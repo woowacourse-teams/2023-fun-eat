@@ -37,4 +37,44 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
+
+    protected Product() {
+    }
+
+    public Product(final String name, final Long price, final String image, final String content,
+                   final Category category) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.content = content;
+        this.category = category;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
 }
