@@ -6,7 +6,9 @@
   "scripts": {
     "start": "webpack serve --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "build-dev": "webpack --config webpack.dev.js"
+    "build-dev": "webpack --config webpack.dev.js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -14,6 +16,16 @@
     "styled-components": "^6.0.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "@babel/preset-typescript": "^7.22.5",
+    "@storybook/addon-essentials": "^7.0.27",
+    "@storybook/addon-interactions": "^7.0.27",
+    "@storybook/addon-links": "^7.0.27",
+    "@storybook/blocks": "^7.0.27",
+    "@storybook/react": "^7.0.27",
+    "@storybook/react-webpack5": "^7.0.27",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@types/styled-components": "^5.1.26",
@@ -21,8 +33,10 @@
     "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.44.0",
     "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-storybook": "^0.6.12",
     "html-webpack-plugin": "^5.5.3",
     "prettier": "^2.8.8",
+    "storybook": "^7.0.27",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
