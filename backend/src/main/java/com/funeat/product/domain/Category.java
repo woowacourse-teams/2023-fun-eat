@@ -1,4 +1,4 @@
-package com.funeat.category.domain;
+package com.funeat.product.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,4 +18,24 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     private CategoryType type;
+
+    protected Category() {
+    }
+
+    public Category(final String name, final CategoryType type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CategoryType getType() {
+        return type;
+    }
 }

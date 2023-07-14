@@ -28,11 +28,18 @@ public class Tag {
     @OneToMany(mappedBy = "tag")
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    public Long getId() {
-        return id;
+    protected Tag() {
+    }
+
+    public Tag(final String name) {
+        this.name = name;
     }
 
     public List<ReviewTag> getReviewTags() {
         return reviewTags;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
