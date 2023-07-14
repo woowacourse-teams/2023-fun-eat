@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ProductAcceptanceTest extends AcceptanceTest {
+class ProductAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private ProductRepository productRepository;
@@ -104,15 +104,15 @@ public class ProductAcceptanceTest extends AcceptanceTest {
         카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
     }
 
-    public Long 카테고리_추가_요청(final Category category) {
+    private Long 카테고리_추가_요청(final Category category) {
         return categoryRepository.save(category).getId();
     }
 
-    public Long 상품_추가_요청(final Product product) {
+    private Long 상품_추가_요청(final Product product) {
         return productRepository.save(product).getId();
     }
 
-    public void 복수_상품_추가_요청(final List<Product> products) {
+    private void 복수_상품_추가_요청(final List<Product> products) {
         productRepository.saveAll(products);
     }
 
