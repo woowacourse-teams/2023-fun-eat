@@ -19,4 +19,19 @@ public class Tag {
 
     @OneToMany(mappedBy = "tag")
     private List<ReviewTag> reviewTags;
+
+    protected Tag() {
+    }
+
+    public Tag(final String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
