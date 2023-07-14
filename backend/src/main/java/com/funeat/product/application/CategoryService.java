@@ -16,8 +16,8 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<CategoryDto> findAllFoodTypeCategories() {
-        final List<Category> categories = categoryRepository.findAllByType(CategoryType.FOOD);
+    public List<CategoryDto> findAllCategoriesByType(final CategoryType type) {
+        final List<Category> categories = categoryRepository.findAllByType(type);
         return categories.stream()
                 .map(CategoryDto::toDto)
                 .collect(Collectors.toList());

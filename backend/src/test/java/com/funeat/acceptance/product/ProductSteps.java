@@ -24,6 +24,7 @@ public class ProductSteps {
 
     public static ExtractableResponse<Response> 공통_상품_카테고리_목록_조회_요청() {
         return given()
+                .queryParam("type", "food")
                 .when()
                 .get("/api/categories")
                 .then()
