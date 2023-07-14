@@ -1,4 +1,4 @@
-package com.funeat.category.domain;
+package com.funeat.product.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

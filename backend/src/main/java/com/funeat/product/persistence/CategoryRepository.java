@@ -1,6 +1,6 @@
-package com.funeat.category.persistence;
+package com.funeat.product.persistence;
 
-import com.funeat.category.domain.Category;
+import com.funeat.product.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

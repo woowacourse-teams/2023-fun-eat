@@ -1,6 +1,5 @@
 package com.funeat.product.domain;
 
-import com.funeat.category.domain.Category;
 import com.funeat.member.domain.bookmark.ProductBookmark;
 import java.util.List;
 import javax.persistence.Entity;

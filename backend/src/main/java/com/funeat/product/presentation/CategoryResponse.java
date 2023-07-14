@@ -1,6 +1,6 @@
-package com.funeat.category.presentation;
+package com.funeat.product.presentation;
 
-import com.funeat.category.domain.Category;
+import com.funeat.product.domain.Category;
 
 public class CategoryResponse {
 

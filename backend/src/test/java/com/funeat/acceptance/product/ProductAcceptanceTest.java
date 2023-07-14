@@ -11,14 +11,14 @@ import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.category.domain.Category;
-import com.funeat.category.persistence.CategoryRepository;
-import com.funeat.category.presentation.CategoryResponse;
+import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.domain.SortOrderType;
 import com.funeat.product.domain.SortType;
+import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.product.presentation.CategoryProductResponse;
+import com.funeat.product.presentation.CategoryResponse;
 import com.funeat.product.presentation.ProductResponse;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;

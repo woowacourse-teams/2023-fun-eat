@@ -2,8 +2,8 @@ package com.funeat.acceptance.product;
 
 import static io.restassured.RestAssured.given;
 
-import com.funeat.category.domain.Category;
-import com.funeat.category.domain.CategoryType;
+import com.funeat.product.domain.Category;
+import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.SortOrderType;
 import com.funeat.product.domain.SortType;
 import io.restassured.response.ExtractableResponse;
