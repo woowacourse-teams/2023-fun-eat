@@ -18,8 +18,11 @@ public class ProductSteps {
     public static final Category 아이스크림 = new Category("아이스크림", CategoryType.FOOD);
     public static final Category 식품 = new Category("식품", CategoryType.FOOD);
     public static final Category 음료 = new Category("음료", CategoryType.FOOD);
+    public static final Category CU = new Category("CU", CategoryType.STORE);
+    public static final Category GS25 = new Category("GS25", CategoryType.STORE);
+    public static final Category EMART24 = new Category("EMART24", CategoryType.STORE);
 
-    public static ExtractableResponse<Response> 카테고리_목록_조회_요청() {
+    public static ExtractableResponse<Response> 공통_상품_카테고리_목록_조회_요청() {
         return given()
                 .when()
                 .get("/api/categories")
