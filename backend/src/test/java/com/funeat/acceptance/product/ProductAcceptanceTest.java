@@ -32,12 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SuppressWarnings("NonAsciiCharacters")
 class ProductAcceptanceTest extends AcceptanceTest {
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
     @Test
     void 카테고리별_상품_목록을_가격낮은순으로_조회한다() {
         // given
