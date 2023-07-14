@@ -54,4 +54,8 @@ public class Member {
         this.gender = gender;
         this.phoneNumber = phoneNumber;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

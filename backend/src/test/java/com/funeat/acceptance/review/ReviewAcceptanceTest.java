@@ -1,4 +1,4 @@
-package com.funeat.review.presentation;
+package com.funeat.acceptance.review;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
-class ReviewControllerTest extends AcceptanceTest {
+class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private MemberRepository memberRepository;

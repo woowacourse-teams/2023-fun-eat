@@ -1,7 +1,6 @@
 package com.funeat.tag.domain;
 
 import com.funeat.review.domain.ReviewTag;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +18,7 @@ public class Tag {
     private String name;
 
     @OneToMany(mappedBy = "tag")
-    private List<ReviewTag> reviewTags = new ArrayList<>();
+    private List<ReviewTag> reviewTags;
 
     protected Tag() {
     }
@@ -30,5 +29,9 @@ public class Tag {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }
