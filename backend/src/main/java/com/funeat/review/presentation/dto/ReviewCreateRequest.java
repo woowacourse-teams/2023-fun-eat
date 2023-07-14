@@ -39,17 +39,3 @@ public class ReviewCreateRequest {
         return tagIds;
     }
 }
-//"image": "qwer.png",
-//        "rating": 4.5,
-//        "tags": [
-//        {
-//        "id": 5,
-//        "name": "단짠단짠"
-//        },
-//        {
-//        "id": 1,
-//        "name": "망고망고"
-//        }
-//        ],
-//        "content": "맛있어용~!~!",
-//        "rebuy": true
