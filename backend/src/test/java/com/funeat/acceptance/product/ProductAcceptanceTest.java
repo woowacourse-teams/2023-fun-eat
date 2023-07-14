@@ -39,21 +39,6 @@ public class ProductAcceptanceTest extends AcceptanceTest {
     private CategoryRepository categoryRepository;
 
     @Test
-    void 카테고리의_목록을_조회한다() {
-        // given
-        카테고리_추가_요청(간편식사);
-        카테고리_추가_요청(즉석조리);
-        카테고리_추가_요청(과자류);
-
-        // when
-        final var response = 카테고리_목록_조회_요청();
-
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
-    }
-
-    @Test
     void 카테고리별_상품_목록을_가격낮은순으로_조회한다() {
         // given
         final Long categoryId = 카테고리_추가_요청(간편식사);
@@ -104,6 +89,21 @@ public class ProductAcceptanceTest extends AcceptanceTest {
         상품_상세_정보_조회_결과를_검증한다(response, product);
     }
 
+    @Test
+    void 카테고리의_목록을_조회한다() {
+        // given
+        카테고리_추가_요청(간편식사);
+        카테고리_추가_요청(즉석조리);
+        카테고리_추가_요청(과자류);
+
+        // when
+        final var response = 카테고리_목록_조회_요청();
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리);
+        카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
+    }
+
     public Long 카테고리_추가_요청(final Category category) {
         return categoryRepository.save(category).getId();
     }
@@ -114,19 +114,6 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     public void 복수_상품_추가_요청(final List<Product> products) {
         productRepository.saveAll(products);
-    }
-
-    private void 카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Category> categories) {
-        final List<CategoryResponse> expected = new ArrayList<>();
-        for (Category category : categories) {
-            expected.add(CategoryResponse.toResponse(category));
-        }
-
-        final List<CategoryResponse> actualResponses = response.as(new TypeRef<>() {
-        });
-        assertThat(actualResponses).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(expected);
     }
 
     private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
@@ -146,6 +133,19 @@ public class ProductAcceptanceTest extends AcceptanceTest {
         final ProductResponse actual = response.as(ProductResponse.class);
         assertThat(actual).usingRecursiveComparison()
                 .ignoringFields("id", "averageRating")
+                .isEqualTo(expected);
+    }
+
+    private void 카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Category> categories) {
+        final List<CategoryResponse> expected = new ArrayList<>();
+        for (Category category : categories) {
+            expected.add(CategoryResponse.toResponse(category));
+        }
+
+        final List<CategoryResponse> actualResponses = response.as(new TypeRef<>() {
+        });
+        assertThat(actualResponses).usingRecursiveComparison()
+                .ignoringFields("id")
                 .isEqualTo(expected);
     }
 }
