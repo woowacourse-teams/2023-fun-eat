@@ -1,10 +1,6 @@
 package com.funeat.review.application;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
@@ -13,70 +9,88 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.persistence.ReviewRepository;
-import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import java.util.ArrayList;
+import io.restassured.RestAssured;
 import java.util.List;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class ReviewServiceTest {
 
-    @InjectMocks
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.port = port;
+    }
+
+    @Autowired
     private ReviewService reviewService;
 
-    @Mock
+    @Autowired
     private ReviewRepository reviewRepository;
 
-    @Mock
+    @Autowired
     private TagRepository tagRepository;
 
-    @Mock
-    private ReviewTagRepository reviewTagRepository;
-
-    @Mock
+    @Autowired
     private MemberRepository memberRepository;
 
-    @Mock
+    @Autowired
     private ProductRepository productRepository;
 
     @Test
     void 리뷰를_추가할_수_있다() {
         // given
-        var memberId = 1L;
-        var productId = 1L;
-        var request = new ReviewCreateRequest(4.5, List.of(1L, 2L), "review-content", true, memberId);
-        var image = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
-
-        var member = new Member("test", "test.image", 25, Gender.FEMALE, "01036551086");
-        var product = new Product("testProduct", 1000L, "product.image", "productContent", null);
-        var tags = List.of(new Tag("tag1"), new Tag("tag2"));
-        var review = new Review(member, product, image.getOriginalFilename(), request.getRating(), request.getContent(),
-                request.getReBuy());
+        var member = 멤버_추가_요청();
+        var product = 상품_추가_요청();
+        var tags = 태그_추가_요청();
+        var image = 리뷰_페이크_사진_요청();
+        var request = new ReviewCreateRequest(4.5, List.of(tags.get(0).getId(), tags.get(1).getId()), "review", true,
+                member.getId());
 
         // when
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(reviewRepository.save(any(Review.class))).thenReturn(review);
-        when(tagRepository.findTagsByIdIn(anyList())).thenReturn(tags);
-        when(reviewTagRepository.saveAll(anyList())).thenReturn(new ArrayList<>());
-
-        reviewService.create(productId, image, request);
+        reviewService.create(product.getId(), image, request);
+        var result = reviewRepository.findAll();
 
         // then
-        verify(memberRepository, atLeastOnce()).findById(memberId);
-        verify(productRepository, atLeastOnce()).findById(productId);
-        verify(tagRepository, atLeastOnce()).findTagsByIdIn(request.getTagIds());
-        verify(reviewRepository, atLeastOnce()).save(any(Review.class));
-        verify(reviewTagRepository, atLeastOnce()).saveAll(anyList());
+        assertThat(result.get(0)).usingRecursiveComparison()
+                .ignoringExpectedNullFields()
+                .isEqualTo(
+                        new Review(member, product, image.getOriginalFilename(), 4.5, "review", true)
+                );
+    }
+
+    private MockMultipartFile 리뷰_페이크_사진_요청() {
+        return new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
+    }
+
+    private List<Tag> 태그_추가_요청() {
+        final Tag testTag1 = tagRepository.save(new Tag("testTag1"));
+        final Tag testTag2 = tagRepository.save(new Tag("testTag2"));
+
+        return List.of(testTag1, testTag2);
+    }
+
+    private Product 상품_추가_요청() {
+        return productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
+    }
+
+    private Member 멤버_추가_요청() {
+        return memberRepository.save(
+                new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
     }
 }

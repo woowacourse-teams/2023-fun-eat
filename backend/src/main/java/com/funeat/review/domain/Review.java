@@ -42,21 +42,52 @@ public class Review {
     private List<ReviewFavorite> reviewFavorites;
 
     protected Review() {
-
     }
 
-    public Review(final Member member, final Product findProduct, final String image, final Double rating,
+    public Review(final Member member, final Product product, final String image, final Double rating,
                   final String content,
                   final Boolean reBuy) {
         this.member = member;
-        this.product = findProduct;
+        this.product = product;
         this.image = image;
         this.rating = rating;
         this.content = content;
         this.reBuy = reBuy;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Boolean getReBuy() {
+        return reBuy;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
     public List<ReviewTag> getReviewTags() {
         return reviewTags;
+    }
+
+    public List<ReviewFavorite> getReviewFavorites() {
+        return reviewFavorites;
     }
 }
