@@ -42,4 +42,16 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<RecipeBookmark> recipeBookmarks;
+
+    protected Member() {
+    }
+
+    public Member(final String nickName, final String profileImage, final Integer age, final Gender gender,
+                  final String phoneNumber) {
+        this.nickname = nickName;
+        this.profileImage = profileImage;
+        this.age = age;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+    }
 }

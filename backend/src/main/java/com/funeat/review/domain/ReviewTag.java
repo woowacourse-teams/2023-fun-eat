@@ -31,12 +31,4 @@ public class ReviewTag {
         this.review = review;
         this.tag = tag;
     }
-
-    public void addReview(final Review review) {
-        review.getReviewTags().add(this);
-    }
-
-    public void addTag(final Tag tag) {
-        tag.getReviewTags().add(this);
-    }
 }
