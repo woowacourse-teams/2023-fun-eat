@@ -44,8 +44,10 @@ public class ReviewService {
     @Transactional
     public void create(final Long productId, final MultipartFile image,
                        final ReviewCreateRequest reviewRequest) {
-        final Member findMember = memberRepository.findById(reviewRequest.getMemberId()).get();
-        final Product findProduct = productRepository.findById(productId).get();
+        final Member findMember = memberRepository.findById(reviewRequest.getMemberId())
+                .orElseThrow(IllegalArgumentException::new);
+        final Product findProduct = productRepository.findById(productId)
+                .orElseThrow(IllegalArgumentException::new);
         writeImage(image);
 
         final Review savedReview = reviewRepository.save(
