@@ -1,6 +1,7 @@
 package com.funeat.review.domain;
 
 import com.funeat.tag.domain.Tag;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,11 +16,27 @@ public class ReviewTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id")
     private Review review;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    protected ReviewTag() {
+    }
+
+    public ReviewTag(final Review review, final Tag tag) {
+        this.review = review;
+        this.tag = tag;
+    }
+
+    public void addReview(final Review review) {
+        review.getReviewTags().add(this);
+    }
+
+    public void addTag(final Tag tag) {
+        tag.getReviewTags().add(this);
+    }
 }

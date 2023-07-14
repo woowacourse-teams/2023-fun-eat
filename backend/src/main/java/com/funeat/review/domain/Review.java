@@ -3,6 +3,7 @@ package com.funeat.review.domain;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,8 +37,27 @@ public class Review {
     private Member member;
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewTag> reviewTags;
+    private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "review")
     private List<ReviewFavorite> reviewFavorites;
+
+    protected Review() {
+
+    }
+
+    public Review(final Member member, final Product findProduct, final String image, final Double rating,
+                  final String content,
+                  final Boolean reBuy) {
+        this.member = member;
+        this.product = findProduct;
+        this.image = image;
+        this.rating = rating;
+        this.content = content;
+        this.reBuy = reBuy;
+    }
+
+    public List<ReviewTag> getReviewTags() {
+        return reviewTags;
+    }
 }
