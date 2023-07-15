@@ -25,4 +25,20 @@ public class ReviewFavorite {
     private Review review;
 
     private Boolean checked;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
 }
