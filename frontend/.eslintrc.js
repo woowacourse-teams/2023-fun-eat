@@ -63,6 +63,14 @@ module.exports = {
             group: 'external',
           },
           {
+            pattern: '@fun-eat/**',
+            group: 'external',
+          },
+          {
+            pattern: '@*/**',
+            group: 'unknown',
+          },
+          {
             pattern: '@*',
             group: 'unknown',
           },
@@ -75,6 +83,7 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+    'import/no-unresolved': 'off',
   },
   settings: {
     'import/resolver': {
