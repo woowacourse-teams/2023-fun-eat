@@ -3,8 +3,7 @@ package com.funeat.review.domain;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Review {
@@ -37,7 +37,7 @@ public class Review {
     private Member member;
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewTag> reviewTags = new ArrayList<>();
+    private List<ReviewTag> reviewTags;
 
     @OneToMany(mappedBy = "review")
     private List<ReviewFavorite> reviewFavorites;
@@ -45,10 +45,12 @@ public class Review {
     private Long favoriteCount = 0L;
 
     protected Review() {
+
     }
 
     public Review(final Member member, final Product findProduct, final String image, final Double rating,
-                  final String content, final Boolean reBuy) {
+                  final String content,
+                  final Boolean reBuy) {
         this.member = member;
         this.product = findProduct;
         this.image = image;
