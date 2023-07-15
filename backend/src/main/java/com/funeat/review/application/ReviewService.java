@@ -93,7 +93,7 @@ public class ReviewService {
         final List<Review> sortingReviews = reviewRepository.findReviewsByProductOrderByFavoriteCountDesc(pageable, product);
 
         return sortingReviews.stream()
-                .map(review -> SortingReviewDto.toDto(review))
+                .map(SortingReviewDto::toDto)
                 .collect(Collectors.toList());
     }
 
