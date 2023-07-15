@@ -1,7 +1,7 @@
 import { theme } from '@fun-eat/design-system';
 import type { ComponentPropsWithoutRef, CSSProperties } from 'react';
 
-export const SvgIconVariant = [
+export const SVG_ICON_VARIANTS = [
   'recipe',
   'list',
   'profile',
@@ -12,7 +12,7 @@ export const SvgIconVariant = [
   'star',
   'favorite',
 ] as const;
-type SvgIconVariant = (typeof SvgIconVariant)[number];
+type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
 
 interface SvgIconProps extends ComponentPropsWithoutRef<'svg'> {
   /**

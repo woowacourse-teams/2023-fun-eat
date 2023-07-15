@@ -1,7 +1,7 @@
 import { theme } from '@fun-eat/design-system';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import SvgIcon, { SvgIconVariant } from './SvgIcon';
+import SvgIcon, { SVG_ICON_VARIANTS } from './SvgIcon';
 
 const meta: Meta<typeof SvgIcon> = {
   title: 'common/SvgIcon',
@@ -28,7 +28,7 @@ export const SvgIcons: Story = {
   render: () => {
     return (
       <>
-        {Object.values(SvgIconVariant).map((variant) => (
+        {Object.values(SVG_ICON_VARIANTS).map((variant) => (
           <SvgIcon key={variant} variant={variant} />
         ))}
       </>
