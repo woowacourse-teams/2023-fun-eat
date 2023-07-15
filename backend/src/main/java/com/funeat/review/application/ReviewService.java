@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional(readOnly = true)
 public class ReviewService {
+
+    @Value("${review.image.path}")
+    private String imagePath;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -65,7 +69,7 @@ public class ReviewService {
 
     private void writeImage(final MultipartFile image) {
         final String originalImageName = image.getOriginalFilename();
-        final Path path = Paths.get("/Users/wugawuga/fun-eat/review/images/" + originalImageName);
+        final Path path = Paths.get(imagePath + originalImageName);
         try {
             Files.write(path, image.getBytes());
         } catch (IOException e) {
