@@ -4,7 +4,6 @@ import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
-import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
@@ -33,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
-    private ReviewFavoriteRepository reviewFavoriteRepository;
 
     @BeforeEach
     void init() {
@@ -299,7 +297,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final List<RankingReviewsResponse> expected = reviews.stream()
                 .map(RankingReviewsResponse::toResponse)
                 .collect(Collectors.toList());
-        final List<RankingReviewsResponse> actual = response.jsonPath().getList("reviews", RankingReviewsResponse.class);
+        final List<RankingReviewDto> actual = response.jsonPath()
+                .getList("reviews", RankingReviewDto.class);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
