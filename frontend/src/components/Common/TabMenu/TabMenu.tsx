@@ -1,6 +1,6 @@
 import { Button, Text } from '@fun-eat/design-system';
 import { useState } from 'react';
-import { css, styled } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface TabMenuProps {
   menuVariant: 'food' | 'store';
@@ -16,21 +16,25 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
 
   return (
     <TabMenuContainer>
-      {menuList.map((menu, index) => (
-        <TabMenuButton
-          key={menu}
-          variant={index === selectedMenu ? 'filled' : 'outlined'}
-          size="xs"
-          color={index === selectedMenu ? 'white' : 'gray3'}
-          menuVariant={menuVariant}
-          isSelected={index === selectedMenu}
-          onClick={() => selectMenu(index)}
-        >
-          <Text size="xs" weight="bold" color={index === selectedMenu ? 'white' : 'black'}>
-            {menu}
-          </Text>
-        </TabMenuButton>
-      ))}
+      {menuList.map((menu, index) => {
+        const isSelected = index === selectedMenu;
+        return (
+          <TabMenuButton
+            key={menu}
+            type="button"
+            variant={isSelected ? 'filled' : 'outlined'}
+            size="xs"
+            color={isSelected ? 'white' : 'gray3'}
+            menuVariant={menuVariant}
+            isSelected={isSelected}
+            onClick={() => selectMenu(index)}
+          >
+            <Text size="xs" weight="bold" color={isSelected ? 'white' : 'black'}>
+              {menu}
+            </Text>
+          </TabMenuButton>
+        );
+      })}
     </TabMenuContainer>
   );
 };
@@ -47,11 +51,11 @@ const TabMenuContainer = styled.div`
 const selectedTabMenuStyles = {
   food: css`
     background: ${({ theme }) => theme.colors.gray5};
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.textColors.white};
   `,
   store: css`
     background: #ad44ff;
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.textColors.white};
   `,
 };
 
