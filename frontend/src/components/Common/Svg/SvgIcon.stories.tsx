@@ -28,7 +28,7 @@ export const SvgIcons: Story = {
   render: () => {
     return (
       <>
-        {Object.values(SVG_ICON_VARIANTS).map((variant) => (
+        {SVG_ICON_VARIANTS.map((variant) => (
           <SvgIcon key={variant} variant={variant} />
         ))}
       </>

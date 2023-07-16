@@ -33,7 +33,7 @@ interface SvgIconProps extends ComponentPropsWithoutRef<'svg'> {
   height?: number;
 }
 
-const SvgIcon = ({ variant, width = 24, height = 24, color = `${theme.colors.gray4}`, ...props }: SvgIconProps) => {
+const SvgIcon = ({ variant, width = 24, height = 24, color = theme.colors.gray4, ...props }: SvgIconProps) => {
   return (
     <svg width={width} height={height} fill={color} {...props}>
       <use href={`#${variant}`} />
