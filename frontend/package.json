@@ -11,8 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@fun-eat/design-system": "^0.1.0",
-    "msw-storybook-addon": "^1.8.0",
+    "@fun-eat/design-system": "^0.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^6.0.2"
@@ -41,6 +40,7 @@
     "eslint-plugin-storybook": "^0.6.12",
     "html-webpack-plugin": "^5.5.3",
     "msw": "^1.2.2",
+    "msw-storybook-addon": "^1.8.0",
     "prettier": "^2.8.8",
     "storybook": "^7.0.27",
     "ts-loader": "^9.4.4",
