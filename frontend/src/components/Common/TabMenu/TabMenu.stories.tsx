@@ -5,10 +5,6 @@ import TabMenu from './TabMenu';
 const meta: Meta<typeof TabMenu> = {
   title: 'common/TabMenu',
   component: TabMenu,
-  args: {
-    menuList: ['즉석조리', '과자', '간편식사', '아이스크림'],
-    menuVariant: 'food',
-  },
 };
 
 export default meta;
