@@ -39,7 +39,7 @@ const RankingReviewItem = ({ rankingReview }: RankingReviewProps) => {
 
 export default RankingReviewItem;
 
-const RankingReviewContainer = styled.li`
+const RankingReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 315px;
