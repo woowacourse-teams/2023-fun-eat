@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import ProductItem from '../ProductItem/ProductItem';
+
 import { MOCK_PRODUCTS } from '../mock';
+import ProductItem from '../ProductItem/ProductItem';
 
 const ProductList = () => {
   return (
