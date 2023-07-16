@@ -12,8 +12,7 @@ const meta: Meta<typeof TabMenu> = {
 };
 
 export default meta;
-
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof TabMenu>;
 
 export const FoodCategory: Story = {
   args: {
