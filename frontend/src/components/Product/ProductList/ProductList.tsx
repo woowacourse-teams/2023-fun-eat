@@ -22,6 +22,6 @@ const ProductListContainer = styled.ul`
   flex-direction: column;
 
   & > li {
-    border-bottom: 1px solid ${({ theme }) => theme.borderColors.default};
+    border-bottom: 1px solid ${({ theme }) => theme.borderColors.disabled};
   }
 `;
