@@ -12,11 +12,11 @@ const RankingProductItem = ({ rankingProduct }: RankingProductItemProps) => {
 
   return (
     <RankingProductContainer>
-      <Text size="lg" weight="bold">
+      <Text size="lg" weight="bold" align="center">
         {rank}
       </Text>
       <RankingProductImage src={image} alt={`${rank}위 상품 사진`} />
-      <Text size="lg" weight="bold">
+      <Text size="lg" weight="bold" align="center">
         {name}
       </Text>
     </RankingProductContainer>
@@ -35,7 +35,6 @@ const RankingProductContainer = styled.li`
   gap: 15px;
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   background: ${({ theme }) => theme.colors.gray1};
-  text-align: center;
 `;
 
 const RankingProductImage = styled.img`
