@@ -205,6 +205,41 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         좋아요_기준_리뷰_목록_조회_결과를_검증한다(response, sortingReviews);
     }
 
+    @Test
+    void 리뷰_랭킹을_조회하다() {
+        // given
+        final var category = new Category("간편식사", CategoryType.FOOD);
+        카테고리_추가_요청(category);
+
+        final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
+        final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
+        final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+        final var members = List.of(member1, member2, member3);
+        복수_유저_추가_요청(members);
+
+        final var product1 = new Product("김밥", 1000L, "image.png", "김밥", category);
+        final var product2 = new Product("물", 500L, "water.jpg", "물", category);
+        final var products = List.of(product1, product2);
+        복수_상품_추가_요청(products);
+
+        final var review1 = new Review(member1, product1, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 5L);
+        final var review2 = new Review(member2, product1, "review2.jpg", 4.5, "역삼역", true, 351L);
+        final var review3 = new Review(member3, product1, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
+        final var review4 = new Review(member2, product2, "review4.jpg", 5.0, "ㅁㅜㄹ", true, 247L);
+        final var review5 = new Review(member3, product2, "review5.jpg", 1.5, "ㄴㄴ", false, 83L);
+        final var reviews = List.of(review1, review2, review3, review4, review5);
+        복수_리뷰_추가(reviews);
+
+        final var rankingReviews = List.of(review2, review4, review3);
+
+        // when
+        final var response = 리뷰_랭킹_조회_요청();
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리);
+        리뷰_랭킹_조회_결과를_검증한다(response, rankingReviews);
+    }
+
     private void 카테고리_추가_요청(final Category category) {
         categoryRepository.save(category);
     }
@@ -215,6 +250,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
     private Long 상품_추가_요청(final Product product) {
         return productRepository.save(product).getId();
+    }
+
+    private void 복수_상품_추가_요청(final List<Product> products) {
+        productRepository.saveAll(products);
     }
 
     private void 복수_리뷰_추가(final List<Review> reviews) {
@@ -229,6 +268,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .queryParam("page", page)
                 .when()
                 .get("/api/products/{product_id}/reviews", productId)
+                .then()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 리뷰_랭킹_조회_요청() {
+        return given()
+                .when()
+                .get("/api/ranks/reviews")
                 .then()
                 .extract();
     }
@@ -254,5 +301,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         assertThat(actual).usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(expected);
+    }
+
+    private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response,
+                                   final List<Review> reviews) {
+        final List<RankingReviewsResponse> expected = reviews.stream()
+                .map(RankingReviewsResponse::toResponse)
+                .collect(Collectors.toList());
+        final List<RankingReviewsResponse> actual = response.jsonPath().getList("reviews", RankingReviewsResponse.class);
+        assertThat(actual).usingRecursiveComparison() .isEqualTo(expected);
     }
 }
