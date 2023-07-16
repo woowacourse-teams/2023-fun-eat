@@ -19,20 +19,21 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
       {menuList.map((menu, index) => {
         const isSelected = index === selectedMenu;
         return (
-          <TabMenuButton
-            key={menu}
-            type="button"
-            variant={isSelected ? 'filled' : 'outlined'}
-            size="xs"
-            color={isSelected ? 'white' : 'gray3'}
-            menuVariant={menuVariant}
-            isSelected={isSelected}
-            onClick={() => selectMenu(index)}
-          >
-            <Text size="xs" weight="bold" color={isSelected ? 'white' : 'black'}>
-              {menu}
-            </Text>
-          </TabMenuButton>
+          <li key={menu}>
+            <TabMenuButton
+              type="button"
+              variant={isSelected ? 'filled' : 'outlined'}
+              size="xs"
+              color={isSelected ? 'white' : 'gray3'}
+              menuVariant={menuVariant}
+              isSelected={isSelected}
+              onClick={() => selectMenu(index)}
+            >
+              <Text size="xs" weight="bold" color={isSelected ? 'white' : 'black'}>
+                {menu}
+              </Text>
+            </TabMenuButton>
+          </li>
         );
       })}
     </TabMenuContainer>
@@ -43,7 +44,7 @@ export default TabMenu;
 
 type TabMenuStyleProps = Pick<TabMenuProps, 'menuVariant'> & { isSelected?: boolean };
 
-const TabMenuContainer = styled.div`
+const TabMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
 `;
