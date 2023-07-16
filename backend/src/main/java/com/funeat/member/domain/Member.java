@@ -4,6 +4,7 @@ import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.member.domain.bookmark.RecipeBookmark;
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,7 +33,7 @@ public class Member {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "member")
-    private List<ReviewFavorite> reviewFavorites;
+    private List<ReviewFavorite> reviewFavorites = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<RecipeFavorite> recipeFavorites;
@@ -42,4 +43,24 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<RecipeBookmark> recipeBookmarks;
+
+    protected Member() {
+    }
+
+    public Member(final String nickName, final String profileImage, final Integer age, final Gender gender,
+                  final String phoneNumber) {
+        this.nickname = nickName;
+        this.profileImage = profileImage;
+        this.age = age;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<ReviewFavorite> getReviewFavorites() {
+        return reviewFavorites;
+    }
 }
