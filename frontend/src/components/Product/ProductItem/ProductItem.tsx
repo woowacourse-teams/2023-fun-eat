@@ -1,19 +1,13 @@
 import { Spacing, Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
+import { Product } from '../mock';
 
-import productImage from './mock_img.jpg';
+interface ProductItemProps {
+  product: Product;
+}
 
-const MOCK_PRODUCT = {
-  id: 1,
-  name: '삼립)달곰이꿀데니쉬',
-  price: 1500,
-  image: productImage,
-  averageRating: 4.5,
-  reviewCount: 100,
-} as const;
-
-const ProductItem = () => {
-  const { name, price, image, averageRating, reviewCount } = MOCK_PRODUCT;
+const ProductItem = ({ product }: ProductItemProps) => {
+  const { name, price, image, averageRating, reviewCount } = product;
 
   return (
     <ProductItemContainer>
