@@ -1,6 +1,7 @@
-import { Spacing, Text, theme } from '@fun-eat/design-system';
+import { Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
-import { Product } from '../mock';
+
+import type { Product } from '../mock';
 
 interface ProductItemProps {
   product: Product;
@@ -31,8 +32,8 @@ export default ProductItem;
 const ProductItemContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 120px;
-  padding: 15px;
+  height: 150px;
+  padding: 30px;
 `;
 
 const ProductInfoWrapper = styled.div`
