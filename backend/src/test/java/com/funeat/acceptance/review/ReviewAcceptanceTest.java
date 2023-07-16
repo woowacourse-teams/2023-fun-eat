@@ -1,16 +1,9 @@
 package com.funeat.acceptance.review;
 
-import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
-import static com.funeat.acceptance.common.CommonSteps.정상_생성;
-import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
-import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
@@ -34,13 +27,12 @@ import java.util.stream.Collectors;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
-
-    @Autowired
     private ReviewFavoriteRepository reviewFavoriteRepository;
 
     @BeforeEach
@@ -157,7 +149,6 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     private List<Long> 태그_추가_요청() {
         final Tag testTag1 = tagRepository.save(new Tag("testTag1"));
         final Tag testTag2 = tagRepository.save(new Tag("testTag2"));
-
         return List.of(testTag1.getId(), testTag2.getId());
     }
 
@@ -309,6 +300,6 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .map(RankingReviewsResponse::toResponse)
                 .collect(Collectors.toList());
         final List<RankingReviewsResponse> actual = response.jsonPath().getList("reviews", RankingReviewsResponse.class);
-        assertThat(actual).usingRecursiveComparison() .isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
