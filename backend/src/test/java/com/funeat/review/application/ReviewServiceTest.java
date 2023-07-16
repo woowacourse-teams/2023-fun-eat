@@ -53,8 +53,7 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         var image = 리뷰_페이크_사진_요청();
-        var request = new ReviewCreateRequest(4.5, tagIds, "review", true,
-                member.getId());
+        var request = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
 
         // when
         reviewService.create(product.getId(), image, request);
