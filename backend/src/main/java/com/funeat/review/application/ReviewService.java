@@ -103,4 +103,8 @@ public class ReviewService {
 
         return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
     }
+
+    public List<Review> computeRankingReviews() {
+        return reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+    }
 }
