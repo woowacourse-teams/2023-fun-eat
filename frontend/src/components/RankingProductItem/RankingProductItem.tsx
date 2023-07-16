@@ -1,3 +1,4 @@
+import { Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import type { RankingProduct } from '@types';
@@ -11,9 +12,13 @@ const RankingProductItem = ({ rankingProduct }: RankingProductItemProps) => {
 
   return (
     <RankingProductContainer>
-      <span>{rank}</span>
+      <Text size="lg" weight="bold">
+        {rank}
+      </Text>
       <RankingProductImage src={image} alt={`${rank}위 상품 사진`} />
-      <span>{name}</span>
+      <Text size="lg" weight="bold">
+        {name}
+      </Text>
     </RankingProductContainer>
   );
 };
@@ -30,8 +35,6 @@ const RankingProductContainer = styled.li`
   gap: 15px;
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   background: ${({ theme }) => theme.colors.gray1};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
   text-align: center;
 `;
 
