@@ -15,6 +15,7 @@ import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.persistence.ReviewRepository;
+import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.tag.domain.Tag;
@@ -24,6 +25,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +45,20 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     private ReviewRepository reviewRepository;
 
     @Autowired
+    private ReviewTagRepository reviewTagRepository;
+
+    @Autowired
     private ReviewFavoriteRepository reviewFavoriteRepository;
+
+    @BeforeEach
+    void init() {
+        reviewTagRepository.deleteAll();
+        reviewFavoriteRepository.deleteAll();
+        reviewRepository.deleteAll();
+        memberRepository.deleteAll();
+        productRepository.deleteAll();
+        tagRepository.deleteAll();
+    }
 
     @Test
     void 리뷰를_작성한다() {

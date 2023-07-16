@@ -37,7 +37,7 @@ public class Review {
     private Member member;
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewTag> reviewTags;
+    private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "review")
     private List<ReviewFavorite> reviewFavorites = new ArrayList<>();

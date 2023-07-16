@@ -11,12 +11,14 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.persistence.ReviewRepository;
+import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -48,6 +50,19 @@ class ReviewServiceTest {
 
     @Autowired
     private ReviewFavoriteRepository reviewFavoriteRepository;
+
+    @Autowired
+    private ReviewTagRepository reviewTagRepository;
+
+    @BeforeEach
+    void init() {
+        reviewFavoriteRepository.deleteAll();
+        reviewTagRepository.deleteAll();
+        reviewRepository.deleteAll();
+        memberRepository.deleteAll();
+        productRepository.deleteAll();
+        tagRepository.deleteAll();
+    }
 
     @Test
     void 리뷰를_추가할_수_있다() {

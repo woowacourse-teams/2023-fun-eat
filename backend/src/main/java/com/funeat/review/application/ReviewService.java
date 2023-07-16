@@ -59,7 +59,7 @@ public class ReviewService {
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
 
         final List<ReviewTag> reviewTags = findTags.stream()
-                .map(findTag -> new ReviewTag(savedReview, findTag))
+                .map(findTag -> ReviewTag.createReviewTag(savedReview, findTag))
                 .collect(Collectors.toList());
 
         reviewTagRepository.saveAll(reviewTags);
