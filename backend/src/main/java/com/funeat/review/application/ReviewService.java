@@ -40,8 +40,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void create(final Long productId, final MultipartFile image,
-                       final ReviewCreateRequest reviewRequest) {
+    public void create(final Long productId, final MultipartFile image, final ReviewCreateRequest reviewRequest) {
         final Member findMember = memberRepository.findById(reviewRequest.getMemberId())
                 .orElseThrow(IllegalArgumentException::new);
         final Product findProduct = productRepository.findById(productId)

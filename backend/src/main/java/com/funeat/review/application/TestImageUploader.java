@@ -32,8 +32,7 @@ public class TestImageUploader implements ImageService {
     private void deleteDirectory(Path directory) throws IOException {
         // 디렉토리 내부 파일 및 디렉토리 삭제
         try (Stream<Path> pathStream = Files.walk(directory)) {
-            pathStream
-                    .sorted(Comparator.reverseOrder())
+            pathStream.sorted(Comparator.reverseOrder())
                     .map(Path::toFile)
                     .forEach(File::delete);
         }

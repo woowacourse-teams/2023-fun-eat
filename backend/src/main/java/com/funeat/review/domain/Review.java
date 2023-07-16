@@ -45,8 +45,7 @@ public class Review {
     }
 
     public Review(final Member member, final Product product, final String image, final Double rating,
-                  final String content,
-                  final Boolean reBuy) {
+                  final String content, final Boolean reBuy) {
         this.member = member;
         this.product = product;
         this.image = image;

@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ReviewCreateRequest {
 
-    private Double rating;
-    private List<Long> tagIds;
-    private String content;
-    private Boolean reBuy;
-    private Long memberId;
+    private final Double rating;
+    private final List<Long> tagIds;
+    private final String content;
+    private final Boolean reBuy;
+    private final Long memberId;
 
-    public ReviewCreateRequest(final Double rating, final List<Long> tagIds,
-                               final String content, final Boolean reBuy, final Long memberId) {
+    public ReviewCreateRequest(final Double rating, final List<Long> tagIds, final String content, final Boolean reBuy,
+                               final Long memberId) {
         this.rating = rating;
         this.tagIds = tagIds;
         this.content = content;
