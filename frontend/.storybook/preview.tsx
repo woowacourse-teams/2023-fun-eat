@@ -1,8 +1,17 @@
+import React from 'react';
 import type { Preview } from '@storybook/react';
-import mswDecorator from 'msw-storybook-addon';
+import { mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
+import { FunEatProvider } from '@fun-eat/design-system';
 
-export const decorators = [mswDecorator];
+export const decorators = [
+  (Story) => (
+    <FunEatProvider>
+      <Story />
+    </FunEatProvider>
+  ),
+  mswDecorator,
+];
 
 const preview: Preview = {
   parameters: {
