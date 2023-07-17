@@ -1,6 +1,7 @@
 import { Button, Text, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import type { CSSProp } from 'styled-components';
+import styled from 'styled-components';
 
 import type { Category } from '@/types/common';
 
@@ -22,19 +23,18 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
         const isSelected = menu.id === selectedMenu;
         return (
           <li key={menu.id}>
-            <TabMenuButton
+            <Button
               type="button"
               color={isSelected ? 'white' : 'gray4'}
               variant={isSelected ? 'filled' : 'outlined'}
               size="xs"
-              menuVariant={menuVariant}
-              isSelected={isSelected}
+              css={isSelected && selectedTabMenuStyles[menuVariant]}
               onClick={() => selectMenu(menu.id)}
             >
-              <TabMenuButtonText size="xs" weight="bold" color={theme.textColors.gray2}>
+              <TabMenuButtonText size="xs" weight="bold" color={theme.textColors.sub}>
                 {menu.name}
               </TabMenuButtonText>
-            </TabMenuButton>
+            </Button>
           </li>
         );
       })}
@@ -44,29 +44,23 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
 
 export default TabMenu;
 
-type TabMenuStyleProps = Pick<TabMenuProps, 'menuVariant'> & { isSelected?: boolean };
+type TabMenuStyleProps = Pick<TabMenuProps, 'menuVariant'>;
 
 const TabMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
 `;
 
-const selectedTabMenuStyles = {
-  food: css`
-    background: ${({ theme }) => theme.colors.gray5};
-    color: ${({ theme }) => theme.textColors.white};
+const selectedTabMenuStyles: Record<TabMenuStyleProps['menuVariant'], CSSProp> = {
+  food: `
+    background: ${theme.colors.gray5};
+    color: ${theme.textColors.white};
   `,
-  store: css`
-    background: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.textColors.black};
+  store: `
+    background: ${theme.colors.primary};
+    color: ${theme.textColors.default};
   `,
 };
-
-const TabMenuButton = styled(Button)<TabMenuStyleProps>`
-  ${({ menuVariant, isSelected }) => css`
-    ${isSelected && selectedTabMenuStyles[menuVariant]}
-  `}
-`;
 
 const TabMenuButtonText = styled(Text)`
   color: inherit;
