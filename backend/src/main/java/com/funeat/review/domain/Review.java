@@ -41,7 +41,7 @@ public class Review {
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewFavorite> reviewFavorites;
+    private List<ReviewFavorite> reviewFavorites = new ArrayList<>();
 
     private Long favoriteCount = 0L;
 
@@ -67,6 +67,14 @@ public class Review {
         this.content = content;
         this.reBuy = reBuy;
         this.favoriteCount = favoriteCount;
+    }
+
+    public void addFavoriteCount() {
+        this.favoriteCount++;
+    }
+
+    public void minusFavoriteCount() {
+        this.favoriteCount--;
     }
 
     public Long getId() {
@@ -97,15 +105,15 @@ public class Review {
         return member;
     }
 
-    public List<ReviewTag> getReviewTags() {
-        return reviewTags;
-    }
-
     public List<ReviewFavorite> getReviewFavorites() {
         return reviewFavorites;
     }
 
     public Long getFavoriteCount() {
         return favoriteCount;
+    }
+
+    public List<ReviewTag> getReviewTags() {
+        return reviewTags;
     }
 }

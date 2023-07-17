@@ -1,14 +1,20 @@
 package com.funeat.review.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
+import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
+import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
+import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
@@ -23,13 +29,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 @Transactional
 @SpringBootTest
@@ -53,10 +55,14 @@ class ReviewServiceTest {
     private ProductRepository productRepository;
 
     @Autowired
+    private ReviewFavoriteRepository reviewFavoriteRepository;
+
+    @Autowired
     private ReviewTagRepository reviewTagRepository;
 
     @BeforeEach
     void init() {
+        reviewFavoriteRepository.deleteAll();
         reviewTagRepository.deleteAll();
         reviewRepository.deleteAll();
         memberRepository.deleteAll();
@@ -67,18 +73,18 @@ class ReviewServiceTest {
     @Test
     void 리뷰를_추가할_수_있다() {
         // given
-        var member = 멤버_추가_요청();
-        var product = 상품_추가_요청();
-        var tags = 태그_추가_요청();
-        var tagIds = tags.stream()
+        final var member = 멤버_추가_요청();
+        final var product = 상품_추가_요청();
+        final var tags = 태그_추가_요청();
+        final var tagIds = tags.stream()
                 .map(Tag::getId)
                 .collect(Collectors.toList());
-        var image = 리뷰_페이크_사진_요청();
-        var request = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
+        final var image = 리뷰_페이크_사진_요청();
+        final var request = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
 
         // when
         reviewService.create(product.getId(), image, request);
-        var result = reviewRepository.findAll();
+        final var result = reviewRepository.findAll();
 
         // then
         assertThat(result.get(0)).usingRecursiveComparison()
@@ -87,6 +93,70 @@ class ReviewServiceTest {
                 .isEqualTo(
                         new Review(member, product, image.getOriginalFilename(), 4.5, "review", true)
                 );
+    }
+
+    @Test
+    void 리뷰에_좋아요를_할_수_있다() {
+        // given
+        final var member = 멤버_추가_요청();
+        final var product = 상품_추가_요청();
+        final var tags = 태그_추가_요청();
+        final var tagIds = tags.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+        final var image = 리뷰_페이크_사진_요청();
+        final var reviewCreaterequest = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
+
+        reviewService.create(product.getId(), image, reviewCreaterequest);
+        final var savedReview = reviewRepository.findAll().get(0);
+
+        // when
+        final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
+        reviewService.likeReview(product.getId(), savedReview.getId(), favoriteRequest);
+        final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
+        final var reviewResult = reviewRepository.findAll().get(0);
+
+        // then
+        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, true);
+        assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
+        assertThat(reviewFavoriteResult).usingRecursiveComparison()
+                .ignoringExpectedNullFields()
+                .comparingOnlyFields("member", "review", "checked")
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void 리뷰에_좋아요를_취소_할_수_있다() {
+        // given
+        final var member = 멤버_추가_요청();
+        final var product = 상품_추가_요청();
+        final var tags = 태그_추가_요청();
+        final var tagIds = tags.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+        final var image = 리뷰_페이크_사진_요청();
+        final var reviewCreaterequest = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
+
+        reviewService.create(product.getId(), image, reviewCreaterequest);
+        final var savedReview = reviewRepository.findAll().get(0);
+
+        final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
+        reviewService.likeReview(product.getId(), savedReview.getId(), favoriteRequest);
+
+        // when
+        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false, member.getId());
+        reviewService.likeReview(product.getId(), savedReview.getId(), cancelFavoriteRequest);
+
+        final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
+        final var reviewResult = reviewRepository.findAll().get(0);
+
+        // then
+        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, false);
+        assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
+        assertThat(reviewFavoriteResult).usingRecursiveComparison()
+                .ignoringExpectedNullFields()
+                .comparingOnlyFields("member", "review", "checked")
+                .isEqualTo(expected);
     }
 
     private MockMultipartFile 리뷰_페이크_사진_요청() {

@@ -1,13 +1,23 @@
 package com.funeat.acceptance.review;
 
+import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.정상_생성;
+import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
+import com.funeat.member.domain.favorite.ReviewFavorite;
+import com.funeat.member.persistence.MemberRepository;
+import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
+import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
@@ -30,13 +40,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
 
+    @Autowired
+    private ReviewFavoriteRepository reviewFavoriteRepository;
+
     @BeforeEach
     void init() {
         reviewTagRepository.deleteAll();
+        reviewFavoriteRepository.deleteAll();
+        reviewRepository.deleteAll();
         memberRepository.deleteAll();
         productRepository.deleteAll();
         tagRepository.deleteAll();
-        reviewRepository.deleteAll();
     }
 
     @Test
@@ -56,6 +70,60 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         STATUS_CODE를_검증한다(response, 정상_생성);
     }
 
+    @Test
+    void 리뷰에_좋아요를_할_수_있다() {
+        // given
+        final Long savedMemberId = 멤버_추가_요청();
+        final Long savedProductId = 상품_추가_요청();
+        final List<Long> savedTagIds = 태그_추가_요청();
+        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var reviewRequest = new ReviewCreateRequest(4.5, savedTagIds, "test content", true, savedMemberId);
+        final var favoriteRequest = new ReviewFavoriteRequest(true, savedMemberId);
+
+        리뷰_추가_요청(savedProductId, image, reviewRequest);
+        final var savedReviewId = reviewRepository.findAll().get(0).getId();
+
+        // when
+        final var response = 리뷰_좋아요_요청(savedProductId, savedReviewId, favoriteRequest);
+        final var result = reviewFavoriteRepository.findAll().get(0);
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+        리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReviewId);
+        assertThat(result.getChecked()).isTrue();
+    }
+
+    @Test
+    void 리뷰에_좋아요를_취소할_수_있다() {
+        // given
+        final Long savedMemberId = 멤버_추가_요청();
+        final Long savedProductId = 상품_추가_요청();
+        final List<Long> savedTagIds = 태그_추가_요청();
+        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var reviewRequest = new ReviewCreateRequest(4.5, savedTagIds, "test content", true, savedMemberId);
+        final var favoriteRequest = new ReviewFavoriteRequest(true, savedMemberId);
+        final var favoriteCancelRequest = new ReviewFavoriteRequest(false, savedMemberId);
+
+        리뷰_추가_요청(savedProductId, image, reviewRequest);
+        final var savedReview = reviewRepository.findAll().get(0);
+        리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteRequest);
+
+        // when
+        final var response = 리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteCancelRequest);
+        final var result = reviewFavoriteRepository.findAll().get(0);
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+        리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReview.getId());
+        assertThat(result.getChecked()).isFalse();
+    }
+
+    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getReview().getId()).isEqualTo(reviewId);
+        assertThat(result.getMember().getId()).isEqualTo(memberId);
+    }
+
     private ExtractableResponse<Response> 리뷰_추가_요청(final Long productId, final MultiPartSpecification image,
                                                    final ReviewCreateRequest request) {
         return given()
@@ -63,6 +131,17 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .multiPart("reviewRequest", request, "application/json")
                 .when()
                 .post("/api/products/{productId}/reviews", productId)
+                .then()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 리뷰_좋아요_요청(final Long productId, final Long reviewId,
+                                                    final ReviewFavoriteRequest request) {
+        return given()
+                .contentType("application/json")
+                .body(request)
+                .when()
+                .patch("/api/products/{productId}/reviews/{reviewId}", productId, reviewId)
                 .then()
                 .extract();
     }
