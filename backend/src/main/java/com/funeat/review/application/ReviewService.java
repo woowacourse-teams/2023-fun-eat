@@ -37,23 +37,25 @@ public class ReviewService {
     private final ReviewTagRepository reviewTagRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final ImageService imageService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
-                         final ProductRepository productRepository) {
+                         final ProductRepository productRepository, final ImageService imageService) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
+        this.imageService = imageService;
     }
 
     @Transactional
-    public void create(final Long productId, final MultipartFile image,
-                       final ReviewCreateRequest reviewRequest) {
-        final Member findMember = memberRepository.findById(reviewRequest.getMemberId()).get();
-        final Product findProduct = productRepository.findById(productId).get();
-        writeImage(image);
+    public void create(final Long productId, final MultipartFile image, final ReviewCreateRequest reviewRequest) {
+        final Member findMember = memberRepository.findById(reviewRequest.getMemberId())
+                .orElseThrow(IllegalArgumentException::new);
+        final Product findProduct = productRepository.findById(productId)
+                .orElseThrow(IllegalArgumentException::new);
 
         final Review savedReview = reviewRepository.save(
                 new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
@@ -62,20 +64,11 @@ public class ReviewService {
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
 
         final List<ReviewTag> reviewTags = findTags.stream()
-                .map(findTag -> new ReviewTag(savedReview, findTag))
+                .map(findTag -> ReviewTag.createReviewTag(savedReview, findTag))
                 .collect(Collectors.toList());
 
+        imageService.upload(image);
         reviewTagRepository.saveAll(reviewTags);
-    }
-
-    private void writeImage(final MultipartFile image) {
-        final String originalImageName = image.getOriginalFilename();
-        final Path path = Paths.get("/Users/wugawuga/fun-eat/review/images/" + originalImageName);
-        try {
-            Files.write(path, image.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId,

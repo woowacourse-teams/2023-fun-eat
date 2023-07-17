@@ -26,6 +26,15 @@ public class ReviewFavorite {
 
     private Boolean checked;
 
+    protected ReviewFavorite() {
+    }
+
+    public ReviewFavorite(final Member member, final Review review, final Boolean checked) {
+        this.member = member;
+        this.review = review;
+        this.checked = checked;
+    }
+
     public Long getId() {
         return id;
     }

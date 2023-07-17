@@ -3,23 +3,20 @@ package com.funeat.acceptance.review;
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
-import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
-import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
+import com.funeat.review.presentation.dto.SortingReviewDto;
+import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
-import com.funeat.tag.persistence.TagRepository;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,20 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ReviewRepository reviewRepository;
-
-    @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
+    @BeforeEach
+    void init() {
+        reviewTagRepository.deleteAll();
+        memberRepository.deleteAll();
+        productRepository.deleteAll();
+        tagRepository.deleteAll();
+        reviewRepository.deleteAll();
+    }
 
     @Test
     void 리뷰를_작성한다() {

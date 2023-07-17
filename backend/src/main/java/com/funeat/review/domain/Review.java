@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,7 +38,7 @@ public class Review {
     private Member member;
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewTag> reviewTags;
+    private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "review")
     private List<ReviewFavorite> reviewFavorites;
@@ -48,8 +49,7 @@ public class Review {
     }
 
     public Review(final Member member, final Product findProduct, final String image, final Double rating,
-                  final String content,
-                  final Boolean reBuy) {
+                  final String content, final Boolean reBuy) {
         this.member = member;
         this.product = findProduct;
         this.image = image;
@@ -59,9 +59,7 @@ public class Review {
     }
 
     public Review(final Member member, final Product findProduct, final String image, final Double rating,
-                  final String content,
-                  final Boolean reBuy,
-                  final Long favoriteCount) {
+                  final String content, final Boolean reBuy, final Long favoriteCount) {
         this.member = member;
         this.product = findProduct;
         this.image = image;
