@@ -4,7 +4,6 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.persistence.CategoryRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +17,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<CategoryDto> findAllCategoriesByType(final CategoryType type) {
-        final List<Category> categories = categoryRepository.findAllByType(type);
-        return categories.stream()
-                .map(CategoryDto::toDto)
-                .collect(Collectors.toList());
+    public List<Category> findAllCategoriesByType(final CategoryType type) {
+        return categoryRepository.findAllByType(type);
     }
 }
