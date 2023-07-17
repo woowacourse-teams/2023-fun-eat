@@ -1,6 +1,7 @@
 package com.funeat.review.domain;
 
 import com.funeat.tag.domain.Tag;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,5 +37,17 @@ public class ReviewTag {
         final ReviewTag reviewTag = new ReviewTag(review, tag);
         review.getReviewTags().add(reviewTag);
         return reviewTag;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public Tag getTag() {
+        return tag;
     }
 }

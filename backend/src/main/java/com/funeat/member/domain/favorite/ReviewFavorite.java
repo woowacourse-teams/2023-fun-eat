@@ -53,6 +53,7 @@ public class ReviewFavorite {
             return;
         }
         this.review.minusFavoriteCount();
+
     }
 
     public Long getId() {

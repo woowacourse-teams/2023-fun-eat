@@ -60,7 +60,39 @@ public class Member {
         return id;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public List<ReviewFavorite> getReviewFavorites() {
         return reviewFavorites;
+    }
+
+    public List<RecipeFavorite> getRecipeFavorites() {
+        return recipeFavorites;
+    }
+
+    public List<ProductBookmark> getProductBookmarks() {
+        return productBookmarks;
+    }
+
+    public List<RecipeBookmark> getRecipeBookmarks() {
+        return recipeBookmarks;
     }
 }
