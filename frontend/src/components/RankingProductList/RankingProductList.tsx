@@ -1,5 +1,5 @@
-import RankingProductItem from '@components/RankingProductItem/RankingProductItem';
-import rankingProducts from '@mocks/data/rankingProducts.json';
+import RankingProductItem from '@/components/RankingProductItem/RankingProductItem';
+import rankingProducts from '@/mocks/data/rankingProducts.json';
 
 const RankingProductList = () => {
   return (
