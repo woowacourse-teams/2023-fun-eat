@@ -20,18 +20,18 @@ const RankingReviewItem = ({ rankingReview }: RankingReviewProps) => {
         {content}
       </ReviewText>
       <FavoriteStarWrapper>
-        <IconWrapper>
-          <SvgIcon variant="favorite" color="red" width={15} height={15} />
+        <FavoriteIconWrapper>
+          <SvgIcon variant="favorite" color="red" width={11} height={13} />
           <Text size="xs" weight="bold">
             {favoriteCount}
           </Text>
-        </IconWrapper>
-        <IconWrapper>
-          <SvgIcon variant="star" color={theme.colors.secondary} width={18} height={18} />
+        </FavoriteIconWrapper>
+        <RatingIconWrapper>
+          <SvgIcon variant="star" color={theme.colors.secondary} width={16} height={16} />
           <Text size="xs" weight="bold">
-            {rating}
+            {rating.toFixed(1)}
           </Text>
-        </IconWrapper>
+        </RatingIconWrapper>
       </FavoriteStarWrapper>
     </RankingReviewContainer>
   );
@@ -62,8 +62,18 @@ const FavoriteStarWrapper = styled.div`
   gap: 4px;
 `;
 
-const IconWrapper = styled.div`
+const FavoriteIconWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+`;
+
+const RatingIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  & > svg {
+    padding-bottom: 2px;
+  }
 `;
