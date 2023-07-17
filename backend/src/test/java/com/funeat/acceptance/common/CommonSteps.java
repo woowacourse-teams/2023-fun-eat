@@ -11,6 +11,7 @@ public class CommonSteps {
 
     public static final HttpStatus 정상_처리 = HttpStatus.OK;
     public static final HttpStatus 정상_생성 = HttpStatus.CREATED;
+    public static final HttpStatus 정상_처리_NO_CONTENT = HttpStatus.NO_CONTENT;
 
     public static Long LOCATION_헤더에서_ID_추출(final ExtractableResponse<Response> response) {
         return Long.parseLong(response.header("Location").split("/")[2]);
