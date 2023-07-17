@@ -1,29 +1,28 @@
 package com.funeat.product.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.funeat.product.domain.Product;
 import org.springframework.data.domain.Page;
 
 public class ProductsInCategoryPageDto {
     private final Long totalDataCount;
     private final Long totalPages;
-    private final boolean isFirstPage;
-    private final boolean isLastPage;
+    private final boolean firstPage;
+    private final boolean lastPage;
     private final Long requestPage;
     private final Long requestSize;
 
     @JsonCreator
     public ProductsInCategoryPageDto(final Long totalDataCount,
                                  final Long totalPages,
-                                 @JsonProperty(value = "firstPage") final boolean isFirstPage,
-                                 @JsonProperty(value = "lastPage") final boolean isLastPage,
+                                 final boolean FirstPage,
+                                 final boolean LastPage,
                                  final Long requestPage,
                                  final Long requestSize) {
         this.totalDataCount = totalDataCount;
         this.totalPages = totalPages;
-        this.isFirstPage = isFirstPage;
-        this.isLastPage = isLastPage;
+        this.firstPage = FirstPage;
+        this.lastPage = LastPage;
         this.requestPage = requestPage;
         this.requestSize = requestSize;
     }
@@ -48,11 +47,11 @@ public class ProductsInCategoryPageDto {
     }
 
     public boolean isFirstPage() {
-        return isFirstPage;
+        return firstPage;
     }
 
     public boolean isLastPage() {
-        return isLastPage;
+        return lastPage;
     }
 
     public Long getRequestPage() {
