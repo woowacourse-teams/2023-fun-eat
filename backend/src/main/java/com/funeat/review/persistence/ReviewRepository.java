@@ -11,6 +11,4 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Page<Review> findReviewsByProduct(final Pageable pageable, final Product product);
-
-    List<Review> findReviewsByProductOrderByFavoriteCountDesc(final Pageable pageable, final Product product);
 }

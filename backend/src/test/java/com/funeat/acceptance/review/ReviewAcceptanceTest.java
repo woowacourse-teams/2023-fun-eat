@@ -128,7 +128,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final List<Review> sortingReviews = List.of(review2, review3, review1);
 
         // when
-        final var response = 좋아요_기준_리뷰_목록_조회_요청(productId, "favorite", 0);
+        final var response = 좋아요_기준_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
@@ -152,10 +152,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     private ExtractableResponse<Response> 좋아요_기준_리뷰_목록_조회_요청(final Long productId,
-                                                             final String sortOrderType,
+                                                             final String sort,
                                                              final Integer page) {
         return given()
-                .queryParam("option", sortOrderType)
+                .queryParam("sort", sort)
                 .queryParam("page", page)
                 .when()
                 .get("/api/products/{product_id}/reviews", productId)

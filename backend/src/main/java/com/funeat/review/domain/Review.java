@@ -45,7 +45,6 @@ public class Review {
     private Long favoriteCount = 0L;
 
     protected Review() {
-
     }
 
     public Review(final Member member, final Product findProduct, final String image, final Double rating,
@@ -60,7 +59,9 @@ public class Review {
     }
 
     public Review(final Member member, final Product findProduct, final String image, final Double rating,
-                  final String content, final Boolean reBuy, final Long favoriteCount) {
+                  final String content,
+                  final Boolean reBuy,
+                  final Long favoriteCount) {
         this.member = member;
         this.product = findProduct;
         this.image = image;
