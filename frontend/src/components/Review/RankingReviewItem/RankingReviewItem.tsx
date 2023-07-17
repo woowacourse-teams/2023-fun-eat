@@ -1,8 +1,8 @@
 import { Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import { SvgIcon } from '@/components/Common';
 import type { RankingReview } from '@/types/review';
-import { SvgIcon } from '@components/Common';
 
 interface RankingReviewProps {
   rankingReview: RankingReview;
