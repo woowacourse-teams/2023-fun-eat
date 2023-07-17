@@ -1,4 +1,4 @@
-package com.funeat.product.presentation;
+package com.funeat.product.dto;
 
 import com.funeat.product.domain.Category;
 
