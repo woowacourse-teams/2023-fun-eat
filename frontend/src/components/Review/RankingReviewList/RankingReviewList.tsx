@@ -5,9 +5,11 @@ import RankingReviewItem from '../RankingReviewItem/RankingReviewItem';
 import rankingReviewList from '@mocks/data/rankingReviewList.json';
 
 const RankingReviewList = () => {
+  const { reviews } = rankingReviewList;
+
   return (
     <RankingReviewListContainer>
-      {rankingReviewList.reviews.map((rankingReview) => (
+      {reviews.map((rankingReview) => (
         <li key={rankingReview.reviewId}>
           <RankingReviewItem rankingReview={rankingReview} />
         </li>
