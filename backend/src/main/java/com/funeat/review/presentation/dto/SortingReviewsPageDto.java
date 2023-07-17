@@ -1,7 +1,5 @@
 package com.funeat.review.presentation.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.funeat.review.domain.Review;
 import org.springframework.data.domain.Page;
 
@@ -9,22 +7,21 @@ public class SortingReviewsPageDto {
 
     private final Long totalDataCount;
     private final Long totalPages;
-    private final boolean isFirstPage;
-    private final boolean isLastPage;
+    private final boolean firstPage;
+    private final boolean lastPage;
     private final Long requestPage;
     private final Long requestSize;
 
-    @JsonCreator
     public SortingReviewsPageDto(final Long totalDataCount,
                                  final Long totalPages,
-                                 @JsonProperty(value = "firstPage") final boolean isFirstPage,
-                                 @JsonProperty(value = "lastPage") final boolean isLastPage,
+                                 final boolean firstPage,
+                                 final boolean lastPage,
                                  final Long requestPage,
                                  final Long requestSize) {
         this.totalDataCount = totalDataCount;
         this.totalPages = totalPages;
-        this.isFirstPage = isFirstPage;
-        this.isLastPage = isLastPage;
+        this.firstPage = firstPage;
+        this.lastPage = lastPage;
         this.requestPage = requestPage;
         this.requestSize = requestSize;
     }
@@ -49,11 +46,11 @@ public class SortingReviewsPageDto {
     }
 
     public boolean isFirstPage() {
-        return isFirstPage;
+        return firstPage;
     }
 
     public boolean isLastPage() {
-        return isLastPage;
+        return lastPage;
     }
 
     public Long getRequestPage() {
