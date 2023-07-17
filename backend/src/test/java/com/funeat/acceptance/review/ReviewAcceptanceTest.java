@@ -8,6 +8,7 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
+import com.funeat.review.presentation.dto.RankingReviewDto;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
@@ -294,10 +295,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
     private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response,
                                    final List<Review> reviews) {
-        final List<RankingReviewsResponse> expected = reviews.stream()
-                .map(RankingReviewsResponse::toResponse)
+        final var expected = reviews.stream()
+                .map(RankingReviewDto::toDto)
                 .collect(Collectors.toList());
-        final List<RankingReviewDto> actual = response.jsonPath()
+        final var actual = response.jsonPath()
                 .getList("reviews", RankingReviewDto.class);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
