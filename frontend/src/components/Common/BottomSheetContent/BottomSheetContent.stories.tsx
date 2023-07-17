@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import BottomSheetContent from './BottomSheetContent';
 
 const meta: Meta<typeof BottomSheetContent> = {
-  title: 'BottomSheetContent',
+  title: 'common/BottomSheetContent',
   component: BottomSheetContent,
 };
 
