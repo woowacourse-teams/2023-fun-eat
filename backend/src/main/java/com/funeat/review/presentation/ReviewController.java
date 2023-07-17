@@ -61,11 +61,7 @@ public class ReviewController {
 
     @GetMapping("/api/ranks/reviews")
     public ResponseEntity<RankingReviewsResponse> getRankingReviews() {
-        final List<Review> reviews = reviewService.computeRankingReviews();
-        final List<RankingReviewDto> dtos = reviews.stream()
-                .map(RankingReviewDto::toDto)
-                .collect(Collectors.toList());
-        final RankingReviewsResponse response = RankingReviewsResponse.toResponse(dtos);
+        final RankingReviewsResponse response = reviewService.getTopReviews();
 
         return ResponseEntity.ok(response);
     }
