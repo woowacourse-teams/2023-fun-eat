@@ -4,12 +4,12 @@ import com.funeat.review.domain.Review;
 
 public class RankingReviewDto {
 
-    private Long reviewId;
-    private Long productId;
-    private String productName;
-    private String content;
-    private Double rating;
-    private Long favoriteCount;
+    private final Long reviewId;
+    private final Long productId;
+    private final String productName;
+    private final String content;
+    private final Double rating;
+    private final Long favoriteCount;
 
     public RankingReviewDto(final Long reviewId,
                             final Long productId,

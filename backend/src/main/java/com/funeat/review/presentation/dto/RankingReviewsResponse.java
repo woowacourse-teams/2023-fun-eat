@@ -4,7 +4,7 @@ import java.util.List;
 
 public class RankingReviewsResponse {
 
-    private List<RankingReviewDto> reviews;
+    private final List<RankingReviewDto> reviews;
 
     public RankingReviewsResponse(final List<RankingReviewDto> reviews) {
         this.reviews = reviews;
