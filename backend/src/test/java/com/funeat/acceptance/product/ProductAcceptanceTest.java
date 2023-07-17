@@ -2,11 +2,12 @@ package com.funeat.acceptance.product;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.product.ProductSteps.CU;
 import static com.funeat.acceptance.product.ProductSteps.간편식사;
+import static com.funeat.acceptance.product.ProductSteps.공통_상품_카테고리_목록_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.과자류;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.즉석조리;
-import static com.funeat.acceptance.product.ProductSteps.카테고리_목록_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,8 +16,6 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.domain.SortOrderType;
 import com.funeat.product.domain.SortType;
-import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductRepository;
 import com.funeat.product.presentation.CategoryProductResponse;
 import com.funeat.product.presentation.CategoryResponse;
 import com.funeat.product.presentation.ProductResponse;
@@ -27,16 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ProductAcceptanceTest extends AcceptanceTest {
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Test
     void 카테고리별_상품_목록을_가격낮은순으로_조회한다() {
@@ -90,18 +82,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    void 카테고리의_목록을_조회한다() {
+    void 공통_상품_카테고리의_목록을_조회한다() {
         // given
         카테고리_추가_요청(간편식사);
         카테고리_추가_요청(즉석조리);
         카테고리_추가_요청(과자류);
+        카테고리_추가_요청(CU);
 
         // when
-        final var response = 카테고리_목록_조회_요청();
+        final var response = 공통_상품_카테고리_목록_조회_요청();
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
+        공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
     }
 
     private Long 카테고리_추가_요청(final Category category) {
@@ -136,7 +129,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(expected);
     }
 
-    private void 카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Category> categories) {
+    private void 공통_상품_카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
+                                           final List<Category> categories) {
         final List<CategoryResponse> expected = new ArrayList<>();
         for (Category category : categories) {
             expected.add(CategoryResponse.toResponse(category));
