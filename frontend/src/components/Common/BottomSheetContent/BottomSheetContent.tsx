@@ -1,18 +1,17 @@
 import { Button, Divider, theme } from '@fun-eat/design-system';
-import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import { SORT_OPTIONS } from '@constants';
 
 interface BottomSheetContentProps {
+  selectedOption: number;
+  onOptionSelected: (optionIndex: number) => void;
   close: () => void;
 }
 
-const BottomSheetContent = ({ close }: BottomSheetContentProps) => {
-  const [selectedOption, setSelectedOption] = useState(0);
-
-  const handleSelectedOption = (index: number) => {
-    setSelectedOption(index);
+const BottomSheetContent = ({ selectedOption, onOptionSelected, close }: BottomSheetContentProps) => {
+  const handleSelectedOption = (optionIndex: number) => {
+    onOptionSelected(optionIndex);
     close();
   };
 
