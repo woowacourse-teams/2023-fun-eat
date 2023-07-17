@@ -50,7 +50,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         복수_상품_추가_요청(products);
 
         // when
-        final var response = 카테고리별_상품_목록_조회_요청(categoryId, SortType.PRICE, SortOrderType.ASC, 1);
+        final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
@@ -76,8 +76,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11);
         복수_상품_추가_요청(products);
 
+
         // when
-        final var response = 카테고리별_상품_목록_조회_요청(categoryId, SortType.PRICE, SortOrderType.DESC, 1);
+        final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
@@ -137,13 +138,16 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
-        final List<CategoryProductResponse> expected = new ArrayList<>();
+        final List<ProductInCategoryDto> expected = new ArrayList<>();
         for (Product product : products) {
-            expected.add(CategoryProductResponse.toResponse(product, 0L));
+            expected.add(ProductInCategoryDto.toDto(product, 0L));
         }
 
-        final List<CategoryProductResponse> actual = response.jsonPath().getList("products");
-        assertThat(actual).usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "reviewCount")
+        final List<ProductInCategoryDto> actual = response.jsonPath().getList("products", ProductInCategoryDto.class);
+
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "reviewCount")
                 .isEqualTo(expected);
     }
 
