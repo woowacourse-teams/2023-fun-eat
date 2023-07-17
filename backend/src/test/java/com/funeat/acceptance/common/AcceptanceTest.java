@@ -20,6 +20,9 @@ public abstract class AcceptanceTest {
     private int port;
 
     @Autowired
+    private DataCleaner cleaner;
+
+    @Autowired
     public ProductRepository productRepository;
 
     @Autowired
@@ -28,5 +31,6 @@ public abstract class AcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        cleaner.clear();
     }
 }
