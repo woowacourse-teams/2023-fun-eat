@@ -5,9 +5,7 @@ import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SortingReviewDto {
@@ -61,16 +59,14 @@ public class SortingReviewDto {
     }
 
     private static List<Tag> findTags(final Review review) {
-        return Optional.ofNullable(review.getReviewTags())
-                .orElse(Collections.emptyList())
+        return review.getReviewTags()
                 .stream()
                 .map(ReviewTag::getTag)
                 .collect(Collectors.toList());
     }
 
     private static boolean findReviewFavoriteChecked(final Review review) {
-        return Optional.ofNullable(review.getReviewFavorites())
-                .orElse(Collections.emptyList())
+        return review.getReviewFavorites()
                 .stream()
                 .filter(reviewFavorite -> reviewFavorite.getReview().equals(review))
                 .filter(reviewFavorite -> reviewFavorite.getMember().equals(review.getMember()))
