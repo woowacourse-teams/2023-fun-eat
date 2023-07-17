@@ -22,10 +22,10 @@ public class ProductController {
 
     @GetMapping("/{category_id}/products")
     public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(
-            @PathVariable final Long category_id,
+            @PathVariable(name = "category_id") final Long categoryId,
             @PageableDefault Pageable pageable
             ) {
-        ProductsInCategoryResponse response = productService.getAllProductsInCategory(category_id, pageable);
+        ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, pageable);
         return ResponseEntity.ok(response);
     }
 }

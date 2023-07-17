@@ -20,10 +20,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 @DataJpaTest
+@Import(DataCleaner.class)
+@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@ExtendWith(DataClearExtension.class)
-@Import(DataCleaner.class)
 class ProductRepositoryTest {
 
     private Category category;

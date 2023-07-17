@@ -16,10 +16,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
+@Import(DataCleaner.class)
+@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@ExtendWith(DataClearExtension.class)
-@Import(DataCleaner.class)
 class CategoryRepositoryTest {
 
     public static final Category 간편식사 = new Category("간편식사", CategoryType.FOOD);

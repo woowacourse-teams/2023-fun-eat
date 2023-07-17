@@ -25,7 +25,7 @@ public class ProductResponse {
         this.tags = tags;
     }
 
-    public static ProductResponse toResponse(final Product product, List<Tag> tags) {
+    public static ProductResponse toResponse(final Product product, final List<Tag> tags) {
         List<TagDto> tagDtos = new ArrayList<>();
         for (Tag tag : tags) {
             tagDtos.add(TagDto.toDto(tag));

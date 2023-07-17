@@ -2,11 +2,11 @@ package com.funeat.product.application;
 
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductRepository;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.product.dto.ProductsInCategoryResponse;
+import com.funeat.product.persistence.CategoryRepository;
+import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.persistence.ReviewRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,16 +23,16 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
 
-    public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository,
-                          ReviewRepository reviewRepository) {
+    public ProductService(final CategoryRepository categoryRepository, final ProductRepository productRepository,
+                          final ReviewRepository reviewRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
     }
 
-    public ProductsInCategoryResponse getAllProductsInCategory(Long category_id,
-                                                               Pageable pageable) {
-        Category category = categoryRepository.findById(category_id)
+    public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
+                                                               final Pageable pageable) {
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(IllegalArgumentException::new);
 
         Page<Product> productPages = productRepository.findAllByCategory(category, pageable);
