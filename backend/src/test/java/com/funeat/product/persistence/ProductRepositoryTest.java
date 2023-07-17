@@ -2,6 +2,8 @@ package com.funeat.product.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.funeat.common.DataCleaner;
+import com.funeat.common.DataClearExtension;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
@@ -10,14 +12,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 @DataJpaTest
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
+@ExtendWith(DataClearExtension.class)
+@Import(DataCleaner.class)
 class ProductRepositoryTest {
 
     private Category category;
@@ -40,10 +46,8 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        categoryRepository.deleteAll();
         category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
 
-        productRepository.deleteAll();
         product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", category);
         product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", category);
         product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", category);
@@ -60,8 +64,7 @@ class ProductRepositoryTest {
     void 카테고리별_상품을_가격이_높은_순으로_정렬한다() {
         // given
         productRepository.saveAll(
-                List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10));
+                List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10));
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by("price").descending());

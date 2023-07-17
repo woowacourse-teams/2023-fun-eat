@@ -1,4 +1,4 @@
-package com.funeat.acceptance.common;
+package com.funeat.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataCleaner {
-    private static final String FOREIGN_KEY_CHECK_FORMAT = "SET FOREIGN_KEY_CHECKS %d";
+
+    private static final String FOREIGN_KEY_CHECK_FORMAT = "SET REFERENTIAL_INTEGRITY %s";
     private static final String TRUNCATE_FORMAT = "TRUNCATE TABLE %s";
 
     private final List<String> tableNames = new ArrayList<>();
@@ -35,10 +36,10 @@ public class DataCleaner {
     }
 
     private void truncate() {
-        entityManager.createNativeQuery(String.format(FOREIGN_KEY_CHECK_FORMAT, 0)).executeUpdate();
+        entityManager.createNativeQuery(String.format(FOREIGN_KEY_CHECK_FORMAT, "FALSE")).executeUpdate();
         for (String tableName : tableNames) {
             entityManager.createNativeQuery(String.format(TRUNCATE_FORMAT, tableName)).executeUpdate();
         }
-        entityManager.createNativeQuery(String.format(FOREIGN_KEY_CHECK_FORMAT, 1)).executeUpdate();
+        entityManager.createNativeQuery(String.format(FOREIGN_KEY_CHECK_FORMAT, "TRUE")).executeUpdate();
     }
 }

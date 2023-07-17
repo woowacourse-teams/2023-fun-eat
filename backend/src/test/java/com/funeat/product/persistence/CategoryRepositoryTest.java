@@ -2,19 +2,24 @@ package com.funeat.product.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.funeat.common.DataCleaner;
+import com.funeat.common.DataClearExtension;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
+@ExtendWith(DataClearExtension.class)
+@Import(DataCleaner.class)
 class CategoryRepositoryTest {
 
     public static final Category 간편식사 = new Category("간편식사", CategoryType.FOOD);
@@ -30,32 +35,27 @@ class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @BeforeEach
-    void setUp() {
-        categoryRepository.deleteAll();
-        categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
-    }
-
     @Test
     void 카테고리_타입이_FOOD인_모든_카테고리를_조회한다() {
         // given
-        final CategoryType foodType = CategoryType.FOOD;
+        categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
 
         // when
-        final List<Category> actual = categoryRepository.findAllByType(foodType);
+        final List<Category> actual = categoryRepository.findAllByType(CategoryType.FOOD);
 
         // then
-        assertThat(actual).usingRecursiveFieldByFieldElementComparatorIgnoringFields()
+        assertThat(actual)
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .containsOnly(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
     }
 
     @Test
     void 카테고리_타입이_STORE인_모든_카테고리를_조회한다() {
         // given
-        final CategoryType storeType = CategoryType.STORE;
+        categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
 
         // when
-        final List<Category> actual = categoryRepository.findAllByType(storeType);
+        final List<Category> actual = categoryRepository.findAllByType(CategoryType.STORE);
 
         // then
         assertThat(actual).usingRecursiveFieldByFieldElementComparatorIgnoringFields()
