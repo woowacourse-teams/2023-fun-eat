@@ -9,13 +9,19 @@ import com.funeat.review.domain.ReviewTag;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
+import com.funeat.review.presentation.dto.SortingReviewDto;
+import com.funeat.review.presentation.dto.SortingReviewsPageDto;
+import com.funeat.review.presentation.dto.SortingReviewsResponse;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -58,5 +64,20 @@ public class ReviewService {
 
         imageService.upload(image);
         reviewTagRepository.saveAll(reviewTags);
+    }
+
+    public SortingReviewsResponse sortingReviews(final Long productId,
+                                                 final Pageable pageable) {
+        final Product product = productRepository.findById(productId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
+
+        final SortingReviewsPageDto pageDto = SortingReviewsPageDto.toDto(reviewPage);
+        final List<SortingReviewDto> reviewDtos = reviewPage.stream()
+                .map(SortingReviewDto::toDto)
+                .collect(Collectors.toList());
+
+        return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
     }
 }

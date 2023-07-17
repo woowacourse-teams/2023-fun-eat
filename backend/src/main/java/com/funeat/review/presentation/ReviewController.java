@@ -2,7 +2,9 @@ package com.funeat.review.presentation;
 
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
+
 import java.net.URI;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.funeat.review.presentation.dto.SortingReviewsResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @RestController
 public class ReviewController {
@@ -27,5 +36,13 @@ public class ReviewController {
         reviewService.create(productId, image, reviewRequest);
 
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
+    }
+
+    @GetMapping(value = "/api/products/{productId}/reviews")
+    public ResponseEntity<SortingReviewsResponse> getSortingReviews(@PathVariable Long productId,
+                                                                    @PageableDefault Pageable pageable) {
+        final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable);
+
+        return ResponseEntity.ok(response);
     }
 }
