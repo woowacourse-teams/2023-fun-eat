@@ -40,16 +40,14 @@ class ReviewFavoriteRepositoryTest {
         final var member = 멤버_추가_요청();
         final var product = 상품_추가_요청();
         final var review = 리뷰_추가_요청(member, product);
-        final var reviewFavorite = new ReviewFavorite(true);
-        reviewFavorite.updateByMemberAndReview(member, review);
+        final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
         reviewFavoriteRepository.save(reviewFavorite);
 
         // then
         final var result = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
 
         // when
-        var expected = new ReviewFavorite(true);
-        expected.updateByMemberAndReview(member, review);
+        var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
 
         assertThat(result).usingRecursiveComparison()
                 .ignoringExpectedNullFields()

@@ -92,12 +92,13 @@ class ReviewServiceTest {
         // when
         var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
         reviewService.likeReview(product.getId(), savedReview.getId(), favoriteRequest);
-        var result = reviewFavoriteRepository.findAll().get(0);
+        var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
+        var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        var expected = new ReviewFavorite(true);
-        expected.updateByMemberAndReview(member, savedReview);
-        assertThat(result).usingRecursiveComparison()
+        var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, true);
+        assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
+        assertThat(reviewFavoriteResult).usingRecursiveComparison()
                 .ignoringExpectedNullFields()
                 .comparingOnlyFields("member", "review", "checked")
                 .isEqualTo(expected);
@@ -122,15 +123,16 @@ class ReviewServiceTest {
         reviewService.likeReview(product.getId(), savedReview.getId(), favoriteRequest);
 
         // when
-        var cancleFavoriteRequest = new ReviewFavoriteRequest(false, member.getId());
-        reviewService.likeReview(product.getId(), savedReview.getId(), cancleFavoriteRequest);
+        var cancelFavoriteRequest = new ReviewFavoriteRequest(false, member.getId());
+        reviewService.likeReview(product.getId(), savedReview.getId(), cancelFavoriteRequest);
 
-        var result = reviewFavoriteRepository.findAll().get(0);
+        var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
+        var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        var expected = new ReviewFavorite(false);
-        expected.updateByMemberAndReview(member, savedReview);
-        assertThat(result).usingRecursiveComparison()
+        var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, false);
+        assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
+        assertThat(reviewFavoriteResult).usingRecursiveComparison()
                 .ignoringExpectedNullFields()
                 .comparingOnlyFields("member", "review", "checked")
                 .isEqualTo(expected);

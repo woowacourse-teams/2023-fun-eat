@@ -33,15 +33,26 @@ public class ReviewFavorite {
         this.checked = favorite;
     }
 
-    public void updateByMemberAndReview(final Member member, final Review review) {
+    public ReviewFavorite(final Member member, final Review review) {
         this.member = member;
         this.review = review;
-        member.getReviewFavorites().add(this);
-        review.getReviewFavorites().add(this);
+    }
+
+    public static ReviewFavorite createReviewFavoriteByMemberAndReview(final Member member, final Review review,
+                                                                       final Boolean favorite) {
+        final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
+        reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
+        reviewFavorite.member.getReviewFavorites().add(reviewFavorite);
+        return reviewFavorite;
     }
 
     public void updateChecked(final Boolean checked) {
         this.checked = checked;
+        if (checked) {
+            this.review.addFavoriteCount();
+            return;
+        }
+        this.review.minusFavoriteCount();
     }
 
     public Long getId() {

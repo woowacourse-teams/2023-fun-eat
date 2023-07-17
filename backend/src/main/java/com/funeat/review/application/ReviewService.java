@@ -75,8 +75,8 @@ public class ReviewService {
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final ReviewFavorite reviewFavorite = new ReviewFavorite(request.getFavorite());
-        reviewFavorite.updateByMemberAndReview(findMember, findReview);
+        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
+                findReview, request.getFavorite());
 
         final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
                 findReview).orElse(reviewFavoriteRepository.save(reviewFavorite));
