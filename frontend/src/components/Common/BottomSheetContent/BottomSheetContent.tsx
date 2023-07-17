@@ -1,5 +1,5 @@
 import { Button, Divider, theme } from '@fun-eat/design-system';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { SORT_OPTIONS } from '@constants';
 
