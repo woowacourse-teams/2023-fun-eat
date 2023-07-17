@@ -13,6 +13,11 @@ public class SortingReviewsResponse {
         this.reviews = reviews;
     }
 
+    public static SortingReviewsResponse toResponse(final SortingReviewsPageDto page,
+                                                    final List<SortingReviewDto> reviews) {
+        return new SortingReviewsResponse(page, reviews);
+    }
+
     public SortingReviewsPageDto getPage() {
         return page;
     }

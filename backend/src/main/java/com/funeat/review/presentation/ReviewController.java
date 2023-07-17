@@ -49,9 +49,7 @@ public class ReviewController {
     @GetMapping(value = "/api/products/{productId}/reviews")
     public ResponseEntity<SortingReviewsResponse> getSortingReviews(@PathVariable Long productId,
                                                                     @PageableDefault Pageable pageable) {
-        final SortingReviewsPageDto sortingReviewsPageDto = reviewService.computePageInfo(pageable, productId);
-        final List<SortingReviewDto> reviews = reviewService.sortingReviews(productId, pageable);
-        final SortingReviewsResponse response = new SortingReviewsResponse(sortingReviewsPageDto, reviews);
+        final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable);
 
         return ResponseEntity.ok(response);
     }

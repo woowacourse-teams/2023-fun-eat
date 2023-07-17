@@ -11,10 +11,12 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.review.presentation.dto.SortingReviewsPageDto;
+import com.funeat.review.presentation.dto.SortingReviewsResponse;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,33 +78,18 @@ public class ReviewService {
         }
     }
 
-    public List<SortingReviewDto> sortingReviews(final Long productId,
-                                                 final Pageable pageable,
-                                                 final String sort) {
-        if (sort.equals("favorite")) {
-            return sortingReviewsByFavoriteCount(productId, pageable);
-        }
-        return List.of();
-    }
-
-    private List<SortingReviewDto> sortingReviewsByFavoriteCount(final Long productId,
-                                                                 final Pageable pageable) {
+    public SortingReviewsResponse sortingReviews(final Long productId,
+                                                 final Pageable pageable) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final List<Review> sortingReviews = reviewRepository.findReviewsByProductOrderByFavoriteCountDesc(pageable, product);
+        final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
 
-        return sortingReviews.stream()
+        final SortingReviewsPageDto pageDto = SortingReviewsPageDto.toDto(reviewPage);
+        final List<SortingReviewDto> reviewDtos = reviewPage.stream()
                 .map(SortingReviewDto::toDto)
                 .collect(Collectors.toList());
-    }
 
-    public SortingReviewsPageDto computePageInfo(final Pageable pageable,
-                                                 final Long productId) {
-        final Product product = productRepository.findById(productId)
-                .orElseThrow(IllegalArgumentException::new);
-        final Page<Review> reviewsPage = reviewRepository.findReviewsByProduct(pageable, product);
-
-        return SortingReviewsPageDto.toDto(reviewsPage);
+        return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
     }
 }

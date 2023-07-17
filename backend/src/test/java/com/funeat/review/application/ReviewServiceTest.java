@@ -136,7 +136,8 @@ class ReviewServiceTest {
                     .collect(Collectors.toList());
 
             // when
-            final List<SortingReviewDto> actual = reviewService.sortingReviews(product.getId(), pageable);
+            final List<SortingReviewDto> actual = reviewService.sortingReviews(product.getId(), pageable)
+                    .getReviews();
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
