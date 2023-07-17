@@ -5,12 +5,12 @@ import styled from 'styled-components';
 
 import type { Category } from '@/types/common';
 
-interface TabMenuProps {
+interface CategoryMenuProps {
   menuVariant: 'food' | 'store';
   menuList: Category[];
 }
 
-const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
+const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
   const [selectedMenu, setSelectedMenu] = useState(0);
 
   const selectMenu = (menuId: number) => {
@@ -18,7 +18,7 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
   };
 
   return (
-    <TabMenuContainer>
+    <CategoryMenuContainer>
       {menuList.map((menu) => {
         const isSelected = menu.id === selectedMenu;
         return (
@@ -28,30 +28,30 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
               color={isSelected ? 'white' : 'gray4'}
               variant={isSelected ? 'filled' : 'outlined'}
               size="xs"
-              css={isSelected && selectedTabMenuStyles[menuVariant]}
+              css={isSelected && selectedCategoryMenuStyles[menuVariant]}
               onClick={() => selectMenu(menu.id)}
             >
-              <TabMenuButtonText size="xs" weight="bold" color={theme.textColors.sub}>
+              <CategoryMenuButtonText size="xs" weight="bold" color={theme.textColors.sub}>
                 {menu.name}
-              </TabMenuButtonText>
+              </CategoryMenuButtonText>
             </Button>
           </li>
         );
       })}
-    </TabMenuContainer>
+    </CategoryMenuContainer>
   );
 };
 
-export default TabMenu;
+export default CategoryMenu;
 
-type TabMenuStyleProps = Pick<TabMenuProps, 'menuVariant'>;
+type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 
-const TabMenuContainer = styled.ul`
+const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
 `;
 
-const selectedTabMenuStyles: Record<TabMenuStyleProps['menuVariant'], CSSProp> = {
+const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['menuVariant'], CSSProp> = {
   food: `
     background: ${theme.colors.gray5};
     color: ${theme.textColors.white};
@@ -62,6 +62,6 @@ const selectedTabMenuStyles: Record<TabMenuStyleProps['menuVariant'], CSSProp> =
   `,
 };
 
-const TabMenuButtonText = styled(Text)`
+const CategoryMenuButtonText = styled(Text)`
   color: inherit;
 `;

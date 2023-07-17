@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import TabMenu from './TabMenu';
+import CategoryMenu from './CategoryMenu';
 
-const meta: Meta<typeof TabMenu> = {
-  title: 'common/TabMenu',
-  component: TabMenu,
+const meta: Meta<typeof CategoryMenu> = {
+  title: 'common/CategoryMenu',
+  component: CategoryMenu,
 };
 
 export default meta;
-type Story = StoryObj<typeof TabMenu>;
+type Story = StoryObj<typeof CategoryMenu>;
 
 export const FoodCategory: Story = {
   args: {
