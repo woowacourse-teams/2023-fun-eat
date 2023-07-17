@@ -25,7 +25,7 @@ const RankingProductItem = ({ rankingProduct }: RankingProductItemProps) => {
 
 export default RankingProductItem;
 
-const RankingProductContainer = styled.li`
+const RankingProductContainer = styled.div`
   display: flex;
   align-items: center;
   width: 300px;

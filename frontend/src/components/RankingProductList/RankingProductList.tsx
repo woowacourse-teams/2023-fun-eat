@@ -5,7 +5,9 @@ const RankingProductList = () => {
   return (
     <ul>
       {rankingProducts.map((rankingProduct) => (
-        <RankingProductItem key={rankingProduct.id} rankingProduct={rankingProduct} />
+        <li key={rankingProduct.id}>
+          <RankingProductItem rankingProduct={rankingProduct} />
+        </li>
       ))}
     </ul>
   );
