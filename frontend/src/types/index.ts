@@ -1,3 +1,3 @@
 export type BBBB = '';
 
-export * from './Ranking';
+export * from './ranking';
