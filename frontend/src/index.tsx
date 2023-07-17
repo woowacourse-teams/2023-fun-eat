@@ -3,8 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
-
-import { SvgSprite } from '@components/Common';
+import { SvgSprite } from './components/Common';
 
 const main = async () => {
   if (process.env.NODE_ENV === 'development') {
