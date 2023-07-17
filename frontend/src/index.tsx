@@ -1,8 +1,8 @@
+import { FunEatProvider } from '@fun-eat/design-system';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
-import { FunEatProvider } from '@fun-eat/design-system';
 
 const main = async () => {
   if (process.env.NODE_ENV === 'development') {
