@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import mswDecorator from 'msw-storybook-addon';
+import { mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
 
 export const decorators = [mswDecorator];
