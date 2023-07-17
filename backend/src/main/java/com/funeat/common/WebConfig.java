@@ -10,7 +10,5 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(final FormatterRegistry registry) {
         registry.addConverter(new StringToCategoryTypeConverter());
-        registry.addConverter(new StringToSortOrderTypeConverter());
-        registry.addConverter(new StringToSortTypeConverter());
     }
 }
