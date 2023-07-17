@@ -1,4 +1,4 @@
-import { Button, Divider, theme } from '@fun-eat/design-system';
+import { Button, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SORT_OPTIONS } from '@constants';
@@ -19,9 +19,10 @@ const BottomSheetContent = ({ selectedOption, onOptionSelected, close }: BottomS
     <BottomSheetContainer>
       {SORT_OPTIONS.map((option, index) => {
         const isSelected = index === selectedOption;
+        const isLastItem = index < SORT_OPTIONS.length - 1;
         return (
           <>
-            <li key={option}>
+            <SortOptionList key={option} isLastItem={isLastItem}>
               <SortOption
                 color={theme.colors.white}
                 textColor={isSelected ? 'inherit' : theme.textColors.info}
@@ -32,8 +33,7 @@ const BottomSheetContent = ({ selectedOption, onOptionSelected, close }: BottomS
               >
                 {option}
               </SortOption>
-            </li>
-            {index < SORT_OPTIONS.length - 1 && <Divider variant="disabled" />}
+            </SortOptionList>
           </>
         );
       })}
@@ -45,6 +45,10 @@ export default BottomSheetContent;
 
 const BottomSheetContainer = styled.ul`
   padding: 20px;
+`;
+
+const SortOptionList = styled.li<{ isLastItem: boolean }>`
+  border-bottom: ${({ isLastItem, theme }) => (isLastItem ? `1px solid ${theme.dividerColors.disabled}` : 'none')};
 `;
 
 const SortOption = styled(Button)<{ isSelected: boolean }>`
