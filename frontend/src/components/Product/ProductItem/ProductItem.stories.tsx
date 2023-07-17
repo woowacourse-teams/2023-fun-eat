@@ -1,23 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import ProductItem from './ProductItem';
-import type { Product } from '../mock';
-import productImage from '../mock_img.jpg';
 
-const MOCK_PRODUCT: Product = {
-  id: 1,
-  name: '꼬북칩',
-  price: 1500,
-  image: productImage,
-  averageRating: 4.5,
-  reviewCount: 100,
-};
+import mockProducts from '@mocks/data/products.json';
 
 const meta: Meta<typeof ProductItem> = {
   title: 'product/ProductItem',
   component: ProductItem,
   args: {
-    product: MOCK_PRODUCT,
+    product: mockProducts[0],
   },
 };
 

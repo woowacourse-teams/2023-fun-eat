@@ -1,13 +1,14 @@
-import { Text, theme } from '@fun-eat/design-system';
+import { Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import type { Product } from '../mock';
+import type { Product } from '@/types/product';
 
 interface ProductItemProps {
   product: Product;
 }
 
 const ProductItem = ({ product }: ProductItemProps) => {
+  const theme = useTheme();
   const { name, price, image, averageRating, reviewCount } = product;
 
   return (

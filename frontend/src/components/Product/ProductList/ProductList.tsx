@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
-import { MOCK_PRODUCTS } from '../mock';
 import ProductItem from '../ProductItem/ProductItem';
+
+import mockProducts from '@/mocks/data/products.json';
 
 const ProductList = () => {
   return (
     <ProductListContainer>
-      {MOCK_PRODUCTS.map((product) => (
+      {mockProducts.map((product) => (
         <li key={product.id}>
           <ProductItem product={product} />
         </li>
