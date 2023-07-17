@@ -1,6 +1,7 @@
 import { Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import { SvgIcon } from '@/components/Common';
 import type { Product } from '@/types/product';
 
 interface ProductItemProps {
@@ -20,8 +21,18 @@ const ProductItem = ({ product }: ProductItemProps) => {
         </Text>
         <Text color={theme.textColors.info}>{price.toLocaleString('ko-KR')}원</Text>
         <ProductReviewWrapper>
-          <Text>😊 {averageRating}</Text>
-          <Text>✍️ {reviewCount}</Text>
+          <RatingIconWrapper>
+            <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
+            <Text as="span" css="line-height: 24px;">
+              {averageRating}
+            </Text>
+          </RatingIconWrapper>
+          <ReviewIconWrapper>
+            <SvgIcon variant="review" width={20} height={20} color={theme.colors.gray5} />
+            <Text as="span" css="line-height: 24px">
+              {reviewCount}
+            </Text>
+          </ReviewIconWrapper>
         </ProductReviewWrapper>
       </ProductInfoWrapper>
     </ProductItemContainer>
@@ -48,4 +59,25 @@ const ProductInfoWrapper = styled.div`
 const ProductReviewWrapper = styled.div`
   display: flex;
   column-gap: 20px;
+  margin-left: -2px;
+`;
+
+const RatingIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+
+  & > svg {
+    padding-bottom: 2px;
+  }
+`;
+
+const ReviewIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+
+  & > svg {
+    padding-top: 2px;
+  }
 `;
