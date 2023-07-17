@@ -4,8 +4,8 @@ import java.util.List;
 
 public class SortingReviewsResponse {
 
-    private SortingReviewsPageDto page;
-    private List<SortingReviewDto> reviews;
+    private final SortingReviewsPageDto page;
+    private final List<SortingReviewDto> reviews;
 
     public SortingReviewsResponse(final SortingReviewsPageDto page,
                                   final List<SortingReviewDto> reviews) {

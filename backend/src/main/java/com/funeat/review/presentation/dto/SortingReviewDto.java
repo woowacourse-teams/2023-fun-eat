@@ -12,16 +12,16 @@ import java.util.stream.Collectors;
 
 public class SortingReviewDto {
 
-    private Long id;
-    private String userName;
-    private String profileImage;
-    private String image;
-    private Double rating;
-    private List<Tag> tags;
-    private String content;
-    private boolean rebuy;
-    private Long favoriteCount;
-    private boolean favorite;
+    private final Long id;
+    private final String userName;
+    private final String profileImage;
+    private final String image;
+    private final Double rating;
+    private final List<Tag> tags;
+    private final String content;
+    private final boolean rebuy;
+    private final Long favoriteCount;
+    private final boolean favorite;
 
     public SortingReviewDto(final Long id,
                             final String userName,

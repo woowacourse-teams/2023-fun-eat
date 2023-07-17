@@ -7,12 +7,12 @@ import org.springframework.data.domain.Page;
 
 public class SortingReviewsPageDto {
 
-    private Long totalDataCount;
-    private Long totalPages;
-    private boolean isFirstPage;
-    private boolean isLastPage;
-    private Long requestPage;
-    private Long requestSize;
+    private final Long totalDataCount;
+    private final Long totalPages;
+    private final boolean isFirstPage;
+    private final boolean isLastPage;
+    private final Long requestPage;
+    private final Long requestSize;
 
     @JsonCreator
     public SortingReviewsPageDto(final Long totalDataCount,
