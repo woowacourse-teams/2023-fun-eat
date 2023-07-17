@@ -2,9 +2,11 @@ import { Button, Text } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import type { Category } from '@/types/common';
+
 interface TabMenuProps {
   menuVariant: 'food' | 'store';
-  menuList: string[];
+  menuList: Category[];
 }
 
 const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
@@ -16,10 +18,10 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
 
   return (
     <TabMenuContainer>
-      {menuList.map((menu, index) => {
-        const isSelected = index === selectedMenu;
+      {menuList.map((menu) => {
+        const isSelected = menu.id === selectedMenu;
         return (
-          <li key={menu}>
+          <li key={menu.id}>
             <TabMenuButton
               type="button"
               variant={isSelected ? 'filled' : 'outlined'}
@@ -27,10 +29,10 @@ const TabMenu = ({ menuList, menuVariant }: TabMenuProps) => {
               color={isSelected ? 'white' : 'gray3'}
               menuVariant={menuVariant}
               isSelected={isSelected}
-              onClick={() => selectMenu(index)}
+              onClick={() => selectMenu(menu.id)}
             >
               <Text size="xs" weight="bold" color={isSelected ? 'white' : 'black'}>
-                {menu}
+                {menu.name}
               </Text>
             </TabMenuButton>
           </li>
