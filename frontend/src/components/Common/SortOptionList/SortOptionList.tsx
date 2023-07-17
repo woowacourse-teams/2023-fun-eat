@@ -3,26 +3,26 @@ import styled from 'styled-components';
 
 import { SORT_OPTIONS } from '@constants';
 
-interface BottomSheetContentProps {
+interface SortOptionListProps {
   selectedOption: number;
   onOptionSelected: (optionIndex: number) => void;
   close: () => void;
 }
 
-const BottomSheetContent = ({ selectedOption, onOptionSelected, close }: BottomSheetContentProps) => {
+const SortOptionList = ({ selectedOption, onOptionSelected, close }: SortOptionListProps) => {
   const handleSelectedOption = (optionIndex: number) => {
     onOptionSelected(optionIndex);
     close();
   };
 
   return (
-    <BottomSheetContainer>
+    <SortOptionListContainer>
       {SORT_OPTIONS.map((option, index) => {
         const isSelected = index === selectedOption;
         const isLastItem = index < SORT_OPTIONS.length - 1;
         return (
           <>
-            <SortOptionList key={option} isLastItem={isLastItem}>
+            <SortOptionWrapper key={option} isLastItem={isLastItem}>
               <SortOption
                 color={theme.colors.white}
                 textColor={isSelected ? 'inherit' : theme.textColors.info}
@@ -33,21 +33,21 @@ const BottomSheetContent = ({ selectedOption, onOptionSelected, close }: BottomS
               >
                 {option}
               </SortOption>
-            </SortOptionList>
+            </SortOptionWrapper>
           </>
         );
       })}
-    </BottomSheetContainer>
+    </SortOptionListContainer>
   );
 };
 
-export default BottomSheetContent;
+export default SortOptionList;
 
-const BottomSheetContainer = styled.ul`
+const SortOptionListContainer = styled.ul`
   padding: 20px;
 `;
 
-const SortOptionList = styled.li<{ isLastItem: boolean }>`
+const SortOptionWrapper = styled.li<{ isLastItem: boolean }>`
   border-bottom: ${({ isLastItem, theme }) => (isLastItem ? `1px solid ${theme.dividerColors.disabled}` : 'none')};
 `;
 

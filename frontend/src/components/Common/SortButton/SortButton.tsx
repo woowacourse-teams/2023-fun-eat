@@ -1,7 +1,7 @@
 import { BottomSheet, Button, Text, theme } from '@fun-eat/design-system';
 import { useRef, useState } from 'react';
 
-import BottomSheetContent from '../BottomSheetContent/BottomSheetContent';
+import BottomSheetContent from '../SortOptionList/SortOptionList';
 
 import { SORT_OPTIONS } from '@constants';
 

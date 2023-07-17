@@ -2,11 +2,11 @@ import { BottomSheet } from '@fun-eat/design-system';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect, useRef, useState } from 'react';
 
-import BottomSheetContent from './BottomSheetContent';
+import SortOptionList from './SortOptionList';
 
-const meta: Meta<typeof BottomSheetContent> = {
-  title: 'common/BottomSheetContent',
-  component: BottomSheetContent,
+const meta: Meta<typeof SortOptionList> = {
+  title: 'common/SortOptionList',
+  component: SortOptionList,
 };
 
 export default meta;
@@ -31,11 +31,7 @@ export const Default: Story = {
 
     return (
       <BottomSheet ref={ref} close={closeBottomSheet}>
-        <BottomSheetContent
-          selectedOption={selectedOption}
-          onOptionSelected={handleSortOption}
-          close={closeBottomSheet}
-        />
+        <SortOptionList selectedOption={selectedOption} onOptionSelected={handleSortOption} close={closeBottomSheet} />
       </BottomSheet>
     );
   },
