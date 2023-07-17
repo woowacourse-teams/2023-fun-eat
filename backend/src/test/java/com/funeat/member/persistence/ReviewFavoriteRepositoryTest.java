@@ -43,10 +43,10 @@ class ReviewFavoriteRepositoryTest {
         final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
         reviewFavoriteRepository.save(reviewFavorite);
 
-        // then
+        // when
         final var result = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
 
-        // when
+        // then
         var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
 
         assertThat(result).usingRecursiveComparison()

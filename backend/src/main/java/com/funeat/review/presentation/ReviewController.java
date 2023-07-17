@@ -25,8 +25,7 @@ public class ReviewController {
 
     @PostMapping(value = "/api/products/{productId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> writeReview(@PathVariable Long productId,
-                                            @RequestPart MultipartFile image,
+    public ResponseEntity<Void> writeReview(@PathVariable Long productId, @RequestPart MultipartFile image,
                                             @RequestPart ReviewCreateRequest reviewRequest) {
         reviewService.create(productId, image, reviewRequest);
 
