@@ -25,4 +25,50 @@ public class ReviewFavorite {
     private Review review;
 
     private Boolean checked;
+
+    protected ReviewFavorite() {
+    }
+
+    public ReviewFavorite(final Boolean favorite) {
+        this.checked = favorite;
+    }
+
+    public ReviewFavorite(final Member member, final Review review) {
+        this.member = member;
+        this.review = review;
+    }
+
+    public static ReviewFavorite createReviewFavoriteByMemberAndReview(final Member member, final Review review,
+                                                                       final Boolean favorite) {
+        final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
+        reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
+        reviewFavorite.member.getReviewFavorites().add(reviewFavorite);
+        return reviewFavorite;
+    }
+
+    public void updateChecked(final Boolean checked) {
+        this.checked = checked;
+        if (checked) {
+            this.review.addFavoriteCount();
+            return;
+        }
+        this.review.minusFavoriteCount();
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
 }
