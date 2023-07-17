@@ -53,7 +53,6 @@ const SortOption = styled(Button)<{ isSelected: boolean }>`
   border: none;
   outline: transparent;
   font-weight: ${({ isSelected, theme }) => (isSelected ? theme.fontWeights.bold : 'inherit')};
-  cursor: pointer;
 
   &:hover {
     font-weight: ${({ theme }) => theme.fontWeights.bold};
