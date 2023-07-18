@@ -1,12 +1,12 @@
 import { BottomSheet, Button, Text, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import BottomSheetContent from '../SortOptionList/SortOptionList';
 import SvgIcon from '../Svg/SvgIcon';
 
-import { SORT_OPTIONS } from '@constants';
-import useBottomSheet from '@hooks/useBottomSheet';
+import { SORT_OPTIONS } from '@/constants';
+import useBottomSheet from '@/hooks/useBottomSheet';
 
 const SortButton = () => {
   const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
