@@ -1,6 +1,7 @@
 package com.funeat.acceptance.common;
 
 import com.funeat.member.persistence.MemberRepository;
+import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.persistence.ReviewRepository;
@@ -40,6 +41,9 @@ public abstract class AcceptanceTest {
 
     @Autowired
     public ReviewTagRepository reviewTagRepository;
+
+    @Autowired
+    public ReviewFavoriteRepository reviewFavoriteRepository;
 
     @BeforeEach
     void setUp() {
