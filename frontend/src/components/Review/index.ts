@@ -1,1 +1,2 @@
-export { default as RankingReview } from './ReviewRankingItem/ReviewRankingItem';
+export { default as ReviewRankingItem } from './ReviewRankingItem/ReviewRankingItem';
+export { default as ReviewRankingList } from './ReviewRankingList/ReviewRankingList';
