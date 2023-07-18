@@ -1,7 +1,9 @@
 import { BottomSheet, Button, Text, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
+import { styled } from 'styled-components';
 
 import BottomSheetContent from '../SortOptionList/SortOptionList';
+import SvgIcon from '../Svg/SvgIcon';
 
 import { SORT_OPTIONS } from '@constants';
 import useBottomSheet from '@hooks/useBottomSheet';
@@ -16,14 +18,13 @@ const SortButton = () => {
 
   return (
     <>
-      <Button
-        color="white"
-        textColor={theme.textColors.info}
-        size="sm"
-        variant="filled"
-        onClick={handleOpenBottomSheet}
-      >
-        <Text weight="bold">{SORT_OPTIONS[selectedOption].label}</Text>
+      <Button color="white" variant="filled" onClick={handleOpenBottomSheet}>
+        <SortButtonWrapper>
+          <SvgIcon variant="sort" color={theme.textColors.info} width={18} height={18} />
+          <Text element="span" weight="bold" color={theme.textColors.info}>
+            {SORT_OPTIONS[selectedOption].label}
+          </Text>
+        </SortButtonWrapper>
       </Button>
       <BottomSheet ref={ref} close={handleCloseBottomSheet}>
         <BottomSheetContent
@@ -37,3 +38,9 @@ const SortButton = () => {
 };
 
 export default SortButton;
+
+const SortButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3px;
+`;
