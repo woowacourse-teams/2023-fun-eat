@@ -9,19 +9,9 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', 'json'],
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@apis': path.resolve(__dirname, './src/apis'),
-      '@assets': path.resolve(__dirname, './src/assets'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@constants': path.resolve(__dirname, './src/constants'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@mocks': path.resolve(__dirname, './src/mocks'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@router': path.resolve(__dirname, './src/router'),
-      '@styles': path.resolve(__dirname, './src/styles'),
-      '@utils': path.resolve(__dirname, './src/utils'),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   module: {
