@@ -33,5 +33,4 @@ const TitleContainer = styled.h1`
 const SvgIconWrapper = styled.button`
   position: absolute;
   left: 0;
-  cursor: pointer;
 `;
