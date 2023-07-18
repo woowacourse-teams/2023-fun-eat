@@ -11,7 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@fun-eat/design-system": "^0.2.0",
+    "@fun-eat/design-system": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^6.0.2"
