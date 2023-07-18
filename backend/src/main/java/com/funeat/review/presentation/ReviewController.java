@@ -1,6 +1,7 @@
 package com.funeat.review.presentation;
 
 import com.funeat.review.application.ReviewService;
+
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.RankingReviewDto;
 import com.funeat.review.presentation.dto.RankingReviewsResponse;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,8 +1,8 @@
-package com.funeat.product.presentation;
+package com.funeat.product.dto;
 
 import com.funeat.product.domain.Product;
 
-public class CategoryProductResponse {
+public class ProductInCategoryDto {
 
     private final Long id;
     private final String name;
@@ -11,8 +11,8 @@ public class CategoryProductResponse {
     private final Double averageRating;
     private final Long reviewCount;
 
-    public CategoryProductResponse(final Long id, final String name, final Long price, final String image,
-                                   final Double averageRating, final Long reviewCount) {
+    public ProductInCategoryDto(final Long id, final String name, final Long price, final String image,
+                                final Double averageRating, final Long reviewCount) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -21,8 +21,8 @@ public class CategoryProductResponse {
         this.reviewCount = reviewCount;
     }
 
-    public static CategoryProductResponse toResponse(final Product product, final Long reviewCount) {
-        return new CategoryProductResponse(product.getId(), product.getName(), product.getPrice(), product.getImage(),
+    public static ProductInCategoryDto toDto(final Product product, final Long reviewCount) {
+        return new ProductInCategoryDto(product.getId(), product.getName(), product.getPrice(), product.getImage(),
                 product.getAverageRating(), reviewCount);
     }
 
@@ -49,4 +49,5 @@ public class CategoryProductResponse {
     public Long getReviewCount() {
         return reviewCount;
     }
+
 }
