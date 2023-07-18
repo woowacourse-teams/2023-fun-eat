@@ -1,21 +1,14 @@
 import { BottomSheet, Button, Text, theme } from '@fun-eat/design-system';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import BottomSheetContent from '../SortOptionList/SortOptionList';
 
 import { SORT_OPTIONS } from '@constants';
+import useBottomSheet from '@hooks/useBottomSheet';
 
 const SortButton = () => {
-  const ref = useRef<HTMLDialogElement>(null);
+  const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const [selectedOption, setSelectedOption] = useState(0);
-
-  const handleOpenBottomSheet = () => {
-    ref.current?.showModal();
-  };
-
-  const handleCloseBottomSheet = () => {
-    ref.current?.close();
-  };
 
   const handleSortOption = (optionIndex: number) => {
     setSelectedOption(optionIndex);
