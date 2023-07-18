@@ -38,6 +38,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ImageService imageService;
+
     private final ReviewFavoriteRepository reviewFavoriteRepository;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
