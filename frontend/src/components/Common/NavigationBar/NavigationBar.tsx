@@ -7,26 +7,31 @@ const NavigationBar = () => {
   return (
     <NavigationBarContainer>
       <NavigationIconWrapper>
-        <SvgIcon variant="search" />
+        <SvgIcon variant="search" color={theme.colors.gray3} width={22} height={22} />
         <Text size="xs" color={theme.textColors.info}>
           검색
         </Text>
       </NavigationIconWrapper>
       <NavigationIconWrapper>
-        <SvgIcon variant="list" />
+        <SvgIcon variant="list" width={22} height={22} color={theme.colors.gray3} />
         <Text size="xs" color={theme.textColors.info}>
           목록
         </Text>
       </NavigationIconWrapper>
-      <div>로고</div>
       <NavigationIconWrapper>
-        <SvgIcon variant="recipe" />
+        <SvgIcon variant="home" color={theme.colors.gray3} />
+        <Text size="xs" color={theme.textColors.info}>
+          홈
+        </Text>
+      </NavigationIconWrapper>
+      <NavigationIconWrapper>
+        <SvgIcon variant="recipe" color={theme.colors.gray3} />
         <Text size="xs" color={theme.textColors.info}>
           꿀조합
         </Text>
       </NavigationIconWrapper>
       <NavigationIconWrapper>
-        <SvgIcon variant="profile" />
+        <SvgIcon variant="profile" color={theme.colors.gray3} />
         <Text size="xs" color={theme.textColors.info}>
           마이
         </Text>
@@ -49,6 +54,8 @@ const NavigationIconWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: flex-end;
+  gap: 8px;
+  height: 50px;
   cursor: pointer;
 `;
