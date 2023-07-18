@@ -11,9 +11,10 @@ export const SVG_ICON_VARIANTS = [
   'review',
   'star',
   'favorite',
+  'home',
   'sort',
 ] as const;
-type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
+export type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
 
 interface SvgIconProps extends ComponentPropsWithoutRef<'svg'> {
   /**
