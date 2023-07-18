@@ -40,6 +40,7 @@ const NavigationBarContainer = styled.ul`
   justify-content: space-around;
   width: 100%;
   height: 62px;
+  padding-top: 12px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-bottom: none;
   border-top-right-radius: 20px;
