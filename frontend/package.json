@@ -11,7 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@fun-eat/design-system": "^0.1.1",
+    "@fun-eat/design-system": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^6.0.2"
@@ -32,6 +32,7 @@
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
+    "babel-plugin-styled-components": "^2.1.4",
     "eslint": "^8.44.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-import-resolver-webpack": "^0.13.2",
