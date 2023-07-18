@@ -48,6 +48,10 @@ const NavigationBarContainer = styled.div`
   justify-content: space-around;
   width: 100%;
   height: 62px;
+  border: 1px solid ${({ theme }) => theme.borderColors.disabled};
+  border-bottom: none;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
 `;
 
 const NavigationIconWrapper = styled.div`
