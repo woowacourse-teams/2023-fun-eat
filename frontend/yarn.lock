@@ -1558,10 +1558,10 @@
   resolved "https://registry.yarnpkg.com/@fal-works/esbuild-plugin-global-externals/-/esbuild-plugin-global-externals-2.1.2.tgz#c05ed35ad82df8e6ac616c68b92c2282bd083ba4"
   integrity sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==
 
-"@fun-eat/design-system@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@fun-eat/design-system/-/design-system-0.2.0.tgz#f5547889dcc8bdb51f3c7ad6b564a51b4f8815c6"
-  integrity sha512-wXnWEO+k4Kjf98uCfABhIr10Zhckjk0UetdJz2UsWDILG0/GSq/AGxIrQ/KpFRwJXqrmXPE6ZLM77nGvUumMhA==
+"@fun-eat/design-system@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@fun-eat/design-system/-/design-system-0.2.1.tgz#56e2a581adc773cb09bd85fb9f381e959dea14da"
+  integrity sha512-1bLET1X8s0yfsl4OsSzsQjJ0lWLPdNS2ZelGgsxN/X9BNrqL7w5x0jG0QSjz3OmU00WDzH0psVSUflwmugviNw==
 
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
