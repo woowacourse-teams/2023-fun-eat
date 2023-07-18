@@ -1,4 +1,4 @@
-import { Text, theme } from '@fun-eat/design-system';
+import { Spacing, Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
@@ -19,6 +19,7 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
       <ReviewText size="sm" color={theme.textColors.info}>
         {content}
       </ReviewText>
+      <Spacing size={4} />
       <FavoriteStarWrapper>
         <FavoriteIconWrapper>
           <SvgIcon variant="favorite" color="red" width={11} height={13} />
