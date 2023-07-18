@@ -1,5 +1,15 @@
 package com.funeat.acceptance.review;
 
+import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.정상_생성;
+import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
@@ -14,22 +24,13 @@ import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
-import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
-import static com.funeat.acceptance.common.CommonSteps.정상_생성;
-import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
@@ -113,36 +114,6 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         assertThat(result.getId()).isNotNull();
         assertThat(result.getReview().getId()).isEqualTo(reviewId);
         assertThat(result.getMember().getId()).isEqualTo(memberId);
-    }
-
-    private ExtractableResponse<Response> 리뷰_추가_요청(final Long productId, final MultiPartSpecification image,
-                                                   final ReviewCreateRequest request) {
-        return given()
-                .multiPart(image)
-                .multiPart("reviewRequest", request, "application/json")
-                .when()
-                .post("/api/products/{productId}/reviews", productId)
-                .then()
-                .extract();
-    }
-
-    private ExtractableResponse<Response> 리뷰_좋아요_요청(final Long productId, final Long reviewId,
-                                                    final ReviewFavoriteRequest request) {
-        return given()
-                .contentType("application/json")
-                .body(request)
-                .when()
-                .patch("/api/products/{productId}/reviews/{reviewId}", productId, reviewId)
-                .then()
-                .extract();
-    }
-
-    private MultiPartSpecification 리뷰_사진_명세_요청() {
-        return new MultiPartSpecBuilder("image".getBytes())
-                .fileName("testImage.png")
-                .controlName("image")
-                .mimeType("image/png")
-                .build();
     }
 
     private List<Long> 태그_추가_요청() {

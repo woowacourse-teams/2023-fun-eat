@@ -1,7 +1,7 @@
 import { Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import type { RankingProduct } from '@/types';
+import type { RankingProduct } from '@/types/ranking';
 
 interface RankingProductItemProps {
   rankingProduct: RankingProduct;
