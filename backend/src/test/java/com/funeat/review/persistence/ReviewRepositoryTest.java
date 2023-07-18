@@ -13,6 +13,7 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
+import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @DataJpaTest
 @Import(DataCleaner.class)
@@ -56,6 +59,7 @@ class ReviewRepositoryTest {
         // when
         assertThat(reviewRepository.countByProduct(product1)).isEqualTo(3);
         assertThat(reviewRepository.countByProduct(product2)).isEqualTo(1);
+    }
 
     @Test
     void 특정_상품에_대한_좋아요_기준_내림차순으로_정렬한다() {
