@@ -32,6 +32,18 @@ public class Member {
 
     private String phoneNumber;
 
+    protected Member() {
+    }
+
+    public Member(final String nickname, final String profileImage, final Integer age, final Gender gender,
+                  final String phoneNumber) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.age = age;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+    }
+
     @OneToMany(mappedBy = "member")
     private List<ReviewFavorite> reviewFavorites = new ArrayList<>();
 

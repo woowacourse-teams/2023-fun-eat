@@ -4,8 +4,6 @@ import static io.restassured.RestAssured.given;
 
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
-import com.funeat.product.domain.SortOrderType;
-import com.funeat.product.domain.SortType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
@@ -24,31 +22,36 @@ public class ProductSteps {
 
     public static ExtractableResponse<Response> 공통_상품_카테고리_목록_조회_요청() {
         return given()
+                .log().all()
                 .queryParam("type", "food")
                 .when()
                 .get("/api/categories")
                 .then()
+                .log().all()
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 카테고리별_상품_목록_조회_요청(final Long categoryId, final SortType sortType,
-                                                                  final SortOrderType sortOrderType,
-                                                                  final Integer page) {
+    public static ExtractableResponse<Response> 카테고리별_상품_목록_조회_요청(final Long categoryId, final String sortType,
+                                                                  final String sortOrderType,
+                                                                  final int page) {
         return given()
-                .queryParam("sort", sortType.name().toLowerCase())
-                .queryParam("order", sortOrderType.name().toLowerCase())
+                .log().all()
+                .queryParam("sort", sortType+","+sortOrderType)
                 .queryParam("page", page)
                 .when()
                 .get("/api/categories/{category_id}/products", categoryId)
                 .then()
+                .log().all()
                 .extract();
     }
 
     public static ExtractableResponse<Response> 상품_상세_조회_요청(final Long productId) {
         return given()
+                .log().all()
                 .when()
                 .get("/api/products/{product_id}", productId)
                 .then()
+                .log().all()
                 .extract();
     }
 }

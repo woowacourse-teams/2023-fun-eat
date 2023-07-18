@@ -10,7 +10,10 @@ import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
+import com.funeat.review.presentation.dto.RankingReviewDto;
+import com.funeat.review.presentation.dto.RankingReviewsResponse;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
+import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.review.presentation.dto.SortingReviewsResponse;
@@ -35,6 +38,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ImageService imageService;
+
     private final ReviewFavoriteRepository reviewFavoriteRepository;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
@@ -102,5 +106,15 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
+    }
+
+    public RankingReviewsResponse getTopReviews() {
+        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+
+        final List<RankingReviewDto> dtos = rankingReviews.stream()
+                .map(RankingReviewDto::toDto)
+                .collect(Collectors.toList());
+
+        return RankingReviewsResponse.toResponse(dtos);
     }
 }
