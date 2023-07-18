@@ -6,12 +6,12 @@ import TagList from '@/components/Common/TagList/TagList';
 import productDetail from '@/mocks/data/productDetail.json';
 
 const ProductDetail = () => {
-  const { price, image, content, averageRating, tags } = productDetail;
+  const { name, price, image, content, averageRating, tags } = productDetail;
   const theme = useTheme();
 
   return (
     <ProductDetailContainer>
-      <img src={image} width={300} />
+      <img src={image} width={300} alt={name} />
       <DetailInfoWrapper>
         <DescriptionWrapper>
           <Text weight="bold">가격</Text>
