@@ -2,6 +2,7 @@ package com.funeat.product.presentation;
 
 import com.funeat.product.application.CategoryService;
 import com.funeat.product.domain.CategoryType;
+import com.funeat.product.dto.CategoryResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
