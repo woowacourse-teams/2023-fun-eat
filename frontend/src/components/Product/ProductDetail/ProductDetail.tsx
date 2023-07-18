@@ -1,7 +1,8 @@
-import { Badge, Text } from '@fun-eat/design-system';
+import { Text } from '@fun-eat/design-system';
 import styled, { useTheme } from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
+import TagList from '@/components/Common/TagList/TagList';
 import productDetail from '@/mocks/data/productDetail.json';
 
 const ProductDetail = () => {
@@ -28,15 +29,7 @@ const ProductDetail = () => {
           </RatingIconWrapper>
         </DescriptionWrapper>
       </DetailInfoWrapper>
-      <TagList>
-        {tags.map((tag) => (
-          <li key={tag.id}>
-            <Badge color="black" textColor="white">
-              {tag.name}
-            </Badge>
-          </li>
-        ))}
-      </TagList>
+      <TagList tags={tags} />
     </ProductDetailContainer>
   );
 };
@@ -78,9 +71,4 @@ const RatingIconWrapper = styled.div`
   & > svg {
     padding-bottom: 2px;
   }
-`;
-
-const TagList = styled.ul`
-  display: flex;
-  column-gap: 8px;
 `;
