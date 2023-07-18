@@ -63,6 +63,14 @@ module.exports = {
             group: 'external',
           },
           {
+            pattern: '@fun-eat/**',
+            group: 'external',
+          },
+          {
+            pattern: '@*/**',
+            group: 'unknown',
+          },
+          {
             pattern: '@*',
             group: 'unknown',
           },

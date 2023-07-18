@@ -1,8 +1,8 @@
 import React from 'react';
+import { FunEatProvider } from '@fun-eat/design-system';
 import type { Preview } from '@storybook/react';
 import { mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
-import { FunEatProvider } from '@fun-eat/design-system';
 
 export const decorators = [
   (Story) => (
