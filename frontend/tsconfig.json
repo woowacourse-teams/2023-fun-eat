@@ -11,9 +11,10 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
+    "typeRoots": ["node_modules/@types", "src/types"],
     "baseUrl": ".",
     "paths": {
-      "@*": ["src/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src"],
