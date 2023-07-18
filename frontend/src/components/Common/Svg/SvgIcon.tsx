@@ -12,6 +12,7 @@ export const SVG_ICON_VARIANTS = [
   'star',
   'favorite',
   'home',
+  'sort',
 ] as const;
 export type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
 
