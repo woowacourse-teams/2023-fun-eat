@@ -1,21 +1,22 @@
-import { Button, Text, useTheme } from '@fun-eat/design-system';
+import { Button, useTheme } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const PRODUCT_DETAIL_TAB_MENUS = ['리뷰', '꿀조합'];
+interface TabMenuProps {
+  tabMenus: string[];
+}
 
-const TabMenu = () => {
+const TabMenu = ({ tabMenus }: TabMenuProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const theme = useTheme();
 
   const selectTabMenu = (selectedIndex: number) => {
     setSelectedTab(selectedIndex);
   };
 
-  const theme = useTheme();
-
   return (
     <TabMenuContainer>
-      {PRODUCT_DETAIL_TAB_MENUS.map((menu, index) => {
+      {tabMenus.map((menu, index) => {
         const isSelected = selectedTab === index;
         return (
           <TabMenuItem
@@ -27,18 +28,17 @@ const TabMenu = () => {
             <Button
               color="white"
               variant="filled"
-              css="width: 100%; height: 100%; padding: 0;"
+              css={`
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                color: ${isSelected ? theme.textColors.default : theme.textColors.disabled};
+                font-weight: ${isSelected ? theme.fontWeights.bold : theme.fontWeights.regular};
+                line-height: 45px;
+              `}
               onClick={() => selectTabMenu(index)}
             >
-              <Text
-                as="span"
-                css={`
-                  line-height: 45px;
-                  color: ${isSelected ? theme.textColors.default : theme.textColors.disabled};
-                `}
-              >
-                {menu}
-              </Text>
+              {menu}
             </Button>
           </TabMenuItem>
         );
@@ -55,6 +55,6 @@ const TabMenuContainer = styled.ul`
 
 const TabMenuItem = styled.li`
   flex-grow: 1;
+  width: 50%;
   height: 45px;
-  text-align: center;
 `;
