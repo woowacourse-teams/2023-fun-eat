@@ -5,13 +5,13 @@ import { SORT_OPTIONS } from '@constants';
 
 interface SortOptionListProps {
   selectedOption: number;
-  onOptionSelected: (optionIndex: number) => void;
+  selectSortOption: (optionIndex: number) => void;
   close: () => void;
 }
 
-const SortOptionList = ({ selectedOption, onOptionSelected, close }: SortOptionListProps) => {
+const SortOptionList = ({ selectedOption, selectSortOption, close }: SortOptionListProps) => {
   const handleSelectedOption = (optionIndex: number) => {
-    onOptionSelected(optionIndex);
+    selectSortOption(optionIndex);
     close();
   };
 

@@ -12,7 +12,7 @@ const SortButton = () => {
   const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const [selectedOption, setSelectedOption] = useState(0);
 
-  const handleSortOption = (optionIndex: number) => {
+  const selectSortOption = (optionIndex: number) => {
     setSelectedOption(optionIndex);
   };
 
@@ -29,7 +29,7 @@ const SortButton = () => {
       <BottomSheet ref={ref} close={handleCloseBottomSheet}>
         <BottomSheetContent
           selectedOption={selectedOption}
-          onOptionSelected={handleSortOption}
+          selectSortOption={selectSortOption}
           close={handleCloseBottomSheet}
         />
       </BottomSheet>
