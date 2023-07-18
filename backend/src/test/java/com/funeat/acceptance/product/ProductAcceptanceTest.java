@@ -9,20 +9,26 @@ import static com.funeat.acceptance.product.ProductSteps.과자류;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.즉석조리;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.member.domain.Gender;
+import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.CategoryResponse;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryPageDto;
+import com.funeat.review.presentation.dto.ReviewCreateRequest;
+import com.funeat.tag.domain.Tag;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.MultiPartSpecification;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +52,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
         final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
         final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
-        final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11);
+        final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                product8, product9, product10, product11);
         복수_상품_추가_요청(products);
 
         // when
@@ -55,7 +62,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
         페이지를_검증한다(response, (long) products.size(), 0L);
-        카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(product11, product8, product1, product4, product3, product6, product7, product2, product5, product10));
+        카테고리별_상품_목록_조회_결과를_검증한다(response,
+                List.of(product11, product8, product1, product4, product3, product6, product7, product2, product5,
+                        product10));
     }
 
     @Test
@@ -73,9 +82,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
         final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
         final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
-        final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11);
+        final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                product8, product9, product10, product11);
         복수_상품_추가_요청(products);
-
 
         // when
         final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
@@ -83,7 +92,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
         페이지를_검증한다(response, (long) products.size(), 0L);
-        카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(product9, product10, product5, product2, product7, product6, product3, product4, product1, product8));
+        카테고리별_상품_목록_조회_결과를_검증한다(response,
+                List.of(product9, product10, product5, product2, product7, product6, product3, product4, product1,
+                        product8));
     }
 
     @Test
@@ -92,13 +103,28 @@ class ProductAcceptanceTest extends AcceptanceTest {
         카테고리_추가_요청(간편식사);
         final Product product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
         final Long productId = 상품_추가_요청(product);
+        final Long memberId = 멤버_추가_요청();
+        final Tag tag1 = 태그_추가_요청(new Tag("1번"));
+        final Tag tag2 = 태그_추가_요청(new Tag("2번"));
+        final Tag tag3 = 태그_추가_요청(new Tag("3번"));
+        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+
+        final ReviewCreateRequest request1 = new ReviewCreateRequest(4.5,
+                List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true, memberId);
+        final ReviewCreateRequest request2 = new ReviewCreateRequest(4.0, List.of(tag2.getId(), tag3.getId()),
+                "request2", true, memberId);
+        final ReviewCreateRequest request3 = new ReviewCreateRequest(3.0, List.of(tag2.getId()), "request3", true,
+                memberId);
+        리뷰_추가_요청(productId, image, request1);
+        리뷰_추가_요청(productId, image, request2);
+        리뷰_추가_요청(productId, image, request3);
 
         // when
         final var response = 상품_상세_조회_요청(productId);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        상품_상세_정보_조회_결과를_검증한다(response, product);
+        상품_상세_정보_조회_결과를_검증한다(response, product, List.of(tag2, tag3, tag1));
     }
 
     @Test
@@ -129,6 +155,17 @@ class ProductAcceptanceTest extends AcceptanceTest {
         productRepository.saveAll(products);
     }
 
+    private Tag 태그_추가_요청(final Tag tag) {
+        return tagRepository.save(tag);
+    }
+
+    private Long 멤버_추가_요청() {
+        final Member testMember = memberRepository.save(
+                new Member("test", "image.png", 27, Gender.FEMALE, "01036551086")
+        );
+        return testMember.getId();
+    }
+
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, Long dataSize, Long page) {
         long totalPages = (long) Math.ceil((double) dataSize / PAGE_SIZE);
         ProductsInCategoryPageDto expected = new ProductsInCategoryPageDto(dataSize, totalPages,
@@ -151,8 +188,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(expected);
     }
 
-    private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product) {
-        final ProductResponse expected = ProductResponse.toResponse(product, Collections.emptyList());
+    private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product,
+                                      final List<Tag> expectedTags) {
+        final ProductResponse expected = ProductResponse.toResponse(product, expectedTags);
 
         final ProductResponse actual = response.as(ProductResponse.class);
         assertThat(actual).usingRecursiveComparison()
