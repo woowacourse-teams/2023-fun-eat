@@ -1,8 +1,7 @@
 import { Badge, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import { SvgIcon } from '@/components/Common';
-import TagList from '@/components/Common/TagList/TagList';
+import { SvgIcon, TagList } from '@/components/Common';
 import type { Review } from '@/types/review';
 
 interface ReviewItemProps {
