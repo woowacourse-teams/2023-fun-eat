@@ -22,7 +22,7 @@ const SortOptionList = ({ selectedOption, onOptionSelected, close }: SortOptionL
         const isLastItem = index < SORT_OPTIONS.length - 1;
         return (
           <>
-            <SortOptionWrapper key={option} isLastItem={isLastItem}>
+            <SortOptionWrapper key={option.value} isLastItem={isLastItem}>
               <SortOption
                 color={theme.colors.white}
                 textColor={isSelected ? 'inherit' : theme.textColors.info}
@@ -31,7 +31,7 @@ const SortOptionList = ({ selectedOption, onOptionSelected, close }: SortOptionL
                 isSelected={isSelected}
                 onClick={() => handleSelectedOption(index)}
               >
-                {option}
+                {option.value}
               </SortOption>
             </SortOptionWrapper>
           </>

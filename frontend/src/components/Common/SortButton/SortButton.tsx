@@ -30,7 +30,7 @@ const SortButton = () => {
         variant="filled"
         onClick={handleOpenBottomSheet}
       >
-        <Text weight="bold">{SORT_OPTIONS[selectedOption]}</Text>
+        <Text weight="bold">{SORT_OPTIONS[selectedOption].label}</Text>
       </Button>
       <BottomSheet ref={ref} close={handleCloseBottomSheet}>
         <BottomSheetContent
