@@ -3,46 +3,28 @@ import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
 
+import { NAVIGATION_MENU } from '@/constants';
+
 const NavigationBar = () => {
   return (
-    <NavigationBarContainer>
-      <NavigationIconWrapper>
-        <SvgIcon variant="search" color={theme.colors.gray3} width={22} height={22} />
-        <Text size="xs" color={theme.textColors.info}>
-          검색
-        </Text>
-      </NavigationIconWrapper>
-      <NavigationIconWrapper>
-        <SvgIcon variant="list" width={22} height={22} color={theme.colors.gray3} />
-        <Text size="xs" color={theme.textColors.info}>
-          목록
-        </Text>
-      </NavigationIconWrapper>
-      <NavigationIconWrapper>
-        <SvgIcon variant="home" color={theme.colors.gray3} />
-        <Text size="xs" color={theme.textColors.info}>
-          홈
-        </Text>
-      </NavigationIconWrapper>
-      <NavigationIconWrapper>
-        <SvgIcon variant="recipe" color={theme.colors.gray3} />
-        <Text size="xs" color={theme.textColors.info}>
-          꿀조합
-        </Text>
-      </NavigationIconWrapper>
-      <NavigationIconWrapper>
-        <SvgIcon variant="profile" color={theme.colors.gray3} />
-        <Text size="xs" color={theme.textColors.info}>
-          마이
-        </Text>
-      </NavigationIconWrapper>
-    </NavigationBarContainer>
+    <nav>
+      <NavigationBarContainer>
+        {NAVIGATION_MENU.map((menu) => (
+          <NavigationIconWrapper key={menu.variant}>
+            <SvgIcon variant={menu.variant} color={theme.colors.gray3} width={22} height={22} />
+            <Text size="xs" color={theme.textColors.info}>
+              {menu.name}
+            </Text>
+          </NavigationIconWrapper>
+        ))}
+      </NavigationBarContainer>
+    </nav>
   );
 };
 
 export default NavigationBar;
 
-const NavigationBarContainer = styled.div`
+const NavigationBarContainer = styled.ul`
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -54,7 +36,7 @@ const NavigationBarContainer = styled.div`
   border-top-left-radius: 20px;
 `;
 
-const NavigationIconWrapper = styled.div`
+const NavigationIconWrapper = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;

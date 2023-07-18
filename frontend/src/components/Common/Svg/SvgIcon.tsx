@@ -13,7 +13,7 @@ export const SVG_ICON_VARIANTS = [
   'favorite',
   'home',
 ] as const;
-type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
+export type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
 
 interface SvgIconProps extends ComponentPropsWithoutRef<'svg'> {
   /**
