@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import RankingReviewItem from './RankingReviewItem';
+import ReviewRankingItem from './ReviewRankingItem';
 
-const meta: Meta<typeof RankingReviewItem> = {
-  title: 'review/RankingReviewItem',
-  component: RankingReviewItem,
+const meta: Meta<typeof ReviewRankingItem> = {
+  title: 'review/ReviewRankingItem',
+  component: ReviewRankingItem,
   args: {
-    rankingReview: {
+    reviewRanking: {
       reviewId: 1,
       productId: 5,
       productName: '구운감자슬림명란마요',
@@ -19,6 +19,6 @@ const meta: Meta<typeof RankingReviewItem> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof RankingReviewItem>;
+type Story = StoryObj<typeof ReviewRankingItem>;
 
 export const Default: Story = {};

@@ -2,17 +2,17 @@ import { Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import type { RankingReview } from '@/types/review';
+import type { ReviewRanking } from '@/types/ranking';
 
-interface RankingReviewProps {
-  rankingReview: RankingReview;
+interface ReviewRankingItemProps {
+  reviewRanking: ReviewRanking;
 }
 
-const RankingReviewItem = ({ rankingReview }: RankingReviewProps) => {
-  const { productName, content, rating, favoriteCount } = rankingReview;
+const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
+  const { productName, content, rating, favoriteCount } = reviewRanking;
 
   return (
-    <RankingReviewContainer>
+    <ReviewRankingItemContainer>
       <Text size="sm" weight="bold">
         {productName}
       </Text>
@@ -33,13 +33,13 @@ const RankingReviewItem = ({ rankingReview }: RankingReviewProps) => {
           </Text>
         </RatingIconWrapper>
       </FavoriteStarWrapper>
-    </RankingReviewContainer>
+    </ReviewRankingItemContainer>
   );
 };
 
-export default RankingReviewItem;
+export default ReviewRankingItem;
 
-const RankingReviewContainer = styled.div`
+const ReviewRankingItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 315px;
