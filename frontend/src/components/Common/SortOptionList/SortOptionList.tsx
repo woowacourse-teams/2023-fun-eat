@@ -32,7 +32,6 @@ const SortOptionList = ({ selectedOption, selectSortOption, close }: SortOptionL
               textColor={isSelected ? 'black' : 'gray4'}
               variant="filled"
               size="lg"
-              // isSelected={isSelected}
               css={`
                 font-weight: ${isSelected ? theme.fontWeights.bold : 'inherit'};
               `}
