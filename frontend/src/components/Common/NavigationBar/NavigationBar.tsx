@@ -1,5 +1,6 @@
-import { Text, theme } from '@fun-eat/design-system';
+import { Link, Text, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -16,15 +17,17 @@ const NavigationBar = () => {
   return (
     <nav>
       <NavigationBarContainer>
-        {NAVIGATION_MENU.map(({ variant, name }) => {
+        {NAVIGATION_MENU.map(({ variant, name, path }) => {
           const isSelected = selectedMenu === name;
           return (
-            <NavigationItem key={variant} onClick={() => navigateMenu(name)}>
-              <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
-              <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
-                {name}
-              </Text>
-            </NavigationItem>
+            <Link as={RouterLink} to={path} key={variant}>
+              <NavigationItem onClick={() => navigateMenu(name)}>
+                <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
+                <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
+                  {name}
+                </Text>
+              </NavigationItem>
+            </Link>
           );
         })}
       </NavigationBarContainer>
@@ -38,6 +41,8 @@ const NavigationBarContainer = styled.ul`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  position: absolute;
+  bottom: 0;
   width: 100%;
   height: 62px;
   padding-top: 12px;
