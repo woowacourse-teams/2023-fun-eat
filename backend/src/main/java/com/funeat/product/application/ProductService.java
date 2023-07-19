@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private static final int THREE = 3;
+    private static final int TOP = 0;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
@@ -56,7 +58,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(0, 3));
+        final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
 
         return ProductResponse.toResponse(product, tags);
     }
