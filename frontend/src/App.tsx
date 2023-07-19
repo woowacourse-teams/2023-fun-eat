@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import NavigationBar from './components/Common/NavigationBar/NavigationBar';
+import { NavigationBar } from './components/Common';
 
 const App = () => (
   <>
