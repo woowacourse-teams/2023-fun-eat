@@ -16,7 +16,7 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
     <ReviewItemContainer>
       <ReviewerWrapper>
         <ReviewerInfoWrapper>
-          <img src={profileImage} width={40} height={40} alt={`${userName}의 프로필`} />
+          <ReviewerImage src={profileImage} width={40} height={40} alt={`${userName}의 프로필`} />
           <div>
             <Text weight="bold">{userName}</Text>
             <RatingIconWrapper>
@@ -44,9 +44,9 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
           </Badge>
         )}
       </ReviewerWrapper>
-      <img src={image} height={150} alt={`${userName}의 리뷰`} />
+      <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />
       <TagList tags={tags} />
-      <ReviewContentWrapper>
+      <div>
         <Text css="white-space: pre-wrap">{content}</Text>
         <FavoriteButton type="button" color="white" variant="filled">
           <SvgIcon
@@ -59,7 +59,7 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
             {favoriteCount}
           </Text>
         </FavoriteButton>
-      </ReviewContentWrapper>
+      </div>
     </ReviewItemContainer>
   );
 };
@@ -70,10 +70,6 @@ const ReviewItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 20px;
-
-  & > img {
-    align-self: center;
-  }
 `;
 
 const ReviewerWrapper = styled.div`
@@ -86,11 +82,15 @@ const ReviewerInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   column-gap: 10px;
+`;
 
-  & > img {
-    border-radius: 50%;
-    border: 2px solid ${({ theme }) => theme.colors.primary};
-  }
+const ReviewerImage = styled.img`
+  border-radius: 50%;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+`;
+
+const ReviewImage = styled.img`
+  align-self: center;
 `;
 
 const RatingIconWrapper = styled.div`
@@ -102,8 +102,6 @@ const RatingIconWrapper = styled.div`
     padding-bottom: 2px;
   }
 `;
-
-const ReviewContentWrapper = styled.div``;
 
 const FavoriteButton = styled(Button)`
   display: flex;
