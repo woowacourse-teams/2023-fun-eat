@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private static final int THREE = 3;
+    private static final int TOP = 0;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
@@ -38,24 +40,26 @@ public class ProductService {
 
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
                                                                final Pageable pageable) {
-        Category category = categoryRepository.findById(categoryId)
+        final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        Page<Product> productPages = productRepository.findAllByCategory(category, pageable);
+        final Page<Product> productPages = productRepository.findAllByCategory(category, pageable);
 
-        ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(productPages);
-        List<ProductInCategoryDto> productDtos = productPages.getContent()
+        final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(productPages);
+        final List<ProductInCategoryDto> productDtos = productPages.getContent()
                 .stream()
                 .map(it -> ProductInCategoryDto.toDto(it, reviewRepository.countByProduct(it)))
                 .collect(Collectors.toList());
 
-        return new ProductsInCategoryResponse(pageDto, productDtos);
+        return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
     }
 
     public ProductResponse findProductDetail(final Long productId) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
-        final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(0, 3));
+
+        final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
+
         return ProductResponse.toResponse(product, tags);
     }
 }

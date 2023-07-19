@@ -1,9 +1,10 @@
 import { FunEatProvider } from '@fun-eat/design-system';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 
-import App from './App';
 import { SvgSprite } from './components/Common';
+import router from './router';
 
 const main = async () => {
   if (process.env.NODE_ENV === 'development') {
@@ -18,7 +19,7 @@ root.render(
   <React.StrictMode>
     <FunEatProvider>
       <SvgSprite />
-      <App />
+      <RouterProvider router={router} />
     </FunEatProvider>
   </React.StrictMode>
 );
