@@ -25,21 +25,17 @@ const TabMenu = ({ tabMenus }: TabMenuProps) => {
               border-bottom: 2px solid ${isSelected ? theme.borderColors.strong : theme.borderColors.disabled};
             `}
           >
-            <Button
+            <TabMenuButton
               color="white"
               variant="filled"
               css={`
-                width: 100%;
-                height: 100%;
-                padding: 0;
                 color: ${isSelected ? theme.textColors.default : theme.textColors.disabled};
                 font-weight: ${isSelected ? theme.fontWeights.bold : theme.fontWeights.regular};
-                line-height: 45px;
               `}
               onClick={() => selectTabMenu(index)}
             >
               {menu}
-            </Button>
+            </TabMenuButton>
           </TabMenuItem>
         );
       })}
@@ -57,4 +53,11 @@ const TabMenuItem = styled.li`
   flex-grow: 1;
   width: 50%;
   height: 45px;
+`;
+
+const TabMenuButton = styled(Button)`
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  line-height: 45px;
 `;
