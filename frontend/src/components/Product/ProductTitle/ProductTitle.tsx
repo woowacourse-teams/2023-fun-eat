@@ -19,12 +19,7 @@ const ProductTitle = () => {
         <Button color="white" variant="filled">
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
         </Button>
-        <Text
-          as="span"
-          css={`
-            margin-left: 10px;
-          `}
-        >
+        <Text as="span" css="margin-left: 10px">
           {name}
         </Text>
       </div>
