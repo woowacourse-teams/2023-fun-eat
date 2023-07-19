@@ -15,8 +15,8 @@ const NavigationBar = () => {
   };
 
   return (
-    <nav>
-      <NavigationBarContainer>
+    <NavigationBarContainer>
+      <NavigationBarList>
         {NAVIGATION_MENU.map(({ variant, name, path }) => {
           const isSelected = selectedMenu === name;
           return (
@@ -30,20 +30,23 @@ const NavigationBar = () => {
             </Link>
           );
         })}
-      </NavigationBarContainer>
-    </nav>
+      </NavigationBarList>
+    </NavigationBarContainer>
   );
 };
 
 export default NavigationBar;
 
-const NavigationBarContainer = styled.ul`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+const NavigationBarContainer = styled.nav`
   position: absolute;
   bottom: 0;
   width: 100%;
+`;
+
+const NavigationBarList = styled.ul`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   height: 62px;
   padding-top: 12px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
