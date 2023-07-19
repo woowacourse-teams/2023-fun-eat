@@ -23,19 +23,11 @@ const ProductTitle = () => {
           {name}
         </Text>
       </div>
-      <Button
-        color="white"
-        variant="filled"
-        css={`
-          width: 2rem;
-        `}
-        onClick={toggleBookmark}
-      >
-        {isBookmarked ? (
-          <SvgIcon variant="bookmarkFilled" color={theme.colors.primary} />
-        ) : (
-          <SvgIcon variant="bookmark" color={theme.colors.gray5} />
-        )}
+      <Button color="white" variant="filled" css="width: 2rem" onClick={toggleBookmark}>
+        <SvgIcon
+          variant={isBookmarked ? 'bookmarkFilled' : 'bookmark'}
+          color={isBookmarked ? theme.colors.primary : theme.colors.gray5}
+        />
       </Button>
     </ProductTitleContainer>
   );
