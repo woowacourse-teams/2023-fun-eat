@@ -10,7 +10,7 @@ import { NAVIGATION_MENU } from '@/constants';
 const NavigationBar = () => {
   const [selectedMenu, setSelectedMenu] = useState('홈');
 
-  const navigateMenu = (name: string) => {
+  const selectMenu = (name: string) => {
     setSelectedMenu(name);
   };
 
@@ -21,7 +21,7 @@ const NavigationBar = () => {
           const isSelected = selectedMenu === name;
           return (
             <Link as={RouterLink} to={path} key={variant}>
-              <NavigationItem onClick={() => navigateMenu(name)}>
+              <NavigationItem onClick={() => selectMenu(name)}>
                 <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
                 <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
                   {name}
