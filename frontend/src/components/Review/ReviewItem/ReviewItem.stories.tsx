@@ -27,3 +27,11 @@ export const RebuyAndFavorite: Story = {
     </div>
   ),
 };
+
+export const NoImageReview: Story = {
+  render: () => (
+    <div style={{ width: '375px', padding: '0 20px' }}>
+      <ReviewItem review={reviews[2]} />
+    </div>
+  ),
+};

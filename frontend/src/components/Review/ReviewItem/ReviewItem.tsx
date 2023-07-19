@@ -44,7 +44,7 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
           </Badge>
         )}
       </ReviewerWrapper>
-      <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />
+      {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <div>
         <Text css="white-space: pre-wrap">{content}</Text>

@@ -4,7 +4,7 @@ export interface Review {
   id: number;
   userName: string;
   profileImage: string;
-  image: string;
+  image: string | null;
   rating: number;
   tags: Tag[];
   content: string;
