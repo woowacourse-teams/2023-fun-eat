@@ -42,7 +42,12 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
       <ReviewContentWrapper>
         <Text css="white-space: pre-wrap">{content}</Text>
         <FavoriteIconWrapper>
-          <SvgIcon variant="favorite" color={favorite ? 'red' : theme.colors.gray4} width={13} height={13} />
+          <SvgIcon
+            variant={favorite ? 'favoriteFilled' : 'favorite'}
+            color={favorite ? 'red' : theme.colors.gray4}
+            width={13}
+            height={13}
+          />
           <Text weight="bold">{favoriteCount}</Text>
         </FavoriteIconWrapper>
       </ReviewContentWrapper>
