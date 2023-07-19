@@ -5,11 +5,10 @@ import { SvgIcon, TagList } from '@/components/Common';
 import type { Review } from '@/types/review';
 
 interface ReviewItemProps {
-  product: string;
   review: Review;
 }
 
-const ReviewItem = ({ product, review }: ReviewItemProps) => {
+const ReviewItem = ({ review }: ReviewItemProps) => {
   const { userName, profileImage, image, rating, tags, content, rebuy, favoriteCount, favorite } = review;
   const theme = useTheme();
 
@@ -38,7 +37,7 @@ const ReviewItem = ({ product, review }: ReviewItemProps) => {
           </Badge>
         )}
       </ReviewerWrapper>
-      <img src={image} height={150} alt={product} />
+      <img src={image} height={150} alt={`${userName}의 리뷰`} />
       <TagList tags={tags} />
       <ReviewContentWrapper>
         <Text css="white-space: pre-wrap">{content}</Text>
