@@ -20,8 +20,15 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
           <div>
             <Text weight="bold">{userName}</Text>
             <RatingIconWrapper>
-              <SvgIcon variant="star" color={theme.colors.secondary} width={16} height={16} />
-              <Text size="xs">{rating.toFixed(1)}</Text>
+              {Array.from({ length: 5 }, (_, index) => (
+                <SvgIcon
+                  key={`rating-${index}`}
+                  variant="star"
+                  color={index < rating ? theme.colors.secondary : theme.colors.gray2}
+                  width={16}
+                  height={16}
+                />
+              ))}
             </RatingIconWrapper>
           </div>
         </ReviewerInfoWrapper>
