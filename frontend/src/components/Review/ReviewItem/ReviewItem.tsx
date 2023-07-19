@@ -1,4 +1,4 @@
-import { Badge, Text, useTheme } from '@fun-eat/design-system';
+import { Badge, Button, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
@@ -48,15 +48,17 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
       <TagList tags={tags} />
       <ReviewContentWrapper>
         <Text css="white-space: pre-wrap">{content}</Text>
-        <FavoriteIconWrapper>
+        <FavoriteButton type="button" color="white" variant="filled">
           <SvgIcon
             variant={favorite ? 'favoriteFilled' : 'favorite'}
             color={favorite ? 'red' : theme.colors.gray4}
-            width={13}
-            height={13}
+            width={24}
+            height={24}
           />
-          <Text weight="bold">{favoriteCount}</Text>
-        </FavoriteIconWrapper>
+          <Text as="span" weight="bold">
+            {favoriteCount}
+          </Text>
+        </FavoriteButton>
       </ReviewContentWrapper>
     </ReviewItemContainer>
   );
@@ -103,9 +105,10 @@ const RatingIconWrapper = styled.div`
 
 const ReviewContentWrapper = styled.div``;
 
-const FavoriteIconWrapper = styled.div`
+const FavoriteButton = styled(Button)`
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: 8px;
   margin-top: 8px;
+  padding: 0;
 `;
