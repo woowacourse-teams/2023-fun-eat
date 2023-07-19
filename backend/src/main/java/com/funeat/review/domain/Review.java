@@ -3,7 +3,8 @@ package com.funeat.review.domain;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Review {
@@ -23,7 +22,7 @@ public class Review {
 
     private String image;
 
-    private Double rating;
+    private Long rating;
 
     private String content;
 
@@ -48,7 +47,7 @@ public class Review {
     protected Review() {
     }
 
-    public Review(final Member member, final Product findProduct, final String image, final Double rating,
+    public Review(final Member member, final Product findProduct, final String image, final Long rating,
                   final String content, final Boolean reBuy) {
         this.member = member;
         this.product = findProduct;
@@ -58,7 +57,7 @@ public class Review {
         this.reBuy = reBuy;
     }
 
-    public Review(final Member member, final Product findProduct, final String image, final Double rating,
+    public Review(final Member member, final Product findProduct, final String image, final Long rating,
                   final String content, final Boolean reBuy, final Long favoriteCount) {
         this.member = member;
         this.product = findProduct;
@@ -85,7 +84,7 @@ public class Review {
         return image;
     }
 
-    public Double getRating() {
+    public Long getRating() {
         return rating;
     }
 

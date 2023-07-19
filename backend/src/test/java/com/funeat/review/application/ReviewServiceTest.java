@@ -18,6 +18,9 @@ import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
@@ -25,13 +28,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Transactional
 @SpringBootTest
@@ -80,7 +79,7 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var request = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
+        final var request = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
 
         // when
         reviewService.create(product.getId(), image, request);
@@ -91,7 +90,7 @@ class ReviewServiceTest {
                 .ignoringExpectedNullFields()
                 .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
                 .isEqualTo(
-                        new Review(member, product, image.getOriginalFilename(), 4.5, "review", true)
+                        new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
                 );
     }
 
@@ -105,7 +104,7 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
+        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
 
         reviewService.create(product.getId(), image, reviewCreaterequest);
         final var savedReview = reviewRepository.findAll().get(0);
@@ -135,7 +134,7 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4.5, tagIds, "review", true, member.getId());
+        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
 
         reviewService.create(product.getId(), image, reviewCreaterequest);
         final var savedReview = reviewRepository.findAll().get(0);
@@ -194,9 +193,9 @@ class ReviewServiceTest {
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4.5, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
             복수_리뷰_추가(reviews);
 
