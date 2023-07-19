@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
-import reviewRankingList from '@/mocks/data/rankingReviewList.json';
+import reviewRankingList from '@/mocks/data/reviewRankingList.json';
 
 const ReviewRankingList = () => {
   const { reviews } = reviewRankingList;

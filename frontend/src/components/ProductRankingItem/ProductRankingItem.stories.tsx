@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import RankingProductItem from './RankingProductItem';
+import ProductRankingItem from './ProductRankingItem';
 
-const meta: Meta<typeof RankingProductItem> = {
-  title: 'product/RankingProductItem',
-  component: RankingProductItem,
+const meta: Meta<typeof ProductRankingItem> = {
+  title: 'product/ProductRankingItem',
+  component: ProductRankingItem,
   args: {
-    rankingProduct: {
+    productRanking: {
       id: 3,
       rank: 1,
       image: 'https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg',
