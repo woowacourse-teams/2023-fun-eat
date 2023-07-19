@@ -12,6 +12,10 @@ public class ProductsInCategoryResponse {
         this.products = products;
     }
 
+    public static ProductsInCategoryResponse toResponse(final ProductsInCategoryPageDto page, final List<ProductInCategoryDto> products) {
+        return new ProductsInCategoryResponse(page, products);
+    }
+
     public ProductsInCategoryPageDto getPage() {
         return page;
     }
