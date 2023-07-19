@@ -1,4 +1,4 @@
-export interface RankingProduct {
+export interface ProductRanking {
   id: number;
   rank: number;
   name: string;
