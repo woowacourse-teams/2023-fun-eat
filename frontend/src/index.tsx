@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { SvgSprite } from './components/Common';
 import router from './router';
+import GlobalStyle from './styles';
 
 const main = async () => {
   if (process.env.NODE_ENV === 'development') {
@@ -19,6 +20,7 @@ root.render(
   <React.StrictMode>
     <FunEatProvider>
       <SvgSprite />
+      <GlobalStyle />
       <RouterProvider router={router} />
     </FunEatProvider>
   </React.StrictMode>
