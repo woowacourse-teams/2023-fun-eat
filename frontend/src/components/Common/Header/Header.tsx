@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-import logo from '@/assets/logo.svg';
+import Logo from '@/assets/logo.svg';
 
 const Header = () => {
   return (
     <HeaderContainer>
-      <img src={logo} width={206} alt="펀잇 로고" />
+      <Logo />
     </HeaderContainer>
   );
 };
