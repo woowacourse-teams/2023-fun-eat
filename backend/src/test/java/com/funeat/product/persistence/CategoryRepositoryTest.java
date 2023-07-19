@@ -41,7 +41,7 @@ class CategoryRepositoryTest {
         categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
 
         // when
-        final List<Category> actual = categoryRepository.findAllByType(CategoryType.FOOD);
+        final var actual = categoryRepository.findAllByType(CategoryType.FOOD);
 
         // then
         assertThat(actual)
@@ -53,12 +53,12 @@ class CategoryRepositoryTest {
     void 카테고리_타입이_STORE인_모든_카테고리를_조회한다() {
         // given
         categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
+        final var expected = List.of(CU, GS25, EMART24);
 
         // when
-        final List<Category> actual = categoryRepository.findAllByType(CategoryType.STORE);
+        final var actual = categoryRepository.findAllByType(CategoryType.STORE);
 
         // then
-        assertThat(actual).usingRecursiveFieldByFieldElementComparatorIgnoringFields()
-                .containsOnly(CU, GS25, EMART24);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
