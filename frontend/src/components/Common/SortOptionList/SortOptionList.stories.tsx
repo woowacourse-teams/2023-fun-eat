@@ -25,13 +25,13 @@ export const Default: Story = {
       ref.current?.close();
     };
 
-    const handleSortOption = (optionIndex: number) => {
+    const selectSortOption = (optionIndex: number) => {
       setSelectedOption(optionIndex);
     };
 
     return (
       <BottomSheet ref={ref} close={closeBottomSheet}>
-        <SortOptionList selectedOption={selectedOption} onOptionSelected={handleSortOption} close={closeBottomSheet} />
+        <SortOptionList selectedOption={selectedOption} selectSortOption={selectSortOption} close={closeBottomSheet} />
       </BottomSheet>
     );
   },
