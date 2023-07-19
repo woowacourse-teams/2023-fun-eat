@@ -15,7 +15,7 @@ const ProductTitle = () => {
 
   return (
     <ProductTitleContainer>
-      <ProductTitleWrapper>
+      <div>
         <Button color="white" variant="filled">
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
         </Button>
@@ -27,7 +27,7 @@ const ProductTitle = () => {
         >
           {name}
         </Text>
-      </ProductTitleWrapper>
+      </div>
       <Button
         color="white"
         variant="filled"
@@ -53,5 +53,3 @@ const ProductTitleContainer = styled.h3`
   align-items: center;
   justify-content: space-between;
 `;
-
-const ProductTitleWrapper = styled.div``;
