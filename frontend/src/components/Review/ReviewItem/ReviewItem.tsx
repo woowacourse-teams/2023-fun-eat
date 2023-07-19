@@ -46,20 +46,18 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
       </ReviewerWrapper>
       {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
-      <div>
-        <Text css="white-space: pre-wrap">{content}</Text>
-        <FavoriteButton type="button" color="white" variant="filled">
-          <SvgIcon
-            variant={favorite ? 'favoriteFilled' : 'favorite'}
-            color={favorite ? 'red' : theme.colors.gray4}
-            width={24}
-            height={24}
-          />
-          <Text as="span" weight="bold">
-            {favoriteCount}
-          </Text>
-        </FavoriteButton>
-      </div>
+      <Text css="white-space: pre-wrap">{content}</Text>
+      <FavoriteButton type="button" color="white" variant="filled">
+        <SvgIcon
+          variant={favorite ? 'favoriteFilled' : 'favorite'}
+          color={favorite ? 'red' : theme.colors.gray4}
+          width={24}
+          height={24}
+        />
+        <Text as="span" weight="bold">
+          {favoriteCount}
+        </Text>
+      </FavoriteButton>
     </ReviewItemContainer>
   );
 };
@@ -89,24 +87,19 @@ const ReviewerImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.primary};
 `;
 
-const ReviewImage = styled.img`
-  align-self: center;
-`;
-
 const RatingIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: -2px;
+`;
 
-  & > svg {
-    padding-bottom: 2px;
-  }
+const ReviewImage = styled.img`
+  align-self: center;
 `;
 
 const FavoriteButton = styled(Button)`
   display: flex;
   align-items: center;
   column-gap: 8px;
-  margin-top: 8px;
   padding: 0;
 `;
