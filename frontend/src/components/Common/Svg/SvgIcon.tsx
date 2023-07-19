@@ -11,6 +11,7 @@ export const SVG_ICON_VARIANTS = [
   'review',
   'star',
   'favorite',
+  'favoriteFilled',
   'home',
   'sort',
 ] as const;
