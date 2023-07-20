@@ -47,6 +47,11 @@ public class Review {
     protected Review() {
     }
 
+    public Review(final Member member, final Product findProduct, final Long rating, final String content,
+                  final Boolean reBuy) {
+        this(member, findProduct, null, rating, content, reBuy);
+    }
+
     public Review(final Member member, final Product findProduct, final String image, final Long rating,
                   final String content, final Boolean reBuy) {
         this.member = member;
