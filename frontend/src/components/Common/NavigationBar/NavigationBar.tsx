@@ -1,5 +1,6 @@
-import { Text, theme } from '@fun-eat/design-system';
+import { Link, Text, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -9,36 +10,43 @@ import { NAVIGATION_MENU } from '@/constants';
 const NavigationBar = () => {
   const [selectedMenu, setSelectedMenu] = useState('홈');
 
-  const navigateMenu = (name: string) => {
+  const selectMenu = (name: string) => {
     setSelectedMenu(name);
   };
 
   return (
-    <nav>
-      <NavigationBarContainer>
-        {NAVIGATION_MENU.map(({ variant, name }) => {
+    <NavigationBarContainer>
+      <NavigationBarList>
+        {NAVIGATION_MENU.map(({ variant, name, path }) => {
           const isSelected = selectedMenu === name;
           return (
-            <NavigationItem key={variant} onClick={() => navigateMenu(name)}>
-              <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
-              <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
-                {name}
-              </Text>
-            </NavigationItem>
+            <Link as={RouterLink} to={path} key={variant}>
+              <NavigationItem onClick={() => selectMenu(name)}>
+                <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
+                <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
+                  {name}
+                </Text>
+              </NavigationItem>
+            </Link>
           );
         })}
-      </NavigationBarContainer>
-    </nav>
+      </NavigationBarList>
+    </NavigationBarContainer>
   );
 };
 
 export default NavigationBar;
 
-const NavigationBarContainer = styled.ul`
+const NavigationBarContainer = styled.nav`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+`;
+
+const NavigationBarList = styled.ul`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 100%;
   height: 62px;
   padding-top: 12px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};

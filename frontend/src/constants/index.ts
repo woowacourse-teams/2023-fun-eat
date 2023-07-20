@@ -1,30 +1,32 @@
+import { PATH } from './path';
+
 import type { NavigationMenu } from '@/types/common';
 
 export const NAVIGATION_MENU: NavigationMenu[] = [
   {
     variant: 'search',
     name: '검색',
-    path: '',
+    path: PATH.SEARCH,
   },
   {
     variant: 'list',
     name: '목록',
-    path: '',
+    path: PATH.PRODUCT_LIST,
   },
   {
     variant: 'home',
     name: '홈',
-    path: '',
+    path: PATH.HOME,
   },
   {
     variant: 'recipe',
     name: '꿀조합',
-    path: '',
+    path: PATH.RECIPE,
   },
   {
     variant: 'profile',
     name: '마이',
-    path: '',
+    path: PATH.PROFILE,
   },
 ];
 

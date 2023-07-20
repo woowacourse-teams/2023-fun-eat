@@ -26,7 +26,7 @@ public class ProductController {
             @PathVariable(name = "category_id") final Long categoryId,
             @PageableDefault Pageable pageable
     ) {
-        ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, pageable);
+        final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, pageable);
         return ResponseEntity.ok(response);
     }
 

@@ -21,7 +21,7 @@ public class CommonSteps {
         assertThat(response.header("Location")).isNotBlank();
     }
 
-    public static void STATUS_CODE를_검증한다(final ExtractableResponse<Response> response, HttpStatus httpStatus) {
+    public static void STATUS_CODE를_검증한다(final ExtractableResponse<Response> response, final HttpStatus httpStatus) {
         assertThat(response.statusCode()).isEqualTo(httpStatus.value());
     }
 }
