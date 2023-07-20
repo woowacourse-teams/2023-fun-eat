@@ -22,12 +22,12 @@ const ProductDetailPage = () => {
       <ProductDetailItem product={targetProductDetail} />
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
-      <Spacing size={30} />
-      <ReviewSection>
-        <SortButtonWrapper>
-          <SortButton />
-        </SortButtonWrapper>
-        <Spacing size={30} />
+      <Spacing size={8} />
+      <SortButtonWrapper>
+        <SortButton />
+      </SortButtonWrapper>
+      <Spacing size={8} />
+      <section>
         {reviews && (
           <ReviewItemWrapper>
             {reviews.map((review) => (
@@ -37,24 +37,20 @@ const ProductDetailPage = () => {
             ))}
           </ReviewItemWrapper>
         )}
-      </ReviewSection>
+      </section>
     </>
   );
 };
 
 export default ProductDetailPage;
 
-const ReviewSection = styled.section`
-  position: relative;
-`;
-
 const SortButtonWrapper = styled.div`
-  position: absolute;
-  top: -24px;
-  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
-const ReviewItemWrapper = styled.li`
+const ReviewItemWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   row-gap: 60px;
