@@ -22,7 +22,7 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
       <Spacing size={4} />
       <FavoriteStarWrapper>
         <FavoriteIconWrapper>
-          <SvgIcon variant="favorite" color="red" width={11} height={13} />
+          <SvgIcon variant="favoriteFilled" color="red" width={11} height={13} />
           <Text size="xs" weight="bold">
             {favoriteCount}
           </Text>
