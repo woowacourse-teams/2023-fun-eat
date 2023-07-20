@@ -1,6 +1,6 @@
 import { Heading, Link, Spacing } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { CategoryMenu } from '@/components/Common';
 import { PBProductList, ProductList, ProductRankingList } from '@/components/Product';
