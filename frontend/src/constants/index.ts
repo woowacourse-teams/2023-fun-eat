@@ -34,16 +34,3 @@ export const SORT_OPTIONS = [
   { label: '높은 가격순', value: 'price,desc' },
   { label: '낮은 가격순', value: 'price,asc' },
 ] as const;
-
-export const FOOD_CATEGORY_MENU = [
-  { id: 0, name: '즉석조리' },
-  { id: 1, name: '과자' },
-  { id: 2, name: '간편식사' },
-  { id: 3, name: '아이스크림' },
-];
-
-export const STORE_CATEGORY_MENU = [
-  { id: 0, name: 'CU' },
-  { id: 1, name: 'GS25' },
-  { id: 2, name: '이마트24' },
-];

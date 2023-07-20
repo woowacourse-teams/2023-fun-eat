@@ -5,8 +5,9 @@ import { styled } from 'styled-components';
 import { CategoryMenu } from '@/components/Common';
 import { PBProductList, ProductList, ProductRankingList } from '@/components/Product';
 import { ReviewRankingList } from '@/components/Review';
-import { FOOD_CATEGORY_MENU, STORE_CATEGORY_MENU } from '@/constants';
 import { PATH } from '@/constants/path';
+import foodCategory from '@/mocks/data/foodCategory.json';
+import storeCategory from '@/mocks/data/storeCategory.json';
 
 const HomePage = () => {
   return (
@@ -16,7 +17,7 @@ const HomePage = () => {
           공통 상품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={FOOD_CATEGORY_MENU} menuVariant="food" />
+        <CategoryMenu menuList={foodCategory} menuVariant="food" />
         <Spacing size={12} />
         <ProductList />
         <ProductListRouteButton as={RouterLink} to={PATH.PRODUCT_LIST}>
@@ -29,7 +30,7 @@ const HomePage = () => {
           편의점 특산품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={STORE_CATEGORY_MENU} menuVariant="store" />
+        <CategoryMenu menuList={storeCategory} menuVariant="store" />
         <Spacing size={16} />
         <PBProductList />
       </section>
