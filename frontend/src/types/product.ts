@@ -16,5 +16,6 @@ export interface ProductDetail {
   image: string;
   content: string;
   averageRating: number;
+  bookmark: boolean;
   tags: Tag[];
 }

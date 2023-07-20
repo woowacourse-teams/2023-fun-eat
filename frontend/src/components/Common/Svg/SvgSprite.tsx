@@ -16,15 +16,11 @@ const SvgSprite = () => {
       <symbol id="arrow" viewBox="0 0 8 12">
         <path d="M7.41 10.59L2.83 6l4.58-4.59L6 0 0 6l6 6 1.41-1.41z" />
       </symbol>
-      <symbol id="bookmark" viewBox="0 0 24 24">
-        <g clipPath="url(#a)">
-          <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z" />
-        </g>
-        <defs>
-          <clipPath id="a">
-            <path d="M0 0h24v24H0z" />
-          </clipPath>
-        </defs>
+      <symbol id="bookmark" viewBox="0 0 20 24">
+        <path d="M17.143 0H2.857C1.286 0 .014 1.2.014 2.667L0 24l10-4 10 4V2.667C20 1.2 18.714 0 17.143 0zm0 20L10 17.093 2.857 20V2.667h14.286V20z" />
+      </symbol>
+      <symbol id="bookmarkFilled" viewBox="0 0 14 18">
+        <path d="M12 0H2C.9 0 .01.9.01 2L0 18l7-3 7 3V2c0-1.1-.9-2-2-2z" />
       </symbol>
       <symbol id="review" viewBox="0 0 14 14">
         <g clipPath="url(#a)">
