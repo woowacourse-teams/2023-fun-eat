@@ -51,5 +51,5 @@ const SortButtonWrapper = styled.div`
 const ReviewItemWrapper = styled.li`
   display: flex;
   flex-direction: column;
-  row-gap: 40px;
+  row-gap: 60px;
 `;
