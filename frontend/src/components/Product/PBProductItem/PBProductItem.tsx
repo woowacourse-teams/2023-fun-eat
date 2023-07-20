@@ -16,7 +16,7 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
       <PBProductImage src={image} alt={name} />
       <PBProductInfoWrapper>
         <PBProductName weight="bold">{name}</PBProductName>
-        <PBProductDetailInfoWrapper>
+        <PBProductReviewWrapper>
           <RatingWrapper>
             <SvgIcon variant="star" color={theme.colors.secondary} width={18} height={18} />
             <Text as="span" size="sm" weight="bold" color={theme.textColors.info}>
@@ -26,7 +26,7 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
           <Text as="span" size="sm" color={theme.textColors.info}>
             {price.toLocaleString('ko-KR')}원
           </Text>
-        </PBProductDetailInfoWrapper>
+        </PBProductReviewWrapper>
       </PBProductInfoWrapper>
     </PBProductItemContainer>
   );
@@ -59,7 +59,7 @@ const PBProductName = styled(Text)`
   overflow: hidden;
 `;
 
-const PBProductDetailInfoWrapper = styled.div`
+const PBProductReviewWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
