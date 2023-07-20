@@ -1,23 +1,13 @@
 import type { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
+import Header from '../Header/Header';
 import NavigationBar from '../NavigationBar/NavigationBar';
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <LayoutContainer>
-      {/* TODO: 아래 h1은 헤더 들어갈 공간 미리 표시, 헤더로 대체 예정*/}
-      <h1
-        style={{
-          height: '60px',
-          textAlign: 'center',
-          lineHeight: '60px',
-          fontSize: '24px',
-          borderBottom: '1px solid gray',
-        }}
-      >
-        펀잇 - 로망오우타해황
-      </h1>
+      <Header />
       <MainWrapper>{children}</MainWrapper>
       <NavigationBar />
     </LayoutContainer>
