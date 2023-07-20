@@ -1,4 +1,4 @@
-import { Button, Text, theme } from '@fun-eat/design-system';
+import { Button, Heading, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -15,14 +15,14 @@ const ProductTitle = () => {
 
   return (
     <ProductTitleContainer>
-      <div>
+      <ProductTitleWrapper>
         <Button color="white" variant="filled">
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
         </Button>
-        <Text as="span" css="margin-left: 10px">
+        <Heading size="xl" css="margin-left: 10px">
           {name}
-        </Text>
-      </div>
+        </Heading>
+      </ProductTitleWrapper>
       <Button color="white" variant="filled" css="width: 2rem" onClick={toggleBookmark}>
         <SvgIcon
           variant={isBookmarked ? 'bookmarkFilled' : 'bookmark'}
@@ -35,8 +35,13 @@ const ProductTitle = () => {
 
 export default ProductTitle;
 
-const ProductTitleContainer = styled.h3`
+const ProductTitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const ProductTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
