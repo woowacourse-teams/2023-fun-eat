@@ -44,8 +44,7 @@ export default ProductItem;
 const ProductItemContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 150px;
-  padding: 30px;
+  padding: 12px 0;
 `;
 
 const ProductInfoWrapper = styled.div`
