@@ -8,6 +8,7 @@ export const SVG_ICON_VARIANTS = [
   'search',
   'arrow',
   'bookmark',
+  'bookmarkFilled',
   'review',
   'star',
   'favorite',

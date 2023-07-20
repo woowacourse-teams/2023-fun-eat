@@ -1,12 +1,11 @@
 import { Outlet } from 'react-router-dom';
 
-import { NavigationBar } from './components/Common';
+import { Layout } from './components/Common';
 
 const App = () => (
-  <>
+  <Layout>
     <Outlet />
-    <NavigationBar />
-  </>
+  </Layout>
 );
 
 export default App;

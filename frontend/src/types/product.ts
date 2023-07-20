@@ -16,5 +16,14 @@ export interface ProductDetail {
   image: string;
   content: string;
   averageRating: number;
+  bookmark: boolean;
   tags: Tag[];
+}
+
+export interface PBProduct {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  averageRating: number;
 }

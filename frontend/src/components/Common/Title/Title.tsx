@@ -1,4 +1,4 @@
-import { Link, Text, theme } from '@fun-eat/design-system';
+import { Link, Heading, theme } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -16,16 +16,16 @@ const Title = ({ headingTitle }: TitleProps) => {
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
         </SvgIconWrapper>
       </Link>
-      <Text as="p" weight="bold" css="font-size:2.4rem">
+      <Heading weight="bold" css="font-size:2.4rem">
         {headingTitle}
-      </Text>
+      </Heading>
     </TitleContainer>
   );
 };
 
 export default Title;
 
-const TitleContainer = styled.h1`
+const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
