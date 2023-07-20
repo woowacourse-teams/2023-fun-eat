@@ -1,5 +1,6 @@
-import { Button, Heading, theme } from '@fun-eat/design-system';
+import { Button, Heading, Link, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
@@ -16,10 +17,10 @@ const ProductTitle = () => {
   return (
     <ProductTitleContainer>
       <ProductTitleWrapper>
-        <Button color="white" variant="filled">
+        <Link as={RouterLink} to=".." relative="path">
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
-        </Button>
-        <Heading size="xl" css="margin-left: 10px">
+        </Link>
+        <Heading size="xl" css="margin-left: 20px">
           {name}
         </Heading>
       </ProductTitleWrapper>
