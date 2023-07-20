@@ -19,17 +19,19 @@ const ProductItem = ({ product }: ProductItemProps) => {
         <Text size="lg" weight="bold">
           {name}
         </Text>
-        <Text color={theme.textColors.info}>{price.toLocaleString('ko-KR')}원</Text>
+        <Text size="sm" color={theme.textColors.info}>
+          {price.toLocaleString('ko-KR')}원
+        </Text>
         <ProductReviewWrapper>
           <RatingIconWrapper>
             <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
-            <Text as="span" css="line-height: 24px;">
+            <Text as="span" size="sm" css="line-height: 24px;">
               {averageRating}
             </Text>
           </RatingIconWrapper>
           <ReviewIconWrapper>
             <SvgIcon variant="review" width={20} height={20} color={theme.colors.gray5} />
-            <Text as="span" css="line-height: 24px">
+            <Text as="span" size="sm" css="line-height: 24px">
               {reviewCount}
             </Text>
           </ReviewIconWrapper>
