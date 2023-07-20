@@ -36,7 +36,6 @@ export default PBProductItem;
 
 const PBProductItemContainer = styled.div`
   width: 110px;
-  height: 220px;
 `;
 
 const PBProductImage = styled.img`
