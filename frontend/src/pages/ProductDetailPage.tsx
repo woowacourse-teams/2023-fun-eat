@@ -1,19 +1,26 @@
 import { Spacing } from '@fun-eat/design-system';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SortButton from '@/components/Common/SortButton/SortButton';
 import TabMenu from '@/components/Common/TabMenu/TabMenu';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
-import productDetail from '@/mocks/data/productDetail.json';
+import productDetails from '@/mocks/data/productDetails.json';
 import reviews from '@/mocks/data/reviews.json';
 
 const ProductDetailPage = () => {
+  const { productId } = useParams();
+
+  // TODO: productId param으로 api 요청 보내면 바뀔 로직
+  const targetProductDetail =
+    productDetails.find((productDetail) => productDetail.id === Number(productId)) ?? productDetails[0];
+
   return (
     <>
-      <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
+      <ProductTitle name={targetProductDetail.name} bookmark={targetProductDetail?.bookmark} />
       <Spacing size={36} />
-      <ProductDetailItem product={productDetail} />
+      <ProductDetailItem product={targetProductDetail} />
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
       <Spacing size={30} />
