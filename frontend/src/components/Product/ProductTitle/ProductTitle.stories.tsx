@@ -10,4 +10,16 @@ const meta: Meta<typeof ProductTitle> = {
 export default meta;
 type Story = StoryObj<typeof ProductTitle>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    name: '사이다',
+    bookmark: false,
+  },
+};
+
+export const Bookmarked: Story = {
+  args: {
+    name: '사이다',
+    bookmark: true,
+  },
+};

@@ -1,19 +1,15 @@
 import { Button, Heading, Link, theme } from '@fun-eat/design-system';
-import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import productDetail from '@/mocks/data/productDetail.json';
 
-const ProductTitle = () => {
-  const { name, bookmark } = productDetail;
-  const [isBookmarked, setIsBookmarked] = useState(bookmark);
+interface ProductTitleProps {
+  name: string;
+  bookmark: boolean;
+}
 
-  const toggleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-  };
-
+const ProductTitle = ({ name, bookmark }: ProductTitleProps) => {
   return (
     <ProductTitleContainer>
       <ProductTitleWrapper>
@@ -24,10 +20,10 @@ const ProductTitle = () => {
           {name}
         </Heading>
       </ProductTitleWrapper>
-      <Button color="white" variant="filled" css="width: 2rem" onClick={toggleBookmark}>
+      <Button color="white" variant="filled" css="width: 2rem">
         <SvgIcon
-          variant={isBookmarked ? 'bookmarkFilled' : 'bookmark'}
-          color={isBookmarked ? theme.colors.primary : theme.colors.gray5}
+          variant={bookmark ? 'bookmarkFilled' : 'bookmark'}
+          color={bookmark ? theme.colors.primary : theme.colors.gray5}
         />
       </Button>
     </ProductTitleContainer>
