@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: { DEV-DB-URL }
-    username: { DEV-DB-USERNAME }
-    password: { DEV-DB-PASSWORD }
+    url: { DEV_DB_URL }
+    username: { DEV_DB_USERNAME }
+    password: { DEV_DB_PASSWORD }
 
   jpa:
     hibernate:
@@ -15,4 +15,4 @@ spring:
 
 review:
   image:
-    path: { DEV-IMAGE-PATH }
+    path: { DEV_IMAGE_PATH }
