@@ -13,7 +13,7 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
 
   return (
     <PBProductItemContainer>
-      <PBProductImage src={image} alt={name} />
+      <PBProductImage src={image} alt={name} width={110} height={110} />
       <PBProductInfoWrapper>
         <PBProductName weight="bold">{name}</PBProductName>
         <PBProductReviewWrapper>
@@ -37,12 +37,9 @@ export default PBProductItem;
 const PBProductItemContainer = styled.div`
   width: 110px;
   height: 220px;
-  margin: 0 20px;
 `;
 
 const PBProductImage = styled.img`
-  width: 100%;
-  height: 50%;
   object-fit: cover;
 `;
 
@@ -69,4 +66,9 @@ const PBProductReviewWrapper = styled.div`
 const RatingWrapper = styled.div`
   display: flex;
   align-items: center;
+  column-gap: 4px;
+
+  & > svg {
+    padding-bottom: 2px;
+  }
 `;
