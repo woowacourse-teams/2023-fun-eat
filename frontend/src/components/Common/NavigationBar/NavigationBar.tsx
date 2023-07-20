@@ -20,16 +20,14 @@ const NavigationBar = () => {
         {NAVIGATION_MENU.map(({ variant, name, path }) => {
           const isSelected = selectedMenu === name;
           return (
-            <li key={variant}>
-              <Link as={RouterLink} to={path}>
-                <NavigationItem onClick={() => selectMenu(name)}>
-                  <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
-                  <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
-                    {name}
-                  </Text>
-                </NavigationItem>
-              </Link>
-            </li>
+            <NavigationItem key={variant} onClick={() => selectMenu(name)}>
+              <NavigationLink as={RouterLink} to={path}>
+                <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
+                <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
+                  {name}
+                </Text>
+              </NavigationLink>
+            </NavigationItem>
           );
         })}
       </NavigationBarList>
@@ -56,11 +54,13 @@ const NavigationBarList = styled.ul`
 `;
 
 const NavigationItem = styled.li`
+  height: 50px;
+`;
+
+const NavigationLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
-  height: 50px;
-  cursor: pointer;
+  gap: 4px;
 `;
