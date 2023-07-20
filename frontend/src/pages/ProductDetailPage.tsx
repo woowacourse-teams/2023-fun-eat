@@ -2,8 +2,7 @@ import { Spacing } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import SortButton from '@/components/Common/SortButton/SortButton';
-import TabMenu from '@/components/Common/TabMenu/TabMenu';
+import { SortButton, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import productDetails from '@/mocks/data/productDetails.json';
