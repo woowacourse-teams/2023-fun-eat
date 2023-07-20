@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import SortButton from '@/components/Common/SortButton/SortButton';
 import TabMenu from '@/components/Common/TabMenu/TabMenu';
-import { ProductDetail, ProductTitle } from '@/components/Product';
+import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import productDetail from '@/mocks/data/productDetail.json';
 import reviews from '@/mocks/data/reviews.json';
@@ -13,7 +13,7 @@ const ProductDetailPage = () => {
     <>
       <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      <ProductDetail />
+      <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
       <Spacing size={30} />
