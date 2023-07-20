@@ -43,7 +43,6 @@ export default ReviewRankingItem;
 const ReviewRankingItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 315px;
   padding: 12px;
   gap: 4px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};

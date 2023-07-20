@@ -25,15 +25,15 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
           <li key={menu.id}>
             <Button
               type="button"
-              color={isSelected ? 'white' : 'gray4'}
+              color={isSelected ? 'primary' : 'gray3'}
               variant={isSelected ? 'filled' : 'outlined'}
               size="xs"
-              css={isSelected && selectedCategoryMenuStyles[menuVariant]}
+              css={isSelected ? selectedCategoryMenuStyles[menuVariant] : undefined}
               onClick={() => selectMenu(menu.id)}
             >
-              <CategoryMenuButtonText size="xs" weight="bold" color={theme.textColors.sub}>
+              <Text size="xs" weight="bold">
                 {menu.name}
-              </CategoryMenuButtonText>
+              </Text>
             </Button>
           </li>
         );
@@ -61,7 +61,3 @@ const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['menuVariant'], 
     color: ${theme.textColors.default};
   `,
 };
-
-const CategoryMenuButtonText = styled(Text)`
-  color: inherit;
-`;

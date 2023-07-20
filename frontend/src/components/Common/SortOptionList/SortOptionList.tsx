@@ -29,7 +29,7 @@ const SortOptionList = ({ selectedOption, selectSortOption, close }: SortOptionL
           >
             <SortOption
               color="white"
-              textColor={isSelected ? 'black' : 'gray4'}
+              textColor={isSelected ? 'default' : 'sub'}
               variant="filled"
               size="lg"
               css={`

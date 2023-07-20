@@ -24,6 +24,6 @@ const LayoutContainer = styled.div`
 
 const MainWrapper = styled.main`
   height: calc(100% - 120px);
-  padding: 40px 20px;
+  padding: 20px;
   overflow-y: auto;
 `;

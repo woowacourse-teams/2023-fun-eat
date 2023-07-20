@@ -28,7 +28,6 @@ export default ProductRankingItem;
 const ProductRankingContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 300px;
   height: 50px;
   margin-bottom: 15px;
   padding-left: 15px;

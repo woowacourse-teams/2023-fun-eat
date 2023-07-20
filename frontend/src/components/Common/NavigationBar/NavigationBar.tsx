@@ -1,6 +1,5 @@
 import { Link, Text, theme } from '@fun-eat/design-system';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -8,19 +7,15 @@ import SvgIcon from '../Svg/SvgIcon';
 import { NAVIGATION_MENU } from '@/constants';
 
 const NavigationBar = () => {
-  const [selectedMenu, setSelectedMenu] = useState('홈');
-
-  const selectMenu = (name: string) => {
-    setSelectedMenu(name);
-  };
+  const location = useLocation();
 
   return (
     <NavigationBarContainer>
       <NavigationBarList>
         {NAVIGATION_MENU.map(({ variant, name, path }) => {
-          const isSelected = selectedMenu === name;
+          const isSelected = location.pathname === path;
           return (
-            <NavigationItem key={variant} onClick={() => selectMenu(name)}>
+            <NavigationItem key={variant}>
               <NavigationLink as={RouterLink} to={path}>
                 <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
                 <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
