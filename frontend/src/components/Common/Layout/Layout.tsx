@@ -6,7 +6,7 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <LayoutContainer>
-      {/*아래 h1은 헤더 들어갈 공간 미리 표시, 헤더로 대체 예정*/}
+      {/* TODO: 아래 h1은 헤더 들어갈 공간 미리 표시, 헤더로 대체 예정*/}
       <h1
         style={{
           height: '60px',
