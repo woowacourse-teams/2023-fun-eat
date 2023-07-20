@@ -19,3 +19,11 @@ export interface ProductDetail {
   bookmark: boolean;
   tags: Tag[];
 }
+
+export interface PBProduct {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  averageRating: number;
+}
