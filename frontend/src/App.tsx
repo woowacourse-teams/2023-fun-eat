@@ -1,13 +1,11 @@
 import { Outlet } from 'react-router-dom';
 
-import { Header, NavigationBar } from './components/Common';
+import { Layout } from './components/Common';
 
 const App = () => (
-  <>
-    <Header />
+  <Layout>
     <Outlet />
-    <NavigationBar />
-  </>
+  </Layout>
 );
 
 export default App;
