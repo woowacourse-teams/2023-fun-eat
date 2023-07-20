@@ -1,4 +1,5 @@
 import type { SvgIconVariant } from '@/components/Common/Svg/SvgIcon';
+import type { PATH } from '@/constants/path';
 
 export interface Category {
   id: number;
@@ -13,5 +14,5 @@ export interface Tag {
 export interface NavigationMenu {
   variant: SvgIconVariant;
   name: '검색' | '목록' | '홈' | '꿀조합' | '마이';
-  path: string;
+  path: (typeof PATH)[keyof typeof PATH];
 }

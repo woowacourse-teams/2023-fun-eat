@@ -3,11 +3,14 @@ import { FunEatProvider } from '@fun-eat/design-system';
 import type { Preview } from '@storybook/react';
 import { mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/mocks/handlers';
+import { BrowserRouter } from 'react-router-dom';
 
 export const decorators = [
   (Story) => (
     <FunEatProvider>
-      <Story />
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
     </FunEatProvider>
   ),
   mswDecorator,

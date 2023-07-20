@@ -1,11 +1,13 @@
-import { Header } from './components/Common';
+import { Outlet } from 'react-router-dom';
 
-const App = () => {
-  return (
-    <>
-      <Header />
-    </>
-  );
-};
+import { Header, NavigationBar } from './components/Common';
+
+const App = () => (
+  <>
+    <Header />
+    <Outlet />
+    <NavigationBar />
+  </>
+);
 
 export default App;

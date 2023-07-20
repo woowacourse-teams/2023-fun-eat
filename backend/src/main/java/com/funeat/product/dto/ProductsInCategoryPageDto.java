@@ -1,6 +1,5 @@
 package com.funeat.product.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.funeat.product.domain.Product;
 import org.springframework.data.domain.Page;
 
@@ -12,13 +11,8 @@ public class ProductsInCategoryPageDto {
     private final Long requestPage;
     private final Long requestSize;
 
-    @JsonCreator
-    public ProductsInCategoryPageDto(final Long totalDataCount,
-                                 final Long totalPages,
-                                 final boolean FirstPage,
-                                 final boolean LastPage,
-                                 final Long requestPage,
-                                 final Long requestSize) {
+    public ProductsInCategoryPageDto(final Long totalDataCount, final Long totalPages, final boolean FirstPage,
+                                     final boolean LastPage, final Long requestPage, final Long requestSize) {
         this.totalDataCount = totalDataCount;
         this.totalPages = totalPages;
         this.firstPage = FirstPage;
