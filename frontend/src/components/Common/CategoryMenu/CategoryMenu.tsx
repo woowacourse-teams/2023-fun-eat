@@ -25,7 +25,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
           <li key={menu.id}>
             <Button
               type="button"
-              color={isSelected ? 'primary' : 'white'}
+              color={isSelected ? 'primary' : 'gray3'}
               variant={isSelected ? 'filled' : 'outlined'}
               size="xs"
               css={isSelected ? selectedCategoryMenuStyles[menuVariant] : undefined}
