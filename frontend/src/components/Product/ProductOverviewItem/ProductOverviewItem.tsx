@@ -28,7 +28,7 @@ const ProductOverviewItem = ({ productRanking, variant }: ProductRankingItemProp
 
 export default ProductOverviewItem;
 
-const ProductOverviewContainer = styled.div<{ variant: 'default' | 'ranking' }>`
+const ProductOverviewContainer = styled.div<Pick<ProductRankingItemProps, 'variant'>>`
   display: flex;
   align-items: center;
   height: 50px;
