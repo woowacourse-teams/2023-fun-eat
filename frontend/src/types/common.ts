@@ -17,4 +17,6 @@ export interface NavigationMenu {
   path: (typeof PATH)[keyof typeof PATH];
 }
 
-export type SortOption = 'price' | 'averageRating' | 'reviewCount';
+export type ProductSortOption = 'price' | 'averageRating' | 'reviewCount';
+
+export type ReviewSortOption = 'favoriteCount' | 'rating';

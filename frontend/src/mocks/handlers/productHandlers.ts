@@ -1,15 +1,10 @@
 import { rest } from 'msw';
 
+import { isProductSortOption, isSortOrder } from './utils';
 import foodCategory from '../data/foodCategory.json';
 import pbCategory from '../data/pbCategory.json';
 import productDetail from '../data/productDetail.json';
 import categoryProducts from '../data/products.json';
-
-import type { SortOption } from '@/types/common';
-
-const isSortOption = (sortKey: string): sortKey is SortOption =>
-  sortKey === 'price' || sortKey === 'averageRating' || sortKey === 'reviewCount';
-const isSortOrder = (sortOrder: string) => sortOrder === 'asc' || sortOrder === 'desc';
 
 export const productHandlers = [
   rest.get('/api/categories', (req, res, ctx) => {
@@ -35,7 +30,7 @@ export const productHandlers = [
 
     const [key, sortOrder] = sortOptions.split(',');
 
-    if (!isSortOption(key) || !isSortOrder(sortOrder)) {
+    if (!isProductSortOption(key) || !isSortOrder(sortOrder)) {
       return res(ctx.status(400));
     }
 
