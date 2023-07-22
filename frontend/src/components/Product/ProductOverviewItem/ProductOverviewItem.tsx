@@ -3,12 +3,12 @@ import styled from 'styled-components';
 
 import type { ProductRanking } from '@/types/ranking';
 
-interface ProductRankingItemProps {
+interface ProductOverviewItemProps {
   productRanking: ProductRanking;
   variant: 'default' | 'ranking';
 }
 
-const ProductOverviewItem = ({ productRanking, variant }: ProductRankingItemProps) => {
+const ProductOverviewItem = ({ productRanking, variant }: ProductOverviewItemProps) => {
   const { rank, image, name } = productRanking;
 
   return (
@@ -28,7 +28,7 @@ const ProductOverviewItem = ({ productRanking, variant }: ProductRankingItemProp
 
 export default ProductOverviewItem;
 
-const ProductOverviewContainer = styled.div<Pick<ProductRankingItemProps, 'variant'>>`
+const ProductOverviewContainer = styled.div<Pick<ProductOverviewItemProps, 'variant'>>`
   display: flex;
   align-items: center;
   height: 50px;
