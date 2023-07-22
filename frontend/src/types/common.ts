@@ -16,3 +16,5 @@ export interface NavigationMenu {
   name: '검색' | '목록' | '홈' | '꿀조합' | '마이';
   path: (typeof PATH)[keyof typeof PATH];
 }
+
+export type SortOption = 'price' | 'averageRating' | 'reviewCount';
