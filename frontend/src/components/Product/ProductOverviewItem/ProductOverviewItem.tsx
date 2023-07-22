@@ -1,19 +1,16 @@
 import { Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import type { ProductRanking } from '@/types/ranking';
-
 interface ProductOverviewItemProps {
-  productRanking: ProductRanking;
-  variant: 'default' | 'ranking';
+  rank?: number;
+  name: string;
+  image: string;
 }
 
-const ProductOverviewItem = ({ productRanking, variant }: ProductOverviewItemProps) => {
-  const { rank, image, name } = productRanking;
-
+const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) => {
   return (
-    <ProductOverviewContainer variant={variant}>
-      {variant === 'ranking' && (
+    <ProductOverviewContainer rank={rank}>
+      {rank && (
         <Text size="lg" weight="bold" align="center">
           {rank}
         </Text>
@@ -28,7 +25,7 @@ const ProductOverviewItem = ({ productRanking, variant }: ProductOverviewItemPro
 
 export default ProductOverviewItem;
 
-const ProductOverviewContainer = styled.div<Pick<ProductOverviewItemProps, 'variant'>>`
+const ProductOverviewContainer = styled.div<Pick<ProductOverviewItemProps, 'rank'>>`
   display: flex;
   align-items: center;
   height: 50px;
@@ -36,7 +33,7 @@ const ProductOverviewContainer = styled.div<Pick<ProductOverviewItemProps, 'vari
   padding-left: 15px;
   gap: 15px;
   border-radius: ${({ theme }) => theme.borderRadius.xs};
-  background: ${({ theme, variant }) => (variant === 'default' ? theme.colors.white : theme.colors.gray1)};
+  background: ${({ theme, rank }) => (rank ? theme.colors.gray1 : theme.colors.white)};
 `;
 
 const ProductOverviewImage = styled.img`

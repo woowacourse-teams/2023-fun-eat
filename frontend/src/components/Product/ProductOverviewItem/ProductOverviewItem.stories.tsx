@@ -6,13 +6,8 @@ const meta: Meta<typeof ProductOverviewItem> = {
   title: 'product/ProductOverviewItem',
   component: ProductOverviewItem,
   args: {
-    productRanking: {
-      id: 3,
-      rank: 1,
-      image: 'https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg',
-      name: '소금빵',
-    },
-    variant: 'default',
+    image: 'https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg',
+    name: '소금빵',
   },
 };
 
@@ -23,6 +18,6 @@ export const Default: Story = {};
 
 export const Ranking: Story = {
   args: {
-    variant: 'ranking',
+    rank: 1,
   },
 };
