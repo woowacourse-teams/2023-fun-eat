@@ -29,21 +29,10 @@ import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
-
-    @BeforeEach
-    void init() {
-        reviewTagRepository.deleteAll();
-        reviewFavoriteRepository.deleteAll();
-        reviewRepository.deleteAll();
-        memberRepository.deleteAll();
-        productRepository.deleteAll();
-        tagRepository.deleteAll();
-    }
 
     @Test
     void 리뷰를_작성한다() {
@@ -136,7 +125,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    void 좋아요_기준_내림차순된_리뷰_목록을_조회한다() {
+    void 좋아요_기준_내림차순으로_리뷰_목록을_조회한다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
@@ -200,7 +189,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    void 평점_기준_내림차순된_리뷰_목록을_조회한다() {
+    void 평점_기준_내림차순으로_리뷰_목록을_조회한다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
