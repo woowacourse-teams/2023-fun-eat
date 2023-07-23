@@ -1,5 +1,5 @@
 import { Button, Heading, Spacing, theme } from '@fun-eat/design-system';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import useStarRating from '@/hooks/useStarRate';
