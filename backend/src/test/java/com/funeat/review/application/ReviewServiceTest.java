@@ -182,7 +182,7 @@ class ReviewServiceTest {
     class sortingReviews_페이징_테스트 {
 
         @Test
-        void 좋아요_기준으로_내림차순_정렬이_되는지_확인한다() {
+        void 좋아요_기준으로_내림차순_정렬을_할_수_있다() {
             // given
             final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
             final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
@@ -213,7 +213,7 @@ class ReviewServiceTest {
         }
 
         @Test
-        void 평점_기준으로_오름차순_정렬이_되는지_확인한다() {
+        void 평점_기준으로_오름차순_정렬을_할_수_있다() {
             // given
             final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
             final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
@@ -244,7 +244,7 @@ class ReviewServiceTest {
         }
 
         @Test
-        void 평점_기준으로_내림차순_정렬이_되는지_확인한다() {
+        void 평점_기준으로_내림차순_정렬을_할_수_있다() {
             // given
             final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
             final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");

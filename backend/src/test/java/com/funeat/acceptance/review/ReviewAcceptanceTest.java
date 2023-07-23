@@ -125,7 +125,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    void 좋아요_기준_내림차순으로_리뷰_목록을_조회한다() {
+    void 좋아요_기준_내림차순으로_리뷰_목록을_조회할_수_있다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
@@ -153,11 +153,11 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        좋아요_기준_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
     }
 
     @Test
-    void 평점_기준_오름차순으로_리뷰_목록을_조회한다() {
+    void 평점_기준_오름차순으로_리뷰_목록을_조회할_수_있다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
@@ -185,11 +185,11 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        좋아요_기준_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
     }
 
     @Test
-    void 평점_기준_내림차순으로_리뷰_목록을_조회한다() {
+    void 평점_기준_내림차순으로_리뷰_목록을_조회할_수_있다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
@@ -217,7 +217,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        좋아요_기준_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
     }
 
     @Test
@@ -295,9 +295,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    private void 좋아요_기준_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                          final List<Review> reviews,
-                                          final SortingReviewsPageDto pageDto) {
+    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
+                                       final List<Review> reviews,
+                                       final SortingReviewsPageDto pageDto) {
         페이지를_검증한다(response, pageDto);
         리뷰_목록을_검증한다(response, reviews);
     }
