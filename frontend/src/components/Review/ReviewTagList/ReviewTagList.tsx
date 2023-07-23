@@ -20,6 +20,7 @@ const ReviewTagList = () => {
       </Heading>
       <TagListWrapper>
         {reviewTagList.slice(0, displayedTagsLimit).map(({ id, content }) => (
+          // TODO: 태그를 선택했을 때 ui 추가, 태그 색깔 매핑
           <TagItem key={id}>
             <Badge color={theme.colors.primary} textColor={theme.textColors.default}>
               {content}
