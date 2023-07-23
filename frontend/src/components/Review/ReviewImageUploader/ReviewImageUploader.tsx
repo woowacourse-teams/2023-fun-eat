@@ -1,14 +1,12 @@
-import { Button, Heading } from '@fun-eat/design-system';
-import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import React, { useState } from 'react';
+import styled, { useTheme } from 'styled-components';
 
 const ReviewImageUploader = () => {
-  const imageUploadInputRef = useRef<HTMLInputElement>(null);
   const [reviewImage, setReviewImage] = useState('');
+  const theme = useTheme();
 
   const uploadReviewImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!imageUploadInputRef.current) return;
-    imageUploadInputRef.current.click();
     if (!event.target.files) return;
     setReviewImage(URL.createObjectURL(event.target.files[0]));
   };
@@ -20,7 +18,11 @@ const ReviewImageUploader = () => {
 
   return (
     <ReviewImageUploaderContainer>
-      <UploadText as="h2">사진이 있다면 올려주세요.</UploadText>
+      <UploadText as="h2">구매한 상품 사진이 있다면 올려주세요.</UploadText>
+      <Text size="sm" color={theme.textColors.disabled}>
+        사진은 1장까지 업로드 가능합니다.
+      </Text>
+      <Spacing size={20} />
       {reviewImage ? (
         <ReviewImageButtonWrapper>
           <img src={reviewImage} />
@@ -35,7 +37,6 @@ const ReviewImageUploader = () => {
             id="review-image"
             type="file"
             accept="image/*"
-            ref={imageUploadInputRef}
             onChange={uploadReviewImage}
             style={{ display: 'none' }}
           />
@@ -51,7 +52,6 @@ const ReviewImageUploaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
 `;
 
 const UploadText = styled(Heading)`
