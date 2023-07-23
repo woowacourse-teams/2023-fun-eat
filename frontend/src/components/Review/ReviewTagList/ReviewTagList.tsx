@@ -1,6 +1,6 @@
 import { Badge, Heading, theme } from '@fun-eat/design-system';
 import { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import reviewTagList from '@/mocks/data/reviewTagList.json';
@@ -16,7 +16,8 @@ const ReviewTagList = () => {
     setMaxDisplayedTags(maxDisplayedTags + MAX_DISPLAYED_TAGS);
   };
 
-  const toggleTagSelection = (id: number) => {
+  const toggleTagSelection = (id: number, isSelected: boolean) => {
+    if (selectedTags.length >= MAX_SELECTED_TAGS && !isSelected) return;
     setSelectedTags((prevSelectedTags) => {
       const isSelected = prevSelectedTags.includes(id);
       if (isSelected) {
@@ -26,27 +27,30 @@ const ReviewTagList = () => {
     });
   };
 
+  const renderTag = (id: number, content: string) => {
+    const isSelected = selectedTags.includes(id);
+
+    const tagStyles = css`
+      ${isSelected && `border: 1px solid ${theme.colors.information};`}
+      ${selectedTags.length >= MAX_SELECTED_TAGS && !isSelected && `opacity: 0.5;`}
+    `;
+
+    return (
+      <TagItem key={id} onClick={() => toggleTagSelection(id, isSelected)}>
+        <Badge color={theme.colors.primary} textColor={theme.textColors.default} css={tagStyles}>
+          {content}
+        </Badge>
+      </TagItem>
+    );
+  };
+
   return (
     <ReviewTagListContainer>
       <Heading as="h2" size="lg">
         상품에 관한 태그를 선택해주세요 (3개)
       </Heading>
       <TagListWrapper>
-        {reviewTagList.slice(0, maxDisplayedTags).map(({ id, content }) => {
-          const isSelected = selectedTags.includes(id);
-          return (
-            // TODO: 태그 색 매핑
-            <TagItem key={id} onClick={() => toggleTagSelection(id)}>
-              <Badge
-                color={selectedTags.length < MAX_SELECTED_TAGS ? theme.colors.primary : theme.colors.gray2}
-                textColor={theme.textColors.default}
-                css={isSelected && `border: 1px solid ${theme.colors.information}`}
-              >
-                {content}
-              </Badge>
-            </TagItem>
-          );
-        })}
+        {reviewTagList.slice(0, maxDisplayedTags).map(({ id, content }) => renderTag(id, content))}
       </TagListWrapper>
       {reviewTagList.length > maxDisplayedTags && (
         <button onClick={showMoreTags}>
