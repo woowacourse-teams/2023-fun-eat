@@ -15,7 +15,7 @@ const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) =>
           {rank}
         </Text>
       )}
-      <ProductOverviewImage src={image} alt={`${rank}위 상품`} />
+      <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : name} />
       <Text size="lg" weight="bold" align="center">
         {name}
       </Text>
