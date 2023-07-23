@@ -4,11 +4,43 @@ import styled from 'styled-components';
 
 const ReviewImageUploader = () => {
   const imageUploadInputRef = useRef<HTMLInputElement>(null);
+  const [reviewImage, setReviewImage] = useState('');
+
+  const uploadReviewImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!imageUploadInputRef.current) return;
+    imageUploadInputRef.current.click();
+    if (!event.target.files) return;
+    setReviewImage(URL.createObjectURL(event.target.files[0]));
+  };
+
+  const deleteReviewImage = () => {
+    URL.revokeObjectURL(reviewImage);
+    setReviewImage('');
+  };
+
   return (
     <ReviewImageUploaderContainer>
       <UploadText as="h2">사진이 있다면 올려주세요.</UploadText>
-      <ImageUploadLabel htmlFor="review-image">+</ImageUploadLabel>
-      <input id="review-image" type="file" accept="image/*" ref={imageUploadInputRef} style={{ display: 'none' }} />
+      {reviewImage ? (
+        <ReviewImageButtonWrapper>
+          <img src={reviewImage} />
+          <Button variant="filled" color="primary" size="sm" onClick={deleteReviewImage}>
+            삭제하기
+          </Button>
+        </ReviewImageButtonWrapper>
+      ) : (
+        <>
+          <ImageUploadLabel htmlFor="review-image">+</ImageUploadLabel>
+          <input
+            id="review-image"
+            type="file"
+            accept="image/*"
+            ref={imageUploadInputRef}
+            onChange={uploadReviewImage}
+            style={{ display: 'none' }}
+          />
+        </>
+      )}
     </ReviewImageUploaderContainer>
   );
 };
