@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { SvgIcon } from '@/components/Common';
 import useStarRating from '@/hooks/useStarRate';
 
+const starList = Array.from({ length: 5 }, (_, index) => index + 1);
+
 const StarRate = () => {
   const { rating, hovering, handleRating, handleMouseEnter, handleMouseLeave } = useStarRating();
-
-  const starList = Array.from({ length: 5 }, (_, index) => index + 1);
 
   return (
     <StarRateContainer>
