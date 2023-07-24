@@ -36,16 +36,10 @@ const ReviewImageUploader = () => {
           </Button>
         </ReviewImageButtonWrapper>
       ) : (
-        <>
-          <ImageUploadLabel htmlFor="review-image">+</ImageUploadLabel>
-          <input
-            id="review-image"
-            type="file"
-            accept="image/*"
-            onChange={uploadReviewImage}
-            style={{ display: 'none' }}
-          />
-        </>
+        <ImageUploadLabel>
+          +
+          <input type="file" accept="image/*" onChange={uploadReviewImage} />
+        </ImageUploadLabel>
       )}
     </ReviewImageUploaderContainer>
   );
@@ -69,6 +63,10 @@ const ImageUploadLabel = styled.label`
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   cursor: pointer;
+
+  & > input {
+    display: none;
+  }
 `;
 
 const ReviewImageButtonWrapper = styled.div`
