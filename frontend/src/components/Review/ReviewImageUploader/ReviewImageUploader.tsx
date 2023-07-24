@@ -1,13 +1,16 @@
-import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
-import React, { useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import type { ChangeEventHandler } from 'react';
+import { useState } from 'react';
+import styled from 'styled-components';
 
 const ReviewImageUploader = () => {
   const [reviewImage, setReviewImage] = useState('');
   const theme = useTheme();
 
-  const uploadReviewImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) return;
+  const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (!event.target.files) {
+      return;
+    }
     setReviewImage(URL.createObjectURL(event.target.files[0]));
   };
 
