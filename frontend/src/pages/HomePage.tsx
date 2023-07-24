@@ -6,10 +6,12 @@ import { CategoryMenu, SvgIcon } from '@/components/Common';
 import { PBProductList, ProductList, ProductRankingList } from '@/components/Product';
 import { ReviewRankingList } from '@/components/Review';
 import { PATH } from '@/constants/path';
-import foodCategory from '@/mocks/data/foodCategory.json';
-import storeCategory from '@/mocks/data/storeCategory.json';
+import { useCategory } from '@/hooks/product';
 
 const HomePage = () => {
+  const { data: foodCategory } = useCategory('food');
+  const { data: storeCategory } = useCategory('store');
+
   return (
     <>
       <section>
@@ -17,7 +19,7 @@ const HomePage = () => {
           공통 상품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={foodCategory} menuVariant="food" />
+        <CategoryMenu menuList={foodCategory ?? []} menuVariant="food" />
         <Spacing size={12} />
         <ProductList />
         <ProductListRouteButton as={RouterLink} to={PATH.PRODUCT_LIST}>
@@ -30,7 +32,7 @@ const HomePage = () => {
           편의점 특산품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={storeCategory} menuVariant="store" />
+        <CategoryMenu menuList={storeCategory ?? []} menuVariant="store" />
         <Spacing size={16} />
         <PBProductList />
       </section>
