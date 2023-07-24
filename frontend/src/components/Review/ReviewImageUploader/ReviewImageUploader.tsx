@@ -18,7 +18,9 @@ const ReviewImageUploader = () => {
 
   return (
     <ReviewImageUploaderContainer>
-      <UploadText as="h2">구매한 상품 사진이 있다면 올려주세요.</UploadText>
+      <Heading as="h2" size="lg">
+        구매한 상품 사진이 있다면 올려주세요.
+      </Heading>
       <Text size="sm" color={theme.textColors.disabled}>
         사진은 1장까지 업로드 가능합니다.
       </Text>
@@ -52,10 +54,6 @@ const ReviewImageUploaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const UploadText = styled(Heading)`
-  font-size: 1.8rem;
 `;
 
 const ImageUploadLabel = styled.label`
