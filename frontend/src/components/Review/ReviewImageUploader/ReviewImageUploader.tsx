@@ -30,7 +30,7 @@ const ReviewImageUploader = () => {
       <Spacing size={20} />
       {reviewImage ? (
         <ReviewImageButtonWrapper>
-          <img src={reviewImage} alt={'업로드한 리뷰 사진'} />
+          <img src={reviewImage} alt={'업로드한 리뷰 사진'} width={200} />
           <Button variant="filled" color="primary" size="sm" onClick={deleteReviewImage}>
             삭제하기
           </Button>
