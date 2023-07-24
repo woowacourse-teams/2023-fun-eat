@@ -6,7 +6,7 @@ import { SortButton, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import productDetails from '@/mocks/data/productDetails.json';
-import reviews from '@/mocks/data/reviews.json';
+import mockReviews from '@/mocks/data/reviews.json';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -14,6 +14,8 @@ const ProductDetailPage = () => {
   // TODO: productId param으로 api 요청 보내면 바뀔 로직
   const targetProductDetail =
     productDetails.find((productDetail) => productDetail.id === Number(productId)) ?? productDetails[0];
+
+  const { reviews } = mockReviews;
 
   return (
     <>
