@@ -3,10 +3,14 @@ import styled, { useTheme } from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import TagList from '@/components/Common/TagList/TagList';
-import productDetail from '@/mocks/data/productDetail.json';
+import type { ProductDetail } from '@/types/product';
 
-const ProductDetail = () => {
-  const { name, price, image, content, averageRating, tags } = productDetail;
+interface ProductDetailProps {
+  product: ProductDetail;
+}
+
+const ProductDetailItem = ({ product }: ProductDetailProps) => {
+  const { name, price, image, content, averageRating, tags } = product;
   const theme = useTheme();
 
   return (
@@ -34,7 +38,7 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetailItem;
 
 const ProductDetailContainer = styled.div`
   display: flex;

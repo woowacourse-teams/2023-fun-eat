@@ -8,14 +8,14 @@ public class RankingReviewDto {
     private final Long productId;
     private final String productName;
     private final String content;
-    private final Double rating;
+    private final Long rating;
     private final Long favoriteCount;
 
     public RankingReviewDto(final Long reviewId,
                             final Long productId,
                             final String productName,
                             final String content,
-                            final Double rating,
+                            final Long rating,
                             final Long favoriteCount) {
         this.reviewId = reviewId;
         this.productId = productId;
@@ -52,7 +52,7 @@ public class RankingReviewDto {
         return content;
     }
 
-    public Double getRating() {
+    public Long getRating() {
         return rating;
     }
 

@@ -66,7 +66,7 @@ class ReviewFavoriteRepositoryTest {
 
     private Review 리뷰_추가_요청(final Member member, final Product product) {
         final var image = 리뷰_사진_명세_요청();
-        return reviewRepository.save(new Review(member, product, image.getFileName(), 4.5, "content", true));
+        return reviewRepository.save(new Review(member, product, image.getFileName(), 4L, "content", true));
     }
 
     private MultiPartSpecification 리뷰_사진_명세_요청() {

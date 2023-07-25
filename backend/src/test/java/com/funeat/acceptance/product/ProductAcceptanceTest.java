@@ -109,11 +109,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final Tag tag3 = 태그_추가_요청(new Tag("3번"));
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
 
-        final ReviewCreateRequest request1 = new ReviewCreateRequest(4.5,
+        final ReviewCreateRequest request1 = new ReviewCreateRequest(4L,
                 List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true, memberId);
-        final ReviewCreateRequest request2 = new ReviewCreateRequest(4.0, List.of(tag2.getId(), tag3.getId()),
+        final ReviewCreateRequest request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()),
                 "request2", true, memberId);
-        final ReviewCreateRequest request3 = new ReviewCreateRequest(3.0, List.of(tag2.getId()), "request3", true,
+        final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true,
                 memberId);
         리뷰_추가_요청(productId, image, request1);
         리뷰_추가_요청(productId, image, request2);

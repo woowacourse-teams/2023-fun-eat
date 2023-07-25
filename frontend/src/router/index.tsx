@@ -3,7 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '@/App';
 import { PATH } from '@/constants/path';
 import HomePage from '@/pages/HomePage';
-import ProductListPage from '@/pages/ProductList';
+import ProductDetailPage from '@/pages/ProductDetailPage';
+import ProductListPage from '@/pages/ProductListPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RecipePage from '@/pages/RecipePage';
 import SearchPage from '@/pages/SearchPage';
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: PATH.PRODUCT_LIST,
         element: <ProductListPage />,
+      },
+      {
+        path: `${PATH.PRODUCT_LIST}/:productId`,
+        element: <ProductDetailPage />,
       },
       {
         path: PATH.RECIPE,

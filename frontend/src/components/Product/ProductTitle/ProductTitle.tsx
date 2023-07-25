@@ -41,4 +41,9 @@ const ProductTitleContainer = styled.div`
 const ProductTitleWrapper = styled.div`
   display: flex;
   align-items: center;
+  column-gap: 8px;
+
+  svg {
+    padding-top: 2px;
+  }
 `;

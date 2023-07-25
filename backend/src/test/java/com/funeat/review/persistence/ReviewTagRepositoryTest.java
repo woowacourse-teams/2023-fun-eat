@@ -60,8 +60,8 @@ class ReviewTagRepositoryTest {
         final var tag4 = new Tag("4번");
         tagRepository.saveAll(List.of(tag1, tag2, tag3, tag4));
 
-        final var review1 = new Review(member, product, "review1.png", 5.0, "최고의 망고", true, 25L);
-        final var review2 = new Review(member, product, "review2.png", 3.0, "그럭저럭 망고", false, 10L);
+        final var review1 = new Review(member, product, "review1.png", 5L, "최고의 망고", true, 25L);
+        final var review2 = new Review(member, product, "review2.png", 3L, "그럭저럭 망고", false, 10L);
         reviewRepository.saveAll(List.of(review1, review2));
 
         final var reviewTag1 = ReviewTag.createReviewTag(review1, tag1);

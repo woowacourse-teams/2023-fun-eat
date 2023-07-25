@@ -13,10 +13,10 @@ const Title = ({ headingTitle }: TitleProps) => {
     <TitleContainer>
       <Link as={RouterLink} to=".." relative="path">
         <SvgIconWrapper>
-          <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
+          <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
       </Link>
-      <Heading weight="bold" css="font-size:2.4rem">
+      <Heading as="h2" weight="bold">
         {headingTitle}
       </Heading>
     </TitleContainer>
@@ -28,12 +28,12 @@ export default Title;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
   position: relative;
 `;
 
 const SvgIconWrapper = styled.button`
   position: absolute;
+  top: 8px;
   left: 0;
 `;

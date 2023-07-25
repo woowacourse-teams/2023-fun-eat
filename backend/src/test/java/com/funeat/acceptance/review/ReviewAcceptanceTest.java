@@ -29,21 +29,10 @@ import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
-
-    @BeforeEach
-    void init() {
-        reviewTagRepository.deleteAll();
-        reviewFavoriteRepository.deleteAll();
-        reviewRepository.deleteAll();
-        memberRepository.deleteAll();
-        productRepository.deleteAll();
-        tagRepository.deleteAll();
-    }
 
     @Test
     void 리뷰를_작성한다() {
@@ -53,7 +42,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final List<Long> savedTagIds = 태그_추가_요청();
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
 
-        final var request = new ReviewCreateRequest(4.5, savedTagIds, "test content", true, savedMemberId);
+        final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true, savedMemberId);
 
         // when
         final var response = 리뷰_추가_요청(savedProductId, image, request);
@@ -69,7 +58,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final Long savedProductId = 상품_추가_요청();
         final List<Long> savedTagIds = 태그_추가_요청();
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4.5, savedTagIds, "test content", true, savedMemberId);
+        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true, savedMemberId);
         final var favoriteRequest = new ReviewFavoriteRequest(true, savedMemberId);
 
         리뷰_추가_요청(savedProductId, image, reviewRequest);
@@ -92,7 +81,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final Long savedProductId = 상품_추가_요청();
         final List<Long> savedTagIds = 태그_추가_요청();
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4.5, savedTagIds, "test content", true, savedMemberId);
+        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true, savedMemberId);
         final var favoriteRequest = new ReviewFavoriteRequest(true, savedMemberId);
         final var favoriteCancelRequest = new ReviewFavoriteRequest(false, savedMemberId);
 
@@ -136,7 +125,71 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    void 좋아요_기준_내림차순된_리뷰_목록을_조회한다() {
+    void 좋아요_기준_내림차순으로_리뷰_목록을_조회할_수_있다() {
+        // given
+        final var category = new Category("간편식사", CategoryType.FOOD);
+        카테고리_추가_요청(category);
+
+        final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
+        final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
+        final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+        final var members = List.of(member1, member2, member3);
+        복수_유저_추가_요청(members);
+
+        final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+        final var productId = 상품_추가_요청(product);
+
+        final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
+        final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
+        final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+        final var reviews = List.of(review1, review2, review3);
+        복수_리뷰_추가(reviews);
+
+        final var sortingReviews = List.of(review2, review3, review1);
+        final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+        // when
+        final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리);
+        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+    }
+
+    @Test
+    void 평점_기준_오름차순으로_리뷰_목록을_조회할_수_있다() {
+        // given
+        final var category = new Category("간편식사", CategoryType.FOOD);
+        카테고리_추가_요청(category);
+
+        final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
+        final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
+        final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+        final var members = List.of(member1, member2, member3);
+        복수_유저_추가_요청(members);
+
+        final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+        final var productId = 상품_추가_요청(product);
+
+        final var review1 = new Review(member1, product, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 5L);
+        final var review2 = new Review(member2, product, "review2.jpg", 4.5, "역삼역", true, 351L);
+        final var review3 = new Review(member3, product, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
+        final var reviews = List.of(review1, review2, review3);
+        복수_리뷰_추가(reviews);
+
+        final var sortingReviews = List.of(review1, review3, review2);
+
+        // when
+        final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+        final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리);
+        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+    }
+
+    @Test
+    void 평점_기준_내림차순으로_리뷰_목록을_조회할_수_있다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
@@ -157,13 +210,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         복수_리뷰_추가(reviews);
 
         final var sortingReviews = List.of(review2, review3, review1);
+        final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
         // when
-        final var response = 좋아요_기준_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+        final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        좋아요_기준_리뷰_목록_조회_결과를_검증한다(response, sortingReviews);
+        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
     }
 
     @Test
@@ -183,11 +237,11 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final var products = List.of(product1, product2);
         복수_상품_추가_요청(products);
 
-        final var review1 = new Review(member1, product1, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product1, "review2.jpg", 4.5, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product1, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
-        final var review4 = new Review(member2, product2, "review4.jpg", 5.0, "ㅁㅜㄹ", true, 247L);
-        final var review5 = new Review(member3, product2, "review5.jpg", 1.5, "ㄴㄴ", false, 83L);
+        final var review1 = new Review(member1, product1, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
+        final var review2 = new Review(member2, product1, "review2.jpg", 4L, "역삼역", true, 351L);
+        final var review3 = new Review(member3, product1, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+        final var review4 = new Review(member2, product2, "review4.jpg", 5L, "ㅁㅜㄹ", true, 247L);
+        final var review5 = new Review(member3, product2, "review5.jpg", 1L, "ㄴㄴ", false, 83L);
         final var reviews = List.of(review1, review2, review3, review4, review5);
         복수_리뷰_추가(reviews);
 
@@ -221,9 +275,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         reviewRepository.saveAll(reviews);
     }
 
-    private ExtractableResponse<Response> 좋아요_기준_리뷰_목록_조회_요청(final Long productId,
-                                                             final String sort,
-                                                             final Integer page) {
+    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final Long productId,
+                                                          final String sort,
+                                                          final Integer page) {
         return given()
                 .queryParam("sort", sort)
                 .queryParam("page", page)
@@ -241,14 +295,15 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    private void 좋아요_기준_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                          final List<Review> reviews) {
-        페이지를_검증한다(response);
+    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
+                                       final List<Review> reviews,
+                                       final SortingReviewsPageDto pageDto) {
+        페이지를_검증한다(response, pageDto);
         리뷰_목록을_검증한다(response, reviews);
     }
 
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response) {
-        final var expected = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+    private void 페이지를_검증한다(final ExtractableResponse<Response> response,
+                           final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", SortingReviewsPageDto.class);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }

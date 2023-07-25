@@ -19,14 +19,14 @@ import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.review.presentation.dto.SortingReviewsResponse;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -61,9 +61,17 @@ public class ReviewService {
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final Review savedReview = reviewRepository.save(
-                new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
-                        reviewRequest.getContent(), reviewRequest.getReBuy()));
+        final Review savedReview;
+        if (Objects.isNull(image)) {
+            savedReview = reviewRepository.save(
+                    new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
+                            reviewRequest.getReBuy()));
+        } else {
+            savedReview = reviewRepository.save(
+                    new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
+                            reviewRequest.getContent(), reviewRequest.getReBuy()));
+            imageService.upload(image);
+        }
 
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
 
@@ -71,15 +79,15 @@ public class ReviewService {
                 .map(findTag -> ReviewTag.createReviewTag(savedReview, findTag))
                 .collect(Collectors.toList());
 
+        final Long countByProduct = reviewRepository.countByProduct(findProduct);
+
+        findProduct.updateAverageRating(savedReview.getRating(), countByProduct);
         reviewTagRepository.saveAll(reviewTags);
-        imageService.upload(image);
     }
 
     @Transactional
-    public void likeReview(final Long productId, final Long reviewId, final ReviewFavoriteRequest request) {
+    public void likeReview(final Long reviewId, final ReviewFavoriteRequest request) {
         final Member findMember = memberRepository.findById(request.getMemberId())
-                .orElseThrow(IllegalArgumentException::new);
-        final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);

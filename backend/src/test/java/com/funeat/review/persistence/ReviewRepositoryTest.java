@@ -51,10 +51,10 @@ class ReviewRepositoryTest {
         Product product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
         Product product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
 
-        reviewRepository.save(new Review(member, product1, "review.png", 4.5, "이 삼각김밥은 최고!!", true));
-        reviewRepository.save(new Review(member, product1, "review.png", 3.0, "이 삼각김밥은 별로", false));
-        reviewRepository.save(new Review(member, product1, "review.png", 4.0, "이 삼각김밥은 쏘쏘", true));
-        reviewRepository.save(new Review(member, product2, "review.png", 3.0, "이 라면은 맛있다", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 최고!!", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 별로", false));
+        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 쏘쏘", true));
+        reviewRepository.save(new Review(member, product2, "review.png", 3L, "이 라면은 맛있다", true));
 
         // when
         assertThat(reviewRepository.countByProduct(product1)).isEqualTo(3);
@@ -73,9 +73,9 @@ class ReviewRepositoryTest {
         final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
         productRepository.save(product);
 
-        final var review1 = new Review(member1, product, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 351L);
-        final var review2 = new Review(member2, product, "review2.jpg", 4.5, "역삼역", true, 24L);
-        final var review3 = new Review(member3, product, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
+        final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
+        final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
+        final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
         final var reviews = List.of(review1, review2, review3);
         reviewRepository.saveAll(reviews);
 
@@ -106,11 +106,11 @@ class ReviewRepositoryTest {
         final var products = List.of(product1, product2);
         productRepository.saveAll(products);
 
-        final var review1 = new Review(member1, product1, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product1, "review2.jpg", 4.5, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product1, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
-        final var review4 = new Review(member2, product2, "review4.jpg", 5.0, "ㅁㅜㄹ", true, 247L);
-        final var review5 = new Review(member3, product2, "review5.jpg", 1.5, "ㄴㄴ", false, 83L);
+        final var review1 = new Review(member1, product1, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
+        final var review2 = new Review(member2, product1, "review2.jpg", 4L, "역삼역", true, 351L);
+        final var review3 = new Review(member3, product1, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+        final var review4 = new Review(member2, product2, "review4.jpg", 5L, "ㅁㅜㄹ", true, 247L);
+        final var review5 = new Review(member3, product2, "review5.jpg", 1L, "ㄴㄴ", false, 83L);
         final var reviews = List.of(review1, review2, review3, review4, review5);
         reviewRepository.saveAll(reviews);
 

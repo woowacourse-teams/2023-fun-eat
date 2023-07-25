@@ -2,13 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import TagList from './TagList';
 
-import productDetail from '@/mocks/data/productDetail.json';
+import productDetails from '@/mocks/data/productDetails.json';
 
 const meta: Meta<typeof TagList> = {
   title: 'common/TagList',
   component: TagList,
   args: {
-    tags: productDetail.tags,
+    tags: productDetails[0].tags,
   },
 };
 

@@ -22,7 +22,7 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
       <Spacing size={4} />
       <FavoriteStarWrapper>
         <FavoriteIconWrapper>
-          <SvgIcon variant="favorite" color="red" width={11} height={13} />
+          <SvgIcon variant="favoriteFilled" color="red" width={11} height={13} />
           <Text size="xs" weight="bold">
             {favoriteCount}
           </Text>
@@ -43,7 +43,6 @@ export default ReviewRankingItem;
 const ReviewRankingItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 315px;
   padding: 12px;
   gap: 4px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
