@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
-@Profile("dev")
+@Profile("!test")
 public class ImageUploader implements ImageService {
 
     @Value("${review.image.path}")
