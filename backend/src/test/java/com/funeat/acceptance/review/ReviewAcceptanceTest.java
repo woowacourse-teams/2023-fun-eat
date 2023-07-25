@@ -28,6 +28,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -122,100 +123,214 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         return testMember.getId();
     }
 
-    @Test
-    void 좋아요_기준_내림차순으로_리뷰_목록을_조회할_수_있다() {
-        // given
-        final var category = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(category);
+    @Nested
+    class 좋아요_기준_내림차순으로_리뷰_목록_조회 {
 
-        final var member1 = new Member("test1", "test1.png");
-        final var member2 = new Member("test2", "test2.png");
-        final var member3 = new Member("test3", "test3.png");
-        final var members = List.of(member1, member2, member3);
-        복수_유저_추가_요청(members);
+        @Test
+        void 좋아요_수가_서로_다르면_좋아요_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
 
-        final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-        final var productId = 상품_추가_요청(product);
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
+            final var members = List.of(member1, member2, member3);
+            복수_유저_추가_요청(members);
 
-        final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-        final var reviews = List.of(review1, review2, review3);
-        복수_리뷰_추가(reviews);
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
 
-        final var sortingReviews = List.of(review2, review3, review1);
-        final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+            final var reviews = List.of(review1, review2, review3);
+            복수_리뷰_추가(reviews);
 
-        // when
-        final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+            final var sortingReviews = List.of(review2, review3, review1);
+            final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+        }
+
+        @Test
+        void 좋아요_수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
+
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
+            final var member4 = new Member("test4", "test4.png");
+            final var members = List.of(member1, member2, member3, member4);
+            복수_유저_추가_요청(members);
+
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
+
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 130L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 130L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "토미토", false, 130L);
+            final var review4 = new Review(member4, product, "review4.jpg", 4L, "기러기", false, 130L);
+            final var reviews = List.of(review1, review2, review3, review4);
+            복수_리뷰_추가(reviews);
+
+            final var sortingReviews = List.of(review4, review3, review2, review1);
+            final var pageDto = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+        }
     }
 
-    @Test
-    void 평점_기준_오름차순으로_리뷰_목록을_조회할_수_있다() {
-        // given
-        final var category = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(category);
+    @Nested
+    class 평점_기준_오름차순으로_리뷰_목록을_조회 {
 
-        final var member1 = new Member("test1", "test1.png");
-        final var member2 = new Member("test2", "test2.png");
-        final var member3 = new Member("test3", "test3.png");
-        final var members = List.of(member1, member2, member3);
-        복수_유저_추가_요청(members);
+        @Test
+        void 평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
 
-        final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-        final var productId = 상품_추가_요청(product);
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
+            final var members = List.of(member1, member2, member3);
+            복수_유저_추가_요청(members);
 
-        final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-        final var reviews = List.of(review1, review2, review3);
-        복수_리뷰_추가(reviews);
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
 
-        final var sortingReviews = List.of(review1, review3, review2);
+            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+            final var reviews = List.of(review1, review2, review3);
+            복수_리뷰_추가(reviews);
 
-        // when
-        final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
-        final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var sortingReviews = List.of(review1, review3, review2);
 
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+            final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        }
+
+        @Test
+        void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
+
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
+            final var member4 = new Member("test4", "test4.png");
+            final var members = List.of(member1, member2, member3, member4);
+            복수_유저_추가_요청(members);
+
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
+
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
+            final var review2 = new Review(member2, product, "review2.jpg", 3L, "역삼역", true, 351L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "토마토", false, 130L);
+            final var review4 = new Review(member4, product, "review4.jpg", 3L, "기러기", false, 130L);
+            final var reviews = List.of(review1, review2, review3, review4);
+            복수_리뷰_추가(reviews);
+
+            final var sortingReviews = List.of(review4, review3, review2, review1);
+            final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        }
     }
 
-    @Test
-    void 평점_기준_내림차순으로_리뷰_목록을_조회할_수_있다() {
-        // given
-        final var category = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(category);
+    @Nested
+    class 평점_기준_내림차순으로_리뷰_목록_조회 {
 
-        final var member1 = new Member("test1", "test1.png");
-        final var member2 = new Member("test2", "test2.png");
-        final var member3 = new Member("test3", "test3.png");
-        final var members = List.of(member1, member2, member3);
-        복수_유저_추가_요청(members);
+        @Test
+        void 평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
 
-        final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-        final var productId = 상품_추가_요청(product);
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
+            final var members = List.of(member1, member2, member3);
+            복수_유저_추가_요청(members);
 
-        final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-        final var reviews = List.of(review1, review2, review3);
-        복수_리뷰_추가(reviews);
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
 
-        final var sortingReviews = List.of(review2, review3, review1);
-        final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+            final var reviews = List.of(review1, review2, review3);
+            복수_리뷰_추가(reviews);
 
-        // when
-        final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+            final var sortingReviews = List.of(review2, review3, review1);
+            final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        }
+
+        @Test
+        void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
+
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
+            final var member4 = new Member("test4", "test4.png");
+            final var members = List.of(member1, member2, member3, member4);
+            복수_유저_추가_요청(members);
+
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
+
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
+            final var review2 = new Review(member2, product, "review2.jpg", 3L, "역삼역", true, 351L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "토마토", false, 130L);
+            final var review4 = new Review(member4, product, "review4.jpg", 3L, "기러기", false, 130L);
+            final var reviews = List.of(review1, review2, review3, review4);
+            복수_리뷰_추가(reviews);
+
+            final var sortingReviews = List.of(review4, review3, review2, review1);
+            final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        }
     }
 
     @Test
