@@ -22,7 +22,7 @@ const ReviewTextarea = () => {
       <Textarea
         rows={5}
         resize="vertical"
-        placeholder=""
+        placeholder="솔직한 리뷰를 써주세요 😊"
         maxLength={MAX_LENGTH}
         value={reviewValue}
         onChange={handleReviewInput}
