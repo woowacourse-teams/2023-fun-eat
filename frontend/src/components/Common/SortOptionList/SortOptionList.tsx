@@ -1,32 +1,27 @@
 import { Button, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import { SORT_OPTIONS } from '@/constants';
+import { SortOption } from '@/types/common';
 
 interface SortOptionListProps {
-  selectedOption: number;
-  selectSortOption: (optionIndex: number) => void;
+  options: readonly SortOption[];
+  selectedOption: string;
+  selectSortOption: (selectedOptionLabel: string) => void;
   close: () => void;
 }
 
-const SortOptionList = ({ selectedOption, selectSortOption, close }: SortOptionListProps) => {
-  const handleSelectedOption = (optionIndex: number) => {
-    selectSortOption(optionIndex);
+const SortOptionList = ({ options, selectedOption, selectSortOption, close }: SortOptionListProps) => {
+  const handleSelectedOption = (selectedOptionLabel: string) => {
+    selectSortOption(selectedOptionLabel);
     close();
   };
 
   return (
     <SortOptionListContainer>
-      {SORT_OPTIONS.map((option, index) => {
-        const isSelected = index === selectedOption;
-        const isLastItem = index < SORT_OPTIONS.length - 1;
+      {options.map(({ label }) => {
+        const isSelected = label === selectedOption;
         return (
-          <SortOptionItem
-            key={option.label}
-            css={`
-              border-bottom: ${isLastItem ? `1px solid ${theme.dividerColors.disabled}` : 'none'};
-            `}
-          >
+          <li key={label}>
             <SortOption
               color="white"
               textColor={isSelected ? 'default' : 'sub'}
@@ -35,11 +30,11 @@ const SortOptionList = ({ selectedOption, selectSortOption, close }: SortOptionL
               css={`
                 font-weight: ${isSelected ? theme.fontWeights.bold : 'inherit'};
               `}
-              onClick={() => handleSelectedOption(index)}
+              onClick={() => handleSelectedOption(label)}
             >
-              {option.label}
+              {label}
             </SortOption>
-          </SortOptionItem>
+          </li>
         );
       })}
     </SortOptionListContainer>
@@ -50,15 +45,25 @@ export default SortOptionList;
 
 const SortOptionListContainer = styled.ul`
   padding: 20px;
+
+  & > li {
+    height: 60px;
+    border-bottom: 1px solid ${({ theme }) => theme.dividerColors.disabled};
+    line-height: 60px;
+  }
+
+  & > li:last-of-type {
+    border: none;
+  }
 `;
 
-const SortOptionItem = styled.li``;
-
 const SortOption = styled(Button)`
-  margin: 20px 0 10px 0;
-  padding: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10px 0;
   border: none;
   outline: transparent;
+  text-align: left;
 
   &:hover {
     font-weight: ${({ theme }) => theme.fontWeights.bold};
