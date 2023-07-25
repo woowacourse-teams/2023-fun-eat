@@ -14,7 +14,6 @@ import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
@@ -160,9 +159,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 멤버_추가_요청() {
-        final Member testMember = memberRepository.save(
-                new Member("test", "image.png", 27, Gender.FEMALE, "01036551086")
-        );
+        final Member testMember = memberRepository.save(new Member("test", "image.png"));
         return testMember.getId();
     }
 

@@ -3,7 +3,6 @@ package com.funeat.review.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
-import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
@@ -174,8 +173,7 @@ class ReviewServiceTest {
     }
 
     private Member 멤버_추가_요청() {
-        return memberRepository.save(
-                new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
+        return memberRepository.save(new Member("test", "image.png"));
     }
 
     @Nested
@@ -184,9 +182,9 @@ class ReviewServiceTest {
         @Test
         void 좋아요_기준으로_내림차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
-            final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
-            final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가(members);
 
@@ -215,9 +213,9 @@ class ReviewServiceTest {
         @Test
         void 평점_기준으로_오름차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
-            final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
-            final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가(members);
 
@@ -246,9 +244,9 @@ class ReviewServiceTest {
         @Test
         void 평점_기준으로_내림차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
-            final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
-            final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+            final var member1 = new Member("test1", "test1.png");
+            final var member2 = new Member("test2", "test2.png");
+            final var member3 = new Member("test3", "test3.png");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가(members);
 
