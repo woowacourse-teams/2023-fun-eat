@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Category;
@@ -46,7 +45,7 @@ class ReviewRepositoryTest {
     @Test
     void 상품에_달린_리뷰의_숫자를_반환한다() {
         // given
-        Member member = memberRepository.save(new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
+        Member member = memberRepository.save(new Member("test", "image.png"));
         Category category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
         Product product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
         Product product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
@@ -64,9 +63,9 @@ class ReviewRepositoryTest {
     @Test
     void 특정_상품에_대한_좋아요_기준_내림차순으로_정렬한다() {
         // given
-        final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
-        final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
-        final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+        final var member1 = new Member("test1", "test1.png");
+        final var member2 = new Member("test2", "test2.png");
+        final var member3 = new Member("test3", "test3.png");
         final var members = List.of(member1, member2, member3);
         memberRepository.saveAll(members);
 
@@ -95,9 +94,9 @@ class ReviewRepositoryTest {
     void 전체_리뷰_목록에서_가장_좋아요가_높은_상위_3개의_리뷰를_가져온다() {
         // given
 
-        final var member1 = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
-        final var member2 = new Member("test2", "test2.png", 41, Gender.FEMALE, "010-1357-2468");
-        final var member3 = new Member("test3", "test3.png", 9, Gender.MALE, "010-9876-4321");
+        final var member1 = new Member("test1", "test1.png");
+        final var member2 = new Member("test2", "test2.png");
+        final var member3 = new Member("test3", "test3.png");
         final var members = List.of(member1, member2, member3);
         memberRepository.saveAll(members);
 
