@@ -4,9 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
+import com.funeat.member.domain.Gender;
+import com.funeat.member.domain.Member;
+import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
+import com.funeat.review.domain.Review;
+import com.funeat.review.persistence.ReviewRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,10 +31,56 @@ import org.springframework.data.domain.Sort;
 class ProductRepositoryTest {
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Test
+    void 카테고리별_상품을_평점이_높은_순으로_정렬한다() {
+        // given
+        final var category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
+        final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, category);
+        final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.5, category);
+        final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 4.0, category);
+        final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 3.0, category);
+        final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, category);
+        productRepository.saveAll(
+                List.of(product1, product2, product3, product4, product5));
+
+        // when
+        final var pageRequest = PageRequest.of(0, 3, Sort.by("averageRating").descending());
+        final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+
+        // then
+        assertThat(actual).containsExactly(product1, product5, product3);
+    }
+
+    @Test
+    void 카테고리별_상품을_평점이_낮은_순으로_정렬한다() {
+        // given
+        final var category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
+        final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, category);
+        final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.5, category);
+        final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 4.0, category);
+        final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 3.0, category);
+        final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, category);
+        productRepository.saveAll(
+                List.of(product1, product2, product3, product4, product5));
+
+        // when
+        final var pageRequest = PageRequest.of(0, 3, Sort.by("averageRating").ascending());
+        final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+
+        // then
+        assertThat(actual).containsExactly(product4, product2, product3);
+    }
 
     @Test
     void 카테고리별_상품을_가격이_높은_순으로_정렬한다() {
