@@ -1,31 +1,23 @@
 package com.funeat.product.presentation;
 
-import com.funeat.product.application.CategoryService;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.dto.CategoryResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/categories")
-public class CategoryController implements CategoryApiController {
+@Tag(name = "02.Category", description = "카테고리 기능")
+public interface CategoryController {
 
-    private final CategoryService categoryService;
-
-    public CategoryController(final CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
+    @Operation(summary = "해당 type 카테고리 전체 조회", description = "FOOD 또는 STORE 를 받아 해당 카테고리를 전체 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "해당 type 카테고리 전체 조회 성공."
+    )
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAllCategoriesByType(@RequestParam final CategoryType type) {
-        final List<CategoryResponse> responses = categoryService.findAllCategoriesByType(type).stream()
-                .map(CategoryResponse::toResponse)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
-    }
+    ResponseEntity<List<CategoryResponse>> getAllCategoriesByType(@RequestParam final CategoryType type);
 }
