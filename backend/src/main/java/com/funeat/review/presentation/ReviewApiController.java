@@ -38,9 +38,9 @@ public class ReviewApiController implements ReviewController {
     }
 
     @PatchMapping("/api/products/{productId}/reviews/{reviewId}")
-    public ResponseEntity<Void> toggleLikeReview(@PathVariable Long productId, @PathVariable Long reviewId,
+    public ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId,
                                                  @RequestBody ReviewFavoriteRequest request) {
-        reviewService.likeReview(productId, reviewId, request);
+        reviewService.likeReview(reviewId, request);
 
         return ResponseEntity.noContent().build();
 
