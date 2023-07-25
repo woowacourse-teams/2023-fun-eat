@@ -36,8 +36,7 @@ public interface ReviewController {
             description = "리뷰 좋아요(취소) 성공."
     )
     @PatchMapping
-    ResponseEntity<Void> toggleLikeReview(@PathVariable Long productId, @PathVariable Long reviewId,
-                                          @RequestBody ReviewFavoriteRequest request);
+    ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId, @RequestBody ReviewFavoriteRequest request);
 
     @Operation(summary = "리뷰를 정렬후 조회", description = "리뷰를 정렬후 조회한다.")
     @ApiResponse(
