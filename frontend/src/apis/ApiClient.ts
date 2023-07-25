@@ -1,5 +1,10 @@
 import { fetchApi } from './fetch';
 
+interface RequestOptions {
+  params?: string;
+  queries?: string;
+}
+
 export class ApiClient {
   #path: string;
 
@@ -14,7 +19,7 @@ export class ApiClient {
     return '/api' + this.#path + params + queries;
   }
 
-  async get<T>(params?: string, queries?: string) {
+  async get<T>({ params, queries }: RequestOptions) {
     const response = await fetchApi(this.getUrl(params, queries), {
       method: 'GET',
       headers: this.#headers,
@@ -23,7 +28,7 @@ export class ApiClient {
     return data;
   }
 
-  post<T>(body: T, params?: string, queries?: string) {
+  post<T>(body: T, { params, queries }: RequestOptions) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'POST',
       body: JSON.stringify(body),
@@ -31,7 +36,7 @@ export class ApiClient {
     });
   }
 
-  patch<T>(body: T, params?: string, queries?: string) {
+  patch<T>(body: T, { params, queries }: RequestOptions) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PATCH',
       body: JSON.stringify(body),
