@@ -132,4 +132,66 @@ class ProductRepositoryTest {
         // then
         assertThat(actual).containsExactly(product8, product1, product4);
     }
+
+    @Test
+    void 카테고리별_상품을_리뷰수가_많은_순으로_정렬한다() {
+        // given
+        final var category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
+        final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", category);
+        final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", category);
+        final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", category);
+        final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", category);
+        final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", category);
+        productRepository.saveAll(
+                List.of(product1, product2, product3, product4, product5));
+
+        Member member = memberRepository.save(new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
+
+        reviewRepository.save(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
+        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
+        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
+        reviewRepository.save(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+
+        // when
+        final var pageRequest = PageRequest.of(0, 3, Sort.by("reviewCount").descending());
+        final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+
+        // then
+        assertThat(actual).containsExactly(product1, product4, product2);
+    }
+
+    @Test
+    void 카테고리별_상품을_리뷰수가_적은_순으로_정렬한다() {
+        // given
+        final var category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
+        final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", category);
+        final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", category);
+        final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", category);
+        final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", category);
+        final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", category);
+        productRepository.saveAll(
+                List.of(product1, product2, product3, product4, product5));
+
+        Member member = memberRepository.save(new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
+
+        reviewRepository.save(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
+        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
+        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
+        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
+        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
+        reviewRepository.save(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+        reviewRepository.save(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+        reviewRepository.save(new Review(member, product3, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+
+        // when
+        final var pageRequest = PageRequest.of(0, 3, Sort.by("reviewCount").ascending());
+        final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+
+        // then
+        assertThat(actual).containsExactly(product5, product3, product2);
+    }
 }
