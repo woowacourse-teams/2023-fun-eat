@@ -224,9 +224,9 @@ class ReviewServiceTest {
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4.5, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
+            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 351L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
             복수_리뷰_추가(reviews);
 
@@ -255,9 +255,9 @@ class ReviewServiceTest {
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3.0, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4.5, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3.5, "ㅇㅇ", false, 130L);
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
             복수_리뷰_추가(reviews);
 
