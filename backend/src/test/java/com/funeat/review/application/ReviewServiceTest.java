@@ -111,7 +111,7 @@ class ReviewServiceTest {
 
         // when
         final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
-        reviewService.likeReview(product.getId(), savedReview.getId(), favoriteRequest);
+        reviewService.likeReview(savedReview.getId(), favoriteRequest);
         final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
         final var reviewResult = reviewRepository.findAll().get(0);
 
@@ -140,11 +140,11 @@ class ReviewServiceTest {
         final var savedReview = reviewRepository.findAll().get(0);
 
         final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
-        reviewService.likeReview(product.getId(), savedReview.getId(), favoriteRequest);
+        reviewService.likeReview(savedReview.getId(), favoriteRequest);
 
         // when
         final var cancelFavoriteRequest = new ReviewFavoriteRequest(false, member.getId());
-        reviewService.likeReview(product.getId(), savedReview.getId(), cancelFavoriteRequest);
+        reviewService.likeReview(savedReview.getId(), cancelFavoriteRequest);
 
         final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
         final var reviewResult = reviewRepository.findAll().get(0);

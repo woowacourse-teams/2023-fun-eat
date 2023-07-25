@@ -86,10 +86,8 @@ public class ReviewService {
     }
 
     @Transactional
-    public void likeReview(final Long productId, final Long reviewId, final ReviewFavoriteRequest request) {
+    public void likeReview(final Long reviewId, final ReviewFavoriteRequest request) {
         final Member findMember = memberRepository.findById(request.getMemberId())
-                .orElseThrow(IllegalArgumentException::new);
-        productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
