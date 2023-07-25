@@ -1,6 +1,8 @@
-import { Badge, Heading, theme } from '@fun-eat/design-system';
+import { Heading } from '@fun-eat/design-system';
 import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+
+import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
 import reviewTagList from '@/mocks/data/reviewTagList.json';
@@ -12,6 +14,9 @@ const ReviewTagList = () => {
   const [maxDisplayedTags, setMaxDisplayedTags] = useState(MAX_DISPLAYED_TAGS);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
+  const canShowMore = reviewTagList.length > maxDisplayedTags;
+  const displayedTagList = reviewTagList.slice(0, maxDisplayedTags);
+
   const showMoreTags = () => {
     setMaxDisplayedTags(maxDisplayedTags + MAX_DISPLAYED_TAGS);
   };
@@ -19,29 +24,11 @@ const ReviewTagList = () => {
   const toggleTagSelection = (id: number, isSelected: boolean) => {
     if (selectedTags.length >= MAX_SELECTED_TAGS && !isSelected) return;
     setSelectedTags((prevSelectedTags) => {
-      const isSelected = prevSelectedTags.includes(id);
       if (isSelected) {
         return prevSelectedTags.filter((selectedTag) => selectedTag !== id);
       }
       return [...prevSelectedTags, id];
     });
-  };
-
-  const renderTag = (id: number, content: string) => {
-    const isSelected = selectedTags.includes(id);
-
-    const tagStyles = css`
-      ${isSelected && `border: 1px solid ${theme.colors.information};`}
-      ${selectedTags.length >= MAX_SELECTED_TAGS && !isSelected && `opacity: 0.5;`}
-    `;
-
-    return (
-      <TagItem key={id} onClick={() => toggleTagSelection(id, isSelected)}>
-        <Badge color={theme.colors.primary} textColor={theme.textColors.default} css={tagStyles}>
-          {content}
-        </Badge>
-      </TagItem>
-    );
   };
 
   return (
@@ -50,9 +37,23 @@ const ReviewTagList = () => {
         상품에 관한 태그를 선택해주세요 (3개)
       </Heading>
       <TagListWrapper>
-        {reviewTagList.slice(0, maxDisplayedTags).map(({ id, content }) => renderTag(id, content))}
+        {displayedTagList.map(({ id, content }) => {
+          const isSelected = selectedTags.includes(id);
+          const isDisabled = selectedTags.length >= MAX_SELECTED_TAGS && !isSelected;
+          return (
+            <TagItemWrapper key={id}>
+              <ReviewTagItem
+                id={id}
+                content={content}
+                isSelected={isSelected}
+                isDisabled={isDisabled}
+                toggleTagSelection={toggleTagSelection}
+              />
+            </TagItemWrapper>
+          );
+        })}
       </TagListWrapper>
-      {reviewTagList.length > maxDisplayedTags && (
+      {canShowMore && (
         <button onClick={showMoreTags}>
           <SvgIcon
             variant="arrow"
@@ -80,7 +81,7 @@ const TagListWrapper = styled.ul`
   text-align: center;
 `;
 
-const TagItem = styled.li`
+const TagItemWrapper = styled.li`
   display: inline-block;
-  margin: 4px 8px;
+  margin: 12px 8px;
 `;
