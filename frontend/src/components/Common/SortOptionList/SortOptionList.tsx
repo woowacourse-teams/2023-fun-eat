@@ -1,7 +1,7 @@
 import { Button, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import { SortOption } from '@/types/common';
+import type { SortOption } from '@/types/common';
 
 interface SortOptionListProps {
   options: readonly SortOption[];
@@ -22,7 +22,7 @@ const SortOptionList = ({ options, selectedOption, selectSortOption, close }: So
         const isSelected = label === selectedOption;
         return (
           <li key={label}>
-            <SortOption
+            <SortOptionButton
               color="white"
               textColor={isSelected ? 'default' : 'sub'}
               variant="filled"
@@ -33,7 +33,7 @@ const SortOptionList = ({ options, selectedOption, selectSortOption, close }: So
               onClick={() => handleSelectedOption(label)}
             >
               {label}
-            </SortOption>
+            </SortOptionButton>
           </li>
         );
       })}
@@ -57,7 +57,7 @@ const SortOptionListContainer = styled.ul`
   }
 `;
 
-const SortOption = styled(Button)`
+const SortOptionButton = styled(Button)`
   width: 100%;
   height: 100%;
   padding: 10px 0;
