@@ -29,6 +29,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -36,64 +37,132 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     public static final int PAGE_SIZE = 10;
 
-    @Test
-    void 카테고리별_상품_목록을_가격낮은순으로_조회한다() {
-        // given
-        final Long categoryId = 카테고리_추가_요청(간편식사);
-        final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-        final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
-        final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
-        final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
-        final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
-        final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
-        final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
-        final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
-        final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
-        final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
-        final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
-        final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                product8, product9, product10, product11);
-        복수_상품_추가_요청(products);
+    @Nested
+    class 가격_기준_내림차순으로_카테고리별_상품_목록_조회 {
 
-        // when
-        final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
+        @Test
+        void 상품_가격이_서로_다르면_가격_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final Long categoryId = 카테고리_추가_요청(간편식사);
+            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                    product8, product9, product10, product11);
+            복수_상품_추가_요청(products);
 
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        페이지를_검증한다(response, (long) products.size(), 0L);
-        카테고리별_상품_목록_조회_결과를_검증한다(response,
-                List.of(product11, product8, product1, product4, product3, product6, product7, product2, product5,
-                        product10));
+            // when
+            final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, (long) products.size(), 0L);
+            카테고리별_상품_목록_조회_결과를_검증한다(response,
+                    List.of(product11, product8, product1, product4, product3, product6, product7, product2, product5,
+                            product10));
+        }
+
+        @Test
+        void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final Long categoryId = 카테고리_추가_요청(간편식사);
+            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final Product product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final Product product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final Product product4 = new Product("삼각김밥4", 1000L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final Product product5 = new Product("삼각김밥5", 1000L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final Product product6 = new Product("삼각김밥6", 1000L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final Product product7 = new Product("삼각김밥7", 1000L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final Product product8 = new Product("삼각김밥8", 1000L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final Product product9 = new Product("삼각김밥9", 1000L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final Product product10 = new Product("삼각김밥10", 1000L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final Product product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                    product8, product9, product10, product11);
+            복수_상품_추가_요청(products);
+
+            // when
+            final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, (long) products.size(), 0L);
+            카테고리별_상품_목록_조회_결과를_검증한다(response,
+                    List.of(product11, product10, product9, product8, product7, product6, product5, product4, product3,
+                            product2));
+        }
     }
 
-    @Test
-    void 카테고리별_상품_목록을_가격높은순으로_조회한다() {
-        // given
-        final Long categoryId = 카테고리_추가_요청(간편식사);
-        final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-        final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
-        final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
-        final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
-        final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
-        final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
-        final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
-        final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
-        final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
-        final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
-        final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
-        final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                product8, product9, product10, product11);
-        복수_상품_추가_요청(products);
+    @Nested
+    class 가격_기준_오름차순으로_카테고리별_상품_목록_조회 {
 
-        // when
-        final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
+        @Test
+        void 상품_가격이_서로_다르면_가격_기준_오름차순으로_정렬할_수_있다() {
+            // given
+            final Long categoryId = 카테고리_추가_요청(간편식사);
+            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                    product8, product9, product10, product11);
+            복수_상품_추가_요청(products);
 
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        페이지를_검증한다(response, (long) products.size(), 0L);
-        카테고리별_상품_목록_조회_결과를_검증한다(response,
-                List.of(product9, product10, product5, product2, product7, product6, product3, product4, product1,
-                        product8));
+            // when
+            final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, (long) products.size(), 0L);
+            카테고리별_상품_목록_조회_결과를_검증한다(response,
+                    List.of(product9, product10, product5, product2, product7, product6, product3, product4, product1,
+                            product8));
+        }
+
+        @Test
+        void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+            // given
+            final Long categoryId = 카테고리_추가_요청(간편식사);
+            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final Product product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final Product product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final Product product4 = new Product("삼각김밥4", 1000L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final Product product5 = new Product("삼각김밥5", 1000L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final Product product6 = new Product("삼각김밥6", 1000L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final Product product7 = new Product("삼각김밥7", 1000L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final Product product8 = new Product("삼각김밥8", 1000L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final Product product9 = new Product("삼각김밥9", 1000L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final Product product10 = new Product("삼각김밥10", 1000L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final Product product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                    product8, product9, product10, product11);
+            복수_상품_추가_요청(products);
+
+            // when
+            final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, (long) products.size(), 0L);
+            카테고리별_상품_목록_조회_결과를_검증한다(response,
+                    List.of(product11, product10, product9, product8, product7, product6, product5, product4, product3,
+                            product2));
+        }
     }
 
     @Test
