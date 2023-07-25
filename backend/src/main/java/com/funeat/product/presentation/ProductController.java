@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class ProductController {
+public class ProductController implements ProductApiController {
 
     private final ProductService productService;
 

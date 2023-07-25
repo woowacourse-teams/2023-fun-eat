@@ -1,13 +1,11 @@
 package com.funeat.review.presentation;
 
 import com.funeat.review.application.ReviewService;
-
-import com.funeat.review.domain.Review;
-import com.funeat.review.presentation.dto.RankingReviewDto;
 import com.funeat.review.presentation.dto.RankingReviewsResponse;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewsResponse;
+import java.net.URI;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -20,12 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-public class ReviewController {
+public class ReviewController implements ReviewApiController {
 
     private final ReviewService reviewService;
 
