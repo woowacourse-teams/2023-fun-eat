@@ -1,3 +1,9 @@
 spring:
   profiles:
     active: { DEPLOY_ACTIVE:dev }
+
+springdoc:
+  swagger-ui:
+    path: /funeat-api
+    enabled: true
+    tags-sorter: alpha
