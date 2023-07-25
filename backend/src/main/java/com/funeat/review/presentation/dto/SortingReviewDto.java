@@ -4,7 +4,6 @@ import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ public class SortingReviewDto {
     private final String userName;
     private final String profileImage;
     private final String image;
-    private final Double rating;
+    private final Long rating;
     private final List<Tag> tags;
     private final String content;
     private final boolean rebuy;
@@ -25,7 +24,7 @@ public class SortingReviewDto {
                             final String userName,
                             final String profileImage,
                             final String image,
-                            final Double rating,
+                            final Long rating,
                             final List<Tag> tags,
                             final String content,
                             final boolean rebuy,
@@ -91,7 +90,7 @@ public class SortingReviewDto {
         return image;
     }
 
-    public Double getRating() {
+    public Long getRating() {
         return rating;
     }
 

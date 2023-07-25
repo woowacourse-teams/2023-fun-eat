@@ -4,13 +4,13 @@ import java.util.List;
 
 public class ReviewCreateRequest {
 
-    private final Double rating;
+    private final Long rating;
     private final List<Long> tagIds;
     private final String content;
     private final Boolean reBuy;
     private final Long memberId;
 
-    public ReviewCreateRequest(final Double rating, final List<Long> tagIds, final String content, final Boolean reBuy,
+    public ReviewCreateRequest(final Long rating, final List<Long> tagIds, final String content, final Boolean reBuy,
                                final Long memberId) {
         this.rating = rating;
         this.tagIds = tagIds;
@@ -19,7 +19,7 @@ public class ReviewCreateRequest {
         this.memberId = memberId;
     }
 
-    public Double getRating() {
+    public Long getRating() {
         return rating;
     }
 

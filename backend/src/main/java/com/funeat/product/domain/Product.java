@@ -25,7 +25,7 @@ public class Product {
 
     private String content;
 
-    private Double averageRating;
+    private Double averageRating = 0.0;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -47,6 +47,11 @@ public class Product {
         this.image = image;
         this.content = content;
         this.category = category;
+    }
+
+    public void updateAverageRating(final Long rating, final Long count) {
+        double calculatedRating = ((count - 1) * averageRating + rating) / count;
+        this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
     }
 
     public Long getId() {
