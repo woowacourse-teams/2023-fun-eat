@@ -21,7 +21,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured:4.4.0'
-    implementation 'com.h2database:h2'
+    testRuntimeOnly 'com.h2database:h2'
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 }
