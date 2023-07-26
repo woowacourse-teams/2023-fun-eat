@@ -21,12 +21,11 @@ const ReviewImageUploader = () => {
 
   return (
     <ReviewImageUploaderContainer>
-      <Heading as="h2" size="lg">
+      <Heading as="h2" size="xl">
         구매한 상품 사진이 있다면 올려주세요.
       </Heading>
-      <Text size="sm" color={theme.textColors.disabled}>
-        사진은 1장까지 업로드 가능합니다.
-      </Text>
+      <Spacing size={2} />
+      <Text color={theme.textColors.disabled}>(사진은 1장까지 업로드 할 수 있어요)</Text>
       <Spacing size={20} />
       {reviewImage ? (
         <ReviewImageButtonWrapper>
