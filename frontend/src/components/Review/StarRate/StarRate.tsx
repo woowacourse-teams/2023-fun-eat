@@ -18,11 +18,9 @@ const StarRate = () => {
       <Spacing size={20} />
       <div>
         {starList.map((star) => (
-          <Button
+          <StarButton
             key={star}
-            color="white"
-            variant="filled"
-            css="padding: 0 2px"
+            variant="transparent"
             onClick={() => handleRating(star)}
             onMouseEnter={() => handleMouseEnter(star)}
             onMouseLeave={handleMouseLeave}
@@ -31,7 +29,7 @@ const StarRate = () => {
               variant="star"
               color={star <= (hovering || rating) ? theme.colors.secondary : theme.colors.gray2}
             />
-          </Button>
+          </StarButton>
         ))}
       </div>
     </StarRateContainer>
@@ -49,6 +47,10 @@ const StarRateContainer = styled.div`
 
 const RequiredMark = styled.sup`
   color: ${({ theme }) => theme.colors.error};
+`;
+
+const StarButton = styled(Button)`
+  padding: 0 2px;
 `;
 
 const SvgIconWrapper = styled(SvgIcon)`
