@@ -12,7 +12,6 @@ import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,12 +42,16 @@ public class ProductService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final Page<Product> productPages = productRepository.findAllByCategory(category, pageable);
-        final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(productPages);
-        final List<ProductInCategoryDto> productDtos = productPages.getContent()
-                .stream()
-                .map(ProductInCategoryDto::toDto)
-                .collect(Collectors.toList());
+        final Page<ProductInCategoryDto> pages;
+        if (pageable.getSort().getOrderFor("reviewCount") == null) {
+            pages = productRepository.findAllByCategory(category, pageable);
+        } else {
+            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+            pages = productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
+        }
+
+        final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(pages);
+        final List<ProductInCategoryDto> productDtos = pages.getContent();
 
         return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
     }

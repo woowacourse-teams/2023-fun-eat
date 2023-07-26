@@ -1,6 +1,7 @@
 package com.funeat.product.domain;
 
 import com.funeat.member.domain.bookmark.ProductBookmark;
+import com.funeat.review.domain.Review;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.hibernate.annotations.Formula;
 
 @Entity
 public class Product {
@@ -28,19 +28,18 @@ public class Product {
 
     private Double averageRating = 0.0;
 
-    @Formula("SELECT count(1) FROM review r WHERE r.product_id = id")
-    private Long reviewCount;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
 
     @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
 
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
-
 
     protected Product() {
     }
@@ -96,9 +95,5 @@ public class Product {
 
     public Category getCategory() {
         return category;
-    }
-
-    public Long getReviewCount() {
-        return reviewCount;
     }
 }
