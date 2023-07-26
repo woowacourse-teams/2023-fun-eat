@@ -39,10 +39,12 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Gradle 권한 부여
-        run: chmod +x ./backend/gradlew
+        working-directory: backend/
+        run: chmod +x ./gradlew
 
       - name: 테스트 실행
-        run: ./backend/gradlew --info test
+        working-directory: backend/
+        run: ./gradlew --info test
 
       - name: 테스트 결과 PR에 코멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v1
