@@ -14,7 +14,7 @@ export interface Tag {
 export interface NavigationMenu {
   variant: SvgIconVariant;
   name: '검색' | '목록' | '홈' | '꿀조합' | '마이';
-  path: (typeof PATH)[keyof typeof PATH];
+  path: (typeof PATH)[keyof typeof PATH] | '/products/food' | '/products/store';
 }
 
 export type ProductSortOption = 'price' | 'averageRating' | 'reviewCount';

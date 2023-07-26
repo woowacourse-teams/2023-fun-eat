@@ -11,7 +11,7 @@ export const NAVIGATION_MENU: NavigationMenu[] = [
   {
     variant: 'list',
     name: '목록',
-    path: PATH.PRODUCT_LIST,
+    path: `${PATH.PRODUCT_LIST}/food`,
   },
   {
     variant: 'home',

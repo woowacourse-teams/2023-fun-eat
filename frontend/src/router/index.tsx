@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: PATH.PRODUCT_LIST,
+        path: `${PATH.PRODUCT_LIST}/:category`,
         element: (
           <CategoryProvider>
             <ProductListPage />
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: `${PATH.PRODUCT_LIST}/:productId`,
+        path: `${PATH.PRODUCT_LIST}/:category/:productId`,
         element: <ProductDetailPage />,
       },
       {
