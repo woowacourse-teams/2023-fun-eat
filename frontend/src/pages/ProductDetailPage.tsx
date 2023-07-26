@@ -37,7 +37,7 @@ const ProductDetailPage = () => {
           <ReviewItemWrapper>
             {reviews.map((review) => (
               <li key={review.id}>
-                <ReviewItem review={review} />
+                <ReviewItem productId={Number(productId)} review={review} />
               </li>
             ))}
           </ReviewItemWrapper>

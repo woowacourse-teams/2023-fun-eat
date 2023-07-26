@@ -15,7 +15,7 @@ type Story = StoryObj<typeof ReviewItem>;
 export const Default: Story = {
   render: () => (
     <div style={{ width: '375px', padding: '0 20px' }}>
-      <ReviewItem review={mockReviews.reviews[0]} />
+      <ReviewItem productId={1} review={mockReviews.reviews[0]} />
     </div>
   ),
 };
@@ -23,7 +23,7 @@ export const Default: Story = {
 export const RebuyAndFavorite: Story = {
   render: () => (
     <div style={{ width: '375px', padding: '0 20px' }}>
-      <ReviewItem review={mockReviews.reviews[1]} />
+      <ReviewItem productId={1} review={mockReviews.reviews[1]} />
     </div>
   ),
 };
@@ -31,7 +31,7 @@ export const RebuyAndFavorite: Story = {
 export const NoImageReview: Story = {
   render: () => (
     <div style={{ width: '375px', padding: '0 20px' }}>
-      <ReviewItem review={mockReviews.reviews[2]} />
+      <ReviewItem productId={1} review={mockReviews.reviews[2]} />
     </div>
   ),
 };
