@@ -39,16 +39,16 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Gradle 권한 부여
-        run: chmod +x gradlew
+        run: chmod +x ./backend/gradlew
 
       - name: 테스트 실행
-        run: ./gradlew --info test
+        run: ./backend/gradlew --info test
 
       - name: 테스트 결과 PR에 코멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: '**/build/test-results/test/TEST-*.xml'
+          files: '**/backend/build/test-results/test/TEST-*.xml'
 
       - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록
         uses: mikepenz/action-junit-report@v3
