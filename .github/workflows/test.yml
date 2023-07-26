@@ -42,7 +42,7 @@ jobs:
         run: chmod +x ./backend/gradlew
 
       - name: 테스트 실행
-        run: ./gradlew --info test
+        run: ./backend/gradlew --info test
 
       - name: 테스트 결과 PR에 코멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v1
@@ -54,7 +54,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
-          report_paths: '**/build/test-results/test/TEST-*.xml'
+          report_paths: '**/backend/build/test-results/test/TEST-*.xml'
           token: ${{ github.token }}
 
       - name: build 실패 시 Slack으로 알립니다
