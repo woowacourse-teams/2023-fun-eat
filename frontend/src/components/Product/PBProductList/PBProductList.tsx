@@ -1,7 +1,10 @@
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PBProductItem from '../PBProductItem/PBProductItem';
 
+import { PATH } from '@/constants/path';
 import pbProducts from '@/mocks/data/pbProducts.json';
 
 const PBProductList = () => {
@@ -9,7 +12,9 @@ const PBProductList = () => {
     <PBProductListContainer>
       {pbProducts.map((pbProduct) => (
         <li key={pbProduct.id}>
-          <PBProductItem pbProduct={pbProduct} />
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
+            <PBProductItem pbProduct={pbProduct} />
+          </Link>
         </li>
       ))}
     </PBProductListContainer>
