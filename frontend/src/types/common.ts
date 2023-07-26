@@ -1,6 +1,11 @@
 import type { SvgIconVariant } from '@/components/Common/Svg/SvgIcon';
 import type { PATH } from '@/constants/path';
 
+export type CategoryVariant = 'food' | 'store';
+
+export const isCategoryVariant = (value: string): value is CategoryVariant => {
+  return value === 'store' || value === 'food';
+};
 export interface Category {
   id: number;
   name: string;

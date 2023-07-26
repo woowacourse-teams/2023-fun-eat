@@ -1,4 +1,5 @@
 import { Heading, Link, Spacing } from '@fun-eat/design-system';
+import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,11 +7,15 @@ import { CategoryMenu, SvgIcon } from '@/components/Common';
 import { PBProductList, ProductList, ProductRankingList } from '@/components/Product';
 import { ReviewRankingList } from '@/components/Review';
 import { PATH } from '@/constants/path';
-import { useCategory } from '@/hooks/product';
+import { CategoryContext } from '@/contexts/CategoryContext';
+import { useCategory, useCategoryProducts } from '@/hooks/product';
 
 const HomePage = () => {
   const { data: foodCategory } = useCategory('food');
   const { data: storeCategory } = useCategory('store');
+
+  const { categories } = useContext(CategoryContext);
+  const { data: productListResponse } = useCategoryProducts(categories.food);
 
   return (
     <>
@@ -21,8 +26,8 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuList={foodCategory ?? []} menuVariant="food" />
         <Spacing size={12} />
-        <ProductList />
-        <ProductListRouteButton as={RouterLink} to={PATH.PRODUCT_LIST}>
+        <ProductList category="food" productList={productListResponse?.products ?? []} />
+        <ProductListRouteButton as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteButton>
       </section>
