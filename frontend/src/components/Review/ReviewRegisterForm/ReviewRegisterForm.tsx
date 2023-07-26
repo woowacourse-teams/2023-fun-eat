@@ -2,6 +2,7 @@ import { Button, Checkbox, Divider, Heading, Spacing, Text, theme } from '@fun-e
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
+import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
@@ -29,7 +30,8 @@ const ReviewRegisterForm = () => {
           <Spacing size={60} />
           <StarRate />
           <Spacing size={60} />
-          {/* tag 추가 */}
+          <ReviewTagList />
+          <Spacing size={60} />
           <ReviewTextarea />
           <Spacing size={80} />
           <ReBuyCheckWrapper>
@@ -37,7 +39,7 @@ const ReviewRegisterForm = () => {
             <Text weight="bold"> 재구매할 생각이 있으신가요?</Text>
           </ReBuyCheckWrapper>
           <Spacing size={16} />
-          <Button color="primary" variant="filled" css="width:100%; height:60px; font-size:2rem; font-weight:bold;">
+          <Button width="100%" height="60px" size="xl" weight="bold">
             등록하기
           </Button>
         </form>
@@ -48,7 +50,6 @@ const ReviewRegisterForm = () => {
 
 export default ReviewRegisterForm;
 
-// div 맞음? width 주는거 맞음? bottom sheet 내부 padding 삭제??
 const ReviewRegisterFormContainer = styled.div`
   width: 100%;
 `;
@@ -71,7 +72,6 @@ const ProductOverviewItemWrapper = styled.div`
   margin: 15px 0;
 `;
 
-// div...?
 const RegisterFormWrapper = styled.div`
   padding: 50px 0;
 `;
