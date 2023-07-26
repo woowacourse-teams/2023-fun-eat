@@ -6,21 +6,31 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
+import { useProductReview } from '@/hooks/product';
 import useBottomSheet from '@/hooks/useBottomSheet';
 import useSortOption from '@/hooks/useSortOption';
 import productDetails from '@/mocks/data/productDetails.json';
-import mockReviews from '@/mocks/data/reviews.json';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0].label);
+  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
+
+  if (!productId) {
+    return null;
+  }
 
   // TODO: productId param으로 api 요청 보내면 바뀔 로직
   const targetProductDetail =
     productDetails.find((productDetail) => productDetail.id === Number(productId)) ?? productDetails[0];
 
-  const { reviews } = mockReviews;
+  const { data: productReviews } = useProductReview(productId, selectedOption.value);
+
+  if (!productReviews) {
+    return null;
+  }
+
+  const { reviews } = productReviews;
 
   return (
     <>
