@@ -3,7 +3,7 @@ import { useState, createContext } from 'react';
 
 const initialState = {
   food: 1,
-  store: 1,
+  store: 7,
 };
 
 interface CategoryState {
