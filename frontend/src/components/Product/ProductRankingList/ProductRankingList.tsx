@@ -1,4 +1,4 @@
-import ProductRankingItem from '../ProductRankingItem/ProductRankingItem';
+import ProductOverviewItem from '../ProductOverviewItem/ProductOverviewItem';
 
 import productRanking from '@/mocks/data/productRanking.json';
 
@@ -7,7 +7,7 @@ const ProductRankingList = () => {
     <ul>
       {productRanking.map((productRanking) => (
         <li key={productRanking.id}>
-          <ProductRankingItem productRanking={productRanking} />
+          <ProductOverviewItem rank={productRanking.rank} name={productRanking.name} image={productRanking.image} />
         </li>
       ))}
     </ul>

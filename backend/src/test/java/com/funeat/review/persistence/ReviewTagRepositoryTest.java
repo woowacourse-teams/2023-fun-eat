@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Product;
@@ -48,7 +47,7 @@ class ReviewTagRepositoryTest {
     @Test
     void 리뷰_목록에서_상위_3개에_해당하는_태그를_조회한다() {
         // given
-        final var member = new Member("test1", "test1.png", 20, Gender.MALE, "010-1234-1234");
+        final var member = new Member("test1", "test1.png");
         memberRepository.save(member);
 
         final var product = new Product("망고", 1_000L, "mango.png", "망고망고", null);
@@ -60,8 +59,8 @@ class ReviewTagRepositoryTest {
         final var tag4 = new Tag("4번");
         tagRepository.saveAll(List.of(tag1, tag2, tag3, tag4));
 
-        final var review1 = new Review(member, product, "review1.png", 5.0, "최고의 망고", true, 25L);
-        final var review2 = new Review(member, product, "review2.png", 3.0, "그럭저럭 망고", false, 10L);
+        final var review1 = new Review(member, product, "review1.png", 5L, "최고의 망고", true, 25L);
+        final var review2 = new Review(member, product, "review2.png", 3L, "그럭저럭 망고", false, 10L);
         reviewRepository.saveAll(List.of(review1, review2));
 
         final var reviewTag1 = ReviewTag.createReviewTag(review1, tag1);

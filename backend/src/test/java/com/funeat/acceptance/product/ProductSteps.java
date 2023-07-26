@@ -22,12 +22,10 @@ public class ProductSteps {
 
     public static ExtractableResponse<Response> 공통_상품_카테고리_목록_조회_요청() {
         return given()
-                .log().all()
                 .queryParam("type", "food")
                 .when()
                 .get("/api/categories")
                 .then()
-                .log().all()
                 .extract();
     }
 
@@ -35,23 +33,19 @@ public class ProductSteps {
                                                                   final String sortOrderType,
                                                                   final int page) {
         return given()
-                .log().all()
-                .queryParam("sort", sortType+","+sortOrderType)
+                .queryParam("sort", sortType + "," + sortOrderType)
                 .queryParam("page", page)
                 .when()
                 .get("/api/categories/{category_id}/products", categoryId)
                 .then()
-                .log().all()
                 .extract();
     }
 
     public static ExtractableResponse<Response> 상품_상세_조회_요청(final Long productId) {
         return given()
-                .log().all()
                 .when()
                 .get("/api/products/{product_id}", productId)
                 .then()
-                .log().all()
                 .extract();
     }
 }

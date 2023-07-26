@@ -2,7 +2,6 @@ package com.funeat.member.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
@@ -56,8 +55,7 @@ class ReviewFavoriteRepositoryTest {
     }
 
     private Member 멤버_추가_요청() {
-        return memberRepository.save(
-                new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
+        return memberRepository.save(new Member("test", "image.png"));
     }
 
     private Product 상품_추가_요청() {
@@ -66,7 +64,7 @@ class ReviewFavoriteRepositoryTest {
 
     private Review 리뷰_추가_요청(final Member member, final Product product) {
         final var image = 리뷰_사진_명세_요청();
-        return reviewRepository.save(new Review(member, product, image.getFileName(), 4.5, "content", true));
+        return reviewRepository.save(new Review(member, product, image.getFileName(), 4L, "content", true));
     }
 
     private MultiPartSpecification 리뷰_사진_명세_요청() {

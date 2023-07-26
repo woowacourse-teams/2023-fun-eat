@@ -7,8 +7,6 @@ import com.funeat.member.domain.favorite.ReviewFavorite;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,13 +23,6 @@ public class Member {
 
     private String profileImage;
 
-    private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    private String phoneNumber;
-
     @OneToMany(mappedBy = "member")
     private List<ReviewFavorite> reviewFavorites = new ArrayList<>();
 
@@ -47,13 +38,9 @@ public class Member {
     protected Member() {
     }
 
-    public Member(final String nickName, final String profileImage, final Integer age, final Gender gender,
-                  final String phoneNumber) {
+    public Member(final String nickName, final String profileImage) {
         this.nickname = nickName;
         this.profileImage = profileImage;
-        this.age = age;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -66,18 +53,6 @@ public class Member {
 
     public String getProfileImage() {
         return profileImage;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public List<ReviewFavorite> getReviewFavorites() {

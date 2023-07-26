@@ -12,3 +12,21 @@ export interface Review {
   favoriteCount: number;
   favorite: boolean;
 }
+
+export interface ReviewRequest {
+  rating: number;
+  tags: number[];
+  content: string;
+  rebuy: boolean;
+  memberId: number;
+}
+
+export interface ReviewPostRequestBody extends FormData {
+  image: File;
+  reviewRequest: ReviewRequest;
+}
+
+export interface ReviewFavoriteRequestBody {
+  favorite: boolean;
+  memberId: number;
+}

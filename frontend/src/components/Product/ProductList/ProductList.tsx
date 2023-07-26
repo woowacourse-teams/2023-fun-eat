@@ -8,6 +8,7 @@ import { PATH } from '@/constants/path';
 import mockProducts from '@/mocks/data/products.json';
 
 const ProductList = () => {
+  const { products } = mockProducts;
   const navigate = useNavigate();
 
   const navigateToDetailPage = (productId: number) => {
@@ -16,7 +17,7 @@ const ProductList = () => {
 
   return (
     <ProductListContainer>
-      {mockProducts.map((product) => (
+      {products.map((product) => (
         <li key={product.id}>
           <ProductButton type="button" variant="filled" color="white" onClick={() => navigateToDetailPage(product.id)}>
             <ProductItem product={product} />

@@ -8,7 +8,7 @@ const meta: Meta<typeof ProductItem> = {
   title: 'product/ProductItem',
   component: ProductItem,
   args: {
-    product: mockProducts[0],
+    product: mockProducts.products[0],
   },
 };
 
