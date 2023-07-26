@@ -1,15 +1,14 @@
-import { BottomSheet, Spacing } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
-import useBottomSheet from '@/hooks/useBottomSheet';
 import useSortOption from '@/hooks/useSortOption';
 import foodCategory from '@/mocks/data/foodCategory.json';
 
 const ProductListPage = () => {
-  const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
   return (
@@ -23,7 +22,7 @@ const ProductListPage = () => {
         </SortButtonWrapper>
         <ProductList />
       </section>
-      <BottomSheet ref={ref} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
           selectedOption={selectedOption}

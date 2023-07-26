@@ -1,6 +1,6 @@
-import { BottomSheet } from '@fun-eat/design-system';
+import { BottomSheet, useBottomSheet } from '@fun-eat/design-system';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 import SortOptionList from './SortOptionList';
 
@@ -17,11 +17,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
-    const ref = useRef<HTMLDialogElement>(null);
+    const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
     const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
     useEffect(() => {
-      ref.current?.showModal();
+      handleOpenBottomSheet();
     }, []);
 
     const closeBottomSheet = () => {
@@ -29,7 +29,7 @@ export const Default: Story = {
     };
 
     return (
-      <BottomSheet ref={ref} close={closeBottomSheet}>
+      <BottomSheet ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
           selectedOption={selectedOption}

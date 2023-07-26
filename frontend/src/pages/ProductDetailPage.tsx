@@ -1,4 +1,4 @@
-import { BottomSheet, Spacing } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,13 +7,12 @@ import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReview } from '@/hooks/product';
-import useBottomSheet from '@/hooks/useBottomSheet';
 import useSortOption from '@/hooks/useSortOption';
 import productDetails from '@/mocks/data/productDetails.json';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
-  const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
   if (!productId) {
@@ -53,7 +52,7 @@ const ProductDetailPage = () => {
           </ReviewItemWrapper>
         )}
       </section>
-      <BottomSheet ref={ref} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={REVIEW_SORT_OPTIONS}
           selectedOption={selectedOption}
