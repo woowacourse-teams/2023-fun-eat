@@ -1,14 +1,17 @@
 import { Button } from '@fun-eat/design-system';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
-import mockProducts from '@/mocks/data/products.json';
+import { CategoryContext } from '@/contexts/CategoryContext';
+import { useCategoryProducts } from '@/hooks/product';
 
 const ProductList = () => {
-  const { products } = mockProducts;
+  const { categories } = useContext(CategoryContext);
+  const { data } = useCategoryProducts(categories.food);
   const navigate = useNavigate();
 
   const navigateToDetailPage = (productId: number) => {
@@ -17,7 +20,7 @@ const ProductList = () => {
 
   return (
     <ProductListContainer>
-      {products.map((product) => (
+      {data?.products.map((product) => (
         <li key={product.id}>
           <ProductButton type="button" variant="filled" color="white" onClick={() => navigateToDetailPage(product.id)}>
             <ProductItem product={product} />

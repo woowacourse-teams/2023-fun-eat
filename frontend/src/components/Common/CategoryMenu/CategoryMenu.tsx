@@ -1,8 +1,9 @@
 import { Button, Text, theme } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { useContext } from 'react';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
+import { CategoryContext } from '@/contexts/CategoryContext';
 import type { Category } from '@/types/common';
 
 interface CategoryMenuProps {
@@ -11,16 +12,13 @@ interface CategoryMenuProps {
 }
 
 const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
-  const [selectedMenu, setSelectedMenu] = useState(0);
-
-  const selectMenu = (menuId: number) => {
-    setSelectedMenu(menuId);
-  };
+  const { categories, selectCategory } = useContext(CategoryContext);
+  const menuId = categories[menuVariant];
 
   return (
     <CategoryMenuContainer>
       {menuList.map((menu) => {
-        const isSelected = menu.id === selectedMenu;
+        const isSelected = menu.id === menuId;
         return (
           <li key={menu.id}>
             <Button
@@ -29,7 +27,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
               variant={isSelected ? 'filled' : 'outlined'}
               size="xs"
               css={isSelected ? selectedCategoryMenuStyles[menuVariant] : undefined}
-              onClick={() => selectMenu(menu.id)}
+              onClick={() => selectCategory(menuVariant, menu.id)}
             >
               <Text size="xs" weight="bold">
                 {menu.name}
