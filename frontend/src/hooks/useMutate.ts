@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useMutate = <T>(callback: () => Promise<T>) => {
+export const useMutate = <B, T = Response>(callback: (body?: B) => Promise<T>) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -11,9 +11,9 @@ export const useMutate = <T>(callback: () => Promise<T>) => {
     }
   }, [error]);
 
-  const request = async () => {
+  const request = async (body?: B) => {
     try {
-      const res = await callback();
+      const res = await callback(body);
       setIsSuccess(true);
       return res;
     } catch (error) {
