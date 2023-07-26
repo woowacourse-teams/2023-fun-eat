@@ -15,9 +15,10 @@ const NavigationBar = () => {
         {NAVIGATION_MENU.map(({ variant, name, path }) => {
           const currentPath = location.pathname.split('/')[1];
           const isSelected = currentPath === path.split('/')[1];
+
           return (
             <NavigationItem key={variant}>
-              <NavigationLink as={RouterLink} to={Array.isArray(path) ? path[0] : path}>
+              <NavigationLink as={RouterLink} to={path}>
                 <SvgIcon variant={variant} color={isSelected ? theme.colors.gray5 : theme.colors.gray3} />
                 <Text size="xs" color={isSelected ? theme.colors.gray5 : theme.colors.gray3}>
                   {name}
