@@ -10,7 +10,7 @@ import foodCategory from '@/mocks/data/foodCategory.json';
 
 const ProductListPage = () => {
   const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0].label);
+  const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
   return (
     <>

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import SortOptionList from './SortOptionList';
 
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
+import useSortOption from '@/hooks/useSortOption';
 
 const meta: Meta<typeof SortOptionList> = {
   title: 'common/SortOptionList',
@@ -17,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     const ref = useRef<HTMLDialogElement>(null);
-    const [selectedOption, setSelectedOption] = useState<string>(PRODUCT_SORT_OPTIONS[0].label);
+    const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
     useEffect(() => {
       ref.current?.showModal();
@@ -25,10 +26,6 @@ export const Default: Story = {
 
     const closeBottomSheet = () => {
       ref.current?.close();
-    };
-
-    const selectSortOption = (selectedOptionLabel: string) => {
-      setSelectedOption(selectedOptionLabel);
     };
 
     return (
