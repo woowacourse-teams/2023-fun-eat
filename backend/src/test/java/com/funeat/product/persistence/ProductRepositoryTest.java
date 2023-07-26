@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Gender;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Category;
@@ -158,7 +157,7 @@ class ProductRepositoryTest {
         productRepository.saveAll(
                 List.of(product1, product2, product3, product4, product5));
 
-        Member member = memberRepository.save(new Member("test", "image.png", 27, Gender.FEMALE, "01036551086"));
+        Member member = memberRepository.save(new Member("test", "image.png"));
 
         reviewRepository.save(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
         reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
