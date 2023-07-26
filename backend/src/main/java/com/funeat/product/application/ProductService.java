@@ -44,11 +44,10 @@ public class ProductService {
                 .orElseThrow(IllegalArgumentException::new);
 
         final Page<Product> productPages = productRepository.findAllByCategory(category, pageable);
-
         final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(productPages);
         final List<ProductInCategoryDto> productDtos = productPages.getContent()
                 .stream()
-                .map(it -> ProductInCategoryDto.toDto(it, reviewRepository.countByProduct(it)))
+                .map(ProductInCategoryDto::toDto)
                 .collect(Collectors.toList());
 
         return ProductsInCategoryResponse.toResponse(pageDto, productDtos);

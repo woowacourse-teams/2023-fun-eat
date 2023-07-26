@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Formula;
 
 @Entity
 public class Product {
@@ -26,6 +27,9 @@ public class Product {
     private String content;
 
     private Double averageRating = 0.0;
+
+    @Formula("SELECT count(1) FROM review r WHERE r.product_id = id")
+    private Long reviewCount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -92,5 +96,9 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
     }
 }
