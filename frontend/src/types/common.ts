@@ -1,4 +1,5 @@
 import type { SvgIconVariant } from '@/components/Common/Svg/SvgIcon';
+import type { PRODUCT_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import type { PATH } from '@/constants/path';
 
 export type CategoryVariant = 'food' | 'store';
@@ -25,3 +26,5 @@ export interface NavigationMenu {
 export type ProductSortOption = 'price' | 'averageRating' | 'reviewCount';
 
 export type ReviewSortOption = 'favoriteCount' | 'rating';
+
+export type SortOption = (typeof PRODUCT_SORT_OPTIONS)[number] | (typeof REVIEW_SORT_OPTIONS)[number];
