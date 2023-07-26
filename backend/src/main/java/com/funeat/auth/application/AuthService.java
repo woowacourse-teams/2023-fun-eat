@@ -1,4 +1,4 @@
-package com.funeat.auth.service;
+package com.funeat.auth.application;
 
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.auth.util.PlatformUserProvider;

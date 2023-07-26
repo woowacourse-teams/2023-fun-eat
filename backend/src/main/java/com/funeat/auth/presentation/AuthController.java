@@ -1,6 +1,6 @@
-package com.funeat.auth.controller;
+package com.funeat.auth.presentation;
 
-import com.funeat.auth.service.AuthService;
+import com.funeat.auth.application.AuthService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
