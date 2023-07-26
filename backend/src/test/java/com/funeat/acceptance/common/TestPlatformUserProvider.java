@@ -1,0 +1,16 @@
+package com.funeat.acceptance.common;
+
+import com.funeat.auth.dto.UserInfoDto;
+import com.funeat.auth.util.PlatformUserProvider;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
+@Component
+@Profile("test")
+public class TestPlatformUserProvider implements PlatformUserProvider {
+
+    @Override
+    public UserInfoDto getPlatformUser(String code) {
+        return new UserInfoDto(1L, "test", "https://www.test.com");
+    }
+}
