@@ -84,6 +84,7 @@ module.exports = {
       },
     ],
     'import/no-unresolved': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
   settings: {
     'import/resolver': {
