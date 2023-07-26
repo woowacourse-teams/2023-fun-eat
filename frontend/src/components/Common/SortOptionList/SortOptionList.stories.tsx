@@ -24,17 +24,13 @@ export const Default: Story = {
       handleOpenBottomSheet();
     }, []);
 
-    const closeBottomSheet = () => {
-      ref.current?.close();
-    };
-
     return (
       <BottomSheet ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
           selectedOption={selectedOption}
           selectSortOption={selectSortOption}
-          close={closeBottomSheet}
+          close={handleCloseBottomSheet}
         />
       </BottomSheet>
     );
