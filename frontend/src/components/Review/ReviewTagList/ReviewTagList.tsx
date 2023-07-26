@@ -22,7 +22,10 @@ const ReviewTagList = () => {
   };
 
   const toggleTagSelection = (id: number, isSelected: boolean) => {
-    if (selectedTags.length >= MAX_SELECTED_TAGS && !isSelected) return;
+    if (selectedTags.length >= MAX_SELECTED_TAGS && !isSelected) {
+      return;
+    }
+
     setSelectedTags((prevSelectedTags) => {
       if (isSelected) {
         return prevSelectedTags.filter((selectedTag) => selectedTag !== id);
