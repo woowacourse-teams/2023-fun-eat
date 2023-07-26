@@ -13,6 +13,7 @@ const StarRate = () => {
     <StarRateContainer>
       <Heading as="h2" size="xl">
         별점을 남겨주세요.
+        <RequiredMark>*</RequiredMark>
       </Heading>
       <Spacing size={20} />
       <div>
@@ -44,6 +45,10 @@ const StarRateContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`;
+
+const RequiredMark = styled.sup`
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const SvgIconWrapper = styled(SvgIcon)`
