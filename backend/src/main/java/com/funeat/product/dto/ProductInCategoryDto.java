@@ -49,16 +49,4 @@ public class ProductInCategoryDto {
     public Long getReviewCount() {
         return reviewCount;
     }
-
-    @Override
-    public String toString() {
-        return "ProductInCategoryDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                ", averageRating=" + averageRating +
-                ", reviewCount=" + reviewCount +
-                '}';
-    }
 }

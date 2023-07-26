@@ -337,7 +337,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final List<Product> products = List.of(product1, product2, product3, product4, product5);
             복수_상품_추가_요청(products);
 
-            Member member = 멤버_추가_요청(new Member("test", "image.png"));
+            final Member member = 멤버_추가_요청(new Member("test", "image.png"));
             상품_리뷰_추가_요청(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
             상품_리뷰_추가_요청(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
             상품_리뷰_추가_요청(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
@@ -376,7 +376,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 "request2", true, memberId);
         final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true,
                 memberId);
-        리뷰_추가_요청(productId, image, request1);
         리뷰_추가_요청(productId, image, request1);
         리뷰_추가_요청(productId, image, request2);
         리뷰_추가_요청(productId, image, request3);
@@ -426,7 +425,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         return testMember.getId();
     }
 
-    private Member 멤버_추가_요청(Member member) {
+    private Member 멤버_추가_요청(final Member member) {
         return memberRepository.save(member);
     }
 
