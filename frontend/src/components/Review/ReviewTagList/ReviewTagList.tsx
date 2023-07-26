@@ -55,13 +55,7 @@ const ReviewTagList = () => {
       </TagListWrapper>
       {canShowMore && (
         <button onClick={showMoreTags}>
-          <SvgIcon
-            variant="arrow"
-            width={15}
-            css={`
-              transform: rotate(270deg);
-            `}
-          />
+          <SvgIcon variant="arrow" width={15} css="transform: rotate(270deg)" />
         </button>
       )}
     </ReviewTagListContainer>
