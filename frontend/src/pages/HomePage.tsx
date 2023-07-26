@@ -16,6 +16,7 @@ const HomePage = () => {
 
   const { categories } = useContext(CategoryContext);
   const { data: productListResponse } = useCategoryProducts(categories.food);
+  const { data: pbPRoductListResponse } = useCategoryProducts(categories.store);
 
   return (
     <>
@@ -39,7 +40,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuList={storeCategory ?? []} menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList />
+        <PBProductList productList={pbPRoductListResponse?.products ?? []} />
       </section>
       <Spacing size={36} />
       <section>

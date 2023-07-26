@@ -5,12 +5,16 @@ import styled from 'styled-components';
 import PBProductItem from '../PBProductItem/PBProductItem';
 
 import { PATH } from '@/constants/path';
-import pbProducts from '@/mocks/data/pbProducts.json';
+import type { Product } from '@/types/product';
 
-const PBProductList = () => {
+interface PbProductListProps {
+  productList: Product[];
+}
+
+const PBProductList = ({ productList }: PbProductListProps) => {
   return (
     <PBProductListContainer>
-      {pbProducts.map((pbProduct) => (
+      {productList.map((pbProduct) => (
         <li key={pbProduct.id}>
           <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
             <PBProductItem pbProduct={pbProduct} />
