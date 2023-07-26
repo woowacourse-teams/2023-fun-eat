@@ -1,5 +1,5 @@
-import { Link, Heading, theme } from '@fun-eat/design-system';
-import { Link as RouterLink } from 'react-router-dom';
+import { Heading, theme } from '@fun-eat/design-system';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -9,13 +9,19 @@ interface TitleProps {
 }
 
 const Title = ({ headingTitle }: TitleProps) => {
+  const navigate = useNavigate();
+
+  const routeBack = () => {
+    navigate(-1);
+  };
+
   return (
     <TitleContainer>
-      <Link as={RouterLink} to=".." relative="path">
+      <button onClick={routeBack}>
         <SvgIconWrapper>
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
-      </Link>
+      </button>
       <Heading as="h2" weight="bold">
         {headingTitle}
       </Heading>
