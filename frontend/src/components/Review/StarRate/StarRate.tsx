@@ -12,9 +12,9 @@ const StarRate = () => {
   return (
     <StarRateContainer>
       <Heading as="h2" size="xl">
-        별점을 선택해주세요.
+        별점을 남겨주세요.
       </Heading>
-      <Spacing size={16} />
+      <Spacing size={20} />
       <div>
         {starList.map((star) => (
           <Button

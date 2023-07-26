@@ -16,9 +16,9 @@ const ReviewTextarea = () => {
   return (
     <ReviewTextareaContainer>
       <Heading as="h2" size="xl">
-        리뷰를 작성해주세요. (200자)
+        리뷰를 남겨주세요.
       </Heading>
-      <Spacing size={16} />
+      <Spacing size={20} />
       <Textarea
         rows={5}
         resize="vertical"
