@@ -22,6 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "LEFT JOIN p.reviews r " +
             "WHERE p.category = :category " +
             "GROUP BY p " +
-            "ORDER BY COUNT(r) DESC, p.id ASC ")
+            "ORDER BY COUNT(r) DESC, p.id DESC ")
     Page<ProductInCategoryDto> findAllByCategoryOrderByReviewCountDesc(final @Param("category") Category category, final Pageable pageable);
 }
