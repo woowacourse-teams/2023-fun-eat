@@ -1,4 +1,4 @@
-import { Heading } from '@fun-eat/design-system';
+import { Button, Heading } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -36,7 +36,7 @@ const ReviewTagList = () => {
 
   return (
     <ReviewTagListContainer>
-      <Heading as="h2" size="lg">
+      <Heading as="h2" size="xl">
         상품에 관한 태그를 선택해주세요 (3개)
       </Heading>
       <TagListWrapper>
@@ -57,9 +57,9 @@ const ReviewTagList = () => {
         })}
       </TagListWrapper>
       {canShowMore && (
-        <button onClick={showMoreTags}>
+        <Button color="white" variant="filled" onClick={showMoreTags}>
           <SvgIcon variant="arrow" width={15} css="transform: rotate(270deg)" />
-        </button>
+        </Button>
       )}
     </ReviewTagListContainer>
   );
