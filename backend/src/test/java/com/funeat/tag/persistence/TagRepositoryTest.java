@@ -1,5 +1,7 @@
 package com.funeat.tag.persistence;
 
+import static com.funeat.tag.domain.TagType.PRICE;
+import static com.funeat.tag.domain.TagType.TASTE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.DataCleaner;
@@ -28,7 +30,9 @@ class TagRepositoryTest {
     @Test
     void 여러_태그_아이디로_태그들을_조회_할_수_있다() {
         // given
-        final var tags = 태그_추가_요청();
+        final var tag1 = 태그_추가_요청(new Tag("testTag1"));
+        final var tag2 = 태그_추가_요청(new Tag("testTag2"));
+        final var tags = List.of(tag1, tag2);
         final var tagIds = tags.stream()
                 .map(Tag::getId)
                 .collect(Collectors.toList());
@@ -41,10 +45,23 @@ class TagRepositoryTest {
                 .isEqualTo(tags);
     }
 
-    private List<Tag> 태그_추가_요청() {
-        final var testTag1 = tagRepository.save(new Tag("testTag1"));
-        final var testTag2 = tagRepository.save(new Tag("testTag2"));
+    @Test
+    void 태그_타입으로_태그들을_조회할_수_있다() {
+        // given
+        final var tag1 = 태그_추가_요청(new Tag("단짠단짠", TASTE));
+        final var tag2 = 태그_추가_요청(new Tag("매콤해요", TASTE));
+        final var tag3 = 태그_추가_요청(new Tag("갓성비", PRICE));
+        final var expected = List.of(tag1, tag2);
 
-        return List.of(testTag1, testTag2);
+        // when
+        final var actual = tagRepository.findTagsByTagType(TASTE);
+
+        // then
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
+    }
+
+    private Tag 태그_추가_요청(final Tag tag) {
+        return tagRepository.save(tag);
     }
 }
