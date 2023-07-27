@@ -4,6 +4,7 @@ import App from '@/App';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import HomePage from '@/pages/HomePage';
+import LoginPage from '@/pages/LoginPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import ProductListPage from '@/pages/ProductListPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: PATH.PROFILE,
         element: <ProfilePage />,
+      },
+      {
+        path: PATH.LOGIN,
+        element: <LoginPage />,
       },
     ],
   },
