@@ -6,14 +6,13 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductDetail } from '@/hooks/product';
+import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
-import mockReviews from '@/mocks/data/reviews.json';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
-  const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0].label);
+  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
   if (!productId) {
     return null;
@@ -25,7 +24,13 @@ const ProductDetailPage = () => {
     return null;
   }
 
-  const { reviews } = mockReviews;
+  const { data: productReviews } = useProductReview(productId, selectedOption.value);
+
+  if (!productReviews) {
+    return null;
+  }
+
+  const { reviews } = productReviews;
 
   return (
     <>
@@ -48,7 +53,7 @@ const ProductDetailPage = () => {
           </ReviewItemWrapper>
         )}
       </section>
-      <BottomSheet ref={ref} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={REVIEW_SORT_OPTIONS}
           selectedOption={selectedOption}

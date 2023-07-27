@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
-const useSortOption = (initialOption: string) => {
+import type { SortOption } from '@/types/common';
+
+const useSortOption = (initialOption: SortOption) => {
   const [selectedOption, setSelectedOption] = useState(initialOption);
 
-  const selectSortOption = (selectedOptionLabel: string) => {
-    setSelectedOption(selectedOptionLabel);
+  const selectSortOption = (sortOption: SortOption) => {
+    setSelectedOption(sortOption);
   };
 
   return { selectedOption, selectSortOption };

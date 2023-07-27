@@ -3,8 +3,10 @@ import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
 
+import type { SortOption } from '@/types/common';
+
 interface SortButtonProps {
-  option: string;
+  option: SortOption;
   onClick: () => void;
 }
 
@@ -15,7 +17,7 @@ const SortButton = ({ option, onClick }: SortButtonProps) => {
     <SortButtonContainer color="white" variant="filled" onClick={onClick}>
       <SvgIcon variant="sort" color={theme.textColors.info} width={18} height={18} />
       <Text as="span" weight="bold" color={theme.textColors.info}>
-        {option}
+        {option.label}
       </Text>
     </SortButtonContainer>
   );
@@ -26,6 +28,7 @@ export default SortButton;
 const SortButtonContainer = styled(Button)`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   column-gap: 4px;
   padding: 0;
 `;
