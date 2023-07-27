@@ -3,12 +3,14 @@ import styled from 'styled-components';
 
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
+import { useLogin } from '@/hooks/auth';
 import useRouteBack from '@/hooks/useRouteBack';
 
 const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 레시피를 공유해보세요.';
 
 const LoginPage = () => {
   const routeBack = useRouteBack();
+  const { handleLogin } = useLogin();
 
   return (
     <LoginPageContainer>
@@ -23,7 +25,7 @@ const LoginPage = () => {
         </Text>
         <Description>{DESCRIPTION}</Description>
         <Spacing size={48} />
-        <KakaoLoginButton type="button" customWidth="100%">
+        <KakaoLoginButton type="button" customWidth="100%" onClick={() => handleLogin('kakao')}>
           <SvgIcon variant="kakao" width={20} height={20} />
           <Text as="span">카카오 로그인</Text>
         </KakaoLoginButton>
