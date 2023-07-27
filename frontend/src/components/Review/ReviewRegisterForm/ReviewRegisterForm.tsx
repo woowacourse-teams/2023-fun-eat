@@ -1,4 +1,4 @@
-import { Button, Checkbox, Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { Button, Checkbox, Divider, Heading, Spacing, Text, theme, useBottomSheet } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -10,14 +10,18 @@ import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import productDetail from '@/mocks/data/productDetail.json';
 
-const ReviewRegisterForm = () => {
+interface ReviewRegisterFormProps {
+  close: () => void;
+}
+
+const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
   return (
     <ReviewRegisterFormContainer>
       <RegisterFormHeader>
         <Heading css="font-size:2.4rem">리뷰 작성</Heading>
-        <SvgIconWrapper>
+        <CloseButton variant="transparent" onClick={close}>
           <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
-        </SvgIconWrapper>
+        </CloseButton>
       </RegisterFormHeader>
       <Divider />
       <ProductOverviewItemWrapper>
@@ -39,7 +43,7 @@ const ReviewRegisterForm = () => {
             <Text weight="bold"> 재구매할 생각이 있으신가요?</Text>
           </ReBuyCheckWrapper>
           <Spacing size={16} />
-          <Button width="100%" height="60px" size="xl" weight="bold">
+          <Button width="100%" height="60px" size="xl">
             등록하기
           </Button>
         </form>
@@ -51,7 +55,8 @@ const ReviewRegisterForm = () => {
 export default ReviewRegisterForm;
 
 const ReviewRegisterFormContainer = styled.div`
-  width: 100%;
+  height: 100%;
+  padding: 30px;
 `;
 
 const RegisterFormHeader = styled.header`
@@ -59,11 +64,11 @@ const RegisterFormHeader = styled.header`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  height: 80px;
   position: relative;
+  height: 80px;
 `;
 
-const SvgIconWrapper = styled.button`
+const CloseButton = styled(Button)`
   position: absolute;
   right: 30px;
 `;
