@@ -35,7 +35,7 @@ const LoginPageContainer = styled.section`
   width: 100%;
   max-width: 600px;
   height: 100%;
-  padding: 60px 20px 0;
+  padding: 20px 20px 0;
   background: ${({ theme }) => theme.backgroundColors.default};
   transform: translateX(-50%);
 `;
