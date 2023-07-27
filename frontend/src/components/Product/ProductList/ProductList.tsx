@@ -19,7 +19,13 @@ const ProductList = () => {
     <ProductListContainer>
       {products.map((product) => (
         <li key={product.id}>
-          <ProductButton type="button" variant="filled" color="white" onClick={() => navigateToDetailPage(product.id)}>
+          <ProductButton
+            type="button"
+            customWidth="100%"
+            customHeight="100%"
+            variant="transparent"
+            onClick={() => navigateToDetailPage(product.id)}
+          >
             <ProductItem product={product} />
           </ProductButton>
         </li>
@@ -41,6 +47,4 @@ const ProductListContainer = styled.ul`
 
 const ProductButton = styled(Button)`
   padding: 0;
-  width: 100%;
-  height: 100%;
 `;

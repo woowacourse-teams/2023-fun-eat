@@ -1,4 +1,4 @@
-import { Heading } from '@fun-eat/design-system';
+import { Button, Heading } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -57,9 +57,9 @@ const ReviewTagList = () => {
         })}
       </TagListWrapper>
       {canShowMore && (
-        <button onClick={showMoreTags}>
+        <Button type="button" customHeight="fit-content" variant="transparent" onClick={showMoreTags}>
           <SvgIcon variant="arrow" width={15} css="transform: rotate(270deg)" />
-        </button>
+        </Button>
       )}
     </ReviewTagListContainer>
   );

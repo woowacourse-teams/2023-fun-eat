@@ -14,11 +14,9 @@ const SortButton = ({ option, onClick }: SortButtonProps) => {
   const theme = useTheme();
 
   return (
-    <SortButtonContainer color="white" variant="filled" onClick={onClick}>
+    <SortButtonContainer type="button" weight="bold" textColor="info" variant="transparent" onClick={onClick}>
       <SvgIcon variant="sort" color={theme.textColors.info} width={18} height={18} />
-      <Text as="span" weight="bold" color={theme.textColors.info}>
-        {option.label}
-      </Text>
+      {option.label}
     </SortButtonContainer>
   );
 };

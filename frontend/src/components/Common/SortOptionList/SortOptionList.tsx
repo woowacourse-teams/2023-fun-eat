@@ -1,4 +1,4 @@
-import { Button, theme } from '@fun-eat/design-system';
+import { Button } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import type { SortOption } from '@/types/common';
@@ -23,13 +23,13 @@ const SortOptionList = ({ options, selectedOption, selectSortOption, close }: So
         return (
           <li key={sortOption.label}>
             <SortOptionButton
-              color="white"
+              type="button"
+              customWidth="100%"
+              customHeight="100%"
               textColor={isSelected ? 'default' : 'sub'}
-              variant="filled"
               size="lg"
-              css={`
-                font-weight: ${isSelected ? theme.fontWeights.bold : 'inherit'};
-              `}
+              weight={isSelected ? 'bold' : 'regular'}
+              variant="transparent"
               onClick={() => handleSelectedOption(sortOption)}
             >
               {sortOption.label}
@@ -58,8 +58,6 @@ const SortOptionListContainer = styled.ul`
 `;
 
 const SortOptionButton = styled(Button)`
-  width: 100%;
-  height: 100%;
   padding: 10px 0;
   border: none;
   outline: transparent;

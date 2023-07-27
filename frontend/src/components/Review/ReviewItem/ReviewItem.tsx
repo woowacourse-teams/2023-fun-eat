@@ -47,13 +47,8 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
       {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
-      <FavoriteButton type="button" color="white" variant="filled">
-        <SvgIcon
-          variant={favorite ? 'favoriteFilled' : 'favorite'}
-          color={favorite ? 'red' : theme.colors.gray4}
-          width={24}
-          height={24}
-        />
+      <FavoriteButton type="button" variant="transparent">
+        <SvgIcon variant={favorite ? 'favoriteFilled' : 'favorite'} color={favorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
           {favoriteCount}
         </Text>
