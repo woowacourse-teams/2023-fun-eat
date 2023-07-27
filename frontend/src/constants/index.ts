@@ -30,7 +30,13 @@ export const NAVIGATION_MENU: NavigationMenu[] = [
   },
 ];
 
-export const SORT_OPTIONS = [
+export const PRODUCT_SORT_OPTIONS = [
   { label: '높은 가격순', value: 'price,desc' },
   { label: '낮은 가격순', value: 'price,asc' },
+] as const;
+
+export const REVIEW_SORT_OPTIONS = [
+  { label: '높은 평점순', value: 'rating,desc' },
+  { label: '낮은 평점순', value: 'rating,asc' },
+  { label: '추천순', value: 'favoriteCount,asc' },
 ] as const;
