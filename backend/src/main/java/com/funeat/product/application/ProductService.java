@@ -25,6 +25,7 @@ public class ProductService {
     private static final int THREE = 3;
     private static final int TOP = 0;
     public static final String REVIEW_COUNT = "reviewCount";
+
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
@@ -53,7 +54,7 @@ public class ProductService {
 
     private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
         if (pageable.getSort().getOrderFor(REVIEW_COUNT) != null) {
-            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+            final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
             return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
         }
         return productRepository.findAllByCategory(category, pageable);

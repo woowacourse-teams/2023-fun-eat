@@ -59,7 +59,8 @@ class ProductRepositoryTest {
         final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
 
         // then
-        final var expected = List.of(ProductInCategoryDto.toDto(product1, 0L), ProductInCategoryDto.toDto(product5, 0L), ProductInCategoryDto.toDto(product3, 0L));
+        final var expected = List.of(ProductInCategoryDto.toDto(product1, 0L), ProductInCategoryDto.toDto(product5, 0L),
+                ProductInCategoryDto.toDto(product3, 0L));
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
@@ -159,16 +160,20 @@ class ProductRepositoryTest {
 
         final var member = memberRepository.save(new Member("test", "image.png"));
 
-        reviewRepository.save(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
-        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
-        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
-        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
-        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-        reviewRepository.save(new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-        reviewRepository.save(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
-        reviewRepository.save(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
-        reviewRepository.save(new Review(member, product3, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+        final var review1_1 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
+        final var review1_2 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
+        final var review1_3 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+        final var review1_4 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+        final var review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+        final var review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+        final var review3_1 = new Review(member, product3, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+        final var review4_1 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+        final var review4_2 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+        final var review4_3 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+        reviewRepository.saveAll(
+                List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1, review4_1,
+                        review4_2, review4_3)
+        );
 
         // when
         final var pageRequest = PageRequest.of(0, 3);
