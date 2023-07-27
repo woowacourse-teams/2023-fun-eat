@@ -1,4 +1,6 @@
-package com.funeat.tag.domain;
+package com.funeat.tag.dto;
+
+import com.funeat.tag.domain.Tag;
 
 public class TagDto {
 
