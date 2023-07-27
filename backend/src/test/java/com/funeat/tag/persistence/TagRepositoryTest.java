@@ -1,5 +1,6 @@
 package com.funeat.tag.persistence;
 
+import static com.funeat.tag.domain.TagType.ETC;
 import static com.funeat.tag.domain.TagType.PRICE;
 import static com.funeat.tag.domain.TagType.TASTE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,8 +31,8 @@ class TagRepositoryTest {
     @Test
     void 여러_태그_아이디로_태그들을_조회_할_수_있다() {
         // given
-        final var tag1 = 태그_추가_요청(new Tag("testTag1"));
-        final var tag2 = 태그_추가_요청(new Tag("testTag2"));
+        final var tag1 = 태그_추가_요청(new Tag("testTag1", ETC));
+        final var tag2 = 태그_추가_요청(new Tag("testTag2", ETC));
         final var tags = List.of(tag1, tag2);
         final var tagIds = tags.stream()
                 .map(Tag::getId)

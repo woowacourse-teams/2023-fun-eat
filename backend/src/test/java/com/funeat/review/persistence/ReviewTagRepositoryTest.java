@@ -11,6 +11,7 @@ import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
+import com.funeat.tag.domain.TagType;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -53,10 +54,10 @@ class ReviewTagRepositoryTest {
         final var product = new Product("망고", 1_000L, "mango.png", "망고망고", null);
         productRepository.save(product);
 
-        final var tag1 = new Tag("1번");
-        final var tag2 = new Tag("2번");
-        final var tag3 = new Tag("3번");
-        final var tag4 = new Tag("4번");
+        final var tag1 = new Tag("1번", TagType.ETC);
+        final var tag2 = new Tag("2번", TagType.ETC);
+        final var tag3 = new Tag("3번", TagType.ETC);
+        final var tag4 = new Tag("4번", TagType.ETC);
         tagRepository.saveAll(List.of(tag1, tag2, tag3, tag4));
 
         final var review1 = new Review(member, product, "review1.png", 5L, "최고의 망고", true, 25L);

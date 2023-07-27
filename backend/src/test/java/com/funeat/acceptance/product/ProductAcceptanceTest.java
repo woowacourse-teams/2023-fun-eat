@@ -24,6 +24,7 @@ import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.tag.domain.Tag;
+import com.funeat.tag.domain.TagType;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -318,7 +319,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     review3_1, review3_2, review3_3);
             복수_리뷰_추가_요청(reviews);
 
-
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
 
@@ -373,9 +373,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final Product product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
         final Long productId = 상품_추가_요청(product);
         final Long memberId = 기본_멤버_추가_요청();
-        final Tag tag1 = 태그_추가_요청(new Tag("1번"));
-        final Tag tag2 = 태그_추가_요청(new Tag("2번"));
-        final Tag tag3 = 태그_추가_요청(new Tag("3번"));
+        final Tag tag1 = 태그_추가_요청(new Tag("1번", TagType.ETC));
+        final Tag tag2 = 태그_추가_요청(new Tag("2번", TagType.ETC));
+        final Tag tag3 = 태그_추가_요청(new Tag("3번", TagType.ETC));
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
 
         final ReviewCreateRequest request1 = new ReviewCreateRequest(4L,

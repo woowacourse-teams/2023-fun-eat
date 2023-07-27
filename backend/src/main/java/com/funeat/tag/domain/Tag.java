@@ -22,10 +22,6 @@ public class Tag {
     protected Tag() {
     }
 
-    public Tag(final String name) {
-        this.name = name;
-    }
-
     public Tag(final String name, final TagType tagType) {
         this.name = name;
         this.tagType = tagType;
