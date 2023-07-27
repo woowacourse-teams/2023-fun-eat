@@ -305,15 +305,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
             복수_상품_추가_요청(products);
 
             Member member = 멤버_추가_요청(new Member("test", "image.png"));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
-            상품_리뷰_추가_요청(new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+            final Review review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final Review review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final Review review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
+            final Review review1_4 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
+            final Review review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final Review review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final Review review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final Review review3_2 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final Review review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            List<Review> reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
+                    review3_1, review3_2, review3_3);
+            복수_리뷰_추가_요청(reviews);
+
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
@@ -338,14 +342,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
             복수_상품_추가_요청(products);
 
             final Member member = 멤버_추가_요청(new Member("test", "image.png"));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));
-            상품_리뷰_추가_요청(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true));
-            상품_리뷰_추가_요청(new Review(member, product2, "review.png", 3L, "이 삼각김밥은 맛있다", true));
-            상품_리뷰_추가_요청(new Review(member, product2, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false));
-            상품_리뷰_추가_요청(new Review(member, product4, "review.png", 1L, "이 삼각김밥은 맛없다", false));
+            final Review review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final Review review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final Review review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
+            final Review review1_4 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
+            final Review review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final Review review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final Review review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final Review review3_2 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final Review review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            List<Review> reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
+                    review3_1, review3_2, review3_3);
+            복수_리뷰_추가_요청(reviews);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
@@ -429,8 +437,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         return memberRepository.save(member);
     }
 
-    private Review 상품_리뷰_추가_요청(final Review review) {
-        return reviewRepository.save(review);
+    private void 복수_리뷰_추가_요청(final List<Review> reviews) {
+        reviewRepository.saveAll(reviews);
     }
 
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, Long dataSize, Long page) {
