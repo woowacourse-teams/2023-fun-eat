@@ -4,21 +4,21 @@ import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
 import { CategoryContext } from '@/contexts/CategoryContext';
-import type { Category } from '@/types/common';
+import type { Category, CategoryVariant } from '@/types/common';
 
 interface CategoryMenuProps {
-  menuVariant: 'food' | 'store';
+  menuVariant: CategoryVariant;
   menuList: Category[];
 }
 
 const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
-  const { categories, selectCategory } = useContext(CategoryContext);
-  const menuId = categories[menuVariant];
+  const { categoryIds, selectCategory } = useContext(CategoryContext);
+  const currentCategoryId = categoryIds[menuVariant];
 
   return (
     <CategoryMenuContainer>
       {menuList.map((menu) => {
-        const isSelected = menu.id === menuId;
+        const isSelected = menu.id === currentCategoryId;
         return (
           <li key={menu.id}>
             <Button

@@ -1,30 +1,36 @@
 import type { PropsWithChildren } from 'react';
 import { useState, createContext } from 'react';
 
+import type { CategoryVariant } from '@/types/common';
+
 const initialState = {
   food: 1,
   store: 7,
 };
 
+type CategoryIds = {
+  [k in CategoryVariant]: number;
+};
+
 interface CategoryState {
-  categories: { food: number; store: number };
+  categoryIds: CategoryIds;
   selectCategory: (menuVariant: string, categoryId: number) => void;
 }
 
 export const CategoryContext = createContext<CategoryState>({
-  categories: initialState,
+  categoryIds: initialState,
   selectCategory: () => {},
 });
 
 const CategoryProvider = ({ children }: PropsWithChildren) => {
-  const [categories, setCategories] = useState(initialState);
+  const [categoryIds, setCategoryIds] = useState(initialState);
 
   const selectCategory = (menuVariant: string, categoryId: number) => {
-    setCategories((prevCategory) => ({ ...prevCategory, [menuVariant]: categoryId }));
+    setCategoryIds((prevCategory) => ({ ...prevCategory, [menuVariant]: categoryId }));
   };
 
   const categoryState: CategoryState = {
-    categories,
+    categoryIds,
     selectCategory,
   };
 

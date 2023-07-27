@@ -14,9 +14,9 @@ const HomePage = () => {
   const { data: foodCategory } = useCategory('food');
   const { data: storeCategory } = useCategory('store');
 
-  const { categories } = useContext(CategoryContext);
-  const { data: productListResponse } = useCategoryProducts(categories.food);
-  const { data: pbPRoductListResponse } = useCategoryProducts(categories.store);
+  const { categoryIds } = useContext(CategoryContext);
+  const { data: productListResponse } = useCategoryProducts(categoryIds.food);
+  const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
 
   return (
     <>

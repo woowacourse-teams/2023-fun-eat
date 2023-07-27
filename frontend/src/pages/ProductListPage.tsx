@@ -18,27 +18,27 @@ const ProductListPage = () => {
   const location = useLocation();
   const path = location.pathname;
 
-  const category = path.split('/').pop() ?? '';
+  const categoryVariant = path.split('/').pop() ?? '';
 
-  if (!isCategoryVariant(category)) {
+  if (!isCategoryVariant(categoryVariant)) {
     return;
   }
 
-  const { categories } = useContext(CategoryContext);
+  const { categoryIds } = useContext(CategoryContext);
 
-  const { data: menuList } = useCategory(category);
-  const { data: productListResponse } = useCategoryProducts(categories[category]);
+  const { data: menuList } = useCategory(categoryVariant);
+  const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant]);
 
   return (
     <>
       <section>
-        <Title headingTitle={category === 'food' ? '공통 상품' : 'PB 상품'} />
+        <Title headingTitle={categoryVariant === 'food' ? '공통 상품' : 'PB 상품'} />
         <Spacing size={30} />
-        <CategoryMenu menuList={menuList ?? []} menuVariant={category} />
+        <CategoryMenu menuList={menuList ?? []} menuVariant={categoryVariant} />
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList category={category} productList={productListResponse?.products ?? []} />
+        <ProductList category={categoryVariant} productList={productListResponse?.products ?? []} />
       </section>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList

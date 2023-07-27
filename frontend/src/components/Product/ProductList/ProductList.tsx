@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
+import type { CategoryVariant } from '@/types/common';
 import type { Product } from '@/types/product';
 
 interface ProductListProps {
-  category: 'food' | 'store';
+  category: CategoryVariant;
   productList: Product[];
 }
 
