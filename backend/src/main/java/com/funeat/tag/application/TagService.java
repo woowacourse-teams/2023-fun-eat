@@ -32,7 +32,7 @@ public class TagService {
         final List<TagDto> tags = tagRepository.findTagsByTagType(tagType).stream()
                 .map(TagDto::toDto)
                 .collect(Collectors.toList());
-        final TagsResponse tagsResponse = new TagsResponse(tagType.name(), tags);
+        final TagsResponse tagsResponse = TagsResponse.toResponse(tagType.name(), tags);
         responses.add(tagsResponse);
     }
 }

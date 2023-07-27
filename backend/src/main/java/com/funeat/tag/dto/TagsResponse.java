@@ -12,6 +12,10 @@ public class TagsResponse {
         this.tags = tags;
     }
 
+    public static TagsResponse toResponse(final String tagType, final List<TagDto> tags) {
+        return new TagsResponse(tagType, tags);
+    }
+
     public String getTagType() {
         return tagType;
     }
