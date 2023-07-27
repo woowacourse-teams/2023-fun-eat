@@ -50,5 +50,3 @@ export class ApiClient {
     });
   }
 }
-
-export type ApiClientType = typeof ApiClient;
