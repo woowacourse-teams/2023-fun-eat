@@ -21,7 +21,7 @@ public class ProductsInCategoryPageDto {
         this.requestSize = requestSize;
     }
 
-    public static ProductsInCategoryPageDto toDto(final Page<Product> page) {
+    public static ProductsInCategoryPageDto toDto(final Page<ProductInCategoryDto> page) {
         return new ProductsInCategoryPageDto(
                 page.getTotalElements(),
                 Long.valueOf(page.getTotalPages()),
