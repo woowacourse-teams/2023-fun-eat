@@ -1,4 +1,4 @@
-import { Heading, theme } from '@fun-eat/design-system';
+import { Button, Heading, theme } from '@fun-eat/design-system';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -17,11 +17,11 @@ const Title = ({ headingTitle }: TitleProps) => {
 
   return (
     <TitleContainer>
-      <button onClick={routeBack}>
+      <Button type="button" variant="transparent" onClick={routeBack}>
         <SvgIconWrapper>
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
-      </button>
+      </Button>
       <Heading as="h2" weight="bold">
         {headingTitle}
       </Heading>

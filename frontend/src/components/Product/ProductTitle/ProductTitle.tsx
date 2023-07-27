@@ -19,9 +19,9 @@ const ProductTitle = ({ name, bookmark }: ProductTitleProps) => {
   return (
     <ProductTitleContainer>
       <ProductTitleWrapper>
-        <button onClick={routeBack}>
+        <Button type="button" variant="transparent" onClick={routeBack}>
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
-        </button>
+        </Button>
         <Heading size="xl" css="margin-left: 20px">
           {name}
         </Heading>
