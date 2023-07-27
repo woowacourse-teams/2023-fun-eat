@@ -1,12 +1,11 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
-import { CategoryContext } from '@/contexts/CategoryContext';
+import { useCategoryContext } from '@/hooks/context';
 import { useCategory, useCategoryProducts } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
@@ -24,7 +23,7 @@ const ProductListPage = () => {
     return;
   }
 
-  const { categoryIds } = useContext(CategoryContext);
+  const { categoryIds } = useCategoryContext();
 
   const { data: menuList } = useCategory(categoryVariant);
   const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant]);

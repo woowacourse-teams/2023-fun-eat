@@ -1,9 +1,8 @@
 import { Button, Text, theme } from '@fun-eat/design-system';
-import { useContext } from 'react';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
-import { CategoryContext } from '@/contexts/CategoryContext';
+import { useCategoryContext } from '@/hooks/context';
 import type { Category, CategoryVariant } from '@/types/common';
 
 interface CategoryMenuProps {
@@ -12,7 +11,7 @@ interface CategoryMenuProps {
 }
 
 const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
-  const { categoryIds, selectCategory } = useContext(CategoryContext);
+  const { categoryIds, selectCategory } = useCategoryContext();
   const currentCategoryId = categoryIds[menuVariant];
 
   return (

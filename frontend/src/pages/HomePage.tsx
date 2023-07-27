@@ -1,5 +1,4 @@
 import { Heading, Link, Spacing } from '@fun-eat/design-system';
-import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,14 +6,14 @@ import { CategoryMenu, SvgIcon } from '@/components/Common';
 import { PBProductList, ProductList, ProductRankingList } from '@/components/Product';
 import { ReviewRankingList } from '@/components/Review';
 import { PATH } from '@/constants/path';
-import { CategoryContext } from '@/contexts/CategoryContext';
+import { useCategoryContext } from '@/hooks/context';
 import { useCategory, useCategoryProducts } from '@/hooks/product';
 
 const HomePage = () => {
   const { data: foodCategory } = useCategory('food');
   const { data: storeCategory } = useCategory('store');
 
-  const { categoryIds } = useContext(CategoryContext);
+  const { categoryIds } = useCategoryContext();
   const { data: productListResponse } = useCategoryProducts(categoryIds.food);
   const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
 
