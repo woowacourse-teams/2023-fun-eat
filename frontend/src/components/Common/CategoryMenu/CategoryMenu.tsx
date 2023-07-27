@@ -23,7 +23,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
         const isSelected = menu.id === selectedMenu;
         return (
           <li key={menu.id}>
-            <CategoryMenuButton
+            <Button
               type="button"
               customHeight="30px"
               color={isSelected ? 'primary' : 'gray3'}
@@ -37,7 +37,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
               onClick={() => selectMenu(menu.id)}
             >
               {menu.name}
-            </CategoryMenuButton>
+            </Button>
           </li>
         );
       })}
@@ -52,10 +52,6 @@ type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
-`;
-
-const CategoryMenuButton = styled(Button)`
-  padding: 6px 12px;
 `;
 
 const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['menuVariant'], CSSProp> = {
