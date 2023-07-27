@@ -38,5 +38,5 @@ export const PRODUCT_SORT_OPTIONS = [
 export const REVIEW_SORT_OPTIONS = [
   { label: '높은 평점순', value: 'rating,desc' },
   { label: '낮은 평점순', value: 'rating,asc' },
-  { label: '추천순', value: 'favoriteCount,asc' },
+  { label: '추천순', value: 'favoriteCount,desc' },
 ] as const;

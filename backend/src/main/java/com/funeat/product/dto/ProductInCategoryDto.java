@@ -49,5 +49,4 @@ public class ProductInCategoryDto {
     public Long getReviewCount() {
         return reviewCount;
     }
-
 }

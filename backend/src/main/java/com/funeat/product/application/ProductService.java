@@ -12,7 +12,6 @@ import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +24,8 @@ public class ProductService {
 
     private static final int THREE = 3;
     private static final int TOP = 0;
+    public static final String REVIEW_COUNT = "reviewCount";
+
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
@@ -43,15 +44,20 @@ public class ProductService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final Page<Product> productPages = productRepository.findAllByCategory(category, pageable);
+        final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
 
-        final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(productPages);
-        final List<ProductInCategoryDto> productDtos = productPages.getContent()
-                .stream()
-                .map(it -> ProductInCategoryDto.toDto(it, reviewRepository.countByProduct(it)))
-                .collect(Collectors.toList());
+        final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(pages);
+        final List<ProductInCategoryDto> productDtos = pages.getContent();
 
         return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
+    }
+
+    private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
+        if (pageable.getSort().getOrderFor(REVIEW_COUNT) != null) {
+            final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+            return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
+        }
+        return productRepository.findAllByCategory(category, pageable);
     }
 
     public ProductResponse findProductDetail(final Long productId) {

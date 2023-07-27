@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 import { isProductSortOption, isSortOrder } from './utils';
 import foodCategory from '../data/foodCategory.json';
-import productDetail from '../data/productDetail.json';
+import productDetails from '../data/productDetails.json';
 import categoryProducts from '../data/products.json';
 import storeCategory from '../data/storeCategory.json';
 
@@ -44,7 +44,21 @@ export const productHandlers = [
     return res(ctx.status(200), ctx.json(sortedProducts));
   }),
 
-  rest.get('/api/products/:productId', (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json(productDetail));
+  rest.get('/api/products/:productId', (req, res, ctx) => {
+    const { productId } = req.params;
+
+    const isProductIdValid = categoryProducts.products.some(({ id }) => id === Number(productId));
+
+    if (!isProductIdValid) {
+      return res(ctx.status(400));
+    }
+
+    const targetProduct = productDetails.find(({ id }) => id === Number(productId));
+
+    if (!targetProduct) {
+      return res(ctx.status(400));
+    }
+
+    return res(ctx.status(200), ctx.json(targetProduct));
   }),
 ];
