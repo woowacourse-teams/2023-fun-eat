@@ -1,15 +1,24 @@
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PBProductItem from '../PBProductItem/PBProductItem';
 
-import pbProducts from '@/mocks/data/pbProducts.json';
+import { PATH } from '@/constants/path';
+import type { Product } from '@/types/product';
 
-const PBProductList = () => {
+interface PBProductListProps {
+  productList: Product[];
+}
+
+const PBProductList = ({ productList }: PBProductListProps) => {
   return (
     <PBProductListContainer>
-      {pbProducts.map((pbProduct) => (
+      {productList.map((pbProduct) => (
         <li key={pbProduct.id}>
-          <PBProductItem pbProduct={pbProduct} />
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
+            <PBProductItem pbProduct={pbProduct} />
+          </Link>
         </li>
       ))}
     </PBProductListContainer>

@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from '@/App';
 import { PATH } from '@/constants/path';
+import CategoryProvider from '@/contexts/CategoryContext';
 import HomePage from '@/pages/HomePage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import ProductListPage from '@/pages/ProductListPage';
@@ -16,14 +17,22 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: (
+          <CategoryProvider>
+            <HomePage />
+          </CategoryProvider>
+        ),
       },
       {
-        path: PATH.PRODUCT_LIST,
-        element: <ProductListPage />,
+        path: `${PATH.PRODUCT_LIST}/:category`,
+        element: (
+          <CategoryProvider>
+            <ProductListPage />
+          </CategoryProvider>
+        ),
       },
       {
-        path: `${PATH.PRODUCT_LIST}/:productId`,
+        path: `${PATH.PRODUCT_LIST}/:category/:productId`,
         element: <ProductDetailPage />,
       },
       {
