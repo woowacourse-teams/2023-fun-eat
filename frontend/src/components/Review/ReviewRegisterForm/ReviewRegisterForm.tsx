@@ -43,7 +43,7 @@ const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
             <Text weight="bold"> 재구매할 생각이 있으신가요?</Text>
           </ReBuyCheckWrapper>
           <Spacing size={16} />
-          <Button width="100%" height="60px" size="xl">
+          <Button customWidth="100%" customHeight="60px" size="xl">
             등록하기
           </Button>
         </form>
