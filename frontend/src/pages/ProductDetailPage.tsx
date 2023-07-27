@@ -1,4 +1,4 @@
-import { BottomSheet, Spacing } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,9 +6,8 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import useBottomSheet from '@/hooks/useBottomSheet';
+import { useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
-import productDetails from '@/mocks/data/productDetails.json';
 import mockReviews from '@/mocks/data/reviews.json';
 
 const ProductDetailPage = () => {
@@ -16,17 +15,23 @@ const ProductDetailPage = () => {
   const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0].label);
 
-  // TODO: productId param으로 api 요청 보내면 바뀔 로직
-  const targetProductDetail =
-    productDetails.find((productDetail) => productDetail.id === Number(productId)) ?? productDetails[0];
+  if (!productId) {
+    return null;
+  }
+
+  const { data: productDetail } = useProductDetail(productId);
+
+  if (!productDetail) {
+    return null;
+  }
 
   const { reviews } = mockReviews;
 
   return (
     <>
-      <ProductTitle name={targetProductDetail.name} bookmark={targetProductDetail?.bookmark} />
+      <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      <ProductDetailItem product={targetProductDetail} />
+      <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
       <SortButtonWrapper>
