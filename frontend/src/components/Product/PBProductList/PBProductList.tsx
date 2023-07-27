@@ -7,11 +7,11 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 import { PATH } from '@/constants/path';
 import type { Product } from '@/types/product';
 
-interface PbProductListProps {
+interface PBProductListProps {
   productList: Product[];
 }
 
-const PBProductList = ({ productList }: PbProductListProps) => {
+const PBProductList = ({ productList }: PBProductListProps) => {
   return (
     <PBProductListContainer>
       {productList.map((pbProduct) => (
