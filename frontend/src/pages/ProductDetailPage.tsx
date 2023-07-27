@@ -14,19 +14,10 @@ const ProductDetailPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
-  if (!productId) {
-    return null;
-  }
+  const { data: productDetail } = useProductDetail(productId as string);
+  const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
 
-  const { data: productDetail } = useProductDetail(productId);
-
-  if (!productDetail) {
-    return null;
-  }
-
-  const { data: productReviews } = useProductReview(productId, selectedOption.value);
-
-  if (!productReviews) {
+  if (!productDetail || !productReviews) {
     return null;
   }
 
@@ -47,7 +38,7 @@ const ProductDetailPage = () => {
           <ReviewItemWrapper>
             {reviews.map((review) => (
               <li key={review.id}>
-                <ReviewItem review={review} />
+                <ReviewItem productId={Number(productId)} review={review} />
               </li>
             ))}
           </ReviewItemWrapper>

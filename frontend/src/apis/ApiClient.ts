@@ -28,26 +28,27 @@ export class ApiClient {
     return data;
   }
 
-  post<T>(body: T, { params, queries }: RequestOptions) {
+  post<B>({ params, queries }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'POST',
-      body: JSON.stringify(body),
       headers: this.#headers,
+      body: body ? JSON.stringify(body) : null,
     });
   }
 
-  patch<T>(body: T, { params, queries }: RequestOptions) {
+  patch<B>({ params, queries }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PATCH',
-      body: JSON.stringify(body),
       headers: this.#headers,
+      body: body ? JSON.stringify(body) : null,
     });
   }
 
-  delete(params?: string, queries?: string) {
+  delete<B>({ params, queries }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'DELETE',
       headers: this.#headers,
+      body: body ? JSON.stringify(body) : null,
     });
   }
 }
