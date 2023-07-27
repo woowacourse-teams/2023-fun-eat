@@ -3,13 +3,16 @@ import styled from 'styled-components';
 
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
+import useRouteBack from '@/hooks/useRouteBack';
 
 const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 레시피를 공유해보세요.';
 
 const LoginPage = () => {
+  const routeBack = useRouteBack();
+
   return (
     <LoginPageContainer>
-      <Button type="button" variant="transparent">
+      <Button type="button" variant="transparent" onClick={routeBack}>
         <SvgIcon variant="arrow" width={20} height={20} />
       </Button>
       <LoginSection>
