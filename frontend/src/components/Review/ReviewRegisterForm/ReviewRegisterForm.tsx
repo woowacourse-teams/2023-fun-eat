@@ -28,26 +28,24 @@ const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
         <ProductOverviewItem name={productDetail.name} image={productDetail.image} />
       </ProductOverviewItemWrapper>
       <Divider variant="disabled" css="height:4px;" />
-      <RegisterFormWrapper>
-        <form>
-          <ReviewImageUploader />
-          <Spacing size={60} />
-          <StarRate />
-          <Spacing size={60} />
-          <ReviewTagList />
-          <Spacing size={60} />
-          <ReviewTextarea />
-          <Spacing size={80} />
-          <ReBuyCheckWrapper>
-            <Checkbox />
-            <Text weight="bold"> 재구매할 생각이 있으신가요?</Text>
-          </ReBuyCheckWrapper>
-          <Spacing size={16} />
-          <Button customWidth="100%" customHeight="60px" size="xl">
-            등록하기
-          </Button>
-        </form>
-      </RegisterFormWrapper>
+      <RegisterForm>
+        <ReviewImageUploader />
+        <Spacing size={60} />
+        <StarRate />
+        <Spacing size={60} />
+        <ReviewTagList />
+        <Spacing size={60} />
+        <ReviewTextarea />
+        <Spacing size={80} />
+        <ReBuyCheckWrapper>
+          <Checkbox />
+          <Text weight="bold"> 재구매할 생각이 있으신가요?</Text>
+        </ReBuyCheckWrapper>
+        <Spacing size={16} />
+        <Button customWidth="100%" customHeight="60px" size="xl">
+          등록하기
+        </Button>
+      </RegisterForm>
     </ReviewRegisterFormContainer>
   );
 };
@@ -77,7 +75,7 @@ const ProductOverviewItemWrapper = styled.div`
   margin: 15px 0;
 `;
 
-const RegisterFormWrapper = styled.div`
+const RegisterForm = styled.form`
   padding: 50px 0;
 `;
 
