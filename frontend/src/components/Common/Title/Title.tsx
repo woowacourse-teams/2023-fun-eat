@@ -1,19 +1,16 @@
 import { Button, Heading, theme } from '@fun-eat/design-system';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
+
+import useRouteBack from '@/hooks/useRouteBack';
 
 interface TitleProps {
   headingTitle: string;
 }
 
 const Title = ({ headingTitle }: TitleProps) => {
-  const navigate = useNavigate();
-
-  const routeBack = () => {
-    navigate(-1);
-  };
+  const routeBack = useRouteBack();
 
   return (
     <TitleContainer>

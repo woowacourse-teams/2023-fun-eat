@@ -1,8 +1,8 @@
 import { Button, Heading, theme } from '@fun-eat/design-system';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
+import useRouteBack from '@/hooks/useRouteBack';
 
 interface ProductTitleProps {
   name: string;
@@ -10,11 +10,7 @@ interface ProductTitleProps {
 }
 
 const ProductTitle = ({ name, bookmark }: ProductTitleProps) => {
-  const navigate = useNavigate();
-
-  const routeBack = () => {
-    navigate(-1);
-  };
+  const routeBack = useRouteBack();
 
   return (
     <ProductTitleContainer>
