@@ -1,33 +1,26 @@
-import { Button } from '@fun-eat/design-system';
-import { useNavigate } from 'react-router-dom';
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
-import mockProducts from '@/mocks/data/products.json';
+import type { CategoryVariant } from '@/types/common';
+import type { Product } from '@/types/product';
 
-const ProductList = () => {
-  const { products } = mockProducts;
-  const navigate = useNavigate();
+interface ProductListProps {
+  category: CategoryVariant;
+  productList: Product[];
+}
 
-  const navigateToDetailPage = (productId: number) => {
-    navigate(`${PATH.PRODUCT_LIST}/${productId}`);
-  };
-
+const ProductList = ({ category, productList }: ProductListProps) => {
   return (
     <ProductListContainer>
-      {products.map((product) => (
+      {productList.map((product) => (
         <li key={product.id}>
-          <ProductButton
-            type="button"
-            customWidth="100%"
-            customHeight="100%"
-            variant="transparent"
-            onClick={() => navigateToDetailPage(product.id)}
-          >
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
             <ProductItem product={product} />
-          </ProductButton>
+          </Link>
         </li>
       ))}
     </ProductListContainer>
@@ -43,8 +36,4 @@ const ProductListContainer = styled.ul`
   & > li {
     border-bottom: 1px solid ${({ theme }) => theme.borderColors.disabled};
   }
-`;
-
-const ProductButton = styled(Button)`
-  padding: 0;
 `;

@@ -3,8 +3,10 @@ package com.funeat.review.domain;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +29,9 @@ public class Review {
     private String content;
 
     private Boolean reBuy;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -119,5 +124,9 @@ public class Review {
 
     public List<ReviewTag> getReviewTags() {
         return reviewTags;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

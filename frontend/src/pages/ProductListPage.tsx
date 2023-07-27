@@ -1,26 +1,43 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
+import { useCategoryContext } from '@/hooks/context';
+import { useCategory, useCategoryProducts } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
-import foodCategory from '@/mocks/data/foodCategory.json';
+import { isCategoryVariant } from '@/types/common';
 
 const ProductListPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
+  const location = useLocation();
+  const path = location.pathname;
+
+  const categoryVariant = path.split('/').pop() ?? '';
+
+  if (!isCategoryVariant(categoryVariant)) {
+    return;
+  }
+
+  const { categoryIds } = useCategoryContext();
+
+  const { data: menuList } = useCategory(categoryVariant);
+  const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant]);
+
   return (
     <>
       <section>
-        <Title headingTitle="공통 상품" />
+        <Title headingTitle={categoryVariant === 'food' ? '공통 상품' : 'PB 상품'} />
         <Spacing size={30} />
-        <CategoryMenu menuList={foodCategory} menuVariant="food" />
+        <CategoryMenu menuList={menuList ?? []} menuVariant={categoryVariant} />
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList />
+        <ProductList category={categoryVariant} productList={productListResponse?.products ?? []} />
       </section>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
@@ -33,7 +50,6 @@ const ProductListPage = () => {
     </>
   );
 };
-
 export default ProductListPage;
 
 const SortButtonWrapper = styled.div`

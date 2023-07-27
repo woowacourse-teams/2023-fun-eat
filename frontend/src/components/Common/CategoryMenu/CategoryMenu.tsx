@@ -1,26 +1,23 @@
 import { Button, Text, theme } from '@fun-eat/design-system';
-import { useState } from 'react';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
-import type { Category } from '@/types/common';
+import { useCategoryContext } from '@/hooks/context';
+import type { Category, CategoryVariant } from '@/types/common';
 
 interface CategoryMenuProps {
-  menuVariant: 'food' | 'store';
+  menuVariant: CategoryVariant;
   menuList: Category[];
 }
 
 const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
-  const [selectedMenu, setSelectedMenu] = useState(0);
-
-  const selectMenu = (menuId: number) => {
-    setSelectedMenu(menuId);
-  };
+  const { categoryIds, selectCategory } = useCategoryContext();
+  const currentCategoryId = categoryIds[menuVariant];
 
   return (
     <CategoryMenuContainer>
       {menuList.map((menu) => {
-        const isSelected = menu.id === selectedMenu;
+        const isSelected = menu.id === currentCategoryId;
         return (
           <li key={menu.id}>
             <Button
@@ -34,7 +31,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
                 padding: 6px 12px;
                 ${isSelected ? selectedCategoryMenuStyles[menuVariant] : ''}
               `}
-              onClick={() => selectMenu(menu.id)}
+              onClick={() => selectCategory(menuVariant, menu.id)}
             >
               {menu.name}
             </Button>

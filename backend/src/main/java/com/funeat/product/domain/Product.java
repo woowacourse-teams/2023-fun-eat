@@ -1,6 +1,7 @@
 package com.funeat.product.domain;
 
 import com.funeat.member.domain.bookmark.ProductBookmark;
+import com.funeat.review.domain.Review;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,9 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
 
     @OneToMany(mappedBy = "product")
@@ -49,8 +53,18 @@ public class Product {
         this.category = category;
     }
 
+    public Product(final String name, final Long price, final String image, final String content,
+                   final Double averageRating, final Category category) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.content = content;
+        this.averageRating = averageRating;
+        this.category = category;
+    }
+
     public void updateAverageRating(final Long rating, final Long count) {
-        double calculatedRating = ((count - 1) * averageRating + rating) / count;
+        final double calculatedRating = ((count - 1) * averageRating + rating) / count;
         this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
     }
 
