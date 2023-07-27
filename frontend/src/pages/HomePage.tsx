@@ -28,9 +28,9 @@ const HomePage = () => {
         <CategoryMenu menuList={foodCategory ?? []} menuVariant="food" />
         <Spacing size={12} />
         <ProductList category="food" productList={productListResponse?.products ?? []} />
-        <ProductListRouteButton as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
+        <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
-        </ProductListRouteButton>
+        </ProductListRouteLink>
       </section>
       <Spacing size={36} />
       <section>
@@ -64,7 +64,7 @@ const HomePage = () => {
 
 export default HomePage;
 
-const ProductListRouteButton = styled(Link)`
+const ProductListRouteLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
