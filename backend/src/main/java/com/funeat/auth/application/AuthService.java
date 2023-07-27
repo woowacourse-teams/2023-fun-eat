@@ -5,8 +5,10 @@ import com.funeat.auth.util.PlatformUserProvider;
 import com.funeat.member.application.MemberService;
 import com.funeat.member.domain.Member;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class AuthService {
 
     private final MemberService memberService;

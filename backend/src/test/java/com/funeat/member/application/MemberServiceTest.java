@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -25,11 +24,6 @@ class MemberServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @BeforeEach
-    void init() {
-        memberRepository.deleteAll();
-    }
 
     @Nested
     class findOrCreateMember_테스트 {

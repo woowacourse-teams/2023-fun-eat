@@ -45,7 +45,7 @@ public class Member {
         this.profileImage = profileImage;
     }
 
-    public Member(String nickname, String profileImage, String platformId) {
+    public Member(final String nickname, final String profileImage, final String platformId) {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.platformId = platformId;

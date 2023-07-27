@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class TestPlatformUserProvider implements PlatformUserProvider {
 
     @Override
-    public UserInfoDto getPlatformUser(String code) {
+    public UserInfoDto getPlatformUser(final String code) {
         return new UserInfoDto(1L, "test", "https://www.test.com");
     }
 }
