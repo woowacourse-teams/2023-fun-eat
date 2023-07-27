@@ -37,10 +37,7 @@ const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTextarea />
         <Spacing size={80} />
-        <ReBuyCheckWrapper>
-          <Checkbox />
-          <Text weight="bold"> 재구매할 생각이 있으신가요?</Text>
-        </ReBuyCheckWrapper>
+        <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
         <Spacing size={16} />
         <Button customWidth="100%" customHeight="60px" size="xl">
           등록하기
@@ -59,9 +56,9 @@ const ReviewRegisterFormContainer = styled.div`
 
 const RegisterFormHeader = styled.header`
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
   position: relative;
   height: 80px;
 `;
@@ -77,9 +74,4 @@ const ProductOverviewItemWrapper = styled.div`
 
 const RegisterForm = styled.form`
   padding: 50px 0;
-`;
-
-const ReBuyCheckWrapper = styled.div`
-  display: flex;
-  align-items: center;
 `;
