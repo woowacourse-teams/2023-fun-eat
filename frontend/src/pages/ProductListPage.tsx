@@ -1,4 +1,4 @@
-import { BottomSheet, Spacing } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,13 +8,12 @@ import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { CategoryContext } from '@/contexts/CategoryContext';
 import { useCategory, useCategoryProducts } from '@/hooks/product';
-import useBottomSheet from '@/hooks/useBottomSheet';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
 
 const ProductListPage = () => {
-  const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0].label);
+  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
   const location = useLocation();
   const path = location.pathname;
@@ -41,7 +40,7 @@ const ProductListPage = () => {
         </SortButtonWrapper>
         <ProductList category={category} productList={productListResponse?.products ?? []} />
       </section>
-      <BottomSheet ref={ref} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
           selectedOption={selectedOption}

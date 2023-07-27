@@ -5,23 +5,23 @@ import type { SortOption } from '@/types/common';
 
 interface SortOptionListProps {
   options: readonly SortOption[];
-  selectedOption: string;
-  selectSortOption: (selectedOptionLabel: string) => void;
+  selectedOption: SortOption;
+  selectSortOption: (selectedOptionLabel: SortOption) => void;
   close: () => void;
 }
 
 const SortOptionList = ({ options, selectedOption, selectSortOption, close }: SortOptionListProps) => {
-  const handleSelectedOption = (selectedOptionLabel: string) => {
-    selectSortOption(selectedOptionLabel);
+  const handleSelectedOption = (sortOption: SortOption) => {
+    selectSortOption(sortOption);
     close();
   };
 
   return (
     <SortOptionListContainer>
-      {options.map(({ label }) => {
-        const isSelected = label === selectedOption;
+      {options.map((sortOption) => {
+        const isSelected = sortOption.label === selectedOption.label;
         return (
-          <li key={label}>
+          <li key={sortOption.label}>
             <SortOptionButton
               color="white"
               textColor={isSelected ? 'default' : 'sub'}
@@ -30,9 +30,9 @@ const SortOptionList = ({ options, selectedOption, selectSortOption, close }: So
               css={`
                 font-weight: ${isSelected ? theme.fontWeights.bold : 'inherit'};
               `}
-              onClick={() => handleSelectedOption(label)}
+              onClick={() => handleSelectedOption(sortOption)}
             >
-              {label}
+              {sortOption.label}
             </SortOptionButton>
           </li>
         );
