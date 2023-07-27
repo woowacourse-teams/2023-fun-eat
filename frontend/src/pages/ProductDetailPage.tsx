@@ -6,9 +6,8 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReview } from '@/hooks/product';
+import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
-import productDetails from '@/mocks/data/productDetails.json';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -19,9 +18,11 @@ const ProductDetailPage = () => {
     return null;
   }
 
-  // TODO: productId param으로 api 요청 보내면 바뀔 로직
-  const targetProductDetail =
-    productDetails.find((productDetail) => productDetail.id === Number(productId)) ?? productDetails[0];
+  const { data: productDetail } = useProductDetail(productId);
+
+  if (!productDetail) {
+    return null;
+  }
 
   const { data: productReviews } = useProductReview(productId, selectedOption.value);
 
@@ -33,9 +34,9 @@ const ProductDetailPage = () => {
 
   return (
     <>
-      <ProductTitle name={targetProductDetail.name} bookmark={targetProductDetail?.bookmark} />
+      <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      <ProductDetailItem product={targetProductDetail} />
+      <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
       <SortButtonWrapper>
