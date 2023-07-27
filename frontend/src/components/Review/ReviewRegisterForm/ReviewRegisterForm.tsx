@@ -1,4 +1,4 @@
-import { Button, Checkbox, Divider, Heading, Spacing, Text, theme, useBottomSheet } from '@fun-eat/design-system';
+import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -8,13 +8,14 @@ import StarRate from '../StarRate/StarRate';
 
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import productDetail from '@/mocks/data/productDetail.json';
+import type { ProductDetail } from '@/types/product';
 
 interface ReviewRegisterFormProps {
+  product: ProductDetail;
   close: () => void;
 }
 
-const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   return (
     <ReviewRegisterFormContainer>
       <RegisterFormHeader>
@@ -25,7 +26,7 @@ const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
       </RegisterFormHeader>
       <Divider />
       <ProductOverviewItemWrapper>
-        <ProductOverviewItem name={productDetail.name} image={productDetail.image} />
+        <ProductOverviewItem name={product.name} image={product.image} />
       </ProductOverviewItemWrapper>
       <Divider variant="disabled" css="height:4px;" />
       <RegisterForm>
@@ -39,7 +40,7 @@ const ReviewRegisterForm = ({ close }: ReviewRegisterFormProps) => {
         <Spacing size={80} />
         <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
         <Spacing size={16} />
-        <Button customWidth="100%" customHeight="60px" size="xl">
+        <Button customWidth="100%" customHeight="60px" size="xl" weight="bold">
           등록하기
         </Button>
       </RegisterForm>

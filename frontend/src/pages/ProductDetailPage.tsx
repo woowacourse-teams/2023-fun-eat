@@ -49,7 +49,7 @@ const ProductDetailPage = () => {
         </Button>
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
-        <ReviewRegisterForm close={handleCloseBottomSheet} />
+        <ReviewRegisterForm product={targetProductDetail} close={handleCloseBottomSheet} />
       </BottomSheet>
     </>
   );
