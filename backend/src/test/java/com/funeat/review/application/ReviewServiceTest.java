@@ -91,6 +91,7 @@ class ReviewServiceTest {
                 .isEqualTo(
                         new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
                 );
+        assertThat(result.get(0).getCreatedAt()).isNotNull();
     }
 
     @Test
