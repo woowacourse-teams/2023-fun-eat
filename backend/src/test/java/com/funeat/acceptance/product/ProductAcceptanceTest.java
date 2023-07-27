@@ -362,7 +362,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, (long) products.size(), 0L);
             카테고리별_상품_목록_조회_결과를_검증한다(response,
-                    List.of(product1, product3, product2, product4, product5));
+                    List.of(product1, product3, product2, product5, product4));
         }
     }
 

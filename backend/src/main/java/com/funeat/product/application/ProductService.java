@@ -24,6 +24,7 @@ public class ProductService {
 
     private static final int THREE = 3;
     private static final int TOP = 0;
+    public static final String REVIEW_COUNT = "reviewCount";
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
@@ -42,18 +43,20 @@ public class ProductService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final Page<ProductInCategoryDto> pages;
-        if (pageable.getSort().getOrderFor("reviewCount") == null) {
-            pages = productRepository.findAllByCategory(category, pageable);
-        } else {
-            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-            pages = productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
-        }
+        final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
 
         final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(pages);
         final List<ProductInCategoryDto> productDtos = pages.getContent();
 
         return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
+    }
+
+    private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
+        if (pageable.getSort().getOrderFor(REVIEW_COUNT) != null) {
+            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+            return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
+        }
+        return productRepository.findAllByCategory(category, pageable);
     }
 
     public ProductResponse findProductDetail(final Long productId) {
