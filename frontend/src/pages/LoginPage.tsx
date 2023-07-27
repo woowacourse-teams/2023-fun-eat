@@ -9,7 +9,7 @@ const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 �
 const LoginPage = () => {
   return (
     <LoginPageContainer>
-      <Button variant="transparent">
+      <Button type="button" variant="transparent">
         <SvgIcon variant="arrow" width={20} height={20} />
       </Button>
       <LoginSection>
@@ -20,7 +20,10 @@ const LoginPage = () => {
         </Text>
         <Description>{DESCRIPTION}</Description>
         <Spacing size={48} />
-        <Button customWidth="100%">카카오 로그인</Button>
+        <KakaoLoginButton type="button" customWidth="100%">
+          <SvgIcon variant="kakao" width={20} height={20} />
+          <Text as="span">카카오 로그인</Text>
+        </KakaoLoginButton>
       </LoginSection>
     </LoginPageContainer>
   );
@@ -51,4 +54,19 @@ const LoginSection = styled.section`
 
 const Description = styled(Text)`
   white-space: pre-wrap;
+`;
+
+const KakaoLoginButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  height: 54px;
+  padding: 0 16px;
+  background-color: #fee500;
+  border-radius: 12px;
+
+  & > span {
+    width: 100%;
+    color: rgba(0, 0, 0, 0.85);
+    text-align: center;
+  }
 `;
