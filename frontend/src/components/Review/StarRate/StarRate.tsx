@@ -18,9 +18,9 @@ const StarRate = () => {
       <div>
         {starList.map((star) => (
           <Button
+            type="button"
             key={star}
-            color="white"
-            variant="filled"
+            variant="transparent"
             css="padding: 0 2px"
             onClick={() => handleRating(star)}
             onMouseEnter={() => handleMouseEnter(star)}

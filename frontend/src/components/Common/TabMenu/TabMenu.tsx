@@ -26,12 +26,12 @@ const TabMenu = ({ tabMenus }: TabMenuProps) => {
             `}
           >
             <TabMenuButton
-              color="white"
-              variant="filled"
-              css={`
-                color: ${isSelected ? theme.textColors.default : theme.textColors.disabled};
-                font-weight: ${isSelected ? theme.fontWeights.bold : theme.fontWeights.regular};
-              `}
+              type="button"
+              customWidth="100%"
+              customHeight="100%"
+              textColor={isSelected ? 'default' : 'disabled'}
+              weight={isSelected ? 'bold' : 'regular'}
+              variant="transparent"
               onClick={() => selectTabMenu(index)}
             >
               {menu}
@@ -56,8 +56,6 @@ const TabMenuItem = styled.li`
 `;
 
 const TabMenuButton = styled(Button)`
-  width: 100%;
-  height: 100%;
   padding: 0;
   line-height: 45px;
 `;

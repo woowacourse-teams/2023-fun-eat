@@ -1,4 +1,4 @@
-import { Badge, useTheme } from '@fun-eat/design-system';
+import { Badge, Button, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 interface ReviewTagItemProps {
@@ -13,7 +13,7 @@ const ReviewTagItem = ({ id, content, isSelected, isDisabled, toggleTagSelection
   const theme = useTheme();
 
   return (
-    <TagSelectButton onClick={() => toggleTagSelection(id, isSelected)} disabled={isDisabled}>
+    <TagSelectButton type="button" onClick={() => toggleTagSelection(id, isSelected)} disabled={isDisabled}>
       <Badge
         color={theme.colors.primary}
         textColor={theme.textColors.default}
@@ -27,7 +27,7 @@ const ReviewTagItem = ({ id, content, isSelected, isDisabled, toggleTagSelection
 
 export default ReviewTagItem;
 
-const TagSelectButton = styled.button`
+const TagSelectButton = styled(Button)`
   &:disabled {
     opacity: 0.5;
   }

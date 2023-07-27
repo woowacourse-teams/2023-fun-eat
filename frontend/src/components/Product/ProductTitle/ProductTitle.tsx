@@ -22,7 +22,7 @@ const ProductTitle = ({ name, bookmark }: ProductTitleProps) => {
           {name}
         </Heading>
       </ProductTitleWrapper>
-      <Button color="white" variant="filled" css="width: 2rem">
+      <Button type="button" customWidth="32px" variant="transparent">
         <SvgIcon
           variant={bookmark ? 'bookmarkFilled' : 'bookmark'}
           color={bookmark ? theme.colors.primary : theme.colors.gray5}
@@ -43,7 +43,7 @@ const ProductTitleContainer = styled.div`
 const ProductTitleWrapper = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 8px;
+  column-gap: 16px;
 
   svg {
     padding-top: 2px;

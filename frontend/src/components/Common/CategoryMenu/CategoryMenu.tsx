@@ -22,15 +22,18 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
           <li key={menu.id}>
             <Button
               type="button"
+              customHeight="30px"
               color={isSelected ? 'primary' : 'gray3'}
-              variant={isSelected ? 'filled' : 'outlined'}
               size="xs"
-              css={isSelected ? selectedCategoryMenuStyles[menuVariant] : undefined}
+              weight="bold"
+              variant={isSelected ? 'filled' : 'outlined'}
+              css={`
+                padding: 6px 12px;
+                ${isSelected ? selectedCategoryMenuStyles[menuVariant] : ''}
+              `}
               onClick={() => selectCategory(menuVariant, menu.id)}
             >
-              <Text size="xs" weight="bold">
-                {menu.name}
-              </Text>
+              {menu.name}
             </Button>
           </li>
         );
