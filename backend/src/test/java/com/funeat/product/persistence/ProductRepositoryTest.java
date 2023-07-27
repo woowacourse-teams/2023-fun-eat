@@ -157,7 +157,7 @@ class ProductRepositoryTest {
         productRepository.saveAll(
                 List.of(product1, product2, product3, product4, product5));
 
-        Member member = memberRepository.save(new Member("test", "image.png"));
+        final var member = memberRepository.save(new Member("test", "image.png"));
 
         reviewRepository.save(new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true));
         reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true));

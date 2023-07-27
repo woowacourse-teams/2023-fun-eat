@@ -54,8 +54,7 @@ public class Product {
     }
 
     public Product(final String name, final Long price, final String image, final String content,
-                   final Double averageRating,
-                   final Category category) {
+                   final Double averageRating, final Category category) {
         this.name = name;
         this.price = price;
         this.image = image;
@@ -65,7 +64,7 @@ public class Product {
     }
 
     public void updateAverageRating(final Long rating, final Long count) {
-        double calculatedRating = ((count - 1) * averageRating + rating) / count;
+        final double calculatedRating = ((count - 1) * averageRating + rating) / count;
         this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
     }
 

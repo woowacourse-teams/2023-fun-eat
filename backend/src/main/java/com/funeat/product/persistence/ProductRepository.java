@@ -16,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "WHERE p.category = :category " +
             "GROUP BY p ",
             countQuery = "SELECT COUNT(p) FROM Product p WHERE p.category = :category")
-    Page<ProductInCategoryDto> findAllByCategory(final @Param("category") Category category, final Pageable pageable);
+    Page<ProductInCategoryDto> findAllByCategory(@Param("category") final Category category, final Pageable pageable);
 
     @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) " +
             "FROM Product p " +
@@ -25,5 +25,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "GROUP BY p " +
             "ORDER BY COUNT(r) DESC, p.id DESC ",
             countQuery = "SELECT COUNT(p) FROM Product p WHERE p.category = :category")
-    Page<ProductInCategoryDto> findAllByCategoryOrderByReviewCountDesc(final @Param("category") Category category, final Pageable pageable);
+    Page<ProductInCategoryDto> findAllByCategoryOrderByReviewCountDesc(@Param("category") final Category category, final Pageable pageable);
 }
