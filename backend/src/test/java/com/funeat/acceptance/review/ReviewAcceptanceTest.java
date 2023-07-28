@@ -119,7 +119,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 멤버_추가_요청() {
-        final Member testMember = memberRepository.save(new Member("test", "image.png"));
+        final Member testMember = memberRepository.save(new Member("test", "image.png", "1"));
 
         return testMember.getId();
     }
@@ -133,9 +133,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var category = new Category("간편식사", CategoryType.FOOD);
             카테고리_추가_요청(category);
 
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2'");
+            final var member3 = new Member("test3", "test3.png", "3'");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가_요청(members);
 
@@ -165,10 +165,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var category = new Category("간편식사", CategoryType.FOOD);
             카테고리_추가_요청(category);
 
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
-            final var member4 = new Member("test4", "test4.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
+            final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
             복수_유저_추가_요청(members);
 
@@ -203,9 +203,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var category = new Category("간편식사", CategoryType.FOOD);
             카테고리_추가_요청(category);
 
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가_요청(members);
 
@@ -235,10 +235,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var category = new Category("간편식사", CategoryType.FOOD);
             카테고리_추가_요청(category);
 
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
-            final var member4 = new Member("test4", "test4.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
+            final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
             복수_유저_추가_요청(members);
 
@@ -273,9 +273,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var category = new Category("간편식사", CategoryType.FOOD);
             카테고리_추가_요청(category);
 
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가_요청(members);
 
@@ -305,10 +305,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var category = new Category("간편식사", CategoryType.FOOD);
             카테고리_추가_요청(category);
 
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
-            final var member4 = new Member("test4", "test4.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
+            final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
             복수_유저_추가_요청(members);
 
@@ -340,9 +340,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final var category = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(category);
 
-        final var member1 = new Member("test1", "test1.png");
-        final var member2 = new Member("test2", "test2.png");
-        final var member3 = new Member("test3", "test3.png");
+        final var member1 = new Member("test1", "test1.png", "1");
+        final var member2 = new Member("test2", "test2.png", "2");
+        final var member3 = new Member("test3", "test3.png", "3");
         final var members = List.of(member1, member2, member3);
         복수_유저_추가_요청(members);
 

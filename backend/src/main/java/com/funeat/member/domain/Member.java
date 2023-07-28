@@ -23,6 +23,8 @@ public class Member {
 
     private String profileImage;
 
+    private String platformId;
+
     @OneToMany(mappedBy = "member")
     private List<ReviewFavorite> reviewFavorites = new ArrayList<>();
 
@@ -38,9 +40,10 @@ public class Member {
     protected Member() {
     }
 
-    public Member(final String nickName, final String profileImage) {
-        this.nickname = nickName;
+    public Member(final String nickname, final String profileImage, final String platformId) {
+        this.nickname = nickname;
         this.profileImage = profileImage;
+        this.platformId = platformId;
     }
 
     public Long getId() {
@@ -53,6 +56,10 @@ public class Member {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public String getPlatformId() {
+        return platformId;
     }
 
     public List<ReviewFavorite> getReviewFavorites() {

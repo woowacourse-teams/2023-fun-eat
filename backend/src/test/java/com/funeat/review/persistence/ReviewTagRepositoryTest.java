@@ -48,7 +48,7 @@ class ReviewTagRepositoryTest {
     @Test
     void 리뷰_목록에서_상위_3개에_해당하는_태그를_조회한다() {
         // given
-        final var member = new Member("test1", "test1.png");
+        final var member = new Member("test1", "test1.png", "1");
         memberRepository.save(member);
 
         final var product = new Product("망고", 1_000L, "mango.png", "망고망고", null);
