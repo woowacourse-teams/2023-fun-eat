@@ -44,7 +44,7 @@ const ProductDetailPage = () => {
       </section>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
-        <Button type="button" width="100%" height="60px" size="xl" onClick={handleOpenBottomSheet}>
+        <Button type="button" customWidth="100%" customHeight="60px" size="xl" onClick={handleOpenBottomSheet}>
           리뷰 작성하기
         </Button>
       </ReviewRegisterButtonWrapper>
