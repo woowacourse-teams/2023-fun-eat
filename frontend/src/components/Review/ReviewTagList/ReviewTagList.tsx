@@ -36,8 +36,9 @@ const ReviewTagList = () => {
 
   return (
     <ReviewTagListContainer>
-      <Heading as="h2" size="lg">
-        상품에 관한 태그를 선택해주세요 (3개)
+      <Heading as="h2" size="xl">
+        태그를 골라주세요. (3개)
+        <RequiredMark>*</RequiredMark>
       </Heading>
       <TagListWrapper>
         {displayedTagList.map(({ id, content }) => {
@@ -72,6 +73,10 @@ const ReviewTagListContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
+`;
+
+const RequiredMark = styled.sup`
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const TagListWrapper = styled.ul`

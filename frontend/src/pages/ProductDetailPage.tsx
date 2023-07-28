@@ -1,10 +1,15 @@
-import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
+
+import ReviewRegisterForm from '@/components/Review/ReviewRegisterForm/ReviewRegisterForm';
+import productDetails from '@/mocks/data/productDetails.json';
+import mockReviews from '@/mocks/data/reviews.json';
+
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
@@ -44,6 +49,15 @@ const ProductDetailPage = () => {
           </ReviewItemWrapper>
         )}
       </section>
+      <Spacing size={100} />
+      <ReviewRegisterButtonWrapper>
+        <Button type="button" customWidth="100%" customHeight="60px" size="xl" onClick={handleOpenBottomSheet}>
+          리뷰 작성하기
+        </Button>
+      </ReviewRegisterButtonWrapper>
+      <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
+        <ReviewRegisterForm product={targetProductDetail} close={handleCloseBottomSheet} />
+      </BottomSheet>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={REVIEW_SORT_OPTIONS}
@@ -69,4 +83,15 @@ const ReviewItemWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   row-gap: 60px;
+`;
+
+const ReviewRegisterButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  width: calc(100% - 40px);
+  max-width: 560px;
+  height: 80px;
+  background: ${({ theme }) => theme.backgroundColors.default};
+  transform: translateX(-50%);
 `;
