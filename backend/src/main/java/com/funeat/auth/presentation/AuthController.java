@@ -1,7 +1,9 @@
 package com.funeat.auth.presentation;
 
 import com.funeat.auth.application.AuthService;
+import com.funeat.auth.dto.LoginRequest;
 import com.funeat.auth.dto.SignUserDto;
+import com.funeat.auth.util.AuthenticationPrincipal;
 import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -41,5 +43,13 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create("/profile"))
                 .build();
+    }
+
+    @GetMapping("/api/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal final LoginRequest loginRequest,
+                                       final HttpServletRequest request) {
+        request.getSession().removeAttribute("member");
+
+        return ResponseEntity.ok().build();
     }
 }
