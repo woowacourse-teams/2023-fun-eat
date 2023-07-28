@@ -40,11 +40,6 @@ public class Member {
     protected Member() {
     }
 
-    public Member(final String nickName, final String profileImage) {
-        this.nickname = nickName;
-        this.profileImage = profileImage;
-    }
-
     public Member(final String nickname, final String profileImage, final String platformId) {
         this.nickname = nickname;
         this.profileImage = profileImage;

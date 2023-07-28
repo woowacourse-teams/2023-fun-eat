@@ -304,7 +304,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final List<Product> products = List.of(product1, product2, product3);
             복수_상품_추가_요청(products);
 
-            Member member = 멤버_추가_요청(new Member("test", "image.png"));
+            Member member = 멤버_추가_요청(new Member("test", "image.png", "1"));
             final Review review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final Review review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final Review review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -317,7 +317,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
             List<Review> reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
                     review3_1, review3_2, review3_3);
             복수_리뷰_추가_요청(reviews);
-
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
@@ -341,7 +340,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final List<Product> products = List.of(product1, product2, product3, product4, product5);
             복수_상품_추가_요청(products);
 
-            final Member member = 멤버_추가_요청(new Member("test", "image.png"));
+            final Member member = 멤버_추가_요청(new Member("test", "image.png", "1"));
             final Review review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final Review review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final Review review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -429,7 +428,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 기본_멤버_추가_요청() {
-        final Member testMember = memberRepository.save(new Member("test", "image.png"));
+        final Member testMember = memberRepository.save(new Member("test", "image.png", "1"));
         return testMember.getId();
     }
 
