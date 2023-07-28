@@ -17,6 +17,7 @@ import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
+import com.funeat.tag.domain.TagType;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -166,8 +167,8 @@ class ReviewServiceTest {
     }
 
     private List<Tag> 태그_추가_요청() {
-        final Tag testTag1 = tagRepository.save(new Tag("testTag1"));
-        final Tag testTag2 = tagRepository.save(new Tag("testTag2"));
+        final Tag testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+        final Tag testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
 
         return List.of(testTag1, testTag2);
     }

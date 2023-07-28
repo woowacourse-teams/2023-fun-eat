@@ -2,7 +2,7 @@ package com.funeat.product.dto;
 
 import com.funeat.product.domain.Product;
 import com.funeat.tag.domain.Tag;
-import com.funeat.tag.domain.TagDto;
+import com.funeat.tag.dto.TagDto;
 import java.util.ArrayList;
 import java.util.List;
 
