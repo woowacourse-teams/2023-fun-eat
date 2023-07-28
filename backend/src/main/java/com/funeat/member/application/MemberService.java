@@ -1,5 +1,6 @@
 package com.funeat.member.application;
 
+import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
@@ -16,21 +17,19 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Member findOrCreateMember(final UserInfoDto userInfoDto) {
+    public SignUserDto findOrCreateMember(final UserInfoDto userInfoDto) {
         final String platformId = userInfoDto.getId().toString();
 
         return memberRepository.findByPlatformId(platformId)
+                .map(value -> SignUserDto.of(false, value))
                 .orElseGet(() -> save(userInfoDto));
     }
 
     @Transactional
-    public Member save(final UserInfoDto userInfoDto) {
-        final String nickname = userInfoDto.getNickname();
-        final String profileImage = userInfoDto.getProfileImageUrl();
-        final String platformId = userInfoDto.getId().toString();
+    public SignUserDto save(final UserInfoDto userInfoDto) {
+        final Member member = userInfoDto.toMember();
+        memberRepository.save(member);
 
-        final Member member = new Member(nickname, profileImage, platformId);
-
-        return memberRepository.save(member);
+        return SignUserDto.of(true, member);
     }
 }

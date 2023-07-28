@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funeat.auth.dto.KakaoTokenDto;
 import com.funeat.auth.dto.KakaoUserInfoDto;
 import com.funeat.auth.dto.UserInfoDto;
+import java.util.StringJoiner;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Profile;
@@ -98,9 +99,7 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(RESOURCE_BASE_URL + USER_INFO_URI, request,
-                String.class);
-        return response;
+        return restTemplate.postForEntity(RESOURCE_BASE_URL + USER_INFO_URI, request, String.class);
     }
 
     private KakaoUserInfoDto convertJsonToKakaoUserDto(final String responseBody) {
@@ -109,5 +108,15 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
         } catch (final JsonProcessingException e) {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public String getRedirectURI() {
+        final StringJoiner joiner = new StringJoiner("&");
+        joiner.add("response_type=code");
+        joiner.add("client_id=" + kakaoRestApiKey);
+        joiner.add("redirect_uri=" + redirectUri);
+
+        return AUTHORIZATION_BASE_URL + "?" + joiner;
     }
 }

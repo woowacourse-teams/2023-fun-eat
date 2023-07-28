@@ -1,9 +1,9 @@
 package com.funeat.auth.application;
 
+import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.auth.util.PlatformUserProvider;
 import com.funeat.member.application.MemberService;
-import com.funeat.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +19,13 @@ public class AuthService {
         this.platformUserProvider = platformUserProvider;
     }
 
-    public Long loginWithKakao(final String code) {
+    public SignUserDto loginWithKakao(final String code) {
         final UserInfoDto userInfoDto = platformUserProvider.getPlatformUser(code);
-        final Member member = memberService.findOrCreateMember(userInfoDto);
-        return member.getId();
+        final SignUserDto signUserDto = memberService.findOrCreateMember(userInfoDto);
+        return signUserDto;
+    }
+
+    public String getLoginRedirectUri() {
+        return platformUserProvider.getRedirectURI();
     }
 }

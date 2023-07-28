@@ -1,5 +1,7 @@
 package com.funeat.auth.dto;
 
+import com.funeat.member.domain.Member;
+
 public class UserInfoDto {
 
     private final Long id;
@@ -18,6 +20,10 @@ public class UserInfoDto {
                 kakaoUserInfoDto.getKakaoAccount().getProfile().getNickname(),
                 kakaoUserInfoDto.getKakaoAccount().getProfile().getProfileImageUrl()
         );
+    }
+
+    public Member toMember() {
+        return new Member(this.nickname, this.profileImageUrl, this.id.toString());
     }
 
     public Long getId() {

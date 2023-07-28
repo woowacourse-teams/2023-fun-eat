@@ -13,4 +13,9 @@ public class TestPlatformUserProvider implements PlatformUserProvider {
     public UserInfoDto getPlatformUser(final String code) {
         return new UserInfoDto(1L, "test", "https://www.test.com");
     }
+
+    @Override
+    public String getRedirectURI() {
+        return "https://www.test.com";
+    }
 }

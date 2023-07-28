@@ -6,6 +6,8 @@ import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
+import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -44,7 +46,10 @@ class MemberServiceTest {
             final var actual = memberService.findOrCreateMember(userInfoDto);
 
             // then
-            assertThat(expected).containsExactly(actual);
+            SoftAssertions.assertSoftly(softAssertions -> {
+                Assertions.assertFalse(actual.isSignIn());
+                assertThat(expected).containsExactly(actual.getMember());
+            });
         }
 
         @Test
@@ -60,7 +65,10 @@ class MemberServiceTest {
             final var actual = memberService.findOrCreateMember(userInfoDto);
 
             // then
-            assertThat(expected).doesNotContain(actual);
+            SoftAssertions.assertSoftly(softAssertions -> {
+                Assertions.assertTrue(actual.isSignIn());
+                assertThat(expected).doesNotContain(actual.getMember());
+            });
         }
     }
 }
