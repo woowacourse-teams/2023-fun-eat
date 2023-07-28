@@ -42,8 +42,10 @@ public class TagAcceptanceTest extends AcceptanceTest {
     }
 
     private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Tag> tags) {
-        final var expectedByType = tags.stream().collect(Collectors.groupingBy(Tag::getTagType));
-        final var actual = response.jsonPath().getList("", TagsResponse.class);
+        final var expectedByType = tags.stream()
+                .collect(Collectors.groupingBy(Tag::getTagType));
+        final var actual = response.jsonPath()
+                .getList("", TagsResponse.class);
 
         for (final TagsResponse tagsResponse : actual) {
             final TagType tagType = TagType.valueOf(tagsResponse.getTagType());
