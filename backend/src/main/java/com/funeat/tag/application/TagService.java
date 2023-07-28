@@ -23,16 +23,15 @@ public class TagService {
     public List<TagsResponse> getAllTags() {
         final List<TagsResponse> responses = new ArrayList<>();
         for (final TagType tagType : TagType.values()) {
-            getTagsByTagType(responses, tagType);
+            responses.add(getTagsByTagType(tagType));
         }
         return responses;
     }
 
-    private void getTagsByTagType(final List<TagsResponse> responses, final TagType tagType) {
+    private TagsResponse getTagsByTagType(final TagType tagType) {
         final List<TagDto> tags = tagRepository.findTagsByTagType(tagType).stream()
                 .map(TagDto::toDto)
                 .collect(Collectors.toList());
-        final TagsResponse tagsResponse = TagsResponse.toResponse(tagType.name(), tags);
-        responses.add(tagsResponse);
+        return TagsResponse.toResponse(tagType.name(), tags);
     }
 }
