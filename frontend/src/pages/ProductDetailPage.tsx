@@ -2,41 +2,48 @@ import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-sy
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, TabMenu } from '@/components/Common';
+import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
+
 import ReviewRegisterForm from '@/components/Review/ReviewRegisterForm/ReviewRegisterForm';
 import productDetails from '@/mocks/data/productDetails.json';
 import mockReviews from '@/mocks/data/reviews.json';
 
+import { REVIEW_SORT_OPTIONS } from '@/constants';
+import { useProductReview, useProductDetail } from '@/hooks/product';
+import useSortOption from '@/hooks/useSortOption';
+
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
-  // TODO: productId param으로 api 요청 보내면 바뀔 로직
-  const targetProductDetail =
-    productDetails.find((productDetail) => productDetail.id === Number(productId)) ?? productDetails[0];
+  const { data: productDetail } = useProductDetail(productId as string);
+  const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
 
-  const { reviews } = mockReviews;
+  if (!productDetail || !productReviews) {
+    return null;
+  }
+
+  const { reviews } = productReviews;
 
   return (
     <>
-      <ProductTitle name={targetProductDetail.name} bookmark={targetProductDetail?.bookmark} />
+      <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      <ProductDetailItem product={targetProductDetail} />
+      <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
-      <Spacing size={8} />
       <SortButtonWrapper>
-        <SortButton />
+        <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
       </SortButtonWrapper>
-      <Spacing size={8} />
       <section>
         {reviews && (
           <ReviewItemWrapper>
             {reviews.map((review) => (
               <li key={review.id}>
-                <ReviewItem review={review} />
+                <ReviewItem productId={Number(productId)} review={review} />
               </li>
             ))}
           </ReviewItemWrapper>
@@ -51,6 +58,14 @@ const ProductDetailPage = () => {
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         <ReviewRegisterForm product={targetProductDetail} close={handleCloseBottomSheet} />
       </BottomSheet>
+      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
+        <SortOptionList
+          options={REVIEW_SORT_OPTIONS}
+          selectedOption={selectedOption}
+          selectSortOption={selectSortOption}
+          close={handleCloseBottomSheet}
+        />
+      </BottomSheet>
     </>
   );
 };
@@ -61,6 +76,7 @@ const SortButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  margin: 20px 0;
 `;
 
 const ReviewItemWrapper = styled.ul`

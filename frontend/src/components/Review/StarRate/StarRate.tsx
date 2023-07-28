@@ -18,9 +18,11 @@ const StarRate = () => {
       <Spacing size={20} />
       <div>
         {starList.map((star) => (
-          <StarButton
+          <Button
+            type="button"
             key={star}
             variant="transparent"
+            css="padding: 0 2px"
             onClick={() => handleRating(star)}
             onMouseEnter={() => handleMouseEnter(star)}
             onMouseLeave={handleMouseLeave}
@@ -49,9 +51,6 @@ const RequiredMark = styled.sup`
   color: ${({ theme }) => theme.colors.error};
 `;
 
-const StarButton = styled(Button)`
-  padding: 0 2px;
-`;
 
 const SvgIconWrapper = styled(SvgIcon)`
   transition: all 0.3s ease-out;

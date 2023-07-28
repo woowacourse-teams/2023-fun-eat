@@ -1,46 +1,32 @@
-import { BottomSheet, Button, Text, theme } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { Button, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import BottomSheetContent from '../SortOptionList/SortOptionList';
 import SvgIcon from '../Svg/SvgIcon';
 
-import { SORT_OPTIONS } from '@/constants';
-import useBottomSheet from '@/hooks/useBottomSheet';
+import type { SortOption } from '@/types/common';
 
-const SortButton = () => {
-  const { ref, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const [selectedOption, setSelectedOption] = useState(0);
+interface SortButtonProps {
+  option: SortOption;
+  onClick: () => void;
+}
 
-  const selectSortOption = (optionIndex: number) => {
-    setSelectedOption(optionIndex);
-  };
+const SortButton = ({ option, onClick }: SortButtonProps) => {
+  const theme = useTheme();
 
   return (
-    <>
-      <Button color="white" variant="filled" onClick={handleOpenBottomSheet}>
-        <SortButtonWrapper>
-          <SvgIcon variant="sort" color={theme.textColors.info} width={18} height={18} />
-          <Text element="span" weight="bold" color={theme.textColors.info}>
-            {SORT_OPTIONS[selectedOption].label}
-          </Text>
-        </SortButtonWrapper>
-      </Button>
-      <BottomSheet ref={ref} close={handleCloseBottomSheet}>
-        <BottomSheetContent
-          selectedOption={selectedOption}
-          selectSortOption={selectSortOption}
-          close={handleCloseBottomSheet}
-        />
-      </BottomSheet>
-    </>
+    <SortButtonContainer type="button" weight="bold" textColor="info" variant="transparent" onClick={onClick}>
+      <SvgIcon variant="sort" color={theme.textColors.info} width={18} height={18} />
+      {option.label}
+    </SortButtonContainer>
   );
 };
 
 export default SortButton;
 
-const SortButtonWrapper = styled.div`
+const SortButtonContainer = styled(Button)`
   display: flex;
   align-items: center;
-  gap: 3px;
+  justify-content: flex-end;
+  column-gap: 4px;
+  padding: 0;
 `;

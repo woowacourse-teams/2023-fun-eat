@@ -1,16 +1,27 @@
 import { Badge, Button, Text, useTheme } from '@fun-eat/design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
+import { useReviewFavorite } from '@/hooks/review';
 import type { Review } from '@/types/review';
 
 interface ReviewItemProps {
+  productId: number;
   review: Review;
 }
 
-const ReviewItem = ({ review }: ReviewItemProps) => {
-  const { userName, profileImage, image, rating, tags, content, rebuy, favoriteCount, favorite } = review;
+const ReviewItem = ({ productId, review }: ReviewItemProps) => {
+  const { id, userName, profileImage, image, rating, tags, content, rebuy, favoriteCount, favorite } = review;
+  const [isFavorite, setIsFavorite] = useState(favorite);
+
+  const { request } = useReviewFavorite(productId, id);
   const theme = useTheme();
+
+  const handleToggleFavorite = async () => {
+    await request({ favorite: !isFavorite });
+    setIsFavorite((prev) => !prev);
+  };
 
   return (
     <ReviewItemContainer>
@@ -47,13 +58,8 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
       {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
-      <FavoriteButton type="button" color="white" variant="filled">
-        <SvgIcon
-          variant={favorite ? 'favoriteFilled' : 'favorite'}
-          color={favorite ? 'red' : theme.colors.gray4}
-          width={24}
-          height={24}
-        />
+      <FavoriteButton type="button" variant="transparent" onClick={handleToggleFavorite}>
+        <SvgIcon variant={favorite ? 'favoriteFilled' : 'favorite'} color={favorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
           {favoriteCount}
         </Text>

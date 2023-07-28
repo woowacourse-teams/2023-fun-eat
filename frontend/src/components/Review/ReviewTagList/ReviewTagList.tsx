@@ -58,7 +58,7 @@ const ReviewTagList = () => {
         })}
       </TagListWrapper>
       {canShowMore && (
-        <Button color="white" variant="filled" onClick={showMoreTags}>
+        <Button type="button" customHeight="fit-content" variant="transparent" onClick={showMoreTags}>
           <SvgIcon variant="arrow" width={15} css="transform: rotate(270deg)" />
         </Button>
       )}
