@@ -18,12 +18,10 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   return (
     <ReviewRegisterFormContainer>
-      <RegisterFormHeader>
-        <Heading css="font-size:2.4rem">리뷰 작성</Heading>
-        <CloseButton variant="transparent" onClick={close}>
-          <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
-        </CloseButton>
-      </RegisterFormHeader>
+      <ReviewHeading>리뷰 작성</ReviewHeading>
+      <CloseButton variant="transparent" onClick={close}>
+        <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
+      </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
         <ProductOverviewItem name={product.name} image={product.image} />
@@ -51,22 +49,21 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 export default ReviewRegisterForm;
 
 const ReviewRegisterFormContainer = styled.div`
+  position: relative;
   height: 100%;
-  padding: 30px;
 `;
 
-const RegisterFormHeader = styled.header`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+const ReviewHeading = styled(Heading)`
   height: 80px;
+  text-align: center;
+  font-size: 2.4rem;
+  line-height: 80px;
 `;
 
 const CloseButton = styled(Button)`
   position: absolute;
-  right: 30px;
+  top: 24px;
+  right: 32px;
 `;
 
 const ProductOverviewItemWrapper = styled.div`
@@ -74,5 +71,5 @@ const ProductOverviewItemWrapper = styled.div`
 `;
 
 const RegisterForm = styled.form`
-  padding: 50px 0;
+  padding: 50px 20px;
 `;
