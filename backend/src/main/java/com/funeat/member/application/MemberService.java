@@ -21,7 +21,7 @@ public class MemberService {
         final String platformId = userInfoDto.getId().toString();
 
         return memberRepository.findByPlatformId(platformId)
-                .map(value -> SignUserDto.of(false, value))
+                .map(member -> SignUserDto.of(false, member))
                 .orElseGet(() -> save(userInfoDto));
     }
 

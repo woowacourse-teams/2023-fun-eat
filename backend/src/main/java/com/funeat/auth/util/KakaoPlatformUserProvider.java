@@ -52,7 +52,7 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
 
     private KakaoTokenDto findAccessToken(final String code) {
         final ResponseEntity<String> response = requestAccessToken(code);
-        validateResponse(response);
+        validateResponse(response, HttpStatus.OK);
         return convertJsonToKakaoTokenDto(response.getBody());
     }
 
@@ -73,8 +73,8 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
         return response;
     }
 
-    private void validateResponse(final ResponseEntity<String> response) {
-        if (response.getStatusCode() != HttpStatus.OK) {
+    private void validateResponse(final ResponseEntity<String> response, final HttpStatus status) {
+        if (response.getStatusCode() != status) {
             throw new IllegalArgumentException();
         }
     }
@@ -89,7 +89,7 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
 
     private KakaoUserInfoDto findKakaoUserInfo(final String accessToken) {
         final ResponseEntity<String> response = requestKakaoUserInfo(accessToken);
-        validateResponse(response);
+        validateResponse(response, HttpStatus.OK);
         return convertJsonToKakaoUserDto(response.getBody());
     }
 
