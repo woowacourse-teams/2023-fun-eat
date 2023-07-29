@@ -61,7 +61,7 @@ class ReviewFavoriteRepositoryTest {
     }
 
     private Member 멤버_추가_요청() {
-        return memberRepository.save(new Member("test", "image.png"));
+        return memberRepository.save(new Member("test", "image.png", "1"));
     }
 
     private Product 상품_추가_요청() {

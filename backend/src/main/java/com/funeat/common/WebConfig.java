@@ -1,5 +1,6 @@
 package com.funeat.common;
 
+import com.funeat.auth.util.AuthArgumentResolver;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -10,9 +11,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final CustomPageableHandlerMethodArgumentResolver customPageableHandlerMethodArgumentResolver;
+    private final AuthArgumentResolver authArgumentResolver;
 
-    public WebConfig(final CustomPageableHandlerMethodArgumentResolver customPageableHandlerMethodArgumentResolver) {
+    public WebConfig(final CustomPageableHandlerMethodArgumentResolver customPageableHandlerMethodArgumentResolver,
+                     final AuthArgumentResolver authArgumentResolver) {
         this.customPageableHandlerMethodArgumentResolver = customPageableHandlerMethodArgumentResolver;
+        this.authArgumentResolver = authArgumentResolver;
     }
 
     @Override
@@ -23,5 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(customPageableHandlerMethodArgumentResolver);
+        resolvers.add(authArgumentResolver);
     }
 }

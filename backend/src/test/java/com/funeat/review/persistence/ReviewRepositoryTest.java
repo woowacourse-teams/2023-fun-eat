@@ -45,7 +45,7 @@ class ReviewRepositoryTest {
     @Test
     void 상품에_달린_리뷰의_숫자를_반환한다() {
         // given
-        Member member = memberRepository.save(new Member("test", "image.png"));
+        Member member = memberRepository.save(new Member("test", "image.png", "1"));
         Category category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
         Product product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
         Product product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
@@ -63,9 +63,9 @@ class ReviewRepositoryTest {
     @Test
     void 특정_상품에_대한_좋아요_기준_내림차순으로_정렬한다() {
         // given
-        final var member1 = new Member("test1", "test1.png");
-        final var member2 = new Member("test2", "test2.png");
-        final var member3 = new Member("test3", "test3.png");
+        final var member1 = new Member("test1", "test1.png", "1");
+        final var member2 = new Member("test2", "test2.png", "2");
+        final var member3 = new Member("test3", "test3.png", "3");
         final var members = List.of(member1, member2, member3);
         memberRepository.saveAll(members);
 
@@ -94,9 +94,9 @@ class ReviewRepositoryTest {
     void 전체_리뷰_목록에서_가장_좋아요가_높은_상위_3개의_리뷰를_가져온다() {
         // given
 
-        final var member1 = new Member("test1", "test1.png");
-        final var member2 = new Member("test2", "test2.png");
-        final var member3 = new Member("test3", "test3.png");
+        final var member1 = new Member("test1", "test1.png", "1");
+        final var member2 = new Member("test2", "test2.png", "2");
+        final var member3 = new Member("test3", "test3.png", "3");
         final var members = List.of(member1, member2, member3);
         memberRepository.saveAll(members);
 

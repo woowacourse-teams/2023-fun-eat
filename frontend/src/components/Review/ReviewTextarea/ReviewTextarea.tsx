@@ -16,9 +16,10 @@ const ReviewTextarea = () => {
   return (
     <ReviewTextareaContainer>
       <Heading as="h2" size="xl">
-        리뷰를 작성해주세요. (200자)
+        리뷰를 남겨주세요.
+        <RequiredMark>*</RequiredMark>
       </Heading>
-      <Spacing size={16} />
+      <Spacing size={20} />
       <Textarea
         rows={5}
         resize="vertical"
@@ -42,6 +43,10 @@ const ReviewTextareaContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`;
+
+const RequiredMark = styled.sup`
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const ReviewWritingStatusText = styled(Text)`

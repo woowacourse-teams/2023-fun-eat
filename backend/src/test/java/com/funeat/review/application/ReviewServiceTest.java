@@ -17,6 +17,7 @@ import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
+import com.funeat.tag.domain.TagType;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -166,8 +167,8 @@ class ReviewServiceTest {
     }
 
     private List<Tag> 태그_추가_요청() {
-        final Tag testTag1 = tagRepository.save(new Tag("testTag1"));
-        final Tag testTag2 = tagRepository.save(new Tag("testTag2"));
+        final Tag testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+        final Tag testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
 
         return List.of(testTag1, testTag2);
     }
@@ -177,7 +178,7 @@ class ReviewServiceTest {
     }
 
     private Member 멤버_추가_요청() {
-        return memberRepository.save(new Member("test", "image.png"));
+        return memberRepository.save(new Member("test", "image.png", "1"));
     }
 
     @Nested
@@ -186,9 +187,9 @@ class ReviewServiceTest {
         @Test
         void 좋아요_기준으로_내림차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가(members);
 
@@ -217,9 +218,9 @@ class ReviewServiceTest {
         @Test
         void 평점_기준으로_오름차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가(members);
 
@@ -248,9 +249,9 @@ class ReviewServiceTest {
         @Test
         void 평점_기준으로_내림차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png");
-            final var member2 = new Member("test2", "test2.png");
-            final var member3 = new Member("test3", "test3.png");
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
             복수_유저_추가(members);
 
