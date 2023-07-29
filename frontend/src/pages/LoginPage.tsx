@@ -31,7 +31,9 @@ const LoginPage = () => {
       <LoginButtonWrapper>
         <KakaoLoginButton type="button" customWidth="100%" customHeight="54px" onClick={() => handleLogin('kakao')}>
           <SvgIcon variant="kakao" width={20} height={20} />
-          <Text as="span">{KAKAO_LOGIN}</Text>
+          <Text as="span" weight="bold">
+            {KAKAO_LOGIN}
+          </Text>
         </KakaoLoginButton>
       </LoginButtonWrapper>
     </LoginPageContainer>
