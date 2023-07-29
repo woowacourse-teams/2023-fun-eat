@@ -7,9 +7,8 @@ const meta: Meta<typeof ReviewTagItem> = {
   component: ReviewTagItem,
   args: {
     id: 0,
-    content: '단짠단짠',
-    isSelected: true,
-    isDisabled: false,
+    name: '단짠단짠',
+    isSelected: false,
   },
 };
 
@@ -21,11 +20,5 @@ export const Default: Story = {};
 export const Selected: Story = {
   args: {
     isSelected: true,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    isDisabled: true,
   },
 };
