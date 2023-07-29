@@ -1,4 +1,5 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -11,6 +12,8 @@ import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
+  const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
@@ -24,6 +27,16 @@ const ProductDetailPage = () => {
 
   const { reviews } = productReviews;
 
+  const handleOpenRegisterReviewSheet = () => {
+    setActiveSheet('registerReview');
+    handleOpenBottomSheet();
+  };
+
+  const handleOpenSortOptionSheet = () => {
+    setActiveSheet('sortOption');
+    handleOpenBottomSheet();
+  };
+
   return (
     <>
       <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
@@ -32,7 +45,7 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
       <SortButtonWrapper>
-        <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
+        <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
       <section>
         {reviews && (
@@ -53,21 +66,22 @@ const ProductDetailPage = () => {
           customHeight="60px"
           size="xl"
           weight="bold"
-          onClick={handleOpenBottomSheet}
+          onClick={handleOpenRegisterReviewSheet}
         >
           리뷰 작성하기
         </Button>
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
-        <ReviewRegisterForm product={productDetail} close={handleCloseBottomSheet} />
-      </BottomSheet>
-      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
-        <SortOptionList
-          options={REVIEW_SORT_OPTIONS}
-          selectedOption={selectedOption}
-          selectSortOption={selectSortOption}
-          close={handleCloseBottomSheet}
-        />
+        {activeSheet === 'registerReview' ? (
+          <ReviewRegisterForm product={productDetail} close={handleCloseBottomSheet} />
+        ) : (
+          <SortOptionList
+            options={REVIEW_SORT_OPTIONS}
+            selectedOption={selectedOption}
+            selectSortOption={selectSortOption}
+            close={handleCloseBottomSheet}
+          />
+        )}
       </BottomSheet>
     </>
   );
