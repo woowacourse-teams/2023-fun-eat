@@ -31,7 +31,7 @@ const StarRate = () => {
               variant="star"
               color={star <= (hovering || rating) ? theme.colors.secondary : theme.colors.gray2}
             />
-          </StarButton>
+          </Button>
         ))}
       </div>
     </StarRateContainer>
@@ -50,7 +50,6 @@ const StarRateContainer = styled.div`
 const RequiredMark = styled.sup`
   color: ${({ theme }) => theme.colors.error};
 `;
-
 
 const SvgIconWrapper = styled(SvgIcon)`
   transition: all 0.3s ease-out;

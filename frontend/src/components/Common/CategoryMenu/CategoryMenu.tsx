@@ -1,4 +1,4 @@
-import { Button, Text, theme } from '@fun-eat/design-system';
+import { Button, theme } from '@fun-eat/design-system';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
@@ -20,21 +20,19 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
         const isSelected = menu.id === currentCategoryId;
         return (
           <li key={menu.id}>
-            <Button
+            <CategoryButton
               type="button"
               customHeight="30px"
               color={isSelected ? 'primary' : 'gray3'}
               size="xs"
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
-              css={`
-                padding: 6px 12px;
-                ${isSelected ? selectedCategoryMenuStyles[menuVariant] : ''}
-              `}
+              isSelected={isSelected}
+              menuVariant={menuVariant}
               onClick={() => selectCategory(menuVariant, menu.id)}
             >
               {menu.name}
-            </Button>
+            </CategoryButton>
           </li>
         );
       })}
@@ -49,6 +47,11 @@ type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
+`;
+
+const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryMenuStyleProps>`
+  padding: 6px 12px;
+  ${({ isSelected, menuVariant }) => (isSelected ? selectedCategoryMenuStyles[menuVariant] : '')}
 `;
 
 const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['menuVariant'], CSSProp> = {

@@ -5,11 +5,7 @@ import styled from 'styled-components';
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem } from '@/components/Review';
-
 import ReviewRegisterForm from '@/components/Review/ReviewRegisterForm/ReviewRegisterForm';
-import productDetails from '@/mocks/data/productDetails.json';
-import mockReviews from '@/mocks/data/reviews.json';
-
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
@@ -51,12 +47,19 @@ const ProductDetailPage = () => {
       </section>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
-        <Button type="button" customWidth="100%" customHeight="60px" size="xl" onClick={handleOpenBottomSheet}>
+        <Button
+          type="button"
+          customWidth="100%"
+          customHeight="60px"
+          size="xl"
+          weight="bold"
+          onClick={handleOpenBottomSheet}
+        >
           리뷰 작성하기
         </Button>
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
-        <ReviewRegisterForm product={targetProductDetail} close={handleCloseBottomSheet} />
+        <ReviewRegisterForm product={productDetail} close={handleCloseBottomSheet} />
       </BottomSheet>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
