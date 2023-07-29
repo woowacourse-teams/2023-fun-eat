@@ -1,22 +1,22 @@
 import type { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import Header from '../Header/Header';
-import NavigationBar from '../NavigationBar/NavigationBar';
+import Header from '../Common/Header/Header';
+import NavigationBar from '../Common/NavigationBar/NavigationBar';
 
-const Layout = ({ children }: PropsWithChildren) => {
+const DefaultLayout = ({ children }: PropsWithChildren) => {
   return (
-    <LayoutContainer>
+    <DefaultLayoutContainer>
       <Header />
       <MainWrapper>{children}</MainWrapper>
       <NavigationBar />
-    </LayoutContainer>
+    </DefaultLayoutContainer>
   );
 };
 
-export default Layout;
+export default DefaultLayout;
 
-const LayoutContainer = styled.div`
+const DefaultLayoutContainer = styled.div`
   max-width: 600px;
   height: 100%;
   margin: 0 auto;

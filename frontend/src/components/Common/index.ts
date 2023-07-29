@@ -1,6 +1,5 @@
 export { default as CategoryMenu } from './CategoryMenu/CategoryMenu';
 export { default as Header } from './Header/Header';
-export { default as Layout } from './Layout/Layout';
 export { default as NavigationBar } from './NavigationBar/NavigationBar';
 export { default as SortButton } from './SortButton/SortButton';
 export { default as SortOptionList } from './SortOptionList/SortOptionList';

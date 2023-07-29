@@ -13,7 +13,7 @@ const LoginPage = () => {
   const { handleLogin } = useLogin();
 
   return (
-    <LoginPageContainer>
+    <>
       <Button type="button" variant="transparent" onClick={routeBack}>
         <SvgIcon variant="arrow" width={20} height={20} />
       </Button>
@@ -30,35 +30,25 @@ const LoginPage = () => {
           <Text as="span">카카오 로그인</Text>
         </KakaoLoginButton>
       </LoginSection>
-    </LoginPageContainer>
+    </>
   );
 };
 
 export default LoginPage;
-
-const LoginPageContainer = styled.section`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100%;
-  max-width: 600px;
-  height: 100%;
-  padding: 20px 20px 0;
-  background: ${({ theme }) => theme.backgroundColors.default};
-  transform: translateX(-50%);
-`;
 
 const LoginSection = styled.section`
   position: absolute;
   top: 50%;
   left: 50%;
   width: 100%;
+  max-width: 600px;
   padding: 0 20px;
   transform: translate(-50%, -50%);
 `;
 
 const Description = styled(Text)`
   white-space: pre-wrap;
+  word-break: break-all;
 `;
 
 const KakaoLoginButton = styled(Button)`

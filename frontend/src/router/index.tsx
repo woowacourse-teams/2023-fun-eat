@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import App from '@/App';
+import App from './App';
+
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import HomePage from '@/pages/HomePage';
@@ -48,6 +49,12 @@ const router = createBrowserRouter([
         path: PATH.PROFILE,
         element: <ProfilePage />,
       },
+    ],
+  },
+  {
+    path: '/',
+    element: <App layout="auth" />,
+    children: [
       {
         path: PATH.LOGIN,
         element: <LoginPage />,
