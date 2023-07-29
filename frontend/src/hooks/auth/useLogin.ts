@@ -2,11 +2,13 @@ import { useState } from 'react';
 
 import { authApi } from '@/apis';
 
+type AuthProvider = 'kakao';
+
 const useLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const handleLogin = async (authProvider: string) => {
+  const handleLogin = async (authProvider: AuthProvider) => {
     try {
       const response = await authApi.get({ params: `/${authProvider}` });
       const locationUrl = response.url;
