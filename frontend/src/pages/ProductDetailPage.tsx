@@ -5,8 +5,7 @@ import styled from 'styled-components';
 
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
-import { ReviewItem } from '@/components/Review';
-import ReviewRegisterForm from '@/components/Review/ReviewRegisterForm/ReviewRegisterForm';
+import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
