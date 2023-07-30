@@ -12,26 +12,15 @@ const ReviewTagItem = ({ id, name, isSelected, toggleTagSelection }: ReviewTagIt
   const theme = useTheme();
 
   return (
-    <TagSelectButton
-      type="button"
-      weight="bold"
-      variant="transparent"
-      onClick={() => toggleTagSelection(id, isSelected)}
-    >
+    <Button type="button" weight="bold" variant="transparent" onClick={() => toggleTagSelection(id, isSelected)}>
       <TagBadge isSelected={isSelected} size="sm" color="transparent" textColor={theme.textColors.default}>
         {name}
       </TagBadge>
-    </TagSelectButton>
+    </Button>
   );
 };
 
 export default ReviewTagItem;
-
-const TagSelectButton = styled(Button)`
-  &:disabled {
-    opacity: 0.5;
-  }
-`;
 
 const TagBadge = styled(Badge)<{ isSelected: boolean }>`
   border: 2px solid ${({ theme }) => theme.colors.primary};

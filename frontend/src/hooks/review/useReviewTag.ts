@@ -5,9 +5,7 @@ import type { ReviewTag } from '@/types/review';
 const MAX_DISPLAYED_TAGS = 3;
 
 const getMaxTagsInGroup = (tagList: ReviewTag[]) => {
-  return tagList.reduce((max, currentGroup) => {
-    return Math.max(max, currentGroup.tags.length);
-  }, 0);
+  return tagList.reduce((max, { tags }) => Math.max(max, tags.length), 0);
 };
 
 const useReviewTag = (initialReviewTagList: ReviewTag[]) => {

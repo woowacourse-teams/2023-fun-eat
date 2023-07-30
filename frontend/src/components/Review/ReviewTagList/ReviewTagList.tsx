@@ -37,20 +37,20 @@ const ReviewTagList = () => {
       </Heading>
       <Spacing size={25} />
       <TagListWrapper>
-        {rev.map((tagGroup) => {
+        {rev.map(({ tagType, tags }) => {
           return (
-            <TagItemWrapper key={tagGroup.tagType}>
+            <TagItemWrapper key={tagType}>
               <TagTitle as="h3" size="md">
-                {TAG_TITLE[tagGroup.tagType]}
+                {TAG_TITLE[tagType]}
               </TagTitle>
+              <Spacing size={20} />
               <ul>
-                <Spacing size={20} />
-                {tagGroup.tags.slice(0, maxDisplayedTags).map((tag) => (
-                  <li key={tag.id}>
+                {tags.slice(0, maxDisplayedTags).map(({ id, name }) => (
+                  <li key={id}>
                     <ReviewTagItem
-                      id={tag.id}
-                      name={tag.name}
-                      isSelected={selectedTags.includes(tag.id)}
+                      id={id}
+                      name={name}
+                      isSelected={selectedTags.includes(id)}
                       toggleTagSelection={toggleTagSelection}
                     />
                     <Spacing size={5} />
