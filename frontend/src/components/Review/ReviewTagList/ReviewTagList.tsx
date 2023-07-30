@@ -6,7 +6,7 @@ import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
 import { TAG_TITLE } from '@/constants';
-import useReviewTag from '@/hooks/review/useReviewTag';
+import useDisplayTag from '@/hooks/review/useDisplayTag';
 import reviewTagList from '@/mocks/data/reviewTagList.json';
 import type { ReviewTag } from '@/types/review';
 
@@ -14,7 +14,7 @@ const MIN_DISPLAYED_TAGS = 3;
 
 const ReviewTagList = () => {
   const rev = reviewTagList as ReviewTag[];
-  const { maxDisplayedTags, canShowMore, showMoreTags } = useReviewTag(rev, MIN_DISPLAYED_TAGS);
+  const { maxDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(rev, MIN_DISPLAYED_TAGS);
 
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 

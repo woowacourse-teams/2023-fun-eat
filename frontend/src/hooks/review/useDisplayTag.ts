@@ -6,7 +6,7 @@ const getMaxTagsInGroup = (tagList: ReviewTag[]) => {
   return tagList.reduce((max, { tags }) => Math.max(max, tags.length), 0);
 };
 
-const useReviewTag = (initialReviewTagList: ReviewTag[], minDisplayedTags: number) => {
+const useDisplayTag = (initialReviewTagList: ReviewTag[], minDisplayedTags: number) => {
   const [maxDisplayedTags, setMaxDisplayedTags] = useState(minDisplayedTags);
 
   const canShowMore = maxDisplayedTags < getMaxTagsInGroup(initialReviewTagList);
@@ -18,4 +18,4 @@ const useReviewTag = (initialReviewTagList: ReviewTag[], minDisplayedTags: numbe
   return { maxDisplayedTags, canShowMore, showMoreTags };
 };
 
-export default useReviewTag;
+export default useDisplayTag;
