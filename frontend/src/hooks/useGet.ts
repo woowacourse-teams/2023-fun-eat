@@ -14,7 +14,9 @@ export const useGet = <T>(callback: () => Promise<T>, dependencies: unknown[] = 
 
   const request = async () => {
     try {
-      const data = await callback();
+      const response = await callback();
+      const data: T = await response.json();
+
       setData(data);
     } catch (error) {
       if (!(error instanceof Error)) {

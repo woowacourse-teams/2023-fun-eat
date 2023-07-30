@@ -5,7 +5,7 @@ import Logo from '@/assets/logo.svg';
 const Header = () => {
   return (
     <HeaderContainer>
-      <Logo />
+      <Logo width={200} />
     </HeaderContainer>
   );
 };
