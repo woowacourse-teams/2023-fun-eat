@@ -40,3 +40,9 @@ export const REVIEW_SORT_OPTIONS = [
   { label: '낮은 평점순', value: 'rating,asc' },
   { label: '추천순', value: 'favoriteCount,desc' },
 ] as const;
+
+export const TAG_TITLE = {
+  TASTE: '맛',
+  PRICE: '가격/양',
+  ETC: '기타',
+} as const;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useGet = <T>(callback: () => Promise<Response>, dependency?: unknown) => {
+export const useGet = <T>(callback: () => Promise<T>, dependencies: unknown[] = []) => {
   const [data, setData] = useState<T>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -10,7 +10,7 @@ export const useGet = <T>(callback: () => Promise<Response>, dependency?: unknow
     if (error) {
       throw new Error(error);
     }
-  }, [dependency, error]);
+  }, [...dependencies, error]);
 
   const request = async () => {
     try {

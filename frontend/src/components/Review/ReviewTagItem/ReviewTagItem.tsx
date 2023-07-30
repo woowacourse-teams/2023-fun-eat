@@ -3,32 +3,27 @@ import styled from 'styled-components';
 
 interface ReviewTagItemProps {
   id: number;
-  content: string;
+  name: string;
   isSelected: boolean;
-  isDisabled: boolean;
   toggleTagSelection: (id: number, isSelected: boolean) => void;
 }
 
-const ReviewTagItem = ({ id, content, isSelected, isDisabled, toggleTagSelection }: ReviewTagItemProps) => {
+const ReviewTagItem = ({ id, name, isSelected, toggleTagSelection }: ReviewTagItemProps) => {
   const theme = useTheme();
 
   return (
-    <TagSelectButton type="button" onClick={() => toggleTagSelection(id, isSelected)} disabled={isDisabled}>
-      <Badge
-        color={theme.colors.primary}
-        textColor={theme.textColors.default}
-        css={isSelected && `font-weight: ${theme.fontWeights.bold}`}
-      >
-        {content}
-      </Badge>
-    </TagSelectButton>
+    <Button type="button" weight="bold" variant="transparent" onClick={() => toggleTagSelection(id, isSelected)}>
+      <TagBadge isSelected={isSelected} size="sm" color="transparent" textColor={theme.textColors.default}>
+        {name}
+      </TagBadge>
+    </Button>
   );
 };
 
 export default ReviewTagItem;
 
-const TagSelectButton = styled(Button)`
-  &:disabled {
-    opacity: 0.5;
-  }
+const TagBadge = styled(Badge)<{ isSelected: boolean }>`
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  background: ${({ isSelected, theme }) => isSelected && theme.colors.primary};
+  white-space: nowrap;
 `;

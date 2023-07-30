@@ -1,4 +1,4 @@
-import type { Tag } from './common';
+import type { Tag, TagNameOption } from './common';
 
 export interface Review {
   id: number;
@@ -11,6 +11,11 @@ export interface Review {
   rebuy: boolean;
   favoriteCount: number;
   favorite: boolean;
+}
+
+export interface ReviewTag {
+  tagType: TagNameOption;
+  tags: Tag[];
 }
 
 export interface ReviewRequest {
