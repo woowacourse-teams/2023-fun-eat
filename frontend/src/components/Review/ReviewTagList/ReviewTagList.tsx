@@ -7,14 +7,14 @@ import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 import { SvgIcon } from '@/components/Common';
 import { TAG_TITLE } from '@/constants';
 import useDisplayTag from '@/hooks/review/useDisplayTag';
-import useReviewTag from '@/hooks/review/useReviewTag';
+import useReviewTags from '@/hooks/review/useReviewTags';
 
 const MIN_DISPLAYED_TAGS = 3;
 
 const ReviewTagList = () => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
-  const { data: tag } = useReviewTag();
+  const { data: tag } = useReviewTags();
   const { maxDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tag ?? [], MIN_DISPLAYED_TAGS);
 
   if (!tag) {

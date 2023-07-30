@@ -3,8 +3,8 @@ import { useGet } from '../useGet';
 import { tagApi } from '@/apis';
 import type { ReviewTag } from '@/types/review';
 
-const useReviewTag = () => {
+const useReviewTags = () => {
   return useGet<ReviewTag[]>(() => tagApi.get({}));
 };
 
-export default useReviewTag;
+export default useReviewTags;
