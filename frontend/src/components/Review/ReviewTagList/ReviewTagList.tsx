@@ -87,17 +87,25 @@ const RequiredMark = styled.sup`
 
 const TagListWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  column-gap: 20px;
   width: 100%;
-  column-gap: 30px;
+  margin: 0 auto;
   overflow-x: auto;
 
   &::-webkit-scrollbar {
     display: none;
   }
 
-  @media screen and (max-width: 600px) {
-    justify-content: normal;
+  & > div {
+    flex-grow: 1;
+  }
+
+  @media screen and (min-width: 420px) {
+    justify-content: center;
+
+    & > div {
+      flex-grow: 0;
+    }
   }
 `;
 
