@@ -1,16 +1,11 @@
 import type { SvgIconVariant } from '@/components/Common/Svg/SvgIcon';
-import { TAG_TITLE } from '@/constants';
-import type { PRODUCT_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
+import type { TAG_TITLE, PRODUCT_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import type { PATH } from '@/constants/path';
 
 export type CategoryVariant = 'food' | 'store';
 
 export const isCategoryVariant = (value: string): value is CategoryVariant => {
   return value === 'store' || value === 'food';
-};
-
-export const isTagNameVariant = (value: string): value is TagNameOption => {
-  return value in TAG_TITLE;
 };
 
 export interface Category {

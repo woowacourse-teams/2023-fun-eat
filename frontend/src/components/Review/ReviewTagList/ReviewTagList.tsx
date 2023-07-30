@@ -6,32 +6,17 @@ import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
 import { TAG_TITLE } from '@/constants';
+import useReviewTag from '@/hooks/review/useReviewTag';
 import reviewTagList from '@/mocks/data/reviewTagList.json';
-import { isTagNameVariant, type TagNameOption } from '@/types/common';
-
-const MAX_DISPLAYED_TAGS = 3;
+import type { ReviewTag } from '@/types/review';
 
 const ReviewTagList = () => {
-  const [maxDisplayedTags, setMaxDisplayedTags] = useState(MAX_DISPLAYED_TAGS);
+  const rev = reviewTagList as ReviewTag[];
+  const { MAX_DISPLAYED_TAGS, maxDisplayedTags, canShowMore, showMoreTags } = useReviewTag(rev);
+
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
-  const convertTagName = (tagName: TagNameOption): string => TAG_TITLE[tagName] || null;
-
-  const getMaxTagsInGroup = (tagList: typeof reviewTagList) => {
-    return tagList.reduce((max, currentGroup) => {
-      return Math.max(max, currentGroup.tags.length);
-    }, 0);
-  };
-
-  const canShowMore = maxDisplayedTags < getMaxTagsInGroup(reviewTagList);
-
-  const showMoreTags = () => {
-    setMaxDisplayedTags(getMaxTagsInGroup(reviewTagList));
-  };
-
-  const toggleTagSelection = (id: number) => {
-    const isSelected = selectedTags.includes(id);
-
+  const toggleTagSelection = (id: number, isSelected: boolean) => {
     if (selectedTags.length >= MAX_DISPLAYED_TAGS && !isSelected) {
       return;
     }
@@ -52,35 +37,36 @@ const ReviewTagList = () => {
       </Heading>
       <Spacing size={25} />
       <TagListWrapper>
-        {reviewTagList.map((tagGroup) => {
-          if (!isTagNameVariant(tagGroup.tagType)) {
-            return;
-          }
+        {rev.map((tagGroup) => {
           return (
-            <ul key={tagGroup.tagType}>
+            <TagItemWrapper key={tagGroup.tagType}>
               <TagTitle as="h3" size="md">
-                {convertTagName(tagGroup.tagType)}
+                {TAG_TITLE[tagGroup.tagType]}
               </TagTitle>
-              <Spacing size={20} />
-              {tagGroup.tags.slice(0, maxDisplayedTags).map((tag) => (
-                <li key={tag.id}>
-                  <ReviewTagItem
-                    id={tag.id}
-                    name={tag.name}
-                    isSelected={selectedTags.includes(tag.id)}
-                    toggleTagSelection={toggleTagSelection}
-                  />
-                  <Spacing size={5} />
-                </li>
-              ))}
-            </ul>
+              <ul>
+                <Spacing size={20} />
+                {tagGroup.tags.slice(0, maxDisplayedTags).map((tag) => (
+                  <li key={tag.id}>
+                    <ReviewTagItem
+                      id={tag.id}
+                      name={tag.name}
+                      isSelected={selectedTags.includes(tag.id)}
+                      toggleTagSelection={toggleTagSelection}
+                    />
+                    <Spacing size={5} />
+                  </li>
+                ))}
+              </ul>
+            </TagItemWrapper>
           );
         })}
       </TagListWrapper>
       <Spacing size={26} />
       {canShowMore && (
         <Button type="button" customHeight="fit-content" variant="transparent" onClick={showMoreTags}>
-          <SvgIcon variant="arrow" width={15} css="transform: rotate(270deg)" />
+          <SvgWrapper>
+            <SvgIcon variant="arrow" width={15} />
+          </SvgWrapper>
         </Button>
       )}
     </ReviewTagListContainer>
@@ -115,6 +101,15 @@ const TagListWrapper = styled.div`
   }
 `;
 
+const TagItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const TagTitle = styled(Heading)`
   text-align: center;
+`;
+
+const SvgWrapper = styled.div`
+  transform: rotate(270deg);
 `;

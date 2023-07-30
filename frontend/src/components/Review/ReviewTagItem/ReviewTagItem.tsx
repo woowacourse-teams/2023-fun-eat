@@ -18,13 +18,7 @@ const ReviewTagItem = ({ id, name, isSelected, toggleTagSelection }: ReviewTagIt
       variant="transparent"
       onClick={() => toggleTagSelection(id, isSelected)}
     >
-      <TagBadge
-        isSelected={isSelected}
-        size="sm"
-        color="transparent"
-        textColor={theme.textColors.default}
-        css={isSelected && `background: ${theme.colors.primary}`}
-      >
+      <TagBadge isSelected={isSelected} size="sm" color="transparent" textColor={theme.textColors.default}>
         {name}
       </TagBadge>
     </TagSelectButton>
