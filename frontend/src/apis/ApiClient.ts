@@ -19,13 +19,11 @@ export class ApiClient {
     return '/api' + this.#path + params + queries;
   }
 
-  async get<T>({ params, queries }: RequestOptions) {
-    const response = await fetchApi(this.getUrl(params, queries), {
+  get({ params, queries }: RequestOptions) {
+    return fetchApi(this.getUrl(params, queries), {
       method: 'GET',
       headers: this.#headers,
     });
-    const data: T = await response.json();
-    return data;
   }
 
   post<B>({ params, queries }: RequestOptions, body?: B) {

@@ -26,7 +26,7 @@ const ProductListPage = () => {
   const { categoryIds } = useCategoryContext();
 
   const { data: menuList } = useCategory(categoryVariant);
-  const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant]);
+  const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant], selectedOption.value);
 
   return (
     <>
