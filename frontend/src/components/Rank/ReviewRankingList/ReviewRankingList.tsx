@@ -2,14 +2,16 @@ import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
-import reviewRankingList from '@/mocks/data/reviewRankingList.json';
+import type { ReviewRanking } from '@/types/ranking';
 
-const ReviewRankingList = () => {
-  const { reviews } = reviewRankingList;
+interface ReviewRankingListProps {
+  reviewRankingList: ReviewRanking[];
+}
 
+const ReviewRankingList = ({ reviewRankingList }: ReviewRankingListProps) => {
   return (
     <ReviewRankingListContainer>
-      {reviews.map((reviewRanking) => (
+      {reviewRankingList.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>
