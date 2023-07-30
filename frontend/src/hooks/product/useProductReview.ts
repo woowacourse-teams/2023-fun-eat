@@ -6,7 +6,7 @@ import type { ProductReviewResponse } from '@/types/response';
 const useProductReview = (productId: string, sort: string) => {
   return useGet<ProductReviewResponse>(
     () => productApi.get({ params: `/${productId}/reviews`, queries: `?sort=${sort}` }),
-    sort
+    [sort]
   );
 };
 
