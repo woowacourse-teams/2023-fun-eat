@@ -10,14 +10,16 @@ import useReviewTag from '@/hooks/review/useReviewTag';
 import reviewTagList from '@/mocks/data/reviewTagList.json';
 import type { ReviewTag } from '@/types/review';
 
+const MIN_DISPLAYED_TAGS = 3;
+
 const ReviewTagList = () => {
   const rev = reviewTagList as ReviewTag[];
-  const { MAX_DISPLAYED_TAGS, maxDisplayedTags, canShowMore, showMoreTags } = useReviewTag(rev);
+  const { maxDisplayedTags, canShowMore, showMoreTags } = useReviewTag(rev, MIN_DISPLAYED_TAGS);
 
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
   const toggleTagSelection = (id: number, isSelected: boolean) => {
-    if (selectedTags.length >= MAX_DISPLAYED_TAGS && !isSelected) {
+    if (selectedTags.length >= MIN_DISPLAYED_TAGS && !isSelected) {
       return;
     }
 
