@@ -1,4 +1,5 @@
 import type { Product } from './product';
+import type { ReviewRanking } from './ranking';
 import type { Review } from './review';
 
 export interface Page {
@@ -17,4 +18,8 @@ export interface CategoryProductResponse {
 export interface ProductReviewResponse {
   page: Page;
   reviews: Review[];
+}
+
+export interface ReviewRankingResponse {
+  reviews: ReviewRanking[];
 }
