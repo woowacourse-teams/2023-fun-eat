@@ -3,6 +3,7 @@ import { rest } from 'msw';
 import { isReviewSortOption, isSortOrder } from './utils';
 import mockReviewRanking from '../data/reviewRankingList.json';
 import mockReviews from '../data/reviews.json';
+import mockReviewTags from '../data/reviewTagList.json';
 
 import type { ReviewFavoriteRequestBody, ReviewPostRequestBody } from '@/types/review';
 
@@ -49,5 +50,9 @@ export const reviewHandlers = [
 
   rest.get('/api/ranks/review', (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockReviewRanking));
+  }),
+
+  rest.get('/api/tags', (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockReviewTags));
   }),
 ];

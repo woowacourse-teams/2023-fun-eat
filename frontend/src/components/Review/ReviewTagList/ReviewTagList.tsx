@@ -6,18 +6,22 @@ import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
 import { TAG_TITLE } from '@/constants';
-import useReviewTag from '@/hooks/review/useReviewTag';
-import reviewTagList from '@/mocks/data/reviewTagList.json';
-import type { ReviewTag } from '@/types/review';
+import { useDisplayTag, useReviewTags } from '@/hooks/review';
+
+const MIN_DISPLAYED_TAGS_LENGTH = 3;
 
 const ReviewTagList = () => {
-  const rev = reviewTagList as ReviewTag[];
-  const { MAX_DISPLAYED_TAGS, maxDisplayedTags, canShowMore, showMoreTags } = useReviewTag(rev);
-
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
+  const { data: tagsData } = useReviewTags();
+  const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData ?? [], MIN_DISPLAYED_TAGS_LENGTH);
+
+  if (!tagsData) {
+    return null;
+  }
+
   const toggleTagSelection = (id: number, isSelected: boolean) => {
-    if (selectedTags.length >= MAX_DISPLAYED_TAGS && !isSelected) {
+    if (selectedTags.length >= MIN_DISPLAYED_TAGS_LENGTH && !isSelected) {
       return;
     }
 
@@ -37,7 +41,7 @@ const ReviewTagList = () => {
       </Heading>
       <Spacing size={25} />
       <TagListWrapper>
-        {rev.map(({ tagType, tags }) => {
+        {tagsData.map(({ tagType, tags }) => {
           return (
             <TagItemWrapper key={tagType}>
               <TagTitle as="h3" size="md">
@@ -45,7 +49,7 @@ const ReviewTagList = () => {
               </TagTitle>
               <Spacing size={20} />
               <ul>
-                {tags.slice(0, maxDisplayedTags).map(({ id, name }) => (
+                {tags.slice(0, minDisplayedTags).map(({ id, name }) => (
                   <li key={id}>
                     <ReviewTagItem
                       id={id}
