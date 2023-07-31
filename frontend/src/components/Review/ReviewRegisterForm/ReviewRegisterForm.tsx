@@ -8,6 +8,7 @@ import StarRate from '../StarRate/StarRate';
 
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
+import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
 interface ReviewRegisterFormProps {
@@ -16,6 +17,13 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
+  const { rating, handleRating } = useStarRating();
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(rating);
+  };
+
   return (
     <ReviewRegisterFormContainer>
       <ReviewHeading>리뷰 작성</ReviewHeading>
@@ -30,7 +38,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       <RegisterForm>
         <ReviewImageUploader />
         <Spacing size={60} />
-        <StarRate />
+        <StarRate rating={rating} handleRating={handleRating} />
         <Spacing size={60} />
         <ReviewTagList />
         <Spacing size={60} />
@@ -38,7 +46,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={80} />
         <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
         <Spacing size={16} />
-        <Button customWidth="100%" customHeight="60px" size="xl" weight="bold">
+        <Button customWidth="100%" customHeight="60px" size="xl" weight="bold" onClick={handleSubmit}>
           등록하기
         </Button>
       </RegisterForm>

@@ -16,7 +16,7 @@ const useStarRating = () => {
     setHovering(0);
   };
 
-  return { rating, hovering, handleRating, handleMouseEnter, handleMouseLeave };
+  return { rating, setRating, hovering, handleRating, handleMouseEnter, handleMouseLeave };
 };
 
 export default useStarRating;
