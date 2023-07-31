@@ -5,13 +5,13 @@ import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 import type { ReviewRanking } from '@/types/ranking';
 
 interface ReviewRankingListProps {
-  reviewRankingList: ReviewRanking[];
+  reviewRankings: ReviewRanking[];
 }
 
-const ReviewRankingList = ({ reviewRankingList }: ReviewRankingListProps) => {
+const ReviewRankingList = ({ reviewRankings }: ReviewRankingListProps) => {
   return (
     <ReviewRankingListContainer>
-      {reviewRankingList.map((reviewRanking) => (
+      {reviewRankings.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>

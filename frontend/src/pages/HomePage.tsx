@@ -59,7 +59,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList reviewRankingList={reviewRankingResponse?.reviews ?? []} />
+        <ReviewRankingList reviewRankings={reviewRankingResponse?.reviews ?? []} />
       </section>
     </>
   );
