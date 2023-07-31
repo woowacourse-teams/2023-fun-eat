@@ -1,4 +1,5 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import { FormEvent } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -8,6 +9,8 @@ import StarRate from '../StarRate/StarRate';
 
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
+import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
+import { useSelectedTags } from '@/hooks/review';
 import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
@@ -18,11 +21,15 @@ interface ReviewRegisterFormProps {
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { rating, handleRating } = useStarRating();
+  const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log(rating);
-  };
+  const handleSubmit =
+    //: React.FormEventHandler<HTMLFormElement>
+    (event: any) => {
+      event.preventDefault();
+      console.log(rating);
+      console.log(selectedTags);
+    };
 
   return (
     <ReviewRegisterFormContainer>
@@ -40,7 +47,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <StarRate rating={rating} handleRating={handleRating} />
         <Spacing size={60} />
-        <ReviewTagList />
+        <ReviewTagList selectedTags={selectedTags} toggleTagSelection={toggleTagSelection} />
         <Spacing size={60} />
         <ReviewTextarea />
         <Spacing size={80} />
