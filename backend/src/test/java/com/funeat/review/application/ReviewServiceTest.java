@@ -276,6 +276,37 @@ class ReviewServiceTest {
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
+
+        @Test
+        void 최신순으로_정렬을_할_수_있다() {
+            // given
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
+            final var members = List.of(member1, member2, member3);
+            복수_유저_추가(members);
+
+            final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
+            상품_추가(product);
+
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+            final var reviews = List.of(review1, review2, review3);
+            복수_리뷰_추가(reviews);
+
+            final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
+            final var expected = Stream.of(review3, review2)
+                    .map(SortingReviewDto::toDto)
+                    .collect(Collectors.toList());
+
+            // when
+            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+                    .getReviews();
+
+            // then
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        }
     }
 
     private void 복수_유저_추가(final List<Member> members) {
