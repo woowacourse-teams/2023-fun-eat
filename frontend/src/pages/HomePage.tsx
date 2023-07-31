@@ -11,12 +11,14 @@ import { useCategory, useCategoryProducts } from '@/hooks/product';
 import { useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
+  const { categoryIds } = useCategoryContext();
+
   const { data: foodCategory } = useCategory('food');
   const { data: storeCategory } = useCategory('store');
 
-  const { categoryIds } = useCategoryContext();
   const { data: productListResponse } = useCategoryProducts(categoryIds.food);
   const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
+
   const { data: reviewRankingResponse } = useReviewRanking();
 
   return (
