@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 
-import { AuthLayout, DefaultLayout } from '@/components/Layout';
+import { AuthLayout, DefaultLayout, DetailLayout } from '@/components/Layout';
 
 interface AppProps {
-  layout?: 'auth' | 'default';
+  layout?: 'auth' | 'detail' | 'default';
 }
 
 const App = ({ layout = 'default' }: AppProps) => {
@@ -12,6 +12,14 @@ const App = ({ layout = 'default' }: AppProps) => {
       <AuthLayout>
         <Outlet />
       </AuthLayout>
+    );
+  }
+
+  if (layout === 'detail') {
+    return (
+      <DetailLayout>
+        <Outlet />
+      </DetailLayout>
     );
   }
 
