@@ -4,3 +4,4 @@ dist
 .AppleDouble
 .LSOverride
 .env
+coverage
