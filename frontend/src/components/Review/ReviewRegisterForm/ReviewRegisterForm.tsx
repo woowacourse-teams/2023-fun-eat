@@ -1,5 +1,5 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -10,7 +10,7 @@ import StarRate from '../StarRate/StarRate';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
-import { useSelectedTags } from '@/hooks/review';
+import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
 import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
@@ -22,6 +22,12 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { rating, handleRating } = useStarRating();
   const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
+  const { content, handleReviewInput } = useReviewTextarea();
+  const [rebuy, setRebuy] = useState(false);
+
+  const handleRebuy = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRebuy(event.target.checked);
+  };
 
   const handleSubmit =
     //: React.FormEventHandler<HTMLFormElement>
@@ -29,6 +35,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       event.preventDefault();
       console.log(rating);
       console.log(selectedTags);
+      console.log(content);
+      console.log(rebuy);
     };
 
   return (
@@ -49,9 +57,11 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTagList selectedTags={selectedTags} toggleTagSelection={toggleTagSelection} />
         <Spacing size={60} />
-        <ReviewTextarea />
+        <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
-        <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
+        <Checkbox weight="bold" onChange={handleRebuy}>
+          재구매할 생각이 있으신가요?
+        </Checkbox>
         <Spacing size={16} />
         <Button customWidth="100%" customHeight="60px" size="xl" weight="bold" onClick={handleSubmit}>
           등록하기
