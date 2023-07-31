@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import { AuthLayout, DefaultLayout } from '@/components/Layout';
-import DetailLayout from '@/components/Layout/DetailLayout';
+import { AuthLayout, DefaultLayout, DetailLayout } from '@/components/Layout';
 
 interface AppProps {
   layout?: 'auth' | 'detail' | 'default';
