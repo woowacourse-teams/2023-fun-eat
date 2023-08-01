@@ -7,7 +7,7 @@ import { categoryApi } from '@/apis';
 import type { Product } from '@/types/product';
 import type { CategoryProductResponse } from '@/types/response';
 
-const useInfiniteProductData = (categoryId: number, option: string) => {
+const useInfiniteProducts = (categoryId: number, option: string) => {
   const [page, setPage] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -43,4 +43,4 @@ const useInfiniteProductData = (categoryId: number, option: string) => {
   return { products, scrollRef };
 };
 
-export default useInfiniteProductData;
+export default useInfiniteProducts;

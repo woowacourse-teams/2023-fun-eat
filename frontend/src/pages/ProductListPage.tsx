@@ -6,7 +6,7 @@ import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Co
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useInfiniteProductData } from '@/hooks/product';
+import { useCategory, useInfiniteProducts } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
 
@@ -27,7 +27,7 @@ const ProductListPage = () => {
 
   const { data: menuList } = useCategory(categoryVariant);
 
-  const { products, scrollRef } = useInfiniteProductData(categoryIds[categoryVariant], selectedOption.value);
+  const { products, scrollRef } = useInfiniteProducts(categoryIds[categoryVariant], selectedOption.value);
 
   return (
     <>
