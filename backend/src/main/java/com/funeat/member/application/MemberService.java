@@ -3,6 +3,7 @@ package com.funeat.member.application;
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.persistence.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,5 +32,14 @@ public class MemberService {
         memberRepository.save(member);
 
         return SignUserDto.of(true, member);
+    }
+
+    @Transactional
+    public void modify(final Long memberId, final MemberRequest request) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        findMember.modifyNickname(request.getNickname());
+        findMember.modifyProfileImage(request.getProfileImage());
     }
 }
