@@ -16,7 +16,7 @@ export class ApiClient {
   }
 
   getUrl(params = '', queries = '') {
-    return process.env.API_BASE_URL + this.#path + params + queries;
+    return '/api' + this.#path + params + queries;
   }
 
   get({ params, queries }: RequestOptions) {
