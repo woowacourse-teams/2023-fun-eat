@@ -1,7 +1,6 @@
 import { Spacing } from '@fun-eat/design-system';
 
-import ProductOverviewItem from '../ProductOverviewItem/ProductOverviewItem';
-
+import { ProductOverviewItem } from '@/components/Product';
 import productRanking from '@/mocks/data/productRanking.json';
 
 const ProductRankingList = () => {
