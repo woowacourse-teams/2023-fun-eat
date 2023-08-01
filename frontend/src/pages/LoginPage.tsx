@@ -9,6 +9,8 @@ const SLOGAN = '궁금해? 맛있을걸? 먹어봐 🥄';
 const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 레시피를 공유해보세요.';
 const KAKAO_LOGIN = '카카오 로그인';
 
+const loginLink = process.env.NODE_ENV === 'development' ? '/login/kakao?code=abc' : '/api/auth/kakao';
+
 const LoginPage = () => {
   const routeBack = useRouteBack();
 
@@ -27,7 +29,7 @@ const LoginPage = () => {
         <Description>{DESCRIPTION}</Description>
       </LoginSection>
       <LoginLinkWrapper>
-        <KakaoLoginLink href="/api/auth/kakao" block isExternal>
+        <KakaoLoginLink href={loginLink} block>
           <SvgIcon variant="kakao" width={20} height={20} />
           <Text as="span" weight="bold">
             {KAKAO_LOGIN}
