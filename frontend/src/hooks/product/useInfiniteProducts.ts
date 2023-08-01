@@ -11,17 +11,21 @@ const useInfiniteProducts = (categoryId: number, sort: string) => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { data: productListResponse } = useCategoryProducts(categoryId, page, sort);
+  const prevCategoryId = useRef(categoryId);
+  const nextPage = prevCategoryId.current !== categoryId ? 0 : page;
+
+  useEffect(() => {
+    setPage(0);
+    prevCategoryId.current = categoryId;
+  }, [categoryId, sort]);
+
+  const { data: productListResponse } = useCategoryProducts(categoryId, nextPage, sort);
 
   const getNextPage = () => {
     setPage((page) => page + 1);
   };
 
   useIntersectionObserver<HTMLDivElement>(getNextPage, scrollRef, productListResponse?.page.lastPage);
-
-  useEffect(() => {
-    setPage(0);
-  }, [categoryId]);
 
   useEffect(() => {
     if (!productListResponse) {
