@@ -1,40 +1,62 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
+import { memberApi } from '@/apis';
 import { useAuth } from '@/hooks/auth';
+import useMemberActionContext from '@/hooks/context/useMemberActionContext';
 
 const AuthPage = () => {
-  const navigate = useNavigate();
-
   const { provider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
+  const navigate = useNavigate();
 
+  const { handleMember } = useMemberActionContext();
   const { request } = useAuth(provider ?? 'kakao', code ?? 'code');
+
+  const locationRef = useRef<string>('');
 
   useEffect(() => {
     if (!code) {
       throw new Error('code가 없습니다.');
     }
 
-    const redirect = async () => {
+    const getSessionId = async () => {
       const response = await request();
 
       if (!response) {
         throw new Error('로그인에 실패했습니다.');
       }
 
-      const location = await response.headers.get('Location');
-
-      if (!location) {
-        throw new Error('로그인에 실패했습니다.');
-      }
-
-      navigate(location);
+      const location = response.headers.get('Location');
+      locationRef.current = location ?? '';
     };
 
-    redirect();
+    getSessionId();
   }, []);
+
+  useEffect(() => {
+    if (locationRef.current === '') {
+      return;
+    }
+
+    const getMember = async () => {
+      const response = await memberApi.get({ credentials: true });
+      const member = await response.json();
+
+      handleMember(member);
+    };
+
+    getMember();
+  }, [locationRef.current]);
+
+  useEffect(() => {
+    if (locationRef.current === '') {
+      return;
+    }
+
+    navigate(locationRef.current);
+  }, [locationRef.current]);
 
   return <></>;
 };
