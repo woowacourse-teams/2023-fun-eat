@@ -27,7 +27,7 @@ const LoginPage = () => {
         <Description>{DESCRIPTION}</Description>
       </LoginSection>
       <LoginLinkWrapper>
-        <KakaoLoginLink href={`${process.env.API_BASE_URL}/auth/kakao`} block isExternal>
+        <KakaoLoginLink href="/api/auth/kakao" block isExternal>
           <SvgIcon variant="kakao" width={20} height={20} />
           <Text as="span" weight="bold">
             {KAKAO_LOGIN}
