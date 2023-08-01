@@ -77,4 +77,12 @@ public class Member {
     public List<RecipeBookmark> getRecipeBookmarks() {
         return recipeBookmarks;
     }
+
+    public void modifyNickname(final String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void modifyProfileImage(final String profileImage) {
+        this.profileImage = profileImage;
+    }
 }
