@@ -34,7 +34,7 @@ public class ReviewApiController implements ReviewController {
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> writeReview(@PathVariable Long productId,
                                             @AuthenticationPrincipal LoginRequest loginInfo,
-                                            @RequestPart MultipartFile image,
+                                            @RequestPart(required = false) MultipartFile image,
                                             @RequestPart ReviewCreateRequest reviewRequest) {
         reviewService.create(productId, loginInfo.getId(), image, reviewRequest);
 
