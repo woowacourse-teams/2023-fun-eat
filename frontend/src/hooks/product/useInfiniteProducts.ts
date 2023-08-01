@@ -1,22 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { useGet } from '../useGet';
+import useCategoryProducts from './useCategoryProducts';
 import useIntersectionObserver from '../useIntersectionObserver';
 
-import { categoryApi } from '@/apis';
 import type { Product } from '@/types/product';
-import type { CategoryProductResponse } from '@/types/response';
 
-const useInfiniteProducts = (categoryId: number, option: string) => {
+const useInfiniteProducts = (categoryId: number, sort: string) => {
   const [page, setPage] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { data: productListResponse } = useGet<CategoryProductResponse>(
-    () => categoryApi.get({ params: `/${categoryId}/products`, queries: `?page=${page}&sort=${option}` }),
-    [page, categoryId]
-  );
+  const { data: productListResponse } = useCategoryProducts(categoryId, page, sort);
 
   const getNextPage = () => {
     setPage((page) => page + 1);
