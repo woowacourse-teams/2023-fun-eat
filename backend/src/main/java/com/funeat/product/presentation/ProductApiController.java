@@ -3,6 +3,7 @@ package com.funeat.product.presentation;
 import com.funeat.product.application.ProductService;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryResponse;
+import com.funeat.product.dto.RankingProductsResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,12 @@ public class ProductApiController implements ProductController {
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductResponse> getProductDetail(@PathVariable final Long productId) {
         final ProductResponse response = productService.findProductDetail(productId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/ranks/products")
+    public ResponseEntity<RankingProductsResponse> getRankingProducts() {
+        final RankingProductsResponse response = productService.getTop3Products();
         return ResponseEntity.ok(response);
     }
 }
