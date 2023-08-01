@@ -45,17 +45,10 @@ const AuthPage = () => {
       const member = await response.json();
 
       handleMember(member);
+      navigate(locationRef.current);
     };
 
     getMember();
-  }, [locationRef.current]);
-
-  useEffect(() => {
-    if (locationRef.current === '') {
-      return;
-    }
-
-    navigate(locationRef.current);
   }, [locationRef.current]);
 
   return <></>;
