@@ -68,6 +68,12 @@ public class Product {
         this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
     }
 
+    public Double calculateRankingScore(final Long reviewCount) {
+        final double exponent = -Math.log10(reviewCount + 1);
+        final double factor = Math.pow(2, exponent);
+        return averageRating - (averageRating - 3.0) * factor;
+    }
+
     public Long getId() {
         return id;
     }
