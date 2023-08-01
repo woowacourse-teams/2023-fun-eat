@@ -17,11 +17,9 @@ await main();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <FunEatProvider>
-      <SvgSprite />
-      <GlobalStyle />
-      <RouterProvider router={router} />
-    </FunEatProvider>
-  </React.StrictMode>
+  <FunEatProvider>
+    <SvgSprite />
+    <GlobalStyle />
+    <RouterProvider router={router} />
+  </FunEatProvider>
 );

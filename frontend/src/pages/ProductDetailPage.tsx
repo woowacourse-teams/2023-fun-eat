@@ -8,6 +8,7 @@ import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReview, useProductDetail } from '@/hooks/product';
+import useInfiniteProductReviews from '@/hooks/product/useInfiniteProductReviews';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
@@ -18,13 +19,14 @@ const ProductDetailPage = () => {
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
   const { data: productDetail } = useProductDetail(productId as string);
-  const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
+  //const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
+  const { productReviews: reviews, scrollRef } = useInfiniteProductReviews(productId as string, selectedOption.value);
 
-  if (!productDetail || !productReviews) {
+  if (!productDetail) {
     return null;
   }
 
-  const { reviews } = productReviews;
+  //const { reviews } = productReviews;
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -54,6 +56,7 @@ const ProductDetailPage = () => {
                 <ReviewItem productId={Number(productId)} review={review} />
               </li>
             ))}
+            <div ref={scrollRef} />
           </ReviewItemWrapper>
         )}
       </section>
