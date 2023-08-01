@@ -2,6 +2,7 @@ package com.funeat.acceptance.product;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.product.ProductSteps.CU;
 import static com.funeat.acceptance.product.ProductSteps.간편식사;
 import static com.funeat.acceptance.product.ProductSteps.공통_상품_카테고리_목록_조회_요청;
@@ -379,14 +380,15 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
 
         final ReviewCreateRequest request1 = new ReviewCreateRequest(4L,
-                List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true, memberId);
+                List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true);
         final ReviewCreateRequest request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()),
-                "request2", true, memberId);
-        final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true,
-                memberId);
-        리뷰_추가_요청(productId, image, request1);
-        리뷰_추가_요청(productId, image, request2);
-        리뷰_추가_요청(productId, image, request3);
+                "request2", true);
+        final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true);
+
+        final var loginCookie = 로그인_쿠키를_얻는다();
+        리뷰_추가_요청(productId, image, request1, loginCookie);
+        리뷰_추가_요청(productId, image, request2, loginCookie);
+        리뷰_추가_요청(productId, image, request3, loginCookie);
 
         // when
         final var response = 상품_상세_조회_요청(productId);
