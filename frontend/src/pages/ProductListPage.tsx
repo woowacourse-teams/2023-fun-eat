@@ -20,7 +20,7 @@ const ProductListPage = () => {
   const categoryVariant = path.split('/').pop() ?? '';
 
   if (!isCategoryVariant(categoryVariant)) {
-    return;
+    return <></>;
   }
 
   const { categoryIds } = useCategoryContext();
