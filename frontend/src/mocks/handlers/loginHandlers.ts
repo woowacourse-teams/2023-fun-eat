@@ -4,10 +4,14 @@ export const loginHandlers = [
   rest.post('/api/login/oauth2/code/:provider', (req, res, ctx) => {
     const code = req.url.searchParams.get('code');
 
-    if (code !== 'abc') {
-      return res(ctx.status(400));
+    if (code === 'abc') {
+      return res(ctx.status(200), ctx.cookie('mockSessionId', 'abc123'), ctx.set('Location', '/profile'));
     }
 
-    return res(ctx.status(200), ctx.cookie('mockSessionId', 'abc-123'));
+    if (code === 'qwe') {
+      return res(ctx.status(200), ctx.cookie('mockSessionId', 'qwe456'), ctx.set('Location', '/'));
+    }
+
+    return res(ctx.status(400));
   }),
 ];
