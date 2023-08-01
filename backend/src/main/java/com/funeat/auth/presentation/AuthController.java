@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class AuthController {
                 .build();
     }
 
-    @GetMapping("/login/oauth2/code/kakao")
+    @PostMapping("/api/login/oauth2/code/kakao")
     public ResponseEntity<Void> loginAuthorizeUser(@RequestParam("code") final String code,
                                                    final HttpServletRequest request) {
         final SignUserDto signUserDto = authService.loginWithKakao(code);

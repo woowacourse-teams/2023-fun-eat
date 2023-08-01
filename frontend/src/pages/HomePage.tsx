@@ -3,19 +3,23 @@ import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CategoryMenu, SvgIcon } from '@/components/Common';
-import { PBProductList, ProductList, ProductRankingList } from '@/components/Product';
-import { ReviewRankingList } from '@/components/Review';
+import { PBProductList, ProductList } from '@/components/Product';
+import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useCategory, useCategoryProducts } from '@/hooks/product';
+import { useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
+  const { categoryIds } = useCategoryContext();
+
   const { data: foodCategory } = useCategory('food');
   const { data: storeCategory } = useCategory('store');
 
-  const { categoryIds } = useCategoryContext();
   const { data: productListResponse } = useCategoryProducts(categoryIds.food);
   const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
+
+  const { data: reviewRankingResponse } = useReviewRanking();
 
   return (
     <>
@@ -55,7 +59,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList />
+        <ReviewRankingList reviewRankings={reviewRankingResponse?.reviews ?? []} />
       </section>
     </>
   );
