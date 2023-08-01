@@ -7,7 +7,7 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReview, useProductDetail } from '@/hooks/product';
+import { useProductDetail } from '@/hooks/product';
 import useInfiniteProductReviews from '@/hooks/product/useInfiniteProductReviews';
 import useSortOption from '@/hooks/useSortOption';
 
@@ -19,14 +19,11 @@ const ProductDetailPage = () => {
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
   const { data: productDetail } = useProductDetail(productId as string);
-  //const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
-  const { productReviews: reviews, scrollRef } = useInfiniteProductReviews(productId as string, selectedOption.value);
+  const { productReviews, scrollRef } = useInfiniteProductReviews(productId as string, selectedOption.value);
 
   if (!productDetail) {
     return null;
   }
-
-  //const { reviews } = productReviews;
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -44,14 +41,14 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
-      <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
+      <TabMenu tabMenus={[`리뷰 ${productReviews.length}`, '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
       <section>
-        {reviews && (
+        {productReviews && (
           <ReviewItemWrapper>
-            {reviews.map((review) => (
+            {productReviews.map((review) => (
               <li key={review.id}>
                 <ReviewItem productId={Number(productId)} review={review} />
               </li>
