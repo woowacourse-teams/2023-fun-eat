@@ -1,13 +1,13 @@
 package com.funeat.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.persistence.MemberRepository;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -47,7 +47,7 @@ class MemberServiceTest {
             final var actual = memberService.findOrCreateMember(userInfoDto);
 
             // then
-            SoftAssertions.assertSoftly(softAssertions -> {
+            assertSoftly(softAssertions -> {
                 Assertions.assertFalse(actual.isSignIn());
                 assertThat(expected).containsExactly(actual.getMember());
             });
@@ -66,7 +66,7 @@ class MemberServiceTest {
             final var actual = memberService.findOrCreateMember(userInfoDto);
 
             // then
-            SoftAssertions.assertSoftly(softAssertions -> {
+            assertSoftly(softAssertions -> {
                 Assertions.assertTrue(actual.isSignIn());
                 assertThat(expected).doesNotContain(actual.getMember());
             });
@@ -97,7 +97,7 @@ class MemberServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            SoftAssertions.assertSoftly(softAssertions -> {
+            assertSoftly(softAssertions -> {
                 softAssertions.assertThat(actualNickname).isEqualTo(expectedNickname);
                 softAssertions.assertThat(actualProfileImage).isEqualTo(expectedProfileImage);
             });
@@ -125,7 +125,7 @@ class MemberServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            SoftAssertions.assertSoftly(softAssertions -> {
+            assertSoftly(softAssertions -> {
                 softAssertions.assertThat(actualNickname).isNotEqualTo(expectedNickname);
                 softAssertions.assertThat(actualProfileImage).isEqualTo(expectedProfileImage);
             });
@@ -154,7 +154,7 @@ class MemberServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            SoftAssertions.assertSoftly(softAssertions -> {
+            assertSoftly(softAssertions -> {
                 softAssertions.assertThat(actualNickname).isEqualTo(expectedNickname);
                 softAssertions.assertThat(actualProfileImage).isNotEqualTo(expectedProfileImage);
             });
@@ -184,7 +184,7 @@ class MemberServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            SoftAssertions.assertSoftly(softAssertions -> {
+            assertSoftly(softAssertions -> {
                 softAssertions.assertThat(actualNickname).isNotEqualTo(expectedNickname);
                 softAssertions.assertThat(actualProfileImage).isNotEqualTo(expectedProfileImage);
             });
