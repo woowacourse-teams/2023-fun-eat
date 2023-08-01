@@ -28,7 +28,7 @@ public class AuthController {
                 .build();
     }
 
-    @GetMapping("/login/oauth2/code/kakao")
+    @GetMapping("/api/login/oauth2/code/kakao")
     public ResponseEntity<Void> loginAuthorizeUser(@RequestParam("code") final String code,
                                                    final HttpServletRequest request) {
         final SignUserDto signUserDto = authService.loginWithKakao(code);

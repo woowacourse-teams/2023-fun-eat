@@ -39,7 +39,7 @@ public class AuthControllerTest {
             when(authService.loginWithKakao(code)).thenReturn(signUserDto);
 
             // then
-            mockMvc.perform(get("/login/oauth2/code/kakao")
+            mockMvc.perform(get("/api/login/oauth2/code/kakao")
                             .param("code", code))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"));
@@ -56,7 +56,7 @@ public class AuthControllerTest {
             when(authService.loginWithKakao(code)).thenReturn(signUserDto);
 
             // then
-            mockMvc.perform(get("/login/oauth2/code/kakao")
+            mockMvc.perform(get("/api/login/oauth2/code/kakao")
                             .param("code", code))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/profile"));
