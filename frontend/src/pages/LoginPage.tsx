@@ -1,9 +1,8 @@
-import { Button, Spacing, Text } from '@fun-eat/design-system';
+import { Button, Link, Spacing, Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
-import { useLogin } from '@/hooks/auth';
 import useRouteBack from '@/hooks/useRouteBack';
 
 const SLOGAN = '궁금해? 맛있을걸? 먹어봐 🥄';
@@ -12,7 +11,6 @@ const KAKAO_LOGIN = '카카오 로그인';
 
 const LoginPage = () => {
   const routeBack = useRouteBack();
-  const { handleLogin } = useLogin();
 
   return (
     <LoginPageContainer>
@@ -28,14 +26,14 @@ const LoginPage = () => {
         </Text>
         <Description>{DESCRIPTION}</Description>
       </LoginSection>
-      <LoginButtonWrapper>
-        <KakaoLoginButton type="button" customWidth="100%" customHeight="54px" onClick={() => handleLogin('kakao')}>
+      <LoginLinkWrapper>
+        <KakaoLoginLink href="/api/auth/kakao" block isExternal>
           <SvgIcon variant="kakao" width={20} height={20} />
           <Text as="span" weight="bold">
             {KAKAO_LOGIN}
           </Text>
-        </KakaoLoginButton>
-      </LoginButtonWrapper>
+        </KakaoLoginLink>
+      </LoginLinkWrapper>
     </LoginPageContainer>
   );
 };
@@ -57,13 +55,15 @@ const Description = styled(Text)`
   word-break: break-all;
 `;
 
-const LoginButtonWrapper = styled.div`
+const LoginLinkWrapper = styled.div`
   flex-grow: 1;
 `;
 
-const KakaoLoginButton = styled(Button)`
+const KakaoLoginLink = styled(Link)`
   display: flex;
   align-items: center;
+  width: 100%;
+  height: 54px;
   padding: 0 16px;
   background-color: #fee500;
   border-radius: 12px;
