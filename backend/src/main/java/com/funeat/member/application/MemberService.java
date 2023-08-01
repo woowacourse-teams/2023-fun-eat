@@ -1,5 +1,7 @@
 package com.funeat.member.application;
 
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
+
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
@@ -25,7 +27,7 @@ public class MemberService {
                 .orElseGet(() -> save(userInfoDto));
     }
 
-    @Transactional
+    @Transactional(propagation = REQUIRES_NEW)
     public SignUserDto save(final UserInfoDto userInfoDto) {
         final Member member = userInfoDto.toMember();
         memberRepository.save(member);
