@@ -15,9 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(AuthApiController.class)
 @SuppressWarnings("NonAsciiCharacters")
-public class AuthControllerTest {
+public class AuthApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
