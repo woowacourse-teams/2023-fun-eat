@@ -2,13 +2,11 @@ package com.funeat.acceptance.member;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static io.restassured.RestAssured.given;
+import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberRequest;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -31,15 +29,5 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
     private Long 멤버_추가_요청(final Member member) {
         return memberRepository.save(member).getId();
-    }
-
-    private ExtractableResponse<Response> 사용자_정보_수정_요청(final Long memberId, final MemberRequest request) {
-        return given()
-                .contentType("application/json")
-                .body(request)
-                .when()
-                .put("/api/members/{memberId}", memberId)
-                .then()
-                .extract();
     }
 }

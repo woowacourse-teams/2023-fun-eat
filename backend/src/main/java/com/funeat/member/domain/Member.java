@@ -78,11 +78,8 @@ public class Member {
         return recipeBookmarks;
     }
 
-    public void modifyNickname(final String nickname) {
+    public void modifyProfile(final String nickname, final String profileImage) {
         this.nickname = nickname;
-    }
-
-    public void modifyProfileImage(final String profileImage) {
         this.profileImage = profileImage;
     }
 }

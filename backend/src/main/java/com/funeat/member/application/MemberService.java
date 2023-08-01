@@ -39,7 +39,9 @@ public class MemberService {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        findMember.modifyNickname(request.getNickname());
-        findMember.modifyProfileImage(request.getProfileImage());
+        final String nickname = request.getNickname();
+        final String profileImage = request.getProfileImage();
+
+        findMember.modifyProfile(nickname, profileImage);
     }
 }
