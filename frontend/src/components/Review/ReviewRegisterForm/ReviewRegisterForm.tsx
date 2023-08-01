@@ -39,12 +39,83 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
     setRebuy(event.target.checked);
   };
 
+  // const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+  //   event.preventDefault();
+
+  //   const formData = new FormData();
+
+  //   // if (reviewImage) {
+  //   //   formData.append('image', reviewImage);
+  //   // }
+
+  //   const reviewRequest = JSON.stringify({
+  //     rating: rating,
+  //     tagIds: selectedTags,
+  //     content: content,
+  //     rebuy: rebuy,
+  //   });
+
+  //   const jsonBlob = new Blob([reviewRequest], { type: 'application/json' });
+  //   formData.append('reviewRequest', jsonBlob);
+
+  //   const url = `http://3.36.100.213/api/products/${product.id}/reviews`;
+
+  //   const headers = {
+  //     'Content-Type': 'multipart/form-data',
+  //   };
+
+  //   const response = await fetch(url, {
+  //     method: 'POST',
+  //     headers: headers,
+  //     body: formData,
+  //   });
+
+  //   if (!response.ok) {
+  //     throw new Error(`에러 발생 상태코드:${response.status}`);
+  //   }
+
+  //   console.log('리뷰가 성공적으로 등록되었습니다.');
+
+  //   // 다음 작업을 수행...
+
+  //   // await request(formData);
+  // };
+
+  // const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+  //   event.preventDefault();
+
+  //   const formData = new FormData();
+
+  //   if (reviewImage) {
+  //     formData.append('image', reviewImage);
+  //   }
+
+  //   // JSON 리뷰 데이터에 이러한 속성들을 추가
+  //   const reviewRequest = {
+  //     rating,
+  //     tagIds: selectedTags,
+  //     content,
+  //     rebuy,
+  //   };
+
+  //   // JSON 리뷰 데이터를 문자열로 변환
+  //   const jsonString = JSON.stringify(reviewRequest);
+
+  //   // 문자열을 Blob 객체로 변환. mimeType은 'application/json'으로 설정
+  //   const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+
+  //   // 리뷰 요청으로 JSON Blob 객체를 추가
+  //   formData.append('reviewRequest', jsonBlob);
+
+  //   await request(formData);
+  // };
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
     const formData = new FormData();
 
-    formData.append('image', reviewImage);
+    formData.append('image', '');
     formData.append(
       'reviewRequest',
       JSON.stringify({
@@ -55,16 +126,34 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       })
     );
 
-    await request(formData);
+    const url = `http://3.36.100.213/api/products/${product.id}/reviews`;
+
+    // const headers = {
+    //   'Content-Type': 'multipart/form-data',
+    // };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      // headers: headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`에러 발생 상태코드:${response.status}`);
+    }
+
+    console.log(response, '리뷰가 성공적으로 등록되었습니다.');
+
+    // await request(formData);
   };
 
-  useEffect(() => {
-    const isValid =
-      rating > MIN_RATING_SCORE &&
-      selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
-      content.length > MIN_CONTENT_LENGTH;
-    setSubmitEnabled(isValid);
-  }, [rating, selectedTags, content]);
+  // useEffect(() => {
+  //   const isValid =
+  //     rating > MIN_RATING_SCORE &&
+  //     selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
+  //     content.length > MIN_CONTENT_LENGTH;
+  //   setSubmitEnabled(isValid);
+  // }, [rating, selectedTags, content]);
 
   return (
     <ReviewRegisterFormContainer>
@@ -100,7 +189,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           customHeight="60px"
           size="xl"
           weight="bold"
-          disabled={!submitEnabled}
+          // disabled={!submitEnabled}
         >
           등록하기
         </FormButton>

@@ -16,7 +16,7 @@ export class ApiClient {
   }
 
   getUrl(params = '', queries = '') {
-    return '/api' + this.#path + params + queries;
+    return 'http://3.36.100.213/api' + this.#path + params + queries;
   }
 
   get({ params, queries }: RequestOptions) {
@@ -31,6 +31,14 @@ export class ApiClient {
       method: 'POST',
       headers: this.#headers,
       body: body ? JSON.stringify(body) : null,
+    });
+  }
+
+  postData({ params, queries }: RequestOptions, body?: FormData) {
+    return fetchApi(this.getUrl(params, queries), {
+      method: 'POST',
+      headers: this.#headers,
+      body: body ? body : null,
     });
   }
 

@@ -5,3 +5,6 @@ export const productApi = new ApiClient('/products');
 export const tagApi = new ApiClient('/tags');
 export const authApi = new ApiClient('/auth');
 export const rankApi = new ApiClient('/ranks');
+export const testApi = new ApiClient('/products', {
+  headers: 'Content-Type: multipart/form-data',
+});
