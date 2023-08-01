@@ -265,6 +265,42 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
+    class 최신순으로_리뷰_목록을_조회 {
+
+        @Test
+        void 등록_시간이_서로_다르면_최신순으로_정렬할_수_있다() {
+            // given
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            카테고리_추가_요청(category);
+
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
+            final var members = List.of(member1, member2, member3);
+            복수_유저_추가_요청(members);
+
+            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
+            final var productId = 상품_추가_요청(product);
+
+            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+            final var reviews = List.of(review1, review2, review3);
+            복수_리뷰_추가(reviews);
+
+            final var sortingReviews = List.of(review3, review2, review1);
+
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(productId, "createdAt,desc", 0);
+            final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+        }
+    }
+
+    @Nested
     class 평점_기준_내림차순으로_리뷰_목록_조회 {
 
         @Test

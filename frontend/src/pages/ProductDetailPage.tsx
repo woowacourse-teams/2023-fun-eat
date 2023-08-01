@@ -103,7 +103,7 @@ const ReviewItemWrapper = styled.ul`
 
 const ReviewRegisterButtonWrapper = styled.div`
   position: fixed;
-  bottom: 60px;
+  bottom: 0;
   left: 50%;
   width: calc(100% - 40px);
   max-width: 560px;

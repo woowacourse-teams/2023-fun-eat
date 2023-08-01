@@ -34,10 +34,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: `${PATH.PRODUCT_LIST}/:category/:productId`,
-        element: <ProductDetailPage />,
-      },
-      {
         path: PATH.RECIPE,
         element: <RecipePage />,
       },
@@ -58,6 +54,16 @@ const router = createBrowserRouter([
       {
         path: PATH.LOGIN,
         element: <LoginPage />,
+      },
+    ],
+  },
+  {
+    path: '/',
+    element: <App layout="detail" />,
+    children: [
+      {
+        path: `${PATH.PRODUCT_LIST}/:category/:productId`,
+        element: <ProductDetailPage />,
       },
     ],
   },
