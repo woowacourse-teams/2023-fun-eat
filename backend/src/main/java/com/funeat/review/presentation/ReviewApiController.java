@@ -1,5 +1,7 @@
 package com.funeat.review.presentation;
 
+import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.presentation.dto.RankingReviewsResponse;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
@@ -30,23 +32,26 @@ public class ReviewApiController implements ReviewController {
 
     @PostMapping(value = "/api/products/{productId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> writeReview(@PathVariable Long productId, @RequestPart MultipartFile image,
-                                            @RequestPart ReviewCreateRequest reviewRequest) {
-        reviewService.create(productId, image, reviewRequest);
+    public ResponseEntity<Void> writeReview(@PathVariable final Long productId,
+                                            @AuthenticationPrincipal final LoginRequest loginInfo,
+                                            @RequestPart(required = false) final MultipartFile image,
+                                            @RequestPart final ReviewCreateRequest reviewRequest) {
+        reviewService.create(productId, loginInfo.getId(), image, reviewRequest);
 
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
     }
 
     @PatchMapping("/api/products/{productId}/reviews/{reviewId}")
     public ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId,
+                                                 @AuthenticationPrincipal LoginRequest loginInfo,
                                                  @RequestBody ReviewFavoriteRequest request) {
-        reviewService.likeReview(reviewId, request);
+        reviewService.likeReview(reviewId, loginInfo.getId(), request);
 
         return ResponseEntity.noContent().build();
 
     }
 
-    @GetMapping(value = "/api/products/{productId}/reviews")
+    @GetMapping("/api/products/{productId}/reviews")
     public ResponseEntity<SortingReviewsResponse> getSortingReviews(@PathVariable Long productId,
                                                                     @PageableDefault Pageable pageable) {
         final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable);

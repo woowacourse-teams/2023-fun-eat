@@ -29,10 +29,6 @@ public class ReviewFavorite {
     protected ReviewFavorite() {
     }
 
-    public ReviewFavorite(final Boolean favorite) {
-        this.checked = favorite;
-    }
-
     public ReviewFavorite(final Member member, final Review review) {
         this.member = member;
         this.review = review;

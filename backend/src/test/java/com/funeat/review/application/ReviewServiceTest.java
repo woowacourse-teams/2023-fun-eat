@@ -82,10 +82,10 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var request = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
+        final var request = new ReviewCreateRequest(4L, tagIds, "review", true);
 
         // when
-        reviewService.create(product.getId(), image, request);
+        reviewService.create(product.getId(), member.getId(), image, request);
         final var result = reviewRepository.findAll();
 
         // then
@@ -108,14 +108,14 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
+        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
 
-        reviewService.create(product.getId(), image, reviewCreaterequest);
+        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
         final var savedReview = reviewRepository.findAll().get(0);
 
         // when
-        final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
-        reviewService.likeReview(savedReview.getId(), favoriteRequest);
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
         final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
         final var reviewResult = reviewRepository.findAll().get(0);
 
@@ -138,17 +138,17 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
+        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
 
-        reviewService.create(product.getId(), image, reviewCreaterequest);
+        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
         final var savedReview = reviewRepository.findAll().get(0);
 
-        final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
-        reviewService.likeReview(savedReview.getId(), favoriteRequest);
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
 
         // when
-        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false, member.getId());
-        reviewService.likeReview(savedReview.getId(), cancelFavoriteRequest);
+        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false);
+        reviewService.likeReview(savedReview.getId(), member.getId(), cancelFavoriteRequest);
 
         final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
         final var reviewResult = reviewRepository.findAll().get(0);
