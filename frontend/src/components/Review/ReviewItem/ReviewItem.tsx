@@ -58,7 +58,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
         onClick={handleToggleFavorite}
         aria-label={`좋아요 ${favoriteCount}개`}
       >
-        <SvgIcon variant={favorite ? 'favoriteFilled' : 'favorite'} color={favorite ? 'red' : theme.colors.gray4} />
+        <SvgIcon variant={isFavorite ? 'favoriteFilled' : 'favorite'} color={isFavorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
           {favoriteCount}
         </Text>
