@@ -47,6 +47,12 @@ type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
+  white-space: nowrap;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryMenuStyleProps>`
