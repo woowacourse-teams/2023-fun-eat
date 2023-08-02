@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { loginApi } from '@/apis';
-//import { useMemberActionContext } from '@/hooks/context';
-//import type { Member } from '@/types/member';
+import { loginApi, memberApi } from '@/apis';
+import { useMemberActionContext } from '@/hooks/context';
+import type { Member } from '@/types/member';
 
 const AuthPage = () => {
   const { authProvider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  //const { handleNewMember } = useMemberActionContext();
+  const { handleNewMember } = useMemberActionContext();
 
-  const [, setLocation] = useState('');
+  const [location, setLocation] = useState('');
 
   const getSessionId = async () => {
     const response = await loginApi.get({
@@ -35,13 +35,13 @@ const AuthPage = () => {
     setLocation(location);
   };
 
-  //const getMember = async () => {
-  //  const response = await memberApi.get({ credentials: true });
-  //  const member: Member = await response.json();
+  const getMember = async () => {
+    const response = await memberApi.get({ credentials: true });
+    const member: Member = await response.json();
 
-  //  handleNewMember(member);
-  //  navigate(location, { replace: true });
-  //};
+    handleNewMember(member);
+    navigate(location, { replace: true });
+  };
 
   useEffect(() => {
     if (!code) {
@@ -51,13 +51,13 @@ const AuthPage = () => {
     getSessionId();
   }, []);
 
-  //useEffect(() => {
-  //  if (location === '') {
-  //    return;
-  //  }
+  useEffect(() => {
+    if (location === '') {
+      return;
+    }
 
-  //  getMember();
-  //}, [location]);
+    getMember();
+  }, [location]);
 
   return <></>;
 };
