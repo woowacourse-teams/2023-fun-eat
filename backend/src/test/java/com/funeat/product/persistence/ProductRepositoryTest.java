@@ -216,7 +216,7 @@ class ProductRepositoryTest {
         );
 
         // when
-        final var actual = productRepository.findAllProductsAndReviewCountByAverageRatingGreaterThan3();
+        final var actual = productRepository.findAllByAverageRatingGreaterThan3();
 
         // then
         final var expected = List.of(new ProductReviewCountDto(product1, 4L), new ProductReviewCountDto(product3, 1L));

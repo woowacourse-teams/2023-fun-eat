@@ -72,7 +72,7 @@ public class ProductService {
     }
 
     public RankingProductsResponse getTop3Products() {
-        final List<ProductReviewCountDto> productsAndReviewCounts = productRepository.findAllProductsAndReviewCountByAverageRatingGreaterThan3();
+        final List<ProductReviewCountDto> productsAndReviewCounts = productRepository.findAllByAverageRatingGreaterThan3();
         final Comparator<ProductReviewCountDto> rankingScoreComparator = Comparator.comparing(
                 (ProductReviewCountDto it) -> it.getProduct().calculateRankingScore(it.getReviewCount())
         ).reversed();

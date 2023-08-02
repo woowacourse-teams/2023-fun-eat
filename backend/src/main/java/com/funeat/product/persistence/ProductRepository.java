@@ -40,5 +40,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "LEFT JOIN Review r ON r.product.id = p.id "
             + "WHERE p.averageRating > 3.0 "
             + "GROUP BY p.id")
-    List<ProductReviewCountDto> findAllProductsAndReviewCountByAverageRatingGreaterThan3();
+    List<ProductReviewCountDto> findAllByAverageRatingGreaterThan3();
 }
