@@ -54,6 +54,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .exposedHeaders("Location", "Set-Cookie");
+                .exposedHeaders("Location", "Set-Cookie")
+                .allowCredentials(true);
     }
 }
