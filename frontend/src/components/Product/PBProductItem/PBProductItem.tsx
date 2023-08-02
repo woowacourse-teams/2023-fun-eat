@@ -1,6 +1,7 @@
 import { Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import PBPreviewImage from '@/assets/samgakgimbab.svg';
 import { SvgIcon } from '@/components/Common';
 import type { PBProduct } from '@/types/product';
 
@@ -13,7 +14,11 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
 
   return (
     <PBProductItemContainer>
-      <PBProductImage src={image} alt={name} width={110} height={110} />
+      {image ? (
+        <PBProductImage src={image} alt={name} width={110} height={110} />
+      ) : (
+        <PBPreviewImage width={110} height={110} />
+      )}
       <PBProductInfoWrapper>
         <PBProductName weight="bold">{name}</PBProductName>
         <PBProductReviewWrapper>
