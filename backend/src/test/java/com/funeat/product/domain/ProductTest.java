@@ -24,4 +24,17 @@ class ProductTest {
         product.updateAverageRating(reviewRating2, reviewCount2);
         assertThat(product.getAverageRating()).isEqualTo(3.0);
     }
+
+    @Test
+    void 평균_평점과_리뷰_수로_해당_상품의_랭킹_점수를_구할_수_있다() {
+        // given
+        final var product = new Product("testName", 1000L, "testImage", "testContent", 4.0, null);
+        final var reviewCount = 9L;
+
+        // when
+        final var rankingScore = product.calculateRankingScore(reviewCount);
+
+        // then
+        assertThat(rankingScore).isEqualTo(3.5);
+    }
 }
