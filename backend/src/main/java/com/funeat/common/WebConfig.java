@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authHandlerInterceptor)
                 .addPathPatterns("/api/products/*/reviews/*");
         registry.addInterceptor(memberHandlerInterceptor)
-                .addPathPatterns("/api/members/*");
+                .addPathPatterns("/api/members");
     }
 
     @Override
