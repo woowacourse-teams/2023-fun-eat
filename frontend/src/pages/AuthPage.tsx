@@ -16,7 +16,11 @@ const AuthPage = () => {
   const [, setLocation] = useState('');
 
   const getSessionId = async () => {
-    const response = await loginApi.get({ params: `/oauth2/code/${authProvider}`, queries: `?code=${code}` });
+    const response = await loginApi.get({
+      params: `/oauth2/code/${authProvider}`,
+      queries: `?code=${code}`,
+      credentials: true,
+    });
 
     if (!response) {
       throw new Error('로그인에 실패했습니다.');
