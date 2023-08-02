@@ -1,9 +1,9 @@
-import { useMutate } from '../useMutate';
+import { useGet } from '../useGet';
 
 import { loginApi } from '@/apis';
 
 const useAuth = (authProvider: string, code: string) => {
-  return useMutate(() => loginApi.post({ params: `/oauth2/code/${authProvider}`, queries: `?code=${code}` }));
+  return useGet(() => loginApi.get({ params: `/oauth2/code/${authProvider}`, queries: `?code=${code}` }));
 };
 
 export default useAuth;

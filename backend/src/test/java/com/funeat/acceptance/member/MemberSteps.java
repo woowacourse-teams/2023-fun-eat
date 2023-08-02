@@ -8,20 +8,22 @@ import io.restassured.response.Response;
 
 public class MemberSteps {
 
-    public static ExtractableResponse<Response> 사용자_정보_수정_요청(final Long memberId, final MemberRequest request) {
+    public static ExtractableResponse<Response> 사용자_정보_수정_요청(final String loginCookie, final MemberRequest request) {
         return given()
+                .cookie("JSESSIONID", loginCookie)
                 .contentType("application/json")
                 .body(request)
                 .when()
-                .put("/api/members/{memberId}", memberId)
+                .put("/api/members")
                 .then()
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 사용자_정보_조회_요청(final Long memberId) {
+    public static ExtractableResponse<Response> 사용자_정보_조회_요청(final String loginCookie) {
         return given()
+                .cookie("JSESSIONID", loginCookie)
                 .when()
-                .get("/api/members/{memberId}", memberId)
+                .get("/api/members")
                 .then()
                 .extract();
     }

@@ -2,6 +2,7 @@ package com.funeat.acceptance.member;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_조회_요청;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -21,10 +22,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     void 사용자_정보를_확인하다() {
         // given
         final var member = new Member("test", "http://www.test.com", "1");
-        final var memberId = 멤버_추가_요청(member);
+        멤버_추가_요청(member);
+        final var loginCookie = 로그인_쿠키를_얻는다();
 
         // when
-        final var response = 사용자_정보_조회_요청(memberId);
+        final var response = 사용자_정보_조회_요청(loginCookie);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
@@ -35,12 +37,13 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     void 사용자_정보를_수정하다() {
         // given
         final var member = new Member("before", "http://www.before.com", "1");
-        final var memberId = 멤버_추가_요청(member);
+        멤버_추가_요청(member);
+        final var loginCookie = 로그인_쿠키를_얻는다();
 
         final var request = new MemberRequest("after", "http://www.after.com");
 
         // when
-        final var response = 사용자_정보_수정_요청(memberId, request);
+        final var response = 사용자_정보_수정_요청(loginCookie, request);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);

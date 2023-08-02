@@ -1,6 +1,6 @@
 package com.funeat.auth.util;
 
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +26,6 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final HttpSession session = Objects.requireNonNull(request).getSession();
         final String id = String.valueOf(session.getAttribute("member"));
 
-        return new LoginRequest(Long.valueOf(id));
+        return new LoginInfo(Long.valueOf(id));
     }
 }

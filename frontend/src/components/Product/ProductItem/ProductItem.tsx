@@ -1,9 +1,9 @@
 import { Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import PreviewImage from '@/assets/characters.svg';
 import { SvgIcon } from '@/components/Common';
 import type { Product } from '@/types/product';
-
 interface ProductItemProps {
   product: Product;
 }
@@ -14,7 +14,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
   return (
     <ProductItemContainer>
-      <img src={image} width={90} height={90} alt={`${name}사진`} />
+      {image ? <img src={image} width={90} height={90} alt={`${name}사진`} /> : <PreviewImage alt="대체 이미지" width={90} height={90} />}
       <ProductInfoWrapper>
         <Text size="lg" weight="bold">
           {name}
