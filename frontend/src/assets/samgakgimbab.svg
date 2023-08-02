@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 98.96 80.26">
+  <title>펀잇의 캐릭터</title>
+<desc>
+상품 미리보기 사진입니다.
+</desc>
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+      }
+
+      .cls-5 {
+        fill: #f9f29e;
+      }
+
+      .cls-6 {
+        fill: #f6cade;
+      }
+
+      .cls-7 {
+        fill: #ee98a2;
+      }
+
+      .cls-8 {
+        fill: #aedef1;
+      }
+
+      .cls-9, .cls-10 {
+        fill: #231815;
+      }
+
+      .cls-10 {
+        stroke: #040101;
+        stroke-width: 2px;
+      }
+
+      .cls-10, .cls-2, .cls-11, .cls-12, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-11, .cls-3 {
+        stroke: #231815;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-linecap: round;
+      }
+
+      .cls-11, .cls-12 {
+        fill: #fff;
+      }
+
+      .cls-12 {
+        stroke: #040000;
+      }
+
+      .cls-3 {
+        stroke-width: 1.2px;
+      }
+
+      .cls-4 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <path class="cls-1" d="m90.35,46.78c7.15,24.53-18.2,29.08-38.83,29.08S.37,74.33,6.58,49.29C11.97,27.56,28.95,1.49,49.58,1.49s34.16,22.6,40.77,45.29Z"/>
+    </clipPath>
+  </defs>
+  <g id="_레이어_1-2" data-name="레이어 1">
+    <path class="cls-5" d="m89.76,43.03s-3.32-.99-1.93-5.77,4-8.49,4-8.49l-.76,7.48,3.66-5.69-.6,7.21,4.83-6.9s-1.22,7.28-2.1,9.2c-.89,1.92-1.83,4.73-4.86,3.7,0,0-11.54,33.26-12.29,35.19-.8,2.06-3.7,1.6-3.06-1.07.64-2.67,13.12-34.88,13.12-34.88Z"/>
+    <path class="cls-10" d="m90.98,46.29c7.15,24.53-18.2,29.08-38.83,29.08S1,73.83,7.22,48.8C12.61,27.06,29.59,1,50.21,1s34.16,22.6,40.77,45.29Z"/>
+    <g class="cls-4">
+      <ellipse class="cls-12" cx="58.64" cy="4.04" rx="10.87" ry="14.75" transform="translate(32.8 56.83) rotate(-67.86)"/>
+    </g>
+    <path class="cls-11" d="m70.22,46.14c3.59,12.32-8.78,15.06-19.14,15.06s-26.03-1.23-22.92-13.8c2.71-10.91,10.61-22.35,20.97-22.35s17.76,9.7,21.09,21.09Z"/>
+    <circle class="cls-9" cx="38.99" cy="44.6" r="1.48"/>
+    <circle class="cls-9" cx="58.68" cy="44.6" r="1.48"/>
+    <path class="cls-2" d="m55.83,47.92s-1.45,1.33-.43,2.59"/>
+    <path class="cls-3" d="m43.68,49.39c-.07,0,5.86,2.7,11.25-.16"/>
+    <ellipse class="cls-6" cx="63.14" cy="47.58" rx="2.98" ry="1.39"/>
+    <ellipse class="cls-6" cx="34.53" cy="47.58" rx="2.98" ry="1.39"/>
+    <path class="cls-8" d="m7.72,48.29s-9.91-.75-7.27-11.28c2.64-10.53,9.74-2.44,9.74-2.44,0,0,4.97,4.98-.29,12.46l10.69,26.39s2.01,3.6,1.42,4.49-2.21,2.57-3.27.35c-1.06-2.21-11.02-29.97-11.02-29.97Z"/>
+    <ellipse class="cls-7" cx="57.52" cy="8.18" rx="1.71" ry="5.53" transform="translate(28.26 58.38) rotate(-67.86)"/>
+    <circle class="cls-9" cx="73.37" cy="56.96" r="1.48"/>
+  </g>
+</svg>

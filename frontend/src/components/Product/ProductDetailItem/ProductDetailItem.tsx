@@ -1,10 +1,10 @@
 import { Text } from '@fun-eat/design-system';
 import styled, { useTheme } from 'styled-components';
 
+import PreviewImage from '@/assets/characters.svg';
 import { SvgIcon } from '@/components/Common';
 import TagList from '@/components/Common/TagList/TagList';
 import type { ProductDetail } from '@/types/product';
-
 interface ProductDetailProps {
   product: ProductDetail;
 }
@@ -15,7 +15,7 @@ const ProductDetailItem = ({ product }: ProductDetailProps) => {
 
   return (
     <ProductDetailContainer>
-      <img src={image} width={300} alt={name} />
+      {image ? <img src={image} width={300} alt={name} /> : <PreviewImage width={300} />}
       <DetailInfoWrapper>
         <DescriptionWrapper>
           <Text weight="bold">가격</Text>
@@ -44,8 +44,8 @@ const ProductDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 30px;
-
-  & > img {
+  g & > img,
+  svg {
     align-self: center;
   }
 `;
