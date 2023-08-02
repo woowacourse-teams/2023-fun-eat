@@ -6,7 +6,7 @@ const useMemberActionContext = () => {
   const memberAction = useContext(MemberActionContext);
 
   if (memberAction === null || memberAction === undefined) {
-    throw new Error('useMemberActionContext must be used in MemberProvider');
+    throw new Error('useMemberActionContext는 MemberProvider 안에서 사용해야 합니다.');
   }
 
   return memberAction;
