@@ -8,7 +8,7 @@ const meta: Meta<typeof PBProductItem> = {
   title: 'product/PBProductItem',
   component: PBProductItem,
   args: {
-    pbProduct: pbProducts[0],
+    pbProduct: pbProducts.products[0],
   },
 };
 
