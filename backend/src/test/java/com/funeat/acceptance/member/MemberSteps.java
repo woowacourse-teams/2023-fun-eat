@@ -17,4 +17,12 @@ public class MemberSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 사용자_정보_조회_요청(final Long memberId) {
+        return given()
+                .when()
+                .get("/api/members/{memberId}", memberId)
+                .then()
+                .extract();
+    }
 }
