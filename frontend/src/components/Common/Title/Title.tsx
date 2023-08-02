@@ -35,7 +35,7 @@ const TitleContainer = styled.div`
   position: relative;
 `;
 
-const SvgIconWrapper = styled.a`
+const SvgIconWrapper = styled.span`
   position: absolute;
   top: 8px;
   left: 0;
