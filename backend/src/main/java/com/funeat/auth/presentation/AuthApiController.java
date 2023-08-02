@@ -35,13 +35,13 @@ public class AuthApiController implements AuthController {
         final Long memberId = signUserDto.getMember().getId();
         request.getSession().setAttribute("member", memberId);
 
-        if (signUserDto.isSignIn()) {
+        if (signUserDto.isSignUp()) {
             return ResponseEntity.ok()
-                    .location(URI.create("/"))
+                    .location(URI.create("/profile"))
                     .build();
         }
         return ResponseEntity.ok()
-                .location(URI.create("/profile"))
+                .location(URI.create("/"))
                 .build();
     }
 
