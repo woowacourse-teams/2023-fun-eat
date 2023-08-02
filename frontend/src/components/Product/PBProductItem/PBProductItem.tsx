@@ -17,7 +17,7 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
       {image ? (
         <PBProductImage src={image} alt={`${name}사진`} width={110} height={110} />
       ) : (
-        <PBPreviewImage alt="대체 이미지" width={110} height={110} />
+        <PBPreviewImage width={110} height={110} />
       )}
       <PBProductInfoWrapper>
         <PBProductName weight="bold">{name}</PBProductName>
