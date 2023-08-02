@@ -7,9 +7,10 @@ import useRouteBack from '@/hooks/useRouteBack';
 
 interface TitleProps {
   headingTitle: string;
+  handleClickTitle: () => void;
 }
 
-const Title = ({ headingTitle }: TitleProps) => {
+const Title = ({ headingTitle, handleClickTitle }: TitleProps) => {
   const routeBack = useRouteBack();
 
   return (
@@ -19,9 +20,11 @@ const Title = ({ headingTitle }: TitleProps) => {
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
       </Button>
-      <Heading as="h2" weight="bold">
-        {headingTitle}
-      </Heading>
+      <Button type="button" variant="transparent" onClick={handleClickTitle}>
+        <Heading as="h2" weight="bold">
+          {headingTitle}
+        </Heading>
+      </Button>
     </TitleContainer>
   );
 };

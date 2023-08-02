@@ -1,37 +1,42 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
+import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useCategory, useCategoryProducts } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
-import { isCategoryVariant } from '@/types/common';
+import type { CategoryVariant } from '@/types/common';
+
+const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
 const ProductListPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
-  const location = useLocation();
-  const path = location.pathname;
-
-  const categoryVariant = path.split('/').pop() ?? '';
-
-  if (!isCategoryVariant(categoryVariant)) {
-    return;
-  }
+  const [categoryVariant, setCategoryVariant] = useState<CategoryVariant>('food');
 
   const { categoryIds } = useCategoryContext();
 
   const { data: menuList } = useCategory(categoryVariant);
   const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant], selectedOption.value);
 
+  const navigate = useNavigate();
+
+  const handleClickTitle = () => {
+    const newCategoryVariant = categoryVariant === 'store' ? 'food' : 'store';
+    setCategoryVariant(newCategoryVariant);
+    navigate(PATH.PRODUCT_LIST + '/' + newCategoryVariant);
+  };
+
   return (
     <>
       <section>
-        <Title headingTitle={categoryVariant === 'food' ? '공통 상품' : 'PB 상품'} />
+        <Title headingTitle={PAGE_TITLE[categoryVariant]} handleClickTitle={handleClickTitle} />
         <Spacing size={30} />
         <CategoryMenu menuList={menuList ?? []} menuVariant={categoryVariant} />
         <SortButtonWrapper>
