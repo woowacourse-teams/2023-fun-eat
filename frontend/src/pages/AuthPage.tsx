@@ -26,7 +26,11 @@ const AuthPage = () => {
       throw new Error('로그인에 실패했습니다.');
     }
 
+    console.log(response);
+
     const location = response.headers.get('Location');
+
+    console.log(location);
 
     if (location === null) {
       throw new Error('Location이 없습니다.');
