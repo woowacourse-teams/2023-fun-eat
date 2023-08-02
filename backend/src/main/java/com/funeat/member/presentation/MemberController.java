@@ -1,5 +1,7 @@
 package com.funeat.member.presentation;
 
+import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,7 +21,7 @@ public interface MemberController {
             description = "사용자 정보 조회 성공."
     )
     @GetMapping
-    ResponseEntity<MemberProfileResponse> getMemberProfile(@PathVariable Long memberId);
+    ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal LoginRequest loginRequest);
 
     @Operation(summary = "사용자 정보 수정", description = "사용자 닉네임과 프로필 사진을 수정한다.")
     @ApiResponse(
@@ -28,5 +29,6 @@ public interface MemberController {
             description = "사용자 정보 수정 성공."
     )
     @PutMapping
-    ResponseEntity<Void> putMemberProfile(@PathVariable Long memberId, @RequestBody MemberRequest request);
+    ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal LoginRequest loginRequest,
+                                          @RequestBody MemberRequest request);
 }
