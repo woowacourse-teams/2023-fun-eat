@@ -32,10 +32,10 @@ public class ReviewApiController implements ReviewController {
 
     @PostMapping(value = "/api/products/{productId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> writeReview(@PathVariable Long productId,
-                                            @AuthenticationPrincipal LoginRequest loginInfo,
-                                            @RequestPart(required = false) MultipartFile image,
-                                            @RequestPart ReviewCreateRequest reviewRequest) {
+    public ResponseEntity<Void> writeReview(@PathVariable final Long productId,
+                                            @AuthenticationPrincipal final LoginRequest loginInfo,
+                                            @RequestPart(required = false) final MultipartFile image,
+                                            @RequestPart final ReviewCreateRequest reviewRequest) {
         reviewService.create(productId, loginInfo.getId(), image, reviewRequest);
 
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
