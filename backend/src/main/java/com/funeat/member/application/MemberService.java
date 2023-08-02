@@ -5,6 +5,7 @@ import static org.springframework.transaction.annotation.Propagation.REQUIRES_NE
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.persistence.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,13 @@ public class MemberService {
         memberRepository.save(member);
 
         return SignUserDto.of(true, member);
+    }
+
+    public MemberProfileResponse getMemberProfile(final Long memberId) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        return MemberProfileResponse.toResponse(findMember);
     }
 
     @Transactional
