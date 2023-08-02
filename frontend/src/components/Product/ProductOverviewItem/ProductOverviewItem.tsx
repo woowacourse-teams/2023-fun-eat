@@ -13,7 +13,7 @@ const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) =>
       <Text size="lg" weight="bold" align="center">
         {rank ?? ''}
       </Text>
-      <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : name} />
+      <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : `${name}사진`} />
       <Text size="lg" weight="bold" align="center">
         {name}
       </Text>

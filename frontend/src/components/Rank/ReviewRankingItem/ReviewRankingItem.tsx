@@ -21,13 +21,13 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
       </ReviewText>
       <Spacing size={4} />
       <FavoriteStarWrapper>
-        <FavoriteIconWrapper>
+        <FavoriteIconWrapper aria-label={`좋아요 ${favoriteCount}개`}>
           <SvgIcon variant="favoriteFilled" color="red" width={11} height={13} />
           <Text size="xs" weight="bold">
             {favoriteCount}
           </Text>
         </FavoriteIconWrapper>
-        <RatingIconWrapper>
+        <RatingIconWrapper aria-label={`${rating.toFixed(1)}점`}>
           <SvgIcon variant="star" color={theme.colors.secondary} width={16} height={16} />
           <Text size="xs" weight="bold">
             {rating.toFixed(1)}

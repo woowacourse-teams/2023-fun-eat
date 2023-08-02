@@ -44,21 +44,20 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </div>
         </ReviewerInfoWrapper>
         {rebuy && (
-          <Badge
-            color={theme.colors.primary}
-            textColor={theme.textColors.default}
-            css={`
-              font-weight: ${theme.fontWeights.bold};
-            `}
-          >
+          <RebuyBadge color={theme.colors.primary} textColor={theme.textColors.default}>
             😝 또 살래요
-          </Badge>
+          </RebuyBadge>
         )}
       </ReviewerWrapper>
       {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
-      <FavoriteButton type="button" variant="transparent" onClick={handleToggleFavorite}>
+      <FavoriteButton
+        type="button"
+        variant="transparent"
+        onClick={handleToggleFavorite}
+        aria-label={`좋아요 ${favoriteCount}개`}
+      >
         <SvgIcon variant={favorite ? 'favoriteFilled' : 'favorite'} color={favorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
           {favoriteCount}
@@ -86,6 +85,10 @@ const ReviewerInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   column-gap: 10px;
+`;
+
+const RebuyBadge = styled(Badge)`
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 const ReviewerImage = styled.img`

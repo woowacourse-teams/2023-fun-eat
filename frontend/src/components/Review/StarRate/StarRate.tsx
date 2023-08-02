@@ -26,6 +26,7 @@ const StarRate = () => {
             onClick={() => handleRating(star)}
             onMouseEnter={() => handleMouseEnter(star)}
             onMouseLeave={handleMouseLeave}
+            aria-label={`별점 ${star}점`}
           >
             <SvgIconWrapper
               variant="star"

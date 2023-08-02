@@ -13,13 +13,13 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
 
   return (
     <PBProductItemContainer>
-      <PBProductImage src={image} alt={name} width={110} height={110} />
+      <PBProductImage src={image} alt={`${name}사진`} width={110} height={110} />
       <PBProductInfoWrapper>
         <PBProductName weight="bold">{name}</PBProductName>
         <PBProductReviewWrapper>
           <RatingWrapper>
             <SvgIcon variant="star" color={theme.colors.secondary} width={18} height={18} />
-            <Text as="span" size="sm" weight="bold" color={theme.textColors.info}>
+            <Text as="span" size="sm" weight="bold" color={theme.textColors.info} aria-label={`${averageRating}점`}>
               {averageRating}
             </Text>
           </RatingWrapper>
