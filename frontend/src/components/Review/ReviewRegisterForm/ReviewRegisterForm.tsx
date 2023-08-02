@@ -26,7 +26,7 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, uploadReviewImage, deleteReviewImage } = useReviewImageUploader();
+  const { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile } = useReviewImageUploader();
   const { rating, handleRating } = useStarRating();
   const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, handleReviewInput } = useReviewTextarea();
@@ -86,7 +86,11 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
     const formData = new FormData();
 
-    formData.append('image', reviewImage ?? null);
+    if (reviewImageFile) {
+      formData.append('image', reviewImageFile, reviewImageFile.name);
+    }
+
+    // formData.append('image', reviewImageFile);
 
     // JSON 리뷰 데이터에 이러한 속성들을 추가
     const reviewRequest = {
@@ -109,7 +113,6 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
     const response = await fetch(url, {
       method: 'POST',
-      // headers: headers,
       body: formData,
       credentials: 'include',
     });

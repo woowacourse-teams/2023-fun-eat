@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 const useReviewImageUploader = () => {
   const [reviewImage, setReviewImage] = useState('');
+  const [reviewImageFile, setReviewImageFile] = useState<File | null>(null);
 
   const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (!event.target.files) {
@@ -11,12 +12,19 @@ const useReviewImageUploader = () => {
     setReviewImage(URL.createObjectURL(event.target.files[0]));
   };
 
+  const uploadImage: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (!event.target.files) {
+      return;
+    }
+    setReviewImageFile(event.target.files[0]);
+  };
+
   const deleteReviewImage = () => {
     URL.revokeObjectURL(reviewImage);
     setReviewImage('');
   };
 
-  return { reviewImage, uploadReviewImage, deleteReviewImage };
+  return { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile };
 };
 
 export default useReviewImageUploader;
