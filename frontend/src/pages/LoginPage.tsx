@@ -18,7 +18,7 @@ const LoginPage = () => {
   const member = useMemberValueContext();
 
   if (member !== null) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return (

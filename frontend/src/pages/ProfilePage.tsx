@@ -8,7 +8,7 @@ const ProfilePage = () => {
   const member = useMemberValueContext();
 
   if (member === null) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return (

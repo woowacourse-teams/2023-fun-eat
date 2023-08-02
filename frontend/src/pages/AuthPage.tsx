@@ -45,7 +45,7 @@ const AuthPage = () => {
       const member = await response.json();
 
       handleMember(member);
-      navigate(locationRef.current);
+      navigate(locationRef.current, { replace: true });
     };
 
     getMember();
