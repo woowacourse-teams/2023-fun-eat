@@ -25,7 +25,7 @@ const ProductDetailItem = ({ product }: ProductDetailProps) => {
           <Text weight="bold">상품 설명</Text>
           <Text>{content}</Text>
         </DescriptionWrapper>
-        <DescriptionWrapper>
+        <DescriptionWrapper aria-label={`평균 평점 ${averageRating}점`}>
           <Text weight="bold">평균 평점</Text>
           <RatingIconWrapper>
             <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
