@@ -1,6 +1,6 @@
 package com.funeat.review.presentation;
 
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.presentation.dto.RankingReviewsResponse;
@@ -33,7 +33,7 @@ public class ReviewApiController implements ReviewController {
     @PostMapping(value = "/api/products/{productId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> writeReview(@PathVariable final Long productId,
-                                            @AuthenticationPrincipal final LoginRequest loginInfo,
+                                            @AuthenticationPrincipal final LoginInfo loginInfo,
                                             @RequestPart(required = false) final MultipartFile image,
                                             @RequestPart final ReviewCreateRequest reviewRequest) {
         reviewService.create(productId, loginInfo.getId(), image, reviewRequest);
@@ -43,7 +43,7 @@ public class ReviewApiController implements ReviewController {
 
     @PatchMapping("/api/products/{productId}/reviews/{reviewId}")
     public ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId,
-                                                 @AuthenticationPrincipal LoginRequest loginInfo,
+                                                 @AuthenticationPrincipal LoginInfo loginInfo,
                                                  @RequestBody ReviewFavoriteRequest request) {
         reviewService.likeReview(reviewId, loginInfo.getId(), request);
 

@@ -1,7 +1,7 @@
 package com.funeat.auth.presentation;
 
 import com.funeat.auth.application.AuthService;
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import java.net.URI;
@@ -47,7 +47,7 @@ public class AuthApiController implements AuthController {
     }
 
     @GetMapping("/api/logout")
-    public ResponseEntity<Void> logout(@AuthenticationPrincipal final LoginRequest loginRequest,
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal final LoginInfo loginInfo,
                                        final HttpServletRequest request) {
         request.getSession().removeAttribute("member");
 
