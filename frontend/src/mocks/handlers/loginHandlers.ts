@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 export const loginHandlers = [
-  rest.post('/api/login/oauth2/code/:provider', (req, res, ctx) => {
+  rest.get('/api/login/oauth2/code/:provider', (req, res, ctx) => {
     const code = req.url.searchParams.get('code');
 
     if (code === 'abc') {
