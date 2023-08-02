@@ -1,7 +1,7 @@
 package com.funeat.auth.presentation;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,9 +39,9 @@ public class AuthApiControllerTest {
             when(authService.loginWithKakao(code)).thenReturn(signUserDto);
 
             // then
-            mockMvc.perform(post("/api/login/oauth2/code/kakao")
+            mockMvc.perform(get("/api/login/oauth2/code/kakao")
                             .param("code", code))
-                    .andExpect(status().isFound())
+                    .andExpect(status().isOk())
                     .andExpect(redirectedUrl("/"));
         }
 
@@ -56,9 +56,9 @@ public class AuthApiControllerTest {
             when(authService.loginWithKakao(code)).thenReturn(signUserDto);
 
             // then
-            mockMvc.perform(post("/api/login/oauth2/code/kakao")
+            mockMvc.perform(get("/api/login/oauth2/code/kakao")
                             .param("code", code))
-                    .andExpect(status().isFound())
+                    .andExpect(status().isOk())
                     .andExpect(redirectedUrl("/profile"));
         }
     }

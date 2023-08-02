@@ -9,7 +9,7 @@ public class LoginSteps {
         return RestAssured.given()
                 .queryParam("code", "test")
                 .when()
-                .post("/api/login/oauth2/code/kakao")
+                .get("/api/login/oauth2/code/kakao")
                 .then()
                 .extract()
                 .response()
