@@ -128,13 +128,13 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
     const url = `https://funeat.site/api/products/${product.id}/reviews`;
 
-    const headers = {
-      'Content-Type': 'multipart/form-data',
-    };
+    // const headers = {
+    //   'Content-Type': 'multipart/form-data',
+    // };
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: headers,
+      // headers: headers,
       body: formData,
       credentials: 'include',
     });
