@@ -1,11 +1,13 @@
 package com.funeat.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.persistence.MemberRepository;
 import org.junit.jupiter.api.Assertions;
@@ -70,6 +72,35 @@ class MemberServiceTest {
                 Assertions.assertTrue(actual.isSignIn());
                 assertThat(expected).doesNotContain(actual.getMember());
             });
+        }
+    }
+
+    @Nested
+    class getMemberProfile_테스트 {
+
+        @Test
+        void 사용자_정보를_확인하다() {
+            // given
+            final var member = new Member("test", "http://www.test.com", "1");
+            final var memberId = memberRepository.save(member).getId();
+            final var expected = MemberProfileResponse.toResponse(member);
+
+            // when
+            final var actual = memberService.getMemberProfile(memberId);
+
+            // then
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        }
+
+        @Test
+        void 존재하지_않는_사용자_정보를_조회하면_예외가_발생한다() {
+            // given
+            final var member = new Member("test", "http://www.test.com", "1");
+            final var wrongMemberId = memberRepository.save(member).getId() + 1L;
+
+            // when, then
+            assertThatThrownBy(() -> memberService.getMemberProfile(wrongMemberId))
+                    .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
