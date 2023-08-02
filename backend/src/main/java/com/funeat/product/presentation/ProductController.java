@@ -2,6 +2,7 @@ package com.funeat.product.presentation;
 
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryResponse;
+import com.funeat.product.dto.RankingProductsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,4 +32,12 @@ public interface ProductController {
     )
     @GetMapping
     ResponseEntity<ProductResponse> getProductDetail(@PathVariable final Long productId);
+
+    @Operation(summary = "전체 상품 랭킹 조회", description = "전체 상품들 중에서 랭킹 TOP3를 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "전체 상품 랭킹 조회 성공."
+    )
+    @GetMapping
+    ResponseEntity<RankingProductsResponse> getRankingProducts();
 }

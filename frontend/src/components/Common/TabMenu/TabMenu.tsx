@@ -1,4 +1,4 @@
-import { Button, useTheme } from '@fun-eat/design-system';
+import { Button } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -8,7 +8,6 @@ interface TabMenuProps {
 
 const TabMenu = ({ tabMenus }: TabMenuProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
-  const theme = useTheme();
 
   const selectTabMenu = (selectedIndex: number) => {
     setSelectedTab(selectedIndex);
@@ -19,12 +18,7 @@ const TabMenu = ({ tabMenus }: TabMenuProps) => {
       {tabMenus.map((menu, index) => {
         const isSelected = selectedTab === index;
         return (
-          <TabMenuItem
-            key={menu}
-            css={`
-              border-bottom: 2px solid ${isSelected ? theme.borderColors.strong : theme.borderColors.disabled};
-            `}
-          >
+          <TabMenuItem key={menu} isSelected={isSelected}>
             <TabMenuButton
               type="button"
               customWidth="100%"
@@ -49,10 +43,12 @@ const TabMenuContainer = styled.ul`
   display: flex;
 `;
 
-const TabMenuItem = styled.li`
+const TabMenuItem = styled.li<{ isSelected: boolean }>`
   flex-grow: 1;
   width: 50%;
   height: 45px;
+  border-bottom: 2px solid
+    ${({ isSelected, theme }) => (isSelected ? theme.borderColors.strong : theme.borderColors.disabled)};
 `;
 
 const TabMenuButton = styled(Button)`

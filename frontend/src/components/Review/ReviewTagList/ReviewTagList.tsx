@@ -54,7 +54,13 @@ const ReviewTagList = ({ selectedTags, toggleTagSelection }: ReviewTagListProps)
       </TagListWrapper>
       <Spacing size={26} />
       {canShowMore && (
-        <Button type="button" customHeight="fit-content" variant="transparent" onClick={showMoreTags}>
+        <Button
+          type="button"
+          customHeight="fit-content"
+          variant="transparent"
+          onClick={showMoreTags}
+          aria-label="태그 더보기"
+        >
           <SvgWrapper>
             <SvgIcon variant="arrow" width={15} />
           </SvgWrapper>
@@ -109,6 +115,6 @@ const TagTitle = styled(Heading)`
   text-align: center;
 `;
 
-const SvgWrapper = styled.div`
+const SvgWrapper = styled.span`
   transform: rotate(270deg);
 `;

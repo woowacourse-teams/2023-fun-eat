@@ -1,55 +1,39 @@
 package com.funeat.auth.presentation;
 
-import com.funeat.auth.application.AuthService;
-import com.funeat.auth.dto.LoginRequest;
-import com.funeat.auth.dto.SignUserDto;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
-import java.net.URI;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class AuthController {
+@Tag(name = "06.Login", description = "로그인 관련 API 입니다.")
+public interface AuthController {
 
-    private final AuthService authService;
+    @Operation(summary = "카카오 로그인", description = "카카오 로그인을 한다")
+    @ApiResponse(
+            responseCode = "302",
+            description = "로그인이 성공하여 리다이렉트함"
+    )
+    @GetMapping
+    ResponseEntity<Void> kakaoLogin();
 
-    public AuthController(final AuthService authService) {
-        this.authService = authService;
-    }
+    @Operation(summary = "유저 인증", description = "유저 인증을 한다")
+    @ApiResponse(
+            responseCode = "302",
+            description = "기존 회원이면 홈으로 이동, 신규 회원이면 마이페이지로 이동."
+    )
+    @GetMapping
+    ResponseEntity<Void> loginAuthorizeUser(@RequestParam("code") String code, HttpServletRequest request);
 
-    @GetMapping("/api/auth/kakao")
-    public ResponseEntity<Void> kakaoLogin() {
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(authService.getLoginRedirectUri()))
-                .build();
-    }
-
-    @GetMapping("/api/login/oauth2/code/kakao")
-    public ResponseEntity<Void> loginAuthorizeUser(@RequestParam("code") final String code,
-                                                   final HttpServletRequest request) {
-        final SignUserDto signUserDto = authService.loginWithKakao(code);
-        final Long memberId = signUserDto.getMember().getId();
-        request.getSession().setAttribute("member", memberId);
-
-        if (signUserDto.isSignIn()) {
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .location(URI.create("/"))
-                    .build();
-        }
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create("/profile"))
-                .build();
-    }
-
-    @GetMapping("/api/logout")
-    public ResponseEntity<Void> logout(@AuthenticationPrincipal final LoginRequest loginRequest,
-                                       final HttpServletRequest request) {
-        request.getSession().removeAttribute("member");
-
-        return ResponseEntity.ok().build();
-    }
+    @Operation(summary = "로그아웃", description = "로그아웃을 한다")
+    @ApiResponse(
+            responseCode = "200",
+            description = "로그아웃 성공."
+    )
+    @GetMapping
+    ResponseEntity<Void> logout(@AuthenticationPrincipal LoginInfo loginInfo, HttpServletRequest request);
 }

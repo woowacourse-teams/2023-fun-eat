@@ -2,10 +2,12 @@ package com.funeat.acceptance.product;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.product.ProductSteps.CU;
 import static com.funeat.acceptance.product.ProductSteps.간편식사;
 import static com.funeat.acceptance.product.ProductSteps.공통_상품_카테고리_목록_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.과자류;
+import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.즉석조리;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
@@ -21,6 +23,7 @@ import com.funeat.product.dto.CategoryResponse;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryPageDto;
+import com.funeat.product.dto.RankingProductDto;
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.tag.domain.Tag;
@@ -31,6 +34,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -379,14 +383,15 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
 
         final ReviewCreateRequest request1 = new ReviewCreateRequest(4L,
-                List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true, memberId);
+                List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true);
         final ReviewCreateRequest request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()),
-                "request2", true, memberId);
-        final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true,
-                memberId);
-        리뷰_추가_요청(productId, image, request1);
-        리뷰_추가_요청(productId, image, request2);
-        리뷰_추가_요청(productId, image, request3);
+                "request2", true);
+        final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true);
+
+        final var loginCookie = 로그인_쿠키를_얻는다();
+        리뷰_추가_요청(productId, image, request1, loginCookie);
+        리뷰_추가_요청(productId, image, request2, loginCookie);
+        리뷰_추가_요청(productId, image, request3, loginCookie);
 
         // when
         final var response = 상품_상세_조회_요청(productId);
@@ -410,6 +415,38 @@ class ProductAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
         공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
+    }
+
+    @Test
+    void 전체_상품들_중에서_랭킹_TOP3를_조회할_수_있다() {
+        // given
+        카테고리_추가_요청(간편식사);
+        final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 3.25, 간편식사);
+        final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 4.0, 간편식사);
+        final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 3.33, 간편식사);
+        final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 0.0, 간편식사);
+        복수_상품_추가_요청(List.of(product1, product2, product3, product4));
+
+        final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
+        final var review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+        final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+        final var review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
+        final var review1_4 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 최고!!", true);
+        final var review2_1 = new Review(member, product2, "review.png", 4L, "이 삼각김밥은 그럭저럭", false);
+        final var review2_2 = new Review(member, product2, "review.png", 4L, "이 삼각김밥은 굿", false);
+        final var review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+        final var review3_2 = new Review(member, product3, "review.png", 3L, "이 삼각김밥은 흠", false);
+        final var review3_3 = new Review(member, product3, "review.png", 5L, "이 삼각김밥은 굿굿", false);
+        final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
+                review3_1, review3_2, review3_3);
+        복수_리뷰_추가_요청(reviews);
+
+        // when
+        final var response = 상품_랭킹_조회_요청();
+
+        // then
+        STATUS_CODE를_검증한다(response, 정상_처리);
+        상품_랭킹_조회_결과를_검증한다(response, List.of(product2, product3, product1));
     }
 
     private Long 카테고리_추가_요청(final Category category) {
@@ -484,6 +521,17 @@ class ProductAcceptanceTest extends AcceptanceTest {
         });
         assertThat(actualResponses).usingRecursiveComparison()
                 .ignoringFields("id")
+                .isEqualTo(expected);
+    }
+
+    private void 상품_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
+        final var expected = products.stream()
+                .map(RankingProductDto::toDto)
+                .collect(Collectors.toList());
+        final var actual = response.jsonPath()
+                .getList("products", RankingProductDto.class);
+
+        assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
 }

@@ -30,7 +30,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuList={foodCategory ?? []} menuVariant="food" />
         <Spacing size={12} />
-        <ProductList category="food" productList={productListResponse?.products ?? []} />
+        <ProductList category="food" productList={productListResponse?.products.slice(0, 2) ?? []} />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteLink>
@@ -43,7 +43,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuList={storeCategory ?? []} menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList productList={pbPRoductListResponse?.products ?? []} />
+        <PBProductList productList={pbPRoductListResponse?.products.slice(0, 3) ?? []} />
       </section>
       <Spacing size={36} />
       <section>

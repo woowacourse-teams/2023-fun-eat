@@ -15,9 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(AuthApiController.class)
 @SuppressWarnings("NonAsciiCharacters")
-public class AuthControllerTest {
+public class AuthApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,7 +41,7 @@ public class AuthControllerTest {
             // then
             mockMvc.perform(get("/api/login/oauth2/code/kakao")
                             .param("code", code))
-                    .andExpect(status().isFound())
+                    .andExpect(status().isOk())
                     .andExpect(redirectedUrl("/"));
         }
 
@@ -58,7 +58,7 @@ public class AuthControllerTest {
             // then
             mockMvc.perform(get("/api/login/oauth2/code/kakao")
                             .param("code", code))
-                    .andExpect(status().isFound())
+                    .andExpect(status().isOk())
                     .andExpect(redirectedUrl("/profile"));
         }
     }

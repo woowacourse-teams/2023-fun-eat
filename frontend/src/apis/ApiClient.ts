@@ -3,6 +3,7 @@ import { fetchApi } from './fetch';
 interface RequestOptions {
   params?: string;
   queries?: string;
+  credentials?: boolean;
 }
 
 export class ApiClient {
@@ -19,18 +20,20 @@ export class ApiClient {
     return 'http://3.36.100.213/api' + this.#path + params + queries;
   }
 
-  get({ params, queries }: RequestOptions) {
+  get({ params, queries, credentials = false }: RequestOptions) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'GET',
       headers: this.#headers,
+      credentials: credentials ? 'include' : 'omit',
     });
   }
 
-  post<B>({ params, queries }: RequestOptions, body?: B) {
+  post<B>({ params, queries, credentials = false }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'POST',
       headers: this.#headers,
       body: body ? JSON.stringify(body) : null,
+      credentials: credentials ? 'include' : 'omit',
     });
   }
 
@@ -42,19 +45,21 @@ export class ApiClient {
     });
   }
 
-  patch<B>({ params, queries }: RequestOptions, body?: B) {
+  patch<B>({ params, queries, credentials = false }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PATCH',
       headers: this.#headers,
       body: body ? JSON.stringify(body) : null,
+      credentials: credentials ? 'include' : 'omit',
     });
   }
 
-  delete<B>({ params, queries }: RequestOptions, body?: B) {
+  delete<B>({ params, queries, credentials = false }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'DELETE',
       headers: this.#headers,
       body: body ? JSON.stringify(body) : null,
+      credentials: credentials ? 'include' : 'omit',
     });
   }
 }

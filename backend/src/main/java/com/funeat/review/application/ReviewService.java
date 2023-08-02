@@ -55,8 +55,9 @@ public class ReviewService {
     }
 
     @Transactional
-    public void create(final Long productId, final MultipartFile image, final ReviewCreateRequest reviewRequest) {
-        final Member findMember = memberRepository.findById(reviewRequest.getMemberId())
+    public void create(final Long productId, final Long memberId, final MultipartFile image,
+                       final ReviewCreateRequest reviewRequest) {
+        final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -86,8 +87,8 @@ public class ReviewService {
     }
 
     @Transactional
-    public void likeReview(final Long reviewId, final ReviewFavoriteRequest request) {
-        final Member findMember = memberRepository.findById(request.getMemberId())
+    public void likeReview(final Long reviewId, final Long memberId, final ReviewFavoriteRequest request) {
+        final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -95,8 +96,8 @@ public class ReviewService {
         final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
                 findReview, request.getFavorite());
 
-        final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
-                findReview).orElse(reviewFavoriteRepository.save(reviewFavorite));
+        final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember, findReview)
+                .orElse(reviewFavoriteRepository.save(reviewFavorite));
 
         findReviewFavorite.updateChecked(request.getFavorite());
     }

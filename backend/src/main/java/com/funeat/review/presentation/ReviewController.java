@@ -1,5 +1,7 @@
 package com.funeat.review.presentation;
 
+import com.funeat.auth.dto.LoginInfo;
+import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.review.presentation.dto.RankingReviewsResponse;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
@@ -27,8 +29,8 @@ public interface ReviewController {
             description = "리뷰 작성 성공."
     )
     @PostMapping
-    ResponseEntity<Void> writeReview(@PathVariable Long productId, @RequestPart MultipartFile image,
-                                     @RequestPart ReviewCreateRequest reviewRequest);
+    ResponseEntity<Void> writeReview(@PathVariable Long productId, @AuthenticationPrincipal LoginInfo loginInfo,
+                                     @RequestPart MultipartFile image, @RequestPart ReviewCreateRequest reviewRequest);
 
     @Operation(summary = "리뷰 좋아요", description = "리뷰에 좋아요 또는 취소를 한다.")
     @ApiResponse(
@@ -36,7 +38,8 @@ public interface ReviewController {
             description = "리뷰 좋아요(취소) 성공."
     )
     @PatchMapping
-    ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId, @RequestBody ReviewFavoriteRequest request);
+    ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId, @AuthenticationPrincipal LoginInfo loginInfo,
+                                          @RequestBody ReviewFavoriteRequest request);
 
     @Operation(summary = "리뷰를 정렬후 조회", description = "리뷰를 정렬후 조회한다.")
     @ApiResponse(
