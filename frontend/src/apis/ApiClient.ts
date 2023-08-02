@@ -17,7 +17,7 @@ export class ApiClient {
   }
 
   getUrl(params = '', queries = '') {
-    return 'https://funeat.site/api' + this.#path + params + queries;
+    return '/api' + this.#path + params + queries;
   }
 
   get({ params, queries, credentials = false }: RequestOptions) {

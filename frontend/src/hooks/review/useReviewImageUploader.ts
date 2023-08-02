@@ -12,11 +12,13 @@ const useReviewImageUploader = () => {
     setReviewImage(URL.createObjectURL(event.target.files[0]));
   };
 
-  const uploadImage: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const uploadImageFile: ChangeEventHandler<HTMLInputElement> = (event) => {
+    console.log(reviewImageFile);
     if (!event.target.files) {
       return;
     }
     setReviewImageFile(event.target.files[0]);
+    console.log(event.target.files[0]);
   };
 
   const deleteReviewImage = () => {
@@ -24,7 +26,7 @@ const useReviewImageUploader = () => {
     setReviewImage('');
   };
 
-  return { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile };
+  return { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile };
 };
 
 export default useReviewImageUploader;
