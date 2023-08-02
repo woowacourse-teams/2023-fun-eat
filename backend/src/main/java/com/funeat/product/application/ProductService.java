@@ -73,12 +73,13 @@ public class ProductService {
 
     public RankingProductsResponse getTop3Products() {
         final List<ProductReviewCountDto> productsAndReviewCounts = productRepository.findAllProductsAndReviewCountByAverageRatingGreaterThan3();
+        final Comparator<ProductReviewCountDto> rankingScoreComparator = Comparator.comparing(
+                (ProductReviewCountDto it) -> it.getProduct().calculateRankingScore(it.getReviewCount())
+        ).reversed();
 
         final List<RankingProductDto> rankingProductDtos = productsAndReviewCounts.stream()
-                .sorted(Comparator.comparing((ProductReviewCountDto it) ->
-                                it.getProduct().calculateRankingScore(it.getReviewCount()))
-                        .reversed()
-                ).limit(3)
+                .sorted(rankingScoreComparator)
+                .limit(3)
                 .map(it -> RankingProductDto.toDto(it.getProduct()))
                 .collect(Collectors.toList());
 
