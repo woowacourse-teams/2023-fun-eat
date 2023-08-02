@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
-import useMemberValueContext from '@/hooks/context/useMemberValueContext';
+import { useMemberValueContext } from '@/hooks/context';
 import useRouteBack from '@/hooks/useRouteBack';
 
 const SLOGAN = '궁금해? 맛있을걸? 먹어봐 🥄';

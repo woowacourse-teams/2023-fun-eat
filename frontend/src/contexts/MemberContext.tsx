@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from 'react';
 import type { Member } from '@/types/member';
 
 interface MemberAction {
-  handleMember: (newMember: Member) => void;
+  handleNewMember: (newMember: Member) => void;
   resetMember: () => void;
 }
 
@@ -19,7 +19,7 @@ const MemberProvider = ({ children }: PropsWithChildren) => {
     localStorage.setItem('funEatMember', JSON.stringify(member));
   }, [member]);
 
-  const handleMember = (newMember: Member) => {
+  const handleNewMember = (newMember: Member) => {
     setMember(newMember);
   };
 
@@ -29,7 +29,7 @@ const MemberProvider = ({ children }: PropsWithChildren) => {
   };
 
   const memberAction = {
-    handleMember,
+    handleNewMember,
     resetMember,
   };
 

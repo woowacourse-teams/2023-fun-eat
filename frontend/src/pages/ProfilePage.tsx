@@ -2,7 +2,7 @@ import { Text } from '@fun-eat/design-system';
 import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import useMemberValueContext from '@/hooks/context/useMemberValueContext';
+import { useMemberValueContext } from '@/hooks/context';
 
 const ProfilePage = () => {
   const member = useMemberValueContext();
