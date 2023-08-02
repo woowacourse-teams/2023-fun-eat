@@ -28,12 +28,12 @@ const useInfiniteProducts = (categoryId: number, sort: string) => {
   useIntersectionObserver<HTMLDivElement>(getNextPage, scrollRef, productListResponse?.page.lastPage);
 
   useEffect(() => {
-    if (!productListResponse) {
-      return;
-    }
-
     if (page === 0) {
       setProducts([]);
+    }
+
+    if (!productListResponse) {
+      return;
     }
 
     setProducts((prev) => [...prev, ...productListResponse.products]);
