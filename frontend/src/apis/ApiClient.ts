@@ -46,10 +46,10 @@ export class ApiClient {
     });
   }
 
-  patch<B>({ params, queries, credentials = false }: RequestOptions, body?: B) {
+  patch<B>({ params, queries, credentials = false }: RequestOptions, headers: HeadersInit, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PATCH',
-      headers: this.#headers,
+      headers: headers,
       body: body ? JSON.stringify(body) : null,
       credentials: credentials ? 'include' : 'omit',
     });
