@@ -99,7 +99,6 @@ public class ReviewService {
         final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember, findReview)
                 .orElse(reviewFavoriteRepository.save(reviewFavorite));
 
-        System.out.println("findReviewFavorite.getChecked() = " + findReviewFavorite.getChecked());
         findReviewFavorite.updateChecked(request.getFavorite());
     }
 
