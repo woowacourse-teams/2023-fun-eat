@@ -122,6 +122,6 @@ const TagTitle = styled(Heading)`
   text-align: center;
 `;
 
-const SvgWrapper = styled.div`
+const SvgWrapper = styled.span`
   transform: rotate(270deg);
 `;
