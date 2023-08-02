@@ -18,7 +18,7 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   return (
     <ReviewRegisterFormContainer>
-      <ReviewHeading>리뷰 작성</ReviewHeading>
+      <ReviewHeading tabIndex={0}>리뷰 작성</ReviewHeading>
       <CloseButton variant="transparent" onClick={close} aria-label="닫기">
         <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
       </CloseButton>
@@ -36,7 +36,9 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTextarea />
         <Spacing size={80} />
-        <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
+        <p tabIndex={0}>
+          <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
+        </p>
         <Spacing size={16} />
         <Button customWidth="100%" customHeight="60px" size="xl" weight="bold">
           등록하기

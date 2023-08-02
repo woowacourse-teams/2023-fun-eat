@@ -11,9 +11,9 @@ const StarRate = () => {
 
   return (
     <StarRateContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         별점을 남겨주세요.
-        <RequiredMark>*</RequiredMark>
+        <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={20} />
       <div>

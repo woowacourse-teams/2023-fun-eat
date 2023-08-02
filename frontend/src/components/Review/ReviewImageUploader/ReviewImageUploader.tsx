@@ -21,11 +21,13 @@ const ReviewImageUploader = () => {
 
   return (
     <ReviewImageUploaderContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         구매한 상품 사진이 있다면 올려주세요.
       </Heading>
       <Spacing size={2} />
-      <Text color={theme.textColors.disabled}>(사진은 1장까지 업로드 할 수 있어요)</Text>
+      <Text color={theme.textColors.disabled} tabIndex={0}>
+        (사진은 1장까지 업로드 할 수 있어요)
+      </Text>
       <Spacing size={20} />
       {reviewImage ? (
         <ReviewImageButtonWrapper>
@@ -42,7 +44,7 @@ const ReviewImageUploader = () => {
           </Button>
         </ReviewImageButtonWrapper>
       ) : (
-        <ImageUploadLabel>
+        <ImageUploadLabel tabIndex={0} aria-label="사진 업로드 버튼">
           +
           <input type="file" accept="image/*" onChange={uploadReviewImage} />
         </ImageUploadLabel>

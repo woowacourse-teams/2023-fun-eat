@@ -15,9 +15,9 @@ const ReviewTextarea = () => {
 
   return (
     <ReviewTextareaContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         리뷰를 남겨주세요.
-        <RequiredMark>*</RequiredMark>
+        <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={20} />
       <Textarea
@@ -29,8 +29,8 @@ const ReviewTextarea = () => {
         onChange={handleReviewInput}
       />
       <Spacing size={16} />
-      <ReviewWritingStatusText color={theme.textColors.info}>
-        작성한 글자 수: {reviewValue.length} / {MAX_LENGTH}
+      <ReviewWritingStatusText color={theme.textColors.info} tabIndex={0}>
+        작성한 글자 수: {reviewValue.length}자 / {MAX_LENGTH}자
       </ReviewWritingStatusText>
     </ReviewTextareaContainer>
   );

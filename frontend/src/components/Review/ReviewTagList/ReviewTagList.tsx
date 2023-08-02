@@ -35,16 +35,16 @@ const ReviewTagList = () => {
 
   return (
     <ReviewTagListContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         태그를 골라주세요. (3개)
-        <RequiredMark>*</RequiredMark>
+        <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={25} />
       <TagListWrapper>
         {tagsData.map(({ tagType, tags }) => {
           return (
             <TagItemWrapper key={tagType}>
-              <TagTitle as="h3" size="md">
+              <TagTitle as="h3" size="md" tabIndex={0}>
                 {TAG_TITLE[tagType]}
               </TagTitle>
               <Spacing size={20} />
@@ -129,5 +129,6 @@ const TagTitle = styled(Heading)`
 `;
 
 const SvgWrapper = styled.span`
+  display: inline-block;
   transform: rotate(270deg);
 `;
