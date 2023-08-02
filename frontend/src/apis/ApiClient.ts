@@ -17,7 +17,7 @@ export class ApiClient {
   }
 
   getUrl(params = '', queries = '') {
-    return '/api' + this.#path + params + queries;
+    return 'https://funeat.site/api' + this.#path + params + queries;
   }
 
   get({ params, queries, credentials = false }: RequestOptions) {
@@ -33,6 +33,15 @@ export class ApiClient {
       method: 'POST',
       headers: this.#headers,
       body: body ? JSON.stringify(body) : null,
+      credentials: credentials ? 'include' : 'omit',
+    });
+  }
+
+  postData({ params, queries, credentials = false }: RequestOptions, body?: FormData) {
+    return fetchApi(this.getUrl(params, queries), {
+      method: 'POST',
+      headers: this.#headers,
+      body: body ? body : null,
       credentials: credentials ? 'include' : 'omit',
     });
   }

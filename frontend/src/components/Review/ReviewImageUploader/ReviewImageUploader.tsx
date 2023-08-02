@@ -1,23 +1,15 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
-const ReviewImageUploader = () => {
-  const [reviewImage, setReviewImage] = useState('');
+interface ReviewImageUploaderProps {
+  reviewImage: string;
+  uploadReviewImage: ChangeEventHandler<HTMLInputElement>;
+  deleteReviewImage: () => void;
+}
+
+const ReviewImageUploader = ({ reviewImage, uploadReviewImage, deleteReviewImage }: ReviewImageUploaderProps) => {
   const theme = useTheme();
-
-  const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (!event.target.files) {
-      return;
-    }
-    setReviewImage(URL.createObjectURL(event.target.files[0]));
-  };
-
-  const deleteReviewImage = () => {
-    URL.revokeObjectURL(reviewImage);
-    setReviewImage('');
-  };
 
   return (
     <ReviewImageUploaderContainer>
