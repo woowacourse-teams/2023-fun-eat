@@ -26,7 +26,8 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile } = useReviewImageUploader();
+  const { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile } =
+    useReviewImageUploader();
   const { rating, handleRating } = useStarRating();
   const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, handleReviewInput } = useReviewTextarea();
@@ -188,6 +189,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           reviewImage={reviewImage}
           uploadReviewImage={uploadReviewImage}
           deleteReviewImage={deleteReviewImage}
+          uploadImageFile={uploadImageFile}
         />
         <Spacing size={60} />
         <StarRate rating={rating} handleRating={handleRating} />
