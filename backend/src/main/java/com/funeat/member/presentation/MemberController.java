@@ -1,6 +1,6 @@
 package com.funeat.member.presentation;
 
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
@@ -21,7 +21,7 @@ public interface MemberController {
             description = "사용자 정보 조회 성공."
     )
     @GetMapping
-    ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal LoginRequest loginRequest);
+    ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal LoginInfo loginInfo);
 
     @Operation(summary = "사용자 정보 수정", description = "사용자 닉네임과 프로필 사진을 수정한다.")
     @ApiResponse(
@@ -29,6 +29,6 @@ public interface MemberController {
             description = "사용자 정보 수정 성공."
     )
     @PutMapping
-    ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal LoginRequest loginRequest,
+    ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal LoginInfo loginInfo,
                                           @RequestBody MemberRequest request);
 }

@@ -1,6 +1,6 @@
 package com.funeat.auth.presentation;
 
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,5 +35,5 @@ public interface AuthController {
             description = "로그아웃 성공."
     )
     @GetMapping
-    ResponseEntity<Void> logout(@AuthenticationPrincipal LoginRequest loginRequest, HttpServletRequest request);
+    ResponseEntity<Void> logout(@AuthenticationPrincipal LoginInfo loginInfo, HttpServletRequest request);
 }

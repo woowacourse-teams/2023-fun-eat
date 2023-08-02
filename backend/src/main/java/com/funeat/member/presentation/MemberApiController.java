@@ -1,6 +1,6 @@
 package com.funeat.member.presentation;
 
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.member.application.MemberService;
 import com.funeat.member.dto.MemberProfileResponse;
@@ -22,8 +22,8 @@ public class MemberApiController implements MemberController {
 
     @GetMapping("/api/members")
     public ResponseEntity<MemberProfileResponse> getMemberProfile(
-            @AuthenticationPrincipal final LoginRequest loginRequest) {
-        final Long memberId = loginRequest.getId();
+            @AuthenticationPrincipal final LoginInfo loginInfo) {
+        final Long memberId = loginInfo.getId();
 
         final MemberProfileResponse response = memberService.getMemberProfile(memberId);
 
@@ -31,9 +31,9 @@ public class MemberApiController implements MemberController {
     }
 
     @PutMapping("/api/members")
-    public ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal final LoginRequest loginRequest,
+    public ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                  @RequestBody final MemberRequest request) {
-        final Long memberId = loginRequest.getId();
+        final Long memberId = loginInfo.getId();
 
         memberService.modify(memberId, request);
 
