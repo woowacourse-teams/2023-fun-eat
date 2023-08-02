@@ -115,7 +115,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
     const formData = new FormData();
 
-    formData.append('image', '');
+    formData.append('image', reviewImage ?? null);
     formData.append(
       'reviewRequest',
       JSON.stringify({
@@ -126,16 +126,17 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       })
     );
 
-    const url = `http://3.36.100.213/api/products/${product.id}/reviews`;
+    const url = `https://funeat.site/api/products/${product.id}/reviews`;
 
-    // const headers = {
-    //   'Content-Type': 'multipart/form-data',
-    // };
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
 
     const response = await fetch(url, {
       method: 'POST',
-      // headers: headers,
+      headers: headers,
       body: formData,
+      credentials: 'include',
     });
 
     if (!response.ok) {
