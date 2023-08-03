@@ -1,5 +1,6 @@
 package com.funeat.review.presentation.dto;
 
+import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
@@ -39,7 +40,7 @@ public class SortingReviewDto {
         this.createdAt = createdAt;
     }
 
-    public static SortingReviewDto toDto(final Review review) {
+    public static SortingReviewDto toDto(final Review review, final Member member) {
         return new SortingReviewDto(
                 review.getId(),
                 review.getMember().getNickname(),
@@ -50,7 +51,7 @@ public class SortingReviewDto {
                 review.getContent(),
                 review.getReBuy(),
                 review.getFavoriteCount(),
-                findReviewFavoriteChecked(review),
+                findReviewFavoriteChecked(review, member),
                 review.getCreatedAt()
         );
     }
@@ -62,11 +63,11 @@ public class SortingReviewDto {
                 .collect(Collectors.toList());
     }
 
-    private static boolean findReviewFavoriteChecked(final Review review) {
+    private static boolean findReviewFavoriteChecked(final Review review, final Member member) {
         return review.getReviewFavorites()
                 .stream()
                 .filter(reviewFavorite -> reviewFavorite.getReview().equals(review))
-                .filter(reviewFavorite -> reviewFavorite.getMember().equals(review.getMember()))
+                .filter(reviewFavorite -> reviewFavorite.getMember().equals(member))
                 .findFirst()
                 .map(ReviewFavorite::getFavorite)
                 .orElse(false);

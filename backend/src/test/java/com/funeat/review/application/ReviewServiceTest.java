@@ -195,11 +195,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("favoriteCount").descending());
             final var expected = Stream.of(review1, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -226,11 +226,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").ascending());
             final var expected = Stream.of(review1, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -257,11 +257,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").descending());
             final var expected = Stream.of(review2, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -288,11 +288,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
             final var expected = Stream.of(review3, review2)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then

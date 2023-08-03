@@ -161,7 +161,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
         }
 
         @Test
@@ -196,7 +196,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
         }
     }
 
@@ -233,7 +233,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
 
         @Test
@@ -268,7 +268,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
     }
 
@@ -305,7 +305,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
     }
 
@@ -342,7 +342,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
 
         @Test
@@ -377,7 +377,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
     }
 
@@ -458,23 +458,21 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                       final List<Review> reviews,
-                                       final SortingReviewsPageDto pageDto) {
+    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
+                                       final SortingReviewsPageDto pageDto, final Member member) {
         페이지를_검증한다(response, pageDto);
-        리뷰_목록을_검증한다(response, reviews);
+        리뷰_목록을_검증한다(response, reviews, member);
     }
 
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response,
-                           final SortingReviewsPageDto expected) {
+    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", SortingReviewsPageDto.class);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
-    private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response,
-                             final List<Review> reviews) {
+    private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
+                             final Member member) {
         final List<SortingReviewDto> expected = reviews.stream()
-                .map(SortingReviewDto::toDto)
+                .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
         final List<SortingReviewDto> actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
         assertThat(actual).usingRecursiveComparison()
@@ -482,8 +480,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(expected);
     }
 
-    private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                   final List<Review> reviews) {
+    private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews) {
         final var expected = reviews.stream()
                 .map(RankingReviewDto::toDto)
                 .collect(Collectors.toList());

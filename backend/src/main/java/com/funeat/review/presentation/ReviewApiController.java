@@ -55,7 +55,7 @@ public class ReviewApiController implements ReviewController {
     public ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal LoginInfo loginInfo,
                                                                     @PathVariable Long productId,
                                                                     @PageableDefault Pageable pageable) {
-        final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable);
+        final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable, loginInfo.getId());
 
         return ResponseEntity.ok(response);
     }
