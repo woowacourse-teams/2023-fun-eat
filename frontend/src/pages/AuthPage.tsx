@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
-import { loginApi, memberApi } from '@/apis';
-import { useMemberActionContext } from '@/hooks/context';
-import type { Member } from '@/types/member';
+import { loginApi } from '@/apis';
+import { useMember } from '@/hooks/auth';
 
 const AuthPage = () => {
   const { authProvider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
-  const navigate = useNavigate();
-
-  const { handleNewMember } = useMemberActionContext();
+  const getMember = useMember();
 
   const [location, setLocation] = useState('');
 
@@ -26,25 +23,13 @@ const AuthPage = () => {
       throw new Error('로그인에 실패했습니다.');
     }
 
-    console.log(response);
-
     const location = response.headers.get('Location');
-
-    console.log(location);
 
     if (location === null) {
       throw new Error('Location이 없습니다.');
     }
 
     setLocation(location);
-  };
-
-  const getMember = async () => {
-    const response = await memberApi.get({ credentials: true });
-    const member: Member = await response.json();
-
-    handleNewMember(member);
-    navigate(location, { replace: true });
   };
 
   useEffect(() => {
@@ -60,7 +45,7 @@ const AuthPage = () => {
       return;
     }
 
-    getMember();
+    getMember(location);
   }, [location]);
 
   return <></>;
