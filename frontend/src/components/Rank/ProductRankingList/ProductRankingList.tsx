@@ -10,9 +10,9 @@ interface ProductRankingListProps {
 const ProductRankingList = ({ productRankings }: ProductRankingListProps) => {
   return (
     <ul>
-      {productRankings.map(({ id, name, image }, idx) => (
+      {productRankings.map(({ id, name, image }, index) => (
         <li key={id}>
-          <ProductOverviewItem rank={idx + 1} name={name} image={image} />
+          <ProductOverviewItem rank={index + 1} name={name} image={image} />
           <Spacing size={16} />
         </li>
       ))}
