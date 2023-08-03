@@ -5,7 +5,7 @@ import mockReviewRanking from '../data/reviewRankingList.json';
 import mockReviews from '../data/reviews.json';
 import mockReviewTags from '../data/reviewTagList.json';
 
-import type { ReviewFavoriteRequestBody, ReviewPostRequestBody } from '@/types/review';
+import type { ReviewFavoriteRequestBody } from '@/types/review';
 
 export const reviewHandlers = [
   rest.get('/api/products/:productId/reviews', (req, res, ctx) => {
@@ -31,17 +31,14 @@ export const reviewHandlers = [
     return res(ctx.status(200), ctx.json(sortedReviews));
   }),
 
-  rest.post<ReviewPostRequestBody>('/api/products/:productId/reviews', (req, res, ctx) => {
+  rest.post('/api/products/:productId/reviews', (req, res, ctx) => {
     const formData = req.body;
-    const {
-      reviewRequest: { rating, content },
-    } = formData;
 
-    if (!rating || !content) {
-      return res(ctx.status(400));
+    if (!formData) {
+      return res(ctx.status(400), ctx.json({ error: 'formData를 제공하지 않았습니다.' }));
     }
 
-    return res(ctx.status(201));
+    return res(ctx.status(200), ctx.json({ message: '리뷰가 작성되었습니다.' }));
   }),
 
   rest.patch<ReviewFavoriteRequestBody>('/api/products/:productId/reviews/:reviewId', (_, res, ctx) => {

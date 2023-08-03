@@ -6,8 +6,13 @@ import useStarRating from '@/hooks/useStarRate';
 
 const starList = Array.from({ length: 5 }, (_, index) => index + 1);
 
-const StarRate = () => {
-  const { rating, hovering, handleRating, handleMouseEnter, handleMouseLeave } = useStarRating();
+interface StarRateProps {
+  rating: number;
+  handleRating: (starIndex: number) => void;
+}
+
+const StarRate = ({ rating, handleRating }: StarRateProps) => {
+  const { hovering, handleMouseEnter, handleMouseLeave } = useStarRating();
 
   return (
     <StarRateContainer>

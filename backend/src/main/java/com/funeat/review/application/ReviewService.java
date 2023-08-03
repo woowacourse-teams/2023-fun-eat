@@ -66,11 +66,11 @@ public class ReviewService {
         if (Objects.isNull(image)) {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
-                            reviewRequest.getReBuy()));
+                            reviewRequest.getRebuy()));
         } else {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
-                            reviewRequest.getContent(), reviewRequest.getReBuy()));
+                            reviewRequest.getContent(), reviewRequest.getRebuy()));
             imageService.upload(image);
         }
 

@@ -75,7 +75,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
         리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReviewId);
-        assertThat(result.getChecked()).isTrue();
+        assertThat(result.getFavorite()).isTrue();
     }
 
     @Test
@@ -101,7 +101,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
         리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReview.getId());
-        assertThat(result.getChecked()).isFalse();
+        assertThat(result.getFavorite()).isFalse();
     }
 
     private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {

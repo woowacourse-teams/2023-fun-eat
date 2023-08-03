@@ -1,17 +1,15 @@
 import { Heading, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
-import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 const MAX_LENGTH = 200;
 
-const ReviewTextarea = () => {
-  const [reviewValue, setReviewValue] = useState('');
-  const theme = useTheme();
+interface ReviewTextareaProps {
+  content: string;
+  onReviewInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
 
-  const handleReviewInput: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-    setReviewValue(event.currentTarget.value);
-  };
+const ReviewTextarea = ({ content, onReviewInput }: ReviewTextareaProps) => {
+  const theme = useTheme();
 
   return (
     <ReviewTextareaContainer>
@@ -25,12 +23,12 @@ const ReviewTextarea = () => {
         resize="vertical"
         placeholder="솔직한 리뷰를 써주세요 😊"
         maxLength={MAX_LENGTH}
-        value={reviewValue}
-        onChange={handleReviewInput}
+        value={content}
+        onChange={onReviewInput}
       />
       <Spacing size={16} />
       <ReviewWritingStatusText color={theme.textColors.info} tabIndex={0}>
-        작성한 글자 수: {reviewValue.length}자 / {MAX_LENGTH}자
+        작성한 글자 수: {content.length}자 / {MAX_LENGTH}자
       </ReviewWritingStatusText>
     </ReviewTextareaContainer>
   );

@@ -1,22 +1,25 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
-const ReviewImageUploader = () => {
-  const [reviewImage, setReviewImage] = useState('');
+interface ReviewImageUploaderProps {
+  reviewImage: string;
+  uploadReviewImage: ChangeEventHandler<HTMLInputElement>;
+  uploadImageFile: ChangeEventHandler<HTMLInputElement>;
+  deleteReviewImage: () => void;
+}
+
+const ReviewImageUploader = ({
+  reviewImage,
+  uploadReviewImage,
+  deleteReviewImage,
+  uploadImageFile,
+}: ReviewImageUploaderProps) => {
   const theme = useTheme();
 
-  const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (!event.target.files) {
-      return;
-    }
-    setReviewImage(URL.createObjectURL(event.target.files[0]));
-  };
-
-  const deleteReviewImage = () => {
-    URL.revokeObjectURL(reviewImage);
-    setReviewImage('');
+  const handle: ChangeEventHandler<HTMLInputElement> = (event) => {
+    uploadReviewImage(event);
+    uploadImageFile(event);
   };
 
   return (
@@ -46,7 +49,7 @@ const ReviewImageUploader = () => {
       ) : (
         <ImageUploadLabel tabIndex={0} aria-label="사진 업로드 버튼">
           +
-          <input type="file" accept="image/*" onChange={uploadReviewImage} />
+          <input type="file" accept="image/*" onChange={handle} />
         </ImageUploadLabel>
       )}
     </ReviewImageUploaderContainer>
