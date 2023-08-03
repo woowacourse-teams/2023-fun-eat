@@ -1,0 +1,19 @@
+{
+  "products": [
+    {
+      "id": 3,
+      "name": "구운감자슬림명란마요",
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg"
+    },
+    {
+      "id": 2,
+      "name": "삼립)보름달피치문",
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg"
+    },
+    {
+      "id": 4,
+      "name": "하얀짜파게티큰사발",
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg"
+    }
+  ]
+}
