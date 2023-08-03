@@ -39,6 +39,7 @@ public class ReviewFavorite {
         final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
         reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.member.getReviewFavorites().add(reviewFavorite);
+        reviewFavorite.favorite = favorite;
         return reviewFavorite;
     }
 
