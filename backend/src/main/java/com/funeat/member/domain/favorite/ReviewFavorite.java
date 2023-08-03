@@ -40,17 +40,20 @@ public class ReviewFavorite {
         reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.member.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.favorite = favorite;
+        reviewFavorite.review.addFavoriteCount();
         return reviewFavorite;
     }
 
     public void updateChecked(final Boolean favorite) {
-        this.favorite = favorite;
-        if (favorite) {
+        if (!this.favorite && favorite) {
             this.review.addFavoriteCount();
+            this.favorite = favorite;
             return;
         }
-        this.review.minusFavoriteCount();
-
+        if (this.favorite && !favorite) {
+            this.review.minusFavoriteCount();
+            this.favorite = favorite;
+        }
     }
 
     public Long getId() {
