@@ -63,7 +63,7 @@ public class SortingReviewDto {
                 .filter(reviewFavorite -> reviewFavorite.getReview().equals(review))
                 .filter(reviewFavorite -> reviewFavorite.getMember().equals(review.getMember()))
                 .findFirst()
-                .map(ReviewFavorite::getChecked)
+                .map(ReviewFavorite::getFavorite)
                 .orElse(false);
     }
 
