@@ -8,7 +8,7 @@ import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useCategory, useCategoryProducts } from '@/hooks/product';
-import { useReviewRanking } from '@/hooks/rank';
+import { useProductRanking, useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
   const { categoryIds } = useCategoryContext();
@@ -19,6 +19,7 @@ const HomePage = () => {
   const { data: productListResponse } = useCategoryProducts(categoryIds.food);
   const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
 
+  const { data: productRankingResponse } = useProductRanking();
   const { data: reviewRankingResponse } = useReviewRanking();
 
   return (
@@ -51,7 +52,7 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ProductRankingList />
+        <ProductRankingList productRankings={productRankingResponse?.products ?? []} />
       </section>
       <Spacing size={36} />
       <section>
