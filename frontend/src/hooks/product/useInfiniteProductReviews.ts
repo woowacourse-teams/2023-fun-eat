@@ -1,16 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 
 import useProductReview from './useProductReview';
+import useProductReviewContext from '../context/useProductReviewContext';
 import useIntersectionObserver from '../useIntersectionObserver';
 
-import type { Review } from '@/types/review';
-
-const useInfiniteProductReviews = (productId: string, sort: string) => {
+const useInfiniteProductReviews = (productId: number, sort: string) => {
   const [page, setPage] = useState(0);
-  const [productReviews, setProductReviews] = useState<Review[]>([]);
+  const { productReviews, addProductReviews } = useProductReviewContext();
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { data: productReviewsResponse } = useProductReview(productId, page, sort);
+  const { data: productReviewsResponse, error } = useProductReview(productId, page, sort);
 
   const getNextPage = () => {
     setPage((page) => page + 1);
@@ -23,10 +22,10 @@ const useInfiniteProductReviews = (productId: string, sort: string) => {
       return;
     }
 
-    setProductReviews((prev) => [...prev, ...productReviewsResponse.reviews]);
+    addProductReviews(productReviewsResponse.reviews);
   }, [productReviewsResponse?.reviews]);
 
-  return { productReviews, scrollRef };
+  return { productReviews, scrollRef, error };
 };
 
 export default useInfiniteProductReviews;

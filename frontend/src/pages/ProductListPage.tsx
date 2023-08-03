@@ -19,8 +19,6 @@ const ProductListPage = () => {
 
   const { category } = useParams();
 
-  console.log(category);
-
   if (!category) {
     return <></>;
   }
@@ -47,7 +45,7 @@ const ProductListPage = () => {
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList scrollRef={scrollRef} category={category} productList={products ?? []} />
+        <ProductList ref={scrollRef} category={category} productList={products ?? []} />
       </section>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
