@@ -19,7 +19,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
-    await request({ request: { favorite: !isFavorite } });
+    await request({ favorite: !isFavorite });
     setIsFavorite((prev) => !prev);
   };
 
