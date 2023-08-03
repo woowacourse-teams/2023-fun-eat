@@ -91,6 +91,10 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         setProductReviews(reviews);
         resetPage();
 
+        if (event.target instanceof HTMLFormElement) {
+          event.target.reset();
+        }
+
         close();
       }
     } catch (error) {
