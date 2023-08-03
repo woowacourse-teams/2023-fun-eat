@@ -7,9 +7,11 @@ import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
+import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
+import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
+import { useProductReviewContext } from '@/hooks/context';
 import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
 import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
 import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
@@ -33,6 +35,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { content, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
+  const { setProductReviews } = useProductReviewContext();
 
   const { request } = useReviewRegisterForm(product.id);
 
@@ -75,6 +78,15 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         throw new Error(`에러 발생 상태코드:${response.status}`);
       } else {
         console.log(response, '리뷰가 성공적으로 등록되었습니다.');
+
+        const reviewResponse = await productApi.get({
+          params: `/${product.id}/reviews`,
+          queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
+          credentials: true,
+        });
+        const reviews = await reviewResponse.json();
+        setProductReviews(reviews);
+
         close();
       }
     } catch (error) {
