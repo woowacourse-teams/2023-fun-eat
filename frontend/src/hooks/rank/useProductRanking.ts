@@ -1,11 +1,7 @@
 import { useGet } from '../useGet';
 
 import { rankApi } from '@/apis';
-import type { ProductRanking } from '@/types/ranking';
-
-interface ProductRankingResponse {
-  products: ProductRanking[];
-}
+import type { ProductRankingResponse } from '@/types/response';
 
 const useProductRanking = () => {
   return useGet<ProductRankingResponse>(() => rankApi.get({ params: '/products' }));
