@@ -33,5 +33,4 @@ export interface ReviewPostRequestBody extends FormData {
 
 export interface ReviewFavoriteRequestBody {
   favorite: boolean;
-  memberId: number;
 }

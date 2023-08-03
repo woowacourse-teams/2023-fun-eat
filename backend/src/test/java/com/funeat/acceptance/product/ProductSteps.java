@@ -48,4 +48,12 @@ public class ProductSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 상품_랭킹_조회_요청() {
+        return given()
+                .when()
+                .get("/api/ranks/products")
+                .then()
+                .extract();
+    }
 }

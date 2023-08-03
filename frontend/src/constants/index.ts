@@ -50,3 +50,5 @@ export const TAG_TITLE = {
   PRICE: '가격/양',
   ETC: '기타',
 } as const;
+
+export const MIN_DISPLAYED_TAGS_LENGTH = 3;

@@ -37,10 +37,19 @@ export class ApiClient {
     });
   }
 
-  patch<B>({ params, queries, credentials = false }: RequestOptions, body?: B) {
+  postData({ params, queries, credentials = false }: RequestOptions, body?: FormData) {
+    return fetchApi(this.getUrl(params, queries), {
+      method: 'POST',
+      headers: this.#headers,
+      body: body ? body : null,
+      credentials: credentials ? 'include' : 'omit',
+    });
+  }
+
+  patch<B>({ params, queries, credentials = false }: RequestOptions, headers: HeadersInit, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PATCH',
-      headers: this.#headers,
+      headers: headers,
       body: body ? JSON.stringify(body) : null,
       credentials: credentials ? 'include' : 'omit',
     });

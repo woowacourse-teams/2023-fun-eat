@@ -75,7 +75,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
         리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReviewId);
-        assertThat(result.getChecked()).isTrue();
+        assertThat(result.getFavorite()).isTrue();
     }
 
     @Test
@@ -101,7 +101,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
         리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReview.getId());
-        assertThat(result.getChecked()).isFalse();
+        assertThat(result.getFavorite()).isFalse();
     }
 
     private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {
@@ -154,13 +154,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review2, review3, review1);
             final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
         }
 
         @Test
@@ -188,13 +189,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var pageDto = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
         }
     }
 
@@ -223,14 +225,15 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             복수_리뷰_추가(reviews);
 
             final var sortingReviews = List.of(review1, review3, review2);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
 
         @Test
@@ -258,13 +261,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
     }
 
@@ -293,14 +297,15 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             복수_리뷰_추가(reviews);
 
             final var sortingReviews = List.of(review3, review2, review1);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "createdAt,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "createdAt,desc", 0);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
     }
 
@@ -330,13 +335,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review2, review3, review1);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
 
         @Test
@@ -364,13 +370,14 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page);
+            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
         }
     }
 
@@ -429,10 +436,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         reviewRepository.saveAll(reviews);
     }
 
-    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final Long productId,
+    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie,
+                                                          final Long productId,
                                                           final String sort,
                                                           final Integer page) {
         return given()
+                .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .when()
@@ -449,23 +458,21 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                       final List<Review> reviews,
-                                       final SortingReviewsPageDto pageDto) {
+    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
+                                       final SortingReviewsPageDto pageDto, final Member member) {
         페이지를_검증한다(response, pageDto);
-        리뷰_목록을_검증한다(response, reviews);
+        리뷰_목록을_검증한다(response, reviews, member);
     }
 
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response,
-                           final SortingReviewsPageDto expected) {
+    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", SortingReviewsPageDto.class);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
-    private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response,
-                             final List<Review> reviews) {
+    private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
+                             final Member member) {
         final List<SortingReviewDto> expected = reviews.stream()
-                .map(SortingReviewDto::toDto)
+                .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
         final List<SortingReviewDto> actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
         assertThat(actual).usingRecursiveComparison()
@@ -473,8 +480,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(expected);
     }
 
-    private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                   final List<Review> reviews) {
+    private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews) {
         final var expected = reviews.stream()
                 .map(RankingReviewDto::toDto)
                 .collect(Collectors.toList());

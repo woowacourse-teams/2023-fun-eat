@@ -8,7 +8,7 @@ import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useCategoryProducts } from '@/hooks/product';
+import { useCategory, useInfiniteProducts } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 import type { CategoryVariant } from '@/types/common';
 
@@ -23,7 +23,8 @@ const ProductListPage = () => {
   const { categoryIds } = useCategoryContext();
 
   const { data: menuList } = useCategory(categoryVariant);
-  const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant], selectedOption.value);
+
+  const { products, scrollRef } = useInfiniteProducts(categoryIds[categoryVariant], selectedOption.value);
 
   const navigate = useNavigate();
 
@@ -42,7 +43,7 @@ const ProductListPage = () => {
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList category={categoryVariant} productList={productListResponse?.products ?? []} />
+        <ProductList scrollRef={scrollRef} category={categoryVariant} productList={products ?? []} />
       </section>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList

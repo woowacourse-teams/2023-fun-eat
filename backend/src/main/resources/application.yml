@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: { DEPLOY_ACTIVE:dev }
+  servlet:
+    multipart:
+      enabled: true
 
 springdoc:
   swagger-ui:

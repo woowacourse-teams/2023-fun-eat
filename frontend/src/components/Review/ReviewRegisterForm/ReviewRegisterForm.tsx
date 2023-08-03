@@ -1,4 +1,5 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -8,7 +9,16 @@ import StarRate from '../StarRate/StarRate';
 
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
+import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
+import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
+import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
+import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
+import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
+
+const MIN_RATING_SCORE = 0;
+const MIN_SELECTED_TAGS_COUNT = 1;
+const MIN_CONTENT_LENGTH = 1;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
@@ -16,10 +26,69 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
+  const { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile } =
+    useReviewImageUploader();
+  const { rating, handleRating } = useStarRating();
+  const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
+  const { content, handleReviewInput } = useReviewTextarea();
+  const [rebuy, setRebuy] = useState(false);
+  const [submitEnabled, setSubmitEnabled] = useState(false);
+
+  const { request } = useReviewRegisterForm(product.id);
+
+  const handleRebuy = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRebuy(event.target.checked);
+  };
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+
+    if (reviewImageFile) {
+      formData.append('image', reviewImageFile, reviewImageFile.name);
+    }
+
+    const reviewRequest = {
+      rating,
+      tagIds: selectedTags,
+      content,
+      rebuy,
+    };
+
+    const jsonString = JSON.stringify(reviewRequest);
+
+    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+
+    formData.append('reviewRequest', jsonBlob);
+
+    const url = `https://funeat.site/api/products/${product.id}/reviews`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(`에러 발생 상태코드:${response.status}`);
+    }
+
+    console.log(response, '리뷰가 성공적으로 등록되었습니다.');
+  };
+
+  // useEffect(() => {
+  //   const isValid =
+  //     rating > MIN_RATING_SCORE &&
+  //     selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
+  //     content.length > MIN_CONTENT_LENGTH;
+  //   setSubmitEnabled(isValid);
+  // }, [rating, selectedTags, content]);
+
   return (
     <ReviewRegisterFormContainer>
       <ReviewHeading>리뷰 작성</ReviewHeading>
-      <CloseButton variant="transparent" onClick={close}>
+      <CloseButton variant="transparent" onClick={close} aria-label="닫기">
         <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
       </CloseButton>
       <Divider />
@@ -27,20 +96,34 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <ProductOverviewItem name={product.name} image={product.image} />
       </ProductOverviewItemWrapper>
       <Divider variant="disabled" css="height:4px;" />
-      <RegisterForm>
-        <ReviewImageUploader />
+      <RegisterForm onSubmit={handleSubmit}>
+        <ReviewImageUploader
+          reviewImage={reviewImage}
+          uploadReviewImage={uploadReviewImage}
+          deleteReviewImage={deleteReviewImage}
+          uploadImageFile={uploadImageFile}
+        />
         <Spacing size={60} />
-        <StarRate />
+        <StarRate rating={rating} handleRating={handleRating} />
         <Spacing size={60} />
-        <ReviewTagList />
+        <ReviewTagList selectedTags={selectedTags} toggleTagSelection={toggleTagSelection} />
         <Spacing size={60} />
-        <ReviewTextarea />
+        <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
-        <Checkbox weight="bold">재구매할 생각이 있으신가요?</Checkbox>
+        <Checkbox weight="bold" onChange={handleRebuy}>
+          재구매할 생각이 있으신가요?
+        </Checkbox>
         <Spacing size={16} />
-        <Button customWidth="100%" customHeight="60px" size="xl" weight="bold">
+        <FormButton
+          type="submit"
+          customWidth="100%"
+          customHeight="60px"
+          size="xl"
+          weight="bold"
+          // disabled={!submitEnabled}
+        >
           등록하기
-        </Button>
+        </FormButton>
       </RegisterForm>
     </ReviewRegisterFormContainer>
   );
@@ -72,4 +155,10 @@ const ProductOverviewItemWrapper = styled.div`
 
 const RegisterForm = styled.form`
   padding: 50px 20px;
+`;
+
+const FormButton = styled(Button)`
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.grey : theme.colors.primary)};
+  color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

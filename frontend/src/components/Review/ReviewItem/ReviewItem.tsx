@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
 import { useReviewFavorite } from '@/hooks/review';
-import type { Review } from '@/types/review';
+import type { Review, ReviewFavoriteRequestBody } from '@/types/review';
 
 interface ReviewItemProps {
   productId: number;
@@ -15,7 +15,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const { id, userName, profileImage, image, rating, tags, content, rebuy, favoriteCount, favorite } = review;
   const [isFavorite, setIsFavorite] = useState(favorite);
 
-  const { request } = useReviewFavorite(productId, id);
+  const { request } = useReviewFavorite<ReviewFavoriteRequestBody>(productId, id);
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
@@ -44,22 +44,21 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </div>
         </ReviewerInfoWrapper>
         {rebuy && (
-          <Badge
-            color={theme.colors.primary}
-            textColor={theme.textColors.default}
-            css={`
-              font-weight: ${theme.fontWeights.bold};
-            `}
-          >
+          <RebuyBadge color={theme.colors.primary} textColor={theme.textColors.default}>
             😝 또 살래요
-          </Badge>
+          </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
+      {image !== null && <ReviewImage src={`/images/${image}`} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
-      <FavoriteButton type="button" variant="transparent" onClick={handleToggleFavorite}>
-        <SvgIcon variant={favorite ? 'favoriteFilled' : 'favorite'} color={favorite ? 'red' : theme.colors.gray4} />
+      <FavoriteButton
+        type="button"
+        variant="transparent"
+        onClick={handleToggleFavorite}
+        aria-label={`좋아요 ${favoriteCount}개`}
+      >
+        <SvgIcon variant={isFavorite ? 'favoriteFilled' : 'favorite'} color={isFavorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
           {favoriteCount}
         </Text>
@@ -86,6 +85,10 @@ const ReviewerInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   column-gap: 10px;
+`;
+
+const RebuyBadge = styled(Badge)`
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
 
 const ReviewerImage = styled.img`

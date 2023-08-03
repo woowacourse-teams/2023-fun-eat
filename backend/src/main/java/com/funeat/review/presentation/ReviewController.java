@@ -1,6 +1,6 @@
 package com.funeat.review.presentation;
 
-import com.funeat.auth.dto.LoginRequest;
+import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.review.presentation.dto.RankingReviewsResponse;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
@@ -29,7 +29,7 @@ public interface ReviewController {
             description = "리뷰 작성 성공."
     )
     @PostMapping
-    ResponseEntity<Void> writeReview(@PathVariable Long productId, @AuthenticationPrincipal LoginRequest loginInfo,
+    ResponseEntity<Void> writeReview(@PathVariable Long productId, @AuthenticationPrincipal LoginInfo loginInfo,
                                      @RequestPart MultipartFile image, @RequestPart ReviewCreateRequest reviewRequest);
 
     @Operation(summary = "리뷰 좋아요", description = "리뷰에 좋아요 또는 취소를 한다.")
@@ -38,7 +38,7 @@ public interface ReviewController {
             description = "리뷰 좋아요(취소) 성공."
     )
     @PatchMapping
-    ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId, @AuthenticationPrincipal LoginRequest loginInfo,
+    ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId, @AuthenticationPrincipal LoginInfo loginInfo,
                                           @RequestBody ReviewFavoriteRequest request);
 
     @Operation(summary = "리뷰를 정렬후 조회", description = "리뷰를 정렬후 조회한다.")
@@ -47,7 +47,8 @@ public interface ReviewController {
             description = "리뷰 정렬후 조회 성공."
     )
     @GetMapping
-    ResponseEntity<SortingReviewsResponse> getSortingReviews(@PathVariable Long productId,
+    ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal LoginInfo loginInfo,
+                                                             @PathVariable Long productId,
                                                              @PageableDefault Pageable pageable);
 
     @Operation(summary = "리뷰 랭킹 Top3 조회", description = "리뷰 랭킹 Top3 조회한다.")

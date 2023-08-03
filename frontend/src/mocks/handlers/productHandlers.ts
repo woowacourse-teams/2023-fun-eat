@@ -25,6 +25,7 @@ export const productHandlers = [
   rest.get('/api/categories/:categoryId/products', (req, res, ctx) => {
     const sortOptions = req.url.searchParams.get('sort');
     const categoryId = req.params.categoryId;
+    const page = Number(req.url.searchParams.get('page'));
 
     if (sortOptions === null) {
       return res(ctx.status(400));
@@ -53,7 +54,11 @@ export const productHandlers = [
       ),
     };
 
-    return res(ctx.status(200), ctx.json(sortedProducts));
+    return res(
+      ctx.status(200),
+      ctx.json({ page: sortedProducts.page, products: sortedProducts.products.slice(0, page * 5) }),
+      ctx.delay(500)
+    );
   }),
 
   rest.get('/api/products/:productId', (req, res, ctx) => {

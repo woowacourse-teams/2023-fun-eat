@@ -1,37 +1,24 @@
 import { Button, Heading, Spacing } from '@fun-eat/design-system';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
-import { TAG_TITLE } from '@/constants';
+import { MIN_DISPLAYED_TAGS_LENGTH, TAG_TITLE } from '@/constants';
 import { useDisplayTag, useReviewTags } from '@/hooks/review';
 
-const MIN_DISPLAYED_TAGS_LENGTH = 3;
+interface ReviewTagListProps {
+  selectedTags: number[];
+  toggleTagSelection: (id: number, isSelected: boolean) => void;
+}
 
-const ReviewTagList = () => {
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
-
+const ReviewTagList = ({ selectedTags, toggleTagSelection }: ReviewTagListProps) => {
   const { data: tagsData } = useReviewTags();
   const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData ?? [], MIN_DISPLAYED_TAGS_LENGTH);
 
   if (!tagsData) {
     return null;
   }
-
-  const toggleTagSelection = (id: number, isSelected: boolean) => {
-    if (selectedTags.length >= MIN_DISPLAYED_TAGS_LENGTH && !isSelected) {
-      return;
-    }
-
-    setSelectedTags((prevSelectedTags) => {
-      if (isSelected) {
-        return prevSelectedTags.filter((selectedTag) => selectedTag !== id);
-      }
-      return [...prevSelectedTags, id];
-    });
-  };
 
   return (
     <ReviewTagListContainer>
@@ -67,7 +54,13 @@ const ReviewTagList = () => {
       </TagListWrapper>
       <Spacing size={26} />
       {canShowMore && (
-        <Button type="button" customHeight="fit-content" variant="transparent" onClick={showMoreTags}>
+        <Button
+          type="button"
+          customHeight="fit-content"
+          variant="transparent"
+          onClick={showMoreTags}
+          aria-label="태그 더보기"
+        >
           <SvgWrapper>
             <SvgIcon variant="arrow" width={15} />
           </SvgWrapper>
@@ -122,6 +115,6 @@ const TagTitle = styled(Heading)`
   text-align: center;
 `;
 
-const SvgWrapper = styled.div`
+const SvgWrapper = styled.span`
   transform: rotate(270deg);
 `;
