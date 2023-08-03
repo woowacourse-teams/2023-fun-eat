@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import ReviewItem from '../ReviewItem/ReviewItem';
 
-import useInfiniteProductReviews from '@/hooks/product/useInfiniteProductReviews';
+import { useInfiniteProductReviews } from '@/hooks/product';
 import type { SortOption } from '@/types/common';
 
 const LOGIN_ERROR_MESSAGE =

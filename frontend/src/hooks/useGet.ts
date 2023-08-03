@@ -7,6 +7,7 @@ export const useGet = <T>(callback: () => Promise<Response>, dependencies: unkno
 
   useEffect(() => {
     request();
+    // TODO: 에러바운더리 추가
     //if (error) {
     //  throw new Error(error);
     //}
