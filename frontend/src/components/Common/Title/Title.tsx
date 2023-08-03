@@ -1,4 +1,5 @@
-import { Button, Heading, theme } from '@fun-eat/design-system';
+import { Button, Link, theme } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -7,10 +8,10 @@ import useRouteBack from '@/hooks/useRouteBack';
 
 interface TitleProps {
   headingTitle: string;
-  handleClickTitle: () => void;
+  routeDestination: string;
 }
 
-const Title = ({ headingTitle, handleClickTitle }: TitleProps) => {
+const Title = ({ headingTitle, routeDestination }: TitleProps) => {
   const routeBack = useRouteBack();
 
   return (
@@ -20,11 +21,9 @@ const Title = ({ headingTitle, handleClickTitle }: TitleProps) => {
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
       </Button>
-      <Button type="button" variant="transparent" onClick={handleClickTitle}>
-        <Heading as="h2" weight="bold">
-          {headingTitle}
-        </Heading>
-      </Button>
+      <Link as={RouterLink} to={routeDestination}>
+        {headingTitle}
+      </Link>
     </TitleContainer>
   );
 };
