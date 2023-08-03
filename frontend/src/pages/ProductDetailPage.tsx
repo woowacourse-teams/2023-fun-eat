@@ -7,6 +7,7 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
+import { useMemberValueContext } from '@/hooks/context';
 import { useProductReview, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
@@ -16,6 +17,8 @@ const ProductDetailPage = () => {
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
+
+  const member = useMemberValueContext();
 
   const { data: productDetail } = useProductDetail(productId as string);
   const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
@@ -59,16 +62,19 @@ const ProductDetailPage = () => {
       </section>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
-        <Button
+        <ReviewRegisterButton
           type="button"
           customWidth="100%"
           customHeight="60px"
+          color={!member ? 'gray3' : 'primary'}
+          textColor={!member ? 'white' : 'default'}
           size="xl"
           weight="bold"
           onClick={handleOpenRegisterReviewSheet}
+          disabled={!member}
         >
-          리뷰 작성하기
-        </Button>
+          {member ? '리뷰 작성하기' : '로그인 후 리뷰를 작성할 수 있어요'}
+        </ReviewRegisterButton>
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
@@ -110,4 +116,8 @@ const ReviewRegisterButtonWrapper = styled.div`
   height: 80px;
   background: ${({ theme }) => theme.backgroundColors.default};
   transform: translateX(-50%);
+`;
+
+const ReviewRegisterButton = styled(Button)`
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
