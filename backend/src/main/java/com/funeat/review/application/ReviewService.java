@@ -21,6 +21,7 @@ import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -93,13 +94,18 @@ public class ReviewService {
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
+        final Optional<ReviewFavorite> findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
+                findReview);
+
+        if (findReviewFavorite.isPresent()) {
+            findReviewFavorite.get().updateChecked(request.getFavorite());
+            return;
+        }
+
+        final ReviewFavorite newReviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
                 findReview, request.getFavorite());
-
-        final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember, findReview)
-                .orElse(reviewFavoriteRepository.save(reviewFavorite));
-
-        findReviewFavorite.updateChecked(request.getFavorite());
+        final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.save(newReviewFavorite);
+        savedReviewFavorite.updateChecked(request.getFavorite());
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId,
