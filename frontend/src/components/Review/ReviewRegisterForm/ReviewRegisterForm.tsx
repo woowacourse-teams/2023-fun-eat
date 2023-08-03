@@ -84,7 +84,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
           credentials: true,
         });
-        const reviews = await reviewResponse.json();
+        const { reviews } = await reviewResponse.json();
         setProductReviews(reviews);
 
         close();
