@@ -52,7 +52,8 @@ public class ReviewApiController implements ReviewController {
     }
 
     @GetMapping("/api/products/{productId}/reviews")
-    public ResponseEntity<SortingReviewsResponse> getSortingReviews(@PathVariable Long productId,
+    public ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal LoginInfo loginInfo,
+                                                                    @PathVariable Long productId,
                                                                     @PageableDefault Pageable pageable) {
         final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable);
 
