@@ -30,11 +30,11 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile } =
+  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile } =
     useReviewImageUploader();
-  const { rating, handleRating } = useStarRating();
-  const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
-  const { content, handleReviewInput } = useReviewTextarea();
+  const { rating, setRating, handleRating } = useStarRating();
+  const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
+  const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setProductReviews } = useProductReviewContext();
@@ -92,9 +92,11 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         setProductReviews(reviews);
         resetPage();
 
-        if (formRef.current) {
-          formRef.current.reset();
-        }
+        setReviewImage('');
+        setRating(0);
+        setSelectedTags([]);
+        setContent('');
+        setRebuy(false);
 
         close();
       }

@@ -26,7 +26,7 @@ const useReviewImageUploader = () => {
     setReviewImage('');
   };
 
-  return { reviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile };
+  return { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile };
 };
 
 export default useReviewImageUploader;
