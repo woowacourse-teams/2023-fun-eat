@@ -1,5 +1,5 @@
-import { Text } from '@fun-eat/design-system';
-import React from 'react';
+import { Text, Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ReviewItem from '../ReviewItem/ReviewItem';
@@ -20,9 +20,14 @@ const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
 
   if (error) {
     return (
-      <ErrorDescription align="center" weight="bold" size="lg">
-        {LOGIN_ERROR_MESSAGE}
-      </ErrorDescription>
+      <ErrorContainer>
+        <ErrorDescription align="center" weight="bold" size="lg">
+          {LOGIN_ERROR_MESSAGE}
+        </ErrorDescription>
+        <LoginLink as={RouterLink} to="/login" block>
+          로그인하러 가기
+        </LoginLink>
+      </ErrorContainer>
     );
   }
 
@@ -48,8 +53,20 @@ const ReviewListContainer = styled.ul`
   row-gap: 60px;
 `;
 
+const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const ErrorDescription = styled(Text)`
   padding: 40px 0;
   white-space: pre-line;
   word-break: break-all;
+`;
+
+const LoginLink = styled(Link)`
+  padding: 16px 24px;
+  border: 1px solid ${({ theme }) => theme.colors.gray4};
+  border-radius: 8px;
 `;
