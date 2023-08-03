@@ -67,14 +67,13 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
     close();
   };
 
-  // TODO: 아래 주석은 리팩터링 이후 따로 이슈를 열어 수정할 예정입니다.
-  // useEffect(() => {
-  //   const isValid =
-  //     rating > MIN_RATING_SCORE &&
-  //     selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
-  //     content.length > MIN_CONTENT_LENGTH;
-  //   setSubmitEnabled(isValid);
-  // }, [rating, selectedTags, content]);
+  useEffect(() => {
+    const isValid =
+      rating > MIN_RATING_SCORE &&
+      selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
+      content.length > MIN_CONTENT_LENGTH;
+    setSubmitEnabled(isValid);
+  }, [rating, selectedTags, content]);
 
   return (
     <ReviewRegisterFormContainer>
@@ -111,7 +110,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           customHeight="60px"
           size="xl"
           weight="bold"
-          // disabled={!submitEnabled}
+          disabled={!submitEnabled}
         >
           등록하기
         </FormButton>
