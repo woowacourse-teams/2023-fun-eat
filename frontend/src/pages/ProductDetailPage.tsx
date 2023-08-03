@@ -5,14 +5,16 @@ import styled from 'styled-components';
 
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
-import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
+import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { useMemberValueContext } from '@/hooks/context';
-import { useProductReview, useProductDetail } from '@/hooks/product';
+import { useProductReviewContext } from '@/hooks/context';
+import { useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+  const { productReviews } = useProductReviewContext();
 
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
@@ -21,13 +23,10 @@ const ProductDetailPage = () => {
   const member = useMemberValueContext();
 
   const { data: productDetail } = useProductDetail(productId as string);
-  const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
 
-  if (!productDetail || !productReviews) {
+  if (!productDetail) {
     return null;
   }
-
-  const { reviews } = productReviews;
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -45,20 +44,12 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
-      <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
+      <TabMenu tabMenus={[`리뷰 ${productReviews.length}`, '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
       <section>
-        {reviews && (
-          <ReviewItemWrapper>
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <ReviewItem productId={Number(productId)} review={review} />
-              </li>
-            ))}
-          </ReviewItemWrapper>
-        )}
+        <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
       </section>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
@@ -99,12 +90,6 @@ const SortButtonWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
   margin: 20px 0;
-`;
-
-const ReviewItemWrapper = styled.ul`
-  display: flex;
-  flex-direction: column;
-  row-gap: 60px;
 `;
 
 const ReviewRegisterButtonWrapper = styled.div`
