@@ -39,10 +39,10 @@ export const PRODUCT_SORT_OPTIONS = [
 ] as const;
 
 export const REVIEW_SORT_OPTIONS = [
+  { label: '최신 작성순', value: 'createdAt,desc' },
   { label: '높은 평점순', value: 'rating,desc' },
   { label: '낮은 평점순', value: 'rating,asc' },
   { label: '추천순', value: 'favoriteCount,desc' },
-  { label: '최신 작성순', value: 'createdAt,desc' },
 ] as const;
 
 export const TAG_TITLE = {
