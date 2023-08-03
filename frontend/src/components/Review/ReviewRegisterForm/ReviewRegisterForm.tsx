@@ -1,5 +1,5 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -40,6 +40,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { setProductReviews } = useProductReviewContext();
   const { resetPage } = useProductReviewPageContext();
 
+  const formRef = useRef<HTMLFormElement>(null);
   const { request } = useReviewRegisterForm(product.id);
 
   const handleRebuy = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,8 +92,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         setProductReviews(reviews);
         resetPage();
 
-        if (event.target instanceof HTMLFormElement) {
-          event.target.reset();
+        if (formRef.current) {
+          formRef.current.reset();
         }
 
         close();
@@ -121,7 +122,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <ProductOverviewItem name={product.name} image={product.image} />
       </ProductOverviewItemWrapper>
       <Divider variant="disabled" css="height:4px;" />
-      <RegisterForm onSubmit={handleSubmit}>
+      <RegisterForm ref={formRef} onSubmit={handleSubmit}>
         <ReviewImageUploader
           reviewImage={reviewImage}
           uploadReviewImage={uploadReviewImage}
