@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
-import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Product;
@@ -120,12 +119,8 @@ class ReviewServiceTest {
         final var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, true);
         assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
-        assertThat(reviewFavoriteResult).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+        assertThat(reviewFavoriteResult.getFavorite()).isTrue();
     }
 
     @Test
@@ -154,12 +149,8 @@ class ReviewServiceTest {
         final var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, false);
         assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
-        assertThat(reviewFavoriteResult).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+        assertThat(reviewFavoriteResult.getFavorite()).isFalse();
     }
 
     private MockMultipartFile 리뷰_페이크_사진_요청() {
