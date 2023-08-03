@@ -93,13 +93,17 @@ public class ReviewService {
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
-                findReview, request.getFavorite());
+        final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
+                findReview).orElseGet(() -> saveReviewFavorite(findMember, findReview, request.getFavorite()));
 
-        final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember, findReview)
-                .orElse(reviewFavoriteRepository.save(reviewFavorite));
+        savedReviewFavorite.updateChecked(request.getFavorite());
+    }
 
-        findReviewFavorite.updateChecked(request.getFavorite());
+    private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
+        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review,
+                favorite);
+
+        return reviewFavoriteRepository.save(reviewFavorite);
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId,
