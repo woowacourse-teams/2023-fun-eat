@@ -1,14 +1,18 @@
 import { Spacing } from '@fun-eat/design-system';
 
 import { ProductOverviewItem } from '@/components/Product';
-import productRanking from '@/mocks/data/productRanking.json';
+import type { ProductRanking } from '@/types/ranking';
 
-const ProductRankingList = () => {
+interface ProductRankingListProps {
+  productRanking: ProductRanking[];
+}
+
+const ProductRankingList = ({ productRanking }: ProductRankingListProps) => {
   return (
     <ul>
-      {productRanking.map((productRanking) => (
-        <li key={productRanking.id}>
-          <ProductOverviewItem rank={productRanking.rank} name={productRanking.name} image={productRanking.image} />
+      {productRanking.map(({ id, name, image }, idx) => (
+        <li key={id}>
+          <ProductOverviewItem rank={idx + 1} name={name} image={image} />
           <Spacing size={16} />
         </li>
       ))}
