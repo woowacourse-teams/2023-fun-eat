@@ -6,7 +6,8 @@ import useIntersectionObserver from '../useIntersectionObserver';
 
 const useInfiniteProductReviews = (productId: number, sort: string) => {
   const [page, setPage] = useState(0);
-  const { productReviews, addProductReviews } = useProductReviewContext();
+
+  const { productReviews, resetProductReviews, addProductReviews } = useProductReviewContext();
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const { data: productReviewsResponse, error } = useProductReview(productId, page, sort);
@@ -18,6 +19,14 @@ const useInfiniteProductReviews = (productId: number, sort: string) => {
   useIntersectionObserver<HTMLDivElement>(getNextPage, scrollRef, productReviewsResponse?.page.lastPage);
 
   useEffect(() => {
+    setPage(0);
+  }, [sort]);
+
+  useEffect(() => {
+    if (page === 0) {
+      resetProductReviews();
+    }
+
     if (!productReviewsResponse) {
       return;
     }
