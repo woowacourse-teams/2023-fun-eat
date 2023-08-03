@@ -18,7 +18,7 @@ import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
-const MIN_CONTENT_LENGTH = 1;
+const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
@@ -77,13 +77,13 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
     console.log(response, '리뷰가 성공적으로 등록되었습니다.');
   };
 
-  // useEffect(() => {
-  //   const isValid =
-  //     rating > MIN_RATING_SCORE &&
-  //     selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
-  //     content.length > MIN_CONTENT_LENGTH;
-  //   setSubmitEnabled(isValid);
-  // }, [rating, selectedTags, content]);
+  useEffect(() => {
+    const isValid =
+      rating > MIN_RATING_SCORE &&
+      selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
+      content.length > MIN_CONTENT_LENGTH;
+    setSubmitEnabled(isValid);
+  }, [rating, selectedTags, content]);
 
   return (
     <ReviewRegisterFormContainer>
@@ -120,9 +120,9 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           customHeight="60px"
           size="xl"
           weight="bold"
-          // disabled={!submitEnabled}
+          disabled={!submitEnabled}
         >
-          등록하기
+          {submitEnabled ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>
       </RegisterForm>
     </ReviewRegisterFormContainer>
@@ -158,7 +158,7 @@ const RegisterForm = styled.form`
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.grey : theme.colors.primary)};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
