@@ -1,5 +1,7 @@
 package com.funeat.member.application;
 
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
+
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
@@ -19,7 +21,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    @Transactional
+    @Transactional(propagation = REQUIRES_NEW)
     public SignUserDto findOrCreateMember(final UserInfoDto userInfoDto) {
         final String platformId = userInfoDto.getId().toString();
 
