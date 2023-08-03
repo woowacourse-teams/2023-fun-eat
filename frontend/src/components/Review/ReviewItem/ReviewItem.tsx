@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { SvgIcon, TagList } from '@/components/Common';
 import { useReviewFavorite } from '@/hooks/review';
 import type { Review, ReviewFavoriteRequestBody } from '@/types/review';
+import { getRelativeDate } from '@/utils/relativeDate';
 
 interface ReviewItemProps {
   productId: number;
@@ -12,7 +13,8 @@ interface ReviewItemProps {
 }
 
 const ReviewItem = ({ productId, review }: ReviewItemProps) => {
-  const { id, userName, profileImage, image, rating, tags, content, rebuy, favoriteCount, favorite } = review;
+  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
+    review;
   const [isFavorite, setIsFavorite] = useState(favorite);
 
   const { request } = useReviewFavorite<ReviewFavoriteRequestBody>(productId, id);
@@ -40,6 +42,9 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
                   height={16}
                 />
               ))}
+              <Text as="span" size="sm" color={theme.textColors.info}>
+                {getRelativeDate(createdAt)}
+              </Text>
             </RatingIconWrapper>
           </div>
         </ReviewerInfoWrapper>
@@ -100,6 +105,10 @@ const RatingIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: -2px;
+
+  & > span {
+    margin-left: 12px;
+  }
 `;
 
 const ReviewImage = styled.img`
