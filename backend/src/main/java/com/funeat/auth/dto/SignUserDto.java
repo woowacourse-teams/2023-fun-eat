@@ -4,20 +4,20 @@ import com.funeat.member.domain.Member;
 
 public class SignUserDto {
 
-    private final boolean isSignIn;
+    private final boolean isSignUp;
     private final Member member;
 
-    public SignUserDto(final boolean isSignIn, final Member member) {
-        this.isSignIn = isSignIn;
+    public SignUserDto(final boolean isSignUp, final Member member) {
+        this.isSignUp = isSignUp;
         this.member = member;
     }
 
-    public static SignUserDto of(final boolean isSignIn, final Member member) {
-        return new SignUserDto(isSignIn, member);
+    public static SignUserDto of(final boolean isSignUp, final Member member) {
+        return new SignUserDto(isSignUp, member);
     }
 
-    public boolean isSignIn() {
-        return isSignIn;
+    public boolean isSignUp() {
+        return isSignUp;
     }
 
     public Member getMember() {

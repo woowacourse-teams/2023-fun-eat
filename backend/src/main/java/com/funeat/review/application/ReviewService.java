@@ -66,11 +66,11 @@ public class ReviewService {
         if (Objects.isNull(image)) {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
-                            reviewRequest.getReBuy()));
+                            reviewRequest.getRebuy()));
         } else {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
-                            reviewRequest.getContent(), reviewRequest.getReBuy()));
+                            reviewRequest.getContent(), reviewRequest.getRebuy()));
             imageService.upload(image);
         }
 
@@ -93,13 +93,17 @@ public class ReviewService {
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
-                findReview, request.getFavorite());
+        final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
+                findReview).orElseGet(() -> saveReviewFavorite(findMember, findReview, request.getFavorite()));
 
-        final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember, findReview)
-                .orElse(reviewFavoriteRepository.save(reviewFavorite));
+        savedReviewFavorite.updateChecked(request.getFavorite());
+    }
 
-        findReviewFavorite.updateChecked(request.getFavorite());
+    private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
+        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review,
+                favorite);
+
+        return reviewFavoriteRepository.save(reviewFavorite);
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId,

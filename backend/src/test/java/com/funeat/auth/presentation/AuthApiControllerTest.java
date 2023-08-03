@@ -33,7 +33,7 @@ public class AuthApiControllerTest {
             // given
             final var code = "test";
             final var member = new Member("test", "www.test.com", "1");
-            final var signUserDto = SignUserDto.of(true, member);
+            final var signUserDto = SignUserDto.of(false, member);
 
             // when
             when(authService.loginWithKakao(code)).thenReturn(signUserDto);
@@ -50,7 +50,7 @@ public class AuthApiControllerTest {
             // given
             final var code = "test";
             final var member = new Member("test", "www.test.com", "1");
-            final var signUserDto = SignUserDto.of(false, member);
+            final var signUserDto = SignUserDto.of(true, member);
 
             // when
             when(authService.loginWithKakao(code)).thenReturn(signUserDto);

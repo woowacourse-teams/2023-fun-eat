@@ -4,6 +4,7 @@ import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.dto.TagDto;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +20,12 @@ public class SortingReviewDto {
     private final boolean rebuy;
     private final Long favoriteCount;
     private final boolean favorite;
+    private final LocalDateTime createdAt;
 
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
-                            final Long rating, final List<TagDto> tags, final String content, final boolean rebuy,
-                            final Long favoriteCount, final boolean favorite) {
+                            final Long rating, final List<TagDto> tags,
+                            final String content, final boolean rebuy, final Long favoriteCount, final boolean favorite,
+                            final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -33,6 +36,7 @@ public class SortingReviewDto {
         this.rebuy = rebuy;
         this.favoriteCount = favoriteCount;
         this.favorite = favorite;
+        this.createdAt = createdAt;
     }
 
     public static SortingReviewDto toDto(final Review review) {
@@ -46,7 +50,8 @@ public class SortingReviewDto {
                 review.getContent(),
                 review.getReBuy(),
                 review.getFavoriteCount(),
-                findReviewFavoriteChecked(review)
+                findReviewFavoriteChecked(review),
+                review.getCreatedAt()
         );
     }
 
@@ -63,7 +68,7 @@ public class SortingReviewDto {
                 .filter(reviewFavorite -> reviewFavorite.getReview().equals(review))
                 .filter(reviewFavorite -> reviewFavorite.getMember().equals(review.getMember()))
                 .findFirst()
-                .map(ReviewFavorite::getChecked)
+                .map(ReviewFavorite::getFavorite)
                 .orElse(false);
     }
 
@@ -105,5 +110,9 @@ public class SortingReviewDto {
 
     public boolean isFavorite() {
         return favorite;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
