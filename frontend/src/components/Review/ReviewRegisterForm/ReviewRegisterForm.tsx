@@ -12,6 +12,8 @@ import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReviewContext } from '@/hooks/context';
+import useProductReviewPageContext from '@/hooks/context/useProductReviewPageContext';
+import { useInfiniteProductReviews } from '@/hooks/product';
 import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
 import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
 import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
@@ -36,6 +38,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const [rebuy, setRebuy] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setProductReviews } = useProductReviewContext();
+  const { resetPage } = useProductReviewPageContext();
 
   const { request } = useReviewRegisterForm(product.id);
 
@@ -86,6 +89,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         });
         const { reviews } = await reviewResponse.json();
         setProductReviews(reviews);
+        resetPage();
 
         close();
       }

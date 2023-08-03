@@ -10,10 +10,26 @@ interface ProductReviewState {
   addProductReviews: (newProductReviews: Review[]) => void;
 }
 
+interface ProductReviewPageState {
+  page: number;
+  resetPage: () => void;
+  getNextPage: () => void;
+}
+
 export const ProductReviewContext = createContext<ProductReviewState | null>(null);
+export const ProductReviewPageContext = createContext<ProductReviewPageState | null>(null);
 
 const ProductReviewProvider = ({ children }: PropsWithChildren) => {
+  const [page, setPage] = useState(0);
   const [productReviews, setProductReviews] = useState<Review[]>([]);
+
+  const resetPage = () => {
+    setPage(0);
+  };
+
+  const getNextPage = () => {
+    setPage((page) => page + 1);
+  };
 
   const resetProductReviews = () => {
     setProductReviews([]);
@@ -30,7 +46,17 @@ const ProductReviewProvider = ({ children }: PropsWithChildren) => {
     addProductReviews,
   };
 
-  return <ProductReviewContext.Provider value={productReviewState}>{children}</ProductReviewContext.Provider>;
+  const productReviewPageState = {
+    page,
+    resetPage,
+    getNextPage,
+  };
+
+  return (
+    <ProductReviewPageContext.Provider value={productReviewPageState}>
+      <ProductReviewContext.Provider value={productReviewState}>{children}</ProductReviewContext.Provider>
+    </ProductReviewPageContext.Provider>
+  );
 };
 
 export default ProductReviewProvider;
