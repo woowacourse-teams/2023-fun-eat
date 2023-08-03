@@ -14,7 +14,7 @@ const Title = ({ headingTitle }: TitleProps) => {
 
   return (
     <TitleContainer>
-      <Button type="button" variant="transparent" onClick={routeBack}>
+      <Button type="button" variant="transparent" onClick={routeBack} aria-label="뒤로 가기">
         <SvgIconWrapper>
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
@@ -35,7 +35,7 @@ const TitleContainer = styled.div`
   position: relative;
 `;
 
-const SvgIconWrapper = styled.button`
+const SvgIconWrapper = styled.span`
   position: absolute;
   top: 8px;
   left: 0;

@@ -30,6 +30,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
               isSelected={isSelected}
               menuVariant={menuVariant}
               onClick={() => selectCategory(menuVariant, menu.id)}
+              aria-pressed={isSelected}
             >
               {menu.name}
             </CategoryButton>

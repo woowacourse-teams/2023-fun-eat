@@ -19,7 +19,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   return (
     <ReviewRegisterFormContainer>
       <ReviewHeading>리뷰 작성</ReviewHeading>
-      <CloseButton variant="transparent" onClick={close}>
+      <CloseButton variant="transparent" onClick={close} aria-label="닫기">
         <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
       </CloseButton>
       <Divider />

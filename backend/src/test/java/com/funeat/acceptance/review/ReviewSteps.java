@@ -13,8 +13,9 @@ import io.restassured.specification.MultiPartSpecification;
 public class ReviewSteps {
 
     public static ExtractableResponse<Response> 리뷰_추가_요청(final Long productId, final MultiPartSpecification image,
-                                                         final ReviewCreateRequest request) {
+                                                         final ReviewCreateRequest request, final String loginCookie) {
         return given()
+                .cookie("JSESSIONID", loginCookie)
                 .multiPart(image)
                 .multiPart("reviewRequest", request, "application/json")
                 .when()
@@ -24,8 +25,10 @@ public class ReviewSteps {
     }
 
     public static ExtractableResponse<Response> 리뷰_좋아요_요청(final Long productId, final Long reviewId,
-                                                          final ReviewFavoriteRequest request) {
+                                                          final ReviewFavoriteRequest request,
+                                                          final String loginCookie) {
         return given()
+                .cookie("JSESSIONID", loginCookie)
                 .contentType("application/json")
                 .body(request)
                 .when()

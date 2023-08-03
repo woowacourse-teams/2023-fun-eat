@@ -4,6 +4,7 @@ import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한�
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
+import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
@@ -38,15 +39,15 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰를_작성한다() {
         // given
-        final Long savedMemberId = 멤버_추가_요청();
         final Long savedProductId = 상품_추가_요청();
         final List<Long> savedTagIds = 태그_추가_요청();
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var loginCookie = 로그인_쿠키를_얻는다();
 
-        final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true, savedMemberId);
+        final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
 
         // when
-        final var response = 리뷰_추가_요청(savedProductId, image, request);
+        final var response = 리뷰_추가_요청(savedProductId, image, request, loginCookie);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_생성);
@@ -59,14 +60,16 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final Long savedProductId = 상품_추가_요청();
         final List<Long> savedTagIds = 태그_추가_요청();
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true, savedMemberId);
-        final var favoriteRequest = new ReviewFavoriteRequest(true, savedMemberId);
+        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
 
-        리뷰_추가_요청(savedProductId, image, reviewRequest);
+        final var loginCookie = 로그인_쿠키를_얻는다();
+
+        리뷰_추가_요청(savedProductId, image, reviewRequest, loginCookie);
         final var savedReviewId = reviewRepository.findAll().get(0).getId();
 
         // when
-        final var response = 리뷰_좋아요_요청(savedProductId, savedReviewId, favoriteRequest);
+        final var response = 리뷰_좋아요_요청(savedProductId, savedReviewId, favoriteRequest, loginCookie);
         final var result = reviewFavoriteRepository.findAll().get(0);
 
         // then
@@ -82,16 +85,17 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final Long savedProductId = 상품_추가_요청();
         final List<Long> savedTagIds = 태그_추가_요청();
         final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true, savedMemberId);
-        final var favoriteRequest = new ReviewFavoriteRequest(true, savedMemberId);
-        final var favoriteCancelRequest = new ReviewFavoriteRequest(false, savedMemberId);
+        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+        final var favoriteCancelRequest = new ReviewFavoriteRequest(false);
+        final var loginCookie = 로그인_쿠키를_얻는다();
 
-        리뷰_추가_요청(savedProductId, image, reviewRequest);
+        리뷰_추가_요청(savedProductId, image, reviewRequest, loginCookie);
         final var savedReview = reviewRepository.findAll().get(0);
-        리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteRequest);
+        리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteRequest, loginCookie);
 
         // when
-        final var response = 리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteCancelRequest);
+        final var response = 리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteCancelRequest, loginCookie);
         final var result = reviewFavoriteRepository.findAll().get(0);
 
         // then
