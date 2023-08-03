@@ -32,7 +32,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { rating, handleRating } = useStarRating();
   const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, handleReviewInput } = useReviewTextarea();
-  const [reBuy, setReBuy] = useState(false);
+  const [rebuy, setRebuy] = useState(false);
 
   const { inputRef, handleKeydown } = useEnterKeyDown();
   const [submitEnabled, setSubmitEnabled] = useState(false);
@@ -40,50 +40,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { request } = useReviewRegisterForm(product.id);
 
   const handleRebuy = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setReBuy(event.target.checked);
+    setRebuy(event.target.checked);
   };
-
-  // const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
-  //   event.preventDefault();
-
-  //   const formData = new FormData();
-
-  //   // if (reviewImage) {
-  //   //   formData.append('image', reviewImage);
-  //   // }
-
-  //   const reviewRequest = JSON.stringify({
-  //     rating: rating,
-  //     tagIds: selectedTags,
-  //     content: content,
-  //     rebuy: rebuy,
-  //   });
-
-  //   const jsonBlob = new Blob([reviewRequest], { type: 'application/json' });
-  //   formData.append('reviewRequest', jsonBlob);
-
-  //   const url = `http://3.36.100.213/api/products/${product.id}/reviews`;
-
-  //   const headers = {
-  //     'Content-Type': 'multipart/form-data',
-  //   };
-
-  //   const response = await fetch(url, {
-  //     method: 'POST',
-  //     headers: headers,
-  //     body: formData,
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error(`에러 발생 상태코드:${response.status}`);
-  //   }
-
-  //   console.log('리뷰가 성공적으로 등록되었습니다.');
-
-  //   // 다음 작업을 수행...
-
-  //   // await request(formData);
-  // };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -94,23 +52,17 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       formData.append('image', reviewImageFile, reviewImageFile.name);
     }
 
-    // formData.append('image', reviewImageFile);
-
-    // JSON 리뷰 데이터에 이러한 속성들을 추가
     const reviewRequest = {
       rating,
       tagIds: selectedTags,
       content,
-      reBuy,
+      rebuy,
     };
 
-    // JSON 리뷰 데이터를 문자열로 변환
     const jsonString = JSON.stringify(reviewRequest);
 
-    // 문자열을 Blob 객체로 변환. mimeType은 'application/json'으로 설정
     const jsonBlob = new Blob([jsonString], { type: 'application/json' });
 
-    // 리뷰 요청으로 JSON Blob 객체를 추가
     formData.append('reviewRequest', jsonBlob);
 
     const url = `https://funeat.site/api/products/${product.id}/reviews`;
@@ -126,47 +78,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
     }
 
     console.log(response, '리뷰가 성공적으로 등록되었습니다.');
-
-    // await request(formData);
   };
-
-  // const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
-  //   event.preventDefault();
-
-  //   const formData = new FormData();
-
-  //   formData.append('image', reviewImage ?? null);
-  //   formData.append(
-  //     'reviewRequest',
-  //     JSON.stringify({
-  //       rating,
-  //       tagIds: selectedTags,
-  //       content,
-  //       reBuy,
-  //     })
-  //   );
-
-  //   const url = `https://funeat.site/api/products/${product.id}/reviews`;
-
-  //   // const headers = {
-  //   //   'Content-Type': 'multipart/form-data',
-  //   // };
-
-  //   const response = await fetch(url, {
-  //     method: 'POST',
-  //     // headers: headers,
-  //     body: formData,
-  //     credentials: 'include',
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error(`에러 발생 상태코드:${response.status}`);
-  //   }
-
-  //   console.log(response, '리뷰가 성공적으로 등록되었습니다.');
-
-  //   // await request(formData);
-  // };
 
   // useEffect(() => {
   //   const isValid =

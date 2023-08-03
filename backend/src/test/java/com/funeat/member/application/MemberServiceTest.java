@@ -50,7 +50,7 @@ class MemberServiceTest {
 
             // then
             assertSoftly(softAssertions -> {
-                Assertions.assertFalse(actual.isSignIn());
+                Assertions.assertFalse(actual.isSignUp());
                 assertThat(expected).containsExactly(actual.getMember());
             });
         }
@@ -69,7 +69,7 @@ class MemberServiceTest {
 
             // then
             assertSoftly(softAssertions -> {
-                Assertions.assertTrue(actual.isSignIn());
+                Assertions.assertTrue(actual.isSignUp());
                 assertThat(expected).doesNotContain(actual.getMember());
             });
         }

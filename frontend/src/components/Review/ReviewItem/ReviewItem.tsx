@@ -19,7 +19,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
-    await request({ request: { favorite: !isFavorite } });
+    await request({ favorite: !isFavorite });
     setIsFavorite((prev) => !prev);
   };
 
@@ -49,7 +49,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
+      {image !== null && <ReviewImage src={`/images/${image}`} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
       <FavoriteButton
