@@ -7,8 +7,7 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import { useMemberValueContext } from '@/hooks/context';
-import { useProductReviewContext } from '@/hooks/context';
+import { useMemberValueContext, useProductReviewContext } from '@/hooks/context';
 import { useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
