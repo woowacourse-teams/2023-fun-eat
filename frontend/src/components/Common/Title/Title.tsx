@@ -1,4 +1,4 @@
-import { Button, Link, theme } from '@fun-eat/design-system';
+import { Button, Link, Text, theme } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -21,9 +21,12 @@ const Title = ({ headingTitle, routeDestination }: TitleProps) => {
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
       </Button>
-      <Link as={RouterLink} to={routeDestination}>
-        {headingTitle}
-      </Link>
+      <TitleLink as={RouterLink} to={routeDestination}>
+        <Text as="span" size="xl" weight="bold">
+          {headingTitle}
+        </Text>
+        <DropDownIcon variant="arrow" color={theme.colors.black} width={15} height={15} />
+      </TitleLink>
     </TitleContainer>
   );
 };
@@ -41,4 +44,14 @@ const SvgIconWrapper = styled.span`
   position: absolute;
   top: 8px;
   left: 0;
+`;
+
+const TitleLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const DropDownIcon = styled(SvgIcon)`
+  rotate: 270deg;
 `;
