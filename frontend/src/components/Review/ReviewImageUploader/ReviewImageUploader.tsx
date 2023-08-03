@@ -5,21 +5,21 @@ import styled from 'styled-components';
 interface ReviewImageUploaderProps {
   reviewImage: string;
   uploadReviewImage: ChangeEventHandler<HTMLInputElement>;
-  uploadImageFile: ChangeEventHandler<HTMLInputElement>;
+  uploadReviewImageFile: ChangeEventHandler<HTMLInputElement>;
   deleteReviewImage: () => void;
 }
 
 const ReviewImageUploader = ({
   reviewImage,
   uploadReviewImage,
+  uploadReviewImageFile,
   deleteReviewImage,
-  uploadImageFile,
 }: ReviewImageUploaderProps) => {
   const theme = useTheme();
 
-  const handle: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleReviewImageUpload: ChangeEventHandler<HTMLInputElement> = (event) => {
     uploadReviewImage(event);
-    uploadImageFile(event);
+    uploadReviewImageFile(event);
   };
 
   return (
@@ -47,7 +47,7 @@ const ReviewImageUploader = ({
       ) : (
         <ImageUploadLabel>
           +
-          <input type="file" accept="image/*" onChange={handle} />
+          <input type="file" accept="image/*" onChange={handleReviewImageUpload} />
         </ImageUploadLabel>
       )}
     </ReviewImageUploaderContainer>
