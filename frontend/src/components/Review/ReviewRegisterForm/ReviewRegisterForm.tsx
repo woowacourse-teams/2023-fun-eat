@@ -64,17 +64,22 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
     const url = `https://funeat.site/api/products/${product.id}/reviews`;
 
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      credentials: 'include',
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
 
-    if (!response.ok) {
-      throw new Error(`에러 발생 상태코드:${response.status}`);
+      if (!response.ok) {
+        throw new Error(`에러 발생 상태코드:${response.status}`);
+      } else {
+        console.log(response, '리뷰가 성공적으로 등록되었습니다.');
+        close();
+      }
+    } catch (error) {
+      console.error(error);
     }
-
-    console.log(response, '리뷰가 성공적으로 등록되었습니다.');
   };
 
   useEffect(() => {
