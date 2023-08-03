@@ -5,21 +5,21 @@ import styled from 'styled-components';
 
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
-import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
+import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
+import { useProductReviewContext } from '@/hooks/context';
 import { useProductDetail } from '@/hooks/product';
-import useInfiniteProductReviews from '@/hooks/product/useInfiniteProductReviews';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+  const { productReviews } = useProductReviewContext();
 
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
   const { data: productDetail } = useProductDetail(productId as string);
-  const { productReviews, scrollRef } = useInfiniteProductReviews(productId as string, selectedOption.value);
 
   if (!productDetail) {
     return null;
@@ -46,16 +46,7 @@ const ProductDetailPage = () => {
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
       <section>
-        {productReviews && (
-          <ReviewItemWrapper>
-            {productReviews.map((review) => (
-              <li key={review.id}>
-                <ReviewItem productId={Number(productId)} review={review} />
-              </li>
-            ))}
-            <div ref={scrollRef} aria-hidden />
-          </ReviewItemWrapper>
-        )}
+        <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
       </section>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
@@ -93,12 +84,6 @@ const SortButtonWrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
   margin: 20px 0;
-`;
-
-const ReviewItemWrapper = styled.ul`
-  display: flex;
-  flex-direction: column;
-  row-gap: 60px;
 `;
 
 const ReviewRegisterButtonWrapper = styled.div`
