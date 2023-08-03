@@ -7,7 +7,7 @@ const meta: Meta<typeof ProductRankingList> = {
   title: 'product/ProductRankingList',
   component: ProductRankingList,
   args: {
-    productRanking: mockProductRankingList.products,
+    productRankings: mockProductRankingList.products,
   },
 };
 

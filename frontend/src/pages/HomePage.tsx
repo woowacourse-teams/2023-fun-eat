@@ -52,7 +52,7 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ProductRankingList productRanking={productRankingResponse?.products ?? []} />
+        <ProductRankingList productRankings={productRankingResponse?.products ?? []} />
       </section>
       <Spacing size={36} />
       <section>
