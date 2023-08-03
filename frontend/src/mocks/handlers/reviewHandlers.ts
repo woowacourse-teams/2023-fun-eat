@@ -35,7 +35,7 @@ export const reviewHandlers = [
     const formData = req.body;
 
     if (!formData) {
-      return res(ctx.status(400), ctx.json({ error: 'formData를 제공하지 않았습니다.' }));
+      return res(ctx.status(400), ctx.json({ error: '리뷰 데이터가 없습니다.' }));
     }
 
     return res(ctx.status(200), ctx.json({ message: '리뷰가 작성되었습니다.' }));
