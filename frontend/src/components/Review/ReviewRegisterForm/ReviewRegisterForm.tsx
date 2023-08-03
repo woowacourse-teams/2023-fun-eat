@@ -122,7 +122,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           weight="bold"
           disabled={!submitEnabled}
         >
-          등록하기
+          {submitEnabled ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>
       </RegisterForm>
     </ReviewRegisterFormContainer>
@@ -158,7 +158,7 @@ const RegisterForm = styled.form`
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.grey : theme.colors.primary)};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
