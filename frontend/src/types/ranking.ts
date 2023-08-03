@@ -1,9 +1,6 @@
-export interface ProductRanking {
-  id: number;
-  rank: number;
-  name: string;
-  image: string;
-}
+import type { Product } from './product';
+
+export type ProductRanking = Pick<Product, 'id' | 'name' | 'image'>;
 
 export interface ReviewRanking {
   reviewId: number;
