@@ -25,7 +25,7 @@ const ProductList = ({ category, productList, scrollRef }: ProductListProps) => 
           </Link>
         </li>
       ))}
-      <div ref={scrollRef} />
+      <div ref={scrollRef} aria-hidden />
     </ProductListContainer>
   );
 };

@@ -53,7 +53,7 @@ const ProductDetailPage = () => {
                 <ReviewItem productId={Number(productId)} review={review} />
               </li>
             ))}
-            <div ref={scrollRef} />
+            <div ref={scrollRef} aria-hidden />
           </ReviewItemWrapper>
         )}
       </section>
