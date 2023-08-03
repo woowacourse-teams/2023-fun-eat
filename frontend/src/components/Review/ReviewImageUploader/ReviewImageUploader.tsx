@@ -1,6 +1,8 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
-import type { ChangeEventHandler } from 'react';
+import { type ChangeEventHandler } from 'react';
 import styled from 'styled-components';
+
+import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 
 interface ReviewImageUploaderProps {
   reviewImage: string;
@@ -15,6 +17,7 @@ const ReviewImageUploader = ({
   deleteReviewImage,
   uploadImageFile,
 }: ReviewImageUploaderProps) => {
+  const { inputRef, handleKeydown } = useEnterKeyDown();
   const theme = useTheme();
 
   const handle: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -47,9 +50,9 @@ const ReviewImageUploader = ({
           </Button>
         </ReviewImageButtonWrapper>
       ) : (
-        <ImageUploadLabel tabIndex={0} aria-label="사진 업로드 버튼">
+        <ImageUploadLabel tabIndex={0} onKeyDown={handleKeydown} aria-label="사진 업로드 버튼">
           +
-          <input type="file" accept="image/*" onChange={handle} />
+          <input ref={inputRef} type="file" accept="image/*" onChange={handle} />
         </ImageUploadLabel>
       )}
     </ReviewImageUploaderContainer>

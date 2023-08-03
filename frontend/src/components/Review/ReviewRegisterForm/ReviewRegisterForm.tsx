@@ -13,6 +13,7 @@ import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
 import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
 import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
 import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
+import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
@@ -32,6 +33,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { selectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, handleReviewInput } = useReviewTextarea();
   const [reBuy, setReBuy] = useState(false);
+
+  const { inputRef, handleKeydown } = useEnterKeyDown();
   const [submitEnabled, setSubmitEnabled] = useState(false);
 
   const { request } = useReviewRegisterForm(product.id);
@@ -198,11 +201,10 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
-        <p tabIndex={0}>
-          <Checkbox weight="bold" onChange={handleRebuy}>
-            재구매할 생각이 있으신가요?
-          </Checkbox>
-        </p>
+        {/* TODO: ref랑 tabindex 추가해주세요 */}
+        <Checkbox weight="bold" onChange={handleRebuy}>
+          재구매할 생각이 있으신가요?
+        </Checkbox>
         <Spacing size={16} />
         <FormButton
           type="submit"
