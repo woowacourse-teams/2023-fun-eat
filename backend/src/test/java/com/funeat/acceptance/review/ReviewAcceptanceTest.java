@@ -154,9 +154,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review2, review3, review1);
             final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -188,9 +189,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var pageDto = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "favoriteCount,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -223,9 +225,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             복수_리뷰_추가(reviews);
 
             final var sortingReviews = List.of(review1, review3, review2);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
             // then
@@ -258,9 +261,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,asc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -293,9 +297,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             복수_리뷰_추가(reviews);
 
             final var sortingReviews = List.of(review3, review2, review1);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "createdAt,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "createdAt,desc", 0);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
             // then
@@ -330,9 +335,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review2, review3, review1);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -364,9 +370,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(productId, "rating,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -429,10 +436,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         reviewRepository.saveAll(reviews);
     }
 
-    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final Long productId,
+    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie,
+                                                          final Long productId,
                                                           final String sort,
                                                           final Integer page) {
         return given()
+                .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .when()

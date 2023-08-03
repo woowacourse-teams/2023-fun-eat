@@ -47,7 +47,8 @@ public interface ReviewController {
             description = "리뷰 정렬후 조회 성공."
     )
     @GetMapping
-    ResponseEntity<SortingReviewsResponse> getSortingReviews(@PathVariable Long productId,
+    ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal LoginInfo loginInfo,
+                                                             @PathVariable Long productId,
                                                              @PageableDefault Pageable pageable);
 
     @Operation(summary = "리뷰 랭킹 Top3 조회", description = "리뷰 랭킹 Top3 조회한다.")
