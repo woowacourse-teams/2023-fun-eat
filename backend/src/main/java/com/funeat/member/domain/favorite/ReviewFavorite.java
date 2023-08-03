@@ -24,7 +24,7 @@ public class ReviewFavorite {
     @JoinColumn(name = "review_id")
     private Review review;
 
-    private Boolean checked;
+    private Boolean favorite;
 
     protected ReviewFavorite() {
     }
@@ -42,9 +42,9 @@ public class ReviewFavorite {
         return reviewFavorite;
     }
 
-    public void updateChecked(final Boolean checked) {
-        this.checked = checked;
-        if (checked) {
+    public void updateChecked(final Boolean favorite) {
+        this.favorite = favorite;
+        if (favorite) {
             this.review.addFavoriteCount();
             return;
         }
@@ -64,7 +64,7 @@ public class ReviewFavorite {
         return review;
     }
 
-    public Boolean getChecked() {
-        return checked;
+    public Boolean getFavorite() {
+        return favorite;
     }
 }
