@@ -7,10 +7,10 @@ export const useGet = <T>(callback: () => Promise<Response>, dependencies: unkno
 
   useEffect(() => {
     request();
-    if (error) {
-      throw new Error(error);
-    }
-  }, [...dependencies, error]);
+    //if (error) {
+    //  throw new Error(error);
+    //}
+  }, [...dependencies]);
 
   const request = async () => {
     try {
