@@ -1,7 +1,5 @@
 package com.funeat.member.application;
 
-import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
-
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.member.domain.Member;
@@ -12,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -21,6 +19,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public SignUserDto findOrCreateMember(final UserInfoDto userInfoDto) {
         final String platformId = userInfoDto.getId().toString();
 
@@ -29,8 +28,7 @@ public class MemberService {
                 .orElseGet(() -> save(userInfoDto));
     }
 
-    @Transactional(propagation = REQUIRES_NEW)
-    public SignUserDto save(final UserInfoDto userInfoDto) {
+    private SignUserDto save(final UserInfoDto userInfoDto) {
         final Member member = userInfoDto.toMember();
         memberRepository.save(member);
 
