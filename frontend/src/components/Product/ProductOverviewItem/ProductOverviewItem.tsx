@@ -11,7 +11,7 @@ interface ProductOverviewItemProps {
 
 const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) => {
   return (
-    <ProductOverviewContainer rank={rank}>
+    <ProductOverviewContainer rank={rank} tabIndex={0}>
       <Text size="lg" weight="bold" align="center">
         {rank ?? ''}
       </Text>
@@ -20,7 +20,7 @@ const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) =>
       ) : (
         <ProductPreviewImage width={45} height={45} />
       )}
-      <Text size="lg" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center" aria-label={name}>
         {name}
       </Text>
     </ProductOverviewContainer>

@@ -7,7 +7,6 @@ export type CategoryVariant = 'food' | 'store';
 export const isCategoryVariant = (value: string): value is CategoryVariant => {
   return value === 'store' || value === 'food';
 };
-
 export interface Category {
   id: number;
   name: string;

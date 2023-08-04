@@ -1,11 +1,18 @@
 import { Text } from '@fun-eat/design-system';
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { useMember } from '@/hooks/auth';
 import { useMemberValueContext } from '@/hooks/context';
 
 const ProfilePage = () => {
   const member = useMemberValueContext();
+  const getMember = useMember();
+
+  useEffect(() => {
+    getMember();
+  }, []);
 
   if (member === null) {
     return <Navigate to="/login" replace />;
