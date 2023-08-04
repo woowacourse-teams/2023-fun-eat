@@ -17,6 +17,7 @@ import { useInfiniteProductReviews } from '@/hooks/product';
 import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
 import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
 import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
+import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
@@ -36,6 +37,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
+
+  const { inputRef, handleKeydown } = useEnterKeyDown();
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setProductReviews } = useProductReviewContext();
   const { resetPage } = useProductReviewPageContext();
@@ -115,7 +118,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
   return (
     <ReviewRegisterFormContainer>
-      <ReviewHeading>리뷰 작성</ReviewHeading>
+      <ReviewHeading tabIndex={0}>리뷰 작성</ReviewHeading>
       <CloseButton variant="transparent" onClick={close} aria-label="닫기">
         <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
       </CloseButton>
@@ -138,6 +141,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
+        {/* TODO: ref랑 tabindex 추가해주세요 */}
         <Checkbox weight="bold" onChange={handleRebuy}>
           재구매할 생각이 있으신가요?
         </Checkbox>

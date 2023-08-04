@@ -9,12 +9,12 @@ interface ProductOverviewItemProps {
 
 const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) => {
   return (
-    <ProductOverviewContainer rank={rank}>
+    <ProductOverviewContainer rank={rank} tabIndex={0}>
       <Text size="lg" weight="bold" align="center">
         {rank ?? ''}
       </Text>
       <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : `${name}사진`} />
-      <Text size="lg" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center" aria-label={name}>
         {name}
       </Text>
     </ProductOverviewContainer>
