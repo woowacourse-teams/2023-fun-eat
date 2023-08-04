@@ -31,7 +31,7 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile } =
+  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile } =
     useReviewImageUploader();
   const { rating, setRating, handleRating } = useStarRating();
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
@@ -52,6 +52,15 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+
+    if (
+      rating <= MIN_RATING_SCORE ||
+      selectedTags.length < MIN_SELECTED_TAGS_COUNT ||
+      content.length <= MIN_CONTENT_LENGTH
+    ) {
+      alert('필수 입력 사항을 작성해주세요.');
+      return;
+    }
 
     const formData = new FormData();
 
@@ -108,13 +117,13 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
     }
   };
 
-  useEffect(() => {
-    const isValid =
-      rating > MIN_RATING_SCORE &&
-      selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
-      content.length > MIN_CONTENT_LENGTH;
-    setSubmitEnabled(isValid);
-  }, [rating, selectedTags, content]);
+  //useEffect(() => {
+  //  const isValid =
+  //    rating > MIN_RATING_SCORE &&
+  //    selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
+  //    content.length > MIN_CONTENT_LENGTH;
+  //  setSubmitEnabled(isValid);
+  //}, [rating, selectedTags, content]);
 
   return (
     <ReviewRegisterFormContainer>
@@ -132,7 +141,6 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           reviewImage={reviewImage}
           uploadReviewImage={uploadReviewImage}
           deleteReviewImage={deleteReviewImage}
-          uploadImageFile={uploadImageFile}
         />
         <Spacing size={60} />
         <StarRate rating={rating} handleRating={handleRating} />
@@ -141,8 +149,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
-        {/* TODO: ref랑 tabindex 추가해주세요 */}
-        <Checkbox weight="bold" onChange={handleRebuy}>
+        {/* TODO: ref랑 추가해주세요 */}
+        <Checkbox weight="bold" onChange={handleRebuy} tabIndex={0}>
           재구매할 생각이 있으신가요?
         </Checkbox>
         <Spacing size={16} />
@@ -152,9 +160,10 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           customHeight="60px"
           size="xl"
           weight="bold"
-          disabled={!submitEnabled}
+          //disabled={!submitEnabled}
         >
-          {submitEnabled ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
+          {/*{submitEnabled ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}*/}
+          리뷰 등록하기
         </FormButton>
       </RegisterForm>
     </ReviewRegisterFormContainer>
@@ -190,7 +199,7 @@ const RegisterForm = styled.form`
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
-  color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  /*background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};*/
+  /*color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};*/
+  /*cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};*/
 `;

@@ -1,5 +1,5 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
-import { type ChangeEventHandler } from 'react';
+import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
@@ -7,23 +7,12 @@ import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 interface ReviewImageUploaderProps {
   reviewImage: string;
   uploadReviewImage: ChangeEventHandler<HTMLInputElement>;
-  uploadImageFile: ChangeEventHandler<HTMLInputElement>;
   deleteReviewImage: () => void;
 }
 
-const ReviewImageUploader = ({
-  reviewImage,
-  uploadReviewImage,
-  deleteReviewImage,
-  uploadImageFile,
-}: ReviewImageUploaderProps) => {
+const ReviewImageUploader = ({ reviewImage, uploadReviewImage, deleteReviewImage }: ReviewImageUploaderProps) => {
   const { inputRef, handleKeydown } = useEnterKeyDown();
   const theme = useTheme();
-
-  const handle: ChangeEventHandler<HTMLInputElement> = (event) => {
-    uploadReviewImage(event);
-    uploadImageFile(event);
-  };
 
   return (
     <ReviewImageUploaderContainer>
@@ -32,7 +21,7 @@ const ReviewImageUploader = ({
       </Heading>
       <Spacing size={2} />
       <Text color={theme.textColors.disabled} tabIndex={0}>
-        (사진은 1장까지 업로드 할 수 있어요)
+        (사진은 1MB 이하, 1장까지 업로드 할 수 있어요.)
       </Text>
       <Spacing size={20} />
       {reviewImage ? (
@@ -50,9 +39,9 @@ const ReviewImageUploader = ({
           </Button>
         </ReviewImageButtonWrapper>
       ) : (
-        <ImageUploadLabel tabIndex={0} onKeyDown={handleKeydown} aria-label="사진 업로드 버튼">
+        <ImageUploadLabel tabIndex={0} onKeyDown={handleKeydown} aria-label="사진 업로드 버튼" aria-hidden>
           +
-          <input ref={inputRef} type="file" accept="image/*" onChange={handle} />
+          <input ref={inputRef} type="file" accept="image/*" onChange={uploadReviewImage} />
         </ImageUploadLabel>
       )}
     </ReviewImageUploaderContainer>
