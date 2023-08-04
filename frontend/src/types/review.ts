@@ -8,6 +8,7 @@ export interface Review {
   rating: number;
   tags: Tag[];
   content: string;
+  createdAt: string;
   rebuy: boolean;
   favoriteCount: number;
   favorite: boolean;
