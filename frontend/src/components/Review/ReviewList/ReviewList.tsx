@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import ReviewItem from '../ReviewItem/ReviewItem';
 
+import { PATH } from '@/constants/path';
 import { useInfiniteProductReviews } from '@/hooks/product';
 import type { SortOption } from '@/types/common';
 
@@ -24,7 +25,7 @@ const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
         <ErrorDescription align="center" weight="bold" size="lg">
           {LOGIN_ERROR_MESSAGE}
         </ErrorDescription>
-        <LoginLink as={RouterLink} to="/login" block>
+        <LoginLink as={RouterLink} to={PATH.LOGIN} block>
           로그인하러 가기
         </LoginLink>
       </ErrorContainer>
