@@ -31,7 +31,7 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile, uploadImageFile } =
+  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile } =
     useReviewImageUploader();
   const { rating, setRating, handleRating } = useStarRating();
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
@@ -53,8 +53,6 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-
     if (
       rating <= MIN_RATING_SCORE ||
       selectedTags.length < MIN_SELECTED_TAGS_COUNT ||
@@ -63,6 +61,8 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       alert('필수 입력 사항을 작성해주세요.');
       return;
     }
+
+    const formData = new FormData();
 
     if (reviewImageFile) {
       formData.append('image', reviewImageFile, reviewImageFile.name);
@@ -141,7 +141,6 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
           reviewImage={reviewImage}
           uploadReviewImage={uploadReviewImage}
           deleteReviewImage={deleteReviewImage}
-          uploadImageFile={uploadImageFile}
         />
         <Spacing size={60} />
         <StarRate rating={rating} handleRating={handleRating} />
