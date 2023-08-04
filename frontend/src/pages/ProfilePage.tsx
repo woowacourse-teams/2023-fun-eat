@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { PATH } from '@/constants/path';
 import { useMember } from '@/hooks/auth';
 import { useMemberValueContext } from '@/hooks/context';
 
@@ -15,7 +16,7 @@ const ProfilePage = () => {
   }, []);
 
   if (member === null) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={PATH.LOGIN} replace />;
   }
 
   return (
