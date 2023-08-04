@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
-import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Product;
@@ -120,12 +119,8 @@ class ReviewServiceTest {
         final var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, true);
         assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
-        assertThat(reviewFavoriteResult).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+        assertThat(reviewFavoriteResult.getFavorite()).isTrue();
     }
 
     @Test
@@ -154,12 +149,8 @@ class ReviewServiceTest {
         final var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, false);
         assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
-        assertThat(reviewFavoriteResult).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+        assertThat(reviewFavoriteResult.getFavorite()).isFalse();
     }
 
     private MockMultipartFile 리뷰_페이크_사진_요청() {
@@ -204,11 +195,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("favoriteCount").descending());
             final var expected = Stream.of(review1, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -235,11 +226,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").ascending());
             final var expected = Stream.of(review1, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -266,11 +257,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").descending());
             final var expected = Stream.of(review2, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -297,11 +288,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
             final var expected = Stream.of(review3, review2)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then

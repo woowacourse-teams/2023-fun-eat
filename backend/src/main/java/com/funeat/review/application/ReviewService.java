@@ -106,8 +106,10 @@ public class ReviewService {
         return reviewFavoriteRepository.save(reviewFavorite);
     }
 
-    public SortingReviewsResponse sortingReviews(final Long productId,
-                                                 final Pageable pageable) {
+    public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
         final Product product = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -115,7 +117,7 @@ public class ReviewService {
 
         final SortingReviewsPageDto pageDto = SortingReviewsPageDto.toDto(reviewPage);
         final List<SortingReviewDto> reviewDtos = reviewPage.stream()
-                .map(SortingReviewDto::toDto)
+                .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
 
         return SortingReviewsResponse.toResponse(pageDto, reviewDtos);

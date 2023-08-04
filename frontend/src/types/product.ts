@@ -26,4 +26,5 @@ export interface PBProduct {
   price: number;
   image: string;
   averageRating: number;
+  reviewCount?: number;
 }

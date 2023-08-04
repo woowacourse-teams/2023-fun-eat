@@ -1,23 +1,36 @@
-[
-  {
-    "id": 1,
-    "name": "꼬북칩",
-    "price": 1500,
-    "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
-    "averageRating": 4.5
+{
+  "page": {
+    "totalDataCount": 99,
+    "totalPages": 10,
+    "firstPage": true,
+    "lastPage": false,
+    "requestPage": 1,
+    "requestSize": 10
   },
-  {
-    "id": 2,
-    "name": "새우깡",
-    "price": 1000,
-    "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
-    "averageRating": 4.0
-  },
-  {
-    "id": 3,
-    "name": "감자깡",
-    "price": 1200,
-    "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
-    "averageRating": 3.0
-  }
-]
+  "products": [
+    {
+      "id": 1,
+      "name": "PB 꼬북칩",
+      "price": 1500,
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
+      "averageRating": 4.5,
+      "reviewCount": 100
+    },
+    {
+      "id": 2,
+      "name": "PB 새우깡",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 3,
+      "name": "PB 감자깡",
+      "price": 1200,
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
+      "averageRating": 3.0,
+      "reviewCount": 100
+    }
+  ]
+}

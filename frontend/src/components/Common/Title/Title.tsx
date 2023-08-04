@@ -1,4 +1,5 @@
-import { Button, Heading, theme } from '@fun-eat/design-system';
+import { Button, Link, Text, theme } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -7,9 +8,10 @@ import useRouteBack from '@/hooks/useRouteBack';
 
 interface TitleProps {
   headingTitle: string;
+  routeDestination: string;
 }
 
-const Title = ({ headingTitle }: TitleProps) => {
+const Title = ({ headingTitle, routeDestination }: TitleProps) => {
   const routeBack = useRouteBack();
 
   return (
@@ -19,9 +21,12 @@ const Title = ({ headingTitle }: TitleProps) => {
           <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
         </SvgIconWrapper>
       </Button>
-      <Heading as="h2" weight="bold">
-        {headingTitle}
-      </Heading>
+      <TitleLink as={RouterLink} to={routeDestination}>
+        <Text as="span" size="xl" weight="bold">
+          {headingTitle}
+        </Text>
+        <DropDownIcon variant="arrow" color={theme.colors.black} width={15} height={15} />
+      </TitleLink>
     </TitleContainer>
   );
 };
@@ -39,4 +44,14 @@ const SvgIconWrapper = styled.span`
   position: absolute;
   top: 8px;
   left: 0;
+`;
+
+const TitleLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const DropDownIcon = styled(SvgIcon)`
+  rotate: 270deg;
 `;

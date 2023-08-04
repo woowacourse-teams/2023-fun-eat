@@ -8,7 +8,7 @@ const useReviewTextarea = () => {
     setContent(event.currentTarget.value);
   };
 
-  return { content, handleReviewInput };
+  return { content, setContent, handleReviewInput };
 };
 
 export default useReviewTextarea;

@@ -1,43 +1,51 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
+import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useCategoryProducts } from '@/hooks/product';
+import { useCategory, useInfiniteProducts } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
+
+const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
 const ProductListPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
-  const location = useLocation();
-  const path = location.pathname;
+  const { category } = useParams();
 
-  const categoryVariant = path.split('/').pop() ?? '';
+  if (!category) {
+    return <></>;
+  }
 
-  if (!isCategoryVariant(categoryVariant)) {
-    return;
+  if (!isCategoryVariant(category)) {
+    return <></>;
   }
 
   const { categoryIds } = useCategoryContext();
 
-  const { data: menuList } = useCategory(categoryVariant);
-  const { data: productListResponse } = useCategoryProducts(categoryIds[categoryVariant], selectedOption.value);
+  const { data: menuList } = useCategory(category);
+
+  const { products, scrollRef } = useInfiniteProducts(categoryIds[category], selectedOption.value);
 
   return (
     <>
       <section>
-        <Title headingTitle={categoryVariant === 'food' ? '공통 상품' : 'PB 상품'} />
+        <Title
+          headingTitle={PAGE_TITLE[category]}
+          routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
+        />
         <Spacing size={30} />
-        <CategoryMenu menuList={menuList ?? []} menuVariant={categoryVariant} />
+        <CategoryMenu menuList={menuList ?? []} menuVariant={category} />
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList category={categoryVariant} productList={productListResponse?.products ?? []} />
+        <ProductList ref={scrollRef} category={category} productList={products ?? []} />
       </section>
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList

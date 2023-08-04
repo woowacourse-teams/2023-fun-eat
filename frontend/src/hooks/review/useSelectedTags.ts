@@ -16,7 +16,7 @@ const useSelectedTags = (minDisplayedTagsLength: number) => {
     });
   };
 
-  return { selectedTags, toggleTagSelection };
+  return { selectedTags, setSelectedTags, toggleTagSelection };
 };
 
 export default useSelectedTags;

@@ -12,17 +12,25 @@ interface ReviewItemProps {
   review: Review;
 }
 
-const ReviewItem = ({ productId, review }: ReviewItemProps) => {
-  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
-    review;
-  const [isFavorite, setIsFavorite] = useState(favorite);
+const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
+const ReviewItem = ({ productId, review }: ReviewItemProps) => {
+  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } = review;
+  const [isFavorite, setIsFavorite] = useState(favorite);
+  const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
   const { request } = useReviewFavorite<ReviewFavoriteRequestBody>(productId, id);
+
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
-    await request({ favorite: !isFavorite });
-    setIsFavorite((prev) => !prev);
+    try {
+      await request({ favorite: !isFavorite });
+
+      setIsFavorite((prev) => !prev);
+      setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
+    } catch (error) {
+      alert('리뷰 좋아요를 실패했습니다 🥲');
+    }
   };
 
   return (
@@ -54,7 +62,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={`/images/${image}`} height={150} alt={`${userName}의 리뷰`} />}
+      {image !== null && <ReviewImage src={srcPath + image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
       <FavoriteButton
@@ -65,7 +73,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
       >
         <SvgIcon variant={isFavorite ? 'favoriteFilled' : 'favorite'} color={isFavorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
-          {favoriteCount}
+          {currentFavoriteCount}
         </Text>
       </FavoriteButton>
     </ReviewItemContainer>
