@@ -1,6 +1,8 @@
 import { Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import PreviewImage from '@/assets/characters.svg';
+
 interface ProductOverviewItemProps {
   rank?: number;
   name: string;
@@ -13,7 +15,11 @@ const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) =>
       <Text size="lg" weight="bold" align="center">
         {rank ?? ''}
       </Text>
-      <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : `${name}사진`} />
+      {image ? (
+        <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : `${name}사진`} />
+      ) : (
+        <ProductPreviewImage width={45} height={45} />
+      )}
       <Text size="lg" weight="bold" align="center" aria-label={name}>
         {name}
       </Text>
@@ -37,4 +43,11 @@ const ProductOverviewImage = styled.img`
   width: 45px;
   height: 45px;
   border-radius: 50%;
+`;
+
+const ProductPreviewImage = styled(PreviewImage)`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
