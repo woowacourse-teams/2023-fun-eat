@@ -39,7 +39,7 @@ const ReviewImageUploader = ({ reviewImage, uploadReviewImage, deleteReviewImage
           </Button>
         </ReviewImageButtonWrapper>
       ) : (
-        <ImageUploadLabel tabIndex={0} onKeyDown={handleKeydown} aria-label="사진 업로드 버튼">
+        <ImageUploadLabel tabIndex={0} onKeyDown={handleKeydown} aria-label="사진 업로드 버튼" aria-hidden>
           +
           <input ref={inputRef} type="file" accept="image/*" onChange={uploadReviewImage} />
         </ImageUploadLabel>
