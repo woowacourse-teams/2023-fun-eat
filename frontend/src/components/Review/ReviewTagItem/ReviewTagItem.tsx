@@ -13,7 +13,15 @@ const ReviewTagItem = ({ id, name, isSelected, toggleTagSelection }: ReviewTagIt
 
   return (
     <Button type="button" weight="bold" variant="transparent" onClick={() => toggleTagSelection(id, isSelected)}>
-      <TagBadge isSelected={isSelected} size="sm" color="transparent" textColor={theme.textColors.default}>
+      <TagBadge
+        isSelected={isSelected}
+        size="sm"
+        color="transparent"
+        textColor={theme.textColors.default}
+        role={'radio'}
+        aria-label={`${name} 태그`}
+        aria-checked={isSelected}
+      >
         {name}
       </TagBadge>
     </Button>
