@@ -54,6 +54,7 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
     formContent,
   });
 
+  const labelRef = useRef<HTMLLabelElement | null>(null);
   const { inputRef, handleKeydown } = useEnterKeyDown();
   // const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setProductReviews } = useProductReviewContext();
@@ -131,10 +132,11 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
         <Spacing size={60} />
         <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
-        {/* TODO: ref랑 추가해주세요 */}
-        <Checkbox weight="bold" onChange={handleRebuy} tabIndex={0}>
-          재구매할 생각이 있으신가요?
-        </Checkbox>
+        <p onKeyDown={handleKeydown}>
+          <Checkbox ref={labelRef} inputRef={inputRef} weight="bold" onChange={handleRebuy} tabIndex={0}>
+            재구매할 생각이 있으신가요?
+          </Checkbox>
+        </p>
         <Spacing size={16} />
         <FormButton
           type="submit"
