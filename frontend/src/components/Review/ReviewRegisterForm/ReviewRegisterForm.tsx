@@ -12,14 +12,16 @@ import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReviewContext } from '@/hooks/context';
-import useProductReviewPageContext from '@/hooks/context/useProductReviewPageContext';
-import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
-import useFormData from '@/hooks/review/useFormData';
-import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
-import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
+import { useProductReviewContext, useProductReviewPageContext } from '@/hooks/context';
+import {
+  useReviewRegisterForm,
+  useReviewImageUploader,
+  useReviewTextarea,
+  useSelectedTags,
+  useFormData,
+  useStarRate,
+} from '@/hooks/review';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
-import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -34,7 +36,7 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
-  const { rating, setRating, handleRating } = useStarRating();
+  const { rating, setRating, handleRating } = useStarRate();
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
