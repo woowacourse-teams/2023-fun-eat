@@ -12,14 +12,16 @@ const useReviewImageUploader = () => {
       return;
     }
 
-    if (event.target.files[0].size > MAX_SIZE) {
-      alert('이미지 크기가 너무 큽니다. 1MB 이하의 이미지를 선택하세요.');
+    const imageFile = event.target.files[0];
+
+    if (imageFile.size > MAX_SIZE) {
+      alert('이미지 크기가 너무 커요. 1MB 이하의 이미지를 골라주세요.');
       event.target.value = '';
       return;
     }
 
-    setReviewPreviewImage(URL.createObjectURL(event.target.files[0]));
-    setReviewImageFile(event.target.files[0]);
+    setReviewPreviewImage(URL.createObjectURL(imageFile));
+    setReviewImageFile(imageFile);
   };
 
   const deleteReviewImage = () => {
