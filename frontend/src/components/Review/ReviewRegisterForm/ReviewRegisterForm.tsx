@@ -15,6 +15,7 @@ import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReviewContext } from '@/hooks/context';
 import useProductReviewPageContext from '@/hooks/context/useProductReviewPageContext';
 import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
+import useFormData from '@/hooks/review/useFormData';
 import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
 import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
@@ -38,8 +39,21 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
 
+  const formContent = {
+    rating,
+    tagIds: selectedTags,
+    content,
+    rebuy,
+  };
+  const { formData } = useFormData({
+    imageKey: 'image',
+    imageFile: reviewImageFile,
+    formContentKey: 'reviewRequest',
+    formContent,
+  });
+
   const { inputRef, handleKeydown } = useEnterKeyDown();
-  const [submitEnabled, setSubmitEnabled] = useState(false);
+  // const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setProductReviews } = useProductReviewContext();
   const { resetPage } = useProductReviewPageContext();
 
@@ -62,59 +76,25 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
       return;
     }
 
-    const formData = new FormData();
+    await request(formData);
 
-    if (reviewImageFile) {
-      formData.append('image', reviewImageFile, reviewImageFile.name);
-    }
+    const reviewResponse = await productApi.get({
+      params: `/${product.id}/reviews`,
+      queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
+      credentials: true,
+    });
 
-    const reviewRequest = {
-      rating,
-      tagIds: selectedTags,
-      content,
-      rebuy,
-    };
+    const { reviews } = await reviewResponse.json();
+    setProductReviews(reviews);
+    resetPage();
 
-    const jsonString = JSON.stringify(reviewRequest);
+    setReviewPreviewImage('');
+    setRating(0);
+    setSelectedTags([]);
+    setContent('');
+    setRebuy(false);
 
-    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-
-    formData.append('reviewRequest', jsonBlob);
-
-    const url = `https://funeat.site/api/products/${product.id}/reviews`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error(`에러 발생 상태코드:${response.status}`);
-      } else {
-        console.log(response, '리뷰가 성공적으로 등록되었습니다.');
-
-        const reviewResponse = await productApi.get({
-          params: `/${product.id}/reviews`,
-          queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
-          credentials: true,
-        });
-        const { reviews } = await reviewResponse.json();
-        setProductReviews(reviews);
-        resetPage();
-
-        setReviewPreviewImage('');
-        setRating(0);
-        setSelectedTags([]);
-        setContent('');
-        setRebuy(false);
-
-        closeReviewDialog();
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    closeReviewDialog();
   };
 
   //useEffect(() => {
