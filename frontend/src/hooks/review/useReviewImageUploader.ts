@@ -4,7 +4,7 @@ import { useState } from 'react';
 const MAX_SIZE = 1024 * 1024;
 
 const useReviewImageUploader = () => {
-  const [reviewImage, setReviewImage] = useState('');
+  const [reviewPreviewImage, setReviewPreviewImage] = useState('');
   const [reviewImageFile, setReviewImageFile] = useState<File | null>(null);
 
   const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -18,16 +18,16 @@ const useReviewImageUploader = () => {
       return;
     }
 
-    setReviewImage(URL.createObjectURL(event.target.files[0]));
+    setReviewPreviewImage(URL.createObjectURL(event.target.files[0]));
     setReviewImageFile(event.target.files[0]);
   };
 
   const deleteReviewImage = () => {
-    URL.revokeObjectURL(reviewImage);
-    setReviewImage('');
+    URL.revokeObjectURL(reviewPreviewImage);
+    setReviewPreviewImage('');
   };
 
-  return { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile };
+  return { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage };
 };
 
 export default useReviewImageUploader;

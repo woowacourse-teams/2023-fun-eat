@@ -1,5 +1,6 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import { useEffect, useRef, useState } from 'react';
+import type { ChangeEventHandler } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -13,7 +14,6 @@ import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
 import { useProductReviewContext } from '@/hooks/context';
 import useProductReviewPageContext from '@/hooks/context/useProductReviewPageContext';
-import { useInfiniteProductReviews } from '@/hooks/product';
 import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
 import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
 import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
@@ -30,8 +30,8 @@ interface ReviewRegisterFormProps {
   close: () => void;
 }
 
-const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile } =
+const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegisterFormProps) => {
+  const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const { rating, setRating, handleRating } = useStarRating();
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
@@ -46,7 +46,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const { request } = useReviewRegisterForm(product.id);
 
-  const handleRebuy = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRebuy: ChangeEventHandler<HTMLInputElement> = (event) => {
     setRebuy(event.target.checked);
   };
 
@@ -104,13 +104,13 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         setProductReviews(reviews);
         resetPage();
 
-        setReviewImage('');
+        setReviewPreviewImage('');
         setRating(0);
         setSelectedTags([]);
         setContent('');
         setRebuy(false);
 
-        close();
+        closeReviewDialog();
       }
     } catch (error) {
       console.error(error);
@@ -138,7 +138,7 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       <Divider variant="disabled" css="height:4px;" />
       <RegisterForm ref={formRef} onSubmit={handleSubmit}>
         <ReviewImageUploader
-          reviewImage={reviewImage}
+          reviewPreviewImage={reviewPreviewImage}
           uploadReviewImage={uploadReviewImage}
           deleteReviewImage={deleteReviewImage}
         />

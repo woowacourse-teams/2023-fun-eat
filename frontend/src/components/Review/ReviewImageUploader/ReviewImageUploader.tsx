@@ -5,12 +5,16 @@ import styled from 'styled-components';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 
 interface ReviewImageUploaderProps {
-  reviewImage: string;
+  reviewPreviewImage: string;
   uploadReviewImage: ChangeEventHandler<HTMLInputElement>;
   deleteReviewImage: () => void;
 }
 
-const ReviewImageUploader = ({ reviewImage, uploadReviewImage, deleteReviewImage }: ReviewImageUploaderProps) => {
+const ReviewImageUploader = ({
+  reviewPreviewImage,
+  uploadReviewImage,
+  deleteReviewImage,
+}: ReviewImageUploaderProps) => {
   const { inputRef, handleKeydown } = useEnterKeyDown();
   const theme = useTheme();
 
@@ -24,9 +28,9 @@ const ReviewImageUploader = ({ reviewImage, uploadReviewImage, deleteReviewImage
         (사진은 1MB 이하, 1장까지 업로드 할 수 있어요.)
       </Text>
       <Spacing size={20} />
-      {reviewImage ? (
+      {reviewPreviewImage ? (
         <ReviewImageButtonWrapper>
-          <img src={reviewImage} alt="업로드한 리뷰 사진" width={200} />
+          <img src={reviewPreviewImage} alt="업로드한 리뷰 사진" width={200} />
           <Button
             type="button"
             customWidth="80px"
