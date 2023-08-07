@@ -445,9 +445,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
         final var actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     private void 리뷰_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews) {

@@ -385,10 +385,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var tag3 = 태그_추가_요청(new Tag("3번", TagType.ETC));
         final var image = 리뷰_사진_명세_요청();
 
-        final var request1 = new ReviewCreateRequest(4L,
-                List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true);
-        final var request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()),
-                "request2", true);
+        final var request1 = new ReviewCreateRequest(4L, List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1",
+                true);
+        final var request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()), "request2", true);
         final var request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
@@ -477,9 +476,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
         final var actual = response.jsonPath().getList("products", ProductInCategoryDto.class);
 
-        assertThat(actual)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "reviewCount")
+        assertThat(actual).usingRecursiveComparison()
+                .ignoringFields("reviewCount")
                 .isEqualTo(expected);
     }
 
@@ -487,9 +485,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                                       final List<Tag> expectedTags) {
         final var expected = ProductResponse.toResponse(product, expectedTags);
         final var actual = response.as(ProductResponse.class);
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id", "averageRating")
-                .isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().ignoringFields("averageRating").isEqualTo(expected);
     }
 
     private void 상품_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {

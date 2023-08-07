@@ -25,9 +25,7 @@ public class AuthServiceTest extends ServiceTest {
             final var actual = authService.loginWithKakao(code);
 
             // then
-            assertThat(actual).usingRecursiveComparison()
-                    .ignoringFields("member.id")
-                    .isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
     }
 }

@@ -48,8 +48,6 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         }
 
         final var actualResponses = response.jsonPath().getList("", CategoryResponse.class);
-        assertThat(actualResponses).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(expected);
+        assertThat(actualResponses).usingRecursiveComparison().isEqualTo(expected);
     }
 }
