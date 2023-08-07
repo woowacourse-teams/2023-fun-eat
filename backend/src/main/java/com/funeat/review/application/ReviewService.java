@@ -40,14 +40,13 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
 
-    @Qualifier("reviewImageUploader")
     private final ImageService imageService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
                          final ReviewFavoriteRepository reviewFavoriteRepository,
-                         final ImageService imageService) {
+                         @Qualifier("reviewImageUploader") final ImageService imageService) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
