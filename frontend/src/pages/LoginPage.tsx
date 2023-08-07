@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
 import { useMemberValueContext } from '@/hooks/context';
-import useRouteBack from '@/hooks/useRouteBack';
+import useRoutePage from '@/hooks/useRoutePage';
 
 const SLOGAN = '궁금해? 맛있을걸? 먹어봐 🥄';
 const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 레시피를 공유해보세요.';
@@ -14,7 +14,7 @@ const KAKAO_LOGIN = '카카오 로그인';
 const loginLink = process.env.NODE_ENV === 'development' ? '/login/kakao?code=qwe' : '/api/auth/kakao';
 
 const LoginPage = () => {
-  const routeBack = useRouteBack();
+  const { routeBack } = useRoutePage();
   const member = useMemberValueContext();
 
   if (member !== null) {
