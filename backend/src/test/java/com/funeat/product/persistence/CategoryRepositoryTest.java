@@ -27,23 +27,15 @@ public class CategoryRepositoryTest extends RepositoryTest {
             final var CU = new Category("CU", CategoryType.STORE);
             final var GS25 = new Category("GS25", CategoryType.STORE);
             final var EMART24 = new Category("EMART24", CategoryType.STORE);
-
-            final List<Category> categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
-            for (Category category : categories) {
-                System.out.println("@@@##" + category + " " + category.getName());
-            }
-            ;
-            categoryRepository.saveAll(categories);
-            System.out.println("어디서 그런거져");
+            final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
+            복수_카테고리_저장(categories);
             final var expected = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
 
             // when
-            System.out.println("업데이트 문이 어디서..??");
             final var actual = categoryRepository.findAllByType(CategoryType.FOOD);
-            System.out.println("업데이트 문이 어디서..!!");
+
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
-            System.out.println("???");
         }
 
         @Test
@@ -58,14 +50,18 @@ public class CategoryRepositoryTest extends RepositoryTest {
             final var CU = new Category("CU", CategoryType.STORE);
             final var GS25 = new Category("GS25", CategoryType.STORE);
             final var EMART24 = new Category("EMART24", CategoryType.STORE);
-
-            categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
+            복수_카테고리_저장(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
             final var expected = List.of(CU, GS25, EMART24);
+
             // when
             final var actual = categoryRepository.findAllByType(CategoryType.STORE);
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
+    }
+
+    private void 복수_카테고리_저장(final List<Category> categories) {
+        categoryRepository.saveAll(categories);
     }
 }

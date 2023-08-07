@@ -17,11 +17,15 @@ class ReviewFavoriteRepositoryTest extends RepositoryTest {
     @Test
     void 멤버와_리뷰로_리뷰_좋아요를_조회할_수_있다() {
         // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var review = 리뷰_추가_요청(member, product);
+        final var member = new Member("test", "image.png", "1");
+        final var product = new Product("testName", 1000L, "test.png", "test", null);
+        final var image = 리뷰_사진_명세_요청();
+        final var review = new Review(member, product, image.getFileName(), 4L, "content", true);
         final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
-        reviewFavoriteRepository.save(reviewFavorite);
+        단일_멤버_저장(member);
+        단일_상품_저장(product);
+        단일_리뷰_저장(review);
+        단일_리뷰_좋아요_저장(reviewFavorite);
 
         // when
         final var result = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
@@ -35,17 +39,20 @@ class ReviewFavoriteRepositoryTest extends RepositoryTest {
                 .isEqualTo(expected);
     }
 
-    private Member 멤버_추가_요청() {
-        return memberRepository.save(new Member("test", "image.png", "1"));
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
     }
 
-    private Product 상품_추가_요청() {
-        return productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
+    private Long 단일_상품_저장(final Product product) {
+        return productRepository.save(product).getId();
     }
 
-    private Review 리뷰_추가_요청(final Member member, final Product product) {
-        final var image = 리뷰_사진_명세_요청();
-        return reviewRepository.save(new Review(member, product, image.getFileName(), 4L, "content", true));
+    private Review 단일_리뷰_저장(final Review review) {
+        return reviewRepository.save(review);
+    }
+
+    private Long 단일_리뷰_좋아요_저장(final ReviewFavorite reviewFavorite) {
+        return reviewFavoriteRepository.save(reviewFavorite).getId();
     }
 
     private MultiPartSpecification 리뷰_사진_명세_요청() {

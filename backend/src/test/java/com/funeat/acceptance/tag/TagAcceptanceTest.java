@@ -24,10 +24,11 @@ public class TagAcceptanceTest extends AcceptanceTest {
     @Test
     void 전체_태그_목록을_조회할_수_있다() {
         // given
-        final var tag1 = 태그_추가_요청(new Tag("단짠단짠", TASTE));
-        final var tag2 = 태그_추가_요청(new Tag("매콤해요", TASTE));
-        final var tag3 = 태그_추가_요청(new Tag("갓성비", PRICE));
-        final var tag4 = 태그_추가_요청(new Tag("바삭바삭", ETC));
+        final var tag1 = new Tag("단짠단짠", TASTE);
+        final var tag2 = new Tag("매콤해요", TASTE);
+        final var tag3 = new Tag("갓성비", PRICE);
+        final var tag4 = new Tag("바삭바삭", ETC);
+        복수_태그_저장(List.of(tag1, tag2, tag3, tag4));
 
         // when
         final var response = 전체_태그_목록_조회_요청();
@@ -37,8 +38,8 @@ public class TagAcceptanceTest extends AcceptanceTest {
         전체_태그_목록_조회_결과를_검증한다(response, List.of(tag1, tag2, tag3, tag4));
     }
 
-    private Tag 태그_추가_요청(final Tag tag) {
-        return tagRepository.save(tag);
+    private void 복수_태그_저장(final List<Tag> tags) {
+        tagRepository.saveAll(tags);
     }
 
     private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Tag> tags) {

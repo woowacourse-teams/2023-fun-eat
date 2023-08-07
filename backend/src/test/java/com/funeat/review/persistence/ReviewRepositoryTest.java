@@ -24,20 +24,35 @@ class ReviewRepositoryTest extends RepositoryTest {
         @Test
         void 상품에_달린_리뷰의_숫자를_반환한다() {
             // given
-            final var member = memberRepository.save(new Member("test", "image.png", "1"));
-            final var category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
-            final var product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
-            final var product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
+            final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
 
-            reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 최고!!", true));
-            reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 별로", false));
-            reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 쏘쏘", true));
-            reviewRepository.save(new Review(member, product2, "review.png", 3L, "이 라면은 맛있다", true));
+            final var category = new Category("간편식사", CategoryType.FOOD);
+            단일_카테고리_저장(category);
+
+            final var product1 = new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category);
+            final var product2 = new Product("라면", 2000L, "image.png", "맛있는 라면", category);
+            final var products = List.of(product1, product2);
+            복수_상품_저장(products);
+
+            final var review1 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 최고!!", true);
+            final var review2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 별로", false);
+            final var review3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 쏘쏘", true);
+            final var review4 = new Review(member, product2, "review.png", 3L, "이 라면은 맛있다", true);
+            final var reviews = List.of(review1, review2, review3, review4);
+            복수_리뷰_저장(reviews);
+
+            final var expected1 = 3;
+            final var expected2 = 1;
 
             // when
+            final var actual1 = reviewRepository.countByProduct(product1);
+            final var actual2 = reviewRepository.countByProduct(product2);
+
+            // then
             assertSoftly(softAssertions -> {
-                softAssertions.assertThat(reviewRepository.countByProduct(product1)).isEqualTo(3);
-                softAssertions.assertThat(reviewRepository.countByProduct(product2)).isEqualTo(1);
+                softAssertions.assertThat(actual1).isEqualTo(expected1);
+                softAssertions.assertThat(actual2).isEqualTo(expected2);
             });
         }
     }
@@ -52,16 +67,16 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            memberRepository.saveAll(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            productRepository.save(product);
+            단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            reviewRepository.saveAll(reviews);
+            복수_리뷰_저장(reviews);
 
             final var expected = List.of(review1, review3);
 
@@ -86,12 +101,12 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            memberRepository.saveAll(members);
+            복수_멤버_저장(members);
 
             final var product1 = new Product("김밥", 1000L, "image.png", "김밥", null);
             final var product2 = new Product("물", 500L, "water.jpg", "물", null);
             final var products = List.of(product1, product2);
-            productRepository.saveAll(products);
+            복수_상품_저장(products);
 
             final var review1 = new Review(member1, product1, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product1, "review2.jpg", 4L, "역삼역", true, 351L);
@@ -99,7 +114,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var review4 = new Review(member2, product2, "review4.jpg", 5L, "ㅁㅜㄹ", true, 247L);
             final var review5 = new Review(member3, product2, "review5.jpg", 1L, "ㄴㄴ", false, 83L);
             final var reviews = List.of(review1, review2, review3, review4, review5);
-            reviewRepository.saveAll(reviews);
+            복수_리뷰_저장(reviews);
 
             final var expected = List.of(review2, review4, review3);
 
@@ -109,5 +124,29 @@ class ReviewRepositoryTest extends RepositoryTest {
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
+    }
+
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
+    }
+
+    private Long 단일_카테고리_저장(final Category category) {
+        return categoryRepository.save(category).getId();
+    }
+
+    private void 복수_멤버_저장(final List<Member> members) {
+        memberRepository.saveAll(members);
+    }
+
+    private void 복수_리뷰_저장(final List<Review> reviews) {
+        reviewRepository.saveAll(reviews);
+    }
+
+    private Long 단일_상품_저장(final Product product) {
+        return productRepository.save(product).getId();
+    }
+
+    private void 복수_상품_저장(final List<Product> products) {
+        productRepository.saveAll(products);
     }
 }

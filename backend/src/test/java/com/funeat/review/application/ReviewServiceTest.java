@@ -30,14 +30,21 @@ class ReviewServiceTest extends ServiceTest {
         @Test
         void 리뷰를_추가할_수_있다() {
             // given
-            final var member = 멤버_추가_요청();
-            final var product = 상품_추가_요청();
-            final var tags = 태그_추가_요청();
+            final var member = new Member("test", "image.png", "1");
+            final var product = new Product("testName", 1000L, "test.png", "test", null);
+            final var tag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+            final var tag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
+            final var tags = List.of(tag1, tag2);
+
+            단일_멤버_저장(member);
+            단일_상품_저장(product);
+            복수_태그_저장(tags);
+
             final var tagIds = tags.stream()
                     .map(Tag::getId)
                     .collect(Collectors.toList());
-            final var image = 리뷰_페이크_사진_요청();
             final var request = new ReviewCreateRequest(4L, tagIds, "review", true);
+            final var image = 리뷰_페이크_사진_요청();
 
             // when
             reviewService.create(product.getId(), member.getId(), image, request);
@@ -62,14 +69,21 @@ class ReviewServiceTest extends ServiceTest {
         @Test
         void 리뷰에_좋아요를_할_수_있다() {
             // given
-            final var member = 멤버_추가_요청();
-            final var product = 상품_추가_요청();
-            final var tags = 태그_추가_요청();
+            final var member = new Member("test", "image.png", "1");
+            final var product = new Product("testName", 1000L, "test.png", "test", null);
+            final var tag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+            final var tag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
+            final var tags = List.of(tag1, tag2);
+
+            단일_멤버_저장(member);
+            단일_상품_저장(product);
+            복수_태그_저장(tags);
+
             final var tagIds = tags.stream()
                     .map(Tag::getId)
                     .collect(Collectors.toList());
-            final var image = 리뷰_페이크_사진_요청();
             final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
+            final var image = 리뷰_페이크_사진_요청();
 
             reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
             final var savedReview = reviewRepository.findAll().get(0);
@@ -90,9 +104,16 @@ class ReviewServiceTest extends ServiceTest {
         @Test
         void 리뷰에_좋아요를_취소_할_수_있다() {
             // given
-            final var member = 멤버_추가_요청();
-            final var product = 상품_추가_요청();
-            final var tags = 태그_추가_요청();
+            final var member = new Member("test", "image.png", "1");
+            final var product = new Product("testName", 1000L, "test.png", "test", null);
+            final var tag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+            final var tag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
+            final var tags = List.of(tag1, tag2);
+
+            단일_멤버_저장(member);
+            단일_상품_저장(product);
+            복수_태그_저장(tags);
+
             final var tagIds = tags.stream()
                     .map(Tag::getId)
                     .collect(Collectors.toList());
@@ -120,25 +141,6 @@ class ReviewServiceTest extends ServiceTest {
         }
     }
 
-    private MockMultipartFile 리뷰_페이크_사진_요청() {
-        return new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
-    }
-
-    private List<Tag> 태그_추가_요청() {
-        final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
-
-        return List.of(testTag1, testTag2);
-    }
-
-    private Product 상품_추가_요청() {
-        return productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
-    }
-
-    private Member 멤버_추가_요청() {
-        return memberRepository.save(new Member("test", "image.png", "1"));
-    }
-
     @Nested
     class sortingReviews_페이징_테스트 {
 
@@ -149,16 +151,16 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var pageable = PageRequest.of(0, 2, Sort.by("favoriteCount").descending());
             final var expected = Stream.of(review1, review3)
@@ -180,16 +182,16 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 351L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").ascending());
             final var expected = Stream.of(review1, review3)
@@ -211,16 +213,16 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").descending());
             final var expected = Stream.of(review2, review3)
@@ -242,16 +244,16 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
             final var expected = Stream.of(review3, review2)
@@ -267,15 +269,27 @@ class ReviewServiceTest extends ServiceTest {
         }
     }
 
-    private void 복수_멤버_추가(final List<Member> members) {
+    private MockMultipartFile 리뷰_페이크_사진_요청() {
+        return new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
+    }
+
+    private void 복수_태그_저장(final List<Tag> tags) {
+        tagRepository.saveAll(tags);
+    }
+
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
+    }
+
+    private void 복수_멤버_저장(final List<Member> members) {
         memberRepository.saveAll(members);
     }
 
-    private void 상품_추가(final Product product) {
-        productRepository.save(product);
+    private Long 단일_상품_저장(final Product product) {
+        return productRepository.save(product).getId();
     }
 
-    private void 복수_리뷰_추가(final List<Review> reviews) {
+    private void 복수_리뷰_저장(final List<Review> reviews) {
         reviewRepository.saveAll(reviews);
     }
 }

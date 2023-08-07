@@ -6,8 +6,8 @@ import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
+import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_저장;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
-import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
@@ -43,7 +43,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_가격이_서로_다르면_가격_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
@@ -57,7 +57,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
@@ -74,7 +74,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
             final var product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
@@ -88,7 +88,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
@@ -109,7 +109,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_가격이_서로_다르면_가격_기준_오름차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
@@ -123,7 +123,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
@@ -140,7 +140,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
             final var product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
@@ -154,7 +154,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
@@ -174,7 +174,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
@@ -188,7 +188,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "desc", 0);
@@ -205,7 +205,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
@@ -219,7 +219,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "desc", 0);
@@ -239,7 +239,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
@@ -253,7 +253,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "asc", 0);
@@ -270,7 +270,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
@@ -284,7 +284,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "asc", 0);
@@ -304,14 +304,15 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 리뷰수가_서로_다르면_리뷰수_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
             final var products = List.of(product1, product2, product3);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
-            final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
+            final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
             final var review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final var review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -323,7 +324,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
                     review3_1, review3_2, review3_3);
-            복수_리뷰_추가_요청(reviews);
+            복수_리뷰_저장(reviews);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
@@ -339,16 +340,17 @@ class ProductAcceptanceTest extends AcceptanceTest {
         void 리뷰수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var categoryId = 단일_카테고리_저장(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
             final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
             final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
             final var products = List.of(product1, product2, product3, product4, product5);
-            복수_상품_추가_요청(products);
+            복수_상품_저장(products);
 
-            final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
+            final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
             final var review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final var review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -360,7 +362,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
                     review3_1, review3_2, review3_3);
-            복수_리뷰_추가_요청(reviews);
+            복수_리뷰_저장(reviews);
 
             // when
             final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
@@ -377,23 +379,26 @@ class ProductAcceptanceTest extends AcceptanceTest {
     void 상품_상세_정보를_조회한다() {
         // given
         final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(간편식사);
+        단일_카테고리_저장(간편식사);
         final var product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-        final var productId = 상품_추가_요청(product);
-        final var tag1 = 태그_추가_요청(new Tag("1번", TagType.ETC));
-        final var tag2 = 태그_추가_요청(new Tag("2번", TagType.ETC));
-        final var tag3 = 태그_추가_요청(new Tag("3번", TagType.ETC));
+        final var productId = 단일_상품_저장(product);
+
+        final var tag1 = new Tag("1번", TagType.ETC);
+        final var tag2 = new Tag("2번", TagType.ETC);
+        final var tag3 = new Tag("3번", TagType.ETC);
+        final var tagId1 = 단일_태그_저장(tag1);
+        final var tagId2 = 단일_태그_저장(tag2);
+        final var tagId3 = 단일_태그_저장(tag3);
         final var image = 리뷰_사진_명세_요청();
 
-        final var request1 = new ReviewCreateRequest(4L, List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1",
-                true);
-        final var request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()), "request2", true);
-        final var request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true);
+        final var request1 = new ReviewCreateRequest(4L, List.of(tagId1, tagId2, tagId3), "request1", true);
+        final var request2 = new ReviewCreateRequest(4L, List.of(tagId2, tagId3), "request2", true);
+        final var request3 = new ReviewCreateRequest(3L, List.of(tagId2), "request3", true);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
-        리뷰_추가_요청(productId, image, request1, loginCookie);
-        리뷰_추가_요청(productId, image, request2, loginCookie);
-        리뷰_추가_요청(productId, image, request3, loginCookie);
+        단일_리뷰_저장(productId, image, request1, loginCookie);
+        단일_리뷰_저장(productId, image, request2, loginCookie);
+        단일_리뷰_저장(productId, image, request3, loginCookie);
 
         // when
         final var response = 상품_상세_조회_요청(productId);
@@ -407,14 +412,15 @@ class ProductAcceptanceTest extends AcceptanceTest {
     void 전체_상품들_중에서_랭킹_TOP3를_조회할_수_있다() {
         // given
         final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(간편식사);
+        단일_카테고리_저장(간편식사);
         final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 3.25, 간편식사);
         final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 4.0, 간편식사);
         final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 3.33, 간편식사);
         final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 0.0, 간편식사);
-        복수_상품_추가_요청(List.of(product1, product2, product3, product4));
+        복수_상품_저장(List.of(product1, product2, product3, product4));
 
-        final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
+        final var member = new Member("test", "image.png", "1");
+        단일_멤버_저장(member);
         final var review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
         final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
         final var review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -426,7 +432,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var review3_3 = new Review(member, product3, "review.png", 5L, "이 삼각김밥은 굿굿", false);
         final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
                 review3_1, review3_2, review3_3);
-        복수_리뷰_추가_요청(reviews);
+        복수_리뷰_저장(reviews);
 
         // when
         final var response = 상품_랭킹_조회_요청();
@@ -436,27 +442,27 @@ class ProductAcceptanceTest extends AcceptanceTest {
         상품_랭킹_조회_결과를_검증한다(response, List.of(product2, product3, product1));
     }
 
-    private Long 카테고리_추가_요청(final Category category) {
+    private Long 단일_카테고리_저장(final Category category) {
         return categoryRepository.save(category).getId();
     }
 
-    private Long 상품_추가_요청(final Product product) {
+    private Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
     }
 
-    private void 복수_상품_추가_요청(final List<Product> products) {
+    private Long 단일_태그_저장(final Tag tag) {
+        return tagRepository.save(tag).getId();
+    }
+
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
+    }
+
+    private void 복수_상품_저장(final List<Product> products) {
         productRepository.saveAll(products);
     }
 
-    private Tag 태그_추가_요청(final Tag tag) {
-        return tagRepository.save(tag);
-    }
-
-    private Member 멤버_추가_요청(final Member member) {
-        return memberRepository.save(member);
-    }
-
-    private void 복수_리뷰_추가_요청(final List<Review> reviews) {
+    private void 복수_리뷰_저장(final List<Review> reviews) {
         reviewRepository.saveAll(reviews);
     }
 

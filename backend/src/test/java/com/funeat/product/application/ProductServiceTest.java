@@ -25,9 +25,12 @@ class ProductServiceTest extends ServiceTest {
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 4.0, null);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 5.0, null);
             final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 2.0, null);
-            productRepository.saveAll(List.of(product1, product2, product3, product4));
+            final var products = List.of(product1, product2, product3, product4);
+            복수_상품_추가(products);
 
-            final var member = memberRepository.save(new Member("test", "image.png", "1"));
+            final var member = new Member("test", "image.png", "1");
+            단일_멤버_추가(member);
+
             final var review1_1 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
             final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
             final var review1_3 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
@@ -38,10 +41,9 @@ class ProductServiceTest extends ServiceTest {
             final var review4_1 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var review4_2 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var review4_3 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            reviewRepository.saveAll(
-                    List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1, review4_1,
-                            review4_2, review4_3)
-            );
+            final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1,
+                    review4_1, review4_2, review4_3);
+            복수_리뷰_저장(reviews);
 
             // when
             final var actual = productService.getTop3Products();
@@ -54,5 +56,17 @@ class ProductServiceTest extends ServiceTest {
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
         }
+    }
+
+    private void 복수_상품_추가(final List<Product> products) {
+        productRepository.saveAll(products);
+    }
+
+    private Long 단일_멤버_추가(final Member member) {
+        return memberRepository.save(member).getId();
+    }
+
+    private void 복수_리뷰_저장(final List<Review> reviews) {
+        reviewRepository.saveAll(reviews);
     }
 }

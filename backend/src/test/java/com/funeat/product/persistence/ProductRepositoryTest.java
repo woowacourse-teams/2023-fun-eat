@@ -31,8 +31,8 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 4.0, category);
             final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 3.0, category);
             final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, category);
-            productRepository.saveAll(
-                    List.of(product1, product2, product3, product4, product5));
+            final var products = List.of(product1, product2, product3, product4, product5);
+            복수_상품_저장(products);
 
             // when
             final var pageRequest = PageRequest.of(0, 3, Sort.by("averageRating").descending());
@@ -55,8 +55,8 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 4.0, category);
             final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 3.0, category);
             final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, category);
-            productRepository.saveAll(
-                    List.of(product1, product2, product3, product4, product5));
+            final var products = List.of(product1, product2, product3, product4, product5);
+            복수_상품_저장(products);
 
             // when
             final var pageRequest = PageRequest.of(0, 3, Sort.by("averageRating").ascending());
@@ -84,9 +84,9 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", category);
             final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", category);
             final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", category);
-            productRepository.saveAll(
-                    List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                            product10));
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7, product8,
+                    product9, product10);
+            복수_상품_저장(products);
 
             // when
             final var pageRequest = PageRequest.of(0, 3, Sort.by("price").descending());
@@ -113,9 +113,9 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", category);
             final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", category);
             final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", category);
-            productRepository.saveAll(
-                    List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                            product10));
+            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+                    product8, product9, product10);
+            복수_상품_저장(products);
 
             // when
             final var pageRequest = PageRequest.of(0, 3, Sort.by("price").ascending());
@@ -142,10 +142,11 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", category);
             final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", category);
             final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", category);
-            productRepository.saveAll(
-                    List.of(product1, product2, product3, product4, product5));
+            final var products = List.of(product1, product2, product3, product4, product5);
+            복수_상품_저장(products);
 
-            final var member = memberRepository.save(new Member("test", "image.png", "1"));
+            final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
 
             final var review1_1 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
             final var review1_2 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -157,10 +158,9 @@ class ProductRepositoryTest extends RepositoryTest {
             final var review4_1 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var review4_2 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var review4_3 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            reviewRepository.saveAll(
-                    List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1, review4_1,
-                            review4_2, review4_3)
-            );
+            final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1,
+                    review4_1, review4_2, review4_3);
+            복수_리뷰_저장(reviews);
 
             // when
             final var pageRequest = PageRequest.of(0, 3);
@@ -187,9 +187,11 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 1.0, category);
             final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 5.0, category);
             final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 2.0, category);
-            productRepository.saveAll(List.of(product1, product2, product3, product4));
+            final var products = List.of(product1, product2, product3, product4);
+            복수_상품_저장(products);
 
-            final var member = memberRepository.save(new Member("test", "image.png", "1"));
+            final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
 
             final var review1_1 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
             final var review1_2 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
@@ -201,10 +203,9 @@ class ProductRepositoryTest extends RepositoryTest {
             final var review4_1 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var review4_2 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
             final var review4_3 = new Review(member, product4, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            reviewRepository.saveAll(
-                    List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1, review4_1,
-                            review4_2, review4_3)
-            );
+            final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1,
+                    review4_1, review4_2, review4_3);
+            복수_리뷰_저장(reviews);
 
             // when
             final var actual = productRepository.findAllByAverageRatingGreaterThan3();
@@ -215,5 +216,17 @@ class ProductRepositoryTest extends RepositoryTest {
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
         }
+    }
+
+    private void 복수_상품_저장(final List<Product> products) {
+        productRepository.saveAll(products);
+    }
+
+    private void 복수_리뷰_저장(final List<Review> reviews) {
+        reviewRepository.saveAll(reviews);
+    }
+
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
     }
 }

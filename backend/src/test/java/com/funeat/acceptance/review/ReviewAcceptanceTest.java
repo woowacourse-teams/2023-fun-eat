@@ -5,10 +5,10 @@ import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한�
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
+import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_저장;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
-import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
 import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,15 +39,15 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰를_작성한다() {
         // given
-        final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
-        final var savedTagIds = 태그_추가_요청();
+        final var savedProductId = 단일_상품_저장(new Product("testName", 1000L, "test.png", "test", null));
+        final var savedTagIds = 복수_태그_저장();
         final var image = 리뷰_사진_명세_요청();
         final var loginCookie = 로그인_쿠키를_얻는다();
 
         final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
 
         // when
-        final var response = 리뷰_추가_요청(savedProductId, image, request, loginCookie);
+        final var response = 단일_리뷰_저장(savedProductId, image, request, loginCookie);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_생성);
@@ -56,16 +56,16 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_할_수_있다() {
         // given
-        final var savedMemberId = 멤버_추가_요청(new Member("test", "image.png", "1"));
-        final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
-        final var savedTagIds = 태그_추가_요청();
+        final var savedMemberId = 단일_멤버_저장(new Member("test", "image.png", "1"));
+        final var savedProductId = 단일_상품_저장(new Product("testName", 1000L, "test.png", "test", null));
+        final var savedTagIds = 복수_태그_저장();
         final var image = 리뷰_사진_명세_요청();
         final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
         final var favoriteRequest = new ReviewFavoriteRequest(true);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
 
-        리뷰_추가_요청(savedProductId, image, reviewRequest, loginCookie);
+        단일_리뷰_저장(savedProductId, image, reviewRequest, loginCookie);
         final var savedReviewId = reviewRepository.findAll().get(0).getId();
 
         // when
@@ -81,16 +81,16 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_취소할_수_있다() {
         // given
-        final var savedMemberId = 멤버_추가_요청(new Member("test", "image.png", "1"));
-        final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
-        final var savedTagIds = 태그_추가_요청();
+        final var savedMemberId = 단일_멤버_저장(new Member("test", "image.png", "1"));
+        final var savedProductId = 단일_상품_저장(new Product("testName", 1000L, "test.png", "test", null));
+        final var savedTagIds = 복수_태그_저장();
         final var image = 리뷰_사진_명세_요청();
         final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
         final var favoriteRequest = new ReviewFavoriteRequest(true);
         final var favoriteCancelRequest = new ReviewFavoriteRequest(false);
         final var loginCookie = 로그인_쿠키를_얻는다();
 
-        리뷰_추가_요청(savedProductId, image, reviewRequest, loginCookie);
+        단일_리뷰_저장(savedProductId, image, reviewRequest, loginCookie);
         final var savedReview = reviewRepository.findAll().get(0);
         리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteRequest, loginCookie);
 
@@ -111,22 +111,22 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 좋아요_수가_서로_다르면_좋아요_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2'");
             final var member3 = new Member("test3", "test3.png", "3'");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review2, review3, review1);
             final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
@@ -144,24 +144,24 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 좋아요_수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 130L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 130L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "토미토", false, 130L);
             final var review4 = new Review(member4, product, "review4.jpg", 4L, "기러기", false, 130L);
             final var reviews = List.of(review1, review2, review3, review4);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var pageDto = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
@@ -183,22 +183,22 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review1, review3, review2);
             final var loginCookie = 로그인_쿠키를_얻는다();
@@ -216,24 +216,24 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product, "review2.jpg", 3L, "역삼역", true, 351L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "토마토", false, 130L);
             final var review4 = new Review(member4, product, "review4.jpg", 3L, "기러기", false, 130L);
             final var reviews = List.of(review1, review2, review3, review4);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
@@ -255,22 +255,22 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 등록_시간이_서로_다르면_최신순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review3, review2, review1);
             final var loginCookie = 로그인_쿠키를_얻는다();
@@ -292,22 +292,22 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
             final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review2, review3, review1);
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
@@ -325,24 +325,24 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
             final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            단일_카테고리_저장(category);
 
             final var member1 = new Member("test1", "test1.png", "1");
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
-            복수_멤버_추가_요청(members);
+            복수_멤버_저장(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
             final var review2 = new Review(member2, product, "review2.jpg", 3L, "역삼역", true, 351L);
             final var review3 = new Review(member3, product, "review3.jpg", 3L, "토마토", false, 130L);
             final var review4 = new Review(member4, product, "review4.jpg", 3L, "기러기", false, 130L);
             final var reviews = List.of(review1, review2, review3, review4);
-            복수_리뷰_추가(reviews);
+            복수_리뷰_저장(reviews);
 
             final var sortingReviews = List.of(review4, review3, review2, review1);
             final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
@@ -361,18 +361,18 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     void 리뷰_랭킹을_조회하다() {
         // given
         final var category = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(category);
+        단일_카테고리_저장(category);
 
         final var member1 = new Member("test1", "test1.png", "1");
         final var member2 = new Member("test2", "test2.png", "2");
         final var member3 = new Member("test3", "test3.png", "3");
         final var members = List.of(member1, member2, member3);
-        복수_멤버_추가_요청(members);
+        복수_멤버_저장(members);
 
         final var product1 = new Product("김밥", 1000L, "image.png", "김밥", category);
         final var product2 = new Product("물", 500L, "water.jpg", "물", category);
         final var products = List.of(product1, product2);
-        복수_상품_추가_요청(products);
+        복수_상품_저장(products);
 
         final var review1 = new Review(member1, product1, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
         final var review2 = new Review(member2, product1, "review2.jpg", 4L, "역삼역", true, 351L);
@@ -380,7 +380,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final var review4 = new Review(member2, product2, "review4.jpg", 5L, "ㅁㅜㄹ", true, 247L);
         final var review5 = new Review(member3, product2, "review5.jpg", 1L, "ㄴㄴ", false, 83L);
         final var reviews = List.of(review1, review2, review3, review4, review5);
-        복수_리뷰_추가(reviews);
+        복수_리뷰_저장(reviews);
 
         final var rankingReviews = List.of(review2, review4, review3);
 
@@ -398,33 +398,33 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         assertThat(result.getMember().getId()).isEqualTo(memberId);
     }
 
-    private List<Long> 태그_추가_요청() {
+    private List<Long> 복수_태그_저장() {
         final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
         final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
         return List.of(testTag1.getId(), testTag2.getId());
     }
 
-    private Long 상품_추가_요청(final Product product) {
+    private Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
     }
 
-    private void 복수_상품_추가_요청(final List<Product> products) {
-        productRepository.saveAll(products);
-    }
-
-    private Long 멤버_추가_요청(final Member member) {
+    private Long 단일_멤버_저장(final Member member) {
         return memberRepository.save(member).getId();
     }
 
-    private void 복수_멤버_추가_요청(final List<Member> members) {
+    private Long 단일_카테고리_저장(final Category category) {
+        return categoryRepository.save(category).getId();
+    }
+
+    private void 복수_상품_저장(final List<Product> products) {
+        productRepository.saveAll(products);
+    }
+
+    private void 복수_멤버_저장(final List<Member> members) {
         memberRepository.saveAll(members);
     }
 
-    private void 카테고리_추가_요청(final Category category) {
-        categoryRepository.save(category);
-    }
-
-    private void 복수_리뷰_추가(final List<Review> reviews) {
+    private void 복수_리뷰_저장(final List<Review> reviews) {
         reviewRepository.saveAll(reviews);
     }
 

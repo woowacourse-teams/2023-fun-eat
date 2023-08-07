@@ -22,7 +22,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     void 사용자_정보를_확인하다() {
         // given
         final var member = new Member("test", "http://www.test.com", "1");
-        멤버_추가_요청(member);
+        단일_멤버_저장(member);
         final var loginCookie = 로그인_쿠키를_얻는다();
 
         // when
@@ -37,7 +37,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     void 사용자_정보를_수정하다() {
         // given
         final var member = new Member("before", "http://www.before.com", "1");
-        멤버_추가_요청(member);
+        단일_멤버_저장(member);
         final var loginCookie = 로그인_쿠키를_얻는다();
 
         final var request = new MemberRequest("after", "http://www.after.com");
@@ -49,7 +49,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         STATUS_CODE를_검증한다(response, 정상_처리);
     }
 
-    private Long 멤버_추가_요청(final Member member) {
+    private Long 단일_멤버_저장(final Member member) {
         return memberRepository.save(member).getId();
     }
 

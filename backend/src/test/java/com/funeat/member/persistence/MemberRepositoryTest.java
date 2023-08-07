@@ -14,12 +14,16 @@ public class MemberRepositoryTest extends RepositoryTest {
         // given
         final var platformId = "1234";
         final var member = new Member("test", "www.test.com", platformId);
-        memberRepository.save(member);
+        단일_멤버_저장(member);
 
         // when
         final var actual = memberRepository.findByPlatformId(platformId).get();
 
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(member);
+    }
+
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
     }
 }
