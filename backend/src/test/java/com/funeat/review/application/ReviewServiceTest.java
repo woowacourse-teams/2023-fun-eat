@@ -1,6 +1,7 @@
 package com.funeat.review.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 import com.funeat.common.DataClearExtension;
@@ -80,13 +81,15 @@ class ReviewServiceTest {
             final var result = reviewRepository.findAll();
 
             // then
-            assertThat(result.get(0)).usingRecursiveComparison()
-                    .ignoringExpectedNullFields()
-                    .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
-                    .isEqualTo(
-                            new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
-                    );
-            assertThat(result.get(0).getCreatedAt()).isNotNull();
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(result.get(0)).usingRecursiveComparison()
+                        .ignoringExpectedNullFields()
+                        .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
+                        .isEqualTo(
+                                new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
+                        );
+                softAssertions.assertThat(result.get(0).getCreatedAt()).isNotNull();
+            });
         }
     }
 
@@ -115,8 +118,10 @@ class ReviewServiceTest {
             final var reviewResult = reviewRepository.findAll().get(0);
 
             // then
-            assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
-            assertThat(reviewFavoriteResult.getFavorite()).isTrue();
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
+                softAssertions.assertThat(reviewFavoriteResult.getFavorite()).isTrue();
+            });
         }
 
         @Test
@@ -145,8 +150,10 @@ class ReviewServiceTest {
             final var reviewResult = reviewRepository.findAll().get(0);
 
             // then
-            assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
-            assertThat(reviewFavoriteResult.getFavorite()).isFalse();
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
+                softAssertions.assertThat(reviewFavoriteResult.getFavorite()).isFalse();
+            });
         }
     }
 

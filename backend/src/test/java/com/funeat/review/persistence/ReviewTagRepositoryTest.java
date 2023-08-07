@@ -1,6 +1,6 @@
 package com.funeat.review.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
@@ -83,8 +83,10 @@ class ReviewTagRepositoryTest {
         final var tags = reviewTagRepository.findTop3TagsByReviewIn(product.getId(), PageRequest.of(0, 3));
 
         // then
-        assertThat(tags).hasSize(3);
-        assertThat(tags).usingRecursiveFieldByFieldElementComparator()
-                .containsExactly(tag2, tag1, tag3);
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(tags).hasSize(3);
+            softAssertions.assertThat(tags).usingRecursiveFieldByFieldElementComparator()
+                    .containsExactly(tag2, tag1, tag3);
+        });
     }
 }

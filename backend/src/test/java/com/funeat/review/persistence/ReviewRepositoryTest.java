@@ -1,6 +1,7 @@
 package com.funeat.review.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
@@ -60,8 +61,10 @@ class ReviewRepositoryTest {
             reviewRepository.save(new Review(member, product2, "review.png", 3L, "이 라면은 맛있다", true));
 
             // when
-            assertThat(reviewRepository.countByProduct(product1)).isEqualTo(3);
-            assertThat(reviewRepository.countByProduct(product2)).isEqualTo(1);
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(reviewRepository.countByProduct(product1)).isEqualTo(3);
+                softAssertions.assertThat(reviewRepository.countByProduct(product2)).isEqualTo(1);
+            });
         }
     }
 
