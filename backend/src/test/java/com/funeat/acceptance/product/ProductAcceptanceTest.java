@@ -3,13 +3,8 @@ package com.funeat.acceptance.product;
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static com.funeat.acceptance.product.ProductSteps.CU;
-import static com.funeat.acceptance.product.ProductSteps.간편식사;
-import static com.funeat.acceptance.product.ProductSteps.공통_상품_카테고리_목록_조회_요청;
-import static com.funeat.acceptance.product.ProductSteps.과자류;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
-import static com.funeat.acceptance.product.ProductSteps.즉석조리;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
@@ -18,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Category;
+import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
-import com.funeat.product.dto.CategoryResponse;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryPageDto;
@@ -47,6 +42,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_다르면_가격_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
@@ -77,6 +73,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
@@ -111,6 +108,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_다르면_가격_기준_오름차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
@@ -141,6 +139,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
             final var product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
@@ -174,6 +173,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
@@ -204,6 +204,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
@@ -237,6 +238,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
@@ -267,6 +269,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
@@ -300,6 +303,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 리뷰수가_서로_다르면_리뷰수_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
@@ -334,6 +338,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 리뷰수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
+            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
             final var categoryId = 카테고리_추가_요청(간편식사);
             final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
             final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
@@ -371,6 +376,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
     @Test
     void 상품_상세_정보를_조회한다() {
         // given
+        final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(간편식사);
         final var product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
         final var productId = 상품_추가_요청(product);
@@ -399,24 +405,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    void 공통_상품_카테고리의_목록을_조회한다() {
-        // given
-        카테고리_추가_요청(간편식사);
-        카테고리_추가_요청(즉석조리);
-        카테고리_추가_요청(과자류);
-        카테고리_추가_요청(CU);
-
-        // when
-        final var response = 공통_상품_카테고리_목록_조회_요청();
-
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
-    }
-
-    @Test
     void 전체_상품들_중에서_랭킹_TOP3를_조회할_수_있다() {
         // given
+        final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
         카테고리_추가_요청(간편식사);
         final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 3.25, 간편식사);
         final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 4.0, 간편식사);
@@ -498,19 +489,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var actual = response.as(ProductResponse.class);
         assertThat(actual).usingRecursiveComparison()
                 .ignoringFields("id", "averageRating")
-                .isEqualTo(expected);
-    }
-
-    private void 공통_상품_카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                           final List<Category> categories) {
-        final List<CategoryResponse> expected = new ArrayList<>();
-        for (final var category : categories) {
-            expected.add(CategoryResponse.toResponse(category));
-        }
-
-        final var actualResponses = response.jsonPath().getList("", CategoryResponse.class);
-        assertThat(actualResponses).usingRecursiveComparison()
-                .ignoringFields("id")
                 .isEqualTo(expected);
     }
 
