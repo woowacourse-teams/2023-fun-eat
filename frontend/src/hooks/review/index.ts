@@ -6,4 +6,4 @@ export { default as useReviewRegisterForm } from './useReviewRegisterForm';
 export { default as useReviewTags } from './useReviewTags';
 export { default as useReviewTextarea } from './useReviewTextarea';
 export { default as useSelectedTags } from './useSelectedTags';
-export { default as useStarRate } from './useStarRate';
+export { default as useStarRating } from './useStarRating';
