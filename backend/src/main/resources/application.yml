@@ -14,3 +14,8 @@ springdoc:
 kakao:
   rest-api-key: { REST_API_KEY }
   redirect-uri: { REDIRECT_URI }
+
+logging:
+  slack:
+    webhook-uri: { SLACK_ALARM_URL }
+  config: classpath:logback-spring.xml
