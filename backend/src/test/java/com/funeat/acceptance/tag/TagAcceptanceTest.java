@@ -6,7 +6,7 @@ import static com.funeat.acceptance.tag.TagSteps.전체_태그_목록_조회_요
 import static com.funeat.tag.domain.TagType.ETC;
 import static com.funeat.tag.domain.TagType.PRICE;
 import static com.funeat.tag.domain.TagType.TASTE;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.tag.domain.Tag;
@@ -28,31 +28,35 @@ public class TagAcceptanceTest extends AcceptanceTest {
         final var tag2 = new Tag("매콤해요", TASTE);
         final var tag3 = new Tag("갓성비", PRICE);
         final var tag4 = new Tag("바삭바삭", ETC);
-        복수_태그_저장(List.of(tag1, tag2, tag3, tag4));
+        final var tags = List.of(tag1, tag2, tag3, tag4);
+        복수_태그_저장(tags);
 
         // when
         final var response = 전체_태그_목록_조회_요청();
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
-        전체_태그_목록_조회_결과를_검증한다(response, List.of(tag1, tag2, tag3, tag4));
+        전체_태그_목록_조회_결과를_검증한다(response, tags);
     }
 
     private void 복수_태그_저장(final List<Tag> tags) {
         tagRepository.saveAll(tags);
     }
 
-    private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Tag> tags) {
-        final var expectedByType = tags.stream()
+    private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Tag> expected) {
+        final var expectedByType = expected.stream()
                 .collect(Collectors.groupingBy(Tag::getTagType));
+
         final var actual = response.jsonPath()
                 .getList("", TagsResponse.class);
 
-        for (final var tagsResponse : actual) {
-            final TagType tagType = TagType.valueOf(tagsResponse.getTagType());
-            assertThat(tagType).isIn(expectedByType.keySet());
-            assertThat(tagsResponse.getTags()).usingRecursiveComparison()
-                    .isEqualTo(expectedByType.get(tagType));
-        }
+        assertSoftly(softAssertions -> {
+            for (final var tagsResponse : actual) {
+                final TagType tagType = TagType.valueOf(tagsResponse.getTagType());
+                softAssertions.assertThat(tagType).isIn(expectedByType.keySet());
+                softAssertions.assertThat(tagsResponse.getTags()).usingRecursiveComparison()
+                        .isEqualTo(expectedByType.get(tagType));
+            }
+        });
     }
 }

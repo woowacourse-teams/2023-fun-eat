@@ -18,6 +18,7 @@ public class MemberTest {
         void 사용자의_닉네임과_이미지_주소를_변경할_수_있다() {
             // given
             final var member = new Member("before", "http://www.before.com", "1");
+
             final var expectedNickname = "after";
             final var expectedProfileImage = "http://www.after.com";
 

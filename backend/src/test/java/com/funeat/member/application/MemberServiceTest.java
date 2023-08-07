@@ -9,7 +9,6 @@ import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -23,9 +22,10 @@ class MemberServiceTest extends ServiceTest {
         void 이미_가입된_사용자면_가입하지_않고_반환한다() {
             // given
             final var member = new Member("test", "www.test.com", "1");
-            memberRepository.save(member);
+            단일_멤버_저장(member);
 
             final var userInfoDto = new UserInfoDto(1L, "test", "www.test.com");
+
             final var expected = memberRepository.findAll();
 
             // when
@@ -33,8 +33,8 @@ class MemberServiceTest extends ServiceTest {
 
             // then
             assertSoftly(softAssertions -> {
-                Assertions.assertFalse(actual.isSignUp());
-                assertThat(expected).containsExactly(actual.getMember());
+                softAssertions.assertThat(actual.isSignUp()).isFalse();
+                softAssertions.assertThat(expected).containsExactly(actual.getMember());
             });
         }
 
@@ -42,9 +42,10 @@ class MemberServiceTest extends ServiceTest {
         void 가입되지_않은_사용자면_가입하고_반환하다() {
             // given
             final var member = new Member("test", "www.test.com", "1");
-            memberRepository.save(member);
+            단일_멤버_저장(member);
 
             final var userInfoDto = new UserInfoDto(2L, "test", "www.test.com");
+
             final var expected = memberRepository.findAll();
 
             // when
@@ -52,8 +53,8 @@ class MemberServiceTest extends ServiceTest {
 
             // then
             assertSoftly(softAssertions -> {
-                Assertions.assertTrue(actual.isSignUp());
-                assertThat(expected).doesNotContain(actual.getMember());
+                softAssertions.assertThat(actual.isSignUp()).isTrue();
+                softAssertions.assertThat(expected).doesNotContain(actual.getMember());
             });
         }
     }
@@ -65,7 +66,8 @@ class MemberServiceTest extends ServiceTest {
         void 사용자_정보를_확인하다() {
             // given
             final var member = new Member("test", "http://www.test.com", "1");
-            final var memberId = memberRepository.save(member).getId();
+            final var memberId = 단일_멤버_저장(member);
+
             final var expected = MemberProfileResponse.toResponse(member);
 
             // when
@@ -79,7 +81,7 @@ class MemberServiceTest extends ServiceTest {
         void 존재하지_않는_사용자_정보를_조회하면_예외가_발생한다() {
             // given
             final var member = new Member("test", "http://www.test.com", "1");
-            final var wrongMemberId = memberRepository.save(member).getId() + 1L;
+            final var wrongMemberId = 단일_멤버_저장(member) + 1L;
 
             // when, then
             assertThatThrownBy(() -> memberService.getMemberProfile(wrongMemberId))
@@ -98,7 +100,7 @@ class MemberServiceTest extends ServiceTest {
             final var request = new MemberRequest(nickname, profileImage);
 
             final var member = new Member(nickname, profileImage, "1");
-            final var memberId = memberRepository.save(member).getId();
+            final var memberId = 단일_멤버_저장(member);
 
             final var expected = memberRepository.findById(memberId).get();
             final var expectedNickname = expected.getNickname();
@@ -126,7 +128,7 @@ class MemberServiceTest extends ServiceTest {
             final var request = new MemberRequest(afterNickname, profileImage);
 
             final var member = new Member(beforeNickname, profileImage, "1");
-            final var memberId = memberRepository.save(member).getId();
+            final var memberId = 단일_멤버_저장(member);
 
             final var expected = memberRepository.findById(memberId).get();
             final var expectedNickname = expected.getNickname();
@@ -155,7 +157,7 @@ class MemberServiceTest extends ServiceTest {
             final var request = new MemberRequest(nickname, afterProfileImage);
 
             final var member = new Member(nickname, beforeProfileImage, "1");
-            final var memberId = memberRepository.save(member).getId();
+            final var memberId = 단일_멤버_저장(member);
 
             final var expected = memberRepository.findById(memberId).get();
             final var expectedNickname = expected.getNickname();
@@ -185,7 +187,7 @@ class MemberServiceTest extends ServiceTest {
             final var request = new MemberRequest(afterNickname, afterProfileImage);
 
             final var member = new Member(beforeNickname, beforeProfileImage, "1");
-            final var memberId = memberRepository.save(member).getId();
+            final var memberId = 단일_멤버_저장(member);
 
             final var expected = memberRepository.findById(memberId).get();
             final var expectedNickname = expected.getNickname();
@@ -203,5 +205,9 @@ class MemberServiceTest extends ServiceTest {
                 softAssertions.assertThat(actualProfileImage).isNotEqualTo(expectedProfileImage);
             });
         }
+    }
+
+    private Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
     }
 }

@@ -31,13 +31,14 @@ class ReviewServiceTest extends ServiceTest {
         void 리뷰를_추가할_수_있다() {
             // given
             final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
+
             final var product = new Product("testName", 1000L, "test.png", "test", null);
+            단일_상품_저장(product);
+
             final var tag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
             final var tag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
             final var tags = List.of(tag1, tag2);
-
-            단일_멤버_저장(member);
-            단일_상품_저장(product);
             복수_태그_저장(tags);
 
             final var tagIds = tags.stream()
@@ -70,13 +71,14 @@ class ReviewServiceTest extends ServiceTest {
         void 리뷰에_좋아요를_할_수_있다() {
             // given
             final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
+
             final var product = new Product("testName", 1000L, "test.png", "test", null);
+            단일_상품_저장(product);
+
             final var tag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
             final var tag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
             final var tags = List.of(tag1, tag2);
-
-            단일_멤버_저장(member);
-            단일_상품_저장(product);
             복수_태그_저장(tags);
 
             final var tagIds = tags.stream()
@@ -105,13 +107,14 @@ class ReviewServiceTest extends ServiceTest {
         void 리뷰에_좋아요를_취소_할_수_있다() {
             // given
             final var member = new Member("test", "image.png", "1");
+            단일_멤버_저장(member);
+
             final var product = new Product("testName", 1000L, "test.png", "test", null);
+            단일_상품_저장(product);
+
             final var tag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
             final var tag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
             final var tags = List.of(tag1, tag2);
-
-            단일_멤버_저장(member);
-            단일_상품_저장(product);
             복수_태그_저장(tags);
 
             final var tagIds = tags.stream()
@@ -245,9 +248,10 @@ class ReviewServiceTest extends ServiceTest {
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
             복수_멤버_저장(members);
+            final var memberId1 = member1.getId();
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            단일_상품_저장(product);
+            final var productId = 단일_상품_저장(product);
 
             final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
             final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
@@ -256,13 +260,13 @@ class ReviewServiceTest extends ServiceTest {
             복수_리뷰_저장(reviews);
 
             final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
+
             final var expected = Stream.of(review3, review2)
                     .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
-                    .getReviews();
+            final var actual = reviewService.sortingReviews(productId, pageable, memberId1).getReviews();
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

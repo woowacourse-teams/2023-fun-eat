@@ -34,16 +34,18 @@ class ProductRepositoryTest extends RepositoryTest {
             final var products = List.of(product1, product2, product3, product4, product5);
             복수_상품_저장(products);
 
+            final var page = PageRequest.of(0, 3, Sort.by("averageRating").descending());
+
+            final var productInCategoryDto1 = ProductInCategoryDto.toDto(product1, 0L);
+            final var productInCategoryDto2 = ProductInCategoryDto.toDto(product5, 0L);
+            final var productInCategoryDto3 = ProductInCategoryDto.toDto(product3, 0L);
+            final var expected = List.of(productInCategoryDto1, productInCategoryDto2, productInCategoryDto3);
+
             // when
-            final var pageRequest = PageRequest.of(0, 3, Sort.by("averageRating").descending());
-            final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+            final var actual = productRepository.findAllByCategory(category, page).getContent();
 
             // then
-            final var expected = List.of(ProductInCategoryDto.toDto(product1, 0L),
-                    ProductInCategoryDto.toDto(product5, 0L),
-                    ProductInCategoryDto.toDto(product3, 0L));
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
 
         @Test
@@ -58,16 +60,18 @@ class ProductRepositoryTest extends RepositoryTest {
             final var products = List.of(product1, product2, product3, product4, product5);
             복수_상품_저장(products);
 
+            final var page = PageRequest.of(0, 3, Sort.by("averageRating").ascending());
+
+            final var productInCategoryDto1 = ProductInCategoryDto.toDto(product4, 0L);
+            final var productInCategoryDto2 = ProductInCategoryDto.toDto(product2, 0L);
+            final var productInCategoryDto3 = ProductInCategoryDto.toDto(product3, 0L);
+            final var expected = List.of(productInCategoryDto1, productInCategoryDto2, productInCategoryDto3);
+
             // when
-            final var pageRequest = PageRequest.of(0, 3, Sort.by("averageRating").ascending());
-            final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+            final var actual = productRepository.findAllByCategory(category, page).getContent();
 
             // then
-            final var expected = List.of(ProductInCategoryDto.toDto(product4, 0L),
-                    ProductInCategoryDto.toDto(product2, 0L),
-                    ProductInCategoryDto.toDto(product3, 0L));
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
 
         @Test
@@ -88,15 +92,18 @@ class ProductRepositoryTest extends RepositoryTest {
                     product9, product10);
             복수_상품_저장(products);
 
+            final var page = PageRequest.of(0, 3, Sort.by("price").descending());
+
+            final var productInCategoryDto1 = ProductInCategoryDto.toDto(product9, 0L);
+            final var productInCategoryDto2 = ProductInCategoryDto.toDto(product10, 0L);
+            final var productInCategoryDto3 = ProductInCategoryDto.toDto(product5, 0L);
+            final var expected = List.of(productInCategoryDto1, productInCategoryDto2, productInCategoryDto3);
+
             // when
-            final var pageRequest = PageRequest.of(0, 3, Sort.by("price").descending());
-            final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+            final var actual = productRepository.findAllByCategory(category, page).getContent();
 
             // then
-            final var expected = List.of(ProductInCategoryDto.toDto(product9, 0L),
-                    ProductInCategoryDto.toDto(product10, 0L), ProductInCategoryDto.toDto(product5, 0L));
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
 
         @Test
@@ -117,14 +124,17 @@ class ProductRepositoryTest extends RepositoryTest {
                     product8, product9, product10);
             복수_상품_저장(products);
 
+            final var page = PageRequest.of(0, 3, Sort.by("price").ascending());
+
+            final var productInCategoryDto1 = ProductInCategoryDto.toDto(product8, 0L);
+            final var productInCategoryDto2 = ProductInCategoryDto.toDto(product1, 0L);
+            final var productInCategoryDto3 = ProductInCategoryDto.toDto(product4, 0L);
+            final var expected = List.of(productInCategoryDto1, productInCategoryDto2, productInCategoryDto3);
+
             // when
-            final var pageRequest = PageRequest.of(0, 3, Sort.by("price").ascending());
-            final var actual = productRepository.findAllByCategory(category, pageRequest).getContent();
+            final var actual = productRepository.findAllByCategory(category, page).getContent();
 
             // then
-            final var expected = List.of(ProductInCategoryDto.toDto(product8, 0L),
-                    ProductInCategoryDto.toDto(product1, 0L),
-                    ProductInCategoryDto.toDto(product4, 0L));
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
         }
@@ -162,15 +172,17 @@ class ProductRepositoryTest extends RepositoryTest {
                     review4_1, review4_2, review4_3);
             복수_리뷰_저장(reviews);
 
+            final var page = PageRequest.of(0, 3);
+
+            final var productInCategoryDto1 = ProductInCategoryDto.toDto(product1, 4L);
+            final var productInCategoryDto2 = ProductInCategoryDto.toDto(product4, 3L);
+            final var productInCategoryDto3 = ProductInCategoryDto.toDto(product2, 2L);
+            final var expected = List.of(productInCategoryDto1, productInCategoryDto2, productInCategoryDto3);
+
             // when
-            final var pageRequest = PageRequest.of(0, 3);
-            final var actual = productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest)
-                    .getContent();
+            final var actual = productRepository.findAllByCategoryOrderByReviewCountDesc(category, page).getContent();
 
             // then
-            final var expected = List.of(ProductInCategoryDto.toDto(product1, 4L),
-                    ProductInCategoryDto.toDto(product4, 3L),
-                    ProductInCategoryDto.toDto(product2, 2L));
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
         }
@@ -207,14 +219,15 @@ class ProductRepositoryTest extends RepositoryTest {
                     review4_1, review4_2, review4_3);
             복수_리뷰_저장(reviews);
 
+            final var productReviewCountDto1 = new ProductReviewCountDto(product1, 4L);
+            final var productReviewCountDto2 = new ProductReviewCountDto(product3, 1L);
+            final var expected = List.of(productReviewCountDto1, productReviewCountDto2);
+
             // when
             final var actual = productRepository.findAllByAverageRatingGreaterThan3();
 
             // then
-            final var expected = List.of(new ProductReviewCountDto(product1, 4L),
-                    new ProductReviewCountDto(product3, 1L));
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
     }
 

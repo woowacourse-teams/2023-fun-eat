@@ -18,6 +18,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     void 멤버가_카카오_로그인_버튼을_누르면_카카오_로그인_페이지로_리다이렉트할_수_있다() {
         // given
         final var response = 카카오_로그인_버튼_클릭();
+
         final var expected = authService.getLoginRedirectUri();
 
         // when

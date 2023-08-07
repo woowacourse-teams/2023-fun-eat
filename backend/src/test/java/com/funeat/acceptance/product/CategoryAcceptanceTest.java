@@ -11,8 +11,8 @@ import com.funeat.product.domain.CategoryType;
 import com.funeat.product.dto.CategoryResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -42,12 +42,12 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
     private void 공통_상품_카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
                                            final List<Category> categories) {
-        final List<CategoryResponse> expected = new ArrayList<>();
-        for (final var category : categories) {
-            expected.add(CategoryResponse.toResponse(category));
-        }
+        final var expected = categories.stream()
+                .map(CategoryResponse::toResponse)
+                .collect(Collectors.toList());
 
-        final var actualResponses = response.jsonPath().getList("", CategoryResponse.class);
-        assertThat(actualResponses).usingRecursiveComparison().isEqualTo(expected);
+        final var actual = response.jsonPath().getList("", CategoryResponse.class);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }

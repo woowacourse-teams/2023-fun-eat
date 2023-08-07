@@ -6,7 +6,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
-import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_저장;
+import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -396,9 +396,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var request3 = new ReviewCreateRequest(3L, List.of(tagId2), "request3", true);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
-        단일_리뷰_저장(productId, image, request1, loginCookie);
-        단일_리뷰_저장(productId, image, request2, loginCookie);
-        단일_리뷰_저장(productId, image, request3, loginCookie);
+        단일_리뷰_요청(productId, image, request1, loginCookie);
+        단일_리뷰_요청(productId, image, request2, loginCookie);
+        단일_리뷰_요청(productId, image, request3, loginCookie);
 
         // when
         final var response = 상품_상세_조회_요청(productId);

@@ -46,7 +46,7 @@ public class AuthApiControllerTest {
         }
 
         @Test
-        void 가입되지_않은_멤버라면_프로필_경로로_리다이렉트한다() throws Exception {
+        void 가입되지_않은_유저라면_프로필_경로로_리다이렉트한다() throws Exception {
             // given
             final var code = "test";
             final var member = new Member("test", "www.test.com", "1");

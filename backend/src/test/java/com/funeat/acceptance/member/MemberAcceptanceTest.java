@@ -23,6 +23,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // given
         final var member = new Member("test", "http://www.test.com", "1");
         단일_멤버_저장(member);
+
         final var loginCookie = 로그인_쿠키를_얻는다();
 
         // when
@@ -38,8 +39,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // given
         final var member = new Member("before", "http://www.before.com", "1");
         단일_멤버_저장(member);
-        final var loginCookie = 로그인_쿠키를_얻는다();
 
+        final var loginCookie = 로그인_쿠키를_얻는다();
         final var request = new MemberRequest("after", "http://www.after.com");
 
         // when

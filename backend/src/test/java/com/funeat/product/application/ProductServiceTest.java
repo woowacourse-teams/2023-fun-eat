@@ -45,16 +45,17 @@ class ProductServiceTest extends ServiceTest {
                     review4_1, review4_2, review4_3);
             복수_리뷰_저장(reviews);
 
+            final var rankingProductDto1 = RankingProductDto.toDto(product3);
+            final var rankingProductDto2 = RankingProductDto.toDto(product2);
+            final var rankingProductDto3 = RankingProductDto.toDto(product1);
+            final var rankingProductDtos = List.of(rankingProductDto1, rankingProductDto2, rankingProductDto3);
+            final var expected = RankingProductsResponse.toResponse(rankingProductDtos);
+
             // when
             final var actual = productService.getTop3Products();
 
             // then
-            final var expected = RankingProductsResponse.toResponse(
-                    List.of(RankingProductDto.toDto(product3), RankingProductDto.toDto(product2),
-                            RankingProductDto.toDto(product1))
-            );
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
         }
     }
 

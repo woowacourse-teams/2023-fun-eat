@@ -1,6 +1,6 @@
 package com.funeat.review.persistence;
 
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.RepositoryTest;
 import com.funeat.member.domain.Member;
@@ -23,7 +23,7 @@ class ReviewTagRepositoryTest extends RepositoryTest {
         단일_멤버_저장(member);
 
         final var product = new Product("망고", 1_000L, "mango.png", "망고망고", null);
-        단일_상품_저장(product);
+        final var productId = 단일_상품_저장(product);
 
         final var tag1 = new Tag("1번", TagType.ETC);
         final var tag2 = new Tag("2번", TagType.ETC);
@@ -51,15 +51,14 @@ class ReviewTagRepositoryTest extends RepositoryTest {
                 reviewTag7, reviewTag8, reviewTag9, reviewTag10);
         복수_리뷰_태그_저장(reviewTags);
 
+        final var page = PageRequest.of(0, 3);
+
         // when
-        final var top3Tags = reviewTagRepository.findTop3TagsByReviewIn(product.getId(), PageRequest.of(0, 3));
+        final var top3Tags = reviewTagRepository.findTop3TagsByReviewIn(productId, page);
 
         // then
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(top3Tags).hasSize(3);
-            softAssertions.assertThat(top3Tags).usingRecursiveFieldByFieldElementComparator()
-                    .containsExactly(tag2, tag1, tag3);
-        });
+        assertThat(top3Tags).usingRecursiveFieldByFieldElementComparator()
+                .containsExactly(tag2, tag1, tag3);
     }
 
     private Long 단일_멤버_저장(final Member member) {

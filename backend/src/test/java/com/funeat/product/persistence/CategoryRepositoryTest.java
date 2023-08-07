@@ -27,8 +27,10 @@ public class CategoryRepositoryTest extends RepositoryTest {
             final var CU = new Category("CU", CategoryType.STORE);
             final var GS25 = new Category("GS25", CategoryType.STORE);
             final var EMART24 = new Category("EMART24", CategoryType.STORE);
+
             final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
             복수_카테고리_저장(categories);
+
             final var expected = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
 
             // when
@@ -50,7 +52,10 @@ public class CategoryRepositoryTest extends RepositoryTest {
             final var CU = new Category("CU", CategoryType.STORE);
             final var GS25 = new Category("GS25", CategoryType.STORE);
             final var EMART24 = new Category("EMART24", CategoryType.STORE);
-            복수_카테고리_저장(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
+
+            final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
+            복수_카테고리_저장(categories);
+
             final var expected = List.of(CU, GS25, EMART24);
 
             // when

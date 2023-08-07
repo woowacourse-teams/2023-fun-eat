@@ -5,12 +5,13 @@ import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한�
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
-import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_저장;
+import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Member;
@@ -39,15 +40,24 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰를_작성한다() {
         // given
-        final var savedProductId = 단일_상품_저장(new Product("testName", 1000L, "test.png", "test", null));
-        final var savedTagIds = 복수_태그_저장();
+        final var product = new Product("test", 1000L, "test.png", "test", null);
+        final var productId = 단일_상품_저장(product);
+
+        final var tag1 = tagRepository.save(new Tag("tag1", TagType.ETC));
+        final var tag2 = tagRepository.save(new Tag("tag2", TagType.ETC));
+        final var tags = List.of(tag1, tag2);
+        복수_태그_저장(tags);
+        final var tagIds = tags.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+
         final var image = 리뷰_사진_명세_요청();
         final var loginCookie = 로그인_쿠키를_얻는다();
 
-        final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
+        final var request = new ReviewCreateRequest(4L, tagIds, "test content", true);
 
         // when
-        final var response = 단일_리뷰_저장(savedProductId, image, request, loginCookie);
+        final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_생성);
@@ -56,52 +66,72 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_할_수_있다() {
         // given
-        final var savedMemberId = 단일_멤버_저장(new Member("test", "image.png", "1"));
-        final var savedProductId = 단일_상품_저장(new Product("testName", 1000L, "test.png", "test", null));
-        final var savedTagIds = 복수_태그_저장();
+        final var member = new Member("test", "image.png", "1");
+        final var memberId = 단일_멤버_저장(member);
+
+        final var product = new Product("test", 1000L, "test.png", "test", null);
+        final var productId = 단일_상품_저장(product);
+
+        final var tag1 = tagRepository.save(new Tag("tag1", TagType.ETC));
+        final var tag2 = tagRepository.save(new Tag("tag2", TagType.ETC));
+        final var tags = List.of(tag1, tag2);
+        복수_태그_저장(tags);
+        final var tagIds = tags.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+
         final var image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-
+        final var reviewRequest = new ReviewCreateRequest(4L, tagIds, "test content", true);
         final var loginCookie = 로그인_쿠키를_얻는다();
-
-        단일_리뷰_저장(savedProductId, image, reviewRequest, loginCookie);
+        단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
         final var savedReviewId = reviewRepository.findAll().get(0).getId();
 
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+
         // when
-        final var response = 리뷰_좋아요_요청(savedProductId, savedReviewId, favoriteRequest, loginCookie);
-        final var result = reviewFavoriteRepository.findAll().get(0);
+        final var response = 리뷰_좋아요_요청(productId, savedReviewId, favoriteRequest, loginCookie);
+        final var actual = reviewFavoriteRepository.findAll().get(0);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
-        리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReviewId);
-        assertThat(result.getFavorite()).isTrue();
+        리뷰_좋아요_결과를_검증한다(actual, memberId, savedReviewId, true);
     }
 
     @Test
     void 리뷰에_좋아요를_취소할_수_있다() {
         // given
-        final var savedMemberId = 단일_멤버_저장(new Member("test", "image.png", "1"));
-        final var savedProductId = 단일_상품_저장(new Product("testName", 1000L, "test.png", "test", null));
-        final var savedTagIds = 복수_태그_저장();
-        final var image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-        final var favoriteCancelRequest = new ReviewFavoriteRequest(false);
-        final var loginCookie = 로그인_쿠키를_얻는다();
+        final var member = new Member("test", "image.png", "1");
+        final var memberId = 단일_멤버_저장(member);
 
-        단일_리뷰_저장(savedProductId, image, reviewRequest, loginCookie);
+        final var product = new Product("test", 1000L, "test.png", "test", null);
+        final var productId = 단일_상품_저장(product);
+
+        final var tag1 = tagRepository.save(new Tag("tag1", TagType.ETC));
+        final var tag2 = tagRepository.save(new Tag("tag2", TagType.ETC));
+        final var tags = List.of(tag1, tag2);
+        복수_태그_저장(tags);
+        final var tagIds = tags.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+
+        final var image = 리뷰_사진_명세_요청();
+        final var reviewRequest = new ReviewCreateRequest(4L, tagIds, "test content", true);
+        final var loginCookie = 로그인_쿠키를_얻는다();
+        단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
         final var savedReview = reviewRepository.findAll().get(0);
-        리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteRequest, loginCookie);
+
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+        리뷰_좋아요_요청(productId, savedReview.getId(), favoriteRequest, loginCookie);
+
+        final var favoriteCancelRequest = new ReviewFavoriteRequest(false);
 
         // when
-        final var response = 리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteCancelRequest, loginCookie);
-        final var result = reviewFavoriteRepository.findAll().get(0);
+        final var response = 리뷰_좋아요_요청(productId, savedReview.getId(), favoriteCancelRequest, loginCookie);
+        final var actual = reviewFavoriteRepository.findAll().get(0);
 
         // then
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
-        리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReview.getId());
-        assertThat(result.getFavorite()).isFalse();
+        리뷰_좋아요_결과를_검증한다(actual, memberId, savedReview.getId(), false);
     }
 
     @Nested
@@ -392,16 +422,18 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         리뷰_랭킹_조회_결과를_검증한다(response, rankingReviews);
     }
 
-    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getReview().getId()).isEqualTo(reviewId);
-        assertThat(result.getMember().getId()).isEqualTo(memberId);
+    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite actual, final Long expectedMemberId,
+                                 final Long expectedReviewId, final Boolean expectedFavorite) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.getId()).isNotNull();
+            softAssertions.assertThat(actual.getReview().getId()).isEqualTo(expectedReviewId);
+            softAssertions.assertThat(actual.getMember().getId()).isEqualTo(expectedMemberId);
+            softAssertions.assertThat(actual.getFavorite()).isEqualTo(expectedFavorite);
+        });
     }
 
-    private List<Long> 복수_태그_저장() {
-        final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
-        return List.of(testTag1.getId(), testTag2.getId());
+    private void 복수_태그_저장(final List<Tag> tags) {
+        tagRepository.saveAll(tags);
     }
 
     private Long 단일_상품_저장(final Product product) {
@@ -436,6 +468,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", SortingReviewsPageDto.class);
+
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
@@ -444,7 +477,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final var expected = reviews.stream()
                 .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
+
         final var actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
+
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
@@ -452,8 +487,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final var expected = reviews.stream()
                 .map(RankingReviewDto::toDto)
                 .collect(Collectors.toList());
+
         final var actual = response.jsonPath()
                 .getList("reviews", RankingReviewDto.class);
+
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }

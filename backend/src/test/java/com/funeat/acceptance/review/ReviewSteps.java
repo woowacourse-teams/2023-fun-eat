@@ -12,7 +12,7 @@ import io.restassured.specification.MultiPartSpecification;
 @SuppressWarnings("NonAsciiCharacters")
 public class ReviewSteps {
 
-    public static ExtractableResponse<Response> 단일_리뷰_저장(final Long productId, final MultiPartSpecification image,
+    public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final MultiPartSpecification image,
                                                          final ReviewCreateRequest request, final String loginCookie) {
         return given()
                 .cookie("JSESSIONID", loginCookie)
