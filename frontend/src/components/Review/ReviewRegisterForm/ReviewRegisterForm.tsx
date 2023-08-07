@@ -1,6 +1,6 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -19,7 +19,7 @@ import {
   useReviewTextarea,
   useSelectedTags,
   useFormData,
-  useStarRate,
+  useStarRating,
 } from '@/hooks/review';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 import type { ProductDetail } from '@/types/product';
@@ -36,7 +36,7 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
-  const { rating, setRating, handleRating } = useStarRate();
+  const { rating, setRating, handleRating } = useStarRating();
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
@@ -54,14 +54,22 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
     formContent,
   });
 
-  const labelRef = useRef<HTMLLabelElement | null>(null);
-  const { inputRef, handleKeydown } = useEnterKeyDown();
+  const { inputRef, labelRef, handleKeydown } = useEnterKeyDown();
+  // TODO: 배포하면 랜덤으로 에러 나는 현상 해결 후 주석 풀기
   // const [submitEnabled, setSubmitEnabled] = useState(false);
+
   const { setProductReviews } = useProductReviewContext();
   const { resetPage } = useProductReviewPageContext();
 
-  const formRef = useRef<HTMLFormElement>(null);
   const { request } = useReviewRegisterForm(product.id);
+
+  const resetForm = () => {
+    setReviewPreviewImage('');
+    setRating(0);
+    setSelectedTags([]);
+    setContent('');
+    setRebuy(false);
+  };
 
   const handleRebuy: ChangeEventHandler<HTMLInputElement> = (event) => {
     setRebuy(event.target.checked);
@@ -86,17 +94,11 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
       queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
       credentials: true,
     });
-
     const { reviews } = await reviewResponse.json();
+
     setProductReviews(reviews);
     resetPage();
-
-    setReviewPreviewImage('');
-    setRating(0);
-    setSelectedTags([]);
-    setContent('');
-    setRebuy(false);
-
+    resetForm();
     closeReviewDialog();
   };
 
@@ -119,7 +121,7 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
         <ProductOverviewItem name={product.name} image={product.image} />
       </ProductOverviewItemWrapper>
       <Divider variant="disabled" css="height:4px;" />
-      <RegisterForm ref={formRef} onSubmit={handleSubmit}>
+      <RegisterForm onSubmit={handleSubmit}>
         <ReviewImageUploader
           reviewPreviewImage={reviewPreviewImage}
           uploadReviewImage={uploadReviewImage}
