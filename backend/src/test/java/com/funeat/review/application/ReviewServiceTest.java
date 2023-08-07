@@ -21,7 +21,6 @@ import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -61,96 +60,94 @@ class ReviewServiceTest {
     @Autowired
     private ReviewTagRepository reviewTagRepository;
 
-    @BeforeEach
-    void init() {
-        reviewFavoriteRepository.deleteAll();
-        reviewTagRepository.deleteAll();
-        reviewRepository.deleteAll();
-        memberRepository.deleteAll();
-        productRepository.deleteAll();
-        tagRepository.deleteAll();
+    @Nested
+    class create_테스트 {
+
+        @Test
+        void 리뷰를_추가할_수_있다() {
+            // given
+            final var member = 멤버_추가_요청();
+            final var product = 상품_추가_요청();
+            final var tags = 태그_추가_요청();
+            final var tagIds = tags.stream()
+                    .map(Tag::getId)
+                    .collect(Collectors.toList());
+            final var image = 리뷰_페이크_사진_요청();
+            final var request = new ReviewCreateRequest(4L, tagIds, "review", true);
+
+            // when
+            reviewService.create(product.getId(), member.getId(), image, request);
+            final var result = reviewRepository.findAll();
+
+            // then
+            assertThat(result.get(0)).usingRecursiveComparison()
+                    .ignoringExpectedNullFields()
+                    .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
+                    .isEqualTo(
+                            new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
+                    );
+            assertThat(result.get(0).getCreatedAt()).isNotNull();
+        }
     }
 
-    @Test
-    void 리뷰를_추가할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var tags = 태그_추가_요청();
-        final var tagIds = tags.stream()
-                .map(Tag::getId)
-                .collect(Collectors.toList());
-        final var image = 리뷰_페이크_사진_요청();
-        final var request = new ReviewCreateRequest(4L, tagIds, "review", true);
+    @Nested
+    class likeReview_테스트 {
 
-        // when
-        reviewService.create(product.getId(), member.getId(), image, request);
-        final var result = reviewRepository.findAll();
+        @Test
+        void 리뷰에_좋아요를_할_수_있다() {
+            // given
+            final var member = 멤버_추가_요청();
+            final var product = 상품_추가_요청();
+            final var tags = 태그_추가_요청();
+            final var tagIds = tags.stream()
+                    .map(Tag::getId)
+                    .collect(Collectors.toList());
+            final var image = 리뷰_페이크_사진_요청();
+            final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
 
-        // then
-        assertThat(result.get(0)).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
-                .isEqualTo(
-                        new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
-                );
-        assertThat(result.get(0).getCreatedAt()).isNotNull();
-    }
+            reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
+            final var savedReview = reviewRepository.findAll().get(0);
 
-    @Test
-    void 리뷰에_좋아요를_할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var tags = 태그_추가_요청();
-        final var tagIds = tags.stream()
-                .map(Tag::getId)
-                .collect(Collectors.toList());
-        final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
+            // when
+            final var favoriteRequest = new ReviewFavoriteRequest(true);
+            reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
+            final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
+            final var reviewResult = reviewRepository.findAll().get(0);
 
-        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
-        final var savedReview = reviewRepository.findAll().get(0);
+            // then
+            assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
+            assertThat(reviewFavoriteResult.getFavorite()).isTrue();
+        }
 
-        // when
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
-        final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
-        final var reviewResult = reviewRepository.findAll().get(0);
+        @Test
+        void 리뷰에_좋아요를_취소_할_수_있다() {
+            // given
+            final var member = 멤버_추가_요청();
+            final var product = 상품_추가_요청();
+            final var tags = 태그_추가_요청();
+            final var tagIds = tags.stream()
+                    .map(Tag::getId)
+                    .collect(Collectors.toList());
+            final var image = 리뷰_페이크_사진_요청();
+            final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
 
-        // then
-        assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
-        assertThat(reviewFavoriteResult.getFavorite()).isTrue();
-    }
+            reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
+            final var savedReview = reviewRepository.findAll().get(0);
 
-    @Test
-    void 리뷰에_좋아요를_취소_할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var tags = 태그_추가_요청();
-        final var tagIds = tags.stream()
-                .map(Tag::getId)
-                .collect(Collectors.toList());
-        final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
+            final var favoriteRequest = new ReviewFavoriteRequest(true);
+            reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
 
-        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
-        final var savedReview = reviewRepository.findAll().get(0);
+            // when
+            final var cancelFavoriteRequest = new ReviewFavoriteRequest(false);
+            reviewService.likeReview(savedReview.getId(), member.getId(), cancelFavoriteRequest);
 
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
+            final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
+            final var reviewResult = reviewRepository.findAll().get(0);
 
-        // when
-        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false);
-        reviewService.likeReview(savedReview.getId(), member.getId(), cancelFavoriteRequest);
-
-        final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
-        final var reviewResult = reviewRepository.findAll().get(0);
-
-        // then
-        assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
-        assertThat(reviewFavoriteResult.getFavorite()).isFalse();
+            // then
+            assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
+            assertThat(reviewFavoriteResult.getFavorite()).isFalse();
+        }
     }
 
     private MockMultipartFile 리뷰_페이크_사진_요청() {

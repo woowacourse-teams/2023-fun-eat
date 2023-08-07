@@ -9,6 +9,7 @@ import com.funeat.product.domain.CategoryType;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,30 +36,34 @@ class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Test
-    void 카테고리_타입이_FOOD인_모든_카테고리를_조회한다() {
-        // given
-        categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
+    @Nested
+    class findAllByType_테스트 {
 
-        // when
-        final var actual = categoryRepository.findAllByType(CategoryType.FOOD);
+        @Test
+        void 카테고리_타입이_FOOD인_모든_카테고리를_조회한다() {
+            // given
+            categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
 
-        // then
-        assertThat(actual)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
-                .containsOnly(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
-    }
+            // when
+            final var actual = categoryRepository.findAllByType(CategoryType.FOOD);
 
-    @Test
-    void 카테고리_타입이_STORE인_모든_카테고리를_조회한다() {
-        // given
-        categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
-        final var expected = List.of(CU, GS25, EMART24);
+            // then
+            assertThat(actual)
+                    .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+                    .containsOnly(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
+        }
 
-        // when
-        final var actual = categoryRepository.findAllByType(CategoryType.STORE);
+        @Test
+        void 카테고리_타입이_STORE인_모든_카테고리를_조회한다() {
+            // given
+            categoryRepository.saveAll(List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24));
+            final var expected = List.of(CU, GS25, EMART24);
 
-        // then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            // when
+            final var actual = categoryRepository.findAllByType(CategoryType.STORE);
+
+            // then
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        }
     }
 }
