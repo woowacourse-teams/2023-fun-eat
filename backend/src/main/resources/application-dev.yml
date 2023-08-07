@@ -16,3 +16,7 @@ spring:
 review:
   image:
     path: { DEV_IMAGE_PATH }
+
+recipe:
+  image:
+    path: { DEV_RECIPE_PATH }

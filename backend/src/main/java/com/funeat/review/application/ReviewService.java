@@ -22,6 +22,7 @@ import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,21 +38,23 @@ public class ReviewService {
     private final ReviewTagRepository reviewTagRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final ImageService imageService;
-
     private final ReviewFavoriteRepository reviewFavoriteRepository;
+
+    @Qualifier("reviewImageUploader")
+    private final ImageService imageService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
-                         final ProductRepository productRepository, final ImageService imageService,
-                         final ReviewFavoriteRepository reviewFavoriteRepository) {
+                         final ProductRepository productRepository,
+                         final ReviewFavoriteRepository reviewFavoriteRepository,
+                         final ImageService imageService) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
-        this.imageService = imageService;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
+        this.imageService = imageService;
     }
 
     @Transactional
