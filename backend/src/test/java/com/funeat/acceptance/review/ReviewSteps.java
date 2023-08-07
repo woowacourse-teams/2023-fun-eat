@@ -44,4 +44,26 @@ public class ReviewSteps {
                 .mimeType("image/png")
                 .build();
     }
+
+    public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie,
+                                                                final Long productId,
+                                                                final String sort,
+                                                                final Integer page) {
+        return given()
+                .cookie("JSESSIONID", loginCookie)
+                .queryParam("sort", sort)
+                .queryParam("page", page)
+                .when()
+                .get("/api/products/{product_id}/reviews", productId)
+                .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 리뷰_랭킹_조회_요청() {
+        return given()
+                .when()
+                .get("/api/ranks/reviews")
+                .then()
+                .extract();
+    }
 }

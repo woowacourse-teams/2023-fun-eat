@@ -1,8 +1,8 @@
 package com.funeat.acceptance.product;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.product.ProductSteps.CU;
 import static com.funeat.acceptance.product.ProductSteps.간편식사;
 import static com.funeat.acceptance.product.ProductSteps.공통_상품_카테고리_목록_조회_요청;
@@ -374,7 +374,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
         카테고리_추가_요청(간편식사);
         final var product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
         final var productId = 상품_추가_요청(product);
-        final var memberId = 기본_멤버_추가_요청();
         final var tag1 = 태그_추가_요청(new Tag("1번", TagType.ETC));
         final var tag2 = 태그_추가_요청(new Tag("2번", TagType.ETC));
         final var tag3 = 태그_추가_요청(new Tag("3번", TagType.ETC));
@@ -461,11 +460,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     private Tag 태그_추가_요청(final Tag tag) {
         return tagRepository.save(tag);
-    }
-
-    private Long 기본_멤버_추가_요청() {
-        final var testMember = memberRepository.save(new Member("test", "image.png", "1"));
-        return testMember.getId();
     }
 
     private Member 멤버_추가_요청(final Member member) {

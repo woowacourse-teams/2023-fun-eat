@@ -1,8 +1,8 @@
 package com.funeat.acceptance.member;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_조회_요청;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;

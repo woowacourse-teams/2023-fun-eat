@@ -1,14 +1,15 @@
 package com.funeat.acceptance.review;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
-import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
-import static io.restassured.RestAssured.given;
+import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
@@ -38,7 +39,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰를_작성한다() {
         // given
-        final var savedProductId = 상품_추가_요청();
+        final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
         final var savedTagIds = 태그_추가_요청();
         final var image = 리뷰_사진_명세_요청();
         final var loginCookie = 로그인_쿠키를_얻는다();
@@ -55,8 +56,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_할_수_있다() {
         // given
-        final var savedMemberId = 멤버_추가_요청();
-        final var savedProductId = 상품_추가_요청();
+        final var savedMemberId = 유저_추가_요청(new Member("test", "image.png", "1"));
+        final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
         final var savedTagIds = 태그_추가_요청();
         final var image = 리뷰_사진_명세_요청();
         final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
@@ -80,8 +81,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_취소할_수_있다() {
         // given
-        final var savedMemberId = 멤버_추가_요청();
-        final var savedProductId = 상품_추가_요청();
+        final var savedMemberId = 유저_추가_요청(new Member("test", "image.png", "1"));
+        final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
         final var savedTagIds = 태그_추가_요청();
         final var image = 리뷰_사진_명세_요청();
         final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
@@ -101,30 +102,6 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
         리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReview.getId());
         assertThat(result.getFavorite()).isFalse();
-    }
-
-    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getReview().getId()).isEqualTo(reviewId);
-        assertThat(result.getMember().getId()).isEqualTo(memberId);
-    }
-
-    private List<Long> 태그_추가_요청() {
-        final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
-        return List.of(testTag1.getId(), testTag2.getId());
-    }
-
-    private Long 상품_추가_요청() {
-        final var testProduct = productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
-
-        return testProduct.getId();
-    }
-
-    private Long 멤버_추가_요청() {
-        final var testMember = memberRepository.save(new Member("test", "image.png", "1"));
-
-        return testMember.getId();
     }
 
     @Nested
@@ -415,12 +392,16 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         리뷰_랭킹_조회_결과를_검증한다(response, rankingReviews);
     }
 
-    private void 카테고리_추가_요청(final Category category) {
-        categoryRepository.save(category);
+    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getReview().getId()).isEqualTo(reviewId);
+        assertThat(result.getMember().getId()).isEqualTo(memberId);
     }
 
-    private void 복수_유저_추가_요청(final List<Member> members) {
-        memberRepository.saveAll(members);
+    private List<Long> 태그_추가_요청() {
+        final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+        final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
+        return List.of(testTag1.getId(), testTag2.getId());
     }
 
     private Long 상품_추가_요청(final Product product) {
@@ -431,30 +412,20 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         productRepository.saveAll(products);
     }
 
+    private Long 유저_추가_요청(final Member member) {
+        return memberRepository.save(member).getId();
+    }
+
+    private void 복수_유저_추가_요청(final List<Member> members) {
+        memberRepository.saveAll(members);
+    }
+
+    private void 카테고리_추가_요청(final Category category) {
+        categoryRepository.save(category);
+    }
+
     private void 복수_리뷰_추가(final List<Review> reviews) {
         reviewRepository.saveAll(reviews);
-    }
-
-    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie,
-                                                          final Long productId,
-                                                          final String sort,
-                                                          final Integer page) {
-        return given()
-                .cookie("JSESSIONID", loginCookie)
-                .queryParam("sort", sort)
-                .queryParam("page", page)
-                .when()
-                .get("/api/products/{product_id}/reviews", productId)
-                .then()
-                .extract();
-    }
-
-    private ExtractableResponse<Response> 리뷰_랭킹_조회_요청() {
-        return given()
-                .when()
-                .get("/api/ranks/reviews")
-                .then()
-                .extract();
     }
 
     private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
