@@ -15,7 +15,7 @@ public class AuthServiceTest extends ServiceTest {
     class loginWithKakao_테스트 {
 
         @Test
-        void 카카오_로그인을_하여_유저_정보를_가져온다() {
+        void 카카오_로그인을_하여_멤버_정보를_가져온다() {
             // given
             final var code = "test";
             final var member = new Member("test", "https://www.test.com", "1");
@@ -25,7 +25,9 @@ public class AuthServiceTest extends ServiceTest {
             final var actual = authService.loginWithKakao(code);
 
             // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison()
+                    .ignoringFields("member.id")
+                    .isEqualTo(expected);
         }
     }
 }

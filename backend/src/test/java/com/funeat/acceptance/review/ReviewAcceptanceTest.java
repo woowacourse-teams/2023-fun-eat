@@ -56,7 +56,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_할_수_있다() {
         // given
-        final var savedMemberId = 유저_추가_요청(new Member("test", "image.png", "1"));
+        final var savedMemberId = 멤버_추가_요청(new Member("test", "image.png", "1"));
         final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
         final var savedTagIds = 태그_추가_요청();
         final var image = 리뷰_사진_명세_요청();
@@ -81,7 +81,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_취소할_수_있다() {
         // given
-        final var savedMemberId = 유저_추가_요청(new Member("test", "image.png", "1"));
+        final var savedMemberId = 멤버_추가_요청(new Member("test", "image.png", "1"));
         final var savedProductId = 상품_추가_요청(new Product("testName", 1000L, "test.png", "test", null));
         final var savedTagIds = 태그_추가_요청();
         final var image = 리뷰_사진_명세_요청();
@@ -117,7 +117,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member2 = new Member("test2", "test2.png", "2'");
             final var member3 = new Member("test3", "test3.png", "3'");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -151,7 +151,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member3 = new Member("test3", "test3.png", "3");
             final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -189,7 +189,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -223,7 +223,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member3 = new Member("test3", "test3.png", "3");
             final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -261,7 +261,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -298,7 +298,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -332,7 +332,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var member3 = new Member("test3", "test3.png", "3");
             final var member4 = new Member("test4", "test4.png", "4");
             final var members = List.of(member1, member2, member3, member4);
-            복수_유저_추가_요청(members);
+            복수_멤버_추가_요청(members);
 
             final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
             final var productId = 상품_추가_요청(product);
@@ -367,7 +367,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         final var member2 = new Member("test2", "test2.png", "2");
         final var member3 = new Member("test3", "test3.png", "3");
         final var members = List.of(member1, member2, member3);
-        복수_유저_추가_요청(members);
+        복수_멤버_추가_요청(members);
 
         final var product1 = new Product("김밥", 1000L, "image.png", "김밥", category);
         final var product2 = new Product("물", 500L, "water.jpg", "물", category);
@@ -412,11 +412,11 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         productRepository.saveAll(products);
     }
 
-    private Long 유저_추가_요청(final Member member) {
+    private Long 멤버_추가_요청(final Member member) {
         return memberRepository.save(member).getId();
     }
 
-    private void 복수_유저_추가_요청(final List<Member> members) {
+    private void 복수_멤버_추가_요청(final List<Member> members) {
         memberRepository.saveAll(members);
     }
 

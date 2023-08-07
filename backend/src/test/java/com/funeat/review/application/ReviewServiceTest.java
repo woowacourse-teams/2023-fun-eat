@@ -149,7 +149,7 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            복수_멤버_추가(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
@@ -180,7 +180,7 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            복수_멤버_추가(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
@@ -211,7 +211,7 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            복수_멤버_추가(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
@@ -242,7 +242,7 @@ class ReviewServiceTest extends ServiceTest {
             final var member2 = new Member("test2", "test2.png", "2");
             final var member3 = new Member("test3", "test3.png", "3");
             final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            복수_멤버_추가(members);
 
             final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
             상품_추가(product);
@@ -267,7 +267,7 @@ class ReviewServiceTest extends ServiceTest {
         }
     }
 
-    private void 복수_유저_추가(final List<Member> members) {
+    private void 복수_멤버_추가(final List<Member> members) {
         memberRepository.saveAll(members);
     }
 

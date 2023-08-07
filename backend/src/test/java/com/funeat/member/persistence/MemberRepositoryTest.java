@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class MemberRepositoryTest extends RepositoryTest {
 
     @Test
-    void platform_id를_통해_유저를_반환한다() {
+    void platform_id를_통해_멤버를_반환한다() {
         // given
         final var platformId = "1234";
         final var member = new Member("test", "www.test.com", platformId);
