@@ -23,7 +23,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         final var expected = authService.getLoginRedirectUri();
 
         // when
-        final String actual = response.header("Location");
+        final var actual = response.header("Location");
 
         // then
         assertThat(actual).isEqualTo(expected);

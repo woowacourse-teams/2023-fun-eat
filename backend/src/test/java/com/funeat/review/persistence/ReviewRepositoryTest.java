@@ -49,10 +49,10 @@ class ReviewRepositoryTest {
         @Test
         void 상품에_달린_리뷰의_숫자를_반환한다() {
             // given
-            Member member = memberRepository.save(new Member("test", "image.png", "1"));
-            Category category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
-            Product product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
-            Product product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
+            final var member = memberRepository.save(new Member("test", "image.png", "1"));
+            final var category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
+            final var product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
+            final var product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
 
             reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 최고!!", true));
             reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 별로", false));

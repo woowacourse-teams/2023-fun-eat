@@ -52,7 +52,7 @@ class ReviewFavoriteRepositoryTest {
         final var result = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
 
         // then
-        var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
 
         assertThat(result).usingRecursiveComparison()
                 .ignoringExpectedNullFields()

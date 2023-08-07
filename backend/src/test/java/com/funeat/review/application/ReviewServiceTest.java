@@ -155,8 +155,8 @@ class ReviewServiceTest {
     }
 
     private List<Tag> 태그_추가_요청() {
-        final Tag testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final Tag testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
+        final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+        final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
 
         return List.of(testTag1, testTag2);
     }

@@ -28,10 +28,8 @@ import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.domain.TagType;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.MultiPartSpecification;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,19 +47,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_다르면_가격_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
-            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
-            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
-            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
-            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final var product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final var product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -79,19 +77,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-            final Product product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1000L, "image.png", "맛있는 삼각김밥4", 간편식사);
-            final Product product5 = new Product("삼각김밥5", 1000L, "image.png", "맛있는 삼각김밥5", 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1000L, "image.png", "맛있는 삼각김밥6", 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1000L, "image.png", "맛있는 삼각김밥7", 간편식사);
-            final Product product8 = new Product("삼각김밥8", 1000L, "image.png", "맛있는 삼각김밥8", 간편식사);
-            final Product product9 = new Product("삼각김밥9", 1000L, "image.png", "맛있는 삼각김밥9", 간편식사);
-            final Product product10 = new Product("삼각김밥10", 1000L, "image.png", "맛있는 삼각김밥10", 간편식사);
-            final Product product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final var product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final var product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final var product4 = new Product("삼각김밥4", 1000L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final var product5 = new Product("삼각김밥5", 1000L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final var product6 = new Product("삼각김밥6", 1000L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final var product7 = new Product("삼각김밥7", 1000L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final var product8 = new Product("삼각김밥8", 1000L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final var product9 = new Product("삼각김밥9", 1000L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final var product10 = new Product("삼각김밥10", 1000L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final var product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -113,19 +111,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_다르면_가격_기준_오름차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
-            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
-            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
-            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
-            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final var product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final var product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -143,19 +141,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-            final Product product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1000L, "image.png", "맛있는 삼각김밥4", 간편식사);
-            final Product product5 = new Product("삼각김밥5", 1000L, "image.png", "맛있는 삼각김밥5", 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1000L, "image.png", "맛있는 삼각김밥6", 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1000L, "image.png", "맛있는 삼각김밥7", 간편식사);
-            final Product product8 = new Product("삼각김밥8", 1000L, "image.png", "맛있는 삼각김밥8", 간편식사);
-            final Product product9 = new Product("삼각김밥9", 1000L, "image.png", "맛있는 삼각김밥9", 간편식사);
-            final Product product10 = new Product("삼각김밥10", 1000L, "image.png", "맛있는 삼각김밥10", 간편식사);
-            final Product product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+            final var product2 = new Product("삼각김밥2", 1000L, "image.png", "맛있는 삼각김밥2", 간편식사);
+            final var product3 = new Product("삼각김밥3", 1000L, "image.png", "맛있는 삼각김밥3", 간편식사);
+            final var product4 = new Product("삼각김밥4", 1000L, "image.png", "맛있는 삼각김밥4", 간편식사);
+            final var product5 = new Product("삼각김밥5", 1000L, "image.png", "맛있는 삼각김밥5", 간편식사);
+            final var product6 = new Product("삼각김밥6", 1000L, "image.png", "맛있는 삼각김밥6", 간편식사);
+            final var product7 = new Product("삼각김밥7", 1000L, "image.png", "맛있는 삼각김밥7", 간편식사);
+            final var product8 = new Product("삼각김밥8", 1000L, "image.png", "맛있는 삼각김밥8", 간편식사);
+            final var product9 = new Product("삼각김밥9", 1000L, "image.png", "맛있는 삼각김밥9", 간편식사);
+            final var product10 = new Product("삼각김밥10", 1000L, "image.png", "맛있는 삼각김밥10", 간편식사);
+            final var product11 = new Product("삼각김밥11", 1000L, "image.png", "맛있는 삼각김밥11", 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -176,19 +174,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
-            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
-            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
-            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 0.0, 간편식사);
-            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
+            final var product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
+            final var product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
+            final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
+            final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
+            final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 0.0, 간편식사);
+            final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -206,19 +204,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
-            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
-            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
-            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 1.0, 간편식사);
-            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
+            final var product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
+            final var product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
+            final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
+            final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
+            final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 1.0, 간편식사);
+            final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -239,19 +237,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
-            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
-            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
-            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 0.0, 간편식사);
-            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
+            final var product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
+            final var product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
+            final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
+            final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
+            final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 0.0, 간편식사);
+            final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -269,19 +267,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
-            final Product product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
-            final Product product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
-            final Product product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
-            final Product product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
-            final Product product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 1.0, 간편식사);
-            final Product product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5, product6, product7,
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
+            final var product6 = new Product("삼각김밥6", 1700L, "image.png", "맛있는 삼각김밥6", 2.5, 간편식사);
+            final var product7 = new Product("삼각김밥7", 1800L, "image.png", "맛있는 삼각김밥7", 2.0, 간편식사);
+            final var product8 = new Product("삼각김밥8", 800L, "image.png", "맛있는 삼각김밥8", 1.5, 간편식사);
+            final var product9 = new Product("삼각김밥9", 3100L, "image.png", "맛있는 삼각김밥9", 3.5, 간편식사);
+            final var product10 = new Product("삼각김밥10", 2700L, "image.png", "맛있는 삼각김밥10", 1.0, 간편식사);
+            final var product11 = new Product("삼각김밥11", 300L, "image.png", "맛있는 삼각김밥11", 0.5, 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
                     product8, product9, product10, product11);
             복수_상품_추가_요청(products);
 
@@ -302,24 +300,24 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 리뷰수가_서로_다르면_리뷰수_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
-            final List<Product> products = List.of(product1, product2, product3);
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
+            final var products = List.of(product1, product2, product3);
             복수_상품_추가_요청(products);
 
-            Member member = 멤버_추가_요청(new Member("test", "image.png", "1"));
-            final Review review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
-            final Review review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
-            final Review review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
-            final Review review1_4 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
-            final Review review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
-            final Review review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
-            final Review review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            final Review review3_2 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            final Review review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            List<Review> reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
+            final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
+            final var review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final var review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
+            final var review1_4 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
+            final var review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final var review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final var review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final var review3_2 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final var review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
                     review3_1, review3_2, review3_3);
             복수_리뷰_추가_요청(reviews);
 
@@ -336,26 +334,26 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 리뷰수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
             // given
-            final Long categoryId = 카테고리_추가_요청(간편식사);
-            final Product product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
-            final Product product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
-            final Product product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
-            final Product product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
-            final Product product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
-            final List<Product> products = List.of(product1, product2, product3, product4, product5);
+            final var categoryId = 카테고리_추가_요청(간편식사);
+            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 5.0, 간편식사);
+            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 3.0, 간편식사);
+            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 1.0, 간편식사);
+            final var product4 = new Product("삼각김밥4", 1200L, "image.png", "맛있는 삼각김밥4", 4.0, 간편식사);
+            final var product5 = new Product("삼각김밥5", 2300L, "image.png", "맛있는 삼각김밥5", 4.5, 간편식사);
+            final var products = List.of(product1, product2, product3, product4, product5);
             복수_상품_추가_요청(products);
 
-            final Member member = 멤버_추가_요청(new Member("test", "image.png", "1"));
-            final Review review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
-            final Review review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
-            final Review review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
-            final Review review1_4 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
-            final Review review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
-            final Review review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
-            final Review review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            final Review review3_2 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            final Review review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
-            List<Review> reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
+            final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
+            final var review1_1 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final var review1_2 = new Review(member, product1, "review.png", 3L, "이 삼각김밥은 맛있다", true);
+            final var review1_3 = new Review(member, product1, "review.png", 4L, "이 삼각김밥은 좀 맛있다", true);
+            final var review1_4 = new Review(member, product1, "review.png", 5L, "이 삼각김밥은 최고!!", true);
+            final var review2_1 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final var review2_2 = new Review(member, product2, "review.png", 1L, "이 삼각김밥은 맛없다", false);
+            final var review3_1 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final var review3_2 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final var review3_3 = new Review(member, product3, "review.png", 2L, "이 삼각김밥은 좀 맛없다", false);
+            final var reviews = List.of(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2,
                     review3_1, review3_2, review3_3);
             복수_리뷰_추가_요청(reviews);
 
@@ -374,19 +372,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
     void 상품_상세_정보를_조회한다() {
         // given
         카테고리_추가_요청(간편식사);
-        final Product product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
-        final Long productId = 상품_추가_요청(product);
-        final Long memberId = 기본_멤버_추가_요청();
-        final Tag tag1 = 태그_추가_요청(new Tag("1번", TagType.ETC));
-        final Tag tag2 = 태그_추가_요청(new Tag("2번", TagType.ETC));
-        final Tag tag3 = 태그_추가_요청(new Tag("3번", TagType.ETC));
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var product = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
+        final var productId = 상품_추가_요청(product);
+        final var memberId = 기본_멤버_추가_요청();
+        final var tag1 = 태그_추가_요청(new Tag("1번", TagType.ETC));
+        final var tag2 = 태그_추가_요청(new Tag("2번", TagType.ETC));
+        final var tag3 = 태그_추가_요청(new Tag("3번", TagType.ETC));
+        final var image = 리뷰_사진_명세_요청();
 
-        final ReviewCreateRequest request1 = new ReviewCreateRequest(4L,
+        final var request1 = new ReviewCreateRequest(4L,
                 List.of(tag1.getId(), tag2.getId(), tag3.getId()), "request1", true);
-        final ReviewCreateRequest request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()),
+        final var request2 = new ReviewCreateRequest(4L, List.of(tag2.getId(), tag3.getId()),
                 "request2", true);
-        final ReviewCreateRequest request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true);
+        final var request3 = new ReviewCreateRequest(3L, List.of(tag2.getId()), "request3", true);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
         리뷰_추가_요청(productId, image, request1, loginCookie);
@@ -466,7 +464,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private Long 기본_멤버_추가_요청() {
-        final Member testMember = memberRepository.save(new Member("test", "image.png", "1"));
+        final var testMember = memberRepository.save(new Member("test", "image.png", "1"));
         return testMember.getId();
     }
 
@@ -479,20 +477,20 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, Long dataSize, Long page) {
-        long totalPages = (long) Math.ceil((double) dataSize / PAGE_SIZE);
-        ProductsInCategoryPageDto expected = new ProductsInCategoryPageDto(dataSize, totalPages,
+        final var totalPages = (long) Math.ceil((double) dataSize / PAGE_SIZE);
+        final var expected = new ProductsInCategoryPageDto(dataSize, totalPages,
                 page == 0, page == totalPages - 1, page, (long) PAGE_SIZE);
-        ProductsInCategoryPageDto actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
+        final var actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
-        final List<ProductInCategoryDto> expected = new ArrayList<>();
-        for (Product product : products) {
+        final var expected = new ArrayList<>();
+        for (final var product : products) {
             expected.add(ProductInCategoryDto.toDto(product, 0L));
         }
 
-        final List<ProductInCategoryDto> actual = response.jsonPath().getList("products", ProductInCategoryDto.class);
+        final var actual = response.jsonPath().getList("products", ProductInCategoryDto.class);
 
         assertThat(actual)
                 .usingRecursiveComparison()
@@ -502,9 +500,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product,
                                       final List<Tag> expectedTags) {
-        final ProductResponse expected = ProductResponse.toResponse(product, expectedTags);
-
-        final ProductResponse actual = response.as(ProductResponse.class);
+        final var expected = ProductResponse.toResponse(product, expectedTags);
+        final var actual = response.as(ProductResponse.class);
         assertThat(actual).usingRecursiveComparison()
                 .ignoringFields("id", "averageRating")
                 .isEqualTo(expected);
@@ -513,12 +510,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
     private void 공통_상품_카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
                                            final List<Category> categories) {
         final List<CategoryResponse> expected = new ArrayList<>();
-        for (Category category : categories) {
+        for (final var category : categories) {
             expected.add(CategoryResponse.toResponse(category));
         }
 
-        final List<CategoryResponse> actualResponses = response.as(new TypeRef<>() {
-        });
+        final var actualResponses = response.jsonPath().getList("", CategoryResponse.class);
         assertThat(actualResponses).usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(expected);

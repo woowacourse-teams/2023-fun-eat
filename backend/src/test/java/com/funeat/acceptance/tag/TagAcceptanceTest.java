@@ -47,7 +47,7 @@ public class TagAcceptanceTest extends AcceptanceTest {
         final var actual = response.jsonPath()
                 .getList("", TagsResponse.class);
 
-        for (final TagsResponse tagsResponse : actual) {
+        for (final var tagsResponse : actual) {
             final TagType tagType = TagType.valueOf(tagsResponse.getTagType());
             assertThat(tagType).isIn(expectedByType.keySet());
             assertThat(tagsResponse.getTags()).usingRecursiveComparison()

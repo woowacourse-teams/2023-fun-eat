@@ -112,7 +112,7 @@ class MemberServiceTest {
             // given
             final var nickname = "test";
             final var profileImage = "http://www.test.com";
-            final MemberRequest request = new MemberRequest(nickname, profileImage);
+            final var request = new MemberRequest(nickname, profileImage);
 
             final var member = new Member(nickname, profileImage, "1");
             final var memberId = memberRepository.save(member).getId();
@@ -140,7 +140,7 @@ class MemberServiceTest {
             final var beforeNickname = "before";
             final var profileImage = "http://www.test.com";
             final var afterNickname = "after";
-            final MemberRequest request = new MemberRequest(afterNickname, profileImage);
+            final var request = new MemberRequest(afterNickname, profileImage);
 
             final var member = new Member(beforeNickname, profileImage, "1");
             final var memberId = memberRepository.save(member).getId();
@@ -169,7 +169,7 @@ class MemberServiceTest {
             final var beforeProfileImage = "http://www.before.com";
             final var afterProfileImage = "http://www.after.com";
 
-            final MemberRequest request = new MemberRequest(nickname, afterProfileImage);
+            final var request = new MemberRequest(nickname, afterProfileImage);
 
             final var member = new Member(nickname, beforeProfileImage, "1");
             final var memberId = memberRepository.save(member).getId();
@@ -199,7 +199,7 @@ class MemberServiceTest {
             final var beforeProfileImage = "http://www.before.com";
             final var afterProfileImage = "http://www.after.com";
 
-            final MemberRequest request = new MemberRequest(afterNickname, afterProfileImage);
+            final var request = new MemberRequest(afterNickname, afterProfileImage);
 
             final var member = new Member(beforeNickname, beforeProfileImage, "1");
             final var memberId = memberRepository.save(member).getId();

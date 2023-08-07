@@ -27,7 +27,6 @@ import com.funeat.tag.domain.Tag;
 import com.funeat.tag.domain.TagType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Nested;
@@ -39,9 +38,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰를_작성한다() {
         // given
-        final Long savedProductId = 상품_추가_요청();
-        final List<Long> savedTagIds = 태그_추가_요청();
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var savedProductId = 상품_추가_요청();
+        final var savedTagIds = 태그_추가_요청();
+        final var image = 리뷰_사진_명세_요청();
         final var loginCookie = 로그인_쿠키를_얻는다();
 
         final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
@@ -56,10 +55,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_할_수_있다() {
         // given
-        final Long savedMemberId = 멤버_추가_요청();
-        final Long savedProductId = 상품_추가_요청();
-        final List<Long> savedTagIds = 태그_추가_요청();
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var savedMemberId = 멤버_추가_요청();
+        final var savedProductId = 상품_추가_요청();
+        final var savedTagIds = 태그_추가_요청();
+        final var image = 리뷰_사진_명세_요청();
         final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
         final var favoriteRequest = new ReviewFavoriteRequest(true);
 
@@ -81,10 +80,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Test
     void 리뷰에_좋아요를_취소할_수_있다() {
         // given
-        final Long savedMemberId = 멤버_추가_요청();
-        final Long savedProductId = 상품_추가_요청();
-        final List<Long> savedTagIds = 태그_추가_요청();
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
+        final var savedMemberId = 멤버_추가_요청();
+        final var savedProductId = 상품_추가_요청();
+        final var savedTagIds = 태그_추가_요청();
+        final var image = 리뷰_사진_명세_요청();
         final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
         final var favoriteRequest = new ReviewFavoriteRequest(true);
         final var favoriteCancelRequest = new ReviewFavoriteRequest(false);
@@ -111,19 +110,19 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     private List<Long> 태그_추가_요청() {
-        final Tag testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final Tag testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
+        final var testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
+        final var testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
         return List.of(testTag1.getId(), testTag2.getId());
     }
 
     private Long 상품_추가_요청() {
-        final Product testProduct = productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
+        final var testProduct = productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
 
         return testProduct.getId();
     }
 
     private Long 멤버_추가_요청() {
-        final Member testMember = memberRepository.save(new Member("test", "image.png", "1"));
+        final var testMember = memberRepository.save(new Member("test", "image.png", "1"));
 
         return testMember.getId();
     }
@@ -471,10 +470,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
     private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
                              final Member member) {
-        final List<SortingReviewDto> expected = reviews.stream()
+        final var expected = reviews.stream()
                 .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
-        final List<SortingReviewDto> actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
+        final var actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
         assertThat(actual).usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(expected);

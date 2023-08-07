@@ -80,7 +80,7 @@ class ReviewTagRepositoryTest {
         );
 
         // when
-        final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(product.getId(), PageRequest.of(0, 3));
+        final var tags = reviewTagRepository.findTop3TagsByReviewIn(product.getId(), PageRequest.of(0, 3));
 
         // then
         assertThat(tags).hasSize(3);
