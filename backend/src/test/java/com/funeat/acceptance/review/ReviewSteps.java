@@ -37,18 +37,8 @@ public class ReviewSteps {
                 .extract();
     }
 
-    public static MultiPartSpecification 리뷰_사진_명세_요청() {
-        return new MultiPartSpecBuilder("image".getBytes())
-                .fileName("testImage.png")
-                .controlName("image")
-                .mimeType("image/png")
-                .build();
-    }
-
-    public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie,
-                                                                final Long productId,
-                                                                final String sort,
-                                                                final Integer page) {
+    public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie, final Long productId,
+                                                                final String sort, final Integer page) {
         return given()
                 .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
@@ -65,5 +55,13 @@ public class ReviewSteps {
                 .get("/api/ranks/reviews")
                 .then()
                 .extract();
+    }
+
+    public static MultiPartSpecification 리뷰_사진_명세_요청() {
+        return new MultiPartSpecBuilder("image".getBytes())
+                .fileName("testImage.png")
+                .controlName("image")
+                .mimeType("image/png")
+                .build();
     }
 }

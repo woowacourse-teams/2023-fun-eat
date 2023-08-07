@@ -9,6 +9,15 @@ import io.restassured.response.Response;
 @SuppressWarnings("NonAsciiCharacters")
 public class LoginSteps {
 
+    public static ExtractableResponse<Response> 카카오_로그인_버튼_클릭() {
+        return given()
+                .redirects().follow(false)
+                .when()
+                .get("/api/auth/kakao")
+                .then()
+                .extract();
+    }
+
     public static String 로그인_쿠키를_얻는다() {
         return RestAssured.given()
                 .queryParam("code", "test")
@@ -18,14 +27,5 @@ public class LoginSteps {
                 .extract()
                 .response()
                 .getCookie("JSESSIONID");
-    }
-
-    public static ExtractableResponse<Response> 카카오_로그인_버튼_클릭() {
-        return given()
-                .redirects().follow(false)
-                .when()
-                .get("/api/auth/kakao")
-                .then()
-                .extract();
     }
 }
