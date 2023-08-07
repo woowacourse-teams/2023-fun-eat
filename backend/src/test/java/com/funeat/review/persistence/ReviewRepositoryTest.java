@@ -3,46 +3,23 @@ package com.funeat.review.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.funeat.common.DataCleaner;
-import com.funeat.common.DataClearExtension;
+import com.funeat.common.RepositoryTest;
 import com.funeat.member.domain.Member;
-import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-@DataJpaTest
-@Import(DataCleaner.class)
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-class ReviewRepositoryTest {
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ReviewRepository reviewRepository;
+class ReviewRepositoryTest extends RepositoryTest {
 
     @Nested
     class countByProduct_테스트 {

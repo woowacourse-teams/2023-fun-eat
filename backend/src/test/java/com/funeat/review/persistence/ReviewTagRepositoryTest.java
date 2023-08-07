@@ -2,48 +2,22 @@ package com.funeat.review.persistence;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.funeat.common.DataCleaner;
-import com.funeat.common.DataClearExtension;
+import com.funeat.common.RepositoryTest;
 import com.funeat.member.domain.Member;
-import com.funeat.member.persistence.MemberRepository;
 import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.domain.TagType;
-import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 
-@DataJpaTest
-@Import(DataCleaner.class)
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-class ReviewTagRepositoryTest {
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ReviewTagRepository reviewTagRepository;
-
-    @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
-    private ReviewRepository reviewRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
+class ReviewTagRepositoryTest extends RepositoryTest {
 
     @Test
     void 리뷰_목록에서_상위_3개에_해당하는_태그를_조회한다() {

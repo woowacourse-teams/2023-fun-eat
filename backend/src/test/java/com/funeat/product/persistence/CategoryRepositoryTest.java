@@ -2,8 +2,7 @@ package com.funeat.product.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.funeat.common.DataCleaner;
-import com.funeat.common.DataClearExtension;
+import com.funeat.common.RepositoryTest;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import java.util.List;
@@ -11,17 +10,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@Import(DataCleaner.class)
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-class CategoryRepositoryTest {
+public class CategoryRepositoryTest extends RepositoryTest {
 
     public static final Category 간편식사 = new Category("간편식사", CategoryType.FOOD);
     public static final Category 즉석조리 = new Category("즉석조리", CategoryType.FOOD);
@@ -32,9 +24,6 @@ class CategoryRepositoryTest {
     public static final Category CU = new Category("CU", CategoryType.STORE);
     public static final Category GS25 = new Category("GS25", CategoryType.STORE);
     public static final Category EMART24 = new Category("EMART24", CategoryType.STORE);
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Nested
     class findAllByType_테스트 {
