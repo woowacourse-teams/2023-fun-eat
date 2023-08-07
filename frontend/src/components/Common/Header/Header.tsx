@@ -1,11 +1,16 @@
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Logo from '@/assets/logo.svg';
+import { PATH } from '@/constants/path';
 
 const Header = () => {
   return (
     <HeaderContainer>
-      <Logo width={200} />
+      <Link as={RouterLink} to={PATH.HOME}>
+        <Logo width={200} />
+      </Link>
     </HeaderContainer>
   );
 };
