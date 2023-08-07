@@ -10,13 +10,10 @@ import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.domain.TagType;
 import java.util.List;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class ReviewTagRepositoryTest extends RepositoryTest {
 
     @Test

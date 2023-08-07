@@ -6,13 +6,10 @@ import com.funeat.common.RepositoryTest;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import java.util.List;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 public class CategoryRepositoryTest extends RepositoryTest {
 
     public static final Category 간편식사 = new Category("간편식사", CategoryType.FOOD);

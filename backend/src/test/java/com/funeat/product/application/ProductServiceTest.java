@@ -2,7 +2,6 @@ package com.funeat.product.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.funeat.common.DataClearExtension;
 import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
@@ -10,19 +9,10 @@ import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
 import com.funeat.review.domain.Review;
 import java.util.List;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class ProductServiceTest extends ServiceTest {
 
     @Nested

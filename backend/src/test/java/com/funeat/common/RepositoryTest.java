@@ -13,6 +13,8 @@ import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.persistence.TagRepository;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,6 +23,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import(DataCleaner.class)
 @ExtendWith(DataClearExtension.class)
+@DisplayNameGeneration(ReplaceUnderscores.class)
 public abstract class RepositoryTest {
 
     @Autowired

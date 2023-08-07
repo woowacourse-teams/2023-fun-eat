@@ -5,13 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 public class AuthServiceTest extends ServiceTest {
 
     @Nested

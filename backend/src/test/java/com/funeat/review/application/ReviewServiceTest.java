@@ -2,7 +2,6 @@ package com.funeat.review.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
@@ -16,7 +15,6 @@ import com.funeat.tag.domain.TagType;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class ReviewServiceTest extends ServiceTest {
 
     @Nested

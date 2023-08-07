@@ -10,15 +10,12 @@ import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import java.util.List;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class ReviewRepositoryTest extends RepositoryTest {
 
     @Nested

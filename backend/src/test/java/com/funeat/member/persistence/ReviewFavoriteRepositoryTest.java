@@ -9,12 +9,9 @@ import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.specification.MultiPartSpecification;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class ReviewFavoriteRepositoryTest extends RepositoryTest {
 
     @Test
