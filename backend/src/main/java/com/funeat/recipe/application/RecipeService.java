@@ -12,7 +12,6 @@ import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.application.ImageService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +31,7 @@ public class RecipeService {
     public RecipeService(final MemberRepository memberRepository, final ProductRepository productRepository,
                          final ProductRecipeRepository productRecipeRepository, final RecipeRepository recipeRepository,
                          final RecipeImageRepository recipeImageRepository,
-                         @Qualifier("recipeImageUploader") final ImageService imageService) {
+                         final ImageService imageService) {
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.productRecipeRepository = productRecipeRepository;

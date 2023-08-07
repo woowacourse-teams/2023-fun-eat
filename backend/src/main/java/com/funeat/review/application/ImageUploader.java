@@ -1,6 +1,5 @@
-package com.funeat.recipe.application;
+package com.funeat.review.application;
 
-import com.funeat.review.application.ImageService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,11 +9,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Component("recipeImageUploader")
+@Component
 @Profile("!test")
-public class RecipeImageUploader implements ImageService {
+public class ImageUploader implements ImageService {
 
-    @Value("${recipe.image.path}")
+    @Value("${review.image.path}")
     private String imagePath;
 
     @Override
