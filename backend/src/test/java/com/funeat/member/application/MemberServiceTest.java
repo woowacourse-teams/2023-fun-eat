@@ -5,33 +5,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.auth.dto.UserInfoDto;
-import com.funeat.common.DataClearExtension;
+import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
-import com.funeat.member.persistence.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-class MemberServiceTest {
-
-    @Autowired
-    private TestMemberService memberService;
-
-    @Autowired
-    private MemberRepository memberRepository;
+class MemberServiceTest extends ServiceTest {
 
     @Nested
     class findOrCreateMember_테스트 {
