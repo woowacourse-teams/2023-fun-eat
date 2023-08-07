@@ -2,7 +2,7 @@ import { Button, Heading, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import useRouteBack from '@/hooks/useRouteBack';
+import useRoutePage from '@/hooks/useRoutePage';
 
 interface ProductTitleProps {
   name: string;
@@ -10,7 +10,7 @@ interface ProductTitleProps {
 }
 
 const ProductTitle = ({ name, bookmark }: ProductTitleProps) => {
-  const routeBack = useRouteBack();
+  const { routeBack } = useRoutePage();
 
   return (
     <ProductTitleContainer>
