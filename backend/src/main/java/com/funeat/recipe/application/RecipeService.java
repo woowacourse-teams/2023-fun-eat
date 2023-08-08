@@ -10,7 +10,7 @@ import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
-import com.funeat.review.application.ImageService;
+import com.funeat.common.ImageService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;

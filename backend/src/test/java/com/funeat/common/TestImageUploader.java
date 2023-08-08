@@ -1,6 +1,5 @@
 package com.funeat.common;
 
-import com.funeat.review.application.ImageService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

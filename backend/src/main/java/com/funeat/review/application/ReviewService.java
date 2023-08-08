@@ -1,5 +1,6 @@
 package com.funeat.review.application;
 
+import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
@@ -38,14 +39,12 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
-
     private final ImageService imageService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
-                         final ReviewFavoriteRepository reviewFavoriteRepository,
-                         final ImageService imageService) {
+                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageService imageService) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
