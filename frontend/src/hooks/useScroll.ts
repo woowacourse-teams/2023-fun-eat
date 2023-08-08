@@ -1,3 +1,5 @@
+import type { RefObject } from 'react';
+
 const useScroll = () => {
   const scrollToTop = () => {
     const mainElement = document.getElementById('main');
@@ -7,8 +9,8 @@ const useScroll = () => {
     }
   };
 
-  const scrollToPosition = (targetRef?: React.RefObject<HTMLElement>) => {
-    targetRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToPosition = <T extends HTMLElement>(ref?: RefObject<T>) => {
+    ref?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return { scrollToTop, scrollToPosition };

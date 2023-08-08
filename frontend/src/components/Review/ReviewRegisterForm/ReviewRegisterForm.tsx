@@ -1,5 +1,5 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import type { ChangeEventHandler } from 'react';
+import type { ChangeEventHandler, RefObject } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -31,7 +31,7 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
-  targetRef: React.RefObject<HTMLElement>;
+  targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 

@@ -22,7 +22,6 @@ const ScrollButtonWrapper = styled(Button)`
   bottom: 90px;
   right: 32%;
   border-radius: 50%;
-  z-index: 1;
 
   &:hover {
     transform: scale(1.1);

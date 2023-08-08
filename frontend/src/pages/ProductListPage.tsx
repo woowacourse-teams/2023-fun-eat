@@ -2,8 +2,7 @@ import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
-import ScrollButton from '@/components/Common/ScrollButton/ScrollButton';
+import { CategoryMenu, SortButton, SortOptionList, Title, ScrollButton } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';

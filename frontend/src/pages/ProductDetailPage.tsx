@@ -3,8 +3,7 @@ import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
-import ScrollButton from '@/components/Common/ScrollButton/ScrollButton';
+import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
