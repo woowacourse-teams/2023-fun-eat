@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CategoryMenu, SvgIcon } from '@/components/Common';
+import ScrollButton from '@/components/Common/ScrollButton/ScrollButton';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
@@ -62,6 +63,7 @@ const HomePage = () => {
         <Spacing size={12} />
         <ReviewRankingList reviewRankings={reviewRankingResponse?.reviews ?? []} />
       </section>
+      <ScrollButton />
     </>
   );
 };

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
+import ScrollButton from '@/components/Common/ScrollButton/ScrollButton';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
@@ -66,6 +67,7 @@ const ProductDetailPage = () => {
           {member ? '리뷰 작성하기' : '로그인 후 리뷰를 작성할 수 있어요'}
         </ReviewRegisterButton>
       </ReviewRegisterButtonWrapper>
+      <ScrollButton />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewRegisterForm product={productDetail} close={handleCloseBottomSheet} />
