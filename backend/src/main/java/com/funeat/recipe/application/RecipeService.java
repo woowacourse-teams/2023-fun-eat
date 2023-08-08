@@ -12,6 +12,7 @@ import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.application.ImageService;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,9 +55,10 @@ public class RecipeService {
                         new ProductRecipe(it, savedRecipe)
                 ));
 
-        for (MultipartFile image : images) {
-            recipeImageRepository.save(new RecipeImage(image.getOriginalFilename(), savedRecipe));
-            imageService.upload(image);
+        if (Objects.nonNull(images)) {
+            images.stream()
+                    .peek(it -> recipeImageRepository.save(new RecipeImage(it.getOriginalFilename(), savedRecipe)))
+                    .forEach(imageService::upload);
         }
 
         return savedRecipe.getId();
