@@ -26,6 +26,8 @@ export interface ReviewRequest {
   rebuy: boolean;
 }
 
+export type ReviewRequestKey = keyof ReviewRequest;
+
 export interface ReviewPostRequestBody extends FormData {
   image: File;
   reviewRequest: ReviewRequest;

@@ -7,6 +7,7 @@ import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
+import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useMemberValueContext, useProductReviewContext } from '@/hooks/context';
 import { useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
@@ -68,7 +69,9 @@ const ProductDetailPage = () => {
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
-          <ReviewRegisterForm product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+          <ReviewFormProvider>
+            <ReviewRegisterForm product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+          </ReviewFormProvider>
         ) : (
           <SortOptionList
             options={REVIEW_SORT_OPTIONS}

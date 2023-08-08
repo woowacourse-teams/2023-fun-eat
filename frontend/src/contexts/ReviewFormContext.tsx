@@ -2,32 +2,27 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useState } from 'react';
 
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
-
-interface ReviewFormValue {
-  rating: number;
-  tagIds: number[];
-  content: string;
-  rebuy: boolean;
-}
-
-type ReviewFormKey = keyof ReviewFormValue;
+import type { ReviewRequest, ReviewRequestKey } from '@/types/review';
 
 interface ReviewFormActionParams {
-  target: ReviewFormKey;
+  target: ReviewRequestKey;
   value: string | number | boolean;
   isSelected?: boolean;
 }
 
-type ReviewFormAction = (params: ReviewFormActionParams) => void;
+interface ReviewFormAction {
+  handleReviewFormValue: (params: ReviewFormActionParams) => void;
+  resetReviewFormValue: () => void;
+}
 
-const initialReviewFormValue: ReviewFormValue = {
+const initialReviewFormValue: ReviewRequest = {
   rating: 0,
   tagIds: [],
   content: '',
   rebuy: false,
 };
 
-export const ReviewFormValueContext = createContext<ReviewFormValue | null>(null);
+export const ReviewFormValueContext = createContext<ReviewRequest | null>(null);
 export const ReviewFormActionContext = createContext<ReviewFormAction | null>(null);
 
 const ReviewFormProvider = ({ children }: PropsWithChildren) => {
@@ -57,8 +52,17 @@ const ReviewFormProvider = ({ children }: PropsWithChildren) => {
     });
   };
 
+  const resetReviewFormValue = () => {
+    setReviewFormValue(initialReviewFormValue);
+  };
+
+  const reviewFormAction = {
+    handleReviewFormValue,
+    resetReviewFormValue,
+  };
+
   return (
-    <ReviewFormActionContext.Provider value={handleReviewFormValue}>
+    <ReviewFormActionContext.Provider value={reviewFormAction}>
       <ReviewFormValueContext.Provider value={reviewFormValue}>{children}</ReviewFormValueContext.Provider>
     </ReviewFormActionContext.Provider>
   );
