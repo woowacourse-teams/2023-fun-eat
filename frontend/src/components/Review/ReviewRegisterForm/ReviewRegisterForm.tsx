@@ -1,8 +1,7 @@
-import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
+import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
 import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
@@ -19,7 +18,6 @@ import {
   useReviewFormValueContext,
 } from '@/hooks/context';
 import { useReviewRegisterForm, useReviewImageUploader, useFormData } from '@/hooks/review';
-import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -34,8 +32,6 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
-
-  const [rebuy, setRebuy] = useState(false);
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
@@ -46,7 +42,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     formContent: reviewFormValue,
   });
 
-  const { inputRef, labelRef, handleKeydown } = useEnterKeyDown();
   // TODO: 배포하면 랜덤으로 에러 나는 현상 해결 후 주석 풀기
   // const [submitEnabled, setSubmitEnabled] = useState(false);
 
@@ -54,10 +49,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const { resetPage } = useProductReviewPageContext();
 
   const { request } = useReviewRegisterForm(product.id);
-
-  const handleRebuy: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setRebuy(event.target.checked);
-  };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -71,6 +62,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
       return;
     }
 
+    console.log(reviewFormValue);
     await request(formData);
 
     const reviewResponse = await productApi.get({
@@ -121,11 +113,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
         <Spacing size={60} />
         <ReviewTextarea content={reviewFormValue.content} />
         <Spacing size={80} />
-        <p onKeyDown={handleKeydown}>
-          <Checkbox ref={labelRef} inputRef={inputRef} weight="bold" onChange={handleRebuy} tabIndex={0}>
-            재구매할 생각이 있으신가요?
-          </Checkbox>
-        </p>
+        <RebuyCheckbox />
         <Spacing size={16} />
         <FormButton
           type="submit"

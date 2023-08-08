@@ -32,10 +32,6 @@ const ReviewFormProvider = ({ children }: PropsWithChildren) => {
     setReviewFormValue((prev) => {
       const targetValue = prev[target];
 
-      if (typeof targetValue === 'boolean') {
-        return { ...prev, [target]: !targetValue };
-      }
-
       if (Array.isArray(targetValue)) {
         if (targetValue.length >= MIN_DISPLAYED_TAGS_LENGTH && !isSelected) {
           return prev;
