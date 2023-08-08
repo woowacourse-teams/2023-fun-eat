@@ -55,11 +55,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    if (!isValid) {
-      alert('필수 입력 사항을 작성해주세요.');
-      return;
-    }
-
     await request(formData);
 
     const reviewResponse = await productApi.get({
