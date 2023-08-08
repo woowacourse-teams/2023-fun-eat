@@ -35,6 +35,16 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
+  const { setProductReviews } = useProductReviewContext();
+  const { resetPage } = useProductReviewPageContext();
+
+  const { request } = useReviewRegisterForm(product.id);
+
+  const isValid =
+    reviewFormValue.rating > MIN_RATING_SCORE &&
+    reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
+    reviewFormValue.content.length > MIN_CONTENT_LENGTH;
+
   const formData = useFormData({
     imageKey: 'image',
     imageFile: reviewImageFile,
@@ -42,27 +52,14 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     formContent: reviewFormValue,
   });
 
-  // TODO: 배포하면 랜덤으로 에러 나는 현상 해결 후 주석 풀기
-  // const [submitEnabled, setSubmitEnabled] = useState(false);
-
-  const { setProductReviews } = useProductReviewContext();
-  const { resetPage } = useProductReviewPageContext();
-
-  const { request } = useReviewRegisterForm(product.id);
-
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    if (
-      reviewFormValue.rating <= MIN_RATING_SCORE ||
-      reviewFormValue.tagIds.length < MIN_SELECTED_TAGS_COUNT ||
-      reviewFormValue.content.length <= MIN_CONTENT_LENGTH
-    ) {
+    if (!isValid) {
       alert('필수 입력 사항을 작성해주세요.');
       return;
     }
 
-    console.log(reviewFormValue);
     await request(formData);
 
     const reviewResponse = await productApi.get({
@@ -80,14 +77,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
 
     closeReviewDialog();
   };
-
-  //useEffect(() => {
-  //  const isValid =
-  //    rating > MIN_RATING_SCORE &&
-  //    selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
-  //    content.length > MIN_CONTENT_LENGTH;
-  //  setSubmitEnabled(isValid);
-  //}, [rating, selectedTags, content]);
 
   return (
     <ReviewRegisterFormContainer>
@@ -115,16 +104,8 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
         <Spacing size={80} />
         <RebuyCheckbox />
         <Spacing size={16} />
-        <FormButton
-          type="submit"
-          customWidth="100%"
-          customHeight="60px"
-          size="xl"
-          weight="bold"
-          //disabled={!submitEnabled}
-        >
-          {/*{submitEnabled ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}*/}
-          리뷰 등록하기
+        <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
+          {isValid ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>
       </RegisterForm>
     </ReviewRegisterFormContainer>
@@ -160,7 +141,7 @@ const RegisterForm = styled.form`
 `;
 
 const FormButton = styled(Button)`
-  /*background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};*/
-  /*color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};*/
-  /*cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};*/
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
+  color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
