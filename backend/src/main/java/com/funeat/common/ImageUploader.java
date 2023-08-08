@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Profile("!test")
 public class ImageUploader implements ImageService {
 
-    @Value("${review.image.path}")
+    @Value("${image.path}")
     private String imagePath;
 
     @Override
