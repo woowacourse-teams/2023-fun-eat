@@ -19,7 +19,7 @@ const useFormData = ({ imageKey, imageFile, formContentKey, formContent }: useFo
 
   formData.append(formContentKey, formContentBlob);
 
-  return { formData };
+  return formData;
 };
 
 export default useFormData;
