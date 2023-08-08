@@ -2,6 +2,7 @@ package com.funeat.common;
 
 import com.funeat.auth.util.AuthArgumentResolver;
 import com.funeat.auth.util.AuthHandlerInterceptor;
+import com.funeat.recipe.utill.RecipeHandlerInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -15,13 +16,16 @@ public class WebConfig implements WebMvcConfigurer {
     private final CustomPageableHandlerMethodArgumentResolver customPageableHandlerMethodArgumentResolver;
     private final AuthArgumentResolver authArgumentResolver;
     private final AuthHandlerInterceptor authHandlerInterceptor;
+    private final RecipeHandlerInterceptor recipeHandlerInterceptor;
 
     public WebConfig(final CustomPageableHandlerMethodArgumentResolver customPageableHandlerMethodArgumentResolver,
                      final AuthArgumentResolver authArgumentResolver,
-                     final AuthHandlerInterceptor authHandlerInterceptor) {
+                     final AuthHandlerInterceptor authHandlerInterceptor,
+                     final RecipeHandlerInterceptor recipeHandlerInterceptor) {
         this.customPageableHandlerMethodArgumentResolver = customPageableHandlerMethodArgumentResolver;
         this.authArgumentResolver = authArgumentResolver;
         this.authHandlerInterceptor = authHandlerInterceptor;
+        this.recipeHandlerInterceptor = recipeHandlerInterceptor;
     }
 
     @Override
@@ -29,6 +33,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authHandlerInterceptor)
                 .addPathPatterns("/api/products/**/reviews/**")
                 .addPathPatterns("/api/members");
+        registry.addInterceptor(recipeHandlerInterceptor)
+                .addPathPatterns("/api/recipes");
     }
 
     @Override
