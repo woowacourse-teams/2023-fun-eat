@@ -1,4 +1,5 @@
 import { Heading, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
+import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
 import { useReviewFormActionContext } from '@/hooks/context';
@@ -13,6 +14,10 @@ const ReviewTextarea = ({ content }: ReviewTextareaProps) => {
   const { handleReviewFormValue } = useReviewFormActionContext();
   const theme = useTheme();
 
+  const handleReviewText: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+    handleReviewFormValue({ target: 'content', value: event.currentTarget.value });
+  };
+
   return (
     <ReviewTextareaContainer>
       <Heading as="h2" size="xl" tabIndex={0}>
@@ -26,7 +31,7 @@ const ReviewTextarea = ({ content }: ReviewTextareaProps) => {
         placeholder="솔직한 리뷰를 써주세요 😊"
         maxLength={MAX_LENGTH}
         value={content}
-        onChange={({ currentTarget }) => handleReviewFormValue({ target: 'content', value: currentTarget.value })}
+        onChange={handleReviewText}
       />
       <Spacing size={16} />
       <ReviewWritingStatusText color={theme.textColors.info} tabIndex={0}>

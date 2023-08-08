@@ -13,13 +13,12 @@ const ReviewTagItem = ({ id, name, isSelected }: ReviewTagItemProps) => {
   const { handleReviewFormValue } = useReviewFormActionContext();
   const theme = useTheme();
 
+  const handleReviewTag = () => {
+    handleReviewFormValue({ target: 'tagIds', value: id, isSelected });
+  };
+
   return (
-    <Button
-      type="button"
-      weight="bold"
-      variant="transparent"
-      onClick={() => handleReviewFormValue({ target: 'tagIds', value: id, isSelected })}
-    >
+    <Button type="button" weight="bold" variant="transparent" onClick={handleReviewTag}>
       <TagBadge
         isSelected={isSelected}
         size="sm"

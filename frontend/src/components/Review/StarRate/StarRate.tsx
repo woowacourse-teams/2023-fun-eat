@@ -15,6 +15,10 @@ const StarRate = ({ rating }: StarRateProps) => {
   const { hovering, handleMouseEnter, handleMouseLeave } = useStarRatingHover();
   const { handleReviewFormValue } = useReviewFormActionContext();
 
+  const handleRating = (star: number) => {
+    handleReviewFormValue({ target: 'rating', value: star });
+  };
+
   return (
     <StarRateContainer>
       <Heading as="h2" size="xl" tabIndex={0}>
@@ -29,7 +33,7 @@ const StarRate = ({ rating }: StarRateProps) => {
             key={star}
             variant="transparent"
             css="padding: 0 2px"
-            onClick={() => handleReviewFormValue({ target: 'rating', value: star })}
+            onClick={() => handleRating(star)}
             onMouseEnter={() => handleMouseEnter(star)}
             onMouseLeave={handleMouseLeave}
             aria-label={`별점 ${star}점`}
