@@ -1,14 +1,16 @@
 import { Heading, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import { useReviewFormActionContext } from '@/hooks/context';
+
 const MAX_LENGTH = 200;
 
 interface ReviewTextareaProps {
   content: string;
-  onReviewInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const ReviewTextarea = ({ content, onReviewInput }: ReviewTextareaProps) => {
+const ReviewTextarea = ({ content }: ReviewTextareaProps) => {
+  const { handleReviewFormValue } = useReviewFormActionContext();
   const theme = useTheme();
 
   return (
@@ -24,7 +26,7 @@ const ReviewTextarea = ({ content, onReviewInput }: ReviewTextareaProps) => {
         placeholder="솔직한 리뷰를 써주세요 😊"
         maxLength={MAX_LENGTH}
         value={content}
-        onChange={onReviewInput}
+        onChange={({ currentTarget }) => handleReviewFormValue({ target: 'content', value: currentTarget.value })}
       />
       <Spacing size={16} />
       <ReviewWritingStatusText color={theme.textColors.info} tabIndex={0}>

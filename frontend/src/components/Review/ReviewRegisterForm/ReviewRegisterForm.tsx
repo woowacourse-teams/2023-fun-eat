@@ -11,20 +11,14 @@ import StarRate from '../StarRate/StarRate';
 import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
+import { REVIEW_SORT_OPTIONS } from '@/constants';
 import {
   useProductReviewContext,
   useProductReviewPageContext,
   useReviewFormActionContext,
   useReviewFormValueContext,
 } from '@/hooks/context';
-import {
-  useReviewRegisterForm,
-  useReviewImageUploader,
-  useReviewTextarea,
-  useSelectedTags,
-  useFormData,
-} from '@/hooks/review';
+import { useReviewRegisterForm, useReviewImageUploader, useFormData } from '@/hooks/review';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 import type { ProductDetail } from '@/types/product';
 
@@ -41,7 +35,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
 
-  const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
@@ -72,7 +65,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     if (
       reviewFormValue.rating <= MIN_RATING_SCORE ||
       reviewFormValue.tagIds.length < MIN_SELECTED_TAGS_COUNT ||
-      content.length <= MIN_CONTENT_LENGTH
+      reviewFormValue.content.length <= MIN_CONTENT_LENGTH
     ) {
       alert('필수 입력 사항을 작성해주세요.');
       return;
@@ -126,7 +119,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
         <Spacing size={60} />
         <ReviewTagList selectedTags={reviewFormValue.tagIds} />
         <Spacing size={60} />
-        <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
+        <ReviewTextarea content={reviewFormValue.content} />
         <Spacing size={80} />
         <p onKeyDown={handleKeydown}>
           <Checkbox ref={labelRef} inputRef={inputRef} weight="bold" onChange={handleRebuy} tabIndex={0}>
