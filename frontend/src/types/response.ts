@@ -20,10 +20,6 @@ export interface ProductReviewResponse {
   reviews: Review[];
 }
 
-export interface RegisteredReviewResponse {
-  reviews: Review[];
-}
-
 export interface ReviewRankingResponse {
   reviews: ReviewRanking[];
 }
