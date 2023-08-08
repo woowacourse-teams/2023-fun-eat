@@ -21,10 +21,9 @@ export interface ReviewTag {
 
 export interface ReviewRequest {
   rating: number;
-  tags: number[];
+  tagIds: number[];
   content: string;
   rebuy: boolean;
-  memberId: number;
 }
 
 export interface ReviewPostRequestBody extends FormData {

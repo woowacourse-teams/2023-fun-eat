@@ -23,7 +23,7 @@ const ReviewTagList = ({ selectedTags, toggleTagSelection }: ReviewTagListProps)
   return (
     <ReviewTagListContainer>
       <Heading as="h2" size="xl" tabIndex={0}>
-        태그를 골라주세요. (3개)
+        태그를 골라주세요. (3개까지)
         <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={25} />
