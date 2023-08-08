@@ -30,10 +30,10 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
-  close: () => void;
+  closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const { rating, setRating, handleRating } = useStarRating();
@@ -47,7 +47,7 @@ const ReviewRegisterForm = ({ product, close: closeReviewDialog }: ReviewRegiste
     content,
     rebuy,
   };
-  const { formData } = useFormData({
+  const formData = useFormData({
     imageKey: 'image',
     imageFile: reviewImageFile,
     formContentKey: 'reviewRequest',

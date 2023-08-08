@@ -68,7 +68,7 @@ const ProductDetailPage = () => {
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
-          <ReviewRegisterForm product={productDetail} close={handleCloseBottomSheet} />
+          <ReviewRegisterForm product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
         ) : (
           <SortOptionList
             options={REVIEW_SORT_OPTIONS}
