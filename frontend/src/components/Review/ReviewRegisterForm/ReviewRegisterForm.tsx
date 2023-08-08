@@ -120,7 +120,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
       <ProductOverviewItemWrapper>
         <ProductOverviewItem name={product.name} image={product.image} />
       </ProductOverviewItemWrapper>
-      <Divider variant="disabled" css="height:4px;" />
+      <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>
         <ReviewImageUploader
           reviewPreviewImage={reviewPreviewImage}
