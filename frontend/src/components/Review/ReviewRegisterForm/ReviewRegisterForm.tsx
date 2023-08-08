@@ -1,5 +1,6 @@
 import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import { useEffect, useRef, useState } from 'react';
+import type { ChangeEventHandler } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
@@ -11,14 +12,16 @@ import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReviewContext } from '@/hooks/context';
-import useProductReviewPageContext from '@/hooks/context/useProductReviewPageContext';
-import { useInfiniteProductReviews } from '@/hooks/product';
-import { useReviewTextarea, useSelectedTags } from '@/hooks/review';
-import useReviewImageUploader from '@/hooks/review/useReviewImageUploader';
-import useReviewRegisterForm from '@/hooks/review/useReviewRegisterForm';
+import { useProductReviewContext, useProductReviewPageContext } from '@/hooks/context';
+import {
+  useReviewRegisterForm,
+  useReviewImageUploader,
+  useReviewTextarea,
+  useSelectedTags,
+  useFormData,
+  useStarRating,
+} from '@/hooks/review';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
-import useStarRating from '@/hooks/useStarRate';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -27,26 +30,48 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
-  close: () => void;
+  closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
-  const { reviewImage, setReviewImage, uploadReviewImage, deleteReviewImage, reviewImageFile } =
+const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
+  const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const { rating, setRating, handleRating } = useStarRating();
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
 
-  const { inputRef, handleKeydown } = useEnterKeyDown();
-  const [submitEnabled, setSubmitEnabled] = useState(false);
+  const formContent = {
+    rating,
+    tagIds: selectedTags,
+    content,
+    rebuy,
+  };
+  const formData = useFormData({
+    imageKey: 'image',
+    imageFile: reviewImageFile,
+    formContentKey: 'reviewRequest',
+    formContent,
+  });
+
+  const { inputRef, labelRef, handleKeydown } = useEnterKeyDown();
+  // TODO: 배포하면 랜덤으로 에러 나는 현상 해결 후 주석 풀기
+  // const [submitEnabled, setSubmitEnabled] = useState(false);
+
   const { setProductReviews } = useProductReviewContext();
   const { resetPage } = useProductReviewPageContext();
 
-  const formRef = useRef<HTMLFormElement>(null);
   const { request } = useReviewRegisterForm(product.id);
 
-  const handleRebuy = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const resetForm = () => {
+    setReviewPreviewImage('');
+    setRating(0);
+    setSelectedTags([]);
+    setContent('');
+    setRebuy(false);
+  };
+
+  const handleRebuy: ChangeEventHandler<HTMLInputElement> = (event) => {
     setRebuy(event.target.checked);
   };
 
@@ -62,59 +87,19 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
       return;
     }
 
-    const formData = new FormData();
+    await request(formData);
 
-    if (reviewImageFile) {
-      formData.append('image', reviewImageFile, reviewImageFile.name);
-    }
+    const reviewResponse = await productApi.get({
+      params: `/${product.id}/reviews`,
+      queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
+      credentials: true,
+    });
+    const { reviews } = await reviewResponse.json();
 
-    const reviewRequest = {
-      rating,
-      tagIds: selectedTags,
-      content,
-      rebuy,
-    };
-
-    const jsonString = JSON.stringify(reviewRequest);
-
-    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-
-    formData.append('reviewRequest', jsonBlob);
-
-    const url = `https://funeat.site/api/products/${product.id}/reviews`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error(`에러 발생 상태코드:${response.status}`);
-      } else {
-        console.log(response, '리뷰가 성공적으로 등록되었습니다.');
-
-        const reviewResponse = await productApi.get({
-          params: `/${product.id}/reviews`,
-          queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
-          credentials: true,
-        });
-        const { reviews } = await reviewResponse.json();
-        setProductReviews(reviews);
-        resetPage();
-
-        setReviewImage('');
-        setRating(0);
-        setSelectedTags([]);
-        setContent('');
-        setRebuy(false);
-
-        close();
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    setProductReviews(reviews);
+    resetPage();
+    resetForm();
+    closeReviewDialog();
   };
 
   //useEffect(() => {
@@ -128,17 +113,17 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
   return (
     <ReviewRegisterFormContainer>
       <ReviewHeading tabIndex={0}>리뷰 작성</ReviewHeading>
-      <CloseButton variant="transparent" onClick={close} aria-label="닫기">
+      <CloseButton variant="transparent" onClick={closeReviewDialog} aria-label="닫기">
         <SvgIcon variant="close" color={theme.colors.black} width={20} height={20} />
       </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
         <ProductOverviewItem name={product.name} image={product.image} />
       </ProductOverviewItemWrapper>
-      <Divider variant="disabled" css="height:4px;" />
-      <RegisterForm ref={formRef} onSubmit={handleSubmit}>
+      <Divider customHeight="4px" variant="disabled" />
+      <RegisterForm onSubmit={handleSubmit}>
         <ReviewImageUploader
-          reviewImage={reviewImage}
+          reviewPreviewImage={reviewPreviewImage}
           uploadReviewImage={uploadReviewImage}
           deleteReviewImage={deleteReviewImage}
         />
@@ -149,10 +134,11 @@ const ReviewRegisterForm = ({ product, close }: ReviewRegisterFormProps) => {
         <Spacing size={60} />
         <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
-        {/* TODO: ref랑 추가해주세요 */}
-        <Checkbox weight="bold" onChange={handleRebuy} tabIndex={0}>
-          재구매할 생각이 있으신가요?
-        </Checkbox>
+        <p onKeyDown={handleKeydown}>
+          <Checkbox ref={labelRef} inputRef={inputRef} weight="bold" onChange={handleRebuy} tabIndex={0}>
+            재구매할 생각이 있으신가요?
+          </Checkbox>
+        </p>
         <Spacing size={16} />
         <FormButton
           type="submit"

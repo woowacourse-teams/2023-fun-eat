@@ -2,7 +2,7 @@ import { Button, Heading, Spacing, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import useStarRating from '@/hooks/useStarRate';
+import { useStarRating } from '@/hooks/review';
 
 const starList = Array.from({ length: 5 }, (_, index) => index + 1);
 
