@@ -12,7 +12,12 @@ import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReviewContext, useProductReviewPageContext } from '@/hooks/context';
+import {
+  useProductReviewContext,
+  useProductReviewPageContext,
+  useReviewFormActionContext,
+  useReviewFormValueContext,
+} from '@/hooks/context';
 import {
   useReviewRegisterForm,
   useReviewImageUploader,
@@ -40,18 +45,14 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
+  const reviewFormValue = useReviewFormValueContext();
+  const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const formContent = {
-    rating,
-    tagIds: selectedTags,
-    content,
-    rebuy,
-  };
   const formData = useFormData({
     imageKey: 'image',
     imageFile: reviewImageFile,
     formContentKey: 'reviewRequest',
-    formContent,
+    formContent: reviewFormValue,
   });
 
   const { inputRef, labelRef, handleKeydown } = useEnterKeyDown();
@@ -62,14 +63,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const { resetPage } = useProductReviewPageContext();
 
   const { request } = useReviewRegisterForm(product.id);
-
-  const resetForm = () => {
-    setReviewPreviewImage('');
-    setRating(0);
-    setSelectedTags([]);
-    setContent('');
-    setRebuy(false);
-  };
 
   const handleRebuy: ChangeEventHandler<HTMLInputElement> = (event) => {
     setRebuy(event.target.checked);
@@ -98,7 +91,10 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
 
     setProductReviews(reviews);
     resetPage();
-    resetForm();
+
+    setReviewPreviewImage('');
+    resetReviewFormValue();
+
     closeReviewDialog();
   };
 
@@ -128,7 +124,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
           deleteReviewImage={deleteReviewImage}
         />
         <Spacing size={60} />
-        <StarRate rating={rating} handleRating={handleRating} />
+        <StarRate rating={reviewFormValue.rating} />
         <Spacing size={60} />
         <ReviewTagList selectedTags={selectedTags} toggleTagSelection={toggleTagSelection} />
         <Spacing size={60} />
