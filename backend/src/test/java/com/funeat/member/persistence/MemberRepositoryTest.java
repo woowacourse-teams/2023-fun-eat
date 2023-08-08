@@ -46,7 +46,7 @@ public class MemberRepositoryTest extends RepositoryTest {
                 final var wrongPlatformId = "4321";
 
                 // when, then
-                assertThatThrownBy(() -> memberRepository.findByPlatformId(wrongPlatformId))
+                assertThatThrownBy(() -> memberRepository.findByPlatformId(wrongPlatformId).get())
                         .isInstanceOf(NoSuchElementException.class);
             }
         }
