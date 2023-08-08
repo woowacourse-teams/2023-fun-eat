@@ -41,7 +41,6 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
 
-  const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
   const reviewFormValue = useReviewFormValueContext();
@@ -72,7 +71,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
 
     if (
       reviewFormValue.rating <= MIN_RATING_SCORE ||
-      selectedTags.length < MIN_SELECTED_TAGS_COUNT ||
+      reviewFormValue.tagIds.length < MIN_SELECTED_TAGS_COUNT ||
       content.length <= MIN_CONTENT_LENGTH
     ) {
       alert('필수 입력 사항을 작성해주세요.');
@@ -125,7 +124,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
         <Spacing size={60} />
         <StarRate rating={reviewFormValue.rating} />
         <Spacing size={60} />
-        <ReviewTagList selectedTags={selectedTags} toggleTagSelection={toggleTagSelection} />
+        <ReviewTagList selectedTags={reviewFormValue.tagIds} />
         <Spacing size={60} />
         <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
         <Spacing size={80} />
