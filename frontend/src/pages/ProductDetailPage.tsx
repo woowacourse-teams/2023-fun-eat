@@ -1,5 +1,5 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -14,6 +14,7 @@ import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+  const tabRef = useRef<HTMLUListElement>(null);
   const { productReviews } = useProductReviewContext();
 
   const { productId } = useParams();
@@ -44,7 +45,7 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
-      <TabMenu tabMenus={[`리뷰 ${productReviews.length}`, '꿀조합']} />
+      <TabMenu ref={tabRef} tabMenus={[`리뷰 ${productReviews.length}`, '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
@@ -70,7 +71,7 @@ const ProductDetailPage = () => {
       <ScrollButton />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
-          <ReviewRegisterForm product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+          <ReviewRegisterForm targetRef={tabRef} product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
         ) : (
           <SortOptionList
             options={REVIEW_SORT_OPTIONS}

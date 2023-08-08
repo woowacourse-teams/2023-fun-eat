@@ -7,7 +7,9 @@ const useScroll = () => {
     }
   };
 
-  const scrollToPosition = () => {};
+  const scrollToPosition = (targetRef?: React.RefObject<HTMLElement>) => {
+    targetRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return { scrollToTop, scrollToPosition };
 };

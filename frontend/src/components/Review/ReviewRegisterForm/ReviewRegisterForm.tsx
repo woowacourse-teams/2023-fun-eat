@@ -22,6 +22,7 @@ import {
   useStarRating,
 } from '@/hooks/review';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
+import useScroll from '@/hooks/useScroll';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -30,10 +31,11 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
+  targetRef: React.RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const { rating, setRating, handleRating } = useStarRating();
@@ -55,6 +57,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   });
 
   const { inputRef, labelRef, handleKeydown } = useEnterKeyDown();
+  const { scrollToPosition } = useScroll();
   // TODO: 배포하면 랜덤으로 에러 나는 현상 해결 후 주석 풀기
   // const [submitEnabled, setSubmitEnabled] = useState(false);
 
@@ -100,6 +103,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     resetPage();
     resetForm();
     closeReviewDialog();
+    scrollToPosition(targetRef);
   };
 
   //useEffect(() => {
