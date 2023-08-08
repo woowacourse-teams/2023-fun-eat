@@ -2,17 +2,18 @@ import { Button, Heading, Spacing, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import { useStarRating } from '@/hooks/review';
+import { useReviewFormActionContext } from '@/hooks/context';
+import { useStarRatingHover } from '@/hooks/review';
 
 const starList = Array.from({ length: 5 }, (_, index) => index + 1);
 
 interface StarRateProps {
   rating: number;
-  handleRating: (starIndex: number) => void;
 }
 
-const StarRate = ({ rating, handleRating }: StarRateProps) => {
-  const { hovering, handleMouseEnter, handleMouseLeave } = useStarRating();
+const StarRate = ({ rating }: StarRateProps) => {
+  const { hovering, handleMouseEnter, handleMouseLeave } = useStarRatingHover();
+  const { handleReviewFormValue } = useReviewFormActionContext();
 
   return (
     <StarRateContainer>
@@ -28,7 +29,7 @@ const StarRate = ({ rating, handleRating }: StarRateProps) => {
             key={star}
             variant="transparent"
             css="padding: 0 2px"
-            onClick={() => handleRating(star)}
+            onClick={() => handleReviewFormValue({ target: 'rating', value: star })}
             onMouseEnter={() => handleMouseEnter(star)}
             onMouseLeave={handleMouseLeave}
             aria-label={`별점 ${star}점`}

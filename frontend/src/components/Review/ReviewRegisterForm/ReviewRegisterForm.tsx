@@ -24,7 +24,6 @@ import {
   useReviewTextarea,
   useSelectedTags,
   useFormData,
-  useStarRating,
 } from '@/hooks/review';
 import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 import type { ProductDetail } from '@/types/product';
@@ -41,7 +40,7 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
-  const { rating, setRating, handleRating } = useStarRating();
+
   const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
   const { content, setContent, handleReviewInput } = useReviewTextarea();
   const [rebuy, setRebuy] = useState(false);
@@ -72,7 +71,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     event.preventDefault();
 
     if (
-      rating <= MIN_RATING_SCORE ||
+      reviewFormValue.rating <= MIN_RATING_SCORE ||
       selectedTags.length < MIN_SELECTED_TAGS_COUNT ||
       content.length <= MIN_CONTENT_LENGTH
     ) {
