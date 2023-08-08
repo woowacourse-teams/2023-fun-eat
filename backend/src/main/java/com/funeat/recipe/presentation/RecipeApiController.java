@@ -26,7 +26,7 @@ public class RecipeApiController implements RecipeController{
     public ResponseEntity<Void> writeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
                                             @RequestPart(required = false) final List<MultipartFile> images,
                                             @RequestPart final RecipeCreateRequest recipeRequest) {
-        Long recipeId = recipeService.create(loginInfo.getId(), images, recipeRequest);
+        final Long recipeId = recipeService.create(loginInfo.getId(), images, recipeRequest);
 
         return ResponseEntity.created(URI.create("/api/recipes/" + recipeId)).build();
     }

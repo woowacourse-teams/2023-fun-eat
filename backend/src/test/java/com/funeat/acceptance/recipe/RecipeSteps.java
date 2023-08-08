@@ -15,9 +15,9 @@ import java.util.stream.IntStream;
 public class RecipeSteps {
 
     public static ExtractableResponse<Response> 레시피_추가_요청(final RecipeCreateRequest recipeRequest,
-                                                          List<MultiPartSpecification> imageList,
+                                                          final List<MultiPartSpecification> imageList,
                                                           final String loginCookie) {
-        RequestSpecification request = given()
+        final var request = given()
                 .cookie("JSESSIONID", loginCookie);
         imageList.forEach(request::multiPart);
         return request

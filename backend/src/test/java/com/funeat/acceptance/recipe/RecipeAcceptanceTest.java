@@ -31,7 +31,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         final var request = new RecipeCreateRequest("제일로 맛있는 레시피",
                 List.of(product1.getId(), product2.getId(), product3.getId()),
                 "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
-        final List<MultiPartSpecification> images = 여러_사진_요청(3);
+        final var images = 여러_사진_요청(3);
         final var response = 레시피_추가_요청(request, images, loginCookie);
 
         // then
