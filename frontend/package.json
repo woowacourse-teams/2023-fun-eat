@@ -10,7 +10,6 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "jest",
-    "test:report": "jest --reporters=default --reporters=jest-junit",
     "test:coverage": "jest --watchAll --coverage"
   },
   "dependencies": {

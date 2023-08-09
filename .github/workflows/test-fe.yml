@@ -12,9 +12,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     timeout-minutes: 10
 
     permissions:
@@ -34,30 +31,32 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: 'node_modules'
+          path: '**/frontend/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: 의존성 설치
+        working-directory: frontend/
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --pure-lockfile
 
       - name: 테스트 실행
-        run: yarn test:report
+        working-directory: frontend/
+        run: yarn test
         continue-on-error: true
 
       - name: 테스트 결과 PR에 코멘트 등록
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: './junit.xml'
+          files: '**/frontend/test-results/results.xml'
 
       - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
-          report_paths: './junit.xml'
+          report_paths: '**/frontend/test-results/results.xml'
           token: ${{ github.token }}
 
       - name: build 실패 시 Slack으로 알립니다
