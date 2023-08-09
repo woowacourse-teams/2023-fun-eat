@@ -3,8 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
-import { useReviewFavorite } from '@/hooks/review';
-import type { Review, ReviewFavoriteRequestBody } from '@/types/review';
+import { useReviewFavoriteMutation } from '@/hooks/queries/review';
+import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/relativeDate';
 
 interface ReviewItemProps {
@@ -15,22 +15,19 @@ interface ReviewItemProps {
 const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const ReviewItem = ({ productId, review }: ReviewItemProps) => {
-  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } = review;
+  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
+    review;
   const [isFavorite, setIsFavorite] = useState(favorite);
   const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
-  const { request } = useReviewFavorite<ReviewFavoriteRequestBody>(productId, id);
+  const { mutate } = useReviewFavoriteMutation(productId, id);
 
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
-    try {
-      await request({ favorite: !isFavorite });
+    mutate({ favorite: !isFavorite });
 
-      setIsFavorite((prev) => !prev);
-      setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
-    } catch (error) {
-      alert('리뷰 좋아요를 실패했습니다 🥲');
-    }
+    setIsFavorite((prev) => !prev);
+    setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
   };
 
   return (
