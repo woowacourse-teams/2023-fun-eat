@@ -37,7 +37,7 @@ public class RecipeApiController implements RecipeController{
     @GetMapping(value = "/api/recipes/{recipeId}")
     public ResponseEntity<RecipeDetailResponse> getRecipeDetail(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                                 @PathVariable final Long recipeId) {
-        final RecipeDetailResponse response = recipeService.getRecipeDetail(recipeId);
+        final RecipeDetailResponse response = recipeService.getRecipeDetail(loginInfo.getId(), recipeId);
         return ResponseEntity.ok(response);
     }
 }

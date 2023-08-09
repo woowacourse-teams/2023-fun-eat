@@ -1,7 +1,11 @@
 package com.funeat.recipe.application;
 
+import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
+import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.persistence.MemberRepository;
+import com.funeat.member.persistence.RecipeFavoriteRepository;
+import com.funeat.product.domain.Product;
 import com.funeat.product.domain.ProductRecipe;
 import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
@@ -11,7 +15,6 @@ import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
-import com.funeat.common.ImageService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
@@ -27,18 +30,20 @@ public class RecipeService {
     private final ProductRecipeRepository productRecipeRepository;
     private final RecipeRepository recipeRepository;
     private final RecipeImageRepository recipeImageRepository;
-
+    private final RecipeFavoriteRepository recipeFavoriteRepository;
     private final ImageService imageService;
 
     public RecipeService(final MemberRepository memberRepository, final ProductRepository productRepository,
                          final ProductRecipeRepository productRecipeRepository, final RecipeRepository recipeRepository,
                          final RecipeImageRepository recipeImageRepository,
+                         final RecipeFavoriteRepository recipeFavoriteRepository,
                          final ImageService imageService) {
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.productRecipeRepository = productRecipeRepository;
         this.recipeRepository = recipeRepository;
         this.recipeImageRepository = recipeImageRepository;
+        this.recipeFavoriteRepository = recipeFavoriteRepository;
         this.imageService = imageService;
     }
 
@@ -63,7 +68,20 @@ public class RecipeService {
         return savedRecipe.getId();
     }
 
-    public RecipeDetailResponse getRecipeDetail(final Long recipeId) {
-        return null;
+    public RecipeDetailResponse getRecipeDetail(final Long memberId, final Long recipeId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+        final Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(IllegalArgumentException::new);
+        final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
+        final List<Product> products = productRecipeRepository.findProductByRecipe(recipe);
+        final Long totalPrice = products.stream()
+                .mapToLong(Product::getPrice)
+                .sum();
+        final Boolean favorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
+                .map(RecipeFavorite::getChecked)
+                .orElse(false);
+
+        return RecipeDetailResponse.toResponse(recipe, images, products, totalPrice, favorite);
     }
 }
