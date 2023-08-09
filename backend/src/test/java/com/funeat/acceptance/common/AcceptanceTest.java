@@ -5,6 +5,8 @@ import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.recipe.persistence.RecipeImageRepository;
+import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.persistence.TagRepository;
@@ -47,6 +49,12 @@ public abstract class AcceptanceTest {
 
     @Autowired
     public ReviewFavoriteRepository reviewFavoriteRepository;
+
+    @Autowired
+    public RecipeRepository recipeRepository;
+
+    @Autowired
+    public RecipeImageRepository recipeImageRepository;
 
     @BeforeEach
     void setUp() {
