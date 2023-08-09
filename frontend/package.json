@@ -9,7 +9,8 @@
     "build-dev": "webpack --config webpack.dev.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "jest --watchAll --coverage"
+    "test": "jest",
+    "test:coverage": "jest --watchAll --coverage"
   },
   "dependencies": {
     "@fun-eat/design-system": "^0.3.11",
