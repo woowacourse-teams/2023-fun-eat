@@ -8,17 +8,17 @@ import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
-import { useMemberValueContext, useProductReviewContext } from '@/hooks/context';
-import { useProductDetail } from '@/hooks/product';
+import { useMemberValueContext } from '@/hooks/context';
+import { useInfiniteProductReviews, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
-  const { productReviews } = useProductReviewContext();
 
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
+  const { productReviews } = useInfiniteProductReviews(Number(productId), REVIEW_SORT_OPTIONS[0].value);
 
   const member = useMemberValueContext();
 
