@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: { DEPLOY_ACTIVE:dev }
+    active: local
   servlet:
     multipart:
       enabled: true
@@ -14,3 +14,7 @@ springdoc:
 kakao:
   rest-api-key: { REST_API_KEY }
   redirect-uri: { REDIRECT_URI }
+
+logging:
+  file:
+    path: { LOG_DIR }
