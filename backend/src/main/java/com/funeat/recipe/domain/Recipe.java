@@ -15,7 +15,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
 
     private String content;
 
@@ -28,8 +28,8 @@ public class Recipe {
     protected Recipe() {
     }
 
-    public Recipe(final String name, final String content, final Member member) {
-        this.name = name;
+    public Recipe(final String title, final String content, final Member member) {
+        this.title = title;
         this.content = content;
         this.member = member;
     }
@@ -38,8 +38,8 @@ public class Recipe {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getContent() {
