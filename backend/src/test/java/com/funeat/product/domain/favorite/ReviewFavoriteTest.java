@@ -95,7 +95,7 @@ public class ReviewFavoriteTest {
                 final var actual = reviewFavorite.getFavorite();
 
                 // then
-                assertThat(actual).isTrue();
+                assertThat(actual).isFalse();
             }
         }
     }

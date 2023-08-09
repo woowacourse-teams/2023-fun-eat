@@ -18,6 +18,16 @@ public class LoginSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 로그인_시도_요청(final String code, final String loginCookie) {
+        return given()
+                .cookie("JSESSIONID", loginCookie)
+                .param("code", code)
+                .when()
+                .get("/api/login/oauth2/code/kakao")
+                .then()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 로그아웃_요청(final String loginCookie) {
         return given()
                 .cookie("JSESSIONID", loginCookie)
