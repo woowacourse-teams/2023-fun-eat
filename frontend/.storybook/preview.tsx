@@ -1,17 +1,29 @@
 import React from 'react';
 import { FunEatProvider } from '@fun-eat/design-system';
 import type { Preview } from '@storybook/react';
-import { mswDecorator } from 'msw-storybook-addon';
-import { handlers } from '../src/mocks/handlers';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
 import { BrowserRouter } from 'react-router-dom';
+
+import { productHandlers, reviewHandlers, loginHandlers, rankingHandlers, memberHandlers } from '../src/mocks/handlers';
+
+initialize({
+  serviceWorker: {
+    url: '/mockServiceWorker.js',
+  },
+});
+
+const queryClient = new QueryClient();
 
 export const decorators = [
   (Story) => (
-    <FunEatProvider>
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
-    </FunEatProvider>
+    <QueryClientProvider client={queryClient}>
+      <FunEatProvider>
+        <BrowserRouter>
+          <Story />
+        </BrowserRouter>
+      </FunEatProvider>
+    </QueryClientProvider>
   ),
   mswDecorator,
 ];
@@ -25,7 +37,7 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
-    msw: handlers,
+    msw: { handlers: [...productHandlers, ...reviewHandlers, ...loginHandlers, ...rankingHandlers, ...memberHandlers] },
   },
 };
 
