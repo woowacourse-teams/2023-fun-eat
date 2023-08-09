@@ -11,6 +11,7 @@ import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순
 import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점_2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점_3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
@@ -357,7 +358,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var product = 상품_삼각김밥_가격1000원_평점_3점_생성(category);
                 final var productId = 단일_상품_저장(product);
 
-                final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+                final var review1 = 리뷰_이미지test2_평점2점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
                 final var reviews = List.of(review1, review2, review3);
