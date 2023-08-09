@@ -1,5 +1,14 @@
 package com.funeat.product.persistence;
 
+import static com.funeat.fixture.CategoryFixture.카테고리_CU_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_EMART24_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_GS25_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_과자류_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_식품_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_아이스크림_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_음료_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.RepositoryTest;
@@ -15,54 +24,62 @@ public class CategoryRepositoryTest extends RepositoryTest {
     @Nested
     class findAllByType_테스트 {
 
-        @Test
-        void 카테고리_타입이_FOOD인_모든_카테고리를_조회한다() {
-            // given
-            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var 즉석조리 = new Category("즉석조리", CategoryType.FOOD);
-            final var 과자류 = new Category("과자류", CategoryType.FOOD);
-            final var 아이스크림 = new Category("아이스크림", CategoryType.FOOD);
-            final var 식품 = new Category("식품", CategoryType.FOOD);
-            final var 음료 = new Category("음료", CategoryType.FOOD);
-            final var CU = new Category("CU", CategoryType.STORE);
-            final var GS25 = new Category("GS25", CategoryType.STORE);
-            final var EMART24 = new Category("EMART24", CategoryType.STORE);
+        @Nested
+        class 성공_테스트 {
 
-            final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
-            복수_카테고리_저장(categories);
+            @Test
+            void 카테고리_타입이_FOOD인_모든_카테고리를_조회한다() {
+                // given
+                final var 간편식사 = 카테고리_간편식사_생성();
+                final var 즉석조리 = 카테고리_즉석조리_생성();
+                final var 과자류 = 카테고리_과자류_생성();
+                final var 아이스크림 = 카테고리_아이스크림_생성();
+                final var 식품 = 카테고리_식품_생성();
+                final var 음료 = 카테고리_음료_생성();
+                final var CU = 카테고리_CU_생성();
+                final var GS25 = 카테고리_GS25_생성();
+                final var EMART24 = 카테고리_EMART24_생성();
 
-            final var expected = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
+                final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
+                복수_카테고리_저장(categories);
 
-            // when
-            final var actual = categoryRepository.findAllByType(CategoryType.FOOD);
+                final var expected = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
 
-            // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+                // when
+                final var actual = categoryRepository.findAllByType(CategoryType.FOOD);
+
+                // then
+                assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            }
+
+            @Test
+            void 카테고리_타입이_STORE인_모든_카테고리를_조회한다() {
+                // given
+                final var 간편식사 = 카테고리_간편식사_생성();
+                final var 즉석조리 = 카테고리_즉석조리_생성();
+                final var 과자류 = 카테고리_과자류_생성();
+                final var 아이스크림 = 카테고리_아이스크림_생성();
+                final var 식품 = 카테고리_식품_생성();
+                final var 음료 = 카테고리_음료_생성();
+                final var CU = 카테고리_CU_생성();
+                final var GS25 = 카테고리_GS25_생성();
+                final var EMART24 = 카테고리_EMART24_생성();
+
+                final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
+                복수_카테고리_저장(categories);
+
+                final var expected = List.of(CU, GS25, EMART24);
+
+                // when
+                final var actual = categoryRepository.findAllByType(CategoryType.STORE);
+
+                // then
+                assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            }
         }
 
-        @Test
-        void 카테고리_타입이_STORE인_모든_카테고리를_조회한다() {
-            // given
-            final var 간편식사 = new Category("간편식사", CategoryType.FOOD);
-            final var 즉석조리 = new Category("즉석조리", CategoryType.FOOD);
-            final var 과자류 = new Category("과자류", CategoryType.FOOD);
-            final var 아이스크림 = new Category("아이스크림", CategoryType.FOOD);
-            final var 식품 = new Category("식품", CategoryType.FOOD);
-            final var 음료 = new Category("음료", CategoryType.FOOD);
-            final var CU = new Category("CU", CategoryType.STORE);
-            final var GS25 = new Category("GS25", CategoryType.STORE);
-            final var EMART24 = new Category("EMART24", CategoryType.STORE);
-
-            final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
-            복수_카테고리_저장(categories);
-
-            final var expected = List.of(CU, GS25, EMART24);
-
-            // when
-            final var actual = categoryRepository.findAllByType(CategoryType.STORE);
-
-            // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        @Nested
+        class 실패_테스트 {
         }
     }
 
