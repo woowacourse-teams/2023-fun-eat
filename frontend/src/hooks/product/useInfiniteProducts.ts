@@ -15,12 +15,6 @@ const useInfiniteProducts = (categoryId: number, sort: string) => {
     });
 
     const data: CategoryProductResponse = await res.json();
-
-    // return {
-    //   products: data.products,
-    //   page: data.page,
-    // };
-
     return data;
   };
 
