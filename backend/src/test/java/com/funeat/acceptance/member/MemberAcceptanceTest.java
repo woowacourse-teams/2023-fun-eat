@@ -5,6 +5,7 @@ import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한�
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_조회_요청;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
@@ -21,7 +22,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 사용자_정보를_확인하다() {
         // given
-        final var member = new Member("test", "http://www.test.com", "1");
+        final var member = 멤버_멤버1_생성();
         단일_멤버_저장(member);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
@@ -37,7 +38,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 사용자_정보를_수정하다() {
         // given
-        final var member = new Member("before", "http://www.before.com", "1");
+        final var member = 멤버_멤버1_생성();
         단일_멤버_저장(member);
 
         final var loginCookie = 로그인_쿠키를_얻는다();
