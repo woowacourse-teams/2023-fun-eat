@@ -45,7 +45,7 @@ public class RecipeSteps {
                 .extract();
     }
 
-    public static List<MultiPartSpecification> 여러_사진_요청(int count) {
+    public static List<MultiPartSpecification> 여러_사진_요청(final int count) {
         return IntStream.range(0, count)
                 .mapToObj(i -> new MultiPartSpecBuilder("image".getBytes())
                         .fileName("testImage.png")

@@ -57,9 +57,9 @@ class RecipeFavoriteRepositoryTest {
         final var product2 = 상품_추가_요청(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
         final var product3 = 상품_추가_요청(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
         final var recipeAuthor = 멤버_추가_요청(new Member("author", "image.png", "1"));
-        List<Product> products = List.of(product1, product2, product3);
+        final var products = List.of(product1, product2, product3);
 
-        Recipe recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", recipeAuthor));
+        final var recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", recipeAuthor));
         products.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
 
         // when
@@ -67,8 +67,8 @@ class RecipeFavoriteRepositoryTest {
         final var fakeMember = 멤버_추가_요청(new Member("fake", "image.png", "3"));
         recipeFavoriteRepository.save(new RecipeFavorite(realMember, recipe, true));
 
-        Optional<RecipeFavorite> realMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(realMember, recipe);
-        Optional<RecipeFavorite> fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
+        final var realMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(realMember, recipe);
+        final var fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
 
         // then
         assertThat(realMemberActual).isNotEmpty();
