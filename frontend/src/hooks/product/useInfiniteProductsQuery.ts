@@ -15,7 +15,7 @@ const fetchProducts = async (pageParam: number, categoryId: number, sort: string
 
 const useInfiniteProductsQuery = (categoryId: number, sort: string) => {
   return useInfiniteQuery({
-    queryKey: ['products', categoryId],
+    queryKey: ['products', categoryId, sort],
     queryFn: ({ pageParam = 0 }) => fetchProducts(pageParam, categoryId, sort),
     getNextPageParam: (prevResponse: CategoryProductResponse) => {
       const isLast = prevResponse.page.lastPage;
