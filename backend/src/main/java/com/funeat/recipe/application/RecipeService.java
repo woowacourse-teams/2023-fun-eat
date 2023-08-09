@@ -46,7 +46,7 @@ public class RecipeService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final Recipe savedRecipe = recipeRepository.save(new Recipe(request.getName(), request.getContent(), member));
+        final Recipe savedRecipe = recipeRepository.save(new Recipe(request.getTitle(), request.getContent(), member));
         request.getProductIds()
                 .stream()
                 .map(it -> productRepository.findById(it)
