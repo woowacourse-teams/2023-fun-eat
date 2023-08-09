@@ -54,7 +54,7 @@ class ProductRecipeRepositoryTest {
         List<Product> expected = List.of(product1, product2, product3);
 
         Recipe recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", member));
-        expected.forEach(it -> productRecipeRepository.save(new ProductRecipe(it, recipe)));
+        expected.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
 
         // when
         List<Product> actual = productRecipeRepository.findProductByRecipe(recipe);
@@ -78,5 +78,9 @@ class ProductRecipeRepositoryTest {
 
     private Recipe 레시피_추가_요청(final Recipe recipe) {
         return recipeRepository.save(recipe);
+    }
+
+    private ProductRecipe 레시피에_사용된_상품_추가_요청(final ProductRecipe productRecipe) {
+        return productRecipeRepository.save(productRecipe);
     }
 }

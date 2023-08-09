@@ -60,7 +60,7 @@ class RecipeFavoriteRepositoryTest {
         List<Product> products = List.of(product1, product2, product3);
 
         Recipe recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", recipeAuthor));
-        products.forEach(it -> productRecipeRepository.save(new ProductRecipe(it, recipe)));
+        products.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
 
         // when
         final var realMember = 멤버_추가_요청(new Member("real", "image.png", "2"));
@@ -89,5 +89,9 @@ class RecipeFavoriteRepositoryTest {
 
     private Recipe 레시피_추가_요청(final Recipe recipe) {
         return recipeRepository.save(recipe);
+    }
+
+    private ProductRecipe 레시피에_사용된_상품_추가_요청(final ProductRecipe productRecipe) {
+        return productRecipeRepository.save(productRecipe);
     }
 }
