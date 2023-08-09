@@ -24,6 +24,9 @@ dependencies {
     testRuntimeOnly 'com.h2database:h2'
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'com.github.maricn:logback-slack-appender:1.4.0'
 }
 
 tasks.named('test') {

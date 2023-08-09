@@ -1,35 +1,36 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
-const ReviewImageUploader = () => {
-  const [reviewImage, setReviewImage] = useState('');
+import useEnterKeyDown from '@/hooks/useEnterKeyDown';
+
+interface ReviewImageUploaderProps {
+  reviewPreviewImage: string;
+  uploadReviewImage: ChangeEventHandler<HTMLInputElement>;
+  deleteReviewImage: () => void;
+}
+
+const ReviewImageUploader = ({
+  reviewPreviewImage,
+  uploadReviewImage,
+  deleteReviewImage,
+}: ReviewImageUploaderProps) => {
+  const { inputRef, handleKeydown } = useEnterKeyDown();
   const theme = useTheme();
-
-  const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (!event.target.files) {
-      return;
-    }
-    setReviewImage(URL.createObjectURL(event.target.files[0]));
-  };
-
-  const deleteReviewImage = () => {
-    URL.revokeObjectURL(reviewImage);
-    setReviewImage('');
-  };
 
   return (
     <ReviewImageUploaderContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         구매한 상품 사진이 있다면 올려주세요.
       </Heading>
       <Spacing size={2} />
-      <Text color={theme.textColors.disabled}>(사진은 1장까지 업로드 할 수 있어요)</Text>
+      <Text color={theme.textColors.disabled} tabIndex={0}>
+        (사진은 5MB 이하, 1장까지 업로드 할 수 있어요.)
+      </Text>
       <Spacing size={20} />
-      {reviewImage ? (
+      {reviewPreviewImage ? (
         <ReviewImageButtonWrapper>
-          <img src={reviewImage} alt="업로드한 리뷰 사진" width={200} />
+          <img src={reviewPreviewImage} alt="업로드한 리뷰 사진" width={200} />
           <Button
             type="button"
             customWidth="80px"
@@ -42,9 +43,9 @@ const ReviewImageUploader = () => {
           </Button>
         </ReviewImageButtonWrapper>
       ) : (
-        <ImageUploadLabel>
+        <ImageUploadLabel tabIndex={0} onKeyDown={handleKeydown} aria-label="사진 업로드 버튼" aria-hidden>
           +
-          <input type="file" accept="image/*" onChange={uploadReviewImage} />
+          <input ref={inputRef} type="file" accept="image/*" onChange={uploadReviewImage} />
         </ImageUploadLabel>
       )}
     </ReviewImageUploaderContainer>

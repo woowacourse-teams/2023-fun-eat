@@ -4,6 +4,7 @@ import App from './App';
 
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
+import AuthPage from '@/pages/AuthPage';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
@@ -34,10 +35,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: `${PATH.PRODUCT_LIST}/:category/:productId`,
-        element: <ProductDetailPage />,
-      },
-      {
         path: PATH.RECIPE,
         element: <RecipePage />,
       },
@@ -58,6 +55,20 @@ const router = createBrowserRouter([
       {
         path: PATH.LOGIN,
         element: <LoginPage />,
+      },
+      {
+        path: `${PATH.LOGIN}/:authProvider`,
+        element: <AuthPage />,
+      },
+    ],
+  },
+  {
+    path: '/',
+    element: <App layout="detail" />,
+    children: [
+      {
+        path: `${PATH.PRODUCT_LIST}/:category/:productId`,
+        element: <ProductDetailPage />,
       },
     ],
   },

@@ -1,23 +1,28 @@
 import { Heading, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
+
+import { useReviewFormActionContext } from '@/hooks/context';
 
 const MAX_LENGTH = 200;
 
-const ReviewTextarea = () => {
-  const [reviewValue, setReviewValue] = useState('');
+interface ReviewTextareaProps {
+  content: string;
+}
+
+const ReviewTextarea = ({ content }: ReviewTextareaProps) => {
+  const { handleReviewFormValue } = useReviewFormActionContext();
   const theme = useTheme();
 
-  const handleReviewInput: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-    setReviewValue(event.currentTarget.value);
+  const handleReviewText: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+    handleReviewFormValue({ target: 'content', value: event.currentTarget.value });
   };
 
   return (
     <ReviewTextareaContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         리뷰를 남겨주세요.
-        <RequiredMark>*</RequiredMark>
+        <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={20} />
       <Textarea
@@ -25,12 +30,12 @@ const ReviewTextarea = () => {
         resize="vertical"
         placeholder="솔직한 리뷰를 써주세요 😊"
         maxLength={MAX_LENGTH}
-        value={reviewValue}
-        onChange={handleReviewInput}
+        value={content}
+        onChange={handleReviewText}
       />
       <Spacing size={16} />
-      <ReviewWritingStatusText color={theme.textColors.info}>
-        작성한 글자 수: {reviewValue.length} / {MAX_LENGTH}
+      <ReviewWritingStatusText color={theme.textColors.info} tabIndex={0}>
+        작성한 글자 수: {content.length}자 / {MAX_LENGTH}자
       </ReviewWritingStatusText>
     </ReviewTextareaContainer>
   );

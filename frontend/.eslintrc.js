@@ -79,6 +79,10 @@ module.exports = {
             group: 'external',
           },
           {
+            pattern: '@tanstack/**',
+            group: 'external',
+          },
+          {
             pattern: '@*/**',
             group: 'unknown',
           },

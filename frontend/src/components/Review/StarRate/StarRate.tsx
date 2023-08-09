@@ -2,18 +2,28 @@ import { Button, Heading, Spacing, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import useStarRating from '@/hooks/useStarRate';
+import { useReviewFormActionContext } from '@/hooks/context';
+import { useStarRatingHover } from '@/hooks/review';
 
 const starList = Array.from({ length: 5 }, (_, index) => index + 1);
 
-const StarRate = () => {
-  const { rating, hovering, handleRating, handleMouseEnter, handleMouseLeave } = useStarRating();
+interface StarRateProps {
+  rating: number;
+}
+
+const StarRate = ({ rating }: StarRateProps) => {
+  const { hovering, handleMouseEnter, handleMouseLeave } = useStarRatingHover();
+  const { handleReviewFormValue } = useReviewFormActionContext();
+
+  const handleRating = (star: number) => {
+    handleReviewFormValue({ target: 'rating', value: star });
+  };
 
   return (
     <StarRateContainer>
-      <Heading as="h2" size="xl">
+      <Heading as="h2" size="xl" tabIndex={0}>
         별점을 남겨주세요.
-        <RequiredMark>*</RequiredMark>
+        <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={20} />
       <div>
@@ -26,6 +36,7 @@ const StarRate = () => {
             onClick={() => handleRating(star)}
             onMouseEnter={() => handleMouseEnter(star)}
             onMouseLeave={handleMouseLeave}
+            aria-label={`별점 ${star}점`}
           >
             <SvgIconWrapper
               variant="star"

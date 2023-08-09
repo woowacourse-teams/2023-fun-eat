@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
-import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Product;
@@ -82,10 +81,10 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var request = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
+        final var request = new ReviewCreateRequest(4L, tagIds, "review", true);
 
         // when
-        reviewService.create(product.getId(), image, request);
+        reviewService.create(product.getId(), member.getId(), image, request);
         final var result = reviewRepository.findAll();
 
         // then
@@ -108,24 +107,20 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
+        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
 
-        reviewService.create(product.getId(), image, reviewCreaterequest);
+        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
         final var savedReview = reviewRepository.findAll().get(0);
 
         // when
-        final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
-        reviewService.likeReview(savedReview.getId(), favoriteRequest);
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
         final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
         final var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, true);
         assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
-        assertThat(reviewFavoriteResult).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+        assertThat(reviewFavoriteResult.getFavorite()).isTrue();
     }
 
     @Test
@@ -138,28 +133,24 @@ class ReviewServiceTest {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
         final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true, member.getId());
+        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
 
-        reviewService.create(product.getId(), image, reviewCreaterequest);
+        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
         final var savedReview = reviewRepository.findAll().get(0);
 
-        final var favoriteRequest = new ReviewFavoriteRequest(true, member.getId());
-        reviewService.likeReview(savedReview.getId(), favoriteRequest);
+        final var favoriteRequest = new ReviewFavoriteRequest(true);
+        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
 
         // when
-        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false, member.getId());
-        reviewService.likeReview(savedReview.getId(), cancelFavoriteRequest);
+        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false);
+        reviewService.likeReview(savedReview.getId(), member.getId(), cancelFavoriteRequest);
 
         final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
         final var reviewResult = reviewRepository.findAll().get(0);
 
         // then
-        final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, savedReview, false);
         assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
-        assertThat(reviewFavoriteResult).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+        assertThat(reviewFavoriteResult.getFavorite()).isFalse();
     }
 
     private MockMultipartFile 리뷰_페이크_사진_요청() {
@@ -204,11 +195,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("favoriteCount").descending());
             final var expected = Stream.of(review1, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -235,11 +226,11 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").ascending());
             final var expected = Stream.of(review1, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then
@@ -266,11 +257,42 @@ class ReviewServiceTest {
 
             final var pageable = PageRequest.of(0, 2, Sort.by("rating").descending());
             final var expected = Stream.of(review2, review3)
-                    .map(SortingReviewDto::toDto)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable)
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
+                    .getReviews();
+
+            // then
+            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        }
+
+        @Test
+        void 최신순으로_정렬을_할_수_있다() {
+            // given
+            final var member1 = new Member("test1", "test1.png", "1");
+            final var member2 = new Member("test2", "test2.png", "2");
+            final var member3 = new Member("test3", "test3.png", "3");
+            final var members = List.of(member1, member2, member3);
+            복수_유저_추가(members);
+
+            final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
+            상품_추가(product);
+
+            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
+            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
+            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
+            final var reviews = List.of(review1, review2, review3);
+            복수_리뷰_추가(reviews);
+
+            final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
+            final var expected = Stream.of(review3, review2)
+                    .map(review -> SortingReviewDto.toDto(review, member1))
+                    .collect(Collectors.toList());
+
+            // when
+            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
                     .getReviews();
 
             // then

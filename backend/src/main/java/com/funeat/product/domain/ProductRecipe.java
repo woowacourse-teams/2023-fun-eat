@@ -22,4 +22,12 @@ public class ProductRecipe {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+
+    protected ProductRecipe() {
+    }
+
+    public ProductRecipe(final Product product, final Recipe recipe) {
+        this.product = product;
+        this.recipe = recipe;
+    }
 }

@@ -1,4 +1,4 @@
-import { Button, Text, useTheme } from '@fun-eat/design-system';
+import { Button, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';

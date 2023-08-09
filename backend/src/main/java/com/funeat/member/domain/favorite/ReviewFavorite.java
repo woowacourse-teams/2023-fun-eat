@@ -24,13 +24,9 @@ public class ReviewFavorite {
     @JoinColumn(name = "review_id")
     private Review review;
 
-    private Boolean checked;
+    private Boolean favorite;
 
     protected ReviewFavorite() {
-    }
-
-    public ReviewFavorite(final Boolean favorite) {
-        this.checked = favorite;
     }
 
     public ReviewFavorite(final Member member, final Review review) {
@@ -43,17 +39,21 @@ public class ReviewFavorite {
         final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
         reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.member.getReviewFavorites().add(reviewFavorite);
+        reviewFavorite.favorite = favorite;
+        reviewFavorite.review.addFavoriteCount();
         return reviewFavorite;
     }
 
-    public void updateChecked(final Boolean checked) {
-        this.checked = checked;
-        if (checked) {
+    public void updateChecked(final Boolean favorite) {
+        if (!this.favorite && favorite) {
             this.review.addFavoriteCount();
+            this.favorite = favorite;
             return;
         }
-        this.review.minusFavoriteCount();
-
+        if (this.favorite && !favorite) {
+            this.review.minusFavoriteCount();
+            this.favorite = favorite;
+        }
     }
 
     public Long getId() {
@@ -68,7 +68,7 @@ public class ReviewFavorite {
         return review;
     }
 
-    public Boolean getChecked() {
-        return checked;
+    public Boolean getFavorite() {
+        return favorite;
     }
 }

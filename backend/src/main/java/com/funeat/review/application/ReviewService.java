@@ -1,5 +1,6 @@
 package com.funeat.review.application;
 
+import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
@@ -37,26 +38,26 @@ public class ReviewService {
     private final ReviewTagRepository reviewTagRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final ImageService imageService;
-
     private final ReviewFavoriteRepository reviewFavoriteRepository;
+    private final ImageService imageService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
-                         final ProductRepository productRepository, final ImageService imageService,
-                         final ReviewFavoriteRepository reviewFavoriteRepository) {
+                         final ProductRepository productRepository,
+                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageService imageService) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
-        this.imageService = imageService;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
+        this.imageService = imageService;
     }
 
     @Transactional
-    public void create(final Long productId, final MultipartFile image, final ReviewCreateRequest reviewRequest) {
-        final Member findMember = memberRepository.findById(reviewRequest.getMemberId())
+    public void create(final Long productId, final Long memberId, final MultipartFile image,
+                       final ReviewCreateRequest reviewRequest) {
+        final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -65,11 +66,11 @@ public class ReviewService {
         if (Objects.isNull(image)) {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
-                            reviewRequest.getReBuy()));
+                            reviewRequest.getRebuy()));
         } else {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
-                            reviewRequest.getContent(), reviewRequest.getReBuy()));
+                            reviewRequest.getContent(), reviewRequest.getRebuy()));
             imageService.upload(image);
         }
 
@@ -86,23 +87,29 @@ public class ReviewService {
     }
 
     @Transactional
-    public void likeReview(final Long reviewId, final ReviewFavoriteRequest request) {
-        final Member findMember = memberRepository.findById(request.getMemberId())
+    public void likeReview(final Long reviewId, final Long memberId, final ReviewFavoriteRequest request) {
+        final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
         final Review findReview = reviewRepository.findById(reviewId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(findMember,
-                findReview, request.getFavorite());
+        final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
+                findReview).orElseGet(() -> saveReviewFavorite(findMember, findReview, request.getFavorite()));
 
-        final ReviewFavorite findReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
-                findReview).orElse(reviewFavoriteRepository.save(reviewFavorite));
-
-        findReviewFavorite.updateChecked(request.getFavorite());
+        savedReviewFavorite.updateChecked(request.getFavorite());
     }
 
-    public SortingReviewsResponse sortingReviews(final Long productId,
-                                                 final Pageable pageable) {
+    private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
+        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review,
+                favorite);
+
+        return reviewFavoriteRepository.save(reviewFavorite);
+    }
+
+    public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+
         final Product product = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -110,7 +117,7 @@ public class ReviewService {
 
         final SortingReviewsPageDto pageDto = SortingReviewsPageDto.toDto(reviewPage);
         final List<SortingReviewDto> reviewDtos = reviewPage.stream()
-                .map(SortingReviewDto::toDto)
+                .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
 
         return SortingReviewsResponse.toResponse(pageDto, reviewDtos);

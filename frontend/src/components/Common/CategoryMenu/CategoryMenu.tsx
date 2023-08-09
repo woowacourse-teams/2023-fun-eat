@@ -30,6 +30,7 @@ const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
               isSelected={isSelected}
               menuVariant={menuVariant}
               onClick={() => selectCategory(menuVariant, menu.id)}
+              aria-pressed={isSelected}
             >
               {menu.name}
             </CategoryButton>
@@ -47,6 +48,12 @@ type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
+  white-space: nowrap;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryMenuStyleProps>`

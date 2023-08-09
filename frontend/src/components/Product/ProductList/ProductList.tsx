@@ -1,4 +1,6 @@
 import { Link } from '@fun-eat/design-system';
+import type { ForwardedRef } from 'react';
+import { forwardRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,7 +15,7 @@ interface ProductListProps {
   productList: Product[];
 }
 
-const ProductList = ({ category, productList }: ProductListProps) => {
+const ProductList = ({ category, productList }: ProductListProps, ref: ForwardedRef<HTMLDivElement>) => {
   return (
     <ProductListContainer>
       {productList.map((product) => (
@@ -23,11 +25,11 @@ const ProductList = ({ category, productList }: ProductListProps) => {
           </Link>
         </li>
       ))}
+      <div ref={ref} aria-hidden />
     </ProductListContainer>
   );
 };
-
-export default ProductList;
+export default forwardRef(ProductList);
 
 const ProductListContainer = styled.ul`
   display: flex;

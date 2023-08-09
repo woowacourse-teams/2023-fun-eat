@@ -1,17 +1,12 @@
 package com.funeat.recipe.domain;
 
 import com.funeat.member.domain.Member;
-import com.funeat.member.domain.bookmark.RecipeBookmark;
-import com.funeat.member.domain.favorite.RecipeFavorite;
-import com.funeat.product.domain.ProductRecipe;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Recipe {
@@ -28,12 +23,28 @@ public class Recipe {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "recipe")
-    private List<ProductRecipe> productRecipes;
+    protected Recipe() {
+    }
 
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeFavorite> recipeFavorites;
+    public Recipe(final String name, final String content, final Member member) {
+        this.name = name;
+        this.content = content;
+        this.member = member;
+    }
 
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeBookmark> recipeBookmarks;
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Member getMember() {
+        return member;
+    }
 }

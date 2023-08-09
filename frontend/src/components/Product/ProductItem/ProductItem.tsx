@@ -1,9 +1,9 @@
 import { Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import PreviewImage from '@/assets/characters.svg';
 import { SvgIcon } from '@/components/Common';
 import type { Product } from '@/types/product';
-
 interface ProductItemProps {
   product: Product;
 }
@@ -14,7 +14,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
   return (
     <ProductItemContainer>
-      <img src={image} width={90} height={90} alt={name} />
+      {image ? <img src={image} width={90} height={90} alt={`${name}사진`} /> : <PreviewImage width={90} height={90} />}
       <ProductInfoWrapper>
         <Text size="lg" weight="bold">
           {name}
@@ -25,13 +25,13 @@ const ProductItem = ({ product }: ProductItemProps) => {
         <ProductReviewWrapper>
           <RatingIconWrapper>
             <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
-            <Text as="span" size="sm" css="line-height: 24px;">
+            <Text as="span" size="sm" css="line-height: 24px;" aria-label={`${averageRating}점`}>
               {averageRating}
             </Text>
           </RatingIconWrapper>
           <ReviewIconWrapper>
             <SvgIcon variant="review" width={20} height={20} color={theme.colors.gray5} />
-            <Text as="span" size="sm" css="line-height: 24px">
+            <Text as="span" size="sm" css="line-height: 24px" aria-label={`리뷰 ${reviewCount}개`}>
               {reviewCount}
             </Text>
           </ReviewIconWrapper>

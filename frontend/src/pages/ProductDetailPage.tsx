@@ -5,9 +5,11 @@ import styled from 'styled-components';
 
 import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
-import { ReviewItem, ReviewRegisterForm } from '@/components/Review';
+import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReview, useProductDetail } from '@/hooks/product';
+import ReviewFormProvider from '@/contexts/ReviewFormContext';
+import { useMemberValueContext } from '@/hooks/context';
+import { useInfiniteProductReviewsQuery, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
@@ -17,14 +19,16 @@ const ProductDetailPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
-  const { data: productDetail } = useProductDetail(productId as string);
-  const { data: productReviews } = useProductReview(productId as string, selectedOption.value);
+  const { data } = useInfiniteProductReviewsQuery(Number(productId), REVIEW_SORT_OPTIONS[0].value);
+  const reviewLength = data?.pages.flatMap((page) => page.reviews).length;
 
-  if (!productDetail || !productReviews) {
+  const member = useMemberValueContext();
+
+  const { data: productDetail } = useProductDetail(productId as string);
+
+  if (!productDetail) {
     return null;
   }
-
-  const { reviews } = productReviews;
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -42,37 +46,34 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
-      <TabMenu tabMenus={[`리뷰 ${reviews.length}`, '꿀조합']} />
+      <TabMenu tabMenus={[`리뷰 ${reviewLength}`, '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
       <section>
-        {reviews && (
-          <ReviewItemWrapper>
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <ReviewItem productId={Number(productId)} review={review} />
-              </li>
-            ))}
-          </ReviewItemWrapper>
-        )}
+        <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
       </section>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
-        <Button
+        <ReviewRegisterButton
           type="button"
           customWidth="100%"
           customHeight="60px"
+          color={!member ? 'gray3' : 'primary'}
+          textColor={!member ? 'white' : 'default'}
           size="xl"
           weight="bold"
           onClick={handleOpenRegisterReviewSheet}
+          disabled={!member}
         >
-          리뷰 작성하기
-        </Button>
+          {member ? '리뷰 작성하기' : '로그인 후 리뷰를 작성할 수 있어요'}
+        </ReviewRegisterButton>
       </ReviewRegisterButtonWrapper>
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
-          <ReviewRegisterForm product={productDetail} close={handleCloseBottomSheet} />
+          <ReviewFormProvider>
+            <ReviewRegisterForm product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+          </ReviewFormProvider>
         ) : (
           <SortOptionList
             options={REVIEW_SORT_OPTIONS}
@@ -95,19 +96,17 @@ const SortButtonWrapper = styled.div`
   margin: 20px 0;
 `;
 
-const ReviewItemWrapper = styled.ul`
-  display: flex;
-  flex-direction: column;
-  row-gap: 60px;
-`;
-
 const ReviewRegisterButtonWrapper = styled.div`
   position: fixed;
-  bottom: 60px;
+  bottom: 0;
   left: 50%;
   width: calc(100% - 40px);
   max-width: 560px;
   height: 80px;
   background: ${({ theme }) => theme.backgroundColors.default};
   transform: translateX(-50%);
+`;
+
+const ReviewRegisterButton = styled(Button)`
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

@@ -7,16 +7,13 @@ public class ReviewCreateRequest {
     private final Long rating;
     private final List<Long> tagIds;
     private final String content;
-    private final Boolean reBuy;
-    private final Long memberId;
+    private final Boolean rebuy;
 
-    public ReviewCreateRequest(final Long rating, final List<Long> tagIds, final String content, final Boolean reBuy,
-                               final Long memberId) {
+    public ReviewCreateRequest(final Long rating, final List<Long> tagIds, final String content, final Boolean rebuy) {
         this.rating = rating;
         this.tagIds = tagIds;
         this.content = content;
-        this.reBuy = reBuy;
-        this.memberId = memberId;
+        this.rebuy = rebuy;
     }
 
     public Long getRating() {
@@ -27,12 +24,8 @@ public class ReviewCreateRequest {
         return content;
     }
 
-    public Boolean getReBuy() {
-        return reBuy;
-    }
-
-    public Long getMemberId() {
-        return memberId;
+    public Boolean getRebuy() {
+        return rebuy;
     }
 
     public List<Long> getTagIds() {

@@ -1,18 +1,17 @@
 import { Button, Heading, Spacing } from '@fun-eat/design-system';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
-import { TAG_TITLE } from '@/constants';
+import { MIN_DISPLAYED_TAGS_LENGTH, TAG_TITLE } from '@/constants';
 import { useDisplayTag, useReviewTags } from '@/hooks/review';
 
-const MIN_DISPLAYED_TAGS_LENGTH = 3;
+interface ReviewTagListProps {
+  selectedTags: number[];
+}
 
-const ReviewTagList = () => {
-  const [selectedTags, setSelectedTags] = useState<number[]>([]);
-
+const ReviewTagList = ({ selectedTags }: ReviewTagListProps) => {
   const { data: tagsData } = useReviewTags();
   const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData ?? [], MIN_DISPLAYED_TAGS_LENGTH);
 
@@ -20,45 +19,29 @@ const ReviewTagList = () => {
     return null;
   }
 
-  const toggleTagSelection = (id: number, isSelected: boolean) => {
-    if (selectedTags.length >= MIN_DISPLAYED_TAGS_LENGTH && !isSelected) {
-      return;
-    }
-
-    setSelectedTags((prevSelectedTags) => {
-      if (isSelected) {
-        return prevSelectedTags.filter((selectedTag) => selectedTag !== id);
-      }
-      return [...prevSelectedTags, id];
-    });
-  };
-
   return (
     <ReviewTagListContainer>
-      <Heading as="h2" size="xl">
-        태그를 골라주세요. (3개)
-        <RequiredMark>*</RequiredMark>
+      <Heading as="h2" size="xl" tabIndex={0}>
+        태그를 골라주세요. (3개까지)
+        <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={25} />
       <TagListWrapper>
         {tagsData.map(({ tagType, tags }) => {
           return (
             <TagItemWrapper key={tagType}>
-              <TagTitle as="h3" size="md">
+              <TagTitle as="h3" size="md" tabIndex={0}>
                 {TAG_TITLE[tagType]}
               </TagTitle>
               <Spacing size={20} />
               <ul>
                 {tags.slice(0, minDisplayedTags).map(({ id, name }) => (
-                  <li key={id}>
-                    <ReviewTagItem
-                      id={id}
-                      name={name}
-                      isSelected={selectedTags.includes(id)}
-                      toggleTagSelection={toggleTagSelection}
-                    />
+                  <>
+                    <li key={id}>
+                      <ReviewTagItem id={id} name={name} isSelected={selectedTags.includes(id)} />
+                    </li>
                     <Spacing size={5} />
-                  </li>
+                  </>
                 ))}
               </ul>
             </TagItemWrapper>
@@ -67,7 +50,13 @@ const ReviewTagList = () => {
       </TagListWrapper>
       <Spacing size={26} />
       {canShowMore && (
-        <Button type="button" customHeight="fit-content" variant="transparent" onClick={showMoreTags}>
+        <Button
+          type="button"
+          customHeight="fit-content"
+          variant="transparent"
+          onClick={showMoreTags}
+          aria-label="태그 더보기"
+        >
           <SvgWrapper>
             <SvgIcon variant="arrow" width={15} />
           </SvgWrapper>
@@ -122,6 +111,7 @@ const TagTitle = styled(Heading)`
   text-align: center;
 `;
 
-const SvgWrapper = styled.div`
+const SvgWrapper = styled.span`
+  display: inline-block;
   transform: rotate(270deg);
 `;

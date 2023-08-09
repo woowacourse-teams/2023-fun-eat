@@ -1,5 +1,6 @@
 package com.funeat.auth.util;
 
+import com.funeat.auth.exception.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,7 +14,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         final HttpSession session = request.getSession();
         if (session.getAttribute("member") == null) {
-            throw new IllegalArgumentException("login error");
+            throw new LoginException("login error");
         }
         return true;
     }

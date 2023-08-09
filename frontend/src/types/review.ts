@@ -8,6 +8,7 @@ export interface Review {
   rating: number;
   tags: Tag[];
   content: string;
+  createdAt: string;
   rebuy: boolean;
   favoriteCount: number;
   favorite: boolean;
@@ -20,11 +21,12 @@ export interface ReviewTag {
 
 export interface ReviewRequest {
   rating: number;
-  tags: number[];
+  tagIds: number[];
   content: string;
   rebuy: boolean;
-  memberId: number;
 }
+
+export type ReviewRequestKey = keyof ReviewRequest;
 
 export interface ReviewPostRequestBody extends FormData {
   image: File;
@@ -33,5 +35,4 @@ export interface ReviewPostRequestBody extends FormData {
 
 export interface ReviewFavoriteRequestBody {
   favorite: boolean;
-  memberId: number;
 }

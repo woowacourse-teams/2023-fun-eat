@@ -4,23 +4,33 @@ import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
 import { useReviewFavorite } from '@/hooks/review';
-import type { Review } from '@/types/review';
+import type { Review, ReviewFavoriteRequestBody } from '@/types/review';
+import { getRelativeDate } from '@/utils/relativeDate';
 
 interface ReviewItemProps {
   productId: number;
   review: Review;
 }
 
-const ReviewItem = ({ productId, review }: ReviewItemProps) => {
-  const { id, userName, profileImage, image, rating, tags, content, rebuy, favoriteCount, favorite } = review;
-  const [isFavorite, setIsFavorite] = useState(favorite);
+const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
-  const { request } = useReviewFavorite(productId, id);
+const ReviewItem = ({ productId, review }: ReviewItemProps) => {
+  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } = review;
+  const [isFavorite, setIsFavorite] = useState(favorite);
+  const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
+  const { request } = useReviewFavorite<ReviewFavoriteRequestBody>(productId, id);
+
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
-    await request({ favorite: !isFavorite });
-    setIsFavorite((prev) => !prev);
+    try {
+      await request({ favorite: !isFavorite });
+
+      setIsFavorite((prev) => !prev);
+      setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
+    } catch (error) {
+      alert('리뷰 좋아요를 실패했습니다 🥲');
+    }
   };
 
   return (
@@ -40,28 +50,30 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
                   height={16}
                 />
               ))}
+              <Text as="span" size="sm" color={theme.textColors.info}>
+                {getRelativeDate(createdAt)}
+              </Text>
             </RatingIconWrapper>
           </div>
         </ReviewerInfoWrapper>
         {rebuy && (
-          <Badge
-            color={theme.colors.primary}
-            textColor={theme.textColors.default}
-            css={`
-              font-weight: ${theme.fontWeights.bold};
-            `}
-          >
+          <RebuyBadge color={theme.colors.primary} textColor={theme.textColors.default}>
             😝 또 살래요
-          </Badge>
+          </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
+      {image !== null && <ReviewImage src={srcPath + image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
-      <FavoriteButton type="button" variant="transparent" onClick={handleToggleFavorite}>
-        <SvgIcon variant={favorite ? 'favoriteFilled' : 'favorite'} color={favorite ? 'red' : theme.colors.gray4} />
+      <FavoriteButton
+        type="button"
+        variant="transparent"
+        onClick={handleToggleFavorite}
+        aria-label={`좋아요 ${favoriteCount}개`}
+      >
+        <SvgIcon variant={isFavorite ? 'favoriteFilled' : 'favorite'} color={isFavorite ? 'red' : theme.colors.gray4} />
         <Text as="span" weight="bold">
-          {favoriteCount}
+          {currentFavoriteCount}
         </Text>
       </FavoriteButton>
     </ReviewItemContainer>
@@ -88,6 +100,10 @@ const ReviewerInfoWrapper = styled.div`
   column-gap: 10px;
 `;
 
+const RebuyBadge = styled(Badge)`
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;
+
 const ReviewerImage = styled.img`
   border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.colors.primary};
@@ -97,6 +113,10 @@ const RatingIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: -2px;
+
+  & > span {
+    margin-left: 12px;
+  }
 `;
 
 const ReviewImage = styled.img`

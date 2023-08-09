@@ -25,6 +25,7 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
 
     private static final String AUTHORIZATION_BASE_URL = "https://kauth.kakao.com";
     private static final String RESOURCE_BASE_URL = "https://kapi.kakao.com";
+    private static final String OAUTH_URI = "/oauth/authorize";
     private static final String ACCESS_TOKEN_URI = "/oauth/token";
     private static final String USER_INFO_URI = "/v2/user/me";
     private static final String AUTHORIZATION_CODE = "authorization_code";
@@ -117,6 +118,6 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
         joiner.add("client_id=" + kakaoRestApiKey);
         joiner.add("redirect_uri=" + redirectUri);
 
-        return AUTHORIZATION_BASE_URL + "?" + joiner;
+        return AUTHORIZATION_BASE_URL + OAUTH_URI + "?" + joiner;
     }
 }

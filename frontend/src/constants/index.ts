@@ -31,11 +31,15 @@ export const NAVIGATION_MENU: NavigationMenu[] = [
 ];
 
 export const PRODUCT_SORT_OPTIONS = [
+  { label: '리뷰 많은순', value: 'reviewCount,desc' },
   { label: '높은 가격순', value: 'price,desc' },
   { label: '낮은 가격순', value: 'price,asc' },
+  { label: '높은 평점순', value: 'averageRating,desc' },
+  { label: '낮은 평점순', value: 'averageRating,asc' },
 ] as const;
 
 export const REVIEW_SORT_OPTIONS = [
+  { label: '최신 작성순', value: 'createdAt,desc' },
   { label: '높은 평점순', value: 'rating,desc' },
   { label: '낮은 평점순', value: 'rating,asc' },
   { label: '추천순', value: 'favoriteCount,desc' },
@@ -46,3 +50,5 @@ export const TAG_TITLE = {
   PRICE: '가격/양',
   ETC: '기타',
 } as const;
+
+export const MIN_DISPLAYED_TAGS_LENGTH = 3;
