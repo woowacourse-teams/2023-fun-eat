@@ -8,6 +8,7 @@ import com.funeat.product.persistence.ProductRepository;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
+import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.common.ImageService;
@@ -60,5 +61,9 @@ public class RecipeService {
         }
 
         return savedRecipe.getId();
+    }
+
+    public RecipeDetailResponse getRecipeDetail(final Long recipeId) {
+        return null;
     }
 }
