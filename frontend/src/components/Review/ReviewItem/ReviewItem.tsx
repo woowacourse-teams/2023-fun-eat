@@ -25,10 +25,18 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const theme = useTheme();
 
   const handleToggleFavorite = async () => {
-    mutate({ favorite: !isFavorite });
-
-    setIsFavorite((prev) => !prev);
-    setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
+    mutate(
+      { favorite: !isFavorite },
+      {
+        onSuccess: () => {
+          setIsFavorite((prev) => !prev);
+          setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
+        },
+        onError: () => {
+          alert('리뷰 좋아요를 다시 시도해주세요.');
+        },
+      }
+    );
   };
 
   const [debouncedToggleFavorite] = useDebounce(handleToggleFavorite, 200);

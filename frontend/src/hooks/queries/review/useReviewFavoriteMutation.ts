@@ -12,9 +12,6 @@ const patchReviewFavorite = (productId: number, reviewId: number, body: ReviewFa
 const useReviewFavoriteMutation = (productId: number, reviewId: number) => {
   return useMutation({
     mutationFn: (body: ReviewFavoriteRequestBody) => patchReviewFavorite(productId, reviewId, body),
-    onError: () => {
-      alert('리뷰 좋아요를 다시 시도해주세요.');
-    },
   });
 };
 
