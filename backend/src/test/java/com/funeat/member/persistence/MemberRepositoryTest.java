@@ -1,5 +1,6 @@
 package com.funeat.member.persistence;
 
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -21,8 +22,8 @@ public class MemberRepositoryTest extends RepositoryTest {
             @Test
             void platform_id를_통해_멤버를_반환한다() {
                 // given
-                final var platformId = "1234";
-                final var member = new Member("test", "www.test.com", platformId);
+                final var platformId = "1";
+                final var member = 멤버_멤버1_생성();
                 단일_멤버_저장(member);
 
                 // when
@@ -39,11 +40,10 @@ public class MemberRepositoryTest extends RepositoryTest {
             @Test
             void platform_id가_잘못된_값으로_멤버를_조회할_때_예외가_발생한다() {
                 // given
-                final var platformId = "1234";
-                final var member = new Member("test", "www.test.com", platformId);
+                final var member = 멤버_멤버1_생성();
                 단일_멤버_저장(member);
 
-                final var wrongPlatformId = "4321";
+                final var wrongPlatformId = "2";
 
                 // when, then
                 assertThatThrownBy(() -> memberRepository.findByPlatformId(wrongPlatformId).get())

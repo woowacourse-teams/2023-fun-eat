@@ -1,10 +1,10 @@
 package com.funeat.auth.application;
 
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.common.ServiceTest;
-import com.funeat.member.domain.Member;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -14,20 +14,28 @@ public class AuthServiceTest extends ServiceTest {
     @Nested
     class loginWithKakao_테스트 {
 
-        @Test
-        void 카카오_로그인을_하여_멤버_정보를_가져온다() {
-            // given
-            final var code = "test";
-            final var member = new Member("test", "https://www.test.com", "1");
-            final var expected = SignUserDto.of(true, member);
+        @Nested
+        class 성공_테스트 {
 
-            // when
-            final var actual = authService.loginWithKakao(code);
+            @Test
+            void 카카오_로그인을_하여_멤버_정보를_가져온다() {
+                // given
+                final var code = "test";
+                final var member = 멤버_멤버1_생성();
+                final var expected = SignUserDto.of(true, member);
 
-            // then
-            assertThat(actual).usingRecursiveComparison()
-                    .ignoringFields("member.id")
-                    .isEqualTo(expected);
+                // when
+                final var actual = authService.loginWithKakao(code);
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .ignoringFields("member.id")
+                        .isEqualTo(expected);
+            }
+        }
+
+        @Nested
+        class 실패_테스트 {
         }
     }
 }
