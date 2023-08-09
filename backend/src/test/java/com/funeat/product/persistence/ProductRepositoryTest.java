@@ -7,8 +7,8 @@ import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_가격_내림차순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_가격_오름차순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_평균_평점_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_평균_평점_오름차순_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점_1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점_2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점_3점_생성;
@@ -21,12 +21,12 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격4000원_평점_1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격4000원_평점_2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점_1점_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_평점1점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_평점2점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_평점3점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_평점4점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_평점4점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_평점5점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매O_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.RepositoryTest;
@@ -63,7 +63,7 @@ class ProductRepositoryTest extends RepositoryTest {
                 final var products = List.of(product1, product2, product3, product4, product5);
                 복수_상품_저장(products);
 
-                final var page = 페이지요청_평점_내림차순_생성(0, 3);
+                final var page = 페이지요청_평균_평점_내림차순_생성(0, 3);
 
                 final var productInCategoryDto1 = ProductInCategoryDto.toDto(product5, 0L);
                 final var productInCategoryDto2 = ProductInCategoryDto.toDto(product4, 0L);
@@ -91,7 +91,7 @@ class ProductRepositoryTest extends RepositoryTest {
                 final var products = List.of(product1, product2, product3, product4, product5);
                 복수_상품_저장(products);
 
-                final var page = 페이지요청_평점_오름차순_생성(0, 3);
+                final var page = 페이지요청_평균_평점_오름차순_생성(0, 3);
 
                 final var productInCategoryDto1 = ProductInCategoryDto.toDto(product1, 0L);
                 final var productInCategoryDto2 = ProductInCategoryDto.toDto(product2, 0L);
@@ -192,12 +192,12 @@ class ProductRepositoryTest extends RepositoryTest {
                 final var members = List.of(member1, member2, member3);
                 복수_멤버_저장(members);
 
-                final var review1_1 = 리뷰_평점1점_재구매X_생성(member1, product1);
-                final var review1_2 = 리뷰_평점3점_재구매O_생성(member2, product1);
-                final var review2_1 = 리뷰_평점4점_재구매O_생성(member3, product2);
-                final var review2_2 = 리뷰_평점2점_재구매X_생성(member1, product2);
-                final var review2_3 = 리뷰_평점3점_재구매O_생성(member2, product2);
-                final var review3_1 = 리뷰_평점3점_재구매O_생성(member1, product3);
+                final var review1_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product1, 0L);
+                final var review1_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
+                final var review2_1 = 리뷰_이미지test4_평점4점_재구매O_생성(member3, product2, 0L);
+                final var review2_2 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product2, 0L);
+                final var review2_3 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product2, 0L);
+                final var review3_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product3, 0L);
                 final var reviews = List.of(review1_1, review1_2, review2_1, review2_2, review2_3, review3_1);
                 복수_리뷰_저장(reviews);
 
@@ -247,12 +247,12 @@ class ProductRepositoryTest extends RepositoryTest {
                 final var members = List.of(member1, member2, member3);
                 복수_멤버_저장(members);
 
-                final var review1_1 = 리뷰_평점1점_재구매X_생성(member1, product1);
-                final var review1_2 = 리뷰_평점5점_재구매O_생성(member2, product1);
-                final var review2_1 = 리뷰_평점3점_재구매O_생성(member3, product2);
-                final var review2_2 = 리뷰_평점4점_재구매X_생성(member1, product2);
-                final var review2_3 = 리뷰_평점5점_재구매O_생성(member2, product2);
-                final var review3_1 = 리뷰_평점5점_재구매O_생성(member1, product3);
+                final var review1_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product1, 0L);
+                final var review1_2 = 리뷰_이미지test5_평점5점_재구매O_생성(member2, product1, 0L);
+                final var review2_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member3, product2, 0L);
+                final var review2_2 = 리뷰_이미지test4_평점4점_재구매X_생성(member1, product2, 0L);
+                final var review2_3 = 리뷰_이미지test5_평점5점_재구매O_생성(member2, product2, 0L);
+                final var review3_1 = 리뷰_이미지test5_평점5점_재구매O_생성(member1, product3, 0L);
                 final var reviews = List.of(review1_1, review1_2, review2_1, review2_2, review2_3, review3_1);
                 복수_리뷰_저장(reviews);
 
