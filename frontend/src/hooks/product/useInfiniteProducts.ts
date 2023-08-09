@@ -1,45 +1,43 @@
-import { useState, useRef, useEffect } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
-import useCategoryProducts from './useCategoryProducts';
-import useIntersectionObserver from '../useIntersectionObserver';
-
+import { categoryApi } from '@/apis';
 import type { Product } from '@/types/product';
+import type { CategoryProductResponse } from '@/types/response';
 
 const useInfiniteProducts = (categoryId: number, sort: string) => {
-  const [page, setPage] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const fetchProducts = async ({ pageParam = 0 }) => {
+    const res = await categoryApi.get({
+      params: `/${categoryId}/products`,
+      queries: `?page=${pageParam}&sort=${sort}`,
+    });
 
-  const prevCategoryId = useRef(categoryId);
-  const nextPage = prevCategoryId.current !== categoryId ? 0 : page;
+    const data: CategoryProductResponse = await res.json();
 
-  useEffect(() => {
-    setPage(0);
-    prevCategoryId.current = categoryId;
-  }, [categoryId, sort]);
+    // return {
+    //   products: data.products,
+    //   page: data.page,
+    // };
 
-  const { data: productListResponse } = useCategoryProducts(categoryId, nextPage, sort);
-
-  const getNextPage = () => {
-    setPage((page) => page + 1);
+    return data;
   };
 
-  useIntersectionObserver<HTMLDivElement>(getNextPage, scrollRef, productListResponse?.page.lastPage);
+  const { fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: [`products-${categoryId}`],
+    queryFn: fetchProducts,
+    onSuccess: (data) => {
+      setProducts(() => data.pages.flatMap((page) => page.products));
+    },
+    getNextPageParam: (prevResponse: CategoryProductResponse) => {
+      const isLast = prevResponse.page.lastPage;
+      const nextPage = prevResponse.page.requestPage + 1;
+      return isLast ? undefined : nextPage;
+    },
+  });
 
-  useEffect(() => {
-    if (page === 0) {
-      setProducts([]);
-    }
-
-    if (!productListResponse) {
-      return;
-    }
-
-    setProducts((prev) => [...prev, ...productListResponse.products]);
-  }, [productListResponse?.products]);
-
-  return { products, scrollRef };
+  return { fetchNextPage, hasNextPage, products };
 };
 
 export default useInfiniteProducts;
