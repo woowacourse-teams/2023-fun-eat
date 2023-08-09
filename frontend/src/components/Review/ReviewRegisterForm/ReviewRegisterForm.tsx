@@ -30,6 +30,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
 
   const { mutate } = useReviewRegisterFormMutation(product.id);
 
+  // TODO: 태그 아이디 개수 조건 수정
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
     reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&

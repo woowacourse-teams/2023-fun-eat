@@ -8,7 +8,7 @@ import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useInfiniteProductsQuery } from '@/hooks/product';
+import { useInfiniteProductsQuery } from '@/hooks/product';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
@@ -33,8 +33,6 @@ const ProductListPage = () => {
 
   const { categoryIds } = useCategoryContext();
 
-  const { data: menuList } = useCategory(category);
-
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(categoryIds[category], selectedOption.value);
   const products = data?.pages.flatMap((page) => page.products);
 
@@ -48,7 +46,7 @@ const ProductListPage = () => {
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={30} />
-        <CategoryMenu menuList={menuList ?? []} menuVariant={category} />
+        <CategoryMenu menuVariant={category} />
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
