@@ -53,10 +53,9 @@ export const productHandlers = [
         sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key]
       ),
     };
-
     return res(
       ctx.status(200),
-      ctx.json({ page: sortedProducts.page, products: sortedProducts.products.slice(0, (page + 1) * 5) }),
+      ctx.json({ page: sortedProducts.page, products: products.products.slice(page * 5, (page + 1) * 5) }),
       ctx.delay(500)
     );
   }),

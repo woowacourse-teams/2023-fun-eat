@@ -9,10 +9,9 @@ import { useDisplayTag, useReviewTags } from '@/hooks/review';
 
 interface ReviewTagListProps {
   selectedTags: number[];
-  toggleTagSelection: (id: number, isSelected: boolean) => void;
 }
 
-const ReviewTagList = ({ selectedTags, toggleTagSelection }: ReviewTagListProps) => {
+const ReviewTagList = ({ selectedTags }: ReviewTagListProps) => {
   const { data: tagsData } = useReviewTags();
   const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData ?? [], MIN_DISPLAYED_TAGS_LENGTH);
 
@@ -37,15 +36,12 @@ const ReviewTagList = ({ selectedTags, toggleTagSelection }: ReviewTagListProps)
               <Spacing size={20} />
               <ul>
                 {tags.slice(0, minDisplayedTags).map(({ id, name }) => (
-                  <li key={id}>
-                    <ReviewTagItem
-                      id={id}
-                      name={name}
-                      isSelected={selectedTags.includes(id)}
-                      toggleTagSelection={toggleTagSelection}
-                    />
+                  <>
+                    <li key={id}>
+                      <ReviewTagItem id={id} name={name} isSelected={selectedTags.includes(id)} />
+                    </li>
                     <Spacing size={5} />
-                  </li>
+                  </>
                 ))}
               </ul>
             </TagItemWrapper>

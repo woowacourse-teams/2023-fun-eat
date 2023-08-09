@@ -4,7 +4,6 @@ import App from './App';
 
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
-import ProductReviewProvider from '@/contexts/ProductReviewContext';
 import AuthPage from '@/pages/AuthPage';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
@@ -69,11 +68,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,
-        element: (
-          <ProductReviewProvider>
-            <ProductDetailPage />
-          </ProductReviewProvider>
-        ),
+        element: <ProductDetailPage />,
       },
     ],
   },

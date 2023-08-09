@@ -1,27 +1,17 @@
-import { Button, Checkbox, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
 import type { ChangeEventHandler, RefObject } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
 
+import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
 import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
 import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
-import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { MIN_DISPLAYED_TAGS_LENGTH, REVIEW_SORT_OPTIONS } from '@/constants';
-import { useProductReviewContext, useProductReviewPageContext } from '@/hooks/context';
-import {
-  useReviewRegisterForm,
-  useReviewImageUploader,
-  useReviewTextarea,
-  useSelectedTags,
-  useFormData,
-  useStarRating,
-} from '@/hooks/review';
-import useEnterKeyDown from '@/hooks/useEnterKeyDown';
+import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
+import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
 import useScroll from '@/hooks/useScroll';
 import type { ProductDetail } from '@/types/product';
 
@@ -38,81 +28,36 @@ interface ReviewRegisterFormProps {
 const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
-  const { rating, setRating, handleRating } = useStarRating();
-  const { selectedTags, setSelectedTags, toggleTagSelection } = useSelectedTags(MIN_DISPLAYED_TAGS_LENGTH);
-  const { content, setContent, handleReviewInput } = useReviewTextarea();
-  const [rebuy, setRebuy] = useState(false);
+  const reviewFormValue = useReviewFormValueContext();
+  const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const formContent = {
-    rating,
-    tagIds: selectedTags,
-    content,
-    rebuy,
-  };
+  const { scrollToPosition } = useScroll();
+
+  const { mutate } = useReviewRegisterFormMutation(product.id);
+
+  const isValid =
+    reviewFormValue.rating > MIN_RATING_SCORE &&
+    reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
+    reviewFormValue.content.length > MIN_CONTENT_LENGTH;
+
   const formData = useFormData({
     imageKey: 'image',
     imageFile: reviewImageFile,
     formContentKey: 'reviewRequest',
-    formContent,
+    formContent: reviewFormValue,
   });
-
-  const { inputRef, labelRef, handleKeydown } = useEnterKeyDown();
-  const { scrollToPosition } = useScroll();
-  // TODO: 배포하면 랜덤으로 에러 나는 현상 해결 후 주석 풀기
-  // const [submitEnabled, setSubmitEnabled] = useState(false);
-
-  const { setProductReviews } = useProductReviewContext();
-  const { resetPage } = useProductReviewPageContext();
-
-  const { request } = useReviewRegisterForm(product.id);
-
-  const resetForm = () => {
-    setReviewPreviewImage('');
-    setRating(0);
-    setSelectedTags([]);
-    setContent('');
-    setRebuy(false);
-  };
-
-  const handleRebuy: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setRebuy(event.target.checked);
-  };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    if (
-      rating <= MIN_RATING_SCORE ||
-      selectedTags.length < MIN_SELECTED_TAGS_COUNT ||
-      content.length <= MIN_CONTENT_LENGTH
-    ) {
-      alert('필수 입력 사항을 작성해주세요.');
-      return;
-    }
+    await mutate(formData);
 
-    await request(formData);
+    setReviewPreviewImage('');
+    resetReviewFormValue();
 
-    const reviewResponse = await productApi.get({
-      params: `/${product.id}/reviews`,
-      queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
-      credentials: true,
-    });
-    const { reviews } = await reviewResponse.json();
-
-    setProductReviews(reviews);
-    resetPage();
-    resetForm();
     closeReviewDialog();
     scrollToPosition(targetRef);
   };
-
-  //useEffect(() => {
-  //  const isValid =
-  //    rating > MIN_RATING_SCORE &&
-  //    selectedTags.length === MIN_SELECTED_TAGS_COUNT &&
-  //    content.length > MIN_CONTENT_LENGTH;
-  //  setSubmitEnabled(isValid);
-  //}, [rating, selectedTags, content]);
 
   return (
     <ReviewRegisterFormContainer>
@@ -132,28 +77,16 @@ const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewReg
           deleteReviewImage={deleteReviewImage}
         />
         <Spacing size={60} />
-        <StarRate rating={rating} handleRating={handleRating} />
+        <StarRate rating={reviewFormValue.rating} />
         <Spacing size={60} />
-        <ReviewTagList selectedTags={selectedTags} toggleTagSelection={toggleTagSelection} />
+        <ReviewTagList selectedTags={reviewFormValue.tagIds} />
         <Spacing size={60} />
-        <ReviewTextarea content={content} onReviewInput={handleReviewInput} />
+        <ReviewTextarea content={reviewFormValue.content} />
         <Spacing size={80} />
-        <p onKeyDown={handleKeydown}>
-          <Checkbox ref={labelRef} inputRef={inputRef} weight="bold" onChange={handleRebuy} tabIndex={0}>
-            재구매할 생각이 있으신가요?
-          </Checkbox>
-        </p>
+        <RebuyCheckbox />
         <Spacing size={16} />
-        <FormButton
-          type="submit"
-          customWidth="100%"
-          customHeight="60px"
-          size="xl"
-          weight="bold"
-          //disabled={!submitEnabled}
-        >
-          {/*{submitEnabled ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}*/}
-          리뷰 등록하기
+        <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
+          {isValid ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>
       </RegisterForm>
     </ReviewRegisterFormContainer>
@@ -189,7 +122,7 @@ const RegisterForm = styled.form`
 `;
 
 const FormButton = styled(Button)`
-  /*background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};*/
-  /*color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};*/
-  /*cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};*/
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
+  color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

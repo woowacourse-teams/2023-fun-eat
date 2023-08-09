@@ -12,6 +12,5 @@ spring:
       hibernate:
         show_sql: true
 
-review:
-  image:
-    path: { PROD_IMAGE_PATH }
+image:
+  path: { PROD_IMAGE_PATH }

@@ -25,7 +25,7 @@ const ReviewImageUploader = ({
       </Heading>
       <Spacing size={2} />
       <Text color={theme.textColors.disabled} tabIndex={0}>
-        (사진은 1MB 이하, 1장까지 업로드 할 수 있어요.)
+        (사진은 5MB 이하, 1장까지 업로드 할 수 있어요.)
       </Text>
       <Spacing size={20} />
       {reviewPreviewImage ? (

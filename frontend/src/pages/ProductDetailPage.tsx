@@ -7,18 +7,20 @@ import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/
 import { ProductDetailItem, ProductTitle } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
-import { useMemberValueContext, useProductReviewContext } from '@/hooks/context';
-import { useProductDetail } from '@/hooks/product';
+import ReviewFormProvider from '@/contexts/ReviewFormContext';
+import { useMemberValueContext } from '@/hooks/context';
+import { useInfiniteProductReviewsQuery, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
   const tabRef = useRef<HTMLUListElement>(null);
-  const { productReviews } = useProductReviewContext();
-
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
+
+  const { data } = useInfiniteProductReviewsQuery(Number(productId), REVIEW_SORT_OPTIONS[0].value);
+  const reviewLength = data?.pages.flatMap((page) => page.reviews).length;
 
   const member = useMemberValueContext();
 
@@ -44,7 +46,7 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
-      <TabMenu ref={tabRef} tabMenus={[`리뷰 ${productReviews.length}`, '꿀조합']} />
+      <TabMenu ref={tabRef} tabMenus={[`리뷰 ${reviewLength}`, '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
@@ -70,7 +72,9 @@ const ProductDetailPage = () => {
       <ScrollButton />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
-          <ReviewRegisterForm targetRef={tabRef} product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+          <ReviewFormProvider>
+            <ReviewRegisterForm targetRef={tabRef} product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+          </ReviewFormProvider>
         ) : (
           <SortOptionList
             options={REVIEW_SORT_OPTIONS}

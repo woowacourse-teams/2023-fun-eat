@@ -1,4 +1,5 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,13 +8,16 @@ import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useInfiniteProducts } from '@/hooks/product';
+import { useCategory, useInfiniteProductsQuery } from '@/hooks/product';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
 const ProductListPage = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
@@ -31,7 +35,10 @@ const ProductListPage = () => {
 
   const { data: menuList } = useCategory(category);
 
-  const { products, scrollRef } = useInfiniteProducts(categoryIds[category], selectedOption.value);
+  const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(categoryIds[category], selectedOption.value);
+  const products = data?.pages.flatMap((page) => page.products);
+
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
   return (
     <>
