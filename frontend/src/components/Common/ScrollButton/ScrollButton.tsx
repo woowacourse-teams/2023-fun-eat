@@ -1,4 +1,5 @@
 import { Button } from '@fun-eat/design-system';
+import { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
@@ -7,9 +8,22 @@ import useScroll from '@/hooks/useScroll';
 
 const ScrollButton = () => {
   const { scrollToTop } = useScroll();
+  const [scrollTop, setScrollTop] = useState(false);
+  const mainElement = document.getElementById('main');
+
+  const handleScroll = () => {
+    setScrollTop(true);
+  };
+
+  useEffect(() => {
+    if (mainElement) {
+      scrollToTop(mainElement);
+      setScrollTop(false);
+    }
+  }, [scrollTop, scrollToTop]);
 
   return (
-    <ScrollButtonWrapper customWidth="45px" customHeight="45px" variant="filled" color="gray5" onClick={scrollToTop}>
+    <ScrollButtonWrapper customWidth="45px" customHeight="45px" variant="filled" color="gray5" onClick={handleScroll}>
       <SvgIcon variant="triangle" color="white" width={16} height={14} />
     </ScrollButtonWrapper>
   );
