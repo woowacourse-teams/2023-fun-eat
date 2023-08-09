@@ -7,16 +7,9 @@ import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
-import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { REVIEW_SORT_OPTIONS } from '@/constants';
-import {
-  useProductReviewContext,
-  useProductReviewPageContext,
-  useReviewFormActionContext,
-  useReviewFormValueContext,
-} from '@/hooks/context';
+import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useReviewRegisterForm, useReviewImageUploader, useFormData } from '@/hooks/review';
 import type { ProductDetail } from '@/types/product';
 
@@ -35,10 +28,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const { setProductReviews } = useProductReviewContext();
-  const { resetPage } = useProductReviewPageContext();
-
-  const { request } = useReviewRegisterForm(product.id);
+  const { mutate } = useReviewRegisterForm(product.id);
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
@@ -55,17 +45,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await request(formData);
-
-    const reviewResponse = await productApi.get({
-      params: `/${product.id}/reviews`,
-      queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
-      credentials: true,
-    });
-    const { reviews } = await reviewResponse.json();
-
-    setProductReviews(reviews);
-    resetPage();
+    await mutate(formData);
 
     setReviewPreviewImage('');
     resetReviewFormValue();

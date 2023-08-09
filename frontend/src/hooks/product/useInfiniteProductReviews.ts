@@ -1,36 +1,38 @@
-import { useRef, useEffect } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
-import useProductReview from './useProductReview';
-import useProductReviewContext from '../context/useProductReviewContext';
-import useProductReviewPageContext from '../context/useProductReviewPageContext';
-import useIntersectionObserver from '../useIntersectionObserver';
+import { productApi } from '@/apis';
+import type { ProductReviewResponse } from '@/types/response';
+import type { Review } from '@/types/review';
 
 const useInfiniteProductReviews = (productId: number, sort: string) => {
-  const { page, resetPage, getNextPage } = useProductReviewPageContext();
-  const { productReviews, resetProductReviews, addProductReviews } = useProductReviewContext();
+  const [productReviews, setProductReviews] = useState<Review[]>([]);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const { data: productReviewsResponse, error } = useProductReview(productId, page, sort);
+  const fetchProductReviews = async ({ pageParam = 0 }) => {
+    const res = await productApi.get({
+      params: `/${productId}/reviews`,
+      queries: `?sort=${sort}&page=${pageParam}`,
+      credentials: true,
+    });
 
-  useIntersectionObserver<HTMLDivElement>(getNextPage, scrollRef, productReviewsResponse?.page.lastPage);
+    const data: ProductReviewResponse = await res.json();
+    return data;
+  };
 
-  useEffect(() => {
-    resetPage();
-  }, [sort]);
+  const { fetchNextPage, hasNextPage, isError } = useInfiniteQuery({
+    queryKey: [`productReviews-${productId}`],
+    queryFn: fetchProductReviews,
+    onSuccess: (data) => {
+      setProductReviews(data.pages.flatMap((page) => page.reviews));
+    },
+    getNextPageParam: (prevResponse: ProductReviewResponse) => {
+      const isLast = prevResponse.page.lastPage;
+      const nextPage = prevResponse.page.requestPage + 1;
+      return isLast ? undefined : nextPage;
+    },
+  });
 
-  useEffect(() => {
-    if (page === 0) {
-      resetProductReviews();
-    }
-
-    if (!productReviewsResponse) {
-      return;
-    }
-
-    addProductReviews(productReviewsResponse.reviews);
-  }, [productReviewsResponse?.reviews]);
-
-  return { productReviews, scrollRef, error, resetPage };
+  return { fetchNextPage, hasNextPage, productReviews, isError };
 };
 
 export default useInfiniteProductReviews;

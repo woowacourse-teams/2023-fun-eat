@@ -1,4 +1,5 @@
 import { Text, Link } from '@fun-eat/design-system';
+import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,6 +7,7 @@ import ReviewItem from '../ReviewItem/ReviewItem';
 
 import { PATH } from '@/constants/path';
 import { useInfiniteProductReviews } from '@/hooks/product';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import type { SortOption } from '@/types/common';
 
 const LOGIN_ERROR_MESSAGE =
@@ -17,9 +19,15 @@ interface ReviewListProps {
 }
 
 const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
-  const { productReviews, scrollRef, error } = useInfiniteProductReviews(productId, selectedOption.value);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  if (error) {
+  const { fetchNextPage, hasNextPage, productReviews, isError } = useInfiniteProductReviews(
+    productId,
+    selectedOption.value
+  );
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+
+  if (isError) {
     return (
       <ErrorContainer>
         <ErrorDescription align="center" weight="bold" size="lg">

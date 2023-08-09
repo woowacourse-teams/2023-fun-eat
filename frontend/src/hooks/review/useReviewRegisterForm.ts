@@ -1,11 +1,16 @@
-import { useMutate } from './../useMutate';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { productApi } from '@/apis';
 
 const useReviewRegisterForm = (productId: number) => {
-  return useMutate<FormData>((data) =>
-    productApi.postData({ params: `/${productId}/reviews`, credentials: true }, data)
-  );
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: (data: FormData) => productApi.postData({ params: `/${productId}/reviews`, credentials: true }, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [`productReviews-${productId}`] }),
+  });
+
+  return { mutate };
 };
 
 export default useReviewRegisterForm;
