@@ -18,7 +18,9 @@ const ProductDetailPage = () => {
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
-  const { productReviews } = useInfiniteProductReviews(Number(productId), REVIEW_SORT_OPTIONS[0].value);
+
+  const { data } = useInfiniteProductReviews(Number(productId), REVIEW_SORT_OPTIONS[0].value);
+  const reviewLength = data?.pages.flatMap((page) => page.reviews).length;
 
   const member = useMemberValueContext();
 
@@ -44,7 +46,7 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
-      <TabMenu tabMenus={[`리뷰 ${productReviews.length}`, '꿀조합']} />
+      <TabMenu tabMenus={[`리뷰 ${reviewLength}`, '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>

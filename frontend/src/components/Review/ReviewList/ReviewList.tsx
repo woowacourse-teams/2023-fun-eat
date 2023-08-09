@@ -21,10 +21,7 @@ interface ReviewListProps {
 const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { fetchNextPage, hasNextPage, productReviews, isError } = useInfiniteProductReviews(
-    productId,
-    selectedOption.value
-  );
+  const { fetchNextPage, hasNextPage, data, isError } = useInfiniteProductReviews(productId, selectedOption.value);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
   if (isError) {
@@ -43,11 +40,13 @@ const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
   return (
     <>
       <ReviewListContainer>
-        {productReviews.map((review) => (
-          <li key={review.id}>
-            <ReviewItem productId={productId} review={review} />
-          </li>
-        ))}
+        {data?.pages
+          .flatMap((page) => page.reviews)
+          .map((review) => (
+            <li key={review.id}>
+              <ReviewItem productId={productId} review={review} />
+            </li>
+          ))}
       </ReviewListContainer>
       <div ref={scrollRef} aria-hidden />
     </>

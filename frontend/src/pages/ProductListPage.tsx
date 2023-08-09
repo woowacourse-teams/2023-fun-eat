@@ -35,7 +35,8 @@ const ProductListPage = () => {
 
   const { data: menuList } = useCategory(category);
 
-  const { fetchNextPage, hasNextPage, products } = useInfiniteProducts(categoryIds[category], selectedOption.value);
+  const { fetchNextPage, hasNextPage, data } = useInfiniteProducts(categoryIds[category], selectedOption.value);
+  const products = data?.pages.flatMap((page) => page.products);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
