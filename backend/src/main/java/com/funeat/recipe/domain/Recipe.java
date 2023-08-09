@@ -23,6 +23,8 @@ public class Recipe {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private Long favoriteCount = 0L;
+
     protected Recipe() {
     }
 
@@ -46,5 +48,9 @@ public class Recipe {
 
     public Member getMember() {
         return member;
+    }
+
+    public Long getFavoriteCount() {
+        return favoriteCount;
     }
 }
