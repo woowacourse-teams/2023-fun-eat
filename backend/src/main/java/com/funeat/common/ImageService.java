@@ -1,4 +1,4 @@
-package com.funeat.review.application;
+package com.funeat.common;
 
 import org.springframework.web.multipart.MultipartFile;
 
