@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
+import useDebounce from '@/hooks/useDebounce';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/relativeDate';
 
@@ -29,6 +30,8 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
     setIsFavorite((prev) => !prev);
     setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
   };
+
+  const [debouncedToggleFavorite] = useDebounce(handleToggleFavorite, 200);
 
   return (
     <ReviewItemContainer>
@@ -65,7 +68,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
       <FavoriteButton
         type="button"
         variant="transparent"
-        onClick={handleToggleFavorite}
+        onClick={debouncedToggleFavorite}
         aria-label={`좋아요 ${favoriteCount}개`}
       >
         <SvgIcon variant={isFavorite ? 'favoriteFilled' : 'favorite'} color={isFavorite ? 'red' : theme.colors.gray4} />
