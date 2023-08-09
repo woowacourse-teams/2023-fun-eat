@@ -1,4 +1,6 @@
 import { FunEatProvider } from '@fun-eat/design-system';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
@@ -16,15 +18,20 @@ const main = async () => {
 };
 await main();
 
+export const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <MemberProvider>
-      <FunEatProvider>
-        <SvgSprite />
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </FunEatProvider>
-    </MemberProvider>
+    <QueryClientProvider client={queryClient}>
+      <MemberProvider>
+        <FunEatProvider>
+          <SvgSprite />
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </FunEatProvider>
+      </MemberProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
