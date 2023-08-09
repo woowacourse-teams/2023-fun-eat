@@ -1,0 +1,79 @@
+name: Frontend PR Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - '.github/**'
+      - 'frontend/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    timeout-minutes: 10
+
+    permissions:
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Repository 체크아웃
+        uses: actions/checkout@v3
+
+      - name: Node 설정
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+          cache: yarn
+          registry-url: https://registry.npmjs.org
+
+      - name: node_modules 캐싱
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 의존성 설치
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: 테스트 실행
+        run: yarn test
+        continue-on-error: true
+
+      - name: 테스트 결과 PR에 코멘트 등록
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: 'test-results/results.xml'
+
+      - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: 'test-results/results.xml'
+          token: ${{ github.token }}
+
+      - name: build 실패 시 Slack으로 알립니다
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: 프론트엔드 테스트 실패 알림
+          fields: repo, message, commit, author, action, eventName, ref, workflow, job, took
+        env:
+          SLACK_CHANNEL: group-dev
+          SLACK_COLOR: '#FF2D00'
+          SLACK_USERNAME: 'Github Action'
+          SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          SLACK_TITLE: Build Failure - ${{ github.event.pull_request.title }}
+          SLACK_MESSAGE: PR Url - ${{ github.event.pull_request.url }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: failure()

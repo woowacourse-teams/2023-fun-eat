@@ -5,3 +5,4 @@ dist
 .LSOverride
 .env
 coverage
+test-results
