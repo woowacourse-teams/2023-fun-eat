@@ -7,14 +7,11 @@ import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useCategoryProducts } from '@/hooks/product';
+import { useCategoryProducts } from '@/hooks/product';
 import { useProductRanking, useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
   const { categoryIds } = useCategoryContext();
-
-  const { data: foodCategory } = useCategory('food');
-  const { data: storeCategory } = useCategory('store');
 
   const { data: productListResponse } = useCategoryProducts(categoryIds.food);
   const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
@@ -29,7 +26,7 @@ const HomePage = () => {
           공통 상품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={foodCategory ?? []} menuVariant="food" />
+        <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
         <ProductList category="food" productList={productListResponse?.products.slice(0, 2) ?? []} />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
@@ -42,7 +39,7 @@ const HomePage = () => {
           편의점 특산품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={storeCategory ?? []} menuVariant="store" />
+        <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
         <PBProductList productList={pbPRoductListResponse?.products.slice(0, 3) ?? []} />
       </section>
