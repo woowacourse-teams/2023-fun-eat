@@ -25,4 +25,29 @@ public class RecipeFavorite {
     private Recipe recipe;
 
     private Boolean checked;
+
+    protected RecipeFavorite() {
+    }
+
+    public RecipeFavorite(final Member member, final Recipe recipe, final Boolean checked) {
+        this.member = member;
+        this.recipe = recipe;
+        this.checked = checked;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
 }
