@@ -63,7 +63,7 @@ public class ReviewFavoriteTest {
         class 실패_테스트 {
 
             @Test
-            void 좋아요가_있는_상태에서_좋아요를_적용하면_예외가_발생해야하는데_통과한다() {
+            void 좋아요가_있는_상태에서_좋아요를_적용하면_예외가_발생해야하는데_통과하고_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
                 final var product = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
@@ -81,7 +81,7 @@ public class ReviewFavoriteTest {
             }
 
             @Test
-            void 좋아요가_없는_상태에서_좋아요를_취소하면_예외가_발생해야하는데_통과한다() {
+            void 좋아요가_없는_상태에서_좋아요를_취소하면_예외가_발생해야하는데_통과하고_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
                 final var product = 상품_삼각김밥_가격1000원_평점_1점_생성(category);

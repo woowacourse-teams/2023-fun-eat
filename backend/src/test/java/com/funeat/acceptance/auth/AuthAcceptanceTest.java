@@ -118,7 +118,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         class 실패_테스트 {
 
             @Test
-            void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생해야하는데_통과한다() {
+            void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생해야하는데_통과하고_있다() {
                 // given
                 final var loginCookie = 로그인_쿠키를_얻는다();
 
