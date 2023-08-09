@@ -2,7 +2,7 @@ import imageCompression from 'browser-image-compression';
 import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
-const MAX_SIZE = 5120 * 5120;
+const MAX_SIZE = 5 * 1024 * 1024;
 
 const useReviewImageUploader = () => {
   const [reviewPreviewImage, setReviewPreviewImage] = useState('');
