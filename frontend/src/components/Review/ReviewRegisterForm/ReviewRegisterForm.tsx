@@ -1,5 +1,5 @@
 import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import type { ChangeEventHandler, RefObject } from 'react';
+import type { RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
