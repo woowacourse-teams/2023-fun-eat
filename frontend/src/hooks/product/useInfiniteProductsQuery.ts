@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { categoryApi } from '@/apis';
 import type { CategoryProductResponse } from '@/types/response';
 
-const fetchProducts = async (pageParam: number, categoryId: number, sort: string) => {
+const fetchProducts = async (pageParam: number, categoryId: number, sort = 'reviewCount,desc') => {
   const res = await categoryApi.get({
     params: `/${categoryId}/products`,
     queries: `?page=${pageParam}&sort=${sort}`,
@@ -13,7 +13,7 @@ const fetchProducts = async (pageParam: number, categoryId: number, sort: string
   return data;
 };
 
-const useInfiniteProductsQuery = (categoryId: number, sort: string) => {
+const useInfiniteProductsQuery = (categoryId: number, sort = 'reviewCount,desc') => {
   return useInfiniteQuery({
     queryKey: ['products', categoryId, sort],
     queryFn: ({ pageParam = 0 }) => fetchProducts(pageParam, categoryId, sort),

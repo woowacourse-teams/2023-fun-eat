@@ -7,14 +7,17 @@ import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategoryProducts } from '@/hooks/product';
+import { useInfiniteProductsQuery } from '@/hooks/product';
 import { useProductRanking, useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
   const { categoryIds } = useCategoryContext();
 
-  const { data: productListResponse } = useCategoryProducts(categoryIds.food);
-  const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
+  const { data: productListResponse } = useInfiniteProductsQuery(categoryIds.food);
+  const { data: pbPRoductListResponse } = useInfiniteProductsQuery(categoryIds.store);
+
+  const product = productListResponse?.pages.flatMap((page) => page.products);
+  const pbProduct = pbPRoductListResponse?.pages.flatMap((page) => page.products);
 
   const { data: productRankingResponse } = useProductRanking();
   const { data: reviewRankingResponse } = useReviewRanking();
@@ -28,7 +31,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
-        <ProductList category="food" productList={productListResponse?.products.slice(0, 2) ?? []} />
+        <ProductList category="food" productList={product?.slice(0, 2) ?? []} />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteLink>
@@ -41,7 +44,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList productList={pbPRoductListResponse?.products.slice(0, 3) ?? []} />
+        <PBProductList productList={pbProduct?.slice(0, 3) ?? []} />
       </section>
       <Spacing size={36} />
       <section>
