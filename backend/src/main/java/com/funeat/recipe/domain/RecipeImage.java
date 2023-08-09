@@ -19,4 +19,12 @@ public class RecipeImage {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+
+    protected RecipeImage() {
+    }
+
+    public RecipeImage(final String image, final Recipe recipe) {
+        this.image = image;
+        this.recipe = recipe;
+    }
 }

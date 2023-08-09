@@ -13,6 +13,5 @@ spring:
         format_sql: true
         show_sql: true
 
-review:
-  image:
-    path: { DEV_IMAGE_PATH }
+image:
+  path: { DEV_IMAGE_PATH }

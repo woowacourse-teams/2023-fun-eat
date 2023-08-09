@@ -17,6 +17,5 @@ logging:
   level:
     org.hibernate.type.descriptor.sql: trace
 
-review:
-  image:
-    path:
+image:
+  path:
