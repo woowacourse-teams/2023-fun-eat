@@ -16,7 +16,6 @@ import com.funeat.product.persistence.ProductRepository;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.persistence.RecipeRepository;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,7 @@ import org.springframework.context.annotation.Import;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class RecipeFavoriteRepositoryTest {
+
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -65,7 +65,7 @@ class RecipeFavoriteRepositoryTest {
         // when
         final var realMember = 멤버_추가_요청(new Member("real", "image.png", "2"));
         final var fakeMember = 멤버_추가_요청(new Member("fake", "image.png", "3"));
-        recipeFavoriteRepository.save(new RecipeFavorite(realMember, recipe, true));
+        레시피_좋아요_요청(new RecipeFavorite(realMember, recipe, true));
 
         final var realMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(realMember, recipe);
         final var fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
@@ -93,5 +93,9 @@ class RecipeFavoriteRepositoryTest {
 
     private ProductRecipe 레시피에_사용된_상품_추가_요청(final ProductRecipe productRecipe) {
         return productRecipeRepository.save(productRecipe);
+    }
+
+    private RecipeFavorite 레시피_좋아요_요청(final RecipeFavorite recipeFavorite) {
+        return recipeFavoriteRepository.save(recipeFavorite);
     }
 }

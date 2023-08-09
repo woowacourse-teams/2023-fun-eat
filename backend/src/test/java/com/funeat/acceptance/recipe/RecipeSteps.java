@@ -37,11 +37,9 @@ public class RecipeSteps {
     public static ExtractableResponse<Response> 레시피_상세_정보_요청(final String loginCookie, final Long recipeId) {
         return given()
                 .cookie("JSESSIONID", loginCookie)
-                .log().all()
                 .when()
                 .get("/api/recipes/{recipeId}", recipeId)
                 .then()
-                .log().all()
                 .extract();
     }
 

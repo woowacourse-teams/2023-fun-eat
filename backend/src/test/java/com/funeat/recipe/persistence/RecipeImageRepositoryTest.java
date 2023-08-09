@@ -23,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.mock.web.MockMultipartFile;
 
 @DataJpaTest
 @Import(DataCleaner.class)
@@ -58,10 +57,10 @@ class RecipeImageRepositoryTest {
         final var product2 = 상품_추가_요청(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
         final var product3 = 상품_추가_요청(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
         final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
-        final var expected = List.of(product1, product2, product3);
+        final var products = List.of(product1, product2, product3);
 
         final var recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", member));
-        expected.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
+        products.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
 
         final var image1 = new RecipeImage("1번사진", recipe);
         final var image2 = new RecipeImage("2번사진", recipe);

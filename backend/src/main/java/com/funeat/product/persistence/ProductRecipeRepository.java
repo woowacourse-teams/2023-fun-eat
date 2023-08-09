@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface ProductRecipeRepository extends JpaRepository<ProductRecipe, Long> {
 
     @Query("SELECT pr.product FROM ProductRecipe pr WHERE pr.recipe = :recipe")
-    List<Product> findProductByRecipe(Recipe recipe);
+    List<Product> findProductByRecipe(final Recipe recipe);
 }

@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecipeFavoriteRepository extends JpaRepository<RecipeFavorite, Long> {
 
-    Optional<RecipeFavorite> findByMemberAndRecipe(Member member, Recipe recipe);
+    Optional<RecipeFavorite> findByMemberAndRecipe(final Member member, final Recipe recipe);
 }

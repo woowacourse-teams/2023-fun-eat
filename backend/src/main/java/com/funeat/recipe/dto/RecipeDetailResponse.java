@@ -40,7 +40,7 @@ public class RecipeDetailResponse {
                 .map(ProductRecipeDto::toDto)
                 .collect(Collectors.toList());
         final List<String> images = recipeImages.stream()
-                .map(it -> it.getImage())
+                .map(RecipeImage::getImage)
                 .collect(Collectors.toList());
         return new RecipeDetailResponse(recipe.getId(), images, recipe.getTitle(), recipe.getContent(),
                 authorDto, productDtos, totalPrice, recipe.getFavoriteCount(), favorite);

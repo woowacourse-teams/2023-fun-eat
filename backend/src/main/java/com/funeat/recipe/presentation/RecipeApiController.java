@@ -38,6 +38,7 @@ public class RecipeApiController implements RecipeController{
     public ResponseEntity<RecipeDetailResponse> getRecipeDetail(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                                 @PathVariable final Long recipeId) {
         final RecipeDetailResponse response = recipeService.getRecipeDetail(loginInfo.getId(), recipeId);
+        
         return ResponseEntity.ok(response);
     }
 }
