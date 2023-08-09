@@ -2,17 +2,22 @@ import { Button, Heading, Spacing, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import { useStarRating } from '@/hooks/review';
+import { useReviewFormActionContext } from '@/hooks/context';
+import { useStarRatingHover } from '@/hooks/review';
 
 const starList = Array.from({ length: 5 }, (_, index) => index + 1);
 
 interface StarRateProps {
   rating: number;
-  handleRating: (starIndex: number) => void;
 }
 
-const StarRate = ({ rating, handleRating }: StarRateProps) => {
-  const { hovering, handleMouseEnter, handleMouseLeave } = useStarRating();
+const StarRate = ({ rating }: StarRateProps) => {
+  const { hovering, handleMouseEnter, handleMouseLeave } = useStarRatingHover();
+  const { handleReviewFormValue } = useReviewFormActionContext();
+
+  const handleRating = (star: number) => {
+    handleReviewFormValue({ target: 'rating', value: star });
+  };
 
   return (
     <StarRateContainer>
