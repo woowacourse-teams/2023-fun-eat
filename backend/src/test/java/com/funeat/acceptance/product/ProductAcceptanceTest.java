@@ -41,14 +41,12 @@ import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.member.domain.Member;
-import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.product.dto.RankingProductDto;
-import com.funeat.review.domain.Review;
+import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -61,7 +59,8 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 class ProductAcceptanceTest extends AcceptanceTest {
 
-    public static final int PAGE_SIZE = 10;
+    private static final Long PAGE_SIZE = 10L;
+    private static final Long FIRST_PAGE = 0L;
 
     @Nested
     class getAllProductsInCategory_테스트 {
@@ -89,9 +88,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격3000원_평점_3점_생성(category);
                     final var product10 = 상품_삼각김밥_가격3000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product8, product5, product7, product4, product10, product9,
                             product3, product2, product11, product6);
@@ -101,7 +101,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
 
@@ -122,9 +122,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격1000원_평점_3점_생성(category);
                     final var product10 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                             product5, product4, product3, product2);
@@ -134,7 +135,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
             }
@@ -159,10 +160,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격3000원_평점_3점_생성(category);
                     final var product10 = 상품_삼각김밥_가격3000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
-                    ;
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+
                     final var expectedProducts = List.of(product11, product6, product1, product3, product2, product10,
                             product9, product7, product4, product8);
 
@@ -171,7 +173,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
 
@@ -192,9 +194,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격1000원_평점_3점_생성(category);
                     final var product10 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                             product5, product4, product3, product2);
@@ -204,7 +207,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
             }
@@ -229,9 +232,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격3000원_평점_3점_생성(category);
                     final var product10 = 상품_삼각김밥_가격2000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product1, product5, product4, product9, product2, product7,
                             product6, product11, product10, product8);
@@ -241,7 +245,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
 
@@ -262,9 +266,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격3000원_평점_1점_생성(category);
                     final var product10 = 상품_삼각김밥_가격2000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                             product5, product4, product3, product2);
@@ -274,7 +279,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
             }
@@ -298,9 +303,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격3000원_평점_3점_생성(category);
                     final var product10 = 상품_삼각김밥_가격2000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product11, product10, product8, product3, product7, product6,
                             product9, product2, product5, product4);
@@ -310,7 +316,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
 
@@ -331,9 +337,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product9 = 상품_삼각김밥_가격3000원_평점_1점_생성(category);
                     final var product10 = 상품_삼각김밥_가격2000원_평점_1점_생성(category);
                     final var product11 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5, product6, product7,
-                            product8, product9, product10, product11);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                            product10, product11);
+
+                    final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                             product5, product4, product3, product2);
@@ -343,7 +350,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
             }
@@ -360,14 +367,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product1 = 상품_삼각김밥_가격1000원_평점_5점_생성(category);
                     final var product2 = 상품_삼각김밥_가격2000원_평점_3점_생성(category);
                     final var product3 = 상품_삼각김밥_가격2000원_평점_1점_생성(category);
-                    final var products = List.of(product1, product2, product3);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3);
 
                     final var member1 = 멤버_멤버1_생성();
                     final var member2 = 멤버_멤버2_생성();
                     final var member3 = 멤버_멤버3_생성();
-                    final var members = List.of(member1, member2, member3);
-                    복수_멤버_저장(members);
+                    복수_멤버_저장(member1, member2, member3);
 
                     final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
                     final var review1_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
@@ -377,9 +382,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
                     final var review3_2 = 리뷰_이미지test2_평점2점_재구매X_생성(member2, product3, 0L);
                     final var review3_3 = 리뷰_이미지test2_평점2점_재구매X_생성(member3, product3, 0L);
-                    final var reviews = List.of(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1,
-                            review3_2, review3_3);
-                    복수_리뷰_저장(reviews);
+                    복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1, review3_2, review3_3);
+
+                    final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product3, product1, product2);
 
@@ -388,7 +393,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
 
@@ -403,8 +408,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var product3 = 상품_삼각김밥_가격3000원_평점_1점_생성(category);
                     final var product4 = 상품_삼각김밥_가격2000원_평점_4점_생성(category);
                     final var product5 = 상품_삼각김밥_가격3000원_평점_4점_생성(category);
-                    final var products = List.of(product1, product2, product3, product4, product5);
-                    복수_상품_저장(products);
+                    복수_상품_저장(product1, product2, product3, product4, product5);
 
                     final var member1 = 멤버_멤버1_생성();
                     단일_멤버_저장(member1);
@@ -412,8 +416,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
                     final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
                     final var review2_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product2, 0L);
                     final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
-                    final var reviews = List.of(review1_1, review2_1, review3_1);
-                    복수_리뷰_저장(reviews);
+                    복수_리뷰_저장(review1_1, review2_1, review3_1);
+
+                    final var pageDto = new SortingReviewsPageDto(5L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                     final var expectedProducts = List.of(product3, product2, product1, product5, product4);
 
@@ -422,7 +427,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                     // then
                     STATUS_CODE를_검증한다(response, 정상_처리);
-                    페이지를_검증한다(response, (long) products.size(), 0L);
+                    페이지를_검증한다(response, pageDto);
                     카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
                 }
             }
@@ -450,8 +455,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_단짠단짠_TASTE_생성();
                 final var tag3 = 태그_간식_ETC_생성();
-                final var tags = List.of(tag1, tag2, tag3);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2, tag3);
 
                 final var image = 리뷰_사진_명세_요청();
 
@@ -497,13 +501,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var product2 = 상품_삼각김밥_가격1000원_평점_5점_생성(category);
                 final var product3 = 상품_삼각김밥_가격1000원_평점_4점_생성(category);
                 final var product4 = 상품_삼각김밥_가격1000원_평점_1점_생성(category);
-                복수_상품_저장(List.of(product1, product2, product3, product4));
+                복수_상품_저장(product1, product2, product3, product4);
 
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
                 final var review1_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
@@ -512,9 +515,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var review2_2 = 리뷰_이미지test4_평점4점_재구매X_생성(member2, product2, 0L);
                 final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
                 final var review3_2 = 리뷰_이미지test5_평점5점_재구매X_생성(member2, product3, 0L);
-                final var reviews = List.of(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1,
-                        review3_2);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1, review3_2);
 
                 final var expectedProduct = List.of(product2, product1, product3);
 
@@ -532,45 +533,15 @@ class ProductAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private void 복수_태그_저장(final List<Tag> tags) {
-        tagRepository.saveAll(tags);
-    }
-
     private List<Long> 태그_아이디_변환(final Tag... tags) {
         return Arrays.stream(tags)
                 .map(Tag::getId)
                 .collect(Collectors.toList());
     }
 
-    private void 복수_멤버_저장(final List<Member> members) {
-        memberRepository.saveAll(members);
-    }
-
-    private Long 단일_카테고리_저장(final Category category) {
-        return categoryRepository.save(category).getId();
-    }
-
-    private Long 단일_상품_저장(final Product product) {
-        return productRepository.save(product).getId();
-    }
-
-    private Long 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member).getId();
-    }
-
-    private void 복수_상품_저장(final List<Product> products) {
-        productRepository.saveAll(products);
-    }
-
-    private void 복수_리뷰_저장(final List<Review> reviews) {
-        reviewRepository.saveAll(reviews);
-    }
-
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, Long dataSize, Long page) {
-        final var totalPages = (long) Math.ceil((double) dataSize / PAGE_SIZE);
-        final var expected = new ProductsInCategoryPageDto(dataSize, totalPages,
-                page == 0, page == totalPages - 1, page, (long) PAGE_SIZE);
+    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
+
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
@@ -590,7 +561,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
                                       final List<Tag> expectedTags) {
         final var expected = ProductResponse.toResponse(product, expectedTags);
         final var actual = response.as(ProductResponse.class);
-        assertThat(actual).usingRecursiveComparison().ignoringFields("averageRating").isEqualTo(expected);
+
+        assertThat(actual).usingRecursiveComparison()
+                .ignoringFields("averageRating")
+                .isEqualTo(expected);
     }
 
     private void 상품_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
@@ -600,7 +574,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var actual = response.jsonPath()
                 .getList("products", RankingProductDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }

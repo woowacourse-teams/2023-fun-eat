@@ -25,9 +25,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.ServiceTest;
-import com.funeat.member.domain.Member;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
@@ -61,10 +58,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
                 final var imageFileName = image.getOriginalFilename();
 
@@ -100,10 +96,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
 
                 final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
@@ -127,10 +122,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
 
                 final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
@@ -162,10 +156,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
                 final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
                 reviewService.create(productId, memberId, image, reviewCreaterequest);
@@ -202,10 +195,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
                 final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
                 reviewService.create(productId, memberId, image, reviewCreaterequest);
@@ -249,10 +241,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
                 final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
                 reviewService.create(productId, memberId, image, reviewCreaterequest);
@@ -281,10 +272,9 @@ class ReviewServiceTest extends ServiceTest {
 
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_아침식사_ETC_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
                 final var image = 리뷰_페이크_사진_요청();
                 final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
                 reviewService.create(productId, memberId, image, reviewCreaterequest);
@@ -314,8 +304,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var category = 카테고리_즉석조리_생성();
                 단일_카테고리_저장(category);
@@ -326,8 +315,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-                final var reviews = List.of(review1, review2, review3);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1, review2, review3);
 
                 final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
                 final var member1Id = member1.getId();
@@ -349,8 +337,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var category = 카테고리_즉석조리_생성();
                 단일_카테고리_저장(category);
@@ -361,8 +348,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var review1 = 리뷰_이미지test2_평점2점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-                final var reviews = List.of(review1, review2, review3);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1, review2, review3);
 
                 final var page = 페이지요청_평점_오름차순_생성(0, 2);
                 final var member1Id = member1.getId();
@@ -384,8 +370,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var category = 카테고리_즉석조리_생성();
                 단일_카테고리_저장(category);
@@ -396,8 +381,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-                final var reviews = List.of(review1, review2, review3);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1, review2, review3);
 
                 final var page = 페이지요청_평점_내림차순_생성(0, 2);
                 final var member1Id = member1.getId();
@@ -419,8 +403,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var category = 카테고리_즉석조리_생성();
                 단일_카테고리_저장(category);
@@ -431,8 +414,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-                final var reviews = List.of(review1, review2, review3);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1, review2, review3);
 
                 final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
                 final var member1Id = member1.getId();
@@ -458,8 +440,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var category = 카테고리_즉석조리_생성();
                 단일_카테고리_저장(category);
@@ -470,8 +451,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-                final var reviews = List.of(review1, review2, review3);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1, review2, review3);
 
                 final var page = 페이지요청_기본_생성(0, 2);
                 final var wrongMemberId = member1.getId() + 3L;
@@ -487,8 +467,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var member1 = 멤버_멤버1_생성();
                 final var member2 = 멤버_멤버2_생성();
                 final var member3 = 멤버_멤버3_생성();
-                final var members = List.of(member1, member2, member3);
-                복수_멤버_저장(members);
+                복수_멤버_저장(member1, member2, member3);
 
                 final var category = 카테고리_즉석조리_생성();
                 단일_카테고리_저장(category);
@@ -499,8 +478,7 @@ class ReviewServiceTest extends ServiceTest {
                 final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
                 final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
                 final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-                final var reviews = List.of(review1, review2, review3);
-                복수_리뷰_저장(reviews);
+                복수_리뷰_저장(review1, review2, review3);
 
                 final var page = 페이지요청_기본_생성(0, 2);
                 final var member1Id = member1.getId();
@@ -516,33 +494,9 @@ class ReviewServiceTest extends ServiceTest {
         return new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
     }
 
-    private List<Long> 태그_아이디_변환(final List<Tag> tags) {
-        return tags.stream()
+    private List<Long> 태그_아이디_변환(final Tag... tags) {
+        return Stream.of(tags)
                 .map(Tag::getId)
                 .collect(Collectors.toList());
-    }
-
-    private void 복수_태그_저장(final List<Tag> tags) {
-        tagRepository.saveAll(tags);
-    }
-
-    private Long 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member).getId();
-    }
-
-    private void 복수_멤버_저장(final List<Member> members) {
-        memberRepository.saveAll(members);
-    }
-
-    protected Long 단일_카테고리_저장(final Category category) {
-        return categoryRepository.save(category).getId();
-    }
-
-    private Long 단일_상품_저장(final Product product) {
-        return productRepository.save(product).getId();
-    }
-
-    private void 복수_리뷰_저장(final List<Review> reviews) {
-        reviewRepository.saveAll(reviews);
     }
 }

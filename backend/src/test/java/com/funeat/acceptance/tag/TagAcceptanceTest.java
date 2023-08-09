@@ -36,25 +36,22 @@ public class TagAcceptanceTest extends AcceptanceTest {
                 final var tag2 = 태그_단짠단짠_TASTE_생성();
                 final var tag3 = 태그_갓성비_PRICE_생성();
                 final var tag4 = 태그_간식_ETC_생성();
-                final var tags = List.of(tag1, tag2, tag3, tag4);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2, tag3, tag4);
+
+                final var expected = List.of(tag1, tag2, tag3, tag4);
 
                 // when
                 final var response = 전체_태그_목록_조회_요청();
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                전체_태그_목록_조회_결과를_검증한다(response, tags);
+                전체_태그_목록_조회_결과를_검증한다(response, expected);
             }
         }
 
         @Nested
         class 실패_테스트 {
         }
-    }
-
-    private void 복수_태그_저장(final List<Tag> tags) {
-        tagRepository.saveAll(tags);
     }
 
     private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Tag> expected) {

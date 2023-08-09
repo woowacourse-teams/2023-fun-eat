@@ -10,11 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.funeat.common.RepositoryTest;
-import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.Product;
-import com.funeat.review.domain.Review;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -113,25 +109,5 @@ class ReviewFavoriteRepositoryTest extends RepositoryTest {
                         .isInstanceOf(NoSuchElementException.class);
             }
         }
-    }
-
-    private Long 단일_카테고리_저장(final Category category) {
-        return categoryRepository.save(category).getId();
-    }
-
-    private Long 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member).getId();
-    }
-
-    private Long 단일_상품_저장(final Product product) {
-        return productRepository.save(product).getId();
-    }
-
-    private Review 단일_리뷰_저장(final Review review) {
-        return reviewRepository.save(review);
-    }
-
-    private Long 단일_리뷰_좋아요_저장(final ReviewFavorite reviewFavorite) {
-        return reviewFavoriteRepository.save(reviewFavorite).getId();
     }
 }

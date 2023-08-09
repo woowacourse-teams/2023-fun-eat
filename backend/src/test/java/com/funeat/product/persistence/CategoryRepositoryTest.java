@@ -12,7 +12,6 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.RepositoryTest;
-import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -39,9 +38,7 @@ public class CategoryRepositoryTest extends RepositoryTest {
                 final var CU = 카테고리_CU_생성();
                 final var GS25 = 카테고리_GS25_생성();
                 final var EMART24 = 카테고리_EMART24_생성();
-
-                final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
-                복수_카테고리_저장(categories);
+                복수_카테고리_저장(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
 
                 final var expected = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
 
@@ -64,9 +61,7 @@ public class CategoryRepositoryTest extends RepositoryTest {
                 final var CU = 카테고리_CU_생성();
                 final var GS25 = 카테고리_GS25_생성();
                 final var EMART24 = 카테고리_EMART24_생성();
-
-                final var categories = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
-                복수_카테고리_저장(categories);
+                복수_카테고리_저장(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
 
                 final var expected = List.of(CU, GS25, EMART24);
 
@@ -81,9 +76,5 @@ public class CategoryRepositoryTest extends RepositoryTest {
         @Nested
         class 실패_테스트 {
         }
-    }
-
-    private void 복수_카테고리_저장(final List<Category> categories) {
-        categoryRepository.saveAll(categories);
     }
 }

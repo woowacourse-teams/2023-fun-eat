@@ -51,10 +51,6 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         STATUS_CODE를_검증한다(response, 정상_처리);
     }
 
-    private Long 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member).getId();
-    }
-
     private void 사용자_정보_조회를_검증하다(final ExtractableResponse<Response> response, final Member member) {
         final var expected = MemberProfileResponse.toResponse(member);
         final var expectedNickname = expected.getNickname();

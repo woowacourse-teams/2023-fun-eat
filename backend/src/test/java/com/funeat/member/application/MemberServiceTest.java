@@ -283,8 +283,4 @@ class MemberServiceTest extends ServiceTest {
             }
         }
     }
-
-    private Long 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member).getId();
-    }
 }

@@ -9,6 +9,7 @@ import com.funeat.common.RepositoryTest;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -26,16 +27,17 @@ class TagRepositoryTest extends RepositoryTest {
                 // given
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_갓성비_PRICE_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
-                final var tagIds = 태그_아이디_변환(tags);
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+                final var expected = List.of(tag1, tag2);
 
                 // then
-                final var result = tagRepository.findTagsByIdIn(tagIds);
+                final var actual = tagRepository.findTagsByIdIn(tagIds);
 
                 // when
-                assertThat(result).usingRecursiveComparison().isEqualTo(tags);
+                assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
             }
         }
 
@@ -55,8 +57,7 @@ class TagRepositoryTest extends RepositoryTest {
                 // given
                 final var tag1 = 태그_맛있어요_TASTE_생성();
                 final var tag2 = 태그_갓성비_PRICE_생성();
-                final var tags = List.of(tag1, tag2);
-                복수_태그_저장(tags);
+                복수_태그_저장(tag1, tag2);
 
                 final var expected = List.of(tag1);
 
@@ -73,12 +74,8 @@ class TagRepositoryTest extends RepositoryTest {
         }
     }
 
-    private void 복수_태그_저장(final List<Tag> tags) {
-        tagRepository.saveAll(tags);
-    }
-
-    private List<Long> 태그_아이디_변환(final List<Tag> tags) {
-        return tags.stream()
+    private List<Long> 태그_아이디_변환(final Tag... tags) {
+        return Stream.of(tags)
                 .map(Tag::getId)
                 .collect(Collectors.toList());
     }

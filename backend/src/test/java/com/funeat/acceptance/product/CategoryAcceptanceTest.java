@@ -28,8 +28,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         final var 즉석조리 = 카테고리_즉석조리_생성();
         final var 과자류 = 카테고리_과자류_생성();
         final var CU = 카테고리_CU_생성();
-        final var categories = List.of(간편식사, 즉석조리, 과자류, CU);
-        복수_카테고리_저장(categories);
+        복수_카테고리_저장(간편식사, 즉석조리, 과자류, CU);
 
         // when
         final var response = 공통_상품_카테고리_목록_조회_요청();
@@ -37,10 +36,6 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         // then
         STATUS_CODE를_검증한다(response, 정상_처리);
         공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
-    }
-
-    private void 복수_카테고리_저장(final List<Category> categories) {
-        categoryRepository.saveAll(categories);
     }
 
     private void 공통_상품_카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
