@@ -8,7 +8,7 @@ import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useInfiniteProducts } from '@/hooks/product';
+import { useCategory, useInfiniteProductsQuery } from '@/hooks/product';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useSortOption from '@/hooks/useSortOption';
 import { isCategoryVariant } from '@/types/common';
@@ -35,7 +35,7 @@ const ProductListPage = () => {
 
   const { data: menuList } = useCategory(category);
 
-  const { fetchNextPage, hasNextPage, data } = useInfiniteProducts(categoryIds[category], selectedOption.value);
+  const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(categoryIds[category], selectedOption.value);
   const products = data?.pages.flatMap((page) => page.products);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);

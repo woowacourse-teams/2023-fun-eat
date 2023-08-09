@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { productApi } from '@/apis';
 import type { ProductReviewResponse } from '@/types/response';
 
-const useInfiniteProductReviews = (productId: number, sort: string) => {
+const useInfiniteProductReviewsQuery = (productId: number, sort: string) => {
   const fetchProductReviews = async ({ pageParam = 0 }) => {
     const res = await productApi.get({
       params: `/${productId}/reviews`,
@@ -26,4 +26,4 @@ const useInfiniteProductReviews = (productId: number, sort: string) => {
   });
 };
 
-export default useInfiniteProductReviews;
+export default useInfiniteProductReviewsQuery;

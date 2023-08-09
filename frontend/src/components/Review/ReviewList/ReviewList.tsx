@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import ReviewItem from '../ReviewItem/ReviewItem';
 
 import { PATH } from '@/constants/path';
-import { useInfiniteProductReviews } from '@/hooks/product';
+import { useInfiniteProductReviewsQuery } from '@/hooks/product';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import type { SortOption } from '@/types/common';
 
@@ -21,7 +21,7 @@ interface ReviewListProps {
 const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { fetchNextPage, hasNextPage, data, isError } = useInfiniteProductReviews(productId, selectedOption.value);
+  const { fetchNextPage, hasNextPage, data, isError } = useInfiniteProductReviewsQuery(productId, selectedOption.value);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
   if (isError) {

@@ -9,7 +9,7 @@ import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useMemberValueContext } from '@/hooks/context';
-import { useInfiniteProductReviews, useProductDetail } from '@/hooks/product';
+import { useInfiniteProductReviewsQuery, useProductDetail } from '@/hooks/product';
 import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
@@ -19,7 +19,7 @@ const ProductDetailPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
-  const { data } = useInfiniteProductReviews(Number(productId), REVIEW_SORT_OPTIONS[0].value);
+  const { data } = useInfiniteProductReviewsQuery(Number(productId), REVIEW_SORT_OPTIONS[0].value);
   const reviewLength = data?.pages.flatMap((page) => page.reviews).length;
 
   const member = useMemberValueContext();
