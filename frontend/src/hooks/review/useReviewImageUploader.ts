@@ -8,6 +8,12 @@ const useReviewImageUploader = () => {
   const [reviewPreviewImage, setReviewPreviewImage] = useState('');
   const [reviewImageFile, setReviewImageFile] = useState<File | null>(null);
 
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
   const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (!event.target.files) {
       return;
@@ -20,12 +26,6 @@ const useReviewImageUploader = () => {
       event.target.value = '';
       return;
     }
-
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
 
     try {
       const compressedFile = await imageCompression(imageFile, options);
