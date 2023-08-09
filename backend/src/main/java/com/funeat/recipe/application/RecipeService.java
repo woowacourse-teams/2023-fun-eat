@@ -51,9 +51,7 @@ public class RecipeService {
                 .stream()
                 .map(it -> productRepository.findById(it)
                         .orElseThrow(IllegalArgumentException::new))
-                .forEach(it -> productRecipeRepository.save(
-                        new ProductRecipe(it, savedRecipe)
-                ));
+                .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
 
         if (Objects.nonNull(images)) {
             images.stream()

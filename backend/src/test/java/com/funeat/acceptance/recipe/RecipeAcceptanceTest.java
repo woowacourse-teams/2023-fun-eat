@@ -11,10 +11,10 @@ import com.funeat.acceptance.common.LoginSteps;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.recipe.dto.RecipeCreateRequest;
-import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class RecipeAcceptanceTest extends AcceptanceTest {
 
     @Test
@@ -24,7 +24,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", 간편식사);
         final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", 간편식사);
         final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", 간편식사);
-        복수_상품_추가_요청(List.of(product1, product2, product3));
+        final var products = List.of(product1, product2, product3);
+        복수_상품_추가_요청(products);
         final var loginCookie = LoginSteps.로그인_쿠키를_얻는다();
 
         // when

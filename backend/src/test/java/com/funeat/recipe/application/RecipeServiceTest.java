@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
 @SpringBootTest
@@ -49,32 +48,40 @@ class RecipeServiceTest {
     @Test
     void 레시피를_추가할_수_있다() {
         // given
-        Category category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
-        Product product1 = productRepository.save(new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category));
-        Product product2 = productRepository.save(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
-        Product product3 = productRepository.save(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
-        Member member = memberRepository.save(new Member("test", "image.png", "1"));
+        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD));
+        final var product1 = 상품_추가_요청(new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category));
+        final var product2 = 상품_추가_요청(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
+        final var product3 = 상품_추가_요청(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
+        final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
 
-        List<MultipartFile> images = List.of(
-                new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3}),
-                new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3}),
-                new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3})
-        );
+        final var image1 = new MockMultipartFile("image1", "image1.jpg", "image/jpeg", new byte[]{1, 2, 3});
+        final var image2 = new MockMultipartFile("image2", "image2.jpg", "image/jpeg", new byte[]{1, 2, 3});
+        final var image3 = new MockMultipartFile("image3", "image3.jpg", "image/jpeg", new byte[]{1, 2, 3});
 
-        RecipeCreateRequest request = new RecipeCreateRequest("제일로 맛있는 레시피",
+        final var request = new RecipeCreateRequest("제일로 맛있는 레시피",
                 List.of(product1.getId(), product2.getId(), product3.getId()),
                 "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
 
         // when
-        Long recipeId = recipeService.create(member.getId(), images, request);
-        Recipe actual = recipeRepository.findById(recipeId).get();
+        final var recipeId = recipeService.create(member.getId(), List.of(image1, image2, image3), request);
+        final var actual = recipeRepository.findById(recipeId).get();
 
         // then
+        final var expected = new Recipe("제일로 맛있는 레시피", "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!", member);
         assertThat(actual).usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(
-                        new Recipe("제일로 맛있는 레시피", "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!", member)
-                );
+                .isEqualTo(expected);
     }
 
+    private Category 카테고리_추가_요청(final Category category) {
+        return categoryRepository.save(category);
+    }
+
+    private Product 상품_추가_요청(final Product product) {
+        return productRepository.save(product);
+    }
+
+    private Member 멤버_추가_요청(final Member member) {
+        return memberRepository.save(member);
+    }
 }
