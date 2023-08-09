@@ -10,7 +10,7 @@ import StarRate from '../StarRate/StarRate';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
-import { useReviewRegisterForm, useReviewImageUploader, useFormData } from '@/hooks/review';
+import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -28,7 +28,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const { mutate } = useReviewRegisterForm(product.id);
+  const { mutate } = useReviewRegisterFormMutation(product.id);
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
