@@ -41,4 +41,6 @@ public class CategoryFixture {
     public static Category 카테고리_EMART24_생성() {
         return new Category("EMART24", CategoryType.STORE);
     }
+
+
 }
