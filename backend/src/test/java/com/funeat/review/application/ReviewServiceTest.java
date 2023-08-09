@@ -45,7 +45,7 @@ class ReviewServiceTest extends ServiceTest {
         class 성공_테스트 {
 
             @Test
-            void 리뷰를_추가할_수_있다() {
+            void 이미지가_존재하는_리뷰를_추가할_수_있다() {
                 // given
                 final var member = 멤버_멤버1_생성();
                 final var memberId = 단일_멤버_저장(member);
@@ -70,6 +70,38 @@ class ReviewServiceTest extends ServiceTest {
 
                 // when
                 reviewService.create(productId, memberId, image, request);
+                final var actual = reviewRepository.findAll().get(0);
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 이미지가_없는_리뷰를_추가할_수_있다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                final var memberId = 단일_멤버_저장(member);
+
+                final var category = 카테고리_즉석조리_생성();
+                단일_카테고리_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점_2점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var tag1 = 태그_맛있어요_TASTE_생성();
+                final var tag2 = 태그_아침식사_ETC_생성();
+                복수_태그_저장(tag1, tag2);
+
+                final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+                final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
+
+                final var expected = new Review(member, product, null, 4L, "test", true);
+
+                // when
+                reviewService.create(productId, memberId, null, request);
                 final var actual = reviewRepository.findAll().get(0);
 
                 // then
