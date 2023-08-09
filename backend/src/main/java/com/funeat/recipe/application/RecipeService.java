@@ -69,8 +69,6 @@ public class RecipeService {
     }
 
     public RecipeDetailResponse getRecipeDetail(final Long memberId, final Long recipeId) {
-        final Member member = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
         final Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(IllegalArgumentException::new);
         final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
@@ -78,10 +76,17 @@ public class RecipeService {
         final Long totalPrice = products.stream()
                 .mapToLong(Product::getPrice)
                 .sum();
-        final Boolean favorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
-                .map(RecipeFavorite::getChecked)
-                .orElse(false);
+
+        final Boolean favorite = calculateFavoriteChecked(memberId, recipe);
 
         return RecipeDetailResponse.toResponse(recipe, images, products, totalPrice, favorite);
+    }
+
+    private Boolean calculateFavoriteChecked(final Long memberId, final Recipe recipe) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(IllegalArgumentException::new);
+        return recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
+                .map(RecipeFavorite::getChecked)
+                .orElse(false);
     }
 }
