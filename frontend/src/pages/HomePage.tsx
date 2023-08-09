@@ -44,7 +44,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList productList={pbProduct?.slice(0, 3) ?? []} />
+        <PBProductList productList={pbProduct?.slice(0, 10) ?? []} />
       </section>
       <Spacing size={36} />
       <section>
