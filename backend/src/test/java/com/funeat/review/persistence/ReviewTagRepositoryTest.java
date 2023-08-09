@@ -54,12 +54,12 @@ class ReviewTagRepositoryTest extends RepositoryTest {
                 final var review3 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
                 복수_리뷰_저장(review1, review2, review3);
 
-                final var reviewTag1_1 = 리뷰_태그_생성(tag1, review1);
-                final var reviewTag1_2 = 리뷰_태그_생성(tag2, review1);
-                final var reviewTag2_1 = 리뷰_태그_생성(tag1, review2);
-                final var reviewTag2_2 = 리뷰_태그_생성(tag2, review2);
-                final var reviewTag2_3 = 리뷰_태그_생성(tag3, review2);
-                final var reviewTag3_1 = 리뷰_태그_생성(tag1, review2);
+                final var reviewTag1_1 = 리뷰_태그_생성(review1, tag1);
+                final var reviewTag1_2 = 리뷰_태그_생성(review1, tag2);
+                final var reviewTag2_1 = 리뷰_태그_생성(review2, tag1);
+                final var reviewTag2_2 = 리뷰_태그_생성(review2, tag2);
+                final var reviewTag2_3 = 리뷰_태그_생성(review2, tag3);
+                final var reviewTag3_1 = 리뷰_태그_생성(review3, tag1);
                 복수_리뷰_태그_저장(reviewTag1_1, reviewTag1_2, reviewTag2_1, reviewTag2_2, reviewTag2_3, reviewTag3_1);
 
                 final var page = 페이지요청_기본_생성(0, 3);
@@ -79,7 +79,7 @@ class ReviewTagRepositoryTest extends RepositoryTest {
         }
     }
 
-    private ReviewTag 리뷰_태그_생성(final Tag tag1, final Review review1) {
-        return ReviewTag.createReviewTag(review1, tag1);
+    private ReviewTag 리뷰_태그_생성(final Review review, final Tag tag) {
+        return ReviewTag.createReviewTag(review, tag);
     }
 }

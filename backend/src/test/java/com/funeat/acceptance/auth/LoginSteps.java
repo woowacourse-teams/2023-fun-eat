@@ -18,6 +18,15 @@ public class LoginSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 로그아웃_요청(final String loginCookie) {
+        return given()
+                .cookie("JSESSIONID", loginCookie)
+                .when()
+                .get("/api/logout")
+                .then()
+                .extract();
+    }
+
     public static String 로그인_쿠키를_얻는다() {
         return RestAssured.given()
                 .queryParam("code", "test")

@@ -438,6 +438,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
     class getProductDetail_테스트 {
 
         @Nested
