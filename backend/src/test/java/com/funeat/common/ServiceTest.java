@@ -16,6 +16,7 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.application.ReviewService;
@@ -87,6 +88,9 @@ public abstract class ServiceTest {
 
     @Autowired
     protected CategoryService categoryService;
+
+    @Autowired
+    protected RecipeService recipeService;
 
     @Autowired
     protected ProductService productService;
