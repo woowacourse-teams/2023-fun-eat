@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: { DEPLOY_ACTIVE:dev }
+    active: local
   servlet:
     multipart:
       enabled: true
@@ -16,6 +16,5 @@ kakao:
   redirect-uri: { REDIRECT_URI }
 
 logging:
-  slack:
-    webhook-uri: { SLACK_ALARM_URL }
-  config: classpath:logback-spring.xml
+  file:
+    path: { LOG_DIR }

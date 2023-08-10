@@ -21,6 +21,18 @@ module.exports = {
         sourceType: 'script',
       },
     },
+    {
+      env: {
+        jest: true,
+      },
+      files: ['__tests__/**/*.{ts,tsx}'],
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
+      },
+    },
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {

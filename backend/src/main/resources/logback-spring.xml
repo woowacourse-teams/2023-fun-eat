@@ -2,27 +2,11 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="logback-spring-${spring.profiles.active}.xml"/>
 
-    <springProperty name="SLACK_WEBHOOK_URI" source="logging.slack.webhook-uri"/>
-    <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
-        <webhookUri>${SLACK_WEBHOOK_URI}</webhookUri>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{0} - %msg%n</Pattern>
-        </layout>
-        <username>open-macbook</username>
-        <iconEmoji>:face_with_symbols_on_mouth:</iconEmoji>
-        <colorCoding>true</colorCoding>
-    </appender>
-
-    <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="SLACK"/>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
-        </filter>
-    </appender>
-
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="ASYNC_SLACK"/>
-    </root>
+    <springProfile name="local">
+        <root level="TRACE">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
 </configuration>
