@@ -10,25 +10,26 @@ import StarRate from '../StarRate/StarRate';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
+import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
-import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
 const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
-  product: ProductDetail;
+  productId: number;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ productId, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const { mutate } = useReviewRegisterFormMutation(product.id);
+  const { data: productDetail } = useProductDetailQuery(productId);
+  const { mutate } = useReviewRegisterFormMutation(productId);
 
   // TODO: 태그 아이디 개수 조건 수정
   const isValid =
@@ -62,7 +63,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
       </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
-        <ProductOverviewItem name={product.name} image={product.image} />
+        <ProductOverviewItem name={productDetail?.name} image={productDetail?.image} />
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>
