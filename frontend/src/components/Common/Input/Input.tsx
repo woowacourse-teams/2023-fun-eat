@@ -1,5 +1,6 @@
 import { Button, Text, theme } from '@fun-eat/design-system';
-import { ComponentPropsWithRef, ForwardedRef, forwardRef } from 'react';
+import type { ComponentPropsWithRef, ForwardedRef } from 'react';
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 interface InputProps extends ComponentPropsWithRef<'input'> {
@@ -38,6 +39,7 @@ const Input = forwardRef(
   }
 );
 
+Input.displayName = 'Input';
 export default Input;
 
 type InputContainerStyleProps = Pick<InputProps, 'customWidth'>;
