@@ -1,20 +1,24 @@
 import { Text } from '@fun-eat/design-system';
+import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { useSearchedProductsQuery } from '@/hooks/queries/search';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 interface RecommendListProps {
   searchQuery: string;
 }
 
 const RecommendList = ({ searchQuery }: RecommendListProps) => {
-  const { data: searchResponse } = useSearchedProductsQuery(searchQuery);
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useSearchedProductsQuery(searchQuery);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
   if (!searchResponse) {
     return null;
   }
 
-  const { products } = searchResponse;
+  const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
     return <p>검색어에 해당 하는 상품이 없습니다.</p>;

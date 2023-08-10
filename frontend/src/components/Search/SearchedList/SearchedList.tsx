@@ -1,26 +1,36 @@
 import { Link } from '@fun-eat/design-system';
+import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ProductItem } from '@/components/Product';
 import { PATH } from '@/constants/path';
 import { useSearchedProductsQuery } from '@/hooks/queries/search';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 interface SearchedListProps {
   searchQuery: string;
 }
 
 const SearchedList = ({ searchQuery }: SearchedListProps) => {
-  const { data: searchResponse } = useSearchedProductsQuery(searchQuery);
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useSearchedProductsQuery(searchQuery);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!searchResponse || searchResponse.products.length === 0) {
+  if (!searchResponse) {
+    return null;
+  }
+
+  const products = searchResponse.pages.flatMap((page) => page.products);
+
+  if (products.length === 0) {
     return <div>검색한 상품을 찾을 수 없습니다.</div>;
   }
 
   return (
     <>
       <SearchedListContainer>
-        {searchResponse.products.map((product) => (
+        {products.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${product.id}`}>
               <ProductItem product={product} />
@@ -28,7 +38,7 @@ const SearchedList = ({ searchQuery }: SearchedListProps) => {
           </li>
         ))}
       </SearchedListContainer>
-      {/*<div ref={ref} aria-hidden />*/}
+      <div ref={scrollRef} aria-hidden />
     </>
   );
 };
@@ -43,6 +53,3 @@ const SearchedListContainer = styled.ul`
     border-bottom: 1px solid ${({ theme }) => theme.borderColors.disabled};
   }
 `;
-function useProductsQuery(searchQuery: string): { data: any } {
-  throw new Error('Function not implemented.');
-}

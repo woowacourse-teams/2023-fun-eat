@@ -6,6 +6,7 @@ export const searchHandlers = [
   rest.get('/api/search/:searchId', (req, res, ctx) => {
     const { searchId } = req.params;
     const query = req.url.searchParams.get('query');
+    const page = Number(req.url.searchParams.get('page'));
 
     if (query === null) {
       return res(ctx.status(400));
@@ -14,7 +15,9 @@ export const searchHandlers = [
     if (searchId === 'products') {
       const filteredProducts = {
         page: { ...commonProducts.page },
-        products: commonProducts.products.filter((product) => product.name.includes(query)),
+        products: commonProducts.products
+          .filter((product) => product.name.includes(query))
+          .slice(page * 5, (page + 1) * 5),
       };
       return res(ctx.status(200), ctx.json(filteredProducts));
     }
