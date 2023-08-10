@@ -66,7 +66,7 @@ const CustomInput = styled.input<CustomInputStyleProps>`
   }
 
   &::placeholder {
-    font-size: ${theme.fontSizes.xs};
+    font-size: ${theme.fontSizes.sm};
     color: ${theme.textColors.disabled};
   }
 `;
