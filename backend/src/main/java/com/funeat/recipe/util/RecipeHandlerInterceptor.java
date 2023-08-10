@@ -1,4 +1,4 @@
-package com.funeat.recipe.utill;
+package com.funeat.recipe.util;
 
 import com.funeat.auth.exception.AuthErrorCode;
 import com.funeat.auth.exception.AuthException.NotLoggedInException;

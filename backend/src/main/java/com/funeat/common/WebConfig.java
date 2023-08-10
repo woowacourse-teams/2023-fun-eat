@@ -2,7 +2,7 @@ package com.funeat.common;
 
 import com.funeat.auth.util.AuthArgumentResolver;
 import com.funeat.auth.util.AuthHandlerInterceptor;
-import com.funeat.recipe.utill.RecipeHandlerInterceptor;
+import com.funeat.recipe.util.RecipeHandlerInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
