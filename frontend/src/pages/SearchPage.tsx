@@ -1,6 +1,6 @@
 import { Heading, Spacing } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Input, SvgIcon, TabMenu } from '@/components/Common';
@@ -8,14 +8,11 @@ import { RecommendList, SearchedList } from '@/components/Search';
 import useDebounce from '@/hooks/useDebounce';
 
 const SearchPage = () => {
-  const [, startTransition] = useTransition();
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
-    startTransition(() => {
-      setSearchQuery(event.currentTarget.value);
-    });
+    setSearchQuery(event.currentTarget.value);
   };
 
   useDebounce(
