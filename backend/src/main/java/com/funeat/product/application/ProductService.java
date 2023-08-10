@@ -1,5 +1,7 @@
 package com.funeat.product.application;
 
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOF_FOUND;
+
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
@@ -9,6 +11,7 @@ import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
+import com.funeat.product.exception.CategoryException.CategoryNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
@@ -44,7 +47,7 @@ public class ProductService {
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
                                                                final Pageable pageable) {
         final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOF_FOUND, categoryId));
 
         final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
 

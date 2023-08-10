@@ -12,7 +12,7 @@ public class MemberException extends GlobalException {
 
     public static class MemberNotFoundException extends MemberException {
         public MemberNotFoundException(final MemberErrorCode errorCode, final Long memberId) {
-            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getMessage(), errorCode.getCode(), memberId));
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), memberId));
         }
     }
 }

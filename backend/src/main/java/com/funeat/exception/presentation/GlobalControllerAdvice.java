@@ -44,7 +44,7 @@ public class GlobalControllerAdvice {
 
         final ErrorCode<?> errorCode = new ErrorCode<>(REQUEST_VALID_ERROR_CODE.getCode(), responseErrorMessage);
 
-        log.warn("method = {}, request = {},  message = {} ", request.getMethod(), request.getRequestURI(),
+        log.warn("{} = {},  message = {} ", request.getMethod(), request.getRequestURI(),
                 filedErrorLogMessages);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorCode);
     }
@@ -62,7 +62,8 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<?> handleGlobalException(final GlobalException e, final HttpServletRequest request)
             throws JsonProcessingException {
-        log.warn("request = {} code = {} message = {} info = {}", request.getRequestURI(), e.getErrorCode().getCode(),
+        log.warn("{} = {} code = {} message = {} info = {}", request.getMethod(), request.getRequestURI(),
+                e.getErrorCode().getCode(),
                 e.getErrorCode().getMessage(), objectMapper.writeValueAsString(e.getErrorCode().getInfo()));
 
         return ResponseEntity.status(e.getStatus()).body(e.getErrorCode().getMessage());
