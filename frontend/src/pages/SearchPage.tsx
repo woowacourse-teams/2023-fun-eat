@@ -14,8 +14,10 @@ const SearchPage = () => {
 
   const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(currentSearchQuery || '');
+  const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
 
   const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setIsSubmitted(false);
     setSearchQuery(event.currentTarget.value);
   };
 
@@ -26,6 +28,7 @@ const SearchPage = () => {
       return;
     }
 
+    setIsSubmitted(true);
     setSearchParams({ query: searchQuery });
   };
 
@@ -53,7 +56,7 @@ const SearchPage = () => {
             onChange={handleSearchQuery}
           />
         </form>
-        {debouncedSearchQuery && (
+        {!isSubmitted && debouncedSearchQuery && (
           <RecommendWrapper>
             <RecommendList searchQuery={debouncedSearchQuery} />
           </RecommendWrapper>
@@ -62,7 +65,7 @@ const SearchPage = () => {
       <Spacing size={20} />
       <TabMenu tabMenus={['상품', '꿀조합']} />
       <SearchResultSection>
-        {debouncedSearchQuery ? (
+        {isSubmitted && debouncedSearchQuery ? (
           <>
             <Heading as="h2" size="lg" weight="regular">
               <MarkedText>&apos;{searchQuery}&apos;</MarkedText>에 대한 검색결과입니다.
