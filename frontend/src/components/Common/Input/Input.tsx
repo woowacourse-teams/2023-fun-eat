@@ -1,5 +1,5 @@
 import { Button, Text, theme } from '@fun-eat/design-system';
-import type { ComponentPropsWithRef, ForwardedRef } from 'react';
+import type { ComponentPropsWithRef, ForwardedRef, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
 
@@ -15,7 +15,7 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
   /**
    * Input 컴포넌트 오른쪽에 위치할 아이콘입니다.
    */
-  rightIcon?: React.ReactNode;
+  rightIcon?: ReactNode;
   /**
    * isError가 true일 때 보여줄 에러 메시지입니다.
    */
@@ -65,7 +65,7 @@ const CustomInput = styled.input<CustomInputStyleProps>`
   }
 
   &::placeholder {
-    font-size: 1.2rem;
+    font-size: ${theme.fontSizes.xs};
     color: ${theme.textColors.disabled};
   }
 `;
@@ -79,6 +79,6 @@ const IconWrapper = styled(Button)`
 `;
 
 const ErrorMessage = styled(Text)`
-  font-size: 1.2rem;
+  font-size: ${theme.fontSizes.xs};
   color: ${theme.colors.error};
 `;
