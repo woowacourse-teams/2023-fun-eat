@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 import commonProducts from '../data/products.json';
 
-export const loginHandlers = [
+export const searchHandlers = [
   rest.get('/api/search/:searchId', (req, res, ctx) => {
     const { searchId } = req.params;
     const query = req.url.searchParams.get('query');
