@@ -17,6 +17,11 @@ const useSearch = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
+    if (!searchQuery) {
+      alert('검색어를 입력해주세요');
+      return;
+    }
+
     if (currentSearchQuery === searchQuery) {
       return;
     }

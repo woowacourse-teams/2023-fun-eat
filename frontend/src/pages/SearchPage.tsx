@@ -27,7 +27,7 @@ const SearchPage = () => {
             customWidth="100%"
             placeholder="상품 이름을 검색해보세요."
             rightIcon={
-              <Button customHeight="38px" color="white">
+              <Button customHeight="36px" color="white">
                 <SvgIcon variant="search" />
               </Button>
             }
