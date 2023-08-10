@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import SvgIcon from '../Svg/SvgIcon';
 
 import Input from './Input';
+import SvgIcon from '../Svg/SvgIcon';
 
 const meta: Meta<typeof Input> = {
   title: 'common/Input',
