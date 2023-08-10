@@ -2,12 +2,9 @@ import { Heading, Spacing } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { Input, SvgIcon, TabMenu } from '@/components/Common';
-import { ProductItem } from '@/components/Product';
-import mockProducts from '@/mocks/data/products.json';
+import { SearchedList } from '@/components/Search';
 
 const SearchPage = () => {
-  const { products } = mockProducts;
-
   return (
     <>
       <Input customWidth="100%" placeholder="상품 이름을 검색해보세요." rightIcon={<SvgIcon variant="search" />} />
@@ -18,13 +15,7 @@ const SearchPage = () => {
           <MarkedText>&apos;담곰이&apos;</MarkedText>에 대한 검색결과입니다.
         </Heading>
         <Spacing size={20} />
-        <ProductListWrapper>
-          {products.map((product) => (
-            <li key={product.id}>
-              <ProductItem product={product} />
-            </li>
-          ))}
-        </ProductListWrapper>
+        <SearchedList />
       </SearchResultSection>
     </>
   );
@@ -39,13 +30,4 @@ const SearchResultSection = styled.section`
 const MarkedText = styled.mark`
   background-color: ${({ theme }) => theme.backgroundColors.default};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-`;
-
-const ProductListWrapper = styled.ul`
-  display: flex;
-  flex-direction: column;
-
-  & > li {
-    border-bottom: 1px solid ${({ theme }) => theme.borderColors.disabled};
-  }
 `;
