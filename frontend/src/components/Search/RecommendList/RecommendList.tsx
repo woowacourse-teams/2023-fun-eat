@@ -2,6 +2,7 @@ import { Text } from '@fun-eat/design-system';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
+import { MarkedText } from '@/components/Common';
 import { useSearchedProductsQuery } from '@/hooks/queries/search';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
@@ -30,7 +31,9 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
     <RecommendListContainer>
       {productNames.map((recommend) => (
         <li key={recommend}>
-          <RecommendText>{recommend}</RecommendText>
+          <RecommendText>
+            <MarkedText text={recommend} mark={searchQuery} />
+          </RecommendText>
         </li>
       ))}
     </RecommendListContainer>

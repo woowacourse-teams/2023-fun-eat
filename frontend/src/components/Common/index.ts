@@ -12,3 +12,4 @@ export { default as Input } from './Input/Input';
 export { default as ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 export { default as ErrorComponent } from './ErrorComponent/ErrorComponent';
 export { default as Loading } from './Loading/Loading';
+export { default as MarkedText } from './MarkedText/MarkedText';

@@ -52,7 +52,7 @@ const SearchPage = () => {
           <ErrorBoundary fallback={ErrorComponent}>
             <Suspense fallback={<Loading />}>
               <Heading as="h2" size="lg" weight="regular">
-                <MarkedText>&apos;{searchQuery}&apos;</MarkedText>에 대한 검색결과입니다.
+                <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
               </Heading>
               <Spacing size={20} />
               <SearchedList searchQuery={debouncedSearchQuery} />
@@ -89,7 +89,7 @@ const SearchResultSection = styled.section`
   margin-top: 30px;
 `;
 
-const MarkedText = styled.mark`
+const Mark = styled.mark`
   background-color: ${({ theme }) => theme.backgroundColors.default};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 `;
