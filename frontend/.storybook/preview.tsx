@@ -2,7 +2,7 @@ import React from 'react';
 import { FunEatProvider } from '@fun-eat/design-system';
 import type { Preview } from '@storybook/react';
 import { mswDecorator } from 'msw-storybook-addon';
-import { authHandlers, productHandlers, reviewHandlers } from '../src/mocks/handlers';
+import { loginHandlers, productHandlers, reviewHandlers } from '../src/mocks/handlers';
 import { BrowserRouter } from 'react-router-dom';
 
 export const decorators = [
@@ -25,7 +25,7 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
-    msw: [...authHandlers, ...productHandlers, ...reviewHandlers],
+    msw: [...loginHandlers, ...productHandlers, ...reviewHandlers],
   },
 };
 
