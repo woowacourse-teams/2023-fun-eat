@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { MarkedText } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import { useSearchedProductsQuery } from '@/hooks/queries/search';
+import { useInfiniteSearchedProductsQuery } from '@/hooks/queries/search';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 interface RecommendListProps {
@@ -13,7 +13,7 @@ interface RecommendListProps {
 }
 
 const RecommendList = ({ searchQuery }: RecommendListProps) => {
-  const { data: searchResponse, fetchNextPage, hasNextPage } = useSearchedProductsQuery(searchQuery);
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteSearchedProductsQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 

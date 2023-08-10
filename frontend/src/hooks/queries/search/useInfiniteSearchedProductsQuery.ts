@@ -10,7 +10,7 @@ const fetchSearchedProducts = async (query: string, page: number) => {
   return data;
 };
 
-const useSearchedProductsQuery = (query: string) => {
+const useInfiniteSearchedProductsQuery = (query: string) => {
   return useInfiniteQuery({
     queryKey: ['search', 'products', query],
     queryFn: ({ pageParam = 0 }) => fetchSearchedProducts(query, pageParam),
@@ -23,4 +23,4 @@ const useSearchedProductsQuery = (query: string) => {
   });
 };
 
-export default useSearchedProductsQuery;
+export default useInfiniteSearchedProductsQuery;
