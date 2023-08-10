@@ -6,7 +6,7 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
-import { useInfiniteProductsQuery } from '@/hooks/product';
+import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 
 const PBProductList = () => {
   const location = useLocation();

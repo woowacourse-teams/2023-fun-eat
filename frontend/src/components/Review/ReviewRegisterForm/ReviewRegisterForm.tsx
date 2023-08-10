@@ -11,7 +11,8 @@ import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
-import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
+import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
+import { useReviewImageUploader, useFormData } from '@/hooks/review';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
