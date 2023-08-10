@@ -2,11 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
+import ErrorBoundary from '@/components/Common/ErrorBoundary/ErrorBoundary';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import AuthPage from '@/pages/AuthPage';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
+import NotFoundPage from '@/pages/NotFoundPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import ProductListPage from '@/pages/ProductListPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -16,7 +18,12 @@ import SearchPage from '@/pages/SearchPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <ErrorBoundary fallback={NotFoundPage}>
+        <App />
+      </ErrorBoundary>
+    ),
+    errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
