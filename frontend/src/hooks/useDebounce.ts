@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 const useDebounce = (fn: Function, ms = 0) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const callbackRef = useRef(fn);

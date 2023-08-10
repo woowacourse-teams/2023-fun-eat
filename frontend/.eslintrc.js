@@ -89,6 +89,7 @@ module.exports = {
     ],
     'import/no-unresolved': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/ban-types': 'off',
   },
   settings: {
     'import/resolver': {
