@@ -6,31 +6,12 @@ import styled from 'styled-components';
 
 import { Input, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, SearchedList } from '@/components/Search';
+import { useSearch } from '@/hooks/queries/search';
 import useDebounce from '@/hooks/useDebounce';
 
 const SearchPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentSearchQuery = searchParams.get('query');
-
-  const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(currentSearchQuery || '');
-  const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
-
-  const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setIsSubmitted(false);
-    setSearchQuery(event.currentTarget.value);
-  };
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
-    if (currentSearchQuery === searchQuery) {
-      return;
-    }
-
-    setIsSubmitted(true);
-    setSearchParams({ query: searchQuery });
-  };
+  const { searchQuery, isSubmitted, handleSearchQuery, handleSubmit } = useSearch();
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
 
   useDebounce(
     () => {
