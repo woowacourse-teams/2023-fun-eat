@@ -1,5 +1,4 @@
 import { Spacing, Text } from '@fun-eat/design-system';
-import { useParams } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 
 import ProductTitle from '../ProductTitle/ProductTitle';
