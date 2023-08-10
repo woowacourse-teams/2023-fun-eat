@@ -11,6 +11,7 @@ export const reviewHandlers = [
   rest.get('/api/products/:productId/reviews', (req, res, ctx) => {
     const { mockSessionId } = req.cookies;
     const sortOptions = req.url.searchParams.get('sort');
+    const page = Number(req.url.searchParams.get('page'));
 
     if (!mockSessionId) {
       return res(ctx.status(403));
@@ -33,7 +34,10 @@ export const reviewHandlers = [
       ),
     };
 
-    return res(ctx.status(200), ctx.json(sortedReviews));
+    return res(
+      ctx.status(200),
+      ctx.json({ page: sortedReviews.page, reviews: sortedReviews.reviews.slice(page * 5, (page + 1) * 5) })
+    );
   }),
 
   rest.post('/api/products/:productId/reviews', (req, res, ctx) => {
