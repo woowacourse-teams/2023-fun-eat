@@ -13,9 +13,9 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
    */
   isError?: boolean;
   /**
-   * Input 컴포넌트 왼쪽에 위치할 아이콘입니다.
+   * Input 컴포넌트 오른쪽에 위치할 아이콘입니다.
    */
-  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   /**
    * isError가 true일 때 보여줄 에러 메시지입니다.
    */
@@ -24,14 +24,14 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
 
 const Input = forwardRef(
   (
-    { customWidth = '300px', isError = false, leftIcon, errorMessage, ...props }: InputProps,
+    { customWidth = '300px', isError = false, rightIcon, errorMessage, ...props }: InputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     return (
       <>
         <InputContainer customWidth={customWidth}>
           <CustomInput ref={ref} isError={isError} {...props} />
-          {leftIcon && <IconWrapper variant="transparent">{leftIcon}</IconWrapper>}
+          {rightIcon && <IconWrapper variant="transparent">{rightIcon}</IconWrapper>}
         </InputContainer>
         {isError && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </>

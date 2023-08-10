@@ -7,7 +7,7 @@ const meta: Meta<typeof Input> = {
   title: 'common/Input',
   component: Input,
   argTypes: {
-    leftIcon: {
+    rightIcon: {
       control: { type: 'boolean' },
       mapping: { false: '', true: <SvgIcon variant="search" /> },
     },
@@ -15,7 +15,7 @@ const meta: Meta<typeof Input> = {
   args: {
     customWidth: '300px',
     isError: false,
-    leftIcon: false,
+    rightIcon: false,
     errorMessage: '',
   },
 };
@@ -34,7 +34,7 @@ export const WithPlaceholder: Story = {
 export const WithIcon: Story = {
   args: {
     placeholder: '상품 이름을 검색하세요.',
-    leftIcon: true,
+    rightIcon: true,
   },
 };
 
