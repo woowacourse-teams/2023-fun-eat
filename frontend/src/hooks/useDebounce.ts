@@ -1,34 +1,14 @@
-import { useCallback, useEffect, useRef } from 'react';
+import type { DependencyList } from 'react';
+import { useEffect } from 'react';
 
-const useDebounce = (fn: Function, ms = 0) => {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const callbackRef = useRef(fn);
+import useTimeout from './useTimeout';
 
-  const debounce = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+const useDebounce = (fn: Function, ms = 0, deps: DependencyList = []) => {
+  const [timeoutFn, clear] = useTimeout(fn, ms);
 
-    timeoutRef.current = setTimeout(() => {
-      callbackRef.current();
-    }, ms);
-  }, [ms]);
+  useEffect(timeoutFn, deps);
 
-  const clear = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-  }, []);
-
-  useEffect(() => {
-    callbackRef.current = fn;
-  }, [fn]);
-
-  useEffect(() => {
-    return clear;
-  }, []);
-
-  return [debounce, clear];
+  return clear;
 };
 
 export default useDebounce;
