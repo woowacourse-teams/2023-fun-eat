@@ -1,6 +1,7 @@
-import { Heading, Spacing } from '@fun-eat/design-system';
-import type { ChangeEventHandler } from 'react';
+import { Button, Heading, Spacing } from '@fun-eat/design-system';
+import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SvgIcon, TabMenu } from '@/components/Common';
@@ -8,11 +9,24 @@ import { RecommendList, SearchedList } from '@/components/Search';
 import useDebounce from '@/hooks/useDebounce';
 
 const SearchPage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentSearchQuery = searchParams.get('query');
+
+  const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(currentSearchQuery || '');
 
   const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchQuery(event.currentTarget.value);
+  };
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+
+    if (currentSearchQuery === searchQuery) {
+      return;
+    }
+
+    setSearchParams({ query: searchQuery });
   };
 
   useDebounce(
@@ -26,13 +40,19 @@ const SearchPage = () => {
   return (
     <>
       <SearchSection>
-        <Input
-          customWidth="100%"
-          placeholder="상품 이름을 검색해보세요."
-          rightIcon={<SvgIcon variant="search" />}
-          value={searchQuery}
-          onChange={handleSearchQuery}
-        />
+        <form onSubmit={handleSubmit}>
+          <Input
+            customWidth="100%"
+            placeholder="상품 이름을 검색해보세요."
+            rightIcon={
+              <Button>
+                <SvgIcon variant="search" />
+              </Button>
+            }
+            value={searchQuery}
+            onChange={handleSearchQuery}
+          />
+        </form>
         {debouncedSearchQuery && (
           <RecommendWrapper>
             <RecommendList searchQuery={debouncedSearchQuery} />
