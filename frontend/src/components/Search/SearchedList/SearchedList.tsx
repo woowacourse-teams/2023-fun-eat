@@ -1,4 +1,4 @@
-import { Link } from '@fun-eat/design-system';
+import { Link, Text } from '@fun-eat/design-system';
 import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -24,7 +24,7 @@ const SearchedList = ({ searchQuery }: SearchedListProps) => {
   const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
-    return <div>검색한 상품을 찾을 수 없습니다.</div>;
+    return <Text>검색한 상품을 찾을 수 없습니다.</Text>;
   }
 
   return (

@@ -19,7 +19,7 @@ export const searchHandlers = [
           .filter((product) => product.name.includes(query))
           .slice(page * 5, (page + 1) * 5),
       };
-      return res(ctx.status(200), ctx.json(filteredProducts));
+      return res(ctx.status(200), ctx.json(filteredProducts), ctx.delay(1000));
     }
 
     // TODO: 꿀조합 목 데이터 만들기

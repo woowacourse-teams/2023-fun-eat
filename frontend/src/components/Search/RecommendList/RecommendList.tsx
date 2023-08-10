@@ -21,7 +21,7 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
   const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
-    return <p>검색어에 해당 하는 상품이 없습니다.</p>;
+    return <ErrorText>검색어에 해당 하는 상품이 없습니다.</ErrorText>;
   }
 
   const productNames = products.map((product) => product.name);
@@ -40,7 +40,9 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
 export default RecommendList;
 
 const RecommendListContainer = styled.ul`
-  height: & > li {
+  height: 100%;
+
+  & > li {
     height: 36px;
     line-height: 36px;
     padding: 0 10px;
@@ -48,5 +50,11 @@ const RecommendListContainer = styled.ul`
 `;
 
 const RecommendText = styled(Text)`
+  line-height: 36px;
+`;
+
+const ErrorText = styled(Text)`
+  height: 36px;
+  padding: 0 10px;
   line-height: 36px;
 `;

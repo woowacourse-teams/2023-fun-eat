@@ -19,6 +19,7 @@ const useSearchedProductsQuery = (query: string) => {
       const nextPage = prevResponse.page.requestPage + 1;
       return isLast ? undefined : nextPage;
     },
+    suspense: true,
   });
 };
 

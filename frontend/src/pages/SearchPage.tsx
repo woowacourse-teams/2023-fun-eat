@@ -1,8 +1,8 @@
-import { Button, Heading, Spacing } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
-import { Input, SvgIcon, TabMenu } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, SearchedList } from '@/components/Search';
 import { useSearch } from '@/hooks/queries/search';
 import useDebounce from '@/hooks/useDebounce';
@@ -37,7 +37,11 @@ const SearchPage = () => {
         </form>
         {!isSubmitted && debouncedSearchQuery && (
           <RecommendWrapper>
-            <RecommendList searchQuery={debouncedSearchQuery} />
+            <ErrorBoundary fallback={ErrorComponent}>
+              <Suspense fallback={<Loading />}>
+                <RecommendList searchQuery={debouncedSearchQuery} />
+              </Suspense>
+            </ErrorBoundary>
           </RecommendWrapper>
         )}
       </SearchSection>
@@ -45,15 +49,17 @@ const SearchPage = () => {
       <TabMenu tabMenus={['상품', '꿀조합']} />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
-          <>
-            <Heading as="h2" size="lg" weight="regular">
-              <MarkedText>&apos;{searchQuery}&apos;</MarkedText>에 대한 검색결과입니다.
-            </Heading>
-            <Spacing size={20} />
-            <SearchedList searchQuery={debouncedSearchQuery} />
-          </>
+          <ErrorBoundary fallback={ErrorComponent}>
+            <Suspense fallback={<Loading />}>
+              <Heading as="h2" size="lg" weight="regular">
+                <MarkedText>&apos;{searchQuery}&apos;</MarkedText>에 대한 검색결과입니다.
+              </Heading>
+              <Spacing size={20} />
+              <SearchedList searchQuery={debouncedSearchQuery} />
+            </Suspense>
+          </ErrorBoundary>
         ) : (
-          <p>상품을 검색해보세요.</p>
+          <Text>상품을 검색해보세요.</Text>
         )}
       </SearchResultSection>
     </>
