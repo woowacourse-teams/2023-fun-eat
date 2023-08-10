@@ -28,106 +28,83 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     private AuthService authService;
 
     @Nested
-    class kakaoLogin_테스트 {
+    class kakaoLogin_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 멤버가_카카오_로그인_버튼을_누르면_카카오_로그인_페이지로_리다이렉트할_수_있다() {
+            // given
+            final var expected = authService.getLoginRedirectUri();
 
-            @Test
-            void 멤버가_카카오_로그인_버튼을_누르면_카카오_로그인_페이지로_리다이렉트할_수_있다() {
-                // given
-                final var expected = authService.getLoginRedirectUri();
+            // when
+            final var response = 카카오_로그인_버튼_클릭();
 
-                // when
-                final var response = 카카오_로그인_버튼_클릭();
-
-                // then
-                STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);
-                REDIRECT_URL을_검증한다(response, expected);
-            }
-        }
-
-        @Nested
-        class 실패_테스트 {
+            // then
+            STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);
+            REDIRECT_URL을_검증한다(response, expected);
         }
     }
 
     @Nested
-    class loginAuthorizeUser_테스트 {
+    class loginAuthorizeUser_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 신규_유저라면_마이페이지_경로를_헤더에_담아_응답을_보낸다() {
+            // given
+            final var code = "member1";
+            final var loginCookie = "12345";
 
-            @Test
-            void 신규_유저라면_마이페이지를_헤더에_담아_응답을_보낸다() {
-                // given
-                final var code = "member1";
-                final var loginCookie = "12345";
+            // when
+            final var response = 로그인_시도_요청(code, loginCookie);
 
-                // when
-                final var response = 로그인_시도_요청(code, loginCookie);
-
-                // then
-                STATUS_CODE를_검증한다(response, 정상_처리);
-                헤더에_리다이렉트가_존재하는지_검증한다(response, "/profile");
-            }
-
-            @Test
-            void 기존_유저라면_메인화면을_헤더에_담아_응답을_보낸다() {
-                // given
-                final var member = 멤버_멤버1_생성();
-                단일_멤버_저장(member);
-
-                final var code = "member1";
-                final var loginCookie = 로그인_쿠키를_얻는다();
-
-                // when
-                final var response = 로그인_시도_요청(code, loginCookie);
-
-                // then
-                STATUS_CODE를_검증한다(response, 정상_처리);
-                헤더에_리다이렉트가_존재하는지_검증한다(response, "/");
-            }
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            헤더에_리다이렉트가_존재하는지_검증한다(response, "/profile");
         }
 
-        @Nested
-        class 실패_테스트 {
+        @Test
+        void 기존_유저라면_메인페이지_경로를_헤더에_담아_응답을_보낸다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var code = "member1";
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var response = 로그인_시도_요청(code, loginCookie);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            헤더에_리다이렉트가_존재하는지_검증한다(response, "/");
         }
     }
 
     @Nested
-    class logout_테스트 {
+    class logout_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 로그아웃을_하다() {
+            // given
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
-            @Test
-            void 로그아웃을_하다() {
-                // given
-                final var loginCookie = 로그인_쿠키를_얻는다();
+            // when
+            final var response = 로그아웃_요청(loginCookie);
 
-                // when
-                final var response = 로그아웃_요청(loginCookie);
-
-                // then
-                STATUS_CODE를_검증한다(response, 정상_처리);
-            }
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
         }
+    }
 
-        @Nested
-        class 실패_테스트 {
+    @Nested
+    class logout_실패_테스트 {
 
-            @Test
-            void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생해야하는데_통과하고_있다() {
-                // given
-                final var loginCookie = 로그인_쿠키를_얻는다();
+        @Test
+        void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생해야하는데_통과하고_있다() {
+            // given & when
+            final var response = 로그아웃_요청(null);
 
-                // when
-                final var response = 로그아웃_요청(null);
-
-                // then
-                STATUS_CODE를_검증한다(response, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            // then
+            STATUS_CODE를_검증한다(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

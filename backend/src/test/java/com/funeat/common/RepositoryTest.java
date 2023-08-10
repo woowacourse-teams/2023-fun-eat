@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import(DataCleaner.class)
 @ExtendWith(DataClearExtension.class)
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public abstract class RepositoryTest {
 

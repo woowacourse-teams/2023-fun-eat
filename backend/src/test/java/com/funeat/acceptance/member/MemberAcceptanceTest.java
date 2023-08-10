@@ -21,61 +21,44 @@ import org.junit.jupiter.api.Test;
 public class MemberAcceptanceTest extends AcceptanceTest {
 
     @Nested
-    class getMemberProfile_테스트 {
+    class getMemberProfile_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 사용자_정보를_확인하다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
 
-            @Test
-            void 사용자_정보를_확인하다() {
-                // given
-                final var member = 멤버_멤버1_생성();
-                단일_멤버_저장(member);
+            final var loginCookie = 로그인_쿠키를_얻는다();
 
-                final var loginCookie = 로그인_쿠키를_얻는다();
+            // when
+            final var response = 사용자_정보_조회_요청(loginCookie);
 
-                // when
-                final var response = 사용자_정보_조회_요청(loginCookie);
-
-                // then
-                STATUS_CODE를_검증한다(response, 정상_처리);
-                사용자_정보_조회를_검증하다(response, member);
-            }
-        }
-
-        @Nested
-        class 실패_테스트 {
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            사용자_정보_조회를_검증하다(response, member);
         }
     }
 
     @Nested
-    class putMemberProfile_테스트 {
+    class putMemberProfile_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 사용자_정보를_수정하다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
 
-            @Test
-            void 사용자_정보를_수정하다() {
-                // given
-                final var member = 멤버_멤버1_생성();
-                단일_멤버_저장(member);
+            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var request = new MemberRequest("after", "http://www.after.com");
 
-                final var loginCookie = 로그인_쿠키를_얻는다();
-                final var request = new MemberRequest("after", "http://www.after.com");
+            // when
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
 
-                // when
-                final var response = 사용자_정보_수정_요청(loginCookie, request);
-
-                // then
-                STATUS_CODE를_검증한다(response, 정상_처리);
-            }
-        }
-
-        @Nested
-        class 실패_테스트 {
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
         }
     }
-
 
     private void 사용자_정보_조회를_검증하다(final ExtractableResponse<Response> response, final Member member) {
         final var expected = MemberProfileResponse.toResponse(member);
@@ -86,8 +69,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         final var actualProfileImage = response.jsonPath().getString("profileImage");
 
         assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actualNickname).isEqualTo(expectedNickname);
-            softAssertions.assertThat(actualProfileImage).isEqualTo(expectedProfileImage);
+            softAssertions.assertThat(actualNickname)
+                    .isEqualTo(expectedNickname);
+            softAssertions.assertThat(actualProfileImage)
+                    .isEqualTo(expectedProfileImage);
         });
     }
 }

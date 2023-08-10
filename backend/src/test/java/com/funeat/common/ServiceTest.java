@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest
 @ExtendWith(DataClearExtension.class)
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public abstract class ServiceTest {
 

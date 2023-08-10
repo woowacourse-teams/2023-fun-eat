@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class RecipeSteps {
 
     public static ExtractableResponse<Response> 레시피_생성_요청(final RecipeCreateRequest recipeRequest,

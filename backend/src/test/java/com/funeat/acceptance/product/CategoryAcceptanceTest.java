@@ -24,31 +24,23 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
 
     @Nested
-    class getAllCategoriesByType_테스트 {
+    class getAllCategoriesByType_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 공통_상품_카테고리의_목록을_조회한다() {
+            // given
+            final var 간편식사 = 카테고리_간편식사_생성();
+            final var 즉석조리 = 카테고리_즉석조리_생성();
+            final var 과자류 = 카테고리_과자류_생성();
+            final var CU = 카테고리_CU_생성();
+            복수_카테고리_저장(간편식사, 즉석조리, 과자류, CU);
 
-            @Test
-            void 공통_상품_카테고리의_목록을_조회한다() {
-                // given
-                final var 간편식사 = 카테고리_간편식사_생성();
-                final var 즉석조리 = 카테고리_즉석조리_생성();
-                final var 과자류 = 카테고리_과자류_생성();
-                final var CU = 카테고리_CU_생성();
-                복수_카테고리_저장(간편식사, 즉석조리, 과자류, CU);
+            // when
+            final var response = 공통_상품_카테고리_목록_조회_요청();
 
-                // when
-                final var response = 공통_상품_카테고리_목록_조회_요청();
-
-                // then
-                STATUS_CODE를_검증한다(response, 정상_처리);
-                공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
-            }
-        }
-
-        @Nested
-        class 실패_테스트 {
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
         }
     }
 
@@ -57,9 +49,10 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         final var expected = categories.stream()
                 .map(CategoryResponse::toResponse)
                 .collect(Collectors.toList());
+        final var actual = response.jsonPath()
+                .getList("", CategoryResponse.class);
 
-        final var actual = response.jsonPath().getList("", CategoryResponse.class);
-
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }

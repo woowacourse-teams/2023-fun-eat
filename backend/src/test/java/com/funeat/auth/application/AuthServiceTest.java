@@ -12,30 +12,22 @@ import org.junit.jupiter.api.Test;
 public class AuthServiceTest extends ServiceTest {
 
     @Nested
-    class loginWithKakao_테스트 {
+    class loginWithKakao_성공_테스트 {
 
-        @Nested
-        class 성공_테스트 {
+        @Test
+        void 카카오_로그인을_하여_멤버_정보를_가져온다() {
+            // given
+            final var code = "member1";
+            final var member = 멤버_멤버1_생성();
+            final var expected = SignUserDto.of(true, member);
 
-            @Test
-            void 카카오_로그인을_하여_멤버_정보를_가져온다() {
-                // given
-                final var code = "member1";
-                final var member = 멤버_멤버1_생성();
-                final var expected = SignUserDto.of(true, member);
+            // when
+            final var actual = authService.loginWithKakao(code);
 
-                // when
-                final var actual = authService.loginWithKakao(code);
-
-                // then
-                assertThat(actual).usingRecursiveComparison()
-                        .ignoringFields("member.id")
-                        .isEqualTo(expected);
-            }
-        }
-
-        @Nested
-        class 실패_테스트 {
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .ignoringFields("member.id")
+                    .isEqualTo(expected);
         }
     }
 }
