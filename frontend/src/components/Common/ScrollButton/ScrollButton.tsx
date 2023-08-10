@@ -9,13 +9,13 @@ import useScroll from '@/hooks/useScroll';
 const ScrollButton = () => {
   const { scrollToTop } = useScroll();
   const [scrollTop, setScrollTop] = useState(false);
-  const mainElement = document.getElementById('main');
 
   const handleScroll = () => {
     setScrollTop(true);
   };
 
   useEffect(() => {
+    const mainElement = document.getElementById('main');
     if (mainElement) {
       scrollToTop(mainElement);
       setScrollTop(false);
