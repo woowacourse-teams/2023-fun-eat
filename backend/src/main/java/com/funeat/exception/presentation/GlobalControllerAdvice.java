@@ -62,11 +62,21 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<?> handleGlobalException(final GlobalException e, final HttpServletRequest request)
             throws JsonProcessingException {
-        log.warn("{} = {} code = {} message = {} info = {}", request.getMethod(), request.getRequestURI(),
-                e.getErrorCode().getCode(),
-                e.getErrorCode().getMessage(), objectMapper.writeValueAsString(e.getErrorCode().getInfo()));
+        final String exceptionSource = getExceptionSource(e);
+        log.warn("source = {} , {} = {} code = {} message = {} info = {}", exceptionSource, request.getMethod(),
+                request.getRequestURI(), e.getErrorCode().getCode(), e.getErrorCode().getMessage(),
+                objectMapper.writeValueAsString(e.getErrorCode().getInfo()));
 
-        return ResponseEntity.status(e.getStatus()).body(e.getErrorCode().getMessage());
+        ErrorCode<?> errorCode = new ErrorCode<>(e.getErrorCode().getCode(), e.getMessage());
+        return ResponseEntity.status(e.getStatus()).body(errorCode);
+    }
+
+    private String getExceptionSource(final Exception e) {
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        if (stackTrace.length > 0) {
+            return stackTrace[0].toString();
+        }
+        return "Unknown location";
     }
 
     @ExceptionHandler(Exception.class)
