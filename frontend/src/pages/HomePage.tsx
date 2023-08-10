@@ -8,7 +8,6 @@ import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/product';
-import { useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
   const { categoryIds } = useCategoryContext();
@@ -18,8 +17,6 @@ const HomePage = () => {
 
   const product = productListResponse?.pages.flatMap((page) => page.products);
   const pbProduct = pbPRoductListResponse?.pages.flatMap((page) => page.products);
-
-  const { data: reviewRankingResponse } = useReviewRanking();
 
   return (
     <>
@@ -59,7 +56,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList reviewRankings={reviewRankingResponse?.reviews ?? []} />
+        <ReviewRankingList />
       </section>
     </>
   );

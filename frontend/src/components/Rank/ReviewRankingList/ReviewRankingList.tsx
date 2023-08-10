@@ -1,17 +1,20 @@
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
-import type { ReviewRanking } from '@/types/ranking';
+import { useReviewRankingQuery } from '@/hooks/queries/rank';
 
-interface ReviewRankingListProps {
-  reviewRankings: ReviewRanking[];
-}
+const ReviewRankingList = () => {
+  const location = useLocation();
+  const isRootPath = location.pathname === '/';
 
-const ReviewRankingList = ({ reviewRankings }: ReviewRankingListProps) => {
+  const { data: reviewRankings } = useReviewRankingQuery();
+  const reviewsToDisplay = isRootPath ? reviewRankings?.reviews.slice(0, 3) : reviewRankings?.reviews;
+
   return (
     <ReviewRankingListContainer>
-      {reviewRankings.map((reviewRanking) => (
+      {reviewsToDisplay?.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>
