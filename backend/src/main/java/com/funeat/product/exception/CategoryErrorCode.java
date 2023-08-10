@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum CategoryErrorCode {
 
-    CATEGORY_NOF_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 카테고리입니다. 카테고리 id를 확인하세요.", "2001"),
+    CATEGORY_NOF_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다. 카테고리 id를 확인하세요.", "2001"),
     ;
 
     private final HttpStatus status;
