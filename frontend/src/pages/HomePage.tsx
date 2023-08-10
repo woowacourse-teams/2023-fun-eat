@@ -6,16 +6,8 @@ import { CategoryMenu, SvgIcon } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
-import { useCategoryContext } from '@/hooks/context';
-import { useInfiniteProductsQuery } from '@/hooks/product';
 
 const HomePage = () => {
-  const { categoryIds } = useCategoryContext();
-
-  const { data: pbPRoductListResponse } = useInfiniteProductsQuery(categoryIds.store);
-
-  const pbProduct = pbPRoductListResponse?.pages.flatMap((page) => page.products);
-
   return (
     <>
       <section>
@@ -38,7 +30,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList productList={pbProduct?.slice(0, 10) ?? []} />
+        <PBProductList />
       </section>
       <Spacing size={36} />
       <section>

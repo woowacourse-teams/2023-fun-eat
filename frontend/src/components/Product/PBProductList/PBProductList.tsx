@@ -1,20 +1,26 @@
 import { Link } from '@fun-eat/design-system';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PBProductItem from '../PBProductItem/PBProductItem';
 
 import { PATH } from '@/constants/path';
-import type { Product } from '@/types/product';
+import { useCategoryContext } from '@/hooks/context';
+import { useInfiniteProductsQuery } from '@/hooks/product';
 
-interface PBProductListProps {
-  productList: Product[];
-}
+const PBProductList = () => {
+  const location = useLocation();
+  const isRootPath = location.pathname === '/';
 
-const PBProductList = ({ productList }: PBProductListProps) => {
+  const { categoryIds } = useCategoryContext();
+
+  const { data: pbPRoductListResponse } = useInfiniteProductsQuery(categoryIds.store);
+  const pbProductList = pbPRoductListResponse?.pages.flatMap((page) => page.products);
+  const pbProductsToDisplay = isRootPath ? pbProductList?.slice(0, 10) : pbProductList;
+
   return (
     <PBProductListContainer>
-      {productList.map((pbProduct) => (
+      {pbProductsToDisplay?.map((pbProduct) => (
         <li key={pbProduct.id}>
           <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
             <PBProductItem pbProduct={pbProduct} />
