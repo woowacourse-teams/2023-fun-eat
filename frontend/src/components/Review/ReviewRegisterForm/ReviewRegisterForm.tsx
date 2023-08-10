@@ -1,4 +1,5 @@
 import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import type { RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
@@ -7,17 +8,11 @@ import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
-import { productApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { REVIEW_SORT_OPTIONS } from '@/constants';
-import {
-  useProductReviewContext,
-  useProductReviewPageContext,
-  useReviewFormActionContext,
-  useReviewFormValueContext,
-} from '@/hooks/context';
-import { useReviewRegisterForm, useReviewImageUploader, useFormData } from '@/hooks/review';
+import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
+import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
+import useScroll from '@/hooks/useScroll';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -26,19 +21,19 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
+  targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const { setProductReviews } = useProductReviewContext();
-  const { resetPage } = useProductReviewPageContext();
+  const { scrollToPosition } = useScroll();
 
-  const { request } = useReviewRegisterForm(product.id);
+  const { mutate } = useReviewRegisterFormMutation(product.id);
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
@@ -55,22 +50,13 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await request(formData);
-
-    const reviewResponse = await productApi.get({
-      params: `/${product.id}/reviews`,
-      queries: `?sort=${REVIEW_SORT_OPTIONS[0].value}&page=0`,
-      credentials: true,
-    });
-    const { reviews } = await reviewResponse.json();
-
-    setProductReviews(reviews);
-    resetPage();
+    await mutate(formData);
 
     setReviewPreviewImage('');
     resetReviewFormValue();
 
     closeReviewDialog();
+    scrollToPosition(targetRef);
   };
 
   return (

@@ -17,16 +17,18 @@ interface ProductListProps {
 
 const ProductList = ({ category, productList }: ProductListProps, ref: ForwardedRef<HTMLDivElement>) => {
   return (
-    <ProductListContainer>
-      {productList.map((product) => (
-        <li key={product.id}>
-          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
-            <ProductItem product={product} />
-          </Link>
-        </li>
-      ))}
+    <>
+      <ProductListContainer>
+        {productList.map((product) => (
+          <li key={product.id}>
+            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
+              <ProductItem product={product} />
+            </Link>
+          </li>
+        ))}
+      </ProductListContainer>
       <div ref={ref} aria-hidden />
-    </ProductListContainer>
+    </>
   );
 };
 export default forwardRef(ProductList);

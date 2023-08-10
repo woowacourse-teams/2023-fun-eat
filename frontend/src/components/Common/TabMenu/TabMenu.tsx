@@ -1,12 +1,13 @@
 import { Button } from '@fun-eat/design-system';
-import { useState } from 'react';
+import type { ForwardedRef } from 'react';
+import { forwardRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface TabMenuProps {
   tabMenus: string[];
 }
 
-const TabMenu = ({ tabMenus }: TabMenuProps) => {
+const TabMenu = ({ tabMenus }: TabMenuProps, ref: ForwardedRef<HTMLUListElement>) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const selectTabMenu = (selectedIndex: number) => {
@@ -14,7 +15,7 @@ const TabMenu = ({ tabMenus }: TabMenuProps) => {
   };
 
   return (
-    <TabMenuContainer>
+    <TabMenuContainer ref={ref}>
       {tabMenus.map((menu, index) => {
         const isSelected = selectedTab === index;
         return (
@@ -37,7 +38,7 @@ const TabMenu = ({ tabMenus }: TabMenuProps) => {
   );
 };
 
-export default TabMenu;
+export default forwardRef(TabMenu);
 
 const TabMenuContainer = styled.ul`
   display: flex;

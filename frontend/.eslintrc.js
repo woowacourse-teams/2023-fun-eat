@@ -21,6 +21,18 @@ module.exports = {
         sourceType: 'script',
       },
     },
+    {
+      env: {
+        jest: true,
+      },
+      files: ['__tests__/**/*.{ts,tsx}'],
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
+      },
+    },
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -67,6 +79,10 @@ module.exports = {
             group: 'external',
           },
           {
+            pattern: '@tanstack/**',
+            group: 'external',
+          },
+          {
             pattern: '@*/**',
             group: 'unknown',
           },
@@ -85,6 +101,7 @@ module.exports = {
     ],
     'import/no-unresolved': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/ban-types': 'off',
   },
   settings: {
     'import/resolver': {

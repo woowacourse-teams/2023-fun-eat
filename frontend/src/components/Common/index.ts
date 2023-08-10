@@ -8,3 +8,5 @@ export { default as SvgIcon } from './Svg/SvgIcon';
 export { default as TabMenu } from './TabMenu/TabMenu';
 export { default as TagList } from './TagList/TagList';
 export { default as Title } from './Title/Title';
+export { default as ScrollButton } from './ScrollButton/ScrollButton';
+export { default as Input } from './Input/Input';

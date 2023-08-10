@@ -4,3 +4,6 @@ dist
 .AppleDouble
 .LSOverride
 .env
+coverage
+test-results
+junit.xml
