@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ProductErrorCode {
 
-    PRODUCT_NOF_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품입니다. 상품 id를 확인하세요.", "3001"),
+    PRODUCT_NOF_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품입니다. 상품 id를 확인하세요.", "4001"),
     ;
 
     private final HttpStatus status;

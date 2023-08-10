@@ -8,6 +8,7 @@ import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewsResponse;
 import java.net.URI;
+import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -35,7 +36,7 @@ public class ReviewApiController implements ReviewController {
     public ResponseEntity<Void> writeReview(@PathVariable final Long productId,
                                             @AuthenticationPrincipal final LoginInfo loginInfo,
                                             @RequestPart(required = false) final MultipartFile image,
-                                            @RequestPart final ReviewCreateRequest reviewRequest) {
+                                            @RequestPart @Valid final ReviewCreateRequest reviewRequest) {
         reviewService.create(productId, loginInfo.getId(), image, reviewRequest);
 
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
@@ -44,7 +45,7 @@ public class ReviewApiController implements ReviewController {
     @PatchMapping("/api/products/{productId}/reviews/{reviewId}")
     public ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId,
                                                  @AuthenticationPrincipal LoginInfo loginInfo,
-                                                 @RequestBody ReviewFavoriteRequest request) {
+                                                 @RequestBody @Valid ReviewFavoriteRequest request) {
         reviewService.likeReview(reviewId, loginInfo.getId(), request);
 
         return ResponseEntity.noContent().build();
