@@ -1,4 +1,5 @@
 import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import type { RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
@@ -11,6 +12,7 @@ import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
+import useScroll from '@/hooks/useScroll';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -19,14 +21,17 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   product: ProductDetail;
+  targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
+
+  const { scrollToPosition } = useScroll();
 
   const { mutate } = useReviewRegisterFormMutation(product.id);
 
@@ -51,6 +56,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     resetReviewFormValue();
 
     closeReviewDialog();
+    scrollToPosition(targetRef);
   };
 
   return (

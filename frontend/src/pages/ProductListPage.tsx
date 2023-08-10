@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryMenu, SortButton, SortOptionList, Title } from '@/components/Common';
+import { CategoryMenu, SortButton, SortOptionList, Title, ScrollButton } from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
@@ -54,6 +54,7 @@ const ProductListPage = () => {
         </SortButtonWrapper>
         <ProductList ref={scrollRef} category={category} productList={products ?? []} />
       </section>
+      <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
