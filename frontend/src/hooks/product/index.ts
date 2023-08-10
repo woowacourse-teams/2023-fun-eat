@@ -1,4 +1,3 @@
-export { default as useCategoryProducts } from './useCategoryProducts';
 export { default as useProductReview } from './useProductReview';
 export { default as useProductDetail } from './useProductDetail';
 export { default as useInfiniteProductsQuery } from './useInfiniteProductsQuery';
