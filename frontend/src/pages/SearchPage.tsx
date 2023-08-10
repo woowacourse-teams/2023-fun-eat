@@ -1,7 +1,5 @@
 import { Button, Heading, Spacing } from '@fun-eat/design-system';
-import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SvgIcon, TabMenu } from '@/components/Common';
