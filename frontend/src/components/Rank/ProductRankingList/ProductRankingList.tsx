@@ -1,16 +1,19 @@
 import { Spacing } from '@fun-eat/design-system';
+import { useLocation } from 'react-router-dom';
 
 import { ProductOverviewItem } from '@/components/Product';
-import type { ProductRanking } from '@/types/ranking';
+import { useProductRankingQuery } from '@/hooks/queries/rank';
 
-interface ProductRankingListProps {
-  productRankings: ProductRanking[];
-}
+const ProductRankingList = () => {
+  const location = useLocation();
+  const isRootPath = location.pathname === '/';
 
-const ProductRankingList = ({ productRankings }: ProductRankingListProps) => {
+  const { data: productRankings } = useProductRankingQuery();
+  const productsToDisplay = isRootPath ? productRankings?.products.slice(0, 3) : productRankings?.products;
+
   return (
     <ul>
-      {productRankings.map(({ id, name, image }, index) => (
+      {productsToDisplay?.map(({ id, name, image }, index) => (
         <li key={id}>
           <ProductOverviewItem rank={index + 1} name={name} image={image} />
           <Spacing size={16} />
