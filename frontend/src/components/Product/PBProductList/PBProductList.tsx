@@ -1,5 +1,5 @@
 import { Link } from '@fun-eat/design-system';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PBProductItem from '../PBProductItem/PBProductItem';
@@ -7,16 +7,14 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
+import useDisplaySlice from '@/hooks/useDisplaySlice';
 
 const PBProductList = () => {
-  const location = useLocation();
-  const isRootPath = location.pathname === '/';
-
   const { categoryIds } = useCategoryContext();
 
   const { data: pbPRoductListResponse } = useInfiniteProductsQuery(categoryIds.store);
   const pbProductList = pbPRoductListResponse?.pages.flatMap((page) => page.products);
-  const pbProductsToDisplay = isRootPath ? pbProductList?.slice(0, 10) : pbProductList;
+  const pbProductsToDisplay = useDisplaySlice(PATH.HOME, pbProductList, 10);
 
   return (
     <PBProductListContainer>

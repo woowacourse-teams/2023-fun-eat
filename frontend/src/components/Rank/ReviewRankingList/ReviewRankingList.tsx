@@ -1,16 +1,14 @@
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
+import { PATH } from '@/constants/path';
 import { useReviewRankingQuery } from '@/hooks/queries/rank';
+import useDisplaySlice from '@/hooks/useDisplaySlice';
 
 const ReviewRankingList = () => {
-  const location = useLocation();
-  const isRootPath = location.pathname === '/';
-
   const { data: reviewRankings } = useReviewRankingQuery();
-  const reviewsToDisplay = isRootPath ? reviewRankings?.reviews.slice(0, 3) : reviewRankings?.reviews;
+  const reviewsToDisplay = useDisplaySlice(PATH.HOME, reviewRankings?.reviews);
 
   return (
     <ReviewRankingListContainer>
