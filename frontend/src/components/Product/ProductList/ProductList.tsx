@@ -1,37 +1,52 @@
 import { Link } from '@fun-eat/design-system';
-import type { ForwardedRef } from 'react';
-import { forwardRef } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useRef } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ProductItem from '../ProductItem/ProductItem';
 
+import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
+import { useCategoryContext } from '@/hooks/context';
+import { useInfiniteProductsQuery } from '@/hooks/product';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import useSortOption from '@/hooks/useSortOption';
 import type { CategoryVariant } from '@/types/common';
-import type { Product } from '@/types/product';
 
 interface ProductListProps {
   category: CategoryVariant;
-  productList: Product[];
 }
 
-const ProductList = ({ category, productList }: ProductListProps, ref: ForwardedRef<HTMLDivElement>) => {
+const ProductList = ({ category }: ProductListProps) => {
+  const location = useLocation();
+  const isRootPath = location.pathname === '/';
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { selectedOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
+
+  const { categoryIds } = useCategoryContext();
+
+  const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(categoryIds[category], selectedOption.value);
+  const productList = data?.pages.flatMap((page) => page.products);
+  const productsToDisplay = isRootPath ? productList?.slice(0, 2) : productList;
+
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+
   return (
-    <>
-      <ProductListContainer>
-        {productList.map((product) => (
-          <li key={product.id}>
-            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
-              <ProductItem product={product} />
-            </Link>
-          </li>
-        ))}
-      </ProductListContainer>
-      <div ref={ref} aria-hidden />
-    </>
+    <ProductListContainer>
+      {productsToDisplay?.map((product) => (
+        <li key={product.id}>
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
+            <ProductItem product={product} />
+          </Link>
+        </li>
+      ))}
+      <div ref={scrollRef} aria-hidden />
+    </ProductListContainer>
   );
 };
-export default forwardRef(ProductList);
+export default ProductList;
 
 const ProductListContainer = styled.ul`
   display: flex;

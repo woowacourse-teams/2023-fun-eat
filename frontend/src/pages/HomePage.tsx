@@ -12,10 +12,8 @@ import { useInfiniteProductsQuery } from '@/hooks/product';
 const HomePage = () => {
   const { categoryIds } = useCategoryContext();
 
-  const { data: productListResponse } = useInfiniteProductsQuery(categoryIds.food);
   const { data: pbPRoductListResponse } = useInfiniteProductsQuery(categoryIds.store);
 
-  const product = productListResponse?.pages.flatMap((page) => page.products);
   const pbProduct = pbPRoductListResponse?.pages.flatMap((page) => page.products);
 
   return (
@@ -27,7 +25,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
-        <ProductList category="food" productList={product?.slice(0, 2) ?? []} />
+        <ProductList category="food" />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteLink>
