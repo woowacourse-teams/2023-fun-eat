@@ -25,18 +25,24 @@ const SearchPage = () => {
         />
         {searchQuery && (
           <RecommendWrapper>
-            <RecommendList />
+            <RecommendList searchQuery={searchQuery} />
           </RecommendWrapper>
         )}
       </SearchSection>
       <Spacing size={20} />
       <TabMenu tabMenus={['상품', '꿀조합']} />
       <SearchResultSection>
-        <Heading as="h2" size="lg" weight="regular">
-          <MarkedText>&apos;담곰이&apos;</MarkedText>에 대한 검색결과입니다.
-        </Heading>
-        <Spacing size={20} />
-        <SearchedList />
+        {searchQuery ? (
+          <>
+            <Heading as="h2" size="lg" weight="regular">
+              <MarkedText>&apos;{searchQuery}&apos;</MarkedText>에 대한 검색결과입니다.
+            </Heading>
+            <Spacing size={20} />
+            <SearchedList searchQuery={searchQuery} />
+          </>
+        ) : (
+          <p>상품을 검색해보세요.</p>
+        )}
       </SearchResultSection>
     </>
   );
@@ -53,7 +59,12 @@ const RecommendWrapper = styled.div`
   top: 100%;
   left: 0;
   right: 0;
+  height: fit-content;
+  max-height: 150px;
+  padding: 10px 0;
   background-color: ${({ theme }) => theme.backgroundColors.default};
+  border: 1px solid ${({ theme }) => theme.borderColors.default};
+  overflow-y: auto;
 `;
 
 const SearchResultSection = styled.section`

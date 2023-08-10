@@ -4,15 +4,23 @@ import styled from 'styled-components';
 
 import { ProductItem } from '@/components/Product';
 import { PATH } from '@/constants/path';
-import mockProducts from '@/mocks/data/products.json';
+import { useSearchedProductsQuery } from '@/hooks/queries/search';
 
-const SearchedList = () => {
-  const { products } = mockProducts;
+interface SearchedListProps {
+  searchQuery: string;
+}
+
+const SearchedList = ({ searchQuery }: SearchedListProps) => {
+  const { data: searchResponse } = useSearchedProductsQuery(searchQuery);
+
+  if (!searchResponse || searchResponse.products.length === 0) {
+    return <div>검색한 상품을 찾을 수 없습니다.</div>;
+  }
 
   return (
     <>
       <SearchedListContainer>
-        {products.map((product) => (
+        {searchResponse.products.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${product.id}`}>
               <ProductItem product={product} />
@@ -35,3 +43,6 @@ const SearchedListContainer = styled.ul`
     border-bottom: 1px solid ${({ theme }) => theme.borderColors.disabled};
   }
 `;
+function useProductsQuery(searchQuery: string): { data: any } {
+  throw new Error('Function not implemented.');
+}
