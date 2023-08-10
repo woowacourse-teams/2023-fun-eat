@@ -10,19 +10,13 @@ const defaultOptions = {
 const useIntersectionObserver = <T extends HTMLElement>(
   callback: () => void,
   targetRef: RefObject<T>,
-  isLastPage: boolean | undefined
+  hasNextPage: boolean | undefined
 ) => {
-  let isInitial = true;
-
   const observer = useRef(
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (isInitial) {
-            isInitial = false;
-          } else {
-            callback();
-          }
+          callback();
         }
       });
     }, defaultOptions)
@@ -41,7 +35,7 @@ const useIntersectionObserver = <T extends HTMLElement>(
       return;
     }
 
-    if (isLastPage) {
+    if (!hasNextPage) {
       unobserve(targetRef.current);
       return;
     }
@@ -51,7 +45,7 @@ const useIntersectionObserver = <T extends HTMLElement>(
     return () => {
       observer.current.disconnect();
     };
-  }, [targetRef.current]);
+  }, [targetRef.current, hasNextPage]);
 };
 
 export default useIntersectionObserver;
