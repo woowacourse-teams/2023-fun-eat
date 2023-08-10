@@ -1,8 +1,10 @@
-import { Text } from '@fun-eat/design-system';
+import { Link, Text } from '@fun-eat/design-system';
 import { useRef } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { MarkedText } from '@/components/Common';
+import { PATH } from '@/constants/path';
 import { useSearchedProductsQuery } from '@/hooks/queries/search';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
@@ -19,21 +21,25 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
     return null;
   }
 
-  const products = searchResponse.pages.flatMap((page) => page.products);
+  const products = searchResponse.pages
+    .flatMap((page) => page.products)
+    .map((product) => ({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+    }));
 
   if (products.length === 0) {
     return <ErrorText>검색어에 해당 하는 상품이 없습니다.</ErrorText>;
   }
 
-  const productNames = products.map((product) => product.name);
-
   return (
     <RecommendListContainer>
-      {productNames.map((recommend) => (
-        <li key={recommend}>
-          <RecommendText>
-            <MarkedText text={recommend} mark={searchQuery} />
-          </RecommendText>
+      {products.map((product) => (
+        <li key={product.id}>
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${product.id}`} block>
+            <MarkedText text={product.name} mark={searchQuery} />
+          </Link>
         </li>
       ))}
     </RecommendListContainer>
@@ -50,10 +56,6 @@ const RecommendListContainer = styled.ul`
     line-height: 36px;
     padding: 0 10px;
   }
-`;
-
-const RecommendText = styled(Text)`
-  line-height: 36px;
 `;
 
 const ErrorText = styled(Text)`
