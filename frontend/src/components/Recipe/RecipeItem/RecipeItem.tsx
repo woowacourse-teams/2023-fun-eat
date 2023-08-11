@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import type { Recipe } from '@/types/recipe';
+import { getFormattedDate } from '@/utils/date';
 
 interface RecipeItemProps {
   recipe: Recipe;
@@ -20,7 +21,7 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
       </ImageWrapper>
       <RecipeInfoWrapper>
         <Text color={theme.textColors.sub}>
-          {author.nickname} 님 | {createdAt}
+          {author.nickname} 님 | {getFormattedDate(createdAt)}
         </Text>
         <Text size="xl" weight="bold">
           {title}
