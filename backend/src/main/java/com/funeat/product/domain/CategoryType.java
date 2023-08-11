@@ -10,7 +10,7 @@ public enum CategoryType {
 
     public static CategoryType findCategoryType(final String type) {
         return Arrays.stream(values())
-                .filter(it -> it.name().equals(type))
+                .filter(it -> it.name().equals(type.toUpperCase()))
                 .findFirst()
                 .orElseThrow(() -> new CategoryTypeNotFoundException(CATEGORY_TYPE_NOF_FOUND, type));
     }
