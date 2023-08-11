@@ -7,14 +7,18 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
-import useDisplaySlice from '@/hooks/useDisplaySlice';
+import displaySlice from '@/utils/displaySlice';
 
-const PBProductList = () => {
+interface PBProductListProps {
+  isHome?: boolean;
+}
+
+const PBProductList = ({ isHome }: PBProductListProps) => {
   const { categoryIds } = useCategoryContext();
 
   const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
   const pbProductList = pbProductListResponse?.pages.flatMap((page) => page.products);
-  const pbProductsToDisplay = useDisplaySlice(PATH.HOME, pbProductList, 10);
+  const pbProductsToDisplay = displaySlice(isHome, pbProductList, 10);
 
   return (
     <PBProductListContainer>

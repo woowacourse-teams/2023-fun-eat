@@ -6,9 +6,6 @@ import mockProductRankingList from '../../../mocks/data/productRankingList.json'
 const meta: Meta<typeof ProductRankingList> = {
   title: 'product/ProductRankingList',
   component: ProductRankingList,
-  args: {
-    productRankings: mockProductRankingList.products,
-  },
 };
 
 export default meta;

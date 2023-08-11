@@ -2,13 +2,16 @@ import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
-import { PATH } from '@/constants/path';
 import { useReviewRankingQuery } from '@/hooks/queries/rank';
-import useDisplaySlice from '@/hooks/useDisplaySlice';
+import useDisplaySlice from '@/utils/displaySlice';
 
-const ReviewRankingList = () => {
+interface ReviewRankingListProps {
+  isHome?: boolean;
+}
+
+const ReviewRankingList = ({ isHome }: ReviewRankingListProps) => {
   const { data: reviewRankings } = useReviewRankingQuery();
-  const reviewsToDisplay = useDisplaySlice(PATH.HOME, reviewRankings?.reviews);
+  const reviewsToDisplay = useDisplaySlice(isHome, reviewRankings?.reviews);
 
   return (
     <ReviewRankingListContainer>

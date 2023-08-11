@@ -1,13 +1,16 @@
 import { Spacing } from '@fun-eat/design-system';
 
 import { ProductOverviewItem } from '@/components/Product';
-import { PATH } from '@/constants/path';
 import { useProductRankingQuery } from '@/hooks/queries/rank';
-import useDisplaySlice from '@/hooks/useDisplaySlice';
+import displaySlice from '@/utils/displaySlice';
 
-const ProductRankingList = () => {
+interface ProductRankingListProps {
+  isHome?: boolean;
+}
+
+const ProductRankingList = ({ isHome }: ProductRankingListProps) => {
   const { data: productRankings } = useProductRankingQuery();
-  const productsToDisplay = useDisplaySlice(PATH.HOME, productRankings?.products, 3);
+  const productsToDisplay = displaySlice(isHome, productRankings?.products, 3);
 
   return (
     <ul>

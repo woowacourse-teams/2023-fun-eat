@@ -17,7 +17,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
-        <ProductList category="food" />
+        <ProductList category="food" isHome />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteLink>
@@ -30,7 +30,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList />
+        <PBProductList isHome />
       </section>
       <Spacing size={36} />
       <section>
@@ -38,7 +38,7 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ProductRankingList />
+        <ProductRankingList isHome />
       </section>
       <Spacing size={36} />
       <section>
@@ -46,7 +46,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList />
+        <ReviewRankingList isHome />
       </section>
       <ScrollButton />
     </>
