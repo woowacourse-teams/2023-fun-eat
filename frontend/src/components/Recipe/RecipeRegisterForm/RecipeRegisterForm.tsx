@@ -8,7 +8,7 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import useImageUploader from '@/hooks/useImageUploader';
+import { useImageUploader } from '@/hooks/common';
 import type { RecipeUsedProduct } from '@/types/recipe';
 
 const RecipeRegisterForm = () => {
