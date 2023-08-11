@@ -16,6 +16,7 @@ public class CommonSteps {
     public static final HttpStatus 리다이렉션_영구_이동 = HttpStatus.FOUND;
     public static final HttpStatus 승인되지_않음 = HttpStatus.UNAUTHORIZED;
     public static final HttpStatus 잘못된_요청 = HttpStatus.BAD_REQUEST;
+    public static final HttpStatus 찾을수_없음 = HttpStatus.NOT_FOUND;
 
     public static Long LOCATION_헤더에서_ID_추출(final ExtractableResponse<Response> response) {
         return Long.parseLong(response.header(LOCATION).split("/")[2]);

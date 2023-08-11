@@ -3,6 +3,7 @@ package com.funeat.acceptance.product;
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
@@ -38,7 +39,9 @@ import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생
 import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOF_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.product.domain.Product;
@@ -428,6 +431,31 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 페이지를_검증한다(response, pageDto);
                 카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
             }
+        }
+    }
+
+    @Nested
+    class getAllProductsInCategory_실패_테스트 {
+
+        @Test
+        void 상품을_정렬할때_카테고리가_존재하지_않으면_예외가_발생한다() {
+            // given
+            final var notExistCategoryId = 99999L;
+
+            // when
+            final var response = 카테고리별_상품_목록_조회_요청(notExistCategoryId, "price", "desc", 0);
+
+            // then
+            final var expectedCode = CATEGORY_NOF_FOUND.getCode();
+            final var expectedMessage = CATEGORY_NOF_FOUND.getMessage();
+
+            STATUS_CODE를_검증한다(response, 찾을수_없음);
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(response.jsonPath().getString("code"))
+                        .isEqualTo(expectedCode);
+                softAssertions.assertThat(response.jsonPath().getString("message"))
+                        .isEqualTo(expectedMessage);
+            });
         }
     }
 
