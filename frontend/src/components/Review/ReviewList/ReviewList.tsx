@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import ReviewItem from '../ReviewItem/ReviewItem';
 
 import { PATH } from '@/constants/path';
-import { useInfiniteProductReviewsQuery } from '@/hooks/product';
+import { useInfiniteProductReviewsQuery } from '@/hooks/queries/product';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import type { SortOption } from '@/types/common';
 

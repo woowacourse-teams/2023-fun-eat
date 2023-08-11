@@ -6,22 +6,8 @@ import { CategoryMenu, SvgIcon, ScrollButton } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
-import { useCategoryContext } from '@/hooks/context';
-import { useCategory, useCategoryProducts } from '@/hooks/product';
-import { useProductRanking, useReviewRanking } from '@/hooks/rank';
 
 const HomePage = () => {
-  const { categoryIds } = useCategoryContext();
-
-  const { data: foodCategory } = useCategory('food');
-  const { data: storeCategory } = useCategory('store');
-
-  const { data: productListResponse } = useCategoryProducts(categoryIds.food);
-  const { data: pbPRoductListResponse } = useCategoryProducts(categoryIds.store);
-
-  const { data: productRankingResponse } = useProductRanking();
-  const { data: reviewRankingResponse } = useReviewRanking();
-
   return (
     <>
       <section>
@@ -29,9 +15,9 @@ const HomePage = () => {
           공통 상품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={foodCategory ?? []} menuVariant="food" />
+        <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
-        <ProductList category="food" productList={productListResponse?.products.slice(0, 2) ?? []} />
+        <ProductList category="food" isHome />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteLink>
@@ -42,9 +28,9 @@ const HomePage = () => {
           편의점 특산품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuList={storeCategory ?? []} menuVariant="store" />
+        <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList productList={pbPRoductListResponse?.products.slice(0, 3) ?? []} />
+        <PBProductList isHome />
       </section>
       <Spacing size={36} />
       <section>
@@ -52,7 +38,7 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ProductRankingList productRankings={productRankingResponse?.products ?? []} />
+        <ProductRankingList isHome />
       </section>
       <Spacing size={36} />
       <section>
@@ -60,7 +46,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList reviewRankings={reviewRankingResponse?.reviews ?? []} />
+        <ReviewRankingList isHome />
       </section>
       <ScrollButton />
     </>

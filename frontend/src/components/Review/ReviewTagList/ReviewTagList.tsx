@@ -5,14 +5,15 @@ import ReviewTagItem from '../ReviewTagItem/ReviewTagItem';
 
 import { SvgIcon } from '@/components/Common';
 import { MIN_DISPLAYED_TAGS_LENGTH, TAG_TITLE } from '@/constants';
-import { useDisplayTag, useReviewTags } from '@/hooks/review';
+import { useReviewTagsQuery } from '@/hooks/queries/review';
+import { useDisplayTag } from '@/hooks/review';
 
 interface ReviewTagListProps {
   selectedTags: number[];
 }
 
 const ReviewTagList = ({ selectedTags }: ReviewTagListProps) => {
-  const { data: tagsData } = useReviewTags();
+  const { data: tagsData } = useReviewTagsQuery();
   const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData ?? [], MIN_DISPLAYED_TAGS_LENGTH);
 
   if (!tagsData) {

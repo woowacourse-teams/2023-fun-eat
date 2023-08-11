@@ -2,16 +2,20 @@ import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
-import type { ReviewRanking } from '@/types/ranking';
+import { useReviewRankingQuery } from '@/hooks/queries/rank';
+import useDisplaySlice from '@/utils/displaySlice';
 
 interface ReviewRankingListProps {
-  reviewRankings: ReviewRanking[];
+  isHome?: boolean;
 }
 
-const ReviewRankingList = ({ reviewRankings }: ReviewRankingListProps) => {
+const ReviewRankingList = ({ isHome }: ReviewRankingListProps) => {
+  const { data: reviewRankings } = useReviewRankingQuery();
+  const reviewsToDisplay = useDisplaySlice(isHome, reviewRankings?.reviews);
+
   return (
     <ReviewRankingListContainer>
-      {reviewRankings.map((reviewRanking) => (
+      {reviewsToDisplay?.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>
