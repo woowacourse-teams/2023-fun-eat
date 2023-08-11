@@ -1,9 +1,8 @@
-import { Spacing, Text } from '@fun-eat/design-system';
-import styled, { useTheme } from 'styled-components';
+import { Spacing, Text, useTheme } from '@fun-eat/design-system';
+import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
-import { SectionTitle, SvgIcon } from '@/components/Common';
-import TagList from '@/components/Common/TagList/TagList';
+import { SectionTitle, SvgIcon, TagList } from '@/components/Common';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
 interface ProductDetailItemProps {
