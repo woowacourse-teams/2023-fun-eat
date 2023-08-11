@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import PBProductItem from '../PBProductItem/PBProductItem';
 
-import MoreButton from '@/components/Common/MoreButton/MoreButton';
+import { MoreButton } from '@/components/Common';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
