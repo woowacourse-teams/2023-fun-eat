@@ -1,21 +1,21 @@
 import { Badge, Button, useTheme } from '@fun-eat/design-system';
-import styled from 'styled-components';
+import type { RuleSet } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { useReviewFormActionContext } from '@/hooks/context';
-import { convertTagColor } from '@/utils/converTagColor';
+
+type TagVariants = 'TASTE' | 'PRICE' | 'ETC';
 
 interface ReviewTagItemProps {
   id: number;
   name: string;
-  variant: string;
+  variant: TagVariants;
   isSelected: boolean;
 }
 
 const ReviewTagItem = ({ id, name, variant, isSelected }: ReviewTagItemProps) => {
   const { handleReviewFormValue } = useReviewFormActionContext();
   const theme = useTheme();
-
-  const tagColor = convertTagColor(variant);
 
   const handleReviewTag = () => {
     handleReviewFormValue({ target: 'tagIds', value: id, isSelected });
@@ -24,8 +24,8 @@ const ReviewTagItem = ({ id, name, variant, isSelected }: ReviewTagItemProps) =>
   return (
     <Button type="button" weight="bold" variant="transparent" onClick={handleReviewTag}>
       <TagBadge
+        variant={variant}
         isSelected={isSelected}
-        tagColor={tagColor}
         size="sm"
         color="transparent"
         textColor={theme.textColors.default}
@@ -41,8 +41,26 @@ const ReviewTagItem = ({ id, name, variant, isSelected }: ReviewTagItemProps) =>
 
 export default ReviewTagItem;
 
-const TagBadge = styled(Badge)<{ tagColor: string; isSelected: boolean }>`
-  border: 2px solid ${({ tagColor }) => tagColor};
-  background: ${({ tagColor, isSelected }) => isSelected && tagColor};
+type TagStyleProps = Pick<ReviewTagItemProps, 'variant' | 'isSelected'>;
+
+type TagVariantStyles = Record<TagVariants, (isSelected: boolean) => RuleSet<object>>;
+
+const tagColorStyles: TagVariantStyles = {
+  TASTE: (isSelected) => css`
+    border: 2px solid ${({ theme }) => theme.colors.tertiary};
+    background: ${({ theme }) => isSelected && theme.colors.tertiary};
+  `,
+  PRICE: (isSelected) => css`
+    border: 2px solid ${({ theme }) => theme.colors.secondary};
+    background: ${({ theme }) => isSelected && theme.colors.secondary};
+  `,
+  ETC: (isSelected) => css`
+    border: 2px solid ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => isSelected && theme.colors.primary};
+  `,
+};
+
+const TagBadge = styled(Badge)<TagStyleProps>`
+  ${({ variant, isSelected }) => tagColorStyles[variant ?? 'ETC'](isSelected)};
   white-space: nowrap;
 `;
