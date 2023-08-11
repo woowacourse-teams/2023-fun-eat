@@ -32,16 +32,18 @@ const ProductList = ({ category }: ProductListProps) => {
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
   return (
-    <ProductListContainer>
-      {productsToDisplay?.map((product) => (
-        <li key={product.id}>
-          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
-            <ProductItem product={product} />
-          </Link>
-        </li>
-      ))}
+    <>
+      <ProductListContainer>
+        {productsToDisplay?.map((product) => (
+          <li key={product.id}>
+            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
+              <ProductItem product={product} />
+            </Link>
+          </li>
+        ))}
+      </ProductListContainer>
       <div ref={scrollRef} aria-hidden />
-    </ProductListContainer>
+    </>
   );
 };
 export default ProductList;
