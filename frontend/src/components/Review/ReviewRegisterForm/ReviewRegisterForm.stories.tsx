@@ -9,7 +9,7 @@ const meta: Meta<typeof ReviewRegisterForm> = {
   title: 'review/ReviewRegisterForm',
   component: ReviewRegisterForm,
   args: {
-    product: productDetail,
+    productId: productDetail.id,
   },
   decorators: [
     (Story) => (

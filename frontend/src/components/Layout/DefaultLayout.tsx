@@ -8,7 +8,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
   return (
     <DefaultLayoutContainer>
       <Header />
-      <MainWrapper>{children}</MainWrapper>
+      <MainWrapper id="main">{children}</MainWrapper>
       <NavigationBar />
     </DefaultLayoutContainer>
   );

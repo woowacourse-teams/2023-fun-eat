@@ -5,8 +5,8 @@ import PreviewImage from '@/assets/characters.svg';
 
 interface ProductOverviewItemProps {
   rank?: number;
-  name: string;
-  image: string;
+  name?: string;
+  image?: string;
 }
 
 const ProductOverviewItem = ({ rank, name, image }: ProductOverviewItemProps) => {

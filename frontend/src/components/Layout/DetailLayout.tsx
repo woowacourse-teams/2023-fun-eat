@@ -7,7 +7,7 @@ const DetailLayout = ({ children }: PropsWithChildren) => {
   return (
     <DetailLayoutContainer>
       <Header />
-      <MainWrapper>{children}</MainWrapper>
+      <MainWrapper id="main">{children}</MainWrapper>
     </DetailLayoutContainer>
   );
 };
