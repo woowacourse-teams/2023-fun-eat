@@ -1,7 +1,8 @@
-import { BottomSheet, useBottomSheet } from '@fun-eat/design-system';
+import { BottomSheet, Heading, Link, useBottomSheet } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ScrollButton, SortButton, SortOptionList } from '@/components/Common';
+import { ScrollButton, SortButton, SortOptionList, SvgIcon } from '@/components/Common';
 import { RecipeList } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
 import { useSortOption } from '@/hooks/common';
@@ -12,6 +13,14 @@ const RecipePage = () => {
 
   return (
     <>
+      <Title size="xl" weight="bold">
+        🍯 꿀조합
+      </Title>
+      <LinkWrapper>
+        <Link as={RouterLink} to="/search">
+          <SvgIcon variant="search" width={24} height={24} />
+        </Link>
+      </LinkWrapper>
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
       </SortButtonWrapper>
@@ -30,6 +39,16 @@ const RecipePage = () => {
 };
 
 export default RecipePage;
+
+const Title = styled(Heading)`
+  font-size: 24px;
+`;
+
+const LinkWrapper = styled.div`
+  position: absolute;
+  top: 24px;
+  right: 20px;
+`;
 
 const SortButtonWrapper = styled.div`
   display: flex;
