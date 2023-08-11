@@ -29,7 +29,7 @@ const RecipeUsedProducts = ({ usedProducts, removeUsedProducts }: RecipeUsedProd
               <li key={id}>
                 <Badge color={theme.colors.secondary} textColor={theme.textColors.default}>
                   {name}
-                  <RemoveButton variant="transparent" onClick={() => removeUsedProducts(id)}>
+                  <RemoveButton type="button" variant="transparent" onClick={() => removeUsedProducts(id)}>
                     <SvgIcon variant="close" width={8} height={8} />
                   </RemoveButton>
                 </Badge>
