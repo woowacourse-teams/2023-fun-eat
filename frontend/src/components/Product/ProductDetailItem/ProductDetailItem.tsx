@@ -1,10 +1,8 @@
 import { Spacing, Text } from '@fun-eat/design-system';
 import styled, { useTheme } from 'styled-components';
 
-import ProductTitle from '../ProductTitle/ProductTitle';
-
 import PreviewImage from '@/assets/characters.svg';
-import { SvgIcon } from '@/components/Common';
+import { SectionTitle, SvgIcon } from '@/components/Common';
 import TagList from '@/components/Common/TagList/TagList';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
@@ -25,7 +23,7 @@ const ProductDetailItem = ({ productId }: ProductDetailItemProps) => {
 
   return (
     <>
-      <ProductTitle name={name} bookmark={bookmark} />
+      <SectionTitle name={name} bookmark={bookmark} />
       <Spacing size={36} />
       <ProductDetailContainer>
         {image ? <img src={image} width={300} alt={name} /> : <PreviewImage width={300} />}
