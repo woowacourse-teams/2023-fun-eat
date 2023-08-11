@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class RecipeSteps {
 
-    public static ExtractableResponse<Response> 레시피_추가_요청(final RecipeCreateRequest recipeRequest,
-                                                          final List<MultiPartSpecification> imageList,
+    public static ExtractableResponse<Response> 레시피_생성_요청(final RecipeCreateRequest recipeRequest,
+                                                          final List<MultiPartSpecification> images,
                                                           final String loginCookie) {
         final var request = given()
                 .cookie("JSESSIONID", loginCookie);
-        imageList.forEach(request::multiPart);
+        images.forEach(request::multiPart);
         return request
                 .multiPart("recipeRequest", recipeRequest, "application/json")
                 .when()
@@ -30,7 +31,7 @@ public class RecipeSteps {
     public static Long 레시피_추가_요청하고_id_반환(final RecipeCreateRequest recipeRequest,
                                          final List<MultiPartSpecification> imageList,
                                          final String loginCookie) {
-        final var response = 레시피_추가_요청(recipeRequest, imageList, loginCookie);
+        final var response = 레시피_생성_요청(recipeRequest, imageList, loginCookie);
         return Long.parseLong(response.header("Location").split("/")[3]);
     }
 

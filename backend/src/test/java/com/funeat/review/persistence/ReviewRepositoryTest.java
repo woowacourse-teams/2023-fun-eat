@@ -1,124 +1,134 @@
 package com.funeat.review.persistence;
 
+import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매O_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.funeat.common.DataCleaner;
-import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Member;
-import com.funeat.member.persistence.MemberRepository;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.CategoryType;
-import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductRepository;
-import com.funeat.review.domain.Review;
+import com.funeat.common.RepositoryTest;
 import java.util.List;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
-@DataJpaTest
-@Import(DataCleaner.class)
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-class ReviewRepositoryTest {
+class ReviewRepositoryTest extends RepositoryTest {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    @Nested
+    class countByProduct_성공_테스트 {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+        @Test
+        void 상품의_리뷰_수를_반환한다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-    @Autowired
-    private ProductRepository productRepository;
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2);
 
-    @Test
-    void 상품에_달린_리뷰의_숫자를_반환한다() {
-        // given
-        Member member = memberRepository.save(new Member("test", "image.png", "1"));
-        Category category = categoryRepository.save(new Category("간편식사", CategoryType.FOOD));
-        Product product1 = productRepository.save(new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", category));
-        Product product2 = productRepository.save(new Product("라면", 2000L, "image.png", "맛있는 라면", category));
+            final var review1_1 = 리뷰_이미지test4_평점4점_재구매O_생성(member1, product1, 0L);
+            final var review1_2 = 리뷰_이미지test3_평점3점_재구매X_생성(member2, product1, 0L);
+            final var review1_3 = 리뷰_이미지test4_평점4점_재구매O_생성(member3, product1, 0L);
+            final var review2_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product2, 0L);
+            복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1);
 
-        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 최고!!", true));
-        reviewRepository.save(new Review(member, product1, "review.png", 3L, "이 삼각김밥은 별로", false));
-        reviewRepository.save(new Review(member, product1, "review.png", 4L, "이 삼각김밥은 쏘쏘", true));
-        reviewRepository.save(new Review(member, product2, "review.png", 3L, "이 라면은 맛있다", true));
+            // when
+            final var actual1 = reviewRepository.countByProduct(product1);
+            final var actual2 = reviewRepository.countByProduct(product2);
 
-        // when
-        assertThat(reviewRepository.countByProduct(product1)).isEqualTo(3);
-        assertThat(reviewRepository.countByProduct(product2)).isEqualTo(1);
+            // then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(actual1)
+                        .isEqualTo(3);
+                softAssertions.assertThat(actual2)
+                        .isEqualTo(1);
+            });
+        }
     }
 
-    @Test
-    void 특정_상품에_대한_좋아요_기준_내림차순으로_정렬한다() {
-        // given
-        final var member1 = new Member("test1", "test1.png", "1");
-        final var member2 = new Member("test2", "test2.png", "2");
-        final var member3 = new Member("test3", "test3.png", "3");
-        final var members = List.of(member1, member2, member3);
-        memberRepository.saveAll(members);
+    @Nested
+    class findReviewsByProduct_성공_테스트 {
 
-        final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-        productRepository.save(product);
+        @Test
+        void 특정_상품에_대한_좋아요_기준_내림차순으로_정렬한다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-        final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
-        final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
-        final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-        final var reviews = List.of(review1, review2, review3);
-        reviewRepository.saveAll(reviews);
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
 
-        final var expected = List.of(review1, review3);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
 
-        final var page = PageRequest.of(0, 2, Sort.by("favoriteCount").descending());
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
 
-        // when
-        final List<Review> actual = reviewRepository.findReviewsByProduct(page, product)
-                .getContent();
+            final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
 
-        // then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            final var expected = List.of(review1, review3);
+
+            // when
+            final var actual = reviewRepository.findReviewsByProduct(page, product).getContent();
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
     }
 
-    @Test
-    void 전체_리뷰_목록에서_가장_좋아요가_높은_상위_3개의_리뷰를_가져온다() {
-        // given
+    @Nested
+    class findTop3ByOrderByFavoriteCountDesc_성공_테스트 {
 
-        final var member1 = new Member("test1", "test1.png", "1");
-        final var member2 = new Member("test2", "test2.png", "2");
-        final var member3 = new Member("test3", "test3.png", "3");
-        final var members = List.of(member1, member2, member3);
-        memberRepository.saveAll(members);
+        @Test
+        void 전체_리뷰_목록에서_가장_좋아요가_높은_상위_3개의_리뷰를_가져온다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-        final var product1 = new Product("김밥", 1000L, "image.png", "김밥", null);
-        final var product2 = new Product("물", 500L, "water.jpg", "물", null);
-        final var products = List.of(product1, product2);
-        productRepository.saveAll(products);
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
 
-        final var review1 = new Review(member1, product1, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product1, "review2.jpg", 4L, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product1, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-        final var review4 = new Review(member2, product2, "review4.jpg", 5L, "ㅁㅜㄹ", true, 247L);
-        final var review5 = new Review(member3, product2, "review5.jpg", 1L, "ㄴㄴ", false, 83L);
-        final var reviews = List.of(review1, review2, review3, review4, review5);
-        reviewRepository.saveAll(reviews);
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2);
 
-        final var expected = List.of(review2, review4, review3);
+            final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 5L);
+            final var review1_2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product1, 351L);
+            final var review1_3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product1, 130L);
+            final var review2_2 = 리뷰_이미지test5_평점5점_재구매O_생성(member2, product2, 247L);
+            final var review3_2 = 리뷰_이미지test1_평점1점_재구매X_생성(member3, product2, 83L);
+            복수_리뷰_저장(review1_1, review1_2, review1_3, review2_2, review3_2);
 
-        // when
-        final var actual = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+            final var expected = List.of(review1_2, review2_2, review1_3);
 
-        // then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            // when
+            final var actual = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
     }
 }

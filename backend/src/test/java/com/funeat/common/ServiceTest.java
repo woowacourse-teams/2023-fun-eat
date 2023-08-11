@@ -1,73 +1,109 @@
-package com.funeat.acceptance.common;
+package com.funeat.common;
 
-import com.funeat.common.DataClearExtension;
+import com.funeat.auth.application.AuthService;
+import com.funeat.member.application.TestMemberService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
+import com.funeat.member.persistence.ProductBookmarkRepository;
+import com.funeat.member.persistence.RecipeBookMarkRepository;
+import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
+import com.funeat.product.application.CategoryService;
+import com.funeat.product.application.ProductService;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.persistence.CategoryRepository;
+import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
+import com.funeat.review.application.ReviewService;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
+import com.funeat.tag.application.TagService;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import io.restassured.RestAssured;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
+@SpringBootTest
 @ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public abstract class AcceptanceTest {
-
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    protected ProductRepository productRepository;
-
-    @Autowired
-    protected CategoryRepository categoryRepository;
+public abstract class ServiceTest {
 
     @Autowired
     protected MemberRepository memberRepository;
 
     @Autowired
-    protected ReviewRepository reviewRepository;
+    protected ProductBookmarkRepository productBookmarkRepository;
 
     @Autowired
-    protected TagRepository tagRepository;
+    protected RecipeBookMarkRepository recipeBookMarkRepository;
 
     @Autowired
-    protected ReviewTagRepository reviewTagRepository;
+    protected RecipeFavoriteRepository recipeFavoriteRepository;
 
     @Autowired
     protected ReviewFavoriteRepository reviewFavoriteRepository;
 
     @Autowired
-    public RecipeRepository recipeRepository;
+    protected CategoryRepository categoryRepository;
 
     @Autowired
-    public RecipeImageRepository recipeImageRepository;
+    protected ProductRecipeRepository productRecipeRepository;
 
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
+    @Autowired
+    protected ProductRepository productRepository;
+
+    @Autowired
+    protected RecipeImageRepository recipeImageRepository;
+
+    @Autowired
+    protected RecipeRepository recipeRepository;
+
+    @Autowired
+    protected ReviewRepository reviewRepository;
+
+    @Autowired
+    protected ReviewTagRepository reviewTagRepository;
+
+    @Autowired
+    protected TagRepository tagRepository;
+
+    @Autowired
+    protected AuthService authService;
+
+    @Autowired
+    protected TestMemberService memberService;
+
+    @Autowired
+    protected CategoryService categoryService;
+
+    @Autowired
+    protected RecipeService recipeService;
+
+    @Autowired
+    protected ProductService productService;
+
+    @Autowired
+    protected ImageService imageService;
+
+    @Autowired
+    protected ReviewService reviewService;
+
+    @Autowired
+    protected TagService tagService;
 
     protected Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();

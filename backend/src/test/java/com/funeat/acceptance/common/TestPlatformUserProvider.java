@@ -11,11 +11,11 @@ public class TestPlatformUserProvider implements PlatformUserProvider {
 
     @Override
     public UserInfoDto getPlatformUser(final String code) {
-        return new UserInfoDto(1L, "test", "https://www.test.com");
+        return new UserInfoDto(1L, code, String.format("www.%s.com", code));
     }
 
     @Override
     public String getRedirectURI() {
-        return "https://www.test.com";
+        return "www.test.com";
     }
 }

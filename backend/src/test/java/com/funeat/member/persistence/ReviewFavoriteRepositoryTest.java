@@ -1,83 +1,109 @@
 package com.funeat.member.persistence;
 
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매O_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.funeat.common.DataCleaner;
-import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Member;
+import com.funeat.common.RepositoryTest;
 import com.funeat.member.domain.favorite.ReviewFavorite;
-import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.ProductRepository;
-import com.funeat.review.domain.Review;
-import com.funeat.review.persistence.ReviewRepository;
-import io.restassured.builder.MultiPartSpecBuilder;
-import io.restassured.specification.MultiPartSpecification;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@Import(DataCleaner.class)
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-class ReviewFavoriteRepositoryTest {
+class ReviewFavoriteRepositoryTest extends RepositoryTest {
 
-    @Autowired
-    private ReviewFavoriteRepository reviewFavoriteRepository;
+    @Nested
+    class findByMemberAndReview_성공_테스트 {
 
-    @Autowired
-    private MemberRepository memberRepository;
+        @Test
+        void 멤버와_리뷰로_리뷰_좋아요를_조회할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-    @Autowired
-    private ProductRepository productRepository;
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            단일_상품_저장(product);
 
-    @Test
-    void 멤버와_리뷰로_리뷰_좋아요를_조회할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var review = 리뷰_추가_요청(member, product);
-        final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
-        reviewFavoriteRepository.save(reviewFavorite);
+            final var review = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
+            단일_리뷰_저장(review);
 
-        // when
-        final var result = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
+            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            단일_리뷰_좋아요_저장(reviewFavorite);
 
-        // then
-        var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
 
-        assertThat(result).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "review", "checked")
-                .isEqualTo(expected);
+            // when
+            final var actual = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .ignoringExpectedNullFields()
+                    .isEqualTo(expected);
+        }
     }
 
-    private Member 멤버_추가_요청() {
-        return memberRepository.save(new Member("test", "image.png", "1"));
-    }
+    @Nested
+    class findByMemberAndReview_실패_테스트 {
 
-    private Product 상품_추가_요청() {
-        return productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
-    }
+        @Test
+        void 잘못된_멤버로_좋아요를_조회하면_에러가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
 
-    private Review 리뷰_추가_요청(final Member member, final Product product) {
-        final var image = 리뷰_사진_명세_요청();
-        return reviewRepository.save(new Review(member, product, image.getFileName(), 4L, "content", true));
-    }
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-    private MultiPartSpecification 리뷰_사진_명세_요청() {
-        return new MultiPartSpecBuilder("image".getBytes())
-                .fileName("testImage.png")
-                .controlName("image")
-                .mimeType("image/png")
-                .build();
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            단일_상품_저장(product);
+
+            final var review = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
+            단일_리뷰_저장(review);
+
+            final var wrongMember = 멤버_멤버2_생성();
+            단일_멤버_저장(wrongMember);
+
+            // when & then
+            assertThatThrownBy(() -> reviewFavoriteRepository.findByMemberAndReview(wrongMember, review).get())
+                    .isInstanceOf(NoSuchElementException.class);
+        }
+
+        @Test
+        void 잘못된_리뷰로_좋아요를_조회하면_에러가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var anotherMember = 멤버_멤버2_생성();
+            단일_멤버_저장(anotherMember);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            단일_상품_저장(product);
+
+            final var review = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
+            단일_리뷰_저장(review);
+
+            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            단일_리뷰_좋아요_저장(reviewFavorite);
+
+            final var wrongReview = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 0L);
+            단일_리뷰_저장(wrongReview);
+
+            // when & then
+            assertThatThrownBy(() -> reviewFavoriteRepository.findByMemberAndReview(member, wrongReview).get())
+                    .isInstanceOf(NoSuchElementException.class);
+        }
     }
 }
