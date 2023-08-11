@@ -8,28 +8,52 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useImageUploader } from '@/hooks/common';
-import type { RecipeUsedProduct } from '@/types/recipe';
+import { useFormData, useImageUploader } from '@/hooks/common';
+import type { RecipeRequest, RecipeRequestKey, RecipeUsedProduct } from '@/types/recipe';
 
+interface RecipeFormActionParams {
+  target: RecipeRequestKey;
+  value: string | number;
+}
 const RecipeRegisterForm = () => {
   const theme = useTheme();
 
   const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
-
-  const [recipeName, setRecipeName] = useState('');
-  const [recipeDetail, setRecipeDetail] = useState('');
   const [usedProducts, setUsedProducts] = useState<RecipeUsedProduct[]>([]);
+  const [recipeFormValue, setRecipeFormValue] = useState<RecipeRequest>({
+    title: '',
+    productIds: [],
+    content: '',
+  });
+
+  const handleRecipeFormValue = ({ target, value }: RecipeFormActionParams) => {
+    setRecipeFormValue((prev) => {
+      const targetValue = prev[target];
+      if (Array.isArray(targetValue)) {
+        return { ...prev, [target]: targetValue.filter((id) => id !== value) };
+      }
+      return { ...prev, [target]: value };
+    });
+  };
+
+  const formData = useFormData<RecipeRequest>({
+    imageKey: 'images',
+    imageFile: imageFile === null ? imageFile : [imageFile],
+    formContentKey: 'recipeRequest',
+    formContent: recipeFormValue,
+  });
 
   const handleRecipeName: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setRecipeName(e.currentTarget.value);
+    handleRecipeFormValue({ target: 'title', value: e.currentTarget.value });
   };
 
   const handleRecipeDetail: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    setRecipeDetail(e.currentTarget.value);
+    handleRecipeFormValue({ target: 'content', value: e.currentTarget.value });
   };
 
   const removeUsedProducts = (id: number) => {
     setUsedProducts((prev) => prev.filter((usedProduct) => usedProduct.id !== id));
+    handleRecipeFormValue({ target: 'productIds', value: id });
   };
 
   return (
@@ -41,7 +65,7 @@ const RecipeRegisterForm = () => {
       <Divider />
       <Spacing size={36} />
       <form>
-        <RecipeNameInput recipeName={recipeName} handleRecipeName={handleRecipeName} />
+        <RecipeNameInput recipeName={recipeFormValue.title} handleRecipeName={handleRecipeName} />
         <Spacing size={36} />
         <RecipeUsedProducts usedProducts={usedProducts} removeUsedProducts={removeUsedProducts} />
         <Spacing size={36} />
@@ -55,7 +79,7 @@ const RecipeRegisterForm = () => {
         <Spacing size={12} />
         <ImageUploader previewImage={previewImage} uploadImage={uploadImage} deleteImage={deleteImage} />
         <Spacing size={36} />
-        <RecipeDetailTextarea recipeDetail={recipeDetail} handleRecipeDetail={handleRecipeDetail} />
+        <RecipeDetailTextarea recipeDetail={recipeFormValue.content} handleRecipeDetail={handleRecipeDetail} />
         <Spacing size={36} />
         <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold">
           레시피 등록하기
