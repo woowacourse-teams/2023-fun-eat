@@ -8,8 +8,8 @@ import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
+import { useSortOption } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
-import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');

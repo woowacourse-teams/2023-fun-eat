@@ -2,7 +2,7 @@ import { Button, Heading, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import useRoutePage from '@/hooks/useRoutePage';
+import { useRoutePage } from '@/hooks/common';
 
 interface SectionTitleProps {
   name: string;

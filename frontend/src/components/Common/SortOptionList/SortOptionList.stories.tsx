@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import SortOptionList from './SortOptionList';
 
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
-import useSortOption from '@/hooks/useSortOption';
+import { useSortOption } from '@/hooks/common';
 
 const meta: Meta<typeof SortOptionList> = {
   title: 'common/SortOptionList',
