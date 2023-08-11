@@ -86,7 +86,7 @@ public class RecipeService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
         return recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
-                .map(RecipeFavorite::getChecked)
+                .map(RecipeFavorite::getFavorite)
                 .orElse(false);
     }
 }
