@@ -1,6 +1,7 @@
 <included>
 
-    <springProperty name="LOG_DIR" source="logging.file.path"/>
+    <springProperty name="log_dir" source="logging.file.path"/>
+    <property resource="logback-variables.yml"/>
 
     <springProperty name="SLACK_WEBHOOK_URI" source="logging.slack.webhook-uri"/>
     <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">

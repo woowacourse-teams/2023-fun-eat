@@ -1,6 +1,7 @@
 <included>
 
-    <springProperty name="LOG_DIR" source="logging.file.path"/>
+    <springProperty name="log_dir" source="logging.file.path"/>
+    <property resource="logback-variables.yml"/>
 
     <springProperty name="SLACK_WEBHOOK_URI" source="logging.slack.webhook-uri"/>
     <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
@@ -92,8 +93,8 @@
             <fileNamePattern>
                 ${log_dir}/query/%d{yyyy-MM-dd}_%i.log
             </fileNamePattern>
-            <maxFileSize>${dev_file_size}</maxFileSize>
-            <maxHistory>${dev_file_max_history}</maxHistory>
+            <maxFileSize>10kb</maxFileSize>
+            <maxHistory>1</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>
@@ -110,11 +111,11 @@
         <appender-ref ref="QUERY_LOG"/>
     </logger>
 
-    <root level="INFO">
-        <appender-ref ref="INFO"/>
-        <appender-ref ref="WARN"/>
-        <appender-ref ref="ERROR"/>
-        <appender-ref ref="ASYNC_SLACK"/>
-    </root>
+    <!--    <root level="INFO">-->
+    <!--        <appender-ref ref="INFO"/>-->
+    <!--        <appender-ref ref="WARN"/>-->
+    <!--        <appender-ref ref="ERROR"/>-->
+    <!--        <appender-ref ref="ASYNC_SLACK"/>-->
+    <!--    </root>-->
 
 </included>
