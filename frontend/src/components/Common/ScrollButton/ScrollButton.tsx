@@ -20,7 +20,7 @@ const ScrollButton = () => {
       scrollToTop(mainElement);
       setScrollTop(false);
     }
-  }, [scrollTop, scrollToTop]);
+  }, [scrollTop]);
 
   return (
     <ScrollButtonWrapper customWidth="45px" customHeight="45px" variant="filled" color="gray5" onClick={handleScroll}>
