@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class RecipeCreateRequest {
 
-    @NotBlank(message = "이름을 확인해 주세요")
+    @NotBlank(message = "레시피 이름을 확인해 주세요")
     private final String title;
 
     @NotNull(message = "상품 ID 목록을 확인해 주세요")
