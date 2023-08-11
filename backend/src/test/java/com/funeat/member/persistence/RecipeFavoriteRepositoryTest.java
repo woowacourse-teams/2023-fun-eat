@@ -67,12 +67,12 @@ class RecipeFavoriteRepositoryTest {
         final var fakeMember = 멤버_추가_요청(new Member("fake", "image.png", "3"));
         레시피_좋아요_요청(new RecipeFavorite(realMember, recipe, true));
 
-        final var realMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(realMember, recipe);
-        final var fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
+        final var realMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(realMember, recipe);
+        final var fakeMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(fakeMember, recipe);
 
         // then
-        assertThat(realMemberActual).isNotEmpty();
-        assertThat(fakeMemberActual).isEmpty();
+        assertThat(realMemberActual).isTrue();
+        assertThat(fakeMemberActual).isFalse();
     }
 
     private Category 카테고리_추가_요청(final Category category) {

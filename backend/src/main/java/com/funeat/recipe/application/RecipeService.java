@@ -2,7 +2,6 @@ package com.funeat.recipe.application;
 
 import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
-import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.product.domain.Product;
@@ -85,8 +84,6 @@ public class RecipeService {
     private Boolean calculateFavoriteChecked(final Long memberId, final Recipe recipe) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
-        return recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
-                .map(RecipeFavorite::getFavorite)
-                .orElse(false);
+        return recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(member, recipe);
     }
 }
