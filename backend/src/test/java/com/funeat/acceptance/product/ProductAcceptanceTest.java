@@ -40,6 +40,7 @@ import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOF_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOF_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -446,17 +447,20 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var response = 카테고리별_상품_목록_조회_요청(notExistCategoryId, "price", "desc", 0);
 
             // then
-            final var expectedCode = CATEGORY_NOF_FOUND.getCode();
-            final var expectedMessage = CATEGORY_NOF_FOUND.getMessage();
-
             STATUS_CODE를_검증한다(response, 찾을수_없음);
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(response.jsonPath().getString("code"))
-                        .isEqualTo(expectedCode);
-                softAssertions.assertThat(response.jsonPath().getString("message"))
-                        .isEqualTo(expectedMessage);
-            });
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, CATEGORY_NOF_FOUND.getCode(), CATEGORY_NOF_FOUND.getMessage());
         }
+    }
+
+    private static void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response,
+                                                     final String expectedCode,
+                                                     final String expectedMessage) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.jsonPath().getString("code"))
+                    .isEqualTo(expectedCode);
+            softAssertions.assertThat(response.jsonPath().getString("message"))
+                    .isEqualTo(expectedMessage);
+        });
     }
 
     @Nested
@@ -496,6 +500,23 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             상품_상세_정보_조회_결과를_검증한다(response, product, expectedTags);
+        }
+    }
+
+    @Nested
+    class getProductDetail_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_상품_상세_정보를_조회할때_예외가_발생한다() {
+            // given
+            final var notExistProductId = 99999L;
+
+            // when
+            final var response = 상품_상세_조회_요청(notExistProductId);
+
+            // then
+            STATUS_CODE를_검증한다(response, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOF_FOUND.getCode(), PRODUCT_NOF_FOUND.getMessage());
         }
     }
 
