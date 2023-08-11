@@ -1,13 +1,12 @@
-import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import { Button, Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
-import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
 import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
-import { SvgIcon } from '@/components/Common';
+import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
@@ -65,11 +64,21 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>
-        <ReviewImageUploader
-          reviewPreviewImage={reviewPreviewImage}
-          uploadReviewImage={uploadReviewImage}
-          deleteReviewImage={deleteReviewImage}
-        />
+        <ReviewImageUploaderContainer>
+          <Heading as="h2" size="xl" tabIndex={0}>
+            구매한 상품 사진이 있다면 올려주세요.
+          </Heading>
+          <Spacing size={2} />
+          <Text color={theme.textColors.disabled} tabIndex={0}>
+            (사진은 5MB 이하, 1장까지 업로드 할 수 있어요.)
+          </Text>
+          <Spacing size={20} />
+          <ImageUploader
+            previewImage={reviewPreviewImage}
+            uploadImage={uploadReviewImage}
+            deleteImage={deleteReviewImage}
+          />
+        </ReviewImageUploaderContainer>
         <Spacing size={60} />
         <StarRate rating={reviewFormValue.rating} />
         <Spacing size={60} />
@@ -113,6 +122,12 @@ const ProductOverviewItemWrapper = styled.div`
 
 const RegisterForm = styled.form`
   padding: 50px 20px;
+`;
+
+const ReviewImageUploaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const FormButton = styled(Button)`

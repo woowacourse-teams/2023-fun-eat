@@ -9,3 +9,4 @@ export { default as TabMenu } from './TabMenu/TabMenu';
 export { default as TagList } from './TagList/TagList';
 export { default as Title } from './Title/Title';
 export { default as Input } from './Input/Input';
+export { default as ImageUploader } from './ImageUploader/ImageUploader';
