@@ -9,6 +9,7 @@ import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -100,7 +101,7 @@ class MemberServiceTest {
 
             // when, then
             assertThatThrownBy(() -> memberService.getMemberProfile(wrongMemberId))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
     }
 
