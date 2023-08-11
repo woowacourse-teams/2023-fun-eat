@@ -7,10 +7,9 @@ import ProductItem from '../ProductItem/ProductItem';
 
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
+import { useIntersectionObserver, useSortOption } from '@/hooks/common';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import useSortOption from '@/hooks/useSortOption';
 import type { CategoryVariant } from '@/types/common';
 import displaySlice from '@/utils/displaySlice';
 
