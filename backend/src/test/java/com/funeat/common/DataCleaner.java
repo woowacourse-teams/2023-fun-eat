@@ -13,6 +13,7 @@ public class DataCleaner {
 
     private static final String FOREIGN_KEY_CHECK_FORMAT = "SET REFERENTIAL_INTEGRITY %s";
     private static final String TRUNCATE_FORMAT = "TRUNCATE TABLE %s";
+    private static final String AUTO_INCREMENT_FORMAT = "ALTER TABLE %s ALTER COLUMN id RESTART WITH 1";
 
     private final List<String> tableNames = new ArrayList<>();
 
@@ -39,6 +40,7 @@ public class DataCleaner {
         entityManager.createNativeQuery(String.format(FOREIGN_KEY_CHECK_FORMAT, "FALSE")).executeUpdate();
         for (String tableName : tableNames) {
             entityManager.createNativeQuery(String.format(TRUNCATE_FORMAT, tableName)).executeUpdate();
+            entityManager.createNativeQuery(String.format(AUTO_INCREMENT_FORMAT, tableName)).executeUpdate();
         }
         entityManager.createNativeQuery(String.format(FOREIGN_KEY_CHECK_FORMAT, "TRUE")).executeUpdate();
     }

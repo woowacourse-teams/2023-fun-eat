@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import PBProductItem from '../PBProductItem/PBProductItem';
 
+import { MoreButton } from '@/components/Common';
 import { PATH } from '@/constants/path';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
@@ -21,15 +22,18 @@ const PBProductList = ({ isHome }: PBProductListProps) => {
   const pbProductsToDisplay = displaySlice(isHome, pbProductList, 10);
 
   return (
-    <PBProductListContainer>
-      {pbProductsToDisplay?.map((pbProduct) => (
-        <li key={pbProduct.id}>
-          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
-            <PBProductItem pbProduct={pbProduct} />
-          </Link>
-        </li>
-      ))}
-    </PBProductListContainer>
+    <>
+      <PBProductListContainer>
+        {pbProductsToDisplay?.map((pbProduct) => (
+          <li key={pbProduct.id}>
+            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
+              <PBProductItem pbProduct={pbProduct} />
+            </Link>
+          </li>
+        ))}
+        <MoreButton />
+      </PBProductListContainer>
+    </>
   );
 };
 

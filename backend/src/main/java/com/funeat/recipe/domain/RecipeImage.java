@@ -27,4 +27,16 @@ public class RecipeImage {
         this.image = image;
         this.recipe = recipe;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
 }
