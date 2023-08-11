@@ -9,9 +9,12 @@ import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
+import com.funeat.product.domain.ProductRecipe;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.recipe.domain.Recipe;
+import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.domain.Review;
@@ -142,5 +145,27 @@ public abstract class RepositoryTest {
         final var reviewFavorites = List.of(reviewFavoritesToSave);
 
         reviewFavoriteRepository.saveAll(reviewFavorites);
+    }
+
+    protected Long 단일_레시피_저장(final Recipe recipe) {
+        return recipeRepository.save(recipe).getId();
+    }
+
+    protected void 복수_레시피_저장(final Recipe... recipeToSave) {
+        final var recipes = List.of(recipeToSave);
+
+        recipeRepository.saveAll(recipes);
+    }
+
+    protected void 복수_레시피_이미지_저장(final RecipeImage... recipeImageToSave) {
+        final var images = List.of(recipeImageToSave);
+
+        recipeImageRepository.saveAll(images);
+    }
+
+    protected void 복수_레시피_상품_저장(final ProductRecipe... productRecipeToSave) {
+        final var productRecipes = List.of(productRecipeToSave);
+
+        productRecipeRepository.saveAll(productRecipes);
     }
 }

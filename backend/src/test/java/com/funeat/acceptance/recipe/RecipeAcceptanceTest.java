@@ -16,10 +16,7 @@ import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
-import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,24 +62,27 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 레시피의_상세_정보를_조회한다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
+            final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
 
-            final var product1 = new Product("삼각김밥1", 1000L, "image.png", "맛있는 삼각김밥1", category);
-            final var product2 = new Product("삼각김밥2", 2000L, "image.png", "맛있는 삼각김밥2", category);
-            final var product3 = new Product("삼각김밥3", 1500L, "image.png", "맛있는 삼각김밥3", category);
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
             final var products = List.of(product1, product2, product3);
             복수_상품_저장(product1, product2, product3);
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+            final var totalPrice = 상품_총가격_계산(product1, product2, product3);
+
             final var loginCookie = 로그인_쿠키를_얻는다();
 
-            final var createRequest = new RecipeCreateRequest("제일로 맛있는 레시피",
-                    List.of(product1.getId(), product2.getId(), product3.getId()),
-                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+            final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
             final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+
             final var recipe = recipeRepository.findById(recipeId).get();
             final var findImages = recipeImageRepository.findByRecipe(recipe);
-            final var expected = RecipeDetailResponse.toResponse(recipe, findImages, products, 4500L, false);
+
+            final var expected = RecipeDetailResponse.toResponse(recipe, findImages, products, totalPrice, false);
 
             // when
             final var response = 레시피_상세_정보_요청(loginCookie, recipeId);
@@ -97,6 +97,12 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     private void 레시피_상세_정보_조회_결과를_검증한다(final RecipeDetailResponse actual, final RecipeDetailResponse expected) {
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
+    }
+
+    private Long 상품_총가격_계산(final Product... products) {
+        return Stream.of(products)
+                .mapToLong(Product::getPrice)
+                .sum();
     }
 
     private List<Long> 상품_아이디_변환(final Product... products) {
