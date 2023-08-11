@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
@@ -27,6 +29,16 @@ public class GlobalControllerAdvice {
 
     public GlobalControllerAdvice(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+    }
+
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class, MissingServletRequestParameterException.class})
+    public ResponseEntity<?> handleParamValidationException(final Exception e, final HttpServletRequest request) {
+        log.warn("{} = {}, code = {} message = {}", request.getMethod(), request.getRequestURI(),
+                REQUEST_VALID_ERROR_CODE.getCode(), e.getMessage());
+
+        final ErrorCode<?> errorCode = new ErrorCode<>(REQUEST_VALID_ERROR_CODE.getCode(),
+                REQUEST_VALID_ERROR_CODE.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorCode);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,9 +56,9 @@ public class GlobalControllerAdvice {
 
         final ErrorCode<?> errorCode = new ErrorCode<>(REQUEST_VALID_ERROR_CODE.getCode(), responseErrorMessage);
 
-        log.warn("{} = {},  message = {} ", request.getMethod(), request.getRequestURI(),
+        log.warn("{} = {}, message = {} ", request.getMethod(), request.getRequestURI(),
                 filedErrorLogMessages);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorCode);
+        return ResponseEntity.status(REQUEST_VALID_ERROR_CODE.getStatus()).body(errorCode);
     }
 
     private static String getMethodArgumentExceptionLogMessage(final MethodArgumentNotValidException e) {

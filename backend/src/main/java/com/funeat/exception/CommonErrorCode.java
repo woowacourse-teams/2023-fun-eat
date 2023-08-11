@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum CommonErrorCode {
 
     UNKNOWN_SERVER_ERROR_CODE(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 에러입니다.", "0000"),
-    REQUEST_VALID_ERROR_CODE(HttpStatus.INTERNAL_SERVER_ERROR, "요청을 다시 확인해주세요.", "0001"),
+    REQUEST_VALID_ERROR_CODE(HttpStatus.BAD_REQUEST, "요청을 다시 확인해주세요.", "0001"),
     ;
 
     private final HttpStatus status;

@@ -15,4 +15,10 @@ public class CategoryException extends GlobalException {
             super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), categoryId));
         }
     }
+
+    public static class CategoryTypeNotFoundException extends CategoryException {
+        public CategoryTypeNotFoundException(final CategoryErrorCode errorCode, final String type) {
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), type));
+        }
+    }
 }
