@@ -111,11 +111,11 @@
         <appender-ref ref="QUERY_LOG"/>
     </logger>
 
-    <!--    <root level="INFO">-->
-    <!--        <appender-ref ref="INFO"/>-->
-    <!--        <appender-ref ref="WARN"/>-->
-    <!--        <appender-ref ref="ERROR"/>-->
-    <!--        <appender-ref ref="ASYNC_SLACK"/>-->
-    <!--    </root>-->
+    <root level="INFO">
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="WARN"/>
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="ASYNC_SLACK"/>
+    </root>
 
 </included>
