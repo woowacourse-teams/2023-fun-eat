@@ -11,7 +11,9 @@ import StarRate from '../StarRate/StarRate';
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
-import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
+import { useProductDetailQuery } from '@/hooks/queries/product';
+import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
+import { useReviewImageUploader, useFormData } from '@/hooks/review';
 import useScroll from '@/hooks/useScroll';
 import type { ProductDetail } from '@/types/product';
 
@@ -20,21 +22,22 @@ const MIN_SELECTED_TAGS_COUNT = 1;
 const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
-  product: ProductDetail;
+  productId: number;
   targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
+  const { data: productDetail } = useProductDetailQuery(productId);
+  const { mutate } = useReviewRegisterFormMutation(productId);
   const { scrollToPosition } = useScroll();
 
-  const { mutate } = useReviewRegisterFormMutation(product.id);
-
+  // TODO: 태그 아이디 개수 조건 수정
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
     reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
@@ -67,7 +70,7 @@ const ReviewRegisterForm = ({ product, targetRef, closeReviewDialog }: ReviewReg
       </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
-        <ProductOverviewItem name={product.name} image={product.image} />
+        <ProductOverviewItem name={productDetail?.name} image={productDetail?.image} />
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>
