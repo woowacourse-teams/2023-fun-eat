@@ -43,7 +43,6 @@ const ScrollButtonWrapper = styled(Button)`
   }
 
   @media screen and (min-width: 600px) {
-    left: calc(50% + 260px);
-    transform: translateX(-50%);
+    left: calc(50% + 234px);
   }
 `;
