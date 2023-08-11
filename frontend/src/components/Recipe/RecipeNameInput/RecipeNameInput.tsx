@@ -17,7 +17,7 @@ const RecipeNameInput = ({ handleRecipeName, recipeName }: RecipeNameInputProps)
         <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <Spacing size={12} />
-      <Input onChange={handleRecipeName} value={recipeName} />
+      <Input placeholder="재치있는 이름을 지어주세요!" value={recipeName} onChange={handleRecipeName} />
     </>
   );
 };
