@@ -50,11 +50,12 @@ class ProductRecipeRepositoryTest {
         final var product1 = 상품_추가_요청(new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category));
         final var product2 = 상품_추가_요청(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
         final var product3 = 상품_추가_요청(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
+        final var products = List.of(product1, product2, product3);
         final var member = 멤버_추가_요청(new Member("test", "image.png", "1"));
-        final var expected = List.of(product1, product2, product3);
 
         final var recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", member));
-        expected.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
+        복수_레시피_상품_추가_요청(products, recipe);
+        final var expected = products;
 
         // when
         final var actual = productRecipeRepository.findProductByRecipe(recipe);
@@ -80,7 +81,9 @@ class ProductRecipeRepositoryTest {
         return recipeRepository.save(recipe);
     }
 
-    private ProductRecipe 레시피에_사용된_상품_추가_요청(final ProductRecipe productRecipe) {
-        return productRecipeRepository.save(productRecipe);
+    private void 복수_레시피_상품_추가_요청(final List<Product> products, final Recipe recipe) {
+        for (Product product : products) {
+            productRecipeRepository.save(new ProductRecipe(product, recipe));
+        }
     }
 }
