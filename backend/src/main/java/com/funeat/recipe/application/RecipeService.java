@@ -2,6 +2,7 @@ package com.funeat.recipe.application;
 
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOF_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOF_FOUND;
+import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOF_FOUND;
 
 import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
@@ -17,6 +18,7 @@ import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import java.util.List;
@@ -74,7 +76,7 @@ public class RecipeService {
 
     public RecipeDetailResponse getRecipeDetail(final Long memberId, final Long recipeId) {
         final Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOF_FOUND, recipeId));
         final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
         final List<Product> products = productRecipeRepository.findProductByRecipe(recipe);
         final Long totalPrice = products.stream()
@@ -88,7 +90,7 @@ public class RecipeService {
 
     private Boolean calculateFavoriteChecked(final Long memberId, final Recipe recipe) {
         final Member member = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOF_FOUND, memberId));
         return recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(member, recipe);
     }
 }
