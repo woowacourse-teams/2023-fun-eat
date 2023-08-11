@@ -3,6 +3,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
     <include resource="logback-spring-${spring.profiles.active}.xml"/>
+    <property file="logback-variables.yml"/>
 
     <springProfile name="local">
         <root level="TRACE">

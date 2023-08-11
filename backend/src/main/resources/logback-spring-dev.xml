@@ -1,13 +1,12 @@
 <included>
 
-    <property resource="logback-variables.yml"/>
     <springProperty name="LOG_DIR" source="logging.file.path"/>
 
     <springProperty name="SLACK_WEBHOOK_URI" source="logging.slack.webhook-uri"/>
     <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
-        <webhookUri>${DEV_SLACK_WEBHOOK_URI}</webhookUri>
+        <webhookUri>${dev_slack_webhook_uri}</webhookUri>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>${LOG_PATTERN}</Pattern>
+            <Pattern>${log_pattern}</Pattern>
         </layout>
         <username>open-macbook</username>
         <iconEmoji>:face_with_symbols_on_mouth:</iconEmoji>
@@ -27,17 +26,17 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_DIR}/info.log</file>
+        <file>${log_dir}/info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>
-                ${LOG_DIR}/info/info.%d{yyyy-MM-dd}_%i.log
+                ${log_dir}/info/info.%d{yyyy-MM-dd}_%i.log
             </fileNamePattern>
-            <maxFileSize>${DEV_FILE_SIZE}</maxFileSize>
-            <maxHistory>${DEV_FILE_MAX_HISTORY}</maxHistory>
+            <maxFileSize>${dev_file_size}</maxFileSize>
+            <maxHistory>${dev_file_max_history}</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>
-                ${LOG_PATTERN}
+                ${log_pattern}
             </pattern>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
@@ -49,17 +48,17 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_DIR}/warn.log</file>
+        <file>${log_dir}/warn.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>
-                ${LOG_DIR}/warn/%d{yyyy-MM-dd}_%i.log
+                ${log_dir}/warn/%d{yyyy-MM-dd}_%i.log
             </fileNamePattern>
-            <maxFileSize>${DEV_FILE_SIZE}</maxFileSize>
-            <maxHistory>${DEV_FILE_MAX_HISTORY}</maxHistory>
+            <maxFileSize>${dev_file_size}</maxFileSize>
+            <maxHistory>${dev_file_max_history}</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>
-                ${LOG_PATTERN}
+                ${log_pattern}
             </pattern>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
@@ -71,34 +70,34 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_DIR}/error.log</file>
+        <file>${log_dir}/error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>
-                ${LOG_DIR}/error/%d{yyyy-MM-dd}_%i.log
+                ${log_dir}/error/%d{yyyy-MM-dd}_%i.log
             </fileNamePattern>
-            <maxFileSize>${DEV_FILE_SIZE}</maxFileSize>
-            <maxHistory>${DEV_FILE_MAX_HISTORY}</maxHistory>
+            <maxFileSize>${dev_file_size}</maxFileSize>
+            <maxHistory>${dev_file_max_history}</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>
-                ${LOG_PATTERN}
+                ${log_pattern}
             </pattern>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
     </appender>
 
     <appender name="QUERY_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/query_log.log</file>
+        <file>${log_dir}/query_log.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>
-                ${LOG_DIR}/query/%d{yyyy-MM-dd}_%i.log
+                ${log_dir}/query/%d{yyyy-MM-dd}_%i.log
             </fileNamePattern>
-            <maxFileSize>${DEV_FILE_SIZE}</maxFileSize>
-            <maxHistory>${DEV_FILE_MAX_HISTORY}</maxHistory>
+            <maxFileSize>${dev_file_size}</maxFileSize>
+            <maxHistory>${dev_file_max_history}</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>
-                ${LOG_PATTERN}
+                ${log_pattern}
             </pattern>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
