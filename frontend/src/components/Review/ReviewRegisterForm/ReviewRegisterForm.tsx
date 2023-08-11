@@ -9,7 +9,8 @@ import StarRate from '../StarRate/StarRate';
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
-import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
+import { useReviewRegisterFormMutation, useFormData } from '@/hooks/review';
+import useImageUploader from '@/hooks/useImageUploader';
 import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
@@ -22,8 +23,7 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
-  const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
-    useReviewImageUploader();
+  const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
@@ -36,7 +36,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
 
   const formData = useFormData({
     imageKey: 'image',
-    imageFile: reviewImageFile,
+    imageFile: imageFile,
     formContentKey: 'reviewRequest',
     formContent: reviewFormValue,
   });
@@ -46,7 +46,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
 
     await mutate(formData);
 
-    setReviewPreviewImage('');
+    deleteImage();
     resetReviewFormValue();
 
     closeReviewDialog();
@@ -73,11 +73,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
             (사진은 5MB 이하, 1장까지 업로드 할 수 있어요.)
           </Text>
           <Spacing size={20} />
-          <ImageUploader
-            previewImage={reviewPreviewImage}
-            uploadImage={uploadReviewImage}
-            deleteImage={deleteReviewImage}
-          />
+          <ImageUploader previewImage={previewImage} uploadImage={uploadImage} deleteImage={deleteImage} />
         </ReviewImageUploaderContainer>
         <Spacing size={60} />
         <StarRate rating={reviewFormValue.rating} />
