@@ -15,7 +15,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
 
     private String content;
 
@@ -23,11 +23,13 @@ public class Recipe {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private Long favoriteCount = 0L;
+
     protected Recipe() {
     }
 
-    public Recipe(final String name, final String content, final Member member) {
-        this.name = name;
+    public Recipe(final String title, final String content, final Member member) {
+        this.title = title;
         this.content = content;
         this.member = member;
     }
@@ -36,8 +38,8 @@ public class Recipe {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getContent() {
@@ -46,5 +48,9 @@ public class Recipe {
 
     public Member getMember() {
         return member;
+    }
+
+    public Long getFavoriteCount() {
+        return favoriteCount;
     }
 }

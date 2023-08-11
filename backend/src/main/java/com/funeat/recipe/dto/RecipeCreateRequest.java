@@ -4,18 +4,18 @@ import java.util.List;
 
 public class RecipeCreateRequest {
 
-    private final String name;
+    private final String title;
     private final List<Long> productIds;
     private final String content;
 
-    public RecipeCreateRequest(final String name, final List<Long> productIds, final String content) {
-        this.name = name;
+    public RecipeCreateRequest(final String title, final List<Long> productIds, final String content) {
+        this.title = title;
         this.productIds = productIds;
         this.content = content;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public List<Long> getProductIds() {

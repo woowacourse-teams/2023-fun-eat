@@ -7,7 +7,6 @@ import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
-import io.restassured.specification.RequestSpecification;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,7 +27,23 @@ public class RecipeSteps {
                 .extract();
     }
 
-    public static List<MultiPartSpecification> 여러_사진_요청(int count) {
+    public static Long 레시피_추가_요청하고_id_반환(final RecipeCreateRequest recipeRequest,
+                                         final List<MultiPartSpecification> imageList,
+                                         final String loginCookie) {
+        final var response = 레시피_추가_요청(recipeRequest, imageList, loginCookie);
+        return Long.parseLong(response.header("Location").split("/")[3]);
+    }
+
+    public static ExtractableResponse<Response> 레시피_상세_정보_요청(final String loginCookie, final Long recipeId) {
+        return given()
+                .cookie("JSESSIONID", loginCookie)
+                .when()
+                .get("/api/recipes/{recipeId}", recipeId)
+                .then()
+                .extract();
+    }
+
+    public static List<MultiPartSpecification> 여러_사진_요청(final int count) {
         return IntStream.range(0, count)
                 .mapToObj(i -> new MultiPartSpecBuilder("image".getBytes())
                         .fileName("testImage.png")
