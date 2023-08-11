@@ -11,10 +11,6 @@ import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
-import com.funeat.member.persistence.MemberRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -256,7 +252,7 @@ class MemberServiceTest extends ServiceTest {
 
             // when
             assertThatThrownBy(() -> memberService.modify(wrongMemberId, request))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test

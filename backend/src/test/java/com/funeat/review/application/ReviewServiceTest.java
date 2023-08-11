@@ -26,7 +26,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.ServiceTest;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
+import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
@@ -134,7 +137,7 @@ class ReviewServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> reviewService.create(productId, wrongMemberId, image, request))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test
@@ -160,7 +163,7 @@ class ReviewServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> reviewService.create(wrongProductId, memberId, image, request))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 
@@ -284,7 +287,7 @@ class ReviewServiceTest extends ServiceTest {
 
             // when
             assertThatThrownBy(() -> reviewService.likeReview(reviewId, wrongMemberId, favoriteRequest))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test
@@ -316,7 +319,7 @@ class ReviewServiceTest extends ServiceTest {
 
             // when
             assertThatThrownBy(() -> reviewService.likeReview(wrongReviewId, memberId, favoriteRequest))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(ReviewNotFoundException.class);
         }
     }
 
@@ -487,7 +490,7 @@ class ReviewServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> reviewService.sortingReviews(productId, page, wrongMemberId))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test
@@ -514,7 +517,7 @@ class ReviewServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> reviewService.sortingReviews(wrongProductId, page, member1Id))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 
