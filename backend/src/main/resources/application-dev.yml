@@ -15,3 +15,23 @@ spring:
 
 image:
   path: { DEV_IMAGE_PATH }
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health, metrics, prometheus
+      base-path: { ACTUATOR_BASE_PATH }
+    jmx:
+      exposure:
+        exclude: *
+  endpoint:
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  server:
+    port: { SERVER_PORT }
