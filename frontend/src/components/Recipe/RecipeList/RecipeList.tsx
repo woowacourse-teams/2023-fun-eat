@@ -1,4 +1,5 @@
-import React from 'react';
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import RecipeItem from '../RecipeItem/RecipeItem';
@@ -12,7 +13,9 @@ const RecipeList = () => {
     <RecipeListContainer>
       {recipes.map((recipe) => (
         <li key={recipe.id}>
-          <RecipeItem recipe={recipe} />
+          <Link as={RouterLink} to={`${recipe.id}`}>
+            <RecipeItem recipe={recipe} />
+          </Link>
         </li>
       ))}
     </RecipeListContainer>

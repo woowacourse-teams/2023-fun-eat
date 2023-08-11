@@ -33,7 +33,7 @@ export default ScrollButton;
 
 const ScrollButtonWrapper = styled(Button)`
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   right: 20px;
   border-radius: 50%;
 

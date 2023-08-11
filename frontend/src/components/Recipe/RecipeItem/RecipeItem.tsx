@@ -26,6 +26,7 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
         <Text size="xl" weight="bold">
           {title}
         </Text>
+        {/*TODO: 임시 데이터, API 연동 후 수정*/}
         <Text color={theme.textColors.info}>#불닭볶음면 #옥수수콘 #치즈...</Text>
         <FavoriteWrapper>
           <SvgIcon variant="favoriteFilled" width={16} height={16} />
