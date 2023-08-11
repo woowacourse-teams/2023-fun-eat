@@ -3,13 +3,19 @@ import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
 import { Input } from '@/components/Common';
+import useRecipeFormActionContext from '@/hooks/context/useRecipeFormActionContext';
 
 interface RecipeNameInputProps {
   recipeName: string;
-  handleRecipeName: ChangeEventHandler<HTMLInputElement>;
 }
 
-const RecipeNameInput = ({ handleRecipeName, recipeName }: RecipeNameInputProps) => {
+const RecipeNameInput = ({ recipeName }: RecipeNameInputProps) => {
+  const { handleRecipeFormValue } = useRecipeFormActionContext();
+
+  const handleRecipeName: ChangeEventHandler<HTMLInputElement> = (e) => {
+    handleRecipeFormValue({ target: 'title', value: e.currentTarget.value });
+  };
+
   return (
     <>
       <Heading as="h2" size="xl" tabIndex={0}>

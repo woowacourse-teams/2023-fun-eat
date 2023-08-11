@@ -2,15 +2,22 @@ import { Heading, Spacing, Textarea, Text, useTheme } from '@fun-eat/design-syst
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
+import useRecipeFormActionContext from '@/hooks/context/useRecipeFormActionContext';
+
 const MAX_LENGTH = 500;
 
 interface RecipeDetailTextareaProps {
   recipeDetail: string;
-  handleRecipeDetail: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
-const RecipeDetailTextarea = ({ recipeDetail, handleRecipeDetail }: RecipeDetailTextareaProps) => {
+const RecipeDetailTextarea = ({ recipeDetail }: RecipeDetailTextareaProps) => {
   const theme = useTheme();
+
+  const { handleRecipeFormValue } = useRecipeFormActionContext();
+
+  const handleRecipeDetail: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    handleRecipeFormValue({ target: 'content', value: e.currentTarget.value });
+  };
 
   return (
     <>
