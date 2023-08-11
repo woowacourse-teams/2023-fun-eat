@@ -2,7 +2,7 @@ import { Badge } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import type { Tag } from '@/types/common';
-import { convertTagColor } from '@/utils/converTagColor';
+import { convertTagColor } from '@/utils/convertTagColor';
 
 interface TagListProps {
   tags: Tag[];
