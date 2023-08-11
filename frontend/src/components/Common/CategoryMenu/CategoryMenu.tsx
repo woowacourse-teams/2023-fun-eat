@@ -3,20 +3,22 @@ import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
 import { useCategoryContext } from '@/hooks/context';
-import type { Category, CategoryVariant } from '@/types/common';
+import { useCategoryQuery } from '@/hooks/queries/product';
+import type { CategoryVariant } from '@/types/common';
 
 interface CategoryMenuProps {
   menuVariant: CategoryVariant;
-  menuList: Category[];
 }
 
-const CategoryMenu = ({ menuList, menuVariant }: CategoryMenuProps) => {
+const CategoryMenu = ({ menuVariant }: CategoryMenuProps) => {
+  const { data: categoryList } = useCategoryQuery(menuVariant);
   const { categoryIds, selectCategory } = useCategoryContext();
+
   const currentCategoryId = categoryIds[menuVariant];
 
   return (
     <CategoryMenuContainer>
-      {menuList.map((menu) => {
+      {categoryList?.map((menu) => {
         const isSelected = menu.id === currentCategoryId;
         return (
           <li key={menu.id}>

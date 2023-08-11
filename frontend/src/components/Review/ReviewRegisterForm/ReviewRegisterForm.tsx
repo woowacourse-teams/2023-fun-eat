@@ -1,4 +1,5 @@
 import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import type { RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
@@ -9,27 +10,33 @@ import StarRate from '../StarRate/StarRate';
 
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
+import { useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
-import { useReviewRegisterFormMutation, useReviewImageUploader, useFormData } from '@/hooks/review';
-import type { ProductDetail } from '@/types/product';
+import { useProductDetailQuery } from '@/hooks/queries/product';
+import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
+import { useReviewImageUploader, useFormData } from '@/hooks/review';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
 const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
-  product: ProductDetail;
+  productId: number;
+  targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
-  const { mutate } = useReviewRegisterFormMutation(product.id);
+  const { data: productDetail } = useProductDetailQuery(productId);
+  const { mutate } = useReviewRegisterFormMutation(productId);
+  const { scrollToPosition } = useScroll();
 
+  // TODO: 태그 아이디 개수 조건 수정
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
     reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
@@ -51,6 +58,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
     resetReviewFormValue();
 
     closeReviewDialog();
+    scrollToPosition(targetRef);
   };
 
   return (
@@ -61,7 +69,7 @@ const ReviewRegisterForm = ({ product, closeReviewDialog }: ReviewRegisterFormPr
       </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
-        <ProductOverviewItem name={product.name} image={product.image} />
+        <ProductOverviewItem name={productDetail?.name} image={productDetail?.image} />
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>

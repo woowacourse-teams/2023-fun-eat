@@ -1,16 +1,20 @@
 import { Spacing } from '@fun-eat/design-system';
 
 import { ProductOverviewItem } from '@/components/Product';
-import type { ProductRanking } from '@/types/ranking';
+import { useProductRankingQuery } from '@/hooks/queries/rank';
+import displaySlice from '@/utils/displaySlice';
 
 interface ProductRankingListProps {
-  productRankings: ProductRanking[];
+  isHome?: boolean;
 }
 
-const ProductRankingList = ({ productRankings }: ProductRankingListProps) => {
+const ProductRankingList = ({ isHome }: ProductRankingListProps) => {
+  const { data: productRankings } = useProductRankingQuery();
+  const productsToDisplay = displaySlice(isHome, productRankings?.products, 3);
+
   return (
     <ul>
-      {productRankings.map(({ id, name, image }, index) => (
+      {productsToDisplay?.map(({ id, name, image }, index) => (
         <li key={id}>
           <ProductOverviewItem rank={index + 1} name={name} image={image} />
           <Spacing size={16} />

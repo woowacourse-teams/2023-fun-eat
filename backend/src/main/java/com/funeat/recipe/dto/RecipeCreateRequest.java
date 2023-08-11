@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class RecipeCreateRequest {
 
     @NotBlank(message = "이름을 확인해 주세요")
-    private final String name;
+    private final String title;
 
     @NotNull(message = "상품 ID 목록을 확인해 주세요")
     @Size(min = 1, message = "적어도 1개의 상품 ID가 필요합니다")
@@ -17,14 +17,14 @@ public class RecipeCreateRequest {
     @NotBlank(message = "레시피 내용을 확인해 주세요")
     private final String content;
 
-    public RecipeCreateRequest(final String name, final List<Long> productIds, final String content) {
-        this.name = name;
+    public RecipeCreateRequest(final String title, final List<Long> productIds, final String content) {
+        this.title = title;
         this.productIds = productIds;
         this.content = content;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public List<Long> getProductIds() {

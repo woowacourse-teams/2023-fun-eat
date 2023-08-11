@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import ReviewItem from '../ReviewItem/ReviewItem';
 
 import { PATH } from '@/constants/path';
-import { useInfiniteProductReviewsQuery } from '@/hooks/product';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/hooks/common';
+import { useInfiniteProductReviewsQuery } from '@/hooks/queries/product';
 import type { SortOption } from '@/types/common';
 
 const LOGIN_ERROR_MESSAGE =
