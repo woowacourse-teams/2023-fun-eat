@@ -22,7 +22,7 @@ const RecipeList = () => {
 export default RecipeList;
 
 const RecipeListContainer = styled.ul`
-  & > li {
+  & > li + li {
     margin-top: 40px;
   }
 `;
