@@ -12,8 +12,8 @@ import useDisplaySlice from '@/hooks/useDisplaySlice';
 const PBProductList = () => {
   const { categoryIds } = useCategoryContext();
 
-  const { data: pbPRoductListResponse } = useInfiniteProductsQuery(categoryIds.store);
-  const pbProductList = pbPRoductListResponse?.pages.flatMap((page) => page.products);
+  const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
+  const pbProductList = pbProductListResponse?.pages.flatMap((page) => page.products);
   const pbProductsToDisplay = useDisplaySlice(PATH.HOME, pbProductList, 10);
 
   return (
