@@ -1,9 +1,9 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
+import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/Common';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
@@ -13,7 +13,7 @@ import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
-
+  const tabRef = useRef<HTMLUListElement>(null);
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
@@ -35,7 +35,7 @@ const ProductDetailPage = () => {
       <ProductDetailItem productId={Number(productId)} />
       <Spacing size={36} />
       {/* 나중에 API 수정하면 이 부분도 같이 수정해주세요 */}
-      <TabMenu tabMenus={['리뷰 10', '꿀조합']} />
+      <TabMenu ref={tabRef} tabMenus={['리뷰 10', '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
@@ -58,10 +58,15 @@ const ProductDetailPage = () => {
           {member ? '리뷰 작성하기' : '로그인 후 리뷰를 작성할 수 있어요'}
         </ReviewRegisterButton>
       </ReviewRegisterButtonWrapper>
+      <ScrollButton />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
-            <ReviewRegisterForm productId={Number(productId)} closeReviewDialog={handleCloseBottomSheet} />
+            <ReviewRegisterForm
+              targetRef={tabRef}
+              productId={Number(productId)}
+              closeReviewDialog={handleCloseBottomSheet}
+            />
           </ReviewFormProvider>
         ) : (
           <SortOptionList

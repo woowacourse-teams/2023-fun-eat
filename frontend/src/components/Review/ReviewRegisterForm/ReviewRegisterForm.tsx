@@ -1,4 +1,5 @@
 import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
+import type { RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
@@ -13,6 +14,8 @@ import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/c
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
 import { useReviewImageUploader, useFormData } from '@/hooks/review';
+import useScroll from '@/hooks/useScroll';
+import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
@@ -20,10 +23,11 @@ const MIN_CONTENT_LENGTH = 0;
 
 interface ReviewRegisterFormProps {
   productId: number;
+  targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
 }
 
-const ReviewRegisterForm = ({ productId, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
     useReviewImageUploader();
   const reviewFormValue = useReviewFormValueContext();
@@ -31,6 +35,7 @@ const ReviewRegisterForm = ({ productId, closeReviewDialog }: ReviewRegisterForm
 
   const { data: productDetail } = useProductDetailQuery(productId);
   const { mutate } = useReviewRegisterFormMutation(productId);
+  const { scrollToPosition } = useScroll();
 
   // TODO: 태그 아이디 개수 조건 수정
   const isValid =
@@ -54,6 +59,7 @@ const ReviewRegisterForm = ({ productId, closeReviewDialog }: ReviewRegisterForm
     resetReviewFormValue();
 
     closeReviewDialog();
+    scrollToPosition(targetRef);
   };
 
   return (
