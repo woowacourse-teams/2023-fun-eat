@@ -6,7 +6,7 @@ import { CategoryMenu, SortButton, SortOptionList, Title, ScrollButton } from '@
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
-import useSortOption from '@/hooks/useSortOption';
+import { useSortOption } from '@/hooks/common';
 import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
