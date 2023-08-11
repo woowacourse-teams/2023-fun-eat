@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
 
-import useScroll from '@/hooks/useScroll';
+import { useScroll } from '@/hooks/common';
 
 const ScrollButton = () => {
   const { scrollToTop } = useScroll();

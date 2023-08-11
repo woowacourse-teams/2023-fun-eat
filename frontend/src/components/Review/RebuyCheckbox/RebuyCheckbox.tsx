@@ -1,8 +1,8 @@
 import { Checkbox } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
 
+import { useEnterKeyDown } from '@/hooks/common';
 import { useReviewFormActionContext } from '@/hooks/context';
-import useEnterKeyDown from '@/hooks/useEnterKeyDown';
 
 const RebuyCheckbox = () => {
   const { handleReviewFormValue } = useReviewFormActionContext();
