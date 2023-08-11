@@ -1,314 +1,526 @@
 package com.funeat.review.application;
 
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.ImageFixture.이미지_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_false_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_true_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
+import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
+import static com.funeat.fixture.TagFixture.태그_아침식사_ETC_생성;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Member;
-import com.funeat.member.persistence.MemberRepository;
-import com.funeat.member.persistence.ReviewFavoriteRepository;
-import com.funeat.product.domain.Product;
-import com.funeat.product.persistence.ProductRepository;
+import com.funeat.common.ServiceTest;
 import com.funeat.review.domain.Review;
-import com.funeat.review.persistence.ReviewRepository;
-import com.funeat.review.persistence.ReviewTagRepository;
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
-import com.funeat.tag.domain.TagType;
-import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-class ReviewServiceTest {
+class ReviewServiceTest extends ServiceTest {
 
-    @Autowired
-    private ReviewService reviewService;
+    @Nested
+    class create_성공_테스트 {
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+        @Test
+        void 이미지가_존재하는_리뷰를_추가할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
 
-    @Autowired
-    private TagRepository tagRepository;
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-    @Autowired
-    private MemberRepository memberRepository;
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-    @Autowired
-    private ProductRepository productRepository;
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
 
-    @Autowired
-    private ReviewFavoriteRepository reviewFavoriteRepository;
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var imageFileName = image.getOriginalFilename();
 
-    @Autowired
-    private ReviewTagRepository reviewTagRepository;
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
-    @BeforeEach
-    void init() {
-        reviewFavoriteRepository.deleteAll();
-        reviewTagRepository.deleteAll();
-        reviewRepository.deleteAll();
-        memberRepository.deleteAll();
-        productRepository.deleteAll();
-        tagRepository.deleteAll();
-    }
+            final var expected = new Review(member, product, imageFileName, 4L, "test", true);
 
-    @Test
-    void 리뷰를_추가할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var tags = 태그_추가_요청();
-        final var tagIds = tags.stream()
-                .map(Tag::getId)
-                .collect(Collectors.toList());
-        final var image = 리뷰_페이크_사진_요청();
-        final var request = new ReviewCreateRequest(4L, tagIds, "review", true);
+            // when
+            reviewService.create(productId, memberId, image, request);
+            final var actual = reviewRepository.findAll().get(0);
 
-        // when
-        reviewService.create(product.getId(), member.getId(), image, request);
-        final var result = reviewRepository.findAll();
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
+                    .isEqualTo(expected);
+        }
 
-        // then
-        assertThat(result.get(0)).usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
-                .isEqualTo(
-                        new Review(member, product, image.getOriginalFilename(), 4L, "review", true)
-                );
-        assertThat(result.get(0).getCreatedAt()).isNotNull();
-    }
+        @Test
+        void 이미지가_없는_리뷰를_추가할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
 
-    @Test
-    void 리뷰에_좋아요를_할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var tags = 태그_추가_요청();
-        final var tagIds = tags.stream()
-                .map(Tag::getId)
-                .collect(Collectors.toList());
-        final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
-        final var savedReview = reviewRepository.findAll().get(0);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-        // when
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
-        final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
-        final var reviewResult = reviewRepository.findAll().get(0);
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
 
-        // then
-        assertThat(reviewResult.getFavoriteCount()).isEqualTo(1L);
-        assertThat(reviewFavoriteResult.getFavorite()).isTrue();
-    }
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-    @Test
-    void 리뷰에_좋아요를_취소_할_수_있다() {
-        // given
-        final var member = 멤버_추가_요청();
-        final var product = 상품_추가_요청();
-        final var tags = 태그_추가_요청();
-        final var tagIds = tags.stream()
-                .map(Tag::getId)
-                .collect(Collectors.toList());
-        final var image = 리뷰_페이크_사진_요청();
-        final var reviewCreaterequest = new ReviewCreateRequest(4L, tagIds, "review", true);
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
-        reviewService.create(product.getId(), member.getId(), image, reviewCreaterequest);
-        final var savedReview = reviewRepository.findAll().get(0);
+            final var expected = new Review(member, product, null, 4L, "test", true);
 
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-        reviewService.likeReview(savedReview.getId(), member.getId(), favoriteRequest);
+            // when
+            reviewService.create(productId, memberId, null, request);
+            final var actual = reviewRepository.findAll().get(0);
 
-        // when
-        final var cancelFavoriteRequest = new ReviewFavoriteRequest(false);
-        reviewService.likeReview(savedReview.getId(), member.getId(), cancelFavoriteRequest);
-
-        final var reviewFavoriteResult = reviewFavoriteRepository.findAll().get(0);
-        final var reviewResult = reviewRepository.findAll().get(0);
-
-        // then
-        assertThat(reviewResult.getFavoriteCount()).isEqualTo(0L);
-        assertThat(reviewFavoriteResult.getFavorite()).isFalse();
-    }
-
-    private MockMultipartFile 리뷰_페이크_사진_요청() {
-        return new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
-    }
-
-    private List<Tag> 태그_추가_요청() {
-        final Tag testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final Tag testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
-
-        return List.of(testTag1, testTag2);
-    }
-
-    private Product 상품_추가_요청() {
-        return productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
-    }
-
-    private Member 멤버_추가_요청() {
-        return memberRepository.save(new Member("test", "image.png", "1"));
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .comparingOnlyFields("member", "product", "image", "rating", "content", "reBuy")
+                    .isEqualTo(expected);
+        }
     }
 
     @Nested
-    class sortingReviews_페이징_테스트 {
+    class create_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_멤버로_상품에_리뷰를_추가하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var wrongMemberId = 단일_멤버_저장(member) + 1L;
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.create(productId, wrongMemberId, image, request))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
+        void 멤버로_존재하지_않는_상품에_리뷰를_추가하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var wrongProductId = 단일_상품_저장(product) + 1L;
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.create(wrongProductId, memberId, image, request))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Nested
+    class likeReview_성공_테스트 {
+
+        @Test
+        void 리뷰에_좋아요를_할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, memberId, image, reviewCreaterequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+
+            // when
+            reviewService.likeReview(reviewId, memberId, favoriteRequest);
+
+            final var actualReview = reviewRepository.findAll().get(0);
+            final var actualReviewFavorite = reviewFavoriteRepository.findAll().get(0);
+
+            // then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(actualReview.getFavoriteCount())
+                        .isOne();
+                softAssertions.assertThat(actualReviewFavorite.getFavorite())
+                        .isTrue();
+            });
+        }
+
+        @Test
+        void 리뷰에_좋아요를_취소_할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, memberId, image, reviewCreaterequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+            reviewService.likeReview(reviewId, memberId, favoriteRequest);
+
+            // when
+            final var cancelFavoriteRequest = 리뷰좋아요요청_false_생성();
+            reviewService.likeReview(reviewId, memberId, cancelFavoriteRequest);
+
+            final var actualReview = reviewRepository.findAll().get(0);
+            final var actualReviewFavorite = reviewFavoriteRepository.findAll().get(0);
+
+            // then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(actualReview.getFavoriteCount())
+                        .isZero();
+                softAssertions.assertThat(actualReviewFavorite.getFavorite())
+                        .isFalse();
+            });
+        }
+    }
+
+    @Nested
+    class likeReview_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_멤버가_리뷰에_좋아요를_하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+            final var wrongMemberId = memberId + 1L;
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, memberId, image, reviewCreaterequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+
+            // when
+            assertThatThrownBy(() -> reviewService.likeReview(reviewId, wrongMemberId, favoriteRequest))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
+        void 멤버가_존재하지_않는_리뷰에_좋아요를_하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, memberId, image, reviewCreaterequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+            final var wrongReviewId = reviewId + 1L;
+
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+
+            // when
+            assertThatThrownBy(() -> reviewService.likeReview(wrongReviewId, memberId, favoriteRequest))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Nested
+    class sortingReviews_성공_테스트 {
 
         @Test
         void 좋아요_기준으로_내림차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-            final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var pageable = PageRequest.of(0, 2, Sort.by("favoriteCount").descending());
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
+            final var member1Id = member1.getId();
+
             final var expected = Stream.of(review1, review3)
                     .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
-                    .getReviews();
+            final var actual = reviewService.sortingReviews(productId, page, member1Id).getReviews();
 
             // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
         }
 
         @Test
         void 평점_기준으로_오름차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-            final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var pageable = PageRequest.of(0, 2, Sort.by("rating").ascending());
+            final var review1 = 리뷰_이미지test2_평점2점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var page = 페이지요청_평점_오름차순_생성(0, 2);
+            final var member1Id = member1.getId();
+
             final var expected = Stream.of(review1, review3)
                     .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
-                    .getReviews();
+            final var actual = reviewService.sortingReviews(productId, page, member1Id).getReviews();
 
             // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
         }
 
         @Test
         void 평점_기준으로_내림차순_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-            final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var pageable = PageRequest.of(0, 2, Sort.by("rating").descending());
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var page = 페이지요청_평점_내림차순_생성(0, 2);
+            final var member1Id = member1.getId();
+
             final var expected = Stream.of(review2, review3)
                     .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
-                    .getReviews();
+            final var actual = reviewService.sortingReviews(productId, page, member1Id).getReviews();
 
             // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
         }
 
         @Test
         void 최신순으로_정렬을_할_수_있다() {
             // given
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가(members);
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
 
-            final var product = new Product("김밥", 1000L, "kimbap.png", "우영우가 먹은 그 김밥", null);
-            상품_추가(product);
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 351L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 24L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var pageable = PageRequest.of(0, 2, Sort.by("createdAt").descending());
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
+            final var member1Id = member1.getId();
+
             final var expected = Stream.of(review3, review2)
                     .map(review -> SortingReviewDto.toDto(review, member1))
                     .collect(Collectors.toList());
 
             // when
-            final var actual = reviewService.sortingReviews(product.getId(), pageable, member1.getId())
-                    .getReviews();
+            final var actual = reviewService.sortingReviews(productId, page, member1Id).getReviews();
 
             // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
         }
     }
 
-    private void 복수_유저_추가(final List<Member> members) {
-        memberRepository.saveAll(members);
+    @Nested
+    class sortingReviews_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_멤버가_상품에_있는_리뷰들을_정렬하면_예외가_발생한다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var page = 페이지요청_기본_생성(0, 2);
+            final var wrongMemberId = member1.getId() + 3L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.sortingReviews(productId, page, wrongMemberId))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
+        void 멤버가_존재하지_않는_상품에_있는_리뷰들을_정렬하면_예외가_발생한다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var wrongProductId = 단일_상품_저장(product) + 1L;
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var page = 페이지요청_기본_생성(0, 2);
+            final var member1Id = member1.getId();
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.sortingReviews(wrongProductId, page, member1Id))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
     }
 
-    private void 상품_추가(final Product product) {
-        productRepository.save(product);
-    }
-
-    private void 복수_리뷰_추가(final List<Review> reviews) {
-        reviewRepository.saveAll(reviews);
+    private List<Long> 태그_아이디_변환(final Tag... tags) {
+        return Stream.of(tags)
+                .map(Tag::getId)
+                .collect(Collectors.toList());
     }
 }

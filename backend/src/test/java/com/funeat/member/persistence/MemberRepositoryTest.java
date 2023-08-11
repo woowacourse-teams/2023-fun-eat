@@ -1,39 +1,50 @@
 package com.funeat.member.persistence;
 
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.funeat.common.DataCleaner;
-import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Member;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import com.funeat.common.RepositoryTest;
+import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@Import(DataCleaner.class)
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-public class MemberRepositoryTest {
+public class MemberRepositoryTest extends RepositoryTest {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    @Nested
+    class findByPlatformId_성공_테스트 {
 
-    @Test
-    void platform_id를_통해_유저를_반환한다() {
-        // given
-        final var platformId = "1234";
-        final var member = new Member("test", "www.test.com", platformId);
-        memberRepository.save(member);
+        @Test
+        void platformId를_통해_멤버를_반환한다() {
+            // given
+            final var platformId = "1";
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
 
-        // when
-        final var actual = memberRepository.findByPlatformId(platformId).get();
+            // when
+            final var actual = memberRepository.findByPlatformId(platformId).get();
 
-        // then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(member);
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(member);
+        }
+    }
+
+    @Nested
+    class findByPlatformId_실패_테스트 {
+
+        @Test
+        void platform_id가_잘못된_값으로_멤버를_조회할_때_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var wrongPlatformId = "2";
+
+            // when & then
+            assertThatThrownBy(() -> memberRepository.findByPlatformId(wrongPlatformId).get())
+                    .isInstanceOf(NoSuchElementException.class);
+        }
     }
 }

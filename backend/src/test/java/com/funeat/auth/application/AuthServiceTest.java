@@ -1,41 +1,33 @@
 package com.funeat.auth.application;
 
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.auth.dto.SignUserDto;
-import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Member;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import com.funeat.common.ServiceTest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-public class AuthServiceTest {
+public class AuthServiceTest extends ServiceTest {
 
-    @Autowired
-    private AuthService authService;
+    @Nested
+    class loginWithKakao_성공_테스트 {
 
-    @Test
-    void 카카오_로그인을_하여_유저_정보를_가져온다() {
-        // given
-        final var code = "test";
-        final var member = new Member("test", "https://www.test.com", "1");
-        final var expected = SignUserDto.of(true, member);
+        @Test
+        void 카카오_로그인을_하여_멤버_정보를_가져온다() {
+            // given
+            final var code = "member1";
+            final var member = 멤버_멤버1_생성();
+            final var expected = SignUserDto.of(true, member);
 
-        // when
-        final var actual = authService.loginWithKakao(code);
+            // when
+            final var actual = authService.loginWithKakao(code);
 
-        // then
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("member.id")
-                .isEqualTo(expected);
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .ignoringFields("member.id")
+                    .isEqualTo(expected);
+        }
     }
 }
