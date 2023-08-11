@@ -1,5 +1,5 @@
 import { Button, Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
-import type { RefObject } from 'react';
+import type { FormEventHandler, RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
@@ -47,7 +47,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
     formContent: reviewFormValue,
   });
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
     await mutate(formData);

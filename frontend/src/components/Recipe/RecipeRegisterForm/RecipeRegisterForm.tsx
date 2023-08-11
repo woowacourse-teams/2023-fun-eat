@@ -1,4 +1,5 @@
 import { Button, Divider, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import type { FormEventHandler } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,6 +11,7 @@ import { ImageUploader, SvgIcon } from '@/components/Common';
 import { useFormData, useImageUploader } from '@/hooks/common';
 import useRecipeFormActionContext from '@/hooks/context/useRecipeFormActionContext';
 import useRecipeFormValueContext from '@/hooks/context/useRecipeFormValueContext';
+import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest, RecipeUsedProduct } from '@/types/recipe';
 
 const RecipeRegisterForm = () => {
@@ -19,7 +21,12 @@ const RecipeRegisterForm = () => {
   const [usedProducts, setUsedProducts] = useState<RecipeUsedProduct[]>([]);
 
   const recipeFormValue = useRecipeFormValueContext();
-  const { handleRecipeFormValue } = useRecipeFormActionContext();
+  const { handleRecipeFormValue, resetRecipeFormValue } = useRecipeFormActionContext();
+
+  const { mutate } = useRecipeRegisterFormMutation();
+
+  const isValid =
+    recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
 
   const formData = useFormData<RecipeRequest>({
     imageKey: 'images',
@@ -33,6 +40,13 @@ const RecipeRegisterForm = () => {
     handleRecipeFormValue({ target: 'productIds', value: id });
   };
 
+  const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+    await mutate(formData);
+
+    resetRecipeFormValue();
+  };
+
   return (
     <RecipeRegisterFormContainer>
       <RecipeHeading tabIndex={0}>나만의 꿀조합 만들기🍯</RecipeHeading>
@@ -41,7 +55,7 @@ const RecipeRegisterForm = () => {
       </CloseButton>
       <Divider />
       <Spacing size={36} />
-      <form>
+      <form onSubmit={handleRecipeFormSubmit}>
         <RecipeNameInput recipeName={recipeFormValue.title} />
         <Spacing size={36} />
         <RecipeUsedProducts usedProducts={usedProducts} removeUsedProducts={removeUsedProducts} />
@@ -58,7 +72,7 @@ const RecipeRegisterForm = () => {
         <Spacing size={36} />
         <RecipeDetailTextarea recipeDetail={recipeFormValue.content} />
         <Spacing size={36} />
-        <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold">
+        <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
           레시피 등록하기
         </FormButton>
       </form>
