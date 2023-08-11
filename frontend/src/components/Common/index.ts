@@ -11,3 +11,4 @@ export { default as Title } from './Title/Title';
 export { default as SectionTitle } from './SectionTitle/SectionTitleTitle';
 export { default as ScrollButton } from './ScrollButton/ScrollButton';
 export { default as Input } from './Input/Input';
+export { default as MoreButton } from './MoreButton/MoreButton';
