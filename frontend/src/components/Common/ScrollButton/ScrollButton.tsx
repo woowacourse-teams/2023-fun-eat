@@ -32,13 +32,18 @@ const ScrollButton = () => {
 export default ScrollButton;
 
 const ScrollButtonWrapper = styled(Button)`
-  position: absolute;
-  bottom: 90px;
-  right: 32%;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
   border-radius: 50%;
 
   &:hover {
     transform: scale(1.1);
     transition: all 200ms ease-in-out;
+  }
+
+  @media screen and (min-width: 600px) {
+    left: calc(50% + 260px);
+    transform: translateX(-50%);
   }
 `;

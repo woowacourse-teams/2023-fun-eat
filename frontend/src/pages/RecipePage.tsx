@@ -1,7 +1,7 @@
 import { BottomSheet, useBottomSheet } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList } from '@/components/Common';
+import { ScrollButton, SortButton, SortOptionList } from '@/components/Common';
 import { RecipeList } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
 import { useSortOption } from '@/hooks/common';
@@ -16,6 +16,7 @@ const RecipePage = () => {
         <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
       </SortButtonWrapper>
       <RecipeList />
+      <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={RECIPE_SORT_OPTIONS}
