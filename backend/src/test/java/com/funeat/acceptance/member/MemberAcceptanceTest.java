@@ -114,12 +114,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedMessage = "닉네임을 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(response.jsonPath().getString("code"))
-                        .isEqualTo(expectedCode);
-                softAssertions.assertThat(response.jsonPath().getString("message"))
-                        .isEqualTo(expectedMessage);
-            });
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
 
         @ParameterizedTest
@@ -140,13 +135,18 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedMessage = "프로필 이미지를 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(response.jsonPath().getString("code"))
-                        .isEqualTo(expectedCode);
-                softAssertions.assertThat(response.jsonPath().getString("message"))
-                        .isEqualTo(expectedMessage);
-            });
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
+    }
+
+    private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
+                                              final String expectedMessage) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.jsonPath().getString("code"))
+                    .isEqualTo(expectedCode);
+            softAssertions.assertThat(response.jsonPath().getString("message"))
+                    .isEqualTo(expectedMessage);
+        });
     }
 
     private void 사용자_정보_조회를_검증하다(final ExtractableResponse<Response> response, final Member member) {
