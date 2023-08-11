@@ -10,12 +10,11 @@ import StarRate from '../StarRate/StarRate';
 
 import { SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
+import { useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
 import { useReviewImageUploader, useFormData } from '@/hooks/review';
-import useScroll from '@/hooks/useScroll';
-import type { ProductDetail } from '@/types/product';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
+import { useRoutePage } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
-import useRoutePage from '@/hooks/useRoutePage';
 
 const SLOGAN = '궁금해? 맛있을걸? 먹어봐 🥄';
 const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 레시피를 공유해보세요.';
