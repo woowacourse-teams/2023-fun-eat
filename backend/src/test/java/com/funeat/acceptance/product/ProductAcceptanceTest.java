@@ -452,9 +452,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private static void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response,
-                                                     final String expectedCode,
-                                                     final String expectedMessage) {
+    private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
+                                              final String expectedMessage) {
         assertSoftly(softAssertions -> {
             softAssertions.assertThat(response.jsonPath().getString("code"))
                     .isEqualTo(expectedCode);
