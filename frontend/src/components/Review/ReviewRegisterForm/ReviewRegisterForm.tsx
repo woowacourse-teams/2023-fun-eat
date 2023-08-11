@@ -9,11 +9,11 @@ import StarRate from '../StarRate/StarRate';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { useImageUploader, useScroll } from '@/hooks/common';
+import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
-import { useFormData } from '@/hooks/review';
+import type { ReviewRequest } from '@/types/review';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
@@ -40,7 +40,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
     reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
     reviewFormValue.content.length > MIN_CONTENT_LENGTH;
 
-  const formData = useFormData({
+  const formData = useFormData<ReviewRequest>({
     imageKey: 'image',
     imageFile: imageFile,
     formContentKey: 'reviewRequest',

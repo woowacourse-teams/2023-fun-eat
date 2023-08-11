@@ -2,7 +2,7 @@ import { Button } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
-import useEnterKeyDown from '@/hooks/useEnterKeyDown';
+import { useEnterKeyDown } from '@/hooks/common';
 
 interface ReviewImageUploaderProps {
   previewImage: string;
