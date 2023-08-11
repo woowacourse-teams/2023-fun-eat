@@ -24,7 +24,7 @@ management:
       base-path: { ACTUATOR_BASE_PATH }
     jmx:
       exposure:
-        exclude: *
+        exclude: "*"
   endpoint:
     health:
       enabled: true
