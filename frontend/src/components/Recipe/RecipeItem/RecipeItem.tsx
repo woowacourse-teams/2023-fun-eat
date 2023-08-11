@@ -39,8 +39,8 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
 
 export default RecipeItem;
 
-const RecipeItemContainer = styled.section`
-  height: 300px;
+const RecipeItemContainer = styled.div`
+  height: 280px;
 `;
 
 const ImageWrapper = styled.div`
@@ -72,7 +72,7 @@ const RecipeInfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 120px;
+  height: 100px;
   margin-top: 20px;
 `;
 
