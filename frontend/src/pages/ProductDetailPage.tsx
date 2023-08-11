@@ -3,8 +3,8 @@ import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/Common';
-import { ProductDetailItem, ProductTitle } from '@/components/Product';
+import { SortButton, SortOptionList, TabMenu, ScrollButton, SectionTitle } from '@/components/Common';
+import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
@@ -42,7 +42,7 @@ const ProductDetailPage = () => {
 
   return (
     <>
-      <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
+      <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
       <ProductDetailItem product={productDetail} />
       <Spacing size={36} />
