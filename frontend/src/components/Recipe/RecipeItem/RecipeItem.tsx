@@ -16,8 +16,8 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
   return (
     <RecipeItemContainer>
       <ImageWrapper>
-        <RecipeImage src={image} />
-        <ProfileImage src={author.profileImage} />
+        <RecipeImage src={image} alt={`조리된 ${title}`} />
+        <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />
       </ImageWrapper>
       <RecipeInfoWrapper>
         <Text color={theme.textColors.sub}>

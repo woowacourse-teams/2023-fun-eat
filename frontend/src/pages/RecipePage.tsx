@@ -31,11 +31,9 @@ const RecipePage = () => {
       <Title size="xl" weight="bold">
         🍯 꿀조합
       </Title>
-      <LinkWrapper>
-        <Link as={RouterLink} to="/search">
-          <SvgIcon variant="search" width={24} height={24} />
-        </Link>
-      </LinkWrapper>
+      <SearchPageLink as={RouterLink} to="/search">
+        <SvgIcon variant="search" />
+      </SearchPageLink>
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
@@ -46,8 +44,8 @@ const RecipePage = () => {
           type="button"
           customWidth="100%"
           customHeight="60px"
-          color={!member ? 'gray3' : 'primary'}
-          textColor={!member ? 'white' : 'default'}
+          color={member ? 'primary' : 'gray3'}
+          textColor={member ? 'default' : 'white'}
           size="lg"
           weight="bold"
           onClick={handleOpenRegisterRecipeSheet}
@@ -77,7 +75,7 @@ const Title = styled(Heading)`
   font-size: 24px;
 `;
 
-const LinkWrapper = styled.div`
+const SearchPageLink = styled(Link)`
   position: absolute;
   top: 24px;
   right: 20px;
