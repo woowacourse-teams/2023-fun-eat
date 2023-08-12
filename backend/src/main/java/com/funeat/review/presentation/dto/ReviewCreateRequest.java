@@ -7,13 +7,14 @@ import javax.validation.constraints.Size;
 
 public class ReviewCreateRequest {
 
+    @NotNull(message = "평점을 확인해 주세요")
     private final Long rating;
 
     @NotNull(message = "태그 ID 목록을 확인해 주세요")
     @Size(min = 1, message = "적어도 1개의 태그 ID가 필요합니다")
     private final List<Long> tagIds;
 
-    @NotBlank(message = "리뷰 내용은 공백을 허용하지 않습니다")
+    @NotBlank(message = "리뷰 내용을 확인해 주세요")
     private final String content;
 
     @NotNull(message = "재구매 여부를 입력해주세요")
