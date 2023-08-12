@@ -1,6 +1,6 @@
 import { Heading, Link, theme } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 

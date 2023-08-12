@@ -5,7 +5,7 @@ import MembersInfo from './MembersInfo';
 import mockMember from '@/mocks/data/members.json';
 
 const meta: Meta<typeof MembersInfo> = {
-  title: 'Members/MembersInfo',
+  title: 'members/MembersInfo',
   component: MembersInfo,
   args: {
     member: mockMember,

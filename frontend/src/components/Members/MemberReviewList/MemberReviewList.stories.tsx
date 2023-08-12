@@ -4,7 +4,7 @@ import mockMemberReview from '@/mocks/data/profileReviews.json';
 import MemberReview from '@/pages/MemberReviewPage';
 
 const meta: Meta<typeof MemberReview> = {
-  title: 'Members/MemberReview',
+  title: 'members/MemberReview',
   component: MemberReview,
   args: {
     member: mockMemberReview,
