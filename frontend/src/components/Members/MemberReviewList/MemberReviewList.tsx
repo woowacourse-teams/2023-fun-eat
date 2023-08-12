@@ -1,3 +1,4 @@
+import { Text, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { ReviewRankingItem } from '@/components/Rank';
@@ -14,6 +15,10 @@ const MemberReviewList = ({ isMember }: MemberReviewListProps) => {
 
   return (
     <MemberReviewListContainer>
+      {!isMember && (
+        <TotalReviewCount color={theme.colors.gray4}>총 {profileReviews?.page.totalDataCount}개</TotalReviewCount>
+      )}
+
       {reviewsToDisplay?.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
@@ -29,4 +34,9 @@ const MemberReviewListContainer = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+const TotalReviewCount = styled(Text)`
+  display: flex;
+  flex-direction: row-reverse;
 `;

@@ -7,7 +7,7 @@ const ProfileReviewPage = () => {
   return (
     <>
       <SectionTitle name="내가 작성한 리뷰" />
-      <Spacing size={24} />
+      <Spacing size={18} />
       <MemberReviewList />
     </>
   );
