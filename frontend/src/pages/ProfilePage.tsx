@@ -27,7 +27,7 @@ const ProfilePage = () => {
       <Spacing size={40} />
       <NavigableSectionTitle title="내가 작성한 리뷰" routeDestination={`${PATH.PROFILE}/review`} />
       <Spacing size={24} />
-      <MemberReviewList />
+      <MemberReviewList isMember />
     </ProfilePageContainer>
   );
 };

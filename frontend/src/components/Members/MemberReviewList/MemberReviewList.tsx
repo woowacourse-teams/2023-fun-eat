@@ -1,12 +1,20 @@
 import styled from 'styled-components';
 
 import { ReviewRankingItem } from '@/components/Rank';
-import memberReviews from '@/mocks/data/profileReviews.json';
+import { useProfileReviewQuery } from '@/hooks/queries/members';
+import useDisplaySlice from '@/utils/displaySlice';
 
-const MemberReviewList = () => {
+interface MemberReviewListProps {
+  isMember?: boolean;
+}
+
+const MemberReviewList = ({ isMember }: MemberReviewListProps) => {
+  const { data: profileReviews } = useProfileReviewQuery();
+  const reviewsToDisplay = useDisplaySlice(isMember, profileReviews?.reviews);
+
   return (
     <MemberReviewListContainer>
-      {memberReviews.reviews.map((reviewRanking) => (
+      {reviewsToDisplay?.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>
