@@ -55,7 +55,7 @@ export const productHandlers = [
     };
     return res(
       ctx.status(200),
-      ctx.json({ page: sortedProducts.page, products: products.products.slice(page * 5, (page + 1) * 5) }),
+      ctx.json({ page: sortedProducts.page, products: products.products.slice(page * 10, (page + 1) * 10) }),
       ctx.delay(500)
     );
   }),

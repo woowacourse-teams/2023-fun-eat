@@ -1,34 +1,24 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList, TabMenu } from '@/components/Common';
-import { ProductDetailItem, ProductTitle } from '@/components/Product';
+import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/Common';
+import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
+import { useSortOption } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
-import { useInfiniteProductReviewsQuery, useProductDetail } from '@/hooks/product';
-import useSortOption from '@/hooks/useSortOption';
 
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
-
+  const tabRef = useRef<HTMLUListElement>(null);
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
 
-  const { data } = useInfiniteProductReviewsQuery(Number(productId), REVIEW_SORT_OPTIONS[0].value);
-  const reviewLength = data?.pages.flatMap((page) => page.reviews).length;
-
   const member = useMemberValueContext();
-
-  const { data: productDetail } = useProductDetail(productId as string);
-
-  if (!productDetail) {
-    return null;
-  }
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -42,11 +32,10 @@ const ProductDetailPage = () => {
 
   return (
     <>
-      <ProductTitle name={productDetail.name} bookmark={productDetail.bookmark} />
+      <ProductDetailItem productId={Number(productId)} />
       <Spacing size={36} />
-      <ProductDetailItem product={productDetail} />
-      <Spacing size={36} />
-      <TabMenu tabMenus={[`리뷰 ${reviewLength}`, '꿀조합']} />
+      {/* 나중에 API 수정하면 이 부분도 같이 수정해주세요 */}
+      <TabMenu ref={tabRef} tabMenus={['리뷰 10', '꿀조합']} />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
@@ -69,10 +58,15 @@ const ProductDetailPage = () => {
           {member ? '리뷰 작성하기' : '로그인 후 리뷰를 작성할 수 있어요'}
         </ReviewRegisterButton>
       </ReviewRegisterButtonWrapper>
+      <ScrollButton />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
-            <ReviewRegisterForm product={productDetail} closeReviewDialog={handleCloseBottomSheet} />
+            <ReviewRegisterForm
+              targetRef={tabRef}
+              productId={Number(productId)}
+              closeReviewDialog={handleCloseBottomSheet}
+            />
           </ReviewFormProvider>
         ) : (
           <SortOptionList

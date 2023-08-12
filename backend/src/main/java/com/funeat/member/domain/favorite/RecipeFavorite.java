@@ -24,5 +24,30 @@ public class RecipeFavorite {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    private Boolean checked;
+    private Boolean favorite;
+
+    protected RecipeFavorite() {
+    }
+
+    public RecipeFavorite(final Member member, final Recipe recipe, final Boolean favorite) {
+        this.member = member;
+        this.recipe = recipe;
+        this.favorite = favorite;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
 }
