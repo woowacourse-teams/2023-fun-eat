@@ -262,6 +262,37 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
+
+        @Test
+        void 사용자가_리뷰_작성할때_리뷰내용이_200자_초과시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var maxContent = "test".repeat(50) + "a";
+            final var request = new ReviewCreateRequest(1L, tagIds, maxContent, true);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "리뷰 내용은 최대 200자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
     }
 
     @Nested

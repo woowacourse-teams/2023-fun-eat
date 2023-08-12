@@ -199,6 +199,36 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
+
+        @Test
+        void 사용자가_레시피_작성할때_레시피내용이_500자_초과시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+
+            final var images = 여러_사진_요청(3);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var maxContent = "tests".repeat(100) + "a";
+            final var request = new RecipeCreateRequest("title", productIds, maxContent);
+            final var response = 레시피_생성_요청(request, images, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "리뷰 내용은 최대 500자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
     }
 
     @Nested
