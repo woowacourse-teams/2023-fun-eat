@@ -1,56 +1,36 @@
-import { Button, Heading, Link, theme } from '@fun-eat/design-system';
+import { Heading, Link, theme } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import type { Member } from '@/types/member';
 
 interface MembersTitleProps {
-  member: Member;
+  title: string;
+  routeDestination: string;
 }
 
-const MembersTitle = ({ member }: MembersTitleProps) => {
-  const { nickname, profileImage } = member;
-
+const MembersTitle = ({ title, routeDestination }: MembersTitleProps) => {
   return (
-    <MembersTitleContainer>
-      <MemberTitleInfoWrapper>
-        <MembersImage src={profileImage} width={45} height={45} alt={`${nickname}의 프로필`} />
-        <Heading size="xl" weight="bold">
-          {nickname} 님
-        </Heading>
-        <MemberModifyLink as={RouterLink} to={`${PATH.PROFILE}/modify`}>
-          <SvgIcon variant="pencil" width={20} height={24} color={theme.colors.gray3} />
-        </MemberModifyLink>
-      </MemberTitleInfoWrapper>
-      <Button type="button" textColor="disabled" variant="transparent">
-        로그아웃
-      </Button>
-    </MembersTitleContainer>
+    <MemberTitleContainer>
+      <Heading as="h2" size="xl">
+        {title}
+      </Heading>
+      <Link as={RouterLink} to={`${PATH.PROFILE}/${routeDestination}`}>
+        <ArrowIcon variant="arrow" color={theme.colors.gray5} width={18} height={18} />
+      </Link>
+    </MemberTitleContainer>
   );
 };
 
 export default MembersTitle;
 
-const MembersTitleContainer = styled.div`
+const MemberTitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const MemberTitleInfoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const MemberModifyLink = styled(Link)`
-  margin-left: 5px;
-  transform: translateY(1px);
-`;
-
-const MembersImage = styled.img`
-  margin-right: 16px;
-  border-radius: 50%;
-  border: 2px solid ${({ theme }) => theme.colors.primary};
+const ArrowIcon = styled(SvgIcon)`
+  transform: translateY(3px) rotate(180deg);
 `;
