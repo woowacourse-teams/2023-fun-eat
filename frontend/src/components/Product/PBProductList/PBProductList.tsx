@@ -31,7 +31,9 @@ const PBProductList = ({ isHome }: PBProductListProps) => {
             </Link>
           </li>
         ))}
-        <MoreButton />
+        <li>
+          <MoreButton />
+        </li>
       </PBProductListContainer>
     </>
   );
