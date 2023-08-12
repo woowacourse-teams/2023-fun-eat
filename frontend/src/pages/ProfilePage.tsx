@@ -1,8 +1,10 @@
-import { Text } from '@fun-eat/design-system';
+import { Spacing } from '@fun-eat/design-system';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { NavigableSectionTitle } from '@/components/Common';
+import { MembersInfo, MemberReviewList } from '@/components/Members';
 import { PATH } from '@/constants/path';
 import { useMember } from '@/hooks/auth';
 import { useMemberValueContext } from '@/hooks/context';
@@ -21,25 +23,15 @@ const ProfilePage = () => {
 
   return (
     <ProfilePageContainer>
-      <ProfileImage src={member.profileImage} alt={member.nickname} width={60} height={60} />
-      <Text as="span" size="xl">
-        {member.nickname}
-      </Text>
+      <MembersInfo member={member} />
+      <Spacing size={40} />
+      <NavigableSectionTitle title="내가 작성한 리뷰" routeDestination={`${PATH.PROFILE}/review`} />
+      <Spacing size={24} />
+      <MemberReviewList />
     </ProfilePageContainer>
   );
 };
 
 export default ProfilePage;
 
-const ProfilePageContainer = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 20px;
-`;
-
-const ProfileImage = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.gray4};
-`;
+const ProfilePageContainer = styled.div``;
