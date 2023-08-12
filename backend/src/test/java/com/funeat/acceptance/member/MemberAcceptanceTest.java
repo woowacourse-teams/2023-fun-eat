@@ -2,7 +2,7 @@ package com.funeat.acceptance.member;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
-import static com.funeat.acceptance.common.CommonSteps.승인되지_않음;
+import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
@@ -55,7 +55,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var response = 사용자_정보_조회_요청(null);
 
             // then
-            STATUS_CODE를_검증한다(response, 승인되지_않음);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
             사용자_승인되지_않음을_검증하다(response);
         }
     }
@@ -92,7 +92,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var response = 사용자_정보_수정_요청(null, request);
 
             // then
-            STATUS_CODE를_검증한다(response, 승인되지_않음);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
             사용자_승인되지_않음을_검증하다(response);
         }
 

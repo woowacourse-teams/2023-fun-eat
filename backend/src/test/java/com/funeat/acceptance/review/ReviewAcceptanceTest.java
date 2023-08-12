@@ -2,7 +2,7 @@ package com.funeat.acceptance.review;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
-import static com.funeat.acceptance.common.CommonSteps.승인되지_않음;
+import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
@@ -120,7 +120,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
             final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
 
-            STATUS_CODE를_검증한다(response, 승인되지_않음);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
 
@@ -410,7 +410,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
             final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
 
-            STATUS_CODE를_검증한다(response, 승인되지_않음);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
 
@@ -740,7 +740,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
             final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
 
-            STATUS_CODE를_검증한다(response, 승인되지_않음);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
 
