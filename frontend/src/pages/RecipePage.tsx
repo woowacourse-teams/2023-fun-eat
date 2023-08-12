@@ -9,6 +9,10 @@ import { RECIPE_SORT_OPTIONS } from '@/constants';
 import { useSortOption } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
 
+const RECIPE_PAGE_TITLE = '🍯 꿀조합';
+const REGISTER_RECIPE = '꿀조합 작성하기';
+const REGISTER_RECIPE_AFTER_LOGIN = '로그인 후 꿀조합을 작성할 수 있어요';
+
 const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
@@ -29,7 +33,7 @@ const RecipePage = () => {
   return (
     <>
       <Title size="xl" weight="bold">
-        🍯 꿀조합
+        {RECIPE_PAGE_TITLE}
       </Title>
       <SearchPageLink as={RouterLink} to="/search">
         <SvgIcon variant="search" />
@@ -50,7 +54,7 @@ const RecipePage = () => {
           weight="bold"
           onClick={handleOpenRegisterRecipeSheet}
         >
-          {member ? '꿀조합 작성하기' : '로그인 후 꿀조합을 작성할 수 있어요'}
+          {member ? REGISTER_RECIPE : REGISTER_RECIPE_AFTER_LOGIN}
         </RecipeRegisterButton>
       </RecipeRegisterButtonWrapper>
       <ScrollButton />
