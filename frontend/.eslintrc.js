@@ -3,7 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:storybook/recommended',
+    'plugin:import/recommended',
+  ],
   ignorePatterns: ['*.js'],
   overrides: [
     {
@@ -15,6 +21,18 @@ module.exports = {
         sourceType: 'script',
       },
     },
+    {
+      env: {
+        jest: true,
+      },
+      files: ['__tests__/**/*.{ts,tsx}'],
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
+      },
+    },
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -23,7 +41,7 @@ module.exports = {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
   },
-  plugins: ['@typescript-eslint', 'react'],
+  plugins: ['@typescript-eslint', 'react', 'import'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-var-requires': 0,
@@ -47,5 +65,48 @@ module.exports = {
         html: true,
       },
     ],
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'object', 'unknown'],
+        pathGroups: [
+          {
+            pattern: '@storybook/**',
+            group: 'external',
+          },
+          {
+            pattern: '@fun-eat/**',
+            group: 'external',
+          },
+          {
+            pattern: '@tanstack/**',
+            group: 'external',
+          },
+          {
+            pattern: '@*/**',
+            group: 'unknown',
+          },
+          {
+            pattern: '@*',
+            group: 'unknown',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['unknown'],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'always',
+      },
+    ],
+    'import/no-unresolved': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/ban-types': 'off',
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {},
+      webpack: {},
+    },
   },
 };

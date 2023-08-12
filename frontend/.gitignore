@@ -3,3 +3,7 @@ dist
 .DS_Store
 .AppleDouble
 .LSOverride
+.env
+coverage
+test-results
+junit.xml

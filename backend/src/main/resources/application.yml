@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: { DEPLOY_ACTIVE }
+  servlet:
+    multipart:
+      enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /funeat-api
+    enabled: true
+    tags-sorter: alpha
+
+kakao:
+  rest-api-key: { REST_API_KEY }
+  redirect-uri: { REDIRECT_URI }
+
+logging:
+  file:
+    path: { LOG_DIR }

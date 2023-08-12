@@ -1,0 +1,7 @@
+log_pattern: { LOG_PATTERN }
+dev_slack_webhook_uri: { DEV_SLACK_WEBHOOK_URI }
+dev_file_size: { DEV_FILE_SIZE }
+dev_file_max_history: { DEV_FILE_MAX_HISTORY }
+prod_slack_webhook_uri: { PROD_SLACK_WEBHOOK_URI }
+prod_file_size: { PROD_FILE_SIZE }
+prod_file_max_history: { PROD_FILE_MAX_HISTORY }

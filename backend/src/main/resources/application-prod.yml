@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: { PROD_DB_URL }
+    username: { PROD_DB_USERNAME }
+    password: { PROD_DB_PASSWORD }
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+
+image:
+  path: { PROD_IMAGE_PATH }
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health, metrics, prometheus
+      base-path: { ACTUATOR_BASE_PATH }
+    jmx:
+      exposure:
+        exclude: "*"
+  endpoint:
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  server:
+    port: { SERVER_PORT }
+

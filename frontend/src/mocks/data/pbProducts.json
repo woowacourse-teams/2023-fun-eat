@@ -1,0 +1,92 @@
+{
+  "page": {
+    "totalDataCount": 99,
+    "totalPages": 10,
+    "firstPage": true,
+    "lastPage": false,
+    "requestPage": 1,
+    "requestSize": 10
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "PB 꼬북칩",
+      "price": 1500,
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
+      "averageRating": 4.5,
+      "reviewCount": 100
+    },
+    {
+      "id": 2,
+      "name": "PB 새우깡",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 3,
+      "name": "PB 감자깡",
+      "price": 1200,
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
+      "averageRating": 3.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 4,
+      "name": "PB 고구마깡",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 5,
+      "name": "PB 버터링",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 6,
+      "name": "PB 짱구",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 7,
+      "name": "PB 초코칩쿠키",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 8,
+      "name": "PB 콘칩",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 9,
+      "name": "PB 포스틱",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    },
+    {
+      "id": 10,
+      "name": "PB 꽃게랑",
+      "price": 1000,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "averageRating": 4.0,
+      "reviewCount": 100
+    }
+  ]
+}

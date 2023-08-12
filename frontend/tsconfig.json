@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "esModuleInterop": true,
     "module": "esnext",
@@ -11,11 +11,12 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
+    "typeRoots": ["node_modules/@types", "src/types"],
     "baseUrl": ".",
     "paths": {
-      "@*": ["src/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "__tests__"],
   "exclude": ["node_modules", "dist"]
 }
