@@ -10,7 +10,9 @@ interface MembersTitleProps {
 const MembersTitle = ({ title }: MembersTitleProps) => {
   return (
     <MemberTitleContainer>
-      <Heading size="xl">{title}</Heading>
+      <Heading as="h2" size="xl">
+        {title}
+      </Heading>
       <Link>
         <ArrowIcon variant="arrow" color={theme.colors.gray5} width={18} height={18} />
       </Link>
