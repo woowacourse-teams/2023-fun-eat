@@ -1,4 +1,5 @@
 import { Heading, Link, Spacing } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -10,6 +11,8 @@ import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
 
 const HomePage = () => {
+  const { reset } = useQueryErrorResetBoundary();
+
   channelTalk.loadScript();
 
   channelTalk.boot({
@@ -25,7 +28,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
-        <ErrorBoundary fallback={ErrorComponent}>
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <ProductList category="food" isHomePage />
             <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
@@ -42,7 +45,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <ErrorBoundary fallback={ErrorComponent}>
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <PBProductList isHomePage />
           </Suspense>
@@ -54,7 +57,7 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ErrorBoundary fallback={ErrorComponent}>
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <ProductRankingList isHomePage />
           </Suspense>
@@ -66,7 +69,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ErrorBoundary fallback={ErrorComponent}>
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <ReviewRankingList isHomePage />
           </Suspense>

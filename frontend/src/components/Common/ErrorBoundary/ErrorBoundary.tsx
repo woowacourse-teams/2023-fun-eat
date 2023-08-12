@@ -1,3 +1,4 @@
+import { Button } from '@fun-eat/design-system';
 import type { ComponentType, PropsWithChildren } from 'react';
 import { Component } from 'react';
 
@@ -6,6 +7,7 @@ export interface FallbackProps {
 }
 
 interface ErrorBoundaryProps {
+  handleReset?: Function;
   fallback: ComponentType<FallbackProps>;
 }
 
@@ -22,11 +24,26 @@ class ErrorBoundary extends Component<PropsWithChildren<ErrorBoundaryProps>, Err
     return { error };
   }
 
+  resetError = () => {
+    if (this.props.handleReset) {
+      this.props.handleReset();
+    }
+
+    this.setState({ error: null });
+  };
+
   render() {
     const { fallback: FallbackComponent } = this.props;
 
     if (this.state.error) {
-      return <FallbackComponent message={this.state.error.message} />;
+      return (
+        <>
+          <FallbackComponent message={this.state.error.message} />
+          <Button type="button" onClick={this.resetError}>
+            다시 시도하기
+          </Button>
+        </>
+      );
     }
 
     return this.props.children;
