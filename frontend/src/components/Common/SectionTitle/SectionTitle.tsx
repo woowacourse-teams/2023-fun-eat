@@ -6,7 +6,7 @@ import { useRoutePage } from '@/hooks/common';
 
 interface SectionTitleProps {
   name: string;
-  bookmark: boolean;
+  bookmark?: boolean;
 }
 
 const SectionTitle = ({ name, bookmark }: SectionTitleProps) => {
@@ -22,12 +22,14 @@ const SectionTitle = ({ name, bookmark }: SectionTitleProps) => {
           {name}
         </Heading>
       </SectionTitleWrapper>
-      <Button type="button" customWidth="32px" variant="transparent" aria-label="북마크">
-        <SvgIcon
-          variant={bookmark ? 'bookmarkFilled' : 'bookmark'}
-          color={bookmark ? theme.colors.primary : theme.colors.gray5}
-        />
-      </Button>
+      {bookmark && (
+        <Button type="button" customWidth="32px" variant="transparent" aria-label="북마크">
+          <SvgIcon
+            variant={bookmark ? 'bookmarkFilled' : 'bookmark'}
+            color={bookmark ? theme.colors.primary : theme.colors.gray5}
+          />
+        </Button>
+      )}
     </SectionTitleContainer>
   );
 };
