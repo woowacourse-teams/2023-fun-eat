@@ -18,6 +18,7 @@ const RecipeDetailPage = () => {
   return (
     <>
       <SectionTitle name={title} />
+      <Spacing size={24} />
       <RecipeImageContainer>
         {images.map((image) => (
           <li key={image}>
@@ -111,7 +112,7 @@ const FavoriteWrapper = styled.div`
 `;
 
 const RecipeUsedProductsWrapper = styled.div`
-  padding: 16px;
+  padding: 20px;
   border-radius: 8px;
   background: ${({ theme }) => theme.backgroundColors.light};
 `;
