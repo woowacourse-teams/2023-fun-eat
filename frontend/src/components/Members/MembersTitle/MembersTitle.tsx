@@ -1,7 +1,9 @@
-import { Button, Heading, theme } from '@fun-eat/design-system';
+import { Button, Heading, Link, theme } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
+import { PATH } from '@/constants/path';
 import type { Member } from '@/types/member';
 
 interface MembersTitleProps {
@@ -18,11 +20,11 @@ const MembersTitle = ({ member }: MembersTitleProps) => {
         <Heading size="xl" weight="bold">
           {nickname} 님
         </Heading>
-        <MemberModifyButton type="button" variant="transparent">
+        <MemberModifyLink as={RouterLink} to={`${PATH.PROFILE}/modify`}>
           <SvgIcon variant="pencil" width={20} height={24} color={theme.colors.gray3} />
-        </MemberModifyButton>
+        </MemberModifyLink>
       </MemberTitleInfoWrapper>
-      <Button textColor="disabled" variant="transparent">
+      <Button type="button" textColor="disabled" variant="transparent">
         로그아웃
       </Button>
     </MembersTitleContainer>
@@ -42,7 +44,7 @@ const MemberTitleInfoWrapper = styled.div`
   align-items: center;
 `;
 
-const MemberModifyButton = styled(Button)`
+const MemberModifyLink = styled(Link)`
   margin-left: 5px;
   transform: translateY(1px);
 `;
