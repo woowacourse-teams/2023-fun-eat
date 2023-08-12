@@ -1,7 +1,9 @@
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
+import { ErrorComponent } from '@/components/Common';
 import ErrorBoundary from '@/components/Common/ErrorBoundary/ErrorBoundary';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
@@ -32,9 +34,15 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <CategoryProvider>
-            <HomePage />
-          </CategoryProvider>
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+                <CategoryProvider>
+                  <HomePage />
+                </CategoryProvider>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         ),
       },
       {
