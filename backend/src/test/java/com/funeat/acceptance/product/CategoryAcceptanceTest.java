@@ -1,8 +1,10 @@
 package com.funeat.acceptance.product;
 
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static com.funeat.acceptance.product.CategorySteps.공통_상품_카테고리_목록_조회_요청;
+import static com.funeat.acceptance.product.CategorySteps.카테고리_목록_조회_요청;
+import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_CU_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_과자류_생성;
@@ -18,6 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class CategoryAcceptanceTest extends AcceptanceTest {
@@ -36,11 +41,29 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
             복수_카테고리_저장(간편식사, 즉석조리, 과자류, CU);
 
             // when
-            final var response = 공통_상품_카테고리_목록_조회_요청();
+            final var response = 카테고리_목록_조회_요청("food");
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
+        }
+    }
+
+    @Nested
+    class getAllCategoriesByType_실패_테스트 {
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        @ValueSource(strings = {"a", "foo"})
+        void 존재하지_않는_카테고리의_목록을_조회할때_예외가_발생한다(final String type) {
+            // given & when
+            final var response = 카테고리_목록_조회_요청(type);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            assertThat(response.jsonPath().getString("code")).isEqualTo(expectedCode);
         }
     }
 

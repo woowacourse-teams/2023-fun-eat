@@ -23,10 +23,8 @@ public class ProductApiController implements ProductController {
     }
 
     @GetMapping("/categories/{categoryId}/products")
-    public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(
-            @PathVariable final Long categoryId,
-            @PageableDefault Pageable pageable
-    ) {
+    public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(@PathVariable final Long categoryId,
+                                                                               @PageableDefault Pageable pageable) {
         final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, pageable);
         return ResponseEntity.ok(response);
     }
