@@ -1,7 +1,7 @@
 import { Spacing } from '@fun-eat/design-system';
 
-import { SectionTitle } from '@/components/Common';
-import MemberReviewList from '@/components/Members/MemberReviewList/MemberReviewList';
+import { ScrollButton, SectionTitle } from '@/components/Common';
+import { MemberReviewList } from '@/components/Members';
 
 const MemberReviewPage = () => {
   return (
@@ -9,6 +9,7 @@ const MemberReviewPage = () => {
       <SectionTitle name="내가 작성한 리뷰" />
       <Spacing size={18} />
       <MemberReviewList />
+      <ScrollButton />
     </>
   );
 };
