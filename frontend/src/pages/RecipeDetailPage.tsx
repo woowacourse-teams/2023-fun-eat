@@ -22,7 +22,7 @@ const RecipeDetailPage = () => {
       <RecipeImageContainer>
         {images.map((image) => (
           <li key={image}>
-            <RecipeImage src={image} alt={`${image}`} width={312} height={210} />
+            <RecipeImage src={image} alt={`${title} 꿀조합 사진`} width={312} height={210} />
           </li>
         ))}
       </RecipeImageContainer>
