@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { MarkedText } from '@/components/Common';
 import { PATH } from '@/constants/path';
+import { useIntersectionObserver } from '@/hooks/common';
 import { useInfiniteSearchedProductsQuery } from '@/hooks/queries/search';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 interface RecommendListProps {
   searchQuery: string;
