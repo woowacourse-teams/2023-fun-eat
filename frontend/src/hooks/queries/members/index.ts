@@ -1,1 +1,1 @@
-export { default as useMemberReviewQuery } from './useMemberReviewQuery';
+export { default as useInfiniteMemberReviewQuery } from './useInfiniteMemberReviewQuery';
