@@ -15,6 +15,7 @@ public class ReviewCreateRequest {
     private final List<Long> tagIds;
 
     @NotBlank(message = "리뷰 내용을 확인해 주세요")
+    @Size(max = 200, message = "리뷰 내용은 최대 200자까지 입력 가능합니다")
     private final String content;
 
     @NotNull(message = "재구매 여부를 입력해주세요")

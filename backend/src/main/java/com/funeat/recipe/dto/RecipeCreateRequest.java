@@ -15,6 +15,7 @@ public class RecipeCreateRequest {
     private final List<Long> productIds;
 
     @NotBlank(message = "레시피 내용을 확인해 주세요")
+    @Size(max = 500, message = "리뷰 내용은 최대 500자까지 입력 가능합니다")
     private final String content;
 
     public RecipeCreateRequest(final String title, final List<Long> productIds, final String content) {

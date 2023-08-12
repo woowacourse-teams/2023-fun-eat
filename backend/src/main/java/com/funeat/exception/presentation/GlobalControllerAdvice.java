@@ -79,12 +79,12 @@ public class GlobalControllerAdvice {
                 request.getRequestURI(), e.getErrorCode().getCode(), e.getErrorCode().getMessage(),
                 objectMapper.writeValueAsString(e.getErrorCode().getInfo()));
 
-        ErrorCode<?> errorCode = new ErrorCode<>(e.getErrorCode().getCode(), e.getMessage());
+        final ErrorCode<?> errorCode = new ErrorCode<>(e.getErrorCode().getCode(), e.getMessage());
         return ResponseEntity.status(e.getStatus()).body(errorCode);
     }
 
     private String getExceptionSource(final Exception e) {
-        StackTraceElement[] stackTrace = e.getStackTrace();
+        final StackTraceElement[] stackTrace = e.getStackTrace();
         if (stackTrace.length > 0) {
             return stackTrace[0].toString();
         }
@@ -95,7 +95,7 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> handleServerException(final Exception e) {
         log.error("", e);
 
-        ErrorCode<?> errorCode = new ErrorCode<>(UNKNOWN_SERVER_ERROR_CODE.getCode(),
+        final ErrorCode<?> errorCode = new ErrorCode<>(UNKNOWN_SERVER_ERROR_CODE.getCode(),
                 UNKNOWN_SERVER_ERROR_CODE.getMessage());
         return ResponseEntity.status(UNKNOWN_SERVER_ERROR_CODE.getStatus()).body(errorCode);
     }
