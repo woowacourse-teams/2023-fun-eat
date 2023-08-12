@@ -17,7 +17,12 @@
         "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed"
       },
       "createdAt": "2023-08-09T10:10:10",
-      "favoriteCount": 153
+      "favoriteCount": 153,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 }
+      ]
     },
     {
       "id": 2,
@@ -28,7 +33,14 @@
         "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/84a20dae-4770-4497-ae25-2dd552261aab"
       },
       "createdAt": "2023-08-10T10:10:10",
-      "favoriteCount": 154
+      "favoriteCount": 154,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 },
+        { "id": 14, "name": "치즈", "price": 1500 },
+        { "id": 15, "name": "콘치즈", "price": 1500 }
+      ]
     },
     {
       "id": 3,
@@ -39,7 +51,15 @@
         "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed"
       },
       "createdAt": "2023-08-01T10:10:10",
-      "favoriteCount": 1531
+      "favoriteCount": 1531,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 },
+        { "id": 14, "name": "치즈", "price": 1500 },
+        { "id": 15, "name": "콘치즈", "price": 1500 },
+        { "id": 16, "name": "콘치즈", "price": 1500 }
+      ]
     },
     {
       "id": 4,
@@ -50,7 +70,15 @@
         "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/84a20dae-4770-4497-ae25-2dd552261aab"
       },
       "createdAt": "2023-08-06T10:10:10",
-      "favoriteCount": 120
+      "favoriteCount": 120,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 },
+        { "id": 14, "name": "치즈", "price": 1500 },
+        { "id": 15, "name": "콘치즈", "price": 1500 },
+        { "id": 16, "name": "콘치즈", "price": 1500 }
+      ]
     }
   ]
 }

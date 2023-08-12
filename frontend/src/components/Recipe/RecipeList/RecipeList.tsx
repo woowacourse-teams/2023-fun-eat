@@ -7,6 +7,7 @@ import RecipeItem from '../RecipeItem/RecipeItem';
 import recipeResponse from '@/mocks/data/recipes.json';
 
 const RecipeList = () => {
+  // TODO: 임시 데이터, API 연동 후 수정
   const { recipes } = recipeResponse;
 
   return (

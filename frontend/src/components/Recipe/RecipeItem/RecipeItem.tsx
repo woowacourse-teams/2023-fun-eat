@@ -1,4 +1,4 @@
-import { Text, useTheme } from '@fun-eat/design-system';
+import { Heading, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
@@ -10,7 +10,7 @@ interface RecipeItemProps {
 }
 
 const RecipeItem = ({ recipe }: RecipeItemProps) => {
-  const { image, title, author, createdAt, favoriteCount } = recipe;
+  const { image, title, author, createdAt, favoriteCount, products } = recipe;
   const theme = useTheme();
 
   return (
@@ -23,11 +23,18 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
         <Text color={theme.textColors.sub}>
           {author.nickname} 님 | {getFormattedDate(createdAt)}
         </Text>
-        <Text size="xl" weight="bold">
+        <Heading as="h3" size="xl" weight="bold">
           {title}
+        </Heading>
+        <Text>
+          {products.map(({ id, name }) => (
+            <>
+              <Text as="span" key={id} color={theme.textColors.info}>
+                #{name}
+              </Text>{' '}
+            </>
+          ))}
         </Text>
-        {/*TODO: 임시 데이터, API 연동 후 수정*/}
-        <Text color={theme.textColors.info}>#불닭볶음면 #옥수수콘 #치즈...</Text>
         <FavoriteWrapper>
           <SvgIcon variant="favoriteFilled" width={16} height={16} />
           <Text as="span" weight="bold">
