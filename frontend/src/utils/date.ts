@@ -6,3 +6,5 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 export const getRelativeDate = (date: string) => dayjs().locale('ko').to(dayjs(date));
+
+export const getFormattedDate = (date: string) => dayjs(date).format('YYYY.MM.DD');
