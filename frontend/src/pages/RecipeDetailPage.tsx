@@ -83,9 +83,8 @@ const RecipeImageContainer = styled.ul`
 `;
 
 const RecipeImage = styled.img`
-  width: 312px;
-  height: 208px;
   object-fit: cover;
+  border-radius: 10px;
 `;
 
 const AuthorFavoriteWrapper = styled.div`
