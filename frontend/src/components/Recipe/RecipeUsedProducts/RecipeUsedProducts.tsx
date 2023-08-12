@@ -22,26 +22,24 @@ const RecipeUsedProducts = ({ usedProducts, removeUsedProducts }: RecipeUsedProd
       {/* TODO: 검색 컴포넌트로 교체하기 */}
       <Input />
       <Spacing size={12} />
-      <BadgeWrapper>
-        {usedProducts.length ? (
-          <>
-            {usedProducts.map(({ id, name }) => (
-              <li key={id}>
-                <Badge color={theme.colors.secondary} textColor={theme.textColors.default}>
-                  {name}
-                  <RemoveButton type="button" variant="transparent" onClick={() => removeUsedProducts(id)}>
-                    <SvgIcon variant="close" width={8} height={8} />
-                  </RemoveButton>
-                </Badge>
-              </li>
-            ))}
-          </>
-        ) : (
-          <Text color={theme.textColors.info} tabIndex={0}>
-            사용한 상품은 6개까지 업로드 할 수 있어요 😉
-          </Text>
-        )}
-      </BadgeWrapper>
+      {usedProducts.length ? (
+        <BadgeWrapper>
+          {usedProducts.map(({ id, name }) => (
+            <li key={id}>
+              <Badge color={theme.colors.secondary} textColor={theme.textColors.default}>
+                {name}
+                <RemoveButton type="button" variant="transparent" onClick={() => removeUsedProducts(id)}>
+                  <SvgIcon variant="close" width={8} height={8} />
+                </RemoveButton>
+              </Badge>
+            </li>
+          ))}
+        </BadgeWrapper>
+      ) : (
+        <ProductUploadLimitMessage color={theme.textColors.info}>
+          사용한 상품은 6개까지 업로드 할 수 있어요 😉
+        </ProductUploadLimitMessage>
+      )}
     </>
   );
 };
@@ -57,6 +55,10 @@ const BadgeWrapper = styled.ul`
   flex-wrap: wrap;
   column-gap: 8px;
   max-width: 300px;
+  height: 56px;
+`;
+
+const ProductUploadLimitMessage = styled(Text)`
   height: 56px;
 `;
 
