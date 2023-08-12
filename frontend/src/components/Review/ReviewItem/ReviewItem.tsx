@@ -3,8 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
+import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
-import useTimeout from '@/hooks/useTimeout';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/relativeDate';
 

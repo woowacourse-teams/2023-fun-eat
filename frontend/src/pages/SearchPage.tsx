@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, SearchedList } from '@/components/Search';
+import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
-import useDebounce from '@/hooks/useDebounce';
 
 const SearchPage = () => {
   const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
