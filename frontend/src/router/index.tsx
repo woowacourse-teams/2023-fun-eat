@@ -12,6 +12,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import ProductListPage from '@/pages/ProductListPage';
 import ProfilePage from '@/pages/ProfilePage';
+import RecipeDetailPage from '@/pages/RecipeDetailPage';
 import RecipePage from '@/pages/RecipePage';
 import SearchPage from '@/pages/SearchPage';
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: PATH.RECIPE,
         element: <RecipePage />,
+      },
+      {
+        path: `${PATH.RECIPE}/:recipeId`,
+        element: <RecipeDetailPage />,
       },
       {
         path: PATH.SEARCH,
