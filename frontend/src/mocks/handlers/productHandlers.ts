@@ -19,7 +19,7 @@ export const productHandlers = [
       return res(ctx.status(200), ctx.json(storeCategory));
     }
 
-    return res(ctx.status(400));
+    return res(ctx.status(200));
   }),
 
   rest.get('/api/categories/:categoryId/products', (req, res, ctx) => {
@@ -54,7 +54,7 @@ export const productHandlers = [
       ),
     };
     return res(
-      ctx.status(200),
+      ctx.status(400),
       ctx.json({ page: sortedProducts.page, products: products.products.slice(page * 10, (page + 1) * 10) }),
       ctx.delay(500)
     );

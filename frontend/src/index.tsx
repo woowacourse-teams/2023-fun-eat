@@ -18,7 +18,14 @@ const main = async () => {
 };
 await main();
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+      retry: false,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
