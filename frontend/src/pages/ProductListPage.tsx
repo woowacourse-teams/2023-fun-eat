@@ -1,8 +1,19 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryMenu, SortButton, SortOptionList, Title, ScrollButton } from '@/components/Common';
+import {
+  CategoryMenu,
+  SortButton,
+  SortOptionList,
+  Title,
+  ScrollButton,
+  Loading,
+  ErrorBoundary,
+  ErrorComponent,
+} from '@/components/Common';
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
@@ -14,15 +25,16 @@ const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 const ProductListPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
+  const { reset } = useQueryErrorResetBoundary();
 
   const { category } = useParams();
 
   if (!category) {
-    return <></>;
+    return null;
   }
 
   if (!isCategoryVariant(category)) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -37,7 +49,11 @@ const ProductListPage = () => {
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList category={category} selectedOption={selectedOption} />
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
+            <ProductList category={category} selectedOption={selectedOption} />
+          </Suspense>
+        </ErrorBoundary>
       </section>
       <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
