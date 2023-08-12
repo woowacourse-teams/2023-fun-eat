@@ -11,6 +11,7 @@ import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import java.util.Comparator;
@@ -33,12 +34,14 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ReviewTagRepository reviewTagRepository;
+    private final ReviewRepository reviewRepository;
 
     public ProductService(final CategoryRepository categoryRepository, final ProductRepository productRepository,
-                          final ReviewTagRepository reviewTagRepository) {
+                          final ReviewTagRepository reviewTagRepository, final ReviewRepository reviewRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.reviewTagRepository = reviewTagRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
@@ -65,10 +68,10 @@ public class ProductService {
     public ProductResponse findProductDetail(final Long productId) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(IllegalArgumentException::new);
-
+        final Long reviewCount = reviewRepository.countByProduct(product);
         final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
 
-        return ProductResponse.toResponse(product, tags);
+        return ProductResponse.toResponse(product, reviewCount, tags);
     }
 
     public RankingProductsResponse getTop3Products() {

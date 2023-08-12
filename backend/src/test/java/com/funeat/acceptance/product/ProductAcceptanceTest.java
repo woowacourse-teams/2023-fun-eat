@@ -467,7 +467,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_상세_정보_조회_결과를_검증한다(response, product, expectedTags);
+            상품_상세_정보_조회_결과를_검증한다(response, product, 3L, expectedTags);
         }
     }
 
@@ -536,8 +536,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product,
-                                      final List<Tag> expectedTags) {
-        final var expected = ProductResponse.toResponse(product, expectedTags);
+                                      final Long reviewCount, final List<Tag> expectedTags) {
+        final var expected = ProductResponse.toResponse(product, reviewCount, expectedTags);
         final var actual = response.as(ProductResponse.class);
 
         assertThat(actual).usingRecursiveComparison()
