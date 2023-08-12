@@ -9,7 +9,7 @@
   },
   "products": [
     {
-      "id": 1,
+      "id": 11,
       "name": "PB 꼬북칩",
       "price": 1500,
       "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
@@ -17,7 +17,7 @@
       "reviewCount": 100
     },
     {
-      "id": 2,
+      "id": 12,
       "name": "PB 새우깡",
       "price": 1000,
       "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
@@ -25,7 +25,7 @@
       "reviewCount": 100
     },
     {
-      "id": 3,
+      "id": 13,
       "name": "PB 감자깡",
       "price": 1200,
       "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
