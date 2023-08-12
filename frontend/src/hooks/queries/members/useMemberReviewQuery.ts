@@ -3,17 +3,17 @@ import { useQuery } from '@tanstack/react-query';
 import { memberApi } from '@/apis';
 import type { MemberReviewResponse } from '@/types/response';
 
-const fetchProfileReview = async () => {
+const fetchMemberReview = async () => {
   const response = await memberApi.get({ params: '/reviews' });
   const data: MemberReviewResponse = await response.json();
   return data;
 };
 
-const useProfileReviewQuery = () => {
+const useMemberReviewQuery = () => {
   return useQuery({
     queryKey: ['profileReview'],
-    queryFn: () => fetchProfileReview(),
+    queryFn: () => fetchMemberReview(),
   });
 };
 
-export default useProfileReviewQuery;
+export default useMemberReviewQuery;

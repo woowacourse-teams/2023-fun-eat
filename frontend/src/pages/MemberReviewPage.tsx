@@ -3,7 +3,7 @@ import { Spacing } from '@fun-eat/design-system';
 import { SectionTitle } from '@/components/Common';
 import MemberReviewList from '@/components/Members/MemberReviewList/MemberReviewList';
 
-const ProfileReviewPage = () => {
+const MemberReviewPage = () => {
   return (
     <>
       <SectionTitle name="내가 작성한 리뷰" />
@@ -13,4 +13,4 @@ const ProfileReviewPage = () => {
   );
 };
 
-export default ProfileReviewPage;
+export default MemberReviewPage;

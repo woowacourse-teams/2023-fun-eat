@@ -20,7 +20,7 @@ const MembersInfo = ({ member }: MembersInfoProps) => {
         <Heading size="xl" weight="bold">
           {nickname} 님
         </Heading>
-        <MemberModifyLink as={RouterLink} to={`${PATH.PROFILE}/modify`}>
+        <MemberModifyLink as={RouterLink} to={`${PATH.MEMBER}/modify`}>
           <SvgIcon variant="pencil" width={20} height={24} color={theme.colors.gray3} />
         </MemberModifyLink>
       </MemberInfoWrapper>

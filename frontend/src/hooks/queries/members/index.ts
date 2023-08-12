@@ -1,1 +1,1 @@
-export { default as useProfileReviewQuery } from './useProfileReviewQuery';
+export { default as useMemberReviewQuery } from './useMemberReviewQuery';
