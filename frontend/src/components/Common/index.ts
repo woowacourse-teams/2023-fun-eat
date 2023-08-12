@@ -16,3 +16,4 @@ export { default as ErrorComponent } from './ErrorComponent/ErrorComponent';
 export { default as Loading } from './Loading/Loading';
 export { default as MarkedText } from './MarkedText/MarkedText';
 export { default as MoreButton } from './MoreButton/MoreButton';
+export { default as NavigableSectionTitle } from './NavigableSectionTitle/NavigableSectionTitle';

@@ -3,29 +3,28 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import { PATH } from '@/constants/path';
 
 interface MembersTitleProps {
   title: string;
   routeDestination: string;
 }
 
-const MembersTitle = ({ title, routeDestination }: MembersTitleProps) => {
+const NavigableSectionTitle = ({ title, routeDestination }: MembersTitleProps) => {
   return (
-    <MemberTitleContainer>
+    <NavigableSectionTitleContainer>
       <Heading as="h2" size="xl">
         {title}
       </Heading>
-      <Link as={RouterLink} to={`${PATH.PROFILE}/${routeDestination}`}>
+      <Link as={RouterLink} to={routeDestination}>
         <ArrowIcon variant="arrow" color={theme.colors.gray5} width={18} height={18} />
       </Link>
-    </MemberTitleContainer>
+    </NavigableSectionTitleContainer>
   );
 };
 
-export default MembersTitle;
+export default NavigableSectionTitle;
 
-const MemberTitleContainer = styled.div`
+const NavigableSectionTitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
