@@ -14,7 +14,7 @@ const useSearch = () => {
     setSearchQuery(event.currentTarget.value);
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     if (!searchQuery) {
@@ -30,7 +30,7 @@ const useSearch = () => {
     setSearchParams({ query: searchQuery });
   };
 
-  return { searchQuery, isSubmitted, handleSearchQuery, handleSubmit };
+  return { searchQuery, isSubmitted, handleSearchQuery, handleSearch };
 };
 
 export default useSearch;

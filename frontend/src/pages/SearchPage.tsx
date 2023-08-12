@@ -4,11 +4,11 @@ import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, SearchedList } from '@/components/Search';
-import { useSearch } from '@/hooks/queries/search';
+import { useSearch } from '@/hooks/search';
 import useDebounce from '@/hooks/useDebounce';
 
 const SearchPage = () => {
-  const { searchQuery, isSubmitted, handleSearchQuery, handleSubmit } = useSearch();
+  const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
 
   useDebounce(
@@ -22,7 +22,7 @@ const SearchPage = () => {
   return (
     <>
       <SearchSection>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSearch}>
           <Input
             customWidth="100%"
             placeholder="상품 이름을 검색해보세요."

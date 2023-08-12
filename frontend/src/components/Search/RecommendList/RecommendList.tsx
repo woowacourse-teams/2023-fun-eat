@@ -35,10 +35,10 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
 
   return (
     <RecommendListContainer>
-      {products.map((product) => (
-        <li key={product.id}>
-          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${product.id}`} block>
-            <MarkedText text={product.name} mark={searchQuery} />
+      {products.map(({ id, name }) => (
+        <li key={id}>
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${id}`} block>
+            <MarkedText text={name} mark={searchQuery} />
           </Link>
         </li>
       ))}
