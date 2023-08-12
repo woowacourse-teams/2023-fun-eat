@@ -1,12 +1,20 @@
 import { Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SectionTitle, SvgIcon } from '@/components/Common';
-import recipeDetail from '@/mocks/data/recipeDetail.json';
+import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
 const RecipeDetailPage = () => {
+  const { recipeId } = useParams();
+
+  const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
+
+  if (!recipeDetail) return;
+
   const { images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
+
   return (
     <>
       <SectionTitle name={title} />
@@ -20,9 +28,9 @@ const RecipeDetailPage = () => {
       <Spacing size={24} />
       <AuthorFavoriteWrapper>
         <AuthorWrapper>
-          <AuthorProfileImage src={author.profileImage} alt={`${author.nickName}님의 프로필`} width={45} height={45} />
+          <AuthorProfileImage src={author.profileImage} alt={`${author.nickname}님의 프로필`} width={45} height={45} />
           <div>
-            <Text color={theme.textColors.info}>{author.nickName} 님</Text>
+            <Text color={theme.textColors.info}>{author.nickname} 님</Text>
             <Text color={theme.textColors.info}> {getFormattedDate(createdAt)}</Text>
           </div>
         </AuthorWrapper>
