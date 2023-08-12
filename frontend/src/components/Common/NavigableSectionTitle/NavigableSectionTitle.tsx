@@ -4,12 +4,12 @@ import { styled } from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 
-interface MembersTitleProps {
+interface NavigableSectionTitleProps {
   title: string;
   routeDestination: string;
 }
 
-const NavigableSectionTitle = ({ title, routeDestination }: MembersTitleProps) => {
+const NavigableSectionTitle = ({ title, routeDestination }: NavigableSectionTitleProps) => {
   return (
     <NavigableSectionTitleContainer>
       <Heading as="h2" size="xl">
