@@ -2,7 +2,7 @@ import React from 'react';
 import { FunEatProvider } from '@fun-eat/design-system';
 import type { Preview } from '@storybook/react';
 import { initialize, mswDecorator } from 'msw-storybook-addon';
-import { loginHandlers, productHandlers, rankingHandlers, reviewHandlers } from '../src/mocks/handlers';
+import { loginHandlers, productHandlers, rankingHandlers, reviewHandlers, recipeHandlers } from '../src/mocks/handlers';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -36,7 +36,7 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
-    msw: [...loginHandlers, ...productHandlers, ...reviewHandlers, ...rankingHandlers],
+    msw: [...loginHandlers, ...productHandlers, ...reviewHandlers, ...rankingHandlers, ...recipeHandlers],
   },
 };
 
