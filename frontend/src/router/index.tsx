@@ -11,6 +11,7 @@ import LoginPage from '@/pages/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import ProductListPage from '@/pages/ProductListPage';
+import ProfileModifyPage from '@/pages/ProfileModifyPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RecipeDetailPage from '@/pages/RecipeDetailPage';
 import RecipePage from '@/pages/RecipePage';
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: PATH.PROFILE,
         element: <ProfilePage />,
+      },
+      {
+        path: `${PATH.PROFILE}/modify`,
+        element: <ProfileModifyPage />,
       },
     ],
   },

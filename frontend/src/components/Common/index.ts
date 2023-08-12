@@ -11,4 +11,8 @@ export { default as Title } from './Title/Title';
 export { default as SectionTitle } from './SectionTitle/SectionTitle';
 export { default as ScrollButton } from './ScrollButton/ScrollButton';
 export { default as Input } from './Input/Input';
+export { default as ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
+export { default as ErrorComponent } from './ErrorComponent/ErrorComponent';
+export { default as Loading } from './Loading/Loading';
+export { default as MarkedText } from './MarkedText/MarkedText';
 export { default as MoreButton } from './MoreButton/MoreButton';

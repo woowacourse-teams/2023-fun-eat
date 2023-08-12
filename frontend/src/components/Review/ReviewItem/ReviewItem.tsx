@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
-import { useDebounce } from '@/hooks/common';
+import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/date';
@@ -39,7 +39,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
     );
   };
 
-  const [debouncedToggleFavorite] = useDebounce(handleToggleFavorite, 200);
+  const [debouncedToggleFavorite] = useTimeout(handleToggleFavorite, 200);
 
   return (
     <ReviewItemContainer>
