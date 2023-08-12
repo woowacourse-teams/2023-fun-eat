@@ -1,8 +1,8 @@
 package com.funeat.recipe.application;
 
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOF_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOF_FOUND;
-import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOF_FOUND;
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
 import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
@@ -56,13 +56,13 @@ public class RecipeService {
     @Transactional
     public Long create(final Long memberId, final List<MultipartFile> images, final RecipeCreateRequest request) {
         final Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
 
         final Recipe savedRecipe = recipeRepository.save(new Recipe(request.getTitle(), request.getContent(), member));
         request.getProductIds()
                 .stream()
                 .map(it -> productRepository.findById(it)
-                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOF_FOUND, it)))
+                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, it)))
                 .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
 
         if (Objects.nonNull(images)) {
@@ -76,7 +76,7 @@ public class RecipeService {
 
     public RecipeDetailResponse getRecipeDetail(final Long memberId, final Long recipeId) {
         final Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOF_FOUND, recipeId));
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
         final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
         final List<Product> products = productRecipeRepository.findProductByRecipe(recipe);
         final Long totalPrice = products.stream()
@@ -90,7 +90,7 @@ public class RecipeService {
 
     private Boolean calculateFavoriteChecked(final Long memberId, final Recipe recipe) {
         final Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         return recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(member, recipe);
     }
 }

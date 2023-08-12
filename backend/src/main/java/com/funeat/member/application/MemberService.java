@@ -41,7 +41,7 @@ public class MemberService {
 
     public MemberProfileResponse getMemberProfile(final Long memberId) {
         final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOT_FOUND, memberId));
 
         return MemberProfileResponse.toResponse(findMember);
     }
@@ -49,7 +49,7 @@ public class MemberService {
     @Transactional
     public void modify(final Long memberId, final MemberRequest request) {
         final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOT_FOUND, memberId));
 
         final String nickname = request.getNickname();
         final String profileImage = request.getProfileImage();

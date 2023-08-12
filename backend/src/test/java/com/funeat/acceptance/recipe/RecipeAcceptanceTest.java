@@ -18,7 +18,7 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점1점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
-import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOF_FOUND;
+import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -123,7 +123,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
-            final var expectedMessage = "레시피 이름을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+            final var expectedMessage = "꿀조합 이름을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
@@ -194,7 +194,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
-            final var expectedMessage = "레시피 내용을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+            final var expectedMessage = "꿀조합 내용을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
@@ -224,7 +224,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
-            final var expectedMessage = "리뷰 내용은 최대 500자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage();
+            final var expectedMessage = "꿀조합 내용은 최대 500자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
@@ -283,7 +283,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, RECIPE_NOF_FOUND.getCode(), RECIPE_NOF_FOUND.getMessage());
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
         }
     }
 

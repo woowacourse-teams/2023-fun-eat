@@ -1,8 +1,8 @@
 package com.funeat.review.application;
 
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOF_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOF_FOUND;
-import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOF_FOUND;
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
@@ -65,9 +65,9 @@ public class ReviewService {
     public void create(final Long productId, final Long memberId, final MultipartFile image,
                        final ReviewCreateRequest reviewRequest) {
         final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Product findProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOF_FOUND, productId));
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final Review savedReview;
         if (Objects.isNull(image)) {
@@ -96,9 +96,9 @@ public class ReviewService {
     @Transactional
     public void likeReview(final Long reviewId, final Long memberId, final ReviewFavoriteRequest request) {
         final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Review findReview = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOF_FOUND, reviewId));
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
 
         final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
                 findReview).orElseGet(() -> saveReviewFavorite(findMember, findReview, request.getFavorite()));
@@ -115,10 +115,10 @@ public class ReviewService {
 
     public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
         final Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOF_FOUND, memberId));
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
 
         final Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOF_FOUND, productId));
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
 

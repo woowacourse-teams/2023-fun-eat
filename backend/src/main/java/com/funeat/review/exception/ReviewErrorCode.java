@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ReviewErrorCode {
 
-    REVIEW_NOF_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다. 리뷰 id를 확인하세요.", "5001"),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다. 리뷰 id를 확인하세요.", "3001"),
     ;
 
     private final HttpStatus status;

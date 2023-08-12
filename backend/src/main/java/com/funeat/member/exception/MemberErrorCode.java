@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum MemberErrorCode {
 
-    MEMBER_NOF_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다. 회원 id를 확인하세요.", "1001"),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다. 회원 id를 확인하세요.", "5001"),
     ;
 
     private final HttpStatus status;

@@ -39,8 +39,8 @@ import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생
 import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
-import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOF_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOF_FOUND;
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -448,7 +448,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, CATEGORY_NOF_FOUND.getCode(), CATEGORY_NOF_FOUND.getMessage());
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, CATEGORY_NOT_FOUND.getCode(), CATEGORY_NOT_FOUND.getMessage());
         }
     }
 
@@ -515,7 +515,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOF_FOUND.getCode(), PRODUCT_NOF_FOUND.getMessage());
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
         }
     }
 

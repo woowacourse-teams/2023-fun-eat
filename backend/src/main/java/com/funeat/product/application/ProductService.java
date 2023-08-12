@@ -1,7 +1,7 @@
 package com.funeat.product.application;
 
-import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOF_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOF_FOUND;
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
@@ -49,7 +49,7 @@ public class ProductService {
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
                                                                final Pageable pageable) {
         final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOF_FOUND, categoryId));
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, categoryId));
 
         final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
 
@@ -69,7 +69,7 @@ public class ProductService {
 
     public ProductResponse findProductDetail(final Long productId) {
         final Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOF_FOUND, productId));
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
 
