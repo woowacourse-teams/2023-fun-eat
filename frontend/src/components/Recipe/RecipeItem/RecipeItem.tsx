@@ -60,8 +60,8 @@ const RecipeImage = styled.img`
 
 const ProfileImage = styled.img`
   position: absolute;
-  bottom: -20px;
   right: 16px;
+  bottom: -20px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -70,21 +70,21 @@ const ProfileImage = styled.img`
 `;
 
 const RecipeInfoWrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
   height: 100px;
   margin-top: 20px;
 `;
 
 const FavoriteWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   position: absolute;
   top: 50%;
   right: 0;
   bottom: 50%;
-  display: flex;
-  align-items: center;
-  gap: 4px;
   transform: translateY(-50%);
 `;
