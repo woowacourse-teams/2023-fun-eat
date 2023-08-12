@@ -61,8 +61,9 @@ class RecipeServiceTest extends ServiceTest {
 
             // then
             assertThat(actual).usingRecursiveComparison()
-                    .ignoringFields("id")
+                    .ignoringFields("id", "createdAt")
                     .isEqualTo(expected);
+            assertThat(actual.getCreatedAt()).isNotNull();
         }
     }
 
