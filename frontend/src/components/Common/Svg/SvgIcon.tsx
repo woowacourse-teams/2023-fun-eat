@@ -4,7 +4,7 @@ import type { ComponentPropsWithoutRef, CSSProperties } from 'react';
 export const SVG_ICON_VARIANTS = [
   'recipe',
   'list',
-  'profile',
+  'member',
   'search',
   'arrow',
   'bookmark',
