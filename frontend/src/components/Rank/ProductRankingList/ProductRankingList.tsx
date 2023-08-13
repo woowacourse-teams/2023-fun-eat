@@ -5,12 +5,12 @@ import { useProductRankingQuery } from '@/hooks/queries/rank';
 import displaySlice from '@/utils/displaySlice';
 
 interface ProductRankingListProps {
-  isHome?: boolean;
+  isHomePage?: boolean;
 }
 
-const ProductRankingList = ({ isHome }: ProductRankingListProps) => {
+const ProductRankingList = ({ isHomePage }: ProductRankingListProps) => {
   const { data: productRankings } = useProductRankingQuery();
-  const productsToDisplay = displaySlice(isHome, productRankings?.products, 3);
+  const productsToDisplay = displaySlice(isHomePage, productRankings?.products, 3);
 
   return (
     <ul>

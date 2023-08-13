@@ -8,15 +8,15 @@ import { useInfiniteMemberReviewQuery } from '@/hooks/queries/members';
 import useDisplaySlice from '@/utils/displaySlice';
 
 interface MemberReviewListProps {
-  isMember?: boolean;
+  isMemberPage?: boolean;
 }
 
-const MemberReviewList = ({ isMember = false }: MemberReviewListProps) => {
+const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteMemberReviewQuery();
   const memberReviews = data?.pages.flatMap((page) => page.reviews);
-  const reviewsToDisplay = useDisplaySlice(isMember, memberReviews);
+  const reviewsToDisplay = useDisplaySlice(isMemberPage, memberReviews);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
@@ -24,7 +24,7 @@ const MemberReviewList = ({ isMember = false }: MemberReviewListProps) => {
 
   return (
     <MemberReviewListContainer>
-      {!isMember && (
+      {!isMemberPage && (
         <TotalReviewCount color={theme.colors.gray4}>
           총 <strong>&apos;{totalReviewCount}&apos;</strong>개의 리뷰를 남겼어요!
         </TotalReviewCount>
