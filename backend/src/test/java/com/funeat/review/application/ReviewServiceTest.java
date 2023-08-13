@@ -12,7 +12,12 @@ import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순
 import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
@@ -26,11 +31,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.ServiceTest;
+import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.presentation.dto.SortingReviewDto;
+import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -518,6 +525,65 @@ class ReviewServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> reviewService.sortingReviews(wrongProductId, page, member1Id))
                     .isInstanceOf(ProductNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class findReviewByMember_성공_테스트 {
+
+        @Test
+        void 사용자가_작성한_리뷰를_조회한다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            복수_멤버_저장(member1, member2);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var review1_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
+
+            final var review2_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product2, 0L);
+            final var review2_2 = 리뷰_이미지test1_평점1점_재구매X_생성(member2, product2, 0L);
+
+            final var review3_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
+            final var review3_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
+            복수_리뷰_저장(review1_1, review2_1, review2_2, review3_1, review3_2);
+
+            // when
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var member1Id = member1.getId();
+            final var result = reviewService.findReviewByMember(member1Id, page);
+
+            // then
+            final var expectedReviews = List.of(review3_1, review2_1, review1_1);
+            final var expectedReviewDtos = expectedReviews.stream()
+                    .map(MemberReviewDto::toDto)
+                    .collect(Collectors.toList());
+            final var expectedPage = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+            assertThat(result.getReviews()).usingRecursiveComparison().isEqualTo(expectedReviewDtos);
+            assertThat(result.getPage()).usingRecursiveComparison().isEqualTo(expectedPage);
+        }
+    }
+
+    @Nested
+    class findReviewByMember_실패_테스트 {
+
+        @Test
+        void 존재하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다() {
+            // given
+            final var notExistMemberId = 999999L;
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.findReviewByMember(notExistMemberId, page))
+                    .isInstanceOf(MemberNotFoundException.class);
         }
     }
 

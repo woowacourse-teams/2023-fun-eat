@@ -7,6 +7,8 @@ import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
+import com.funeat.member.dto.MemberReviewDto;
+import com.funeat.member.dto.MemberReviewsResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
@@ -138,5 +140,19 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return RankingReviewsResponse.toResponse(dtos);
+    }
+
+    public MemberReviewsResponse findReviewByMember(final Long memberId, final Pageable pageable) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+
+        final Page<Review> sortedReviewPages = reviewRepository.findReviewsByMember(findMember, pageable);
+        final SortingReviewsPageDto pageDto = SortingReviewsPageDto.toDto(sortedReviewPages);
+
+        final List<MemberReviewDto> dtos = sortedReviewPages.stream()
+                .map(MemberReviewDto::toDto)
+                .collect(Collectors.toList());
+
+        return MemberReviewsResponse.toResponse(pageDto, dtos);
     }
 }
