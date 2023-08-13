@@ -8,9 +8,9 @@ import io.restassured.response.Response;
 @SuppressWarnings("NonAsciiCharacters")
 public class CategorySteps {
 
-    public static ExtractableResponse<Response> 공통_상품_카테고리_목록_조회_요청() {
+    public static ExtractableResponse<Response> 카테고리_목록_조회_요청(final String type) {
         return given()
-                .queryParam("type", "food")
+                .queryParam("type", type)
                 .when()
                 .get("/api/categories")
                 .then()

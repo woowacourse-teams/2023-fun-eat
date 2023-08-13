@@ -15,3 +15,19 @@ export interface RecipeDetail {
 }
 
 type UsedProduct = Pick<Product, 'id' | 'name' | 'price'>;
+
+interface RecipeProduct {
+  id: number;
+  name: string;
+  price: number;
+}
+
+export interface Recipe {
+  id: number;
+  image: string;
+  title: string;
+  author: Member;
+  createdAt: string;
+  favoriteCount: number;
+  products: RecipeProduct[];
+}

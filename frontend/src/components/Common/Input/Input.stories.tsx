@@ -44,3 +44,7 @@ export const Error: Story = {
     errorMessage: '10글자 이내로 입력해주세요.',
   },
 };
+
+export const Disabled: Story = {
+  render: () => <Input disabled />,
+};

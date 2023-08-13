@@ -1,0 +1,84 @@
+{
+  "page": {
+    "totalDataCount": 99,
+    "totalPages": 10,
+    "isLastPage": false,
+    "isFirstPage": true,
+    "requestPage": 1,
+    "requestSize": 10
+  },
+  "recipes": [
+    {
+      "id": 1,
+      "image": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34",
+      "title": "치즈함박카레라이스",
+      "author": {
+        "nickname": "냐미",
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed"
+      },
+      "createdAt": "2023-08-09T10:10:10",
+      "favoriteCount": 153,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 }
+      ]
+    },
+    {
+      "id": 2,
+      "image": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "nickname": "뇨미",
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/84a20dae-4770-4497-ae25-2dd552261aab"
+      },
+      "createdAt": "2023-08-10T10:10:10",
+      "favoriteCount": 154,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 },
+        { "id": 14, "name": "치즈", "price": 1500 },
+        { "id": 15, "name": "콘치즈", "price": 1500 }
+      ]
+    },
+    {
+      "id": 3,
+      "image": "https://t3.ftcdn.net/jpg/06/06/91/70/240_F_606917032_4ujrrMV8nspZDX8nTgGrTpJ69N9JNxOL.jpg",
+      "title": "치즈함박카레라이스2",
+      "author": {
+        "nickname": "냐미",
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed"
+      },
+      "createdAt": "2023-08-01T10:10:10",
+      "favoriteCount": 1531,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 },
+        { "id": 14, "name": "치즈", "price": 1500 },
+        { "id": 15, "name": "콘치즈", "price": 1500 },
+        { "id": 16, "name": "콘치즈", "price": 1500 }
+      ]
+    },
+    {
+      "id": 4,
+      "image": "https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894_1280.jpg",
+      "title": "초특급불닭콘치즈2",
+      "author": {
+        "nickname": "뇨미",
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/84a20dae-4770-4497-ae25-2dd552261aab"
+      },
+      "createdAt": "2023-08-06T10:10:10",
+      "favoriteCount": 120,
+      "products": [
+        { "id": 11, "name": "불닭볶음면", "price": 1500 },
+        { "id": 12, "name": "치즈", "price": 1500 },
+        { "id": 13, "name": "콘치즈", "price": 1500 },
+        { "id": 14, "name": "치즈", "price": 1500 },
+        { "id": 15, "name": "콘치즈", "price": 1500 },
+        { "id": 16, "name": "콘치즈", "price": 1500 }
+      ]
+    }
+  ]
+}
