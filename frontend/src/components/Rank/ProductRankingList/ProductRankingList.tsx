@@ -5,17 +5,18 @@ import { ProductOverviewItem } from '@/components/Product';
 import { PATH } from '@/constants/path';
 import { useProductRankingQuery } from '@/hooks/queries/rank';
 import displaySlice from '@/utils/displaySlice';
+
 interface ProductRankingListProps {
   isHome?: boolean;
 }
 
-const ProductRankingList = ({ isHome }: ProductRankingListProps) => {
+const ProductRankingList = ({ isHome = false }: ProductRankingListProps) => {
   const { data: productRankings } = useProductRankingQuery();
-  const productsToDisplay = displaySlice(isHome, productRankings?.products, 3);
+  const productsToDisplay = displaySlice(isHome, productRankings.products, 3);
 
   return (
     <ul>
-      {productsToDisplay?.map(({ id, name, image, categoryType }, index) => (
+      {productsToDisplay.map(({ id, name, image, categoryType }, index) => (
         <li key={id}>
           <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${categoryType}/${id}`}>
             <ProductOverviewItem rank={index + 1} name={name} image={image} />
