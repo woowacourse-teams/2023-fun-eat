@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '..';
 
 import { categoryApi } from '@/apis';
 import type { Category } from '@/types/common';
@@ -10,10 +10,7 @@ const fetchCategories = async (type: string) => {
 };
 
 const useCategoryQuery = (type: string) => {
-  return useQuery({
-    queryKey: ['categories', type],
-    queryFn: () => fetchCategories(type),
-  });
+  return useSuspendedQuery(['categories', type], () => fetchCategories(type));
 };
 
 export default useCategoryQuery;
