@@ -35,7 +35,7 @@ const RecipeDetailTextarea = ({ recipeDetail }: RecipeDetailTextareaProps) => {
         onChange={handleRecipeDetail}
       />
       <Spacing size={16} />
-      <Text color={theme.textColors.info} size="sm" tabIndex={0}>
+      <Text color={theme.textColors.info} size="sm" align="right" tabIndex={0}>
         작성한 글자 수: {recipeDetail.length}자 / {MAX_LENGTH}자
       </Text>
     </>
