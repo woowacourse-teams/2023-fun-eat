@@ -28,7 +28,6 @@ import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.product.dto.ProductsInCategoryPageDto;
-import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -176,10 +175,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
 
             final var review1_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
-
             final var review2_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product2, 0L);
             final var review2_2 = 리뷰_이미지test1_평점1점_재구매X_생성(member2, product2, 0L);
-
             final var review3_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
             final var review3_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
             복수_리뷰_저장(review1_1, review2_1, review2_2, review3_1, review3_2);
@@ -193,8 +190,12 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
             // then
+            final var expectedReviews = member1SortedReviews.stream()
+                    .map(MemberReviewDto::toDto)
+                    .collect(Collectors.toList());
+
             STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_리뷰_목록_조회_결과를_검증한다(response, member1SortedReviews, page);
+            사용자_리뷰_목록_조회_결과를_검증한다(response, expectedReviews, page);
         }
 
         @Test
@@ -223,13 +224,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var page = new SortingReviewsPageDto(0L, 0L, true, true, 0L, 10L);
 
             // then
-            final var actualReviews = response.jsonPath().getList("reviews", MemberReviewDto.class);
             final var expectedReviews = Collections.emptyList();
 
             STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, page);
-            assertThat(actualReviews).usingRecursiveComparison()
-                    .isEqualTo(expectedReviews);
+            사용자_리뷰_목록_조회_결과를_검증한다(response, expectedReviews, page);
         }
     }
 
@@ -248,8 +246,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private void 사용자_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
-                                       final SortingReviewsPageDto page) {
+    private <T> void 사용자_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> reviews,
+                                           final SortingReviewsPageDto page) {
         페이지를_검증한다(response, page);
         사용자_리뷰_목록을_검증한다(response, reviews);
     }
@@ -260,14 +258,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
-    private void 사용자_리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews) {
-        final var expected = reviews.stream()
-                .map(MemberReviewDto::toDto)
-                .collect(Collectors.toList());
+    private <T> void 사용자_리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<T> expectedReviews) {
         final var actual = response.jsonPath().getList("reviews", MemberReviewDto.class);
 
         assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+                .isEqualTo(expectedReviews);
     }
 
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
