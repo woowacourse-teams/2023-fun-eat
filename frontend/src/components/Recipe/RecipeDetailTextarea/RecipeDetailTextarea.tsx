@@ -2,7 +2,7 @@ import { Heading, Spacing, Textarea, Text, useTheme } from '@fun-eat/design-syst
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
-import useRecipeFormActionContext from '@/hooks/context/useRecipeFormActionContext';
+import { useRecipeFormActionContext } from '@/hooks/context';
 
 const MAX_LENGTH = 500;
 

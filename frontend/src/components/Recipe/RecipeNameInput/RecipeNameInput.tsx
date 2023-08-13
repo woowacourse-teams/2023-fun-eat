@@ -3,7 +3,7 @@ import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
 import { Input } from '@/components/Common';
-import useRecipeFormActionContext from '@/hooks/context/useRecipeFormActionContext';
+import { useRecipeFormActionContext } from '@/hooks/context';
 
 interface RecipeNameInputProps {
   recipeName: string;
