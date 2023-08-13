@@ -11,7 +11,7 @@ const fetchMemberReview = async (pageParam: number) => {
 
 const useInfiniteMemberReviewQuery = () => {
   return useInfiniteQuery({
-    queryKey: ['profileReview'],
+    queryKey: ['member', 'reviews'],
     queryFn: ({ pageParam = 0 }) => fetchMemberReview(pageParam),
     getNextPageParam: (prevResponse: MemberReviewResponse) => {
       const isLast = prevResponse.page.lastPage;

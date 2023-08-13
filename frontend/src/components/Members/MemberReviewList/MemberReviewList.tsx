@@ -11,7 +11,7 @@ interface MemberReviewListProps {
   isMember?: boolean;
 }
 
-const MemberReviewList = ({ isMember }: MemberReviewListProps) => {
+const MemberReviewList = ({ isMember = false }: MemberReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteMemberReviewQuery();
@@ -23,34 +23,38 @@ const MemberReviewList = ({ isMember }: MemberReviewListProps) => {
   const totalReviewCount = data?.pages.flatMap((page) => page.page.totalDataCount);
 
   return (
-    <>
+    <MemberReviewListContainer>
       {!isMember && (
         <TotalReviewCount color={theme.colors.gray4}>
-          총 &apos;{totalReviewCount}&apos;개의 리뷰를 남겼어요!
+          총 <strong>&apos;{totalReviewCount}&apos;</strong>개의 리뷰를 남겼어요!
         </TotalReviewCount>
       )}
       <Spacing size={20} />
-      <MemberReviewListContainer>
+      <MemberReviewListWrapper>
         {reviewsToDisplay?.map((reviewRanking) => (
           <li key={reviewRanking.reviewId}>
             <ReviewRankingItem reviewRanking={reviewRanking} />
           </li>
         ))}
-      </MemberReviewListContainer>
+      </MemberReviewListWrapper>
       <div ref={scrollRef} aria-hidden />
-    </>
+    </MemberReviewListContainer>
   );
 };
 
 export default MemberReviewList;
 
-const MemberReviewListContainer = styled.ul`
+const MemberReviewListContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
+
+const MemberReviewListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 20px;
 `;
 
 const TotalReviewCount = styled(Text)`
-  display: flex;
-  flex-direction: row-reverse;
+  text-align: right;
 `;
