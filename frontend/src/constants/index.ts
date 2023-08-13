@@ -45,6 +45,11 @@ export const REVIEW_SORT_OPTIONS = [
   { label: '추천순', value: 'favoriteCount,desc' },
 ] as const;
 
+export const RECIPE_SORT_OPTIONS = [
+  { label: '최신 작성순', value: 'createdAt,desc' },
+  { label: '추천순', value: 'favoriteCount,desc' },
+] as const;
+
 export const TAG_TITLE = {
   TASTE: '맛',
   PRICE: '가격/양',

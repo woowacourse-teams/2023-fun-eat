@@ -48,8 +48,8 @@ const ProductDetailPage = () => {
           type="button"
           customWidth="100%"
           customHeight="60px"
-          color={!member ? 'gray3' : 'primary'}
-          textColor={!member ? 'white' : 'default'}
+          color={member ? 'primary' : 'gray3'}
+          textColor={member ? 'default' : 'white'}
           size="xl"
           weight="bold"
           onClick={handleOpenRegisterReviewSheet}
