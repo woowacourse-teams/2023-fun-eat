@@ -1,9 +1,10 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
-import { ErrorComponent } from '@/components/Common';
+import { ErrorComponent, Loading } from '@/components/Common';
 import ErrorBoundary from '@/components/Common/ErrorBoundary/ErrorBoundary';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
@@ -100,10 +101,21 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App layout="detail" />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,
-        element: <ProductDetailPage />,
+        element: (
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+                <Suspense fallback={<Loading />}>
+                  <ProductDetailPage />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
+        ),
       },
     ],
   },

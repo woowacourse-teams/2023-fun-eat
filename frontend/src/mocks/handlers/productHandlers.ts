@@ -75,6 +75,6 @@ export const productHandlers = [
       return res(ctx.status(400));
     }
 
-    return res(ctx.status(200), ctx.json(targetProduct));
+    return res(ctx.status(200), ctx.json(targetProduct), ctx.delay(1000));
   }),
 ];
