@@ -1,4 +1,4 @@
-import { Text, theme } from '@fun-eat/design-system';
+import { Spacing, Text, theme } from '@fun-eat/design-system';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
@@ -24,12 +24,13 @@ const MemberReviewList = ({ isMember }: MemberReviewListProps) => {
 
   return (
     <>
+      {!isMember && (
+        <TotalReviewCount color={theme.colors.gray4}>
+          총 &apos;{totalReviewCount}&apos;개의 리뷰를 남겼어요!
+        </TotalReviewCount>
+      )}
+      <Spacing size={20} />
       <MemberReviewListContainer>
-        {!isMember && (
-          <TotalReviewCount color={theme.colors.gray4}>
-            총 &apos;{totalReviewCount}&apos;개의 리뷰를 남겼어요!
-          </TotalReviewCount>
-        )}
         {reviewsToDisplay?.map((reviewRanking) => (
           <li key={reviewRanking.reviewId}>
             <ReviewRankingItem reviewRanking={reviewRanking} />
