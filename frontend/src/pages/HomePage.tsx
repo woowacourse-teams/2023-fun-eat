@@ -6,8 +6,15 @@ import { CategoryMenu, SvgIcon, ScrollButton } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
+import channelTalk from '@/service/channelTalk';
 
 const HomePage = () => {
+  channelTalk.loadScript();
+
+  channelTalk.boot({
+    pluginKey: process.env.CHANNEL_TALK_KEY ?? '',
+  });
+
   return (
     <>
       <section>
