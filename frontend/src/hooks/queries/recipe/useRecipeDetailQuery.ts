@@ -11,7 +11,7 @@ const fetchRecipeDetail = async (recipeId: number) => {
 
 const useRecipeDetailQuery = (recipeId: number) => {
   return useQuery({
-    queryKey: ['recipeDetail'],
+    queryKey: ['recipeDetail', recipeId],
     queryFn: () => fetchRecipeDetail(recipeId),
   });
 };
