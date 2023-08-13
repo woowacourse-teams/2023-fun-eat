@@ -11,7 +11,9 @@ const RecipeDetailPage = () => {
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
 
-  if (!recipeDetail) return;
+  if (!recipeDetail) {
+    return null;
+  }
 
   const { images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
