@@ -1,22 +1,46 @@
 package com.funeat.acceptance.review;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
+import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
-import static com.funeat.acceptance.common.LoginSteps.로그인_쿠키를_얻는다;
+import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
+import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
-import static com.funeat.acceptance.review.ReviewSteps.리뷰_추가_요청;
-import static io.restassured.RestAssured.given;
+import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
+import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
+import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_false_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_true_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
+import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
+import static com.funeat.fixture.TagFixture.태그_푸짐해요_PRICE_생성;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Category;
-import com.funeat.product.domain.CategoryType;
-import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.RankingReviewDto;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
@@ -24,438 +48,790 @@ import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
-import com.funeat.tag.domain.TagType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.MultiPartSpecification;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
 
-    @Test
-    void 리뷰를_작성한다() {
-        // given
-        final Long savedProductId = 상품_추가_요청();
-        final List<Long> savedTagIds = 태그_추가_요청();
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var loginCookie = 로그인_쿠키를_얻는다();
-
-        final var request = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
-
-        // when
-        final var response = 리뷰_추가_요청(savedProductId, image, request, loginCookie);
-
-        // then
-        STATUS_CODE를_검증한다(response, 정상_생성);
-    }
-
-    @Test
-    void 리뷰에_좋아요를_할_수_있다() {
-        // given
-        final Long savedMemberId = 멤버_추가_요청();
-        final Long savedProductId = 상품_추가_요청();
-        final List<Long> savedTagIds = 태그_추가_요청();
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-
-        final var loginCookie = 로그인_쿠키를_얻는다();
-
-        리뷰_추가_요청(savedProductId, image, reviewRequest, loginCookie);
-        final var savedReviewId = reviewRepository.findAll().get(0).getId();
-
-        // when
-        final var response = 리뷰_좋아요_요청(savedProductId, savedReviewId, favoriteRequest, loginCookie);
-        final var result = reviewFavoriteRepository.findAll().get(0);
-
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
-        리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReviewId);
-        assertThat(result.getFavorite()).isTrue();
-    }
-
-    @Test
-    void 리뷰에_좋아요를_취소할_수_있다() {
-        // given
-        final Long savedMemberId = 멤버_추가_요청();
-        final Long savedProductId = 상품_추가_요청();
-        final List<Long> savedTagIds = 태그_추가_요청();
-        final MultiPartSpecification image = 리뷰_사진_명세_요청();
-        final var reviewRequest = new ReviewCreateRequest(4L, savedTagIds, "test content", true);
-        final var favoriteRequest = new ReviewFavoriteRequest(true);
-        final var favoriteCancelRequest = new ReviewFavoriteRequest(false);
-        final var loginCookie = 로그인_쿠키를_얻는다();
-
-        리뷰_추가_요청(savedProductId, image, reviewRequest, loginCookie);
-        final var savedReview = reviewRepository.findAll().get(0);
-        리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteRequest, loginCookie);
-
-        // when
-        final var response = 리뷰_좋아요_요청(savedProductId, savedReview.getId(), favoriteCancelRequest, loginCookie);
-        final var result = reviewFavoriteRepository.findAll().get(0);
-
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
-        리뷰_좋아요_결과를_검증한다(result, savedMemberId, savedReview.getId());
-        assertThat(result.getFavorite()).isFalse();
-    }
-
-    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite result, final Long memberId, final Long reviewId) {
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getReview().getId()).isEqualTo(reviewId);
-        assertThat(result.getMember().getId()).isEqualTo(memberId);
-    }
-
-    private List<Long> 태그_추가_요청() {
-        final Tag testTag1 = tagRepository.save(new Tag("testTag1", TagType.ETC));
-        final Tag testTag2 = tagRepository.save(new Tag("testTag2", TagType.ETC));
-        return List.of(testTag1.getId(), testTag2.getId());
-    }
-
-    private Long 상품_추가_요청() {
-        final Product testProduct = productRepository.save(new Product("testName", 1000L, "test.png", "test", null));
-
-        return testProduct.getId();
-    }
-
-    private Long 멤버_추가_요청() {
-        final Member testMember = memberRepository.save(new Member("test", "image.png", "1"));
-
-        return testMember.getId();
-    }
-
     @Nested
-    class 좋아요_기준_내림차순으로_리뷰_목록_조회 {
+    class writeReview_성공_테스트 {
 
         @Test
-        void 좋아요_수가_서로_다르면_좋아요_기준_내림차순으로_정렬할_수_있다() {
+        void 리뷰를_작성한다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
 
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2'");
-            final var member3 = new Member("test3", "test3.png", "3'");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var sortingReviews = List.of(review2, review3, review1);
-            final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var image = 리뷰_사진_명세_요청();
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
-        }
-
-        @Test
-        void 좋아요_수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
-            // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
-
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var member4 = new Member("test4", "test4.png", "4");
-            final var members = List.of(member1, member2, member3, member4);
-            복수_유저_추가_요청(members);
-
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
-
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 130L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 130L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "토미토", false, 130L);
-            final var review4 = new Review(member4, product, "review4.jpg", 4L, "기러기", false, 130L);
-            final var reviews = List.of(review1, review2, review3, review4);
-            복수_리뷰_추가(reviews);
-
-            final var sortingReviews = List.of(review4, review3, review2, review1);
-            final var pageDto = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
-            final var loginCookie = 로그인_쿠키를_얻는다();
-
-            // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
-
-            // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
+            STATUS_CODE를_검증한다(response, 정상_생성);
         }
     }
 
     @Nested
-    class 평점_기준_오름차순으로_리뷰_목록을_조회 {
+    class writeReview_실패_테스트 {
 
         @Test
-        void 평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
+        void 로그인_하지않은_사용자가_리뷰_작성시_예외가_발생한다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
 
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var sortingReviews = List.of(review1, review3, review2);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var image = 리뷰_사진_명세_요청();
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
-            final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var response = 단일_리뷰_요청(productId, image, request, null);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
+            final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
+
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
 
         @Test
-        void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+        void 사용자가_리뷰_작성할때_태그들이_NULL일시_예외가_발생한다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
 
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var member4 = new Member("test4", "test4.png", "4");
-            final var members = List.of(member1, member2, member3, member4);
-            복수_유저_추가_요청(members);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
-
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-            final var review2 = new Review(member2, product, "review2.jpg", 3L, "역삼역", true, 351L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "토마토", false, 130L);
-            final var review4 = new Review(member4, product, "review4.jpg", 3L, "기러기", false, 130L);
-            final var reviews = List.of(review1, review2, review3, review4);
-            복수_리뷰_추가(reviews);
-
-            final var sortingReviews = List.of(review4, review3, review2, review1);
-            final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var image = 리뷰_사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
+            final var request = 리뷰추가요청_재구매O_생성(4L, null);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "태그 ID 목록을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
+        void 사용자가_리뷰_작성할때_태그들이_비어있을시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var request = 리뷰추가요청_재구매O_생성(4L, Collections.emptyList());
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "적어도 1개의 태그 ID가 필요합니다. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
+        void 사용자가_리뷰_작성할때_평점이_비어있을시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var request = 리뷰추가요청_재구매O_생성(null, tagIds);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "평점을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 사용자가_리뷰_작성할때_리뷰내용이_비어있을시_예외가_발생한다(final String content) {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var request = new ReviewCreateRequest(1L, tagIds, content, true);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "리뷰 내용을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
+        void 사용자가_리뷰_작성할때_재구매여부가_비어있을시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var request = new ReviewCreateRequest(1L, tagIds, "content", null);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "재구매 여부를 입력해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
+        void 사용자가_리뷰_작성할때_리뷰내용이_200자_초과시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var maxContent = "test".repeat(50) + "a";
+            final var request = new ReviewCreateRequest(1L, tagIds, maxContent, true);
+            final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "리뷰 내용은 최대 200자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
     }
 
     @Nested
-    class 최신순으로_리뷰_목록을_조회 {
+    class toggleLikeReview_성공_테스트 {
 
         @Test
-        void 등록_시간이_서로_다르면_최신순으로_정렬할_수_있다() {
+        void 리뷰에_좋아요를_할_수_있다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
 
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
 
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
 
-            final var sortingReviews = List.of(review3, review2, review1);
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
+            단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
+
+            final var reviewId = reviewRepository.findAll().get(0).getId();
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "createdAt,desc", 0);
-            final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var response = 리뷰_좋아요_요청(productId, reviewId, favoriteRequest, loginCookie);
+            final var actual = reviewFavoriteRepository.findAll().get(0);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+            리뷰_좋아요_결과를_검증한다(actual, memberId, reviewId, true);
+        }
+
+        @Test
+        void 리뷰에_좋아요를_취소할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
+
+            final var reviewId = reviewRepository.findAll().get(0).getId();
+
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+            리뷰_좋아요_요청(productId, reviewId, favoriteRequest, loginCookie);
+
+            final var favoriteCancelRequest = 리뷰좋아요요청_false_생성();
+
+            // when
+            final var response = 리뷰_좋아요_요청(productId, reviewId, favoriteCancelRequest, loginCookie);
+            final var actual = reviewFavoriteRepository.findAll().get(0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+            리뷰_좋아요_결과를_검증한다(actual, memberId, reviewId, false);
         }
     }
 
     @Nested
-    class 평점_기준_내림차순으로_리뷰_목록_조회 {
+    class toggleLikeReview_실패_테스트 {
 
         @Test
-        void 평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
+        void 로그인_하지않은_사용자가_리뷰에_좋아요를_할때_예외가_발생한다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
 
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var members = List.of(member1, member2, member3);
-            복수_유저_추가_요청(members);
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
 
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 2L, "이 김밥은 재밌습니다", true, 5L);
-            final var review2 = new Review(member2, product, "review2.jpg", 4L, "역삼역", true, 351L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-            final var reviews = List.of(review1, review2, review3);
-            복수_리뷰_추가(reviews);
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
 
-            final var sortingReviews = List.of(review2, review3, review1);
-            final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
+            단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
+
+            final var reviewId = reviewRepository.findAll().get(0).getId();
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
+            final var response = 리뷰_좋아요_요청(productId, reviewId, favoriteRequest, null);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
+            final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
+
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
 
         @Test
-        void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+        void 사용자가_리뷰에_좋아요를_할때_좋아요_미기입시_예외가_발생한다() {
             // given
-            final var category = new Category("간편식사", CategoryType.FOOD);
-            카테고리_추가_요청(category);
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
 
-            final var member1 = new Member("test1", "test1.png", "1");
-            final var member2 = new Member("test2", "test2.png", "2");
-            final var member3 = new Member("test3", "test3.png", "3");
-            final var member4 = new Member("test4", "test4.png", "4");
-            final var members = List.of(member1, member2, member3, member4);
-            복수_유저_추가_요청(members);
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
 
-            final var product = new Product("삼각김밥1", 1000L, "image.png", "김밥", category);
-            final var productId = 상품_추가_요청(product);
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
 
-            final var review1 = new Review(member1, product, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-            final var review2 = new Review(member2, product, "review2.jpg", 3L, "역삼역", true, 351L);
-            final var review3 = new Review(member3, product, "review3.jpg", 3L, "토마토", false, 130L);
-            final var review4 = new Review(member4, product, "review4.jpg", 3L, "기러기", false, 130L);
-            final var reviews = List.of(review1, review2, review3, review4);
-            복수_리뷰_추가(reviews);
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
 
-            final var sortingReviews = List.of(review4, review3, review2, review1);
-            final var page = new SortingReviewsPageDto(4L, 1L, true, true, 0L, 10L);
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var image = 리뷰_사진_명세_요청();
+            final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            final var loginCookie = 로그인_쿠키를_얻는다();
+            단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
+
+            final var reviewId = reviewRepository.findAll().get(0).getId();
+
+            // when
+            final var request = new ReviewFavoriteRequest(null);
+            final var response = 리뷰_좋아요_요청(productId, reviewId, request, loginCookie);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "좋아요를 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
+        void 존재하지_않는_리뷰에_사용자가_좋아요를_할때_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var favoriteRequest = 리뷰좋아요요청_true_생성();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
+            final var notExistReviewId = 99999L;
+            final var response = 리뷰_좋아요_요청(productId, notExistReviewId, favoriteRequest, loginCookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            STATUS_CODE를_검증한다(response, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, REVIEW_NOT_FOUND.getCode(), REVIEW_NOT_FOUND.getMessage());
         }
     }
 
-    @Test
-    void 리뷰_랭킹을_조회하다() {
-        // given
-        final var category = new Category("간편식사", CategoryType.FOOD);
-        카테고리_추가_요청(category);
+    @Nested
+    class getSortingReviews_성공_테스트 {
 
-        final var member1 = new Member("test1", "test1.png", "1");
-        final var member2 = new Member("test2", "test2.png", "2");
-        final var member3 = new Member("test3", "test3.png", "3");
-        final var members = List.of(member1, member2, member3);
-        복수_유저_추가_요청(members);
+        @Nested
+        class 좋아요_기준_내림차순으로_리뷰_목록_조회 {
 
-        final var product1 = new Product("김밥", 1000L, "image.png", "김밥", category);
-        final var product2 = new Product("물", 500L, "water.jpg", "물", category);
-        final var products = List.of(product1, product2);
-        복수_상품_추가_요청(products);
+            @Test
+            void 좋아요_수가_서로_다르면_좋아요_기준_내림차순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
 
-        final var review1 = new Review(member1, product1, "review1.jpg", 3L, "이 김밥은 재밌습니다", true, 5L);
-        final var review2 = new Review(member2, product1, "review2.jpg", 4L, "역삼역", true, 351L);
-        final var review3 = new Review(member3, product1, "review3.jpg", 3L, "ㅇㅇ", false, 130L);
-        final var review4 = new Review(member2, product2, "review4.jpg", 5L, "ㅁㅜㄹ", true, 247L);
-        final var review5 = new Review(member3, product2, "review5.jpg", 1L, "ㄴㄴ", false, 83L);
-        final var reviews = List.of(review1, review2, review3, review4, review5);
-        복수_리뷰_추가(reviews);
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
 
-        final var rankingReviews = List.of(review2, review4, review3);
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
 
-        // when
-        final var response = 리뷰_랭킹_조회_요청();
+                final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 5L);
+                final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 351L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
 
-        // then
-        STATUS_CODE를_검증한다(response, 정상_처리);
-        리뷰_랭킹_조회_결과를_검증한다(response, rankingReviews);
+                final var sortingReviews = List.of(review2, review3, review1);
+                final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
+            }
+
+            @Test
+            void 좋아요_수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
+
+                final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 130L);
+                final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 130L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
+
+                final var sortingReviews = List.of(review3, review2, review1);
+                final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, pageDto, member1);
+            }
+        }
+
+        @Nested
+        class 평점_기준_오름차순으로_리뷰_목록을_조회 {
+
+            @Test
+            void 평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
+
+                final var review1 = 리뷰_이미지test2_평점2점_재구매O_생성(member1, product, 5L);
+                final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 351L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
+
+                final var sortingReviews = List.of(review1, review3, review2);
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
+                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            }
+
+            @Test
+            void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
+
+                final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 5L);
+                final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product, 351L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
+
+                final var sortingReviews = List.of(review3, review2, review1);
+                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            }
+        }
+
+        @Nested
+        class 평점_기준_내림차순으로_리뷰_목록_조회 {
+
+            @Test
+            void 평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
+
+                final var review1 = 리뷰_이미지test2_평점2점_재구매O_생성(member1, product, 5L);
+                final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 351L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
+
+                final var sortingReviews = List.of(review2, review3, review1);
+                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            }
+
+            @Test
+            void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
+
+                final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 5L);
+                final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product, 351L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
+
+                final var sortingReviews = List.of(review3, review2, review1);
+                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            }
+        }
+
+        @Nested
+        class 최신순으로_리뷰_목록을_조회 {
+
+            @Test
+            void 등록_시간이_서로_다르면_최신순으로_정렬할_수_있다() {
+                // given
+                final var category = 카테고리_즉석조리_생성();
+                카테고리_단일_저장(category);
+
+                final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+                final var productId = 단일_상품_저장(product);
+
+                final var member1 = 멤버_멤버1_생성();
+                final var member2 = 멤버_멤버2_생성();
+                final var member3 = 멤버_멤버3_생성();
+                복수_멤버_저장(member1, member2, member3);
+
+                final var review1 = 리뷰_이미지test2_평점2점_재구매O_생성(member1, product, 5L);
+                final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 351L);
+                final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+                복수_리뷰_저장(review1, review2, review3);
+
+                final var sortingReviews = List.of(review3, review2, review1);
+                final var loginCookie = 로그인_쿠키를_얻는다();
+
+                // when
+                final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "createdAt,desc", 0);
+                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+
+                // then
+                STATUS_CODE를_검증한다(response, 정상_처리);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, sortingReviews, page, member1);
+            }
+        }
     }
 
-    private void 카테고리_추가_요청(final Category category) {
-        categoryRepository.save(category);
+    @Nested
+    class getSortingReviews_실패_테스트 {
+
+        @Test
+        void 로그인_하지않은_사용자가_리뷰_목록을_조회시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 5L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 351L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(null, productId, "favoriteCount,desc", 0);
+
+            // then
+            final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
+            final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
+
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
+        void 존재하지_않는_상품의_리뷰_목록을_조회시_예외가_발생한다() {
+            // given
+            final var notExistProductId = 99999L;
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, notExistProductId, "favoriteCount,desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
+        }
     }
 
-    private void 복수_유저_추가_요청(final List<Member> members) {
-        memberRepository.saveAll(members);
+    @Nested
+    class getRankingReviews_성공_테스트 {
+
+        @Test
+        void 리뷰_랭킹을_조회하다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2);
+
+            final var member1 = 멤버_멤버1_생성();
+            final var member2 = 멤버_멤버2_생성();
+            final var member3 = 멤버_멤버3_생성();
+            복수_멤버_저장(member1, member2, member3);
+
+            final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 5L);
+            final var review1_2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product1, 351L);
+            final var review1_3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product1, 130L);
+            final var review2_1 = 리뷰_이미지test5_평점5점_재구매O_생성(member1, product2, 247L);
+            final var review2_2 = 리뷰_이미지test1_평점1점_재구매X_생성(member2, product2, 83L);
+            복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1, review2_2);
+
+            final var rankingReviews = List.of(review1_2, review2_1, review1_3);
+
+            // when
+            final var response = 리뷰_랭킹_조회_요청();
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            리뷰_랭킹_조회_결과를_검증한다(response, rankingReviews);
+        }
     }
 
-    private Long 상품_추가_요청(final Product product) {
-        return productRepository.save(product).getId();
+    private void 리뷰_좋아요_결과를_검증한다(final ReviewFavorite actual, final Long expectedMemberId,
+                                 final Long expectedReviewId, final Boolean expectedFavorite) {
+        final var actualId = actual.getId();
+        final var actualMemberId = actual.getMember().getId();
+        final var actualReviewId = actual.getReview().getId();
+        final var actualFavorite = actual.getFavorite();
+
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actualId)
+                    .isNotNull();
+            softAssertions.assertThat(actualReviewId)
+                    .isEqualTo(expectedReviewId);
+            softAssertions.assertThat(actualMemberId)
+                    .isEqualTo(expectedMemberId);
+            softAssertions.assertThat(actualFavorite)
+                    .isEqualTo(expectedFavorite);
+        });
     }
 
-    private void 복수_상품_추가_요청(final List<Product> products) {
-        productRepository.saveAll(products);
+    private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
+                                              final String expectedMessage) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.jsonPath().getString("code"))
+                    .isEqualTo(expectedCode);
+            softAssertions.assertThat(response.jsonPath().getString("message"))
+                    .isEqualTo(expectedMessage);
+        });
     }
 
-    private void 복수_리뷰_추가(final List<Review> reviews) {
-        reviewRepository.saveAll(reviews);
+    private Long 카테고리_단일_저장(final Category category) {
+        return categoryRepository.save(category).getId();
     }
 
-    private ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie,
-                                                          final Long productId,
-                                                          final String sort,
-                                                          final Integer page) {
-        return given()
-                .cookie("JSESSIONID", loginCookie)
-                .queryParam("sort", sort)
-                .queryParam("page", page)
-                .when()
-                .get("/api/products/{product_id}/reviews", productId)
-                .then()
-                .extract();
-    }
-
-    private ExtractableResponse<Response> 리뷰_랭킹_조회_요청() {
-        return given()
-                .when()
-                .get("/api/ranks/reviews")
-                .then()
-                .extract();
+    private List<Long> 태그_아이디_변환(final Tag... tags) {
+        return Stream.of(tags)
+                .map(Tag::getId)
+                .collect(Collectors.toList());
     }
 
     private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
@@ -466,17 +842,19 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", SortingReviewsPageDto.class);
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
                              final Member member) {
-        final List<SortingReviewDto> expected = reviews.stream()
+        final var expected = reviews.stream()
                 .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
-        final List<SortingReviewDto> actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
+        final var actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
+
         assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("id")
                 .isEqualTo(expected);
     }
 
@@ -486,6 +864,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .collect(Collectors.toList());
         final var actual = response.jsonPath()
                 .getList("reviews", RankingReviewDto.class);
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }

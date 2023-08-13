@@ -5,6 +5,7 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.member.application.MemberService;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,7 +33,7 @@ public class MemberApiController implements MemberController {
 
     @PutMapping("/api/members")
     public ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo,
-                                                 @RequestBody final MemberRequest request) {
+                                                 @RequestBody @Valid final MemberRequest request) {
         final Long memberId = loginInfo.getId();
 
         memberService.modify(memberId, request);

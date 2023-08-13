@@ -1,14 +1,21 @@
 package com.funeat.review.application;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
+
 import com.funeat.common.ImageService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Product;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
+import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.presentation.dto.RankingReviewDto;
@@ -58,9 +65,9 @@ public class ReviewService {
     public void create(final Long productId, final Long memberId, final MultipartFile image,
                        final ReviewCreateRequest reviewRequest) {
         final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Product findProduct = productRepository.findById(productId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final Review savedReview;
         if (Objects.isNull(image)) {
@@ -89,9 +96,9 @@ public class ReviewService {
     @Transactional
     public void likeReview(final Long reviewId, final Long memberId, final ReviewFavoriteRequest request) {
         final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Review findReview = reviewRepository.findById(reviewId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
 
         final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
                 findReview).orElseGet(() -> saveReviewFavorite(findMember, findReview, request.getFavorite()));
@@ -108,10 +115,10 @@ public class ReviewService {
 
     public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
         final Member member = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
 
         final Product product = productRepository.findById(productId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
 

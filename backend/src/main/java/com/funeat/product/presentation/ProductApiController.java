@@ -22,11 +22,9 @@ public class ProductApiController implements ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/categories/{category_id}/products")
-    public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(
-            @PathVariable(name = "category_id") final Long categoryId,
-            @PageableDefault Pageable pageable
-    ) {
+    @GetMapping("/categories/{categoryId}/products")
+    public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(@PathVariable final Long categoryId,
+                                                                               @PageableDefault Pageable pageable) {
         final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, pageable);
         return ResponseEntity.ok(response);
     }

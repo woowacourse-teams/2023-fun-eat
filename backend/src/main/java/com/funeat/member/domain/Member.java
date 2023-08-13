@@ -1,7 +1,5 @@
 package com.funeat.member.domain;
 
-import com.funeat.member.domain.bookmark.ProductBookmark;
-import com.funeat.member.domain.bookmark.RecipeBookmark;
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import java.util.ArrayList;
@@ -30,12 +28,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<RecipeFavorite> recipeFavorites;
-
-    @OneToMany(mappedBy = "member")
-    private List<ProductBookmark> productBookmarks;
-
-    @OneToMany(mappedBy = "member")
-    private List<RecipeBookmark> recipeBookmarks;
 
     protected Member() {
     }
@@ -68,14 +60,6 @@ public class Member {
 
     public List<RecipeFavorite> getRecipeFavorites() {
         return recipeFavorites;
-    }
-
-    public List<ProductBookmark> getProductBookmarks() {
-        return productBookmarks;
-    }
-
-    public List<RecipeBookmark> getRecipeBookmarks() {
-        return recipeBookmarks;
     }
 
     public void modifyProfile(final String nickname, final String profileImage) {

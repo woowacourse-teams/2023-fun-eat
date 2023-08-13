@@ -18,6 +18,8 @@ export const SVG_ICON_VARIANTS = [
   'kakao',
   'close',
   'triangle',
+  'plus',
+  'pencil',
 ] as const;
 export type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
 

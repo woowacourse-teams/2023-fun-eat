@@ -2,6 +2,7 @@ import type { Product } from './product';
 import type { ProductRanking, ReviewRanking } from './ranking';
 import type { Recipe } from './recipe';
 import type { Review } from './review';
+import type { SearchedProduct } from './search';
 
 export interface Page {
   totalDataCount: number;
@@ -32,4 +33,9 @@ export interface ProductRankingResponse {
 export interface RecipeResponse {
   page: Page;
   recipes: Recipe[];
+}
+  
+export interface SearchedProductResponse {
+  page: Page;
+  products: SearchedProduct[];
 }
