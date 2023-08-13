@@ -21,6 +21,7 @@ const DetailLayoutContainer = styled.div`
 `;
 
 const MainWrapper = styled.main`
+  position: relative;
   height: calc(100% - 60px);
   padding: 20px;
   overflow-y: auto;
