@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 const MAX_SIZE = 5 * 1024 * 1024;
 
-const useReviewImageUploader = () => {
-  const [reviewPreviewImage, setReviewPreviewImage] = useState('');
-  const [reviewImageFile, setReviewImageFile] = useState<File | null>(null);
+const useImageUploader = () => {
+  const [previewImage, setPreviewImage] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const options = {
     maxSizeMB: 1,
@@ -14,7 +14,7 @@ const useReviewImageUploader = () => {
     useWebWorker: true,
   };
 
-  const uploadReviewImage: ChangeEventHandler<HTMLInputElement> = async (event) => {
+  const uploadImage: ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (!event.target.files) {
       return;
     }
@@ -34,27 +34,26 @@ const useReviewImageUploader = () => {
         compressedFile.name
       );
       compressedImageFilePromise.then((result) => {
-        setReviewImageFile(result);
+        setImageFile(result);
       });
     } catch (error) {
       console.log(error);
     }
 
-    setReviewPreviewImage(URL.createObjectURL(imageFile));
+    setPreviewImage(URL.createObjectURL(imageFile));
   };
 
-  const deleteReviewImage = () => {
-    URL.revokeObjectURL(reviewPreviewImage);
-    setReviewPreviewImage('');
+  const deleteImage = () => {
+    URL.revokeObjectURL(previewImage);
+    setPreviewImage('');
   };
 
   return {
-    reviewPreviewImage,
-    setReviewPreviewImage,
-    reviewImageFile,
-    uploadReviewImage,
-    deleteReviewImage,
+    previewImage,
+    imageFile,
+    uploadImage,
+    deleteImage,
   };
 };
 
-export default useReviewImageUploader;
+export default useImageUploader;
