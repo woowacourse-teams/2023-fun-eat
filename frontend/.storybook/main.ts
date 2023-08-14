@@ -10,6 +10,7 @@ const config: StorybookConfig = {
     'msw-storybook-addon',
     '@storybook/addon-onboarding',
   ],
+  staticDirs: ['../public'],
   framework: {
     name: '@storybook/react-webpack5',
     options: {},

@@ -3,6 +3,7 @@ package com.funeat.acceptance.product;
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
@@ -38,7 +39,10 @@ import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생
 import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.product.domain.Product;
@@ -432,6 +436,33 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
+    class getAllProductsInCategory_실패_테스트 {
+
+        @Test
+        void 상품을_정렬할때_카테고리가_존재하지_않으면_예외가_발생한다() {
+            // given
+            final var notExistCategoryId = 99999L;
+
+            // when
+            final var response = 카테고리별_상품_목록_조회_요청(notExistCategoryId, "price", "desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, CATEGORY_NOT_FOUND.getCode(), CATEGORY_NOT_FOUND.getMessage());
+        }
+    }
+
+    private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
+                                              final String expectedMessage) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.jsonPath().getString("code"))
+                    .isEqualTo(expectedCode);
+            softAssertions.assertThat(response.jsonPath().getString("message"))
+                    .isEqualTo(expectedMessage);
+        });
+    }
+
+    @Nested
     class getProductDetail_성공_테스트 {
 
         @Test
@@ -460,6 +491,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_리뷰_요청(productId, image, request2, loginCookie);
             단일_리뷰_요청(productId, image, request3, loginCookie);
 
+            final var expectedReviewCount = 3L;
             final var expectedTags = List.of(tag2, tag3, tag1);
 
             // when
@@ -467,7 +499,24 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_상세_정보_조회_결과를_검증한다(response, product, expectedTags);
+            상품_상세_정보_조회_결과를_검증한다(response, product, expectedReviewCount, expectedTags);
+        }
+    }
+
+    @Nested
+    class getProductDetail_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_상품_상세_정보를_조회할때_예외가_발생한다() {
+            // given
+            final var notExistProductId = 99999L;
+
+            // when
+            final var response = 상품_상세_조회_요청(notExistProductId);
+
+            // then
+            STATUS_CODE를_검증한다(response, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
         }
     }
 
@@ -536,8 +585,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product,
-                                      final List<Tag> expectedTags) {
-        final var expected = ProductResponse.toResponse(product, expectedTags);
+                                      final Long expectedReviewCount, final List<Tag> expectedTags) {
+        final var expected = ProductResponse.toResponse(product, expectedReviewCount, expectedTags);
         final var actual = response.as(ProductResponse.class);
 
         assertThat(actual).usingRecursiveComparison()

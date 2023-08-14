@@ -12,9 +12,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import java.util.List;
@@ -61,8 +63,9 @@ class RecipeServiceTest extends ServiceTest {
 
             // then
             assertThat(actual).usingRecursiveComparison()
-                    .ignoringFields("id")
+                    .ignoringFields("id", "createdAt")
                     .isEqualTo(expected);
+            assertThat(actual.getCreatedAt()).isNotNull();
         }
     }
 
@@ -129,7 +132,7 @@ class RecipeServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> recipeService.create(wrongMemberId, images, request))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test
@@ -157,7 +160,7 @@ class RecipeServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> recipeService.create(memberId, images, request))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 

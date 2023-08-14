@@ -10,6 +10,7 @@ import com.funeat.common.ServiceTest;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -109,7 +110,7 @@ class MemberServiceTest extends ServiceTest {
 
             // when & then
             assertThatThrownBy(() -> memberService.getMemberProfile(wrongMemberId))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
     }
 
@@ -251,7 +252,7 @@ class MemberServiceTest extends ServiceTest {
 
             // when
             assertThatThrownBy(() -> memberService.modify(wrongMemberId, request))
-                    .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test
