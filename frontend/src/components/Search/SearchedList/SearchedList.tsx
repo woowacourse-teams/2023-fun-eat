@@ -6,14 +6,14 @@ import styled from 'styled-components';
 import { ProductItem } from '@/components/Product';
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
-import { useInfiniteSearchedProductsQuery } from '@/hooks/queries/search';
+import { useInfiniteProductSearchResultsQuery } from '@/hooks/queries/search';
 
 interface SearchedListProps {
   searchQuery: string;
 }
 
 const SearchedList = ({ searchQuery }: SearchedListProps) => {
-  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteSearchedProductsQuery(searchQuery);
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchResultsQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 

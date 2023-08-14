@@ -1,9 +1,9 @@
 import { rest } from 'msw';
 
-import searchedProducts from '../data/searchedProducts.json';
+import searchedProducts from '../data/productSearchResults.json';
 
 export const searchHandlers = [
-  rest.get('/api/search/:searchId', (req, res, ctx) => {
+  rest.get('/api/search/:searchId/results', (req, res, ctx) => {
     const { searchId } = req.params;
     const query = req.url.searchParams.get('query');
     const page = Number(req.url.searchParams.get('page'));
