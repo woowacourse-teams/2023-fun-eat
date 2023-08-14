@@ -26,7 +26,9 @@ const HomePage = () => {
           공통 상품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuVariant="food" />
+        <Suspense fallback={null}>
+          <CategoryMenu menuVariant="food" />
+        </Suspense>
         <Spacing size={12} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
@@ -43,7 +45,9 @@ const HomePage = () => {
           편의점 특산품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuVariant="store" />
+        <Suspense fallback={null}>
+          <CategoryMenu menuVariant="store" />
+        </Suspense>
         <Spacing size={16} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>

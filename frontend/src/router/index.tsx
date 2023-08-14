@@ -49,9 +49,15 @@ const router = createBrowserRouter([
       {
         path: `${PATH.PRODUCT_LIST}/:category`,
         element: (
-          <CategoryProvider>
-            <ProductListPage />
-          </CategoryProvider>
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+                <CategoryProvider>
+                  <ProductListPage />
+                </CategoryProvider>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         ),
       },
       {

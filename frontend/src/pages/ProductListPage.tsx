@@ -45,7 +45,9 @@ const ProductListPage = () => {
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={30} />
-        <CategoryMenu menuVariant={category} />
+        <Suspense fallback={null}>
+          <CategoryMenu menuVariant={category} />
+        </Suspense>
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
