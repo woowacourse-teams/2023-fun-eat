@@ -4,12 +4,16 @@ import com.funeat.product.application.ProductService;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductsResponse;
+import com.funeat.product.dto.SearchProductResultsResponse;
+import com.funeat.product.dto.SearchProductsResponse;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,6 +42,20 @@ public class ProductApiController implements ProductController {
     @GetMapping("/ranks/products")
     public ResponseEntity<RankingProductsResponse> getRankingProducts() {
         final RankingProductsResponse response = productService.getTop3Products();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search/products")
+    public ResponseEntity<SearchProductsResponse> searchProducts(@RequestParam final String query, @PageableDefault final Pageable pageable) {
+        final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        final SearchProductsResponse response = productService.searchProducts(query, pageRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search/products/results")
+    public ResponseEntity<SearchProductResultsResponse> getSearchResults(@RequestParam final String query, @PageableDefault final Pageable pageable) {
+        final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        final SearchProductResultsResponse response = productService.getSearchResults(query, pageRequest);
         return ResponseEntity.ok(response);
     }
 }
