@@ -1,6 +1,5 @@
 package com.funeat.product.dto;
 
-import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 
 public class RankingProductDto {
@@ -19,7 +18,7 @@ public class RankingProductDto {
 
     public static RankingProductDto toDto(final Product product) {
         return new RankingProductDto(product.getId(), product.getName(), product.getImage(),
-                CategoryType.convertToLowerCase(product.getCategory().getType()));
+                product.getCategory().getType().getName());
     }
 
     public Long getId() {
