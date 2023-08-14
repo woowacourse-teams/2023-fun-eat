@@ -17,10 +17,6 @@ const SearchedList = ({ searchQuery }: SearchedListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!searchResponse) {
-    return null;
-  }
-
   const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
