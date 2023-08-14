@@ -11,6 +11,7 @@ import com.funeat.recipe.application.RecipeService;
 import com.funeat.review.application.ReviewService;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,7 +56,7 @@ public class MemberApiController implements MemberController {
 
     @GetMapping("/reviews")
     public ResponseEntity<MemberReviewsResponse> getMemberReview(@AuthenticationPrincipal final LoginInfo loginInfo,
-                                                                 final Pageable pageable) {
+                                                                 @PageableDefault final Pageable pageable) {
         final MemberReviewsResponse response = reviewService.findReviewByMember(loginInfo.getId(), pageable);
 
         return ResponseEntity.ok().body(response);
@@ -63,7 +64,7 @@ public class MemberApiController implements MemberController {
 
     @GetMapping("/recipes")
     public ResponseEntity<MemberRecipesResponse> getMemberRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
-                                                                 final Pageable pageable) {
+                                                                 @PageableDefault final Pageable pageable) {
         final MemberRecipesResponse response = recipeService.findRecipeByMember(loginInfo.getId(), pageable);
 
         return ResponseEntity.ok().body(response);
