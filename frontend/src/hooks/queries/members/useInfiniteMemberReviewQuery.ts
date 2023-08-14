@@ -4,7 +4,7 @@ import { memberApi } from '@/apis';
 import type { MemberReviewResponse } from '@/types/response';
 
 const fetchMemberReview = async (pageParam: number) => {
-  const response = await memberApi.get({ params: '/reviews', queries: `?page=${pageParam}` });
+  const response = await memberApi.get({ params: '/reviews', queries: `?page=${pageParam}`, credentials: true });
   const data: MemberReviewResponse = await response.json();
   return data;
 };
