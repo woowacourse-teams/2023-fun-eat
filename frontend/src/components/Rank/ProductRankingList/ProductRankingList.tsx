@@ -12,7 +12,7 @@ interface ProductRankingListProps {
 
 const ProductRankingList = ({ isHomePage }: ProductRankingListProps) => {
   const { data: productRankings } = useProductRankingQuery();
-  const productsToDisplay = displaySlice(isHomePage, productRankings?.products, 3);
+  const productsToDisplay = displaySlice(isHomePage, productRankings.products, 3);
 
   return (
     <ul>

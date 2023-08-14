@@ -11,7 +11,7 @@ interface ReviewRankingListProps {
 
 const ReviewRankingList = ({ isHomePage }: ReviewRankingListProps) => {
   const { data: reviewRankings } = useReviewRankingQuery();
-  const reviewsToDisplay = useDisplaySlice(isHomePage, reviewRankings?.reviews);
+  const reviewsToDisplay = useDisplaySlice(isHomePage, reviewRankings.reviews);
 
   return (
     <ReviewRankingListContainer>

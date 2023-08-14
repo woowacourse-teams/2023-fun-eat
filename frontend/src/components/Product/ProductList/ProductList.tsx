@@ -27,7 +27,7 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
     categoryIds[category],
     selectedOption?.value ?? 'reviewCount,desc'
   );
-  const productList = data?.pages.flatMap((page) => page.products);
+  const productList = data.pages.flatMap((page) => page.products);
   const productsToDisplay = displaySlice(isHomePage, productList);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PreviewImage from '@/assets/characters.svg';
 import { SvgIcon } from '@/components/Common';
 import type { Product } from '@/types/product';
+
 interface ProductItemProps {
   product: Product;
 }
