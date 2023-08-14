@@ -26,7 +26,7 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
     <MemberRecipeListContainer>
       {!isMemberPage && (
         <TotalRecipeCount color={theme.colors.gray4}>
-          총 <strong>&apos;{totalRecipeCount}&apos;</strong>개의 리뷰를 남겼어요!
+          총 <strong>&apos;{totalRecipeCount}&apos;</strong>개의 레시피를 남겼어요!
         </TotalRecipeCount>
       )}
       <Spacing size={20} />
