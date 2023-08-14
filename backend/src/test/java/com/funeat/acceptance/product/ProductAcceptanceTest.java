@@ -569,7 +569,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
