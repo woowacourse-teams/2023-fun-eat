@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 
+import mockMemberRecipes from '../data/memberRecipes.json';
 import mockMemberReviews from '../data/memberReviews.json';
 
 export const memberHandlers = [
@@ -33,5 +34,9 @@ export const memberHandlers = [
 
   rest.get('/api/members/reviews', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockMemberReviews));
+  }),
+
+  rest.get('/api/members/recipes', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockMemberRecipes));
   }),
 ];
