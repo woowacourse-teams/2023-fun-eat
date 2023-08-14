@@ -16,11 +16,6 @@ const useMemberQuery = () => {
     staleTime: 15 * 60 * 1000,
     refetchOnWindowFocus: false,
     useErrorBoundary: false,
-    onError: (error) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };
 
