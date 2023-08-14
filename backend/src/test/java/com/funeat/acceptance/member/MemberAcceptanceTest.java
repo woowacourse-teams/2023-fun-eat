@@ -358,6 +358,51 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 정상_처리);
             사용자_꿀조합_조회_결과를_검증한다(response, expectedRecipes, page);
         }
+
+        @Test
+        void 사용자가_작성한_꿀조합에_이미지가_없을때_꿀조합은_이미지없이_조회된다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            단일_멤버_저장(member1);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var recipe1_1 = new Recipe("test-title", "test-content", member1);
+            단일_꿀조합_저장(recipe1_1);
+
+            final var product_recipe_2_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_1);
+            final var product_recipe_2_1_2 = 레시피_안에_들어가는_상품_생성(product2, recipe1_1);
+            final var product_recipe_2_1_3 = 레시피_안에_들어가는_상품_생성(product3, recipe1_1);
+            복수_꿀조합_상품_저장(product_recipe_2_1_1, product_recipe_2_1_2, product_recipe_2_1_3);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var response = 사용자_꿀조합_조회_요청(loginCookie, "createdAt,desc", 0);
+            final var page = new PageDto(1L, 1L, true, true, 0L, 10L);
+
+            // then
+            final var expectedRecipes = List.of(recipe1_1);
+            final var expectedRecipeResponses = expectedRecipes.stream()
+                    .map(recipe -> {
+                        final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
+                        final var productByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productByRecipe);
+                    })
+                    .collect(Collectors.toList());
+            final var actualRecipeImage = response.jsonPath().getList("recipes", MemberRecipeDto.class).get(0)
+                    .getImage();
+
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            사용자_꿀조합_조회_결과를_검증한다(response, expectedRecipeResponses, page);
+            assertThat(actualRecipeImage).isNull();
+        }
     }
 
     @Nested
