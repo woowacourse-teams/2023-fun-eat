@@ -32,7 +32,12 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           setIsFavorite((prev) => !prev);
           setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
         },
-        onError: () => {
+        onError: (error) => {
+          if (error instanceof Error) {
+            alert(error.message);
+            return;
+          }
+
           alert('리뷰 좋아요를 다시 시도해주세요.');
         },
       }
