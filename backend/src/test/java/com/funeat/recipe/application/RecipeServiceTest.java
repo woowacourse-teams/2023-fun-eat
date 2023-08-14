@@ -1,17 +1,28 @@
 package com.funeat.recipe.application;
 
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
+import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점4점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
+import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.ServiceTest;
+import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
@@ -19,13 +30,13 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -53,6 +64,7 @@ class RecipeServiceTest extends ServiceTest {
             final var image3 = 이미지_생성();
             final var images = List.of(image1, image2, image3);
 
+            // when
             final var request = 레시피추가요청_생성(productIds);
 
             final var expected = 레시피_생성(member);
@@ -63,8 +75,9 @@ class RecipeServiceTest extends ServiceTest {
 
             // then
             assertThat(actual).usingRecursiveComparison()
-                    .ignoringFields("id")
+                    .ignoringFields("id", "createdAt")
                     .isEqualTo(expected);
+            assertThat(actual.getCreatedAt()).isNotNull();
         }
     }
 
@@ -163,8 +176,100 @@ class RecipeServiceTest extends ServiceTest {
         }
     }
 
-    private MultipartFile 이미지_생성() {
-        return new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[]{1, 2, 3});
+    @Nested
+    class findRecipeByMember_성공_테스트 {
+
+        @Test
+        void 사용자가_작성한_꿀조합을_조회한다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            복수_멤버_저장(member1);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var recipe1_1 = 레시피_생성(member1);
+            final var recipe1_2 = 레시피_생성(member1);
+            복수_꿀조합_저장(recipe1_1, recipe1_2);
+
+            final var product_recipe_1_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_1);
+            final var product_recipe_1_1_2 = 레시피_안에_들어가는_상품_생성(product2, recipe1_1);
+            final var product_recipe_1_1_3 = 레시피_안에_들어가는_상품_생성(product3, recipe1_1);
+            final var product_recipe_1_2_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_2);
+            final var product_recipe_1_2_2 = 레시피_안에_들어가는_상품_생성(product3, recipe1_2);
+            복수_꿀조합_상품_저장(product_recipe_1_1_1, product_recipe_1_1_2, product_recipe_1_1_3, product_recipe_1_2_1,
+                    product_recipe_1_2_2);
+
+            final var recipeImage1_1 = 레시피이미지_생성(recipe1_1);
+            final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
+            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
+
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+
+            // when
+            final var actual = recipeService.findRecipeByMember(member1.getId(), page);
+
+            // then
+            final var expectedRecipes = List.of(recipe1_2, recipe1_1);
+            final var expectedRecipesDtos = expectedRecipes.stream()
+                    .map(recipe -> {
+                        final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
+                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productsByRecipe);
+                    })
+                    .collect(Collectors.toList());
+            final var expectedPage = new PageDto(2L, 1L, true, true, 0L, 10L);
+
+            해당멤버의_꿀조합과_페이징_결과를_검증한다(actual, expectedRecipesDtos, expectedPage);
+        }
+
+        @Test
+        void 사용자가_작성한_꿀조합이_없을때_꿀조합은_빈상태로_조회된다() {
+            // given
+            final var member1 = 멤버_멤버1_생성();
+            복수_멤버_저장(member1);
+
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+
+            // when
+            final var actual = recipeService.findRecipeByMember(member1.getId(), page);
+
+            // then
+            final var expectedRecipes = Collections.emptyList();
+            final var expectedPage = new PageDto(0L, 0L, true, true, 0L, 10L);
+
+            해당멤버의_꿀조합과_페이징_결과를_검증한다(actual, expectedRecipes, expectedPage);
+        }
+    }
+
+    @Nested
+    class findRecipeByMember_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_멤버가_해당_멤버의_레시피를_조회하면_예외가_발생한다() {
+            // given
+            final var notExistMemberId = 99999L;
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+
+            // when & then
+            assertThatThrownBy(() -> recipeService.findRecipeByMember(notExistMemberId, page))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+    }
+
+    private <T> void 해당멤버의_꿀조합과_페이징_결과를_검증한다(final MemberRecipesResponse actual, final List<T> expectedRecipesDtos,
+                                             final PageDto expectedPage) {
+        assertSoftly(softAssertions -> {
+            assertThat(actual.getRecipes()).usingRecursiveComparison()
+                    .isEqualTo(expectedRecipesDtos);
+            assertThat(actual.getPage()).usingRecursiveComparison()
+                    .isEqualTo(expectedPage);
+        });
     }
 
     private Category 카테고리_추가_요청(final Category category) {

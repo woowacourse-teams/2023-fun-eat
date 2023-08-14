@@ -37,7 +37,7 @@ public class AuthApiController implements AuthController {
 
         if (signUserDto.isSignUp()) {
             return ResponseEntity.ok()
-                    .location(URI.create("/profile"))
+                    .location(URI.create("/members"))
                     .build();
         }
         return ResponseEntity.ok()
