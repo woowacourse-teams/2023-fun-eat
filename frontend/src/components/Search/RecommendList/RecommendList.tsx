@@ -17,10 +17,6 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!searchResponse) {
-    return null;
-  }
-
   const products = searchResponse.pages
     .flatMap((page) => page.products)
     .map((product) => ({
