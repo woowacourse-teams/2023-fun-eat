@@ -25,7 +25,7 @@ const MemberPage = () => {
       <MembersInfo member={member} />
       <Spacing size={40} />
       <NavigableSectionTitle title="내가 작성한 리뷰" routeDestination={`${PATH.MEMBER}/review`} />
-      <Spacing size={24} />
+      <Spacing size={5} />
       <MemberReviewList isMemberPage />
     </>
   );
