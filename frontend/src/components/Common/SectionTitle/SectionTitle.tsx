@@ -9,7 +9,7 @@ interface SectionTitleProps {
   bookmark?: boolean;
 }
 
-const SectionTitle = ({ name, bookmark }: SectionTitleProps) => {
+const SectionTitle = ({ name, bookmark = false }: SectionTitleProps) => {
   const { routeBack } = useRoutePage();
 
   return (
