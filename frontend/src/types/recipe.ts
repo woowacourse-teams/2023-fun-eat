@@ -22,12 +22,19 @@ interface RecipeProduct {
   price: number;
 }
 
-export interface Recipe {
+export interface BaseRecipe {
   id: number;
   image: string;
   title: string;
-  author: Member;
   createdAt: string;
   favoriteCount: number;
+}
+
+export interface Recipe extends BaseRecipe {
+  author: Member;
   products: RecipeProduct[];
+}
+
+export interface MemberRecipe extends BaseRecipe {
+  products: string[];
 }
