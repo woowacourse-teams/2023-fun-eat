@@ -37,7 +37,7 @@ const ProductListPage = () => {
         <SortButtonWrapper>
           <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
         </SortButtonWrapper>
-        <ProductList category={category} />
+        <ProductList category={category} selectedOption={selectedOption} />
       </section>
       <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
