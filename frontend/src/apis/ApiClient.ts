@@ -55,7 +55,7 @@ export class ApiClient {
     });
   }
 
-  put<B>({ params, queries, credentials = false }: RequestOptions, body?: FormData) {
+  put({ params, queries, credentials = false }: RequestOptions, body?: FormData) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PUT',
       headers: this.#headers,
