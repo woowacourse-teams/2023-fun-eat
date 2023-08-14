@@ -6,8 +6,15 @@ import { CategoryMenu, SvgIcon, ScrollButton } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
+import channelTalk from '@/service/channelTalk';
 
 const HomePage = () => {
+  channelTalk.loadScript();
+
+  channelTalk.boot({
+    pluginKey: process.env.CHANNEL_TALK_KEY ?? '',
+  });
+
   return (
     <>
       <section>
@@ -17,7 +24,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="food" />
         <Spacing size={12} />
-        <ProductList category="food" isHome />
+        <ProductList category="food" isHomePage />
         <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
           전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
         </ProductListRouteLink>
@@ -30,7 +37,7 @@ const HomePage = () => {
         <Spacing size={16} />
         <CategoryMenu menuVariant="store" />
         <Spacing size={16} />
-        <PBProductList isHome />
+        <PBProductList isHomePage />
       </section>
       <Spacing size={36} />
       <section>
@@ -38,7 +45,7 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ProductRankingList isHome />
+        <ProductRankingList isHomePage />
       </section>
       <Spacing size={36} />
       <section>
@@ -46,7 +53,7 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList isHome />
+        <ReviewRankingList isHomePage />
       </section>
       <ScrollButton />
     </>

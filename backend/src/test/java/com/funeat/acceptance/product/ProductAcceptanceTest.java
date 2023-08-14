@@ -491,6 +491,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_리뷰_요청(productId, image, request2, loginCookie);
             단일_리뷰_요청(productId, image, request3, loginCookie);
 
+            final var expectedReviewCount = 3L;
             final var expectedTags = List.of(tag2, tag3, tag1);
 
             // when
@@ -498,7 +499,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_상세_정보_조회_결과를_검증한다(response, product, expectedTags);
+            상품_상세_정보_조회_결과를_검증한다(response, product, expectedReviewCount, expectedTags);
         }
     }
 
@@ -568,7 +569,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
@@ -584,8 +586,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product,
-                                      final List<Tag> expectedTags) {
-        final var expected = ProductResponse.toResponse(product, expectedTags);
+                                      final Long expectedReviewCount, final List<Tag> expectedTags) {
+        final var expected = ProductResponse.toResponse(product, expectedReviewCount, expectedTags);
         final var actual = response.as(ProductResponse.class);
 
         assertThat(actual).usingRecursiveComparison()

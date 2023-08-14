@@ -1,5 +1,7 @@
 import { rest } from 'msw';
 
+import mockProfileReviews from '../data/profileReviews.json';
+
 export const memberHandlers = [
   rest.get('/api/members', (req, res, ctx) => {
     const { mockSessionId } = req.cookies;
@@ -27,5 +29,9 @@ export const memberHandlers = [
     }
 
     return res(ctx.status(403));
+  }),
+
+  rest.get('/api/members/reviews', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockProfileReviews));
   }),
 ];
