@@ -24,9 +24,9 @@ export const NAVIGATION_MENU: NavigationMenu[] = [
     path: PATH.RECIPE,
   },
   {
-    variant: 'profile',
+    variant: 'member',
     name: '마이',
-    path: PATH.PROFILE,
+    path: PATH.MEMBER,
   },
 ];
 

@@ -1,8 +1,8 @@
-package com.funeat.review.presentation.dto;
+package com.funeat.member.dto;
 
 import com.funeat.review.domain.Review;
 
-public class RankingReviewDto {
+public class MemberReviewDto {
 
     private final Long reviewId;
     private final Long productId;
@@ -11,8 +11,8 @@ public class RankingReviewDto {
     private final Long rating;
     private final Long favoriteCount;
 
-    private RankingReviewDto(final Long reviewId, final Long productId, final String productName, final String content,
-                             final Long rating, final Long favoriteCount) {
+    private MemberReviewDto(final Long reviewId, final Long productId, final String productName, final String content,
+                            final Long rating, final Long favoriteCount) {
         this.reviewId = reviewId;
         this.productId = productId;
         this.productName = productName;
@@ -21,8 +21,8 @@ public class RankingReviewDto {
         this.favoriteCount = favoriteCount;
     }
 
-    public static RankingReviewDto toDto(final Review review) {
-        return new RankingReviewDto(
+    public static MemberReviewDto toDto(final Review review) {
+        return new MemberReviewDto(
                 review.getId(),
                 review.getProduct().getId(),
                 review.getProduct().getName(),

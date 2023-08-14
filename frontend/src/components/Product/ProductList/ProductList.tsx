@@ -15,10 +15,10 @@ import displaySlice from '@/utils/displaySlice';
 
 interface ProductListProps {
   category: CategoryVariant;
-  isHome?: boolean;
+  isHomePage?: boolean;
 }
 
-const ProductList = ({ category, isHome }: ProductListProps) => {
+const ProductList = ({ category, isHomePage }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { selectedOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
@@ -27,7 +27,7 @@ const ProductList = ({ category, isHome }: ProductListProps) => {
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(categoryIds[category], selectedOption.value);
   const productList = data?.pages.flatMap((page) => page.products);
-  const productsToDisplay = displaySlice(isHome, productList);
+  const productsToDisplay = displaySlice(isHomePage, productList);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 

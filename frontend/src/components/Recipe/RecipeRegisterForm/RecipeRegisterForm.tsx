@@ -11,13 +11,13 @@ import { ImageUploader, SvgIcon } from '@/components/Common';
 import { useFormData, useImageUploader } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
-import type { RecipeRequest, RecipeUsedProduct } from '@/types/recipe';
+import type { RecipeRequest, RecipeProduct } from '@/types/recipe';
 
 const RecipeRegisterForm = () => {
   const theme = useTheme();
 
   const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
-  const [usedProducts, setUsedProducts] = useState<RecipeUsedProduct[]>([]);
+  const [usedProducts, setUsedProducts] = useState<RecipeProduct[]>([]);
 
   const recipeFormValue = useRecipeFormValueContext();
   const { handleRecipeFormValue, resetRecipeFormValue } = useRecipeFormActionContext();

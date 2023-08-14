@@ -7,7 +7,7 @@ const SvgSprite = () => {
       <symbol id="list" viewBox="0 0 18 14">
         <path d="M0 0h18v2H0zm0 6h18v2H0zm0 6h18v2H0z" />
       </symbol>
-      <symbol id="profile" viewBox="0 0 20 20">
+      <symbol id="member" viewBox="0 0 20 20">
         <path d="M5.5 5.042A4.665 4.665 0 0 1 10.167.375a4.665 4.665 0 0 1 4.666 4.667 4.665 4.665 0 0 1-4.666 4.666A4.665 4.665 0 0 1 5.5 5.042zM.833 16.708c0-3.103 6.219-4.666 9.334-4.666 3.115 0 9.333 1.563 9.333 4.666v2.334H.833v-2.334z" />
       </symbol>
       <symbol id="search" viewBox="0 0 22 22">

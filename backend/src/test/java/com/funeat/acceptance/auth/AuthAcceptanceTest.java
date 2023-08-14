@@ -58,7 +58,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            헤더에_리다이렉트가_존재하는지_검증한다(response, "/profile");
+            헤더에_리다이렉트가_존재하는지_검증한다(response, "/members");
         }
 
         @Test
