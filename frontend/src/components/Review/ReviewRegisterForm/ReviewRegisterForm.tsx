@@ -59,7 +59,12 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
         closeReviewDialog();
         scrollToPosition(targetRef);
       },
-      onError: () => {
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
+
         alert('리뷰 등록을 다시 시도해주세요');
       },
     });

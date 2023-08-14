@@ -47,8 +47,13 @@ const RecipeRegisterForm = () => {
         deleteImage();
         resetRecipeFormValue();
       },
-      onError: () => {
-        alert('레시피 등록을 다시 시도해주세요');
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
+
+        alert('꿀조합 등록을 다시 시도해주세요');
       },
     });
   };
