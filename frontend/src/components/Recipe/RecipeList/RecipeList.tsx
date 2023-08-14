@@ -1,4 +1,4 @@
-import { Link } from '@fun-eat/design-system';
+import { Link, Text } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,6 +9,10 @@ import recipeResponse from '@/mocks/data/recipes.json';
 const RecipeList = () => {
   // TODO: 임시 데이터, API 연동 후 수정
   const { recipes } = recipeResponse;
+
+  if (recipes.length === 0) {
+    return <Text>꿀조합을 작성해보세요</Text>;
+  }
 
   return (
     <RecipeListContainer>

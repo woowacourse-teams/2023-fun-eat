@@ -1,9 +1,18 @@
 import { BottomSheet, Button, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ScrollButton, SortButton, SortOptionList, SvgIcon } from '@/components/Common';
+import {
+  ErrorBoundary,
+  ErrorComponent,
+  Loading,
+  ScrollButton,
+  SortButton,
+  SortOptionList,
+  SvgIcon,
+} from '@/components/Common';
 import { RecipeList } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
 import { useSortOption } from '@/hooks/common';
@@ -17,6 +26,7 @@ const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { reset } = useQueryErrorResetBoundary();
 
   const member = useMemberValueContext();
 
@@ -38,10 +48,14 @@ const RecipePage = () => {
       <SearchPageLink as={RouterLink} to="/search">
         <SvgIcon variant="search" />
       </SearchPageLink>
-      <SortButtonWrapper>
-        <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-      </SortButtonWrapper>
-      <RecipeList />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <SortButtonWrapper>
+            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+          </SortButtonWrapper>
+          <RecipeList />
+        </Suspense>
+      </ErrorBoundary>
       <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
         <RecipeRegisterButton
