@@ -20,20 +20,20 @@ import { REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useSortOption } from '@/hooks/common';
-import { useMemberValueContext } from '@/hooks/context';
+import { useMemberQuery } from '@/hooks/queries/members';
 
 const LOGIN_ERROR_MESSAGE =
   '로그인 해야 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
 
 const ProductDetailPage = () => {
-  const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
-  const tabRef = useRef<HTMLUListElement>(null);
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
+  const { data: member } = useMemberQuery();
   const { reset } = useQueryErrorResetBoundary();
 
-  const member = useMemberValueContext();
+  const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+  const tabRef = useRef<HTMLUListElement>(null);
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
