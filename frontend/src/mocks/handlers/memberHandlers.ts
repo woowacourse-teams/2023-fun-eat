@@ -28,7 +28,7 @@ export const memberHandlers = [
       );
     }
 
-    return res(ctx.status(403));
+    return res(ctx.status(401), ctx.json({ message: '로그인이 필요합니다.' }));
   }),
 
   rest.get('/api/members/reviews', (req, res, ctx) => {
