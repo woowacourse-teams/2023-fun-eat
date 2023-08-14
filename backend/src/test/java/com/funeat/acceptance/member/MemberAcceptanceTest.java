@@ -353,10 +353,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var page = new PageDto(0L, 0L, true, true, 0L, 10L);
 
             // then
-            final var expectedReviews = Collections.emptyList();
+            final var expectedRecipes = Collections.emptyList();
 
             STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_꿀조합_조회_결과를_검증한다(response, expectedReviews, page);
+            사용자_꿀조합_조회_결과를_검증한다(response, expectedRecipes, page);
         }
     }
 
