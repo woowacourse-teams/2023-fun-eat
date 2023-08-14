@@ -1,17 +1,17 @@
 import type { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-const AuthLayout = ({ children }: PropsWithChildren) => {
+const MinimalLayout = ({ children }: PropsWithChildren) => {
   return (
-    <AuthLayoutContainer>
+    <MinimalLayoutContainer>
       <MainWrapper>{children}</MainWrapper>
-    </AuthLayoutContainer>
+    </MinimalLayoutContainer>
   );
 };
 
-export default AuthLayout;
+export default MinimalLayout;
 
-const AuthLayoutContainer = styled.div`
+const MinimalLayoutContainer = styled.div`
   max-width: 600px;
   height: 100%;
   margin: 0 auto;

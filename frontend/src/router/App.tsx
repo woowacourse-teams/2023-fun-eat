@@ -3,34 +3,34 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { ErrorBoundary, ErrorComponent, Loading } from '@/components/Common';
-import { AuthLayout, DefaultLayout, DetailLayout } from '@/components/Layout';
+import { MinimalLayout, DefaultLayout, HeaderOnlyLayout } from '@/components/Layout';
 
 interface AppProps {
-  layout?: 'auth' | 'detail' | 'default';
+  layout?: 'default' | 'headerOnly' | 'minimal';
 }
 
 const App = ({ layout = 'default' }: AppProps) => {
   const { reset } = useQueryErrorResetBoundary();
 
-  if (layout === 'auth') {
+  if (layout === 'minimal') {
     return (
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <AuthLayout>
+          <MinimalLayout>
             <Outlet />
-          </AuthLayout>
+          </MinimalLayout>
         </Suspense>
       </ErrorBoundary>
     );
   }
 
-  if (layout === 'detail') {
+  if (layout === 'headerOnly') {
     return (
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <DetailLayout>
+          <HeaderOnlyLayout>
             <Outlet />
-          </DetailLayout>
+          </HeaderOnlyLayout>
         </Suspense>
       </ErrorBoundary>
     );

@@ -72,7 +72,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App layout="auth" />,
+    element: <App layout="minimal" />,
     errorElement: <NotFoundPage />,
     children: [
       {
@@ -87,7 +87,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App layout="detail" />,
+    element: <App layout="headerOnly" />,
     errorElement: <NotFoundPage />,
     children: [
       {
