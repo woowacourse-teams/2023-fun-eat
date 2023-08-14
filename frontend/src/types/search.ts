@@ -4,4 +4,4 @@ export interface ProductSearchResults extends Product {
   categoryType: string;
 }
 
-export type ProductSearch = Pick<ProductSearchResults, 'id' | 'name' | 'categoryType'>;
+export type SearchingProduct = Pick<ProductSearchResults, 'id' | 'name' | 'categoryType'>;

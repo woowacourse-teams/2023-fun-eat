@@ -6,14 +6,14 @@ import styled from 'styled-components';
 import { MarkedText } from '@/components/Common';
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
-import { useInfiniteProductSearchResultsQuery } from '@/hooks/queries/search';
+import { useInfiniteSearchingProductsQuery } from '@/hooks/queries/search';
 
 interface RecommendListProps {
   searchQuery: string;
 }
 
 const RecommendList = ({ searchQuery }: RecommendListProps) => {
-  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchResultsQuery(searchQuery);
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteSearchingProductsQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
@@ -21,13 +21,7 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
     return null;
   }
 
-  const products = searchResponse.pages
-    .flatMap((page) => page.products)
-    .map((product) => ({
-      id: product.id,
-      name: product.name,
-      category: product.category,
-    }));
+  const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
     return <ErrorText>검색어에 해당 하는 상품이 없습니다.</ErrorText>;
@@ -35,9 +29,9 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
 
   return (
     <RecommendListContainer>
-      {products.map(({ id, name }) => (
+      {products.map(({ id, name, categoryType }) => (
         <li key={id}>
-          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${id}`} block>
+          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${categoryType}/${id}`} block>
             <MarkedText text={name} mark={searchQuery} />
           </Link>
         </li>
