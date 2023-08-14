@@ -1,39 +1,41 @@
 import { Heading, Text, useTheme } from '@fun-eat/design-system';
+import { Fragment } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import type { Recipe } from '@/types/recipe';
+import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 
 interface RecipeItemProps {
-  recipe: Recipe;
+  recipe: Recipe | MemberRecipe;
 }
 
 const RecipeItem = ({ recipe }: RecipeItemProps) => {
-  const { image, title, author, createdAt, favoriteCount, products } = recipe;
+  const { image, title, createdAt, favoriteCount, products } = recipe;
+  const author = 'author' in recipe ? recipe.author : null;
   const theme = useTheme();
 
   return (
     <RecipeItemContainer>
       <ImageWrapper>
         <RecipeImage src={image} alt={`조리된 ${title}`} />
-        <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />
+        {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
       </ImageWrapper>
       <RecipeInfoWrapper>
         <Text color={theme.textColors.sub}>
-          {author.nickname} 님 | {getFormattedDate(createdAt)}
+          {author && `${author.nickname} 님 | `}
+          {getFormattedDate(createdAt)}
         </Text>
         <Heading as="h3" size="xl" weight="bold">
           {title}
         </Heading>
-        <Text>
-          {products.map(({ id, name }) => (
-            <>
-              <Text as="span" key={id} color={theme.textColors.info}>
-                #{name}
-              </Text>{' '}
-            </>
-          ))}
+        <Text as="span" color={theme.textColors.info}>
+          {products.map((product, index) => {
+            const isStringType = typeof product === 'string';
+            const id = isStringType ? `recipeProduct-${index}` : product.id;
+            const name = isStringType ? product : product.name;
+            return <Fragment key={id}>#{name}</Fragment>;
+          })}
         </Text>
         <FavoriteWrapper>
           <SvgIcon variant="favoriteFilled" width={16} height={16} />
