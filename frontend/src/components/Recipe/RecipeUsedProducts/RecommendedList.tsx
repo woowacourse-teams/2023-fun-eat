@@ -40,6 +40,7 @@ const RecommendList = ({ searchQuery, addUsedProducts }: RecommendListProps) => 
           </Button>
         </li>
       ))}
+      <div ref={scrollRef} aria-hidden />
     </RecommendListContainer>
   );
 };
