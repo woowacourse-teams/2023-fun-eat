@@ -32,7 +32,7 @@ const SearchedList = ({ searchQuery }: SearchedListProps) => {
       <SearchedListContainer>
         {products.map((product) => (
           <li key={product.id}>
-            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${product.id}`}>
+            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${product.categoryType}/${product.id}`}>
               <ProductItem product={product} />
             </Link>
           </li>
