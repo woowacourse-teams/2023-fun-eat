@@ -48,11 +48,11 @@ const ProductListPage = () => {
         <Suspense fallback={null}>
           <CategoryMenu menuVariant={category} />
         </Suspense>
-        <SortButtonWrapper>
-          <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
-        </SortButtonWrapper>
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
+            <SortButtonWrapper>
+              <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
+            </SortButtonWrapper>
             <ProductList category={category} selectedOption={selectedOption} />
           </Suspense>
         </ErrorBoundary>
