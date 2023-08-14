@@ -41,9 +41,16 @@ const RecipeRegisterForm = () => {
 
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    await mutate(formData);
 
-    resetRecipeFormValue();
+    mutate(formData, {
+      onSuccess: () => {
+        deleteImage();
+        resetRecipeFormValue();
+      },
+      onError: () => {
+        alert('레시피 등록을 다시 시도해주세요');
+      },
+    });
   };
 
   return (
