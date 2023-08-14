@@ -39,3 +39,8 @@ export interface SearchedProductResponse {
   page: Page;
   products: SearchedProduct[];
 }
+
+export interface MemberReviewResponse {
+  page: Page;
+  reviews: ReviewRanking[];
+}

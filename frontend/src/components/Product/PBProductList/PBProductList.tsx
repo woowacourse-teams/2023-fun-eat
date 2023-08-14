@@ -11,15 +11,15 @@ import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import displaySlice from '@/utils/displaySlice';
 
 interface PBProductListProps {
-  isHome?: boolean;
+  isHomePage?: boolean;
 }
 
-const PBProductList = ({ isHome }: PBProductListProps) => {
+const PBProductList = ({ isHomePage }: PBProductListProps) => {
   const { categoryIds } = useCategoryContext();
 
   const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
   const pbProductList = pbProductListResponse?.pages.flatMap((page) => page.products);
-  const pbProductsToDisplay = displaySlice(isHome, pbProductList, 10);
+  const pbProductsToDisplay = displaySlice(isHomePage, pbProductList, 10);
 
   return (
     <>
