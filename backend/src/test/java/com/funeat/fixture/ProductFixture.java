@@ -108,6 +108,14 @@ public class ProductFixture {
         return new Product("삼각김밥", 5000L, "image.png", "맛있는 삼각김밥", 5.0, category);
     }
 
+    public static Product 상품_망고빙수_가격5000원_평점4점_생성(final Category category) {
+        return new Product("망고빙수", 5000L, "image.png", "맛있는 망고빙수", 4.0, category);
+    }
+
+    public static Product 상품_애플망고_가격3000원_평점5점_생성(final Category category) {
+        return new Product("애플망고", 3000L, "image.png", "맛있는 애플망고", 5.0, category);
+    }
+
     public static ProductRecipe 레시피_안에_들어가는_상품_생성(final Product product, final Recipe recipe) {
         return new ProductRecipe(product, recipe);
     }
