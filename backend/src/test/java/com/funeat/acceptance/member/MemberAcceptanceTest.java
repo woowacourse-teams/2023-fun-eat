@@ -195,7 +195,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
                     .collect(Collectors.toList());
 
             STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_리뷰_목록_조회_결과를_검증한다(response, expectedReviews, page);
+            사용자_리뷰_목록을_검증한다(response, expectedReviews, page);
         }
 
         @Test
@@ -227,7 +227,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedReviews = Collections.emptyList();
 
             STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_리뷰_목록_조회_결과를_검증한다(response, expectedReviews, page);
+            사용자_리뷰_목록을_검증한다(response, expectedReviews, page);
         }
     }
 
@@ -246,8 +246,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private <T> void 사용자_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> reviews,
-                                           final SortingReviewsPageDto page) {
+    private <T> void 사용자_리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<T> reviews,
+                                     final SortingReviewsPageDto page) {
         페이지를_검증한다(response, page);
         사용자_리뷰_목록을_검증한다(response, reviews);
     }
