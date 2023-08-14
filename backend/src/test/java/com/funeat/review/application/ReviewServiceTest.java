@@ -31,13 +31,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.ServiceTest;
+import com.funeat.common.dto.PageDto;
 import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.presentation.dto.SortingReviewDto;
-import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -565,7 +565,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expectedReviewDtos = expectedReviews.stream()
                     .map(MemberReviewDto::toDto)
                     .collect(Collectors.toList());
-            final var expectedPage = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+            final var expectedPage = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             assertThat(result.getReviews()).usingRecursiveComparison()
                     .isEqualTo(expectedReviewDtos);

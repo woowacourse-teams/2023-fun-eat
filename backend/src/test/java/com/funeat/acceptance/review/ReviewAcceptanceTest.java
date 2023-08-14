@@ -38,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Category;
@@ -46,7 +47,6 @@ import com.funeat.review.presentation.dto.RankingReviewDto;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
-import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -499,7 +499,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review2, review3, review1);
-                final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 final var loginCookie = 로그인_쿠키를_얻는다();
 
@@ -531,7 +531,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review3, review2, review1);
-                final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
                 final var loginCookie = 로그인_쿠키를_얻는다();
 
                 // when
@@ -570,7 +570,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
-                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -597,7 +597,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review3, review2, review1);
-                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
                 final var loginCookie = 로그인_쿠키를_얻는다();
 
                 // when
@@ -632,7 +632,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review2, review3, review1);
-                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
                 final var loginCookie = 로그인_쿠키를_얻는다();
 
                 // when
@@ -663,7 +663,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review3, review2, review1);
-                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
                 final var loginCookie = 로그인_쿠키를_얻는다();
 
                 // when
@@ -702,7 +702,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "createdAt,desc", 0);
-                final var page = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
+                final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -835,13 +835,13 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Review> reviews,
-                                       final SortingReviewsPageDto pageDto, final Member member) {
+                                       final PageDto pageDto, final Member member) {
         페이지를_검증한다(response, pageDto);
         리뷰_목록을_검증한다(response, reviews, member);
     }
 
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
-        final var actual = response.jsonPath().getObject("page", SortingReviewsPageDto.class);
+    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
+        final var actual = response.jsonPath().getObject("page", PageDto.class);
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
