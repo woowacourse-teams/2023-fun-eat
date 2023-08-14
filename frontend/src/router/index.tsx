@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
+import { AuthLayout } from '@/components/Layout';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import AuthPage from '@/pages/AuthPage';
@@ -46,7 +47,11 @@ const router = createBrowserRouter([
       },
       {
         path: `${PATH.RECIPE}/:recipeId`,
-        element: <RecipeDetailPage />,
+        element: (
+          <AuthLayout>
+            <RecipeDetailPage />
+          </AuthLayout>
+        ),
       },
       {
         path: PATH.SEARCH,
