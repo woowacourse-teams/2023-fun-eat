@@ -255,7 +255,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
         final var actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     private <T> void 사용자_리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<T> expectedReviews) {

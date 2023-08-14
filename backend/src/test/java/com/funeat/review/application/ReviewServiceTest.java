@@ -567,8 +567,10 @@ class ReviewServiceTest extends ServiceTest {
                     .collect(Collectors.toList());
             final var expectedPage = new SortingReviewsPageDto(3L, 1L, true, true, 0L, 10L);
 
-            assertThat(result.getReviews()).usingRecursiveComparison().isEqualTo(expectedReviewDtos);
-            assertThat(result.getPage()).usingRecursiveComparison().isEqualTo(expectedPage);
+            assertThat(result.getReviews()).usingRecursiveComparison()
+                    .isEqualTo(expectedReviewDtos);
+            assertThat(result.getPage()).usingRecursiveComparison()
+                    .isEqualTo(expectedPage);
         }
     }
 

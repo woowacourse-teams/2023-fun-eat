@@ -49,7 +49,8 @@ public class MemberApiController implements MemberController {
     }
 
     @GetMapping("/reviews")
-    public ResponseEntity<MemberReviewsResponse> getMemberReview(final LoginInfo loginInfo, final Pageable pageable) {
+    public ResponseEntity<MemberReviewsResponse> getMemberReview(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                                 final Pageable pageable) {
         final MemberReviewsResponse response = reviewService.findReviewByMember(loginInfo.getId(), pageable);
 
         return ResponseEntity.ok().body(response);
