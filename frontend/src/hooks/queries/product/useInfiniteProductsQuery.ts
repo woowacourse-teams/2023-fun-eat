@@ -1,6 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-
-import useSuspendedInfiniteQuery from '../useSuspendedInfiniteQuery';
+import { useSuspendedInfiniteQuery } from '..';
 
 import { categoryApi } from '@/apis';
 import type { CategoryProductResponse } from '@/types/response';
