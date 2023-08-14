@@ -1,11 +1,7 @@
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
-import { ErrorComponent, Loading } from '@/components/Common';
-import ErrorBoundary from '@/components/Common/ErrorBoundary/ErrorBoundary';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import AuthPage from '@/pages/AuthPage';
@@ -25,39 +21,23 @@ import SearchPage from '@/pages/SearchPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <ErrorBoundary fallback={NotFoundPage}>
-        <App />
-      </ErrorBoundary>
-    ),
+    element: <App />,
     errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
         element: (
-          <QueryErrorResetBoundary>
-            {({ reset }) => (
-              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-                <CategoryProvider>
-                  <HomePage />
-                </CategoryProvider>
-              </ErrorBoundary>
-            )}
-          </QueryErrorResetBoundary>
+          <CategoryProvider>
+            <HomePage />
+          </CategoryProvider>
         ),
       },
       {
         path: `${PATH.PRODUCT_LIST}/:category`,
         element: (
-          <QueryErrorResetBoundary>
-            {({ reset }) => (
-              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-                <CategoryProvider>
-                  <ProductListPage />
-                </CategoryProvider>
-              </ErrorBoundary>
-            )}
-          </QueryErrorResetBoundary>
+          <CategoryProvider>
+            <ProductListPage />
+          </CategoryProvider>
         ),
       },
       {
@@ -66,17 +46,7 @@ const router = createBrowserRouter([
       },
       {
         path: `${PATH.RECIPE}/:recipeId`,
-        element: (
-          <QueryErrorResetBoundary>
-            {({ reset }) => (
-              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-                <Suspense fallback={<Loading />}>
-                  <RecipeDetailPage />
-                </Suspense>
-              </ErrorBoundary>
-            )}
-          </QueryErrorResetBoundary>
-        ),
+        element: <RecipeDetailPage />,
       },
       {
         path: PATH.SEARCH,
@@ -103,6 +73,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App layout="auth" />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: PATH.LOGIN,
@@ -121,17 +92,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,
-        element: (
-          <QueryErrorResetBoundary>
-            {({ reset }) => (
-              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-                <Suspense fallback={<Loading />}>
-                  <ProductDetailPage />
-                </Suspense>
-              </ErrorBoundary>
-            )}
-          </QueryErrorResetBoundary>
-        ),
+        element: <ProductDetailPage />,
       },
     ],
   },

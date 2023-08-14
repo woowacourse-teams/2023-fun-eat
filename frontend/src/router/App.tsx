@@ -1,5 +1,8 @@
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { ErrorBoundary, ErrorComponent, Loading } from '@/components/Common';
 import { AuthLayout, DefaultLayout, DetailLayout } from '@/components/Layout';
 
 interface AppProps {
@@ -7,26 +10,40 @@ interface AppProps {
 }
 
 const App = ({ layout = 'default' }: AppProps) => {
+  const { reset } = useQueryErrorResetBoundary();
+
   if (layout === 'auth') {
     return (
-      <AuthLayout>
-        <Outlet />
-      </AuthLayout>
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <AuthLayout>
+            <Outlet />
+          </AuthLayout>
+        </Suspense>
+      </ErrorBoundary>
     );
   }
 
   if (layout === 'detail') {
     return (
-      <DetailLayout>
-        <Outlet />
-      </DetailLayout>
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <DetailLayout>
+            <Outlet />
+          </DetailLayout>
+        </Suspense>
+      </ErrorBoundary>
     );
   }
 
   return (
-    <DefaultLayout>
-      <Outlet />
-    </DefaultLayout>
+    <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+      <Suspense fallback={<Loading />}>
+        <DefaultLayout>
+          <Outlet />
+        </DefaultLayout>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 export default App;
