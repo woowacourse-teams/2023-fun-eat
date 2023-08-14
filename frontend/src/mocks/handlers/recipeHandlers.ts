@@ -16,4 +16,8 @@ export const recipeHandlers = [
 
     return res(ctx.status(200), ctx.json({ message: '꿀조합이 등록되었습니다.' }), ctx.set('Location', '/recipes/1'));
   }),
+
+  rest.patch('/api/recipes/:recipeId', (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
