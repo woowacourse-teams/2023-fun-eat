@@ -19,16 +19,6 @@ export const recipeHandlers = [
     return res(ctx.status(200), ctx.json({ message: '꿀조합이 등록되었습니다.' }), ctx.set('Location', '/recipes/1'));
   }),
 
-  rest.post('/api/recipes', (req, res, ctx) => {
-    const formData = req.body;
-
-    if (!formData) {
-      return res(ctx.status(400), ctx.json({ error: 'formData를 제공하지 않았습니다.' }));
-    }
-
-    return res(ctx.status(200), ctx.json({ message: '꿀조합이 등록되었습니다.' }), ctx.set('Location', '/recipes/1'));
-  }),
-
   rest.get('/api/recipes', (req, res, ctx) => {
     const sortOptions = req.url.searchParams.get('sort');
     const page = Number(req.url.searchParams.get('page'));
