@@ -2,7 +2,7 @@ import type { Product } from './product';
 import type { ProductRanking, ReviewRanking } from './ranking';
 import type { Recipe } from './recipe';
 import type { Review } from './review';
-import type { SearchedProduct } from './search';
+import type { ProductSearchResults } from './search';
 
 export interface Page {
   totalDataCount: number;
@@ -34,10 +34,10 @@ export interface RecipeResponse {
   page: Page;
   recipes: Recipe[];
 }
-  
-export interface SearchedProductResponse {
+
+export interface ProductSearchResultResponse {
   page: Page;
-  products: SearchedProduct[];
+  products: ProductSearchResults[];
 }
 
 export interface MemberReviewResponse {

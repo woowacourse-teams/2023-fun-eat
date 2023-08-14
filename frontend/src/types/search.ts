@@ -1,5 +1,7 @@
 import type { Product } from './product';
 
-export interface SearchedProduct extends Product {
+export interface ProductSearchResults extends Product {
   categoryType: string;
 }
+
+export type ProductSearch = Pick<ProductSearchResults, 'id' | 'name' | 'categoryType'>;
