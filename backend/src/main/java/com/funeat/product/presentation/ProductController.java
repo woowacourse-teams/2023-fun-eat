@@ -3,6 +3,8 @@ package com.funeat.product.presentation;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductsResponse;
+import com.funeat.product.dto.SearchProductResultsResponse;
+import com.funeat.product.dto.SearchProductsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "01.Product", description = "상품 기능")
 public interface ProductController {
@@ -40,4 +43,24 @@ public interface ProductController {
     )
     @GetMapping
     ResponseEntity<RankingProductsResponse> getRankingProducts();
+
+    @Operation(summary = "상품 자동 완성 검색", description = "공통 상품 및 PB 상품들의 이름 중에 해당하는 문자열이 포함되어 있는지 검색한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "상품 검색 성공."
+    )
+    @GetMapping
+    ResponseEntity<SearchProductsResponse> searchProducts(
+            @RequestParam final String query, @PageableDefault final Pageable pageable
+    );
+
+    @Operation(summary = "상품 검색 결과 조회", description = "문자열을 받아 상품을 검색하고 검색 결과들을 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "상품 검색 결과 조회 성공."
+    )
+    @GetMapping
+    ResponseEntity<SearchProductResultsResponse> getSearchResults(
+            @RequestParam final String query, @PageableDefault final Pageable pageable
+    );
 }
