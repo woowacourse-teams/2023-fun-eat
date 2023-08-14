@@ -1,17 +1,14 @@
-import { useEffect, type PropsWithChildren } from 'react';
-import { useNavigate } from 'react-router-dom';
+import type { PropsWithChildren } from 'react';
+import { Navigate } from 'react-router-dom';
 
 import { useMemberQuery } from '@/hooks/queries/members';
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
   const { data: member } = useMemberQuery();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!member) {
-      navigate('/login', { replace: true });
-    }
-  }, []);
+  if (!member) {
+    return <Navigate to="/login" replace />;
+  }
 
   return children;
 };
