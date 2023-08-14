@@ -30,7 +30,7 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
     }));
 
   if (products.length === 0) {
-    return <ErrorText>검색어에 해당 하는 상품이 없습니다.</ErrorText>;
+    return <ErrorText>검색어가 포함된 상품을 찾지 못했어요</ErrorText>;
   }
 
   return (

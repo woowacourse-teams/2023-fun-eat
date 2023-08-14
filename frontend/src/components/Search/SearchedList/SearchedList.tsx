@@ -24,7 +24,7 @@ const SearchedList = ({ searchQuery }: SearchedListProps) => {
   const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
-    return <Text>검색한 상품을 찾을 수 없습니다.</Text>;
+    return <Text>앗! 아무것도 없네요</Text>;
   }
 
   return (

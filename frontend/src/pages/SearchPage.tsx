@@ -1,4 +1,5 @@
 import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,6 +11,7 @@ import { useSearch } from '@/hooks/search';
 const SearchPage = () => {
   const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
+  const { reset } = useQueryErrorResetBoundary();
 
   useDebounce(
     () => {
@@ -37,7 +39,7 @@ const SearchPage = () => {
         </form>
         {!isSubmitted && debouncedSearchQuery && (
           <RecommendWrapper>
-            <ErrorBoundary fallback={ErrorComponent}>
+            <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
               <Suspense fallback={<Loading />}>
                 <RecommendList searchQuery={debouncedSearchQuery} />
               </Suspense>
@@ -49,15 +51,17 @@ const SearchPage = () => {
       <TabMenu tabMenus={['상품', '꿀조합']} />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
-          <ErrorBoundary fallback={ErrorComponent}>
-            <Suspense fallback={<Loading />}>
-              <Heading as="h2" size="lg" weight="regular">
-                <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
-              </Heading>
-              <Spacing size={20} />
-              <SearchedList searchQuery={debouncedSearchQuery} />
-            </Suspense>
-          </ErrorBoundary>
+          <>
+            <Heading as="h2" size="lg" weight="regular">
+              <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
+            </Heading>
+            <Spacing size={20} />
+            <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+              <Suspense fallback={<Loading />}>
+                <SearchedList searchQuery={debouncedSearchQuery} />
+              </Suspense>
+            </ErrorBoundary>
+          </>
         ) : (
           <Text>상품을 검색해보세요.</Text>
         )}
