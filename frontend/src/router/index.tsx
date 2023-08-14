@@ -59,19 +59,35 @@ const router = createBrowserRouter([
       },
       {
         path: PATH.MEMBER,
-        element: <MemberPage />,
+        element: (
+          <AuthLayout>
+            <MemberPage />
+          </AuthLayout>
+        ),
       },
       {
         path: `${PATH.MEMBER}/modify`,
-        element: <MemberModifyPage />,
+        element: (
+          <AuthLayout>
+            <MemberModifyPage />
+          </AuthLayout>
+        ),
       },
       {
         path: `${PATH.MEMBER}/review`,
-        element: <MemberReviewPage />,
+        element: (
+          <AuthLayout>
+            <MemberReviewPage />
+          </AuthLayout>
+        ),
       },
       {
         path: `${PATH.MEMBER}/recipe`,
-        element: <MemberRecipePage />,
+        element: (
+          <AuthLayout>
+            <MemberRecipePage />
+          </AuthLayout>
+        ),
       },
     ],
   },

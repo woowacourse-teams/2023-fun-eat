@@ -1,25 +1,20 @@
 import { Spacing } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Suspense } from 'react';
 
 import { ErrorBoundary, ErrorComponent, Loading, NavigableSectionTitle } from '@/components/Common';
 import { MembersInfo, MemberReviewList } from '@/components/Members';
 import { PATH } from '@/constants/path';
-import { useMember } from '@/hooks/auth';
-import { useMemberValueContext } from '@/hooks/context';
+import { useMemberQuery } from '@/hooks/queries/members';
 
 const MemberPage = () => {
-  const member = useMemberValueContext();
-  const getMember = useMember();
+  const { data: member } = useMemberQuery();
   const { reset } = useQueryErrorResetBoundary();
 
-  useEffect(() => {
-    getMember();
-  }, []);
-
-  if (member === null) {
-    return <Navigate to={PATH.LOGIN} replace />;
+  // TODO: suspended query 도입 시 없어질 예정
+  // member가 없다면 로그인 페이지로 이동하기 때문에 member는 항상 존재.
+  if (!member) {
+    return null;
   }
 
   return (
