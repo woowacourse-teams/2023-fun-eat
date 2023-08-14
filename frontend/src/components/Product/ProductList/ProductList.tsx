@@ -26,15 +26,15 @@ const ProductList = ({ category, isHomePage }: ProductListProps) => {
   const { categoryIds } = useCategoryContext();
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(categoryIds[category], selectedOption.value);
-  const productList = data?.pages.flatMap((page) => page.products);
-  const productsToDisplay = displaySlice(isHomePage, productList);
+  const products = data.pages.flatMap((page) => page.products);
+  const productsToDisplay = displaySlice(isHomePage, products);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
   return (
     <>
       <ProductListContainer>
-        {productsToDisplay?.map((product) => (
+        {productsToDisplay.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
               <ProductItem product={product} />
