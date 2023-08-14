@@ -1,11 +1,37 @@
 import { Button, Heading, Spacing } from '@fun-eat/design-system';
+import type { ChangeEventHandler, FormEventHandler } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
-import { useImageUploader } from '@/hooks/common';
+import { useFormData, useImageUploader } from '@/hooks/common';
+import { useMemberValueContext } from '@/hooks/context';
+import { useModifyMember } from '@/hooks/queries/members';
+import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
-  const { previewImage, uploadImage } = useImageUploader();
+  const { previewImage, imageFile, uploadImage } = useImageUploader();
+  const member = useMemberValueContext();
+  const [nickname, setNickname] = useState(member?.nickname);
+
+  const { mutate } = useModifyMember();
+
+  const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setNickname(event.target.value);
+  };
+
+  const formData = useFormData<MemberRequest>({
+    imageKey: 'image',
+    imageFile: imageFile,
+    formContentKey: 'memberRequest',
+    formContent: { nickname },
+  });
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    await mutate(formData);
+  };
 
   return (
     <>
@@ -26,13 +52,13 @@ const MemberModifyPage = () => {
         </MemberImageUploaderWrapper>
       </MemberImageUploaderContainer>
       <Spacing size={44} />
-      <MemberForm>
+      <MemberForm onSubmit={handleSubmit}>
         <div>
           <Heading as="h2" size="xl" tabIndex={0}>
             닉네임
           </Heading>
           <Spacing size={12} />
-          <Input placeholder="닉네임을 입력해주세요" customWidth="100%" />
+          <Input value={nickname} customWidth="100%" onChange={modifyNickname} />
         </div>
         <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold">
           수정하기
