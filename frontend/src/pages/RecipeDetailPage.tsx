@@ -10,11 +10,6 @@ const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
-
-  if (!recipeDetail) {
-    return null;
-  }
-
   const { images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
