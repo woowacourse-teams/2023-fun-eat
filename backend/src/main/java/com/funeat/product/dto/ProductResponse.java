@@ -17,9 +17,8 @@ public class ProductResponse {
     private final Long reviewCount;
     private final List<TagDto> tags;
 
-    public ProductResponse(final Long id, final String name, final Long price, final String image,
-                           final String content, final Double averageRating, final Long reviewCount,
-                           final List<TagDto> tags) {
+    public ProductResponse(final Long id, final String name, final Long price, final String image, final String content,
+                           final Double averageRating, final Long reviewCount, final List<TagDto> tags) {
         this.id = id;
         this.name = name;
         this.price = price;

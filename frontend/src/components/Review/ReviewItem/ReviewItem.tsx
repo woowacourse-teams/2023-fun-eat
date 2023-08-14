@@ -6,7 +6,7 @@ import { SvgIcon, TagList } from '@/components/Common';
 import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
-import { getRelativeDate } from '@/utils/relativeDate';
+import { getRelativeDate } from '@/utils/date';
 
 interface ReviewItemProps {
   productId: number;

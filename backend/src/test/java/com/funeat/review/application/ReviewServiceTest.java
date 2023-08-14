@@ -38,6 +38,7 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.presentation.dto.SortingReviewDto;
+import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
 import java.util.stream.Collectors;

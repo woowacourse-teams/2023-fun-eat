@@ -21,9 +21,8 @@ public class RecipeDetailResponse {
     private final LocalDateTime createdAt;
 
     public RecipeDetailResponse(final Long id, final List<String> images, final String title, final String content,
-                                final RecipeAuthorDto author,
-                                final List<ProductRecipeDto> products, final Long totalPrice, final Long favoriteCount,
-                                final Boolean favorite,
+                                final RecipeAuthorDto author, final List<ProductRecipeDto> products,
+                                final Long totalPrice, final Long favoriteCount, final Boolean favorite,
                                 final LocalDateTime createdAt) {
         this.id = id;
         this.images = images;

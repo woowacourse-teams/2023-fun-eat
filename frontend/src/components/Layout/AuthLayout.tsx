@@ -18,6 +18,7 @@ const AuthLayoutContainer = styled.div`
 `;
 
 const MainWrapper = styled.main`
+  position: relative;
   height: 100%;
   padding: 20px;
   overflow-y: auto;
