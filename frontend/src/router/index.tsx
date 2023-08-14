@@ -66,7 +66,17 @@ const router = createBrowserRouter([
       },
       {
         path: `${PATH.RECIPE}/:recipeId`,
-        element: <RecipeDetailPage />,
+        element: (
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+                <Suspense fallback={<Loading />}>
+                  <RecipeDetailPage />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
+        ),
       },
       {
         path: PATH.SEARCH,
