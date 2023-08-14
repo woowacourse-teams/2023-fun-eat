@@ -4,13 +4,17 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import type { Member } from '@/types/member';
+import { useMemberQuery } from '@/hooks/queries/members';
 
-interface MembersInfoProps {
-  member: Member;
-}
+const MembersInfo = () => {
+  const { data: member } = useMemberQuery();
 
-const MembersInfo = ({ member }: MembersInfoProps) => {
+  // TODO: suspended query 도입 시 없어질 예정
+  // member가 없다면 로그인 페이지로 이동하기 때문에 member는 항상 존재.
+  if (!member) {
+    return null;
+  }
+
   const { nickname, profileImage } = member;
 
   return (
