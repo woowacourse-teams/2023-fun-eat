@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SectionTitle } from '@/components/Common';
-import RecipeFavorite from '@/components/Recipe/RecipeFavorite/RecipeFavorite';
+import { RecipeFavorite } from '@/components/Recipe';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
