@@ -65,6 +65,11 @@ const CustomInput = styled.input<CustomInputStyleProps>`
     border: 2px solid ${({ isError }) => (isError ? theme.colors.error : theme.borderColors.strong)};
   }
 
+  &:disabled {
+    border: 1px solid ${({ theme }) => theme.borderColors.disabled};
+    background: ${({ theme }) => theme.colors.gray1};
+  }
+
   &::placeholder {
     font-size: ${theme.fontSizes.sm};
     color: ${theme.textColors.disabled};

@@ -1,5 +1,8 @@
 package com.funeat.product.application;
 
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
@@ -9,6 +12,8 @@ import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
+import com.funeat.product.exception.CategoryException.CategoryNotFoundException;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.persistence.ReviewRepository;
@@ -47,7 +52,7 @@ public class ProductService {
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
                                                                final Pageable pageable) {
         final Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, categoryId));
 
         final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
 
@@ -67,7 +72,7 @@ public class ProductService {
 
     public ProductResponse findProductDetail(final Long productId) {
         final Product product = productRepository.findById(productId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
         final Long reviewCount = reviewRepository.countByProduct(product);
         final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
 

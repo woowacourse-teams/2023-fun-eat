@@ -6,6 +6,7 @@ import {
   loginHandlers,
   rankingHandlers,
   memberHandlers,
+  recipeHandlers,
   searchHandlers,
 } from './handlers';
 
@@ -15,5 +16,6 @@ export const worker = setupWorker(
   ...loginHandlers,
   ...rankingHandlers,
   ...memberHandlers,
+  ...recipeHandlers,
   ...searchHandlers
 );

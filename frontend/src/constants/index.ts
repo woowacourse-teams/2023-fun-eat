@@ -24,9 +24,9 @@ export const NAVIGATION_MENU: NavigationMenu[] = [
     path: PATH.RECIPE,
   },
   {
-    variant: 'profile',
+    variant: 'member',
     name: '마이',
-    path: PATH.PROFILE,
+    path: PATH.MEMBER,
   },
 ];
 
@@ -42,6 +42,11 @@ export const REVIEW_SORT_OPTIONS = [
   { label: '최신 작성순', value: 'createdAt,desc' },
   { label: '높은 평점순', value: 'rating,desc' },
   { label: '낮은 평점순', value: 'rating,asc' },
+  { label: '추천순', value: 'favoriteCount,desc' },
+] as const;
+
+export const RECIPE_SORT_OPTIONS = [
+  { label: '최신 작성순', value: 'createdAt,desc' },
   { label: '추천순', value: 'favoriteCount,desc' },
 ] as const;
 

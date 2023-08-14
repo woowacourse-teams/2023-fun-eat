@@ -21,8 +21,7 @@ public class AuthService {
 
     public SignUserDto loginWithKakao(final String code) {
         final UserInfoDto userInfoDto = platformUserProvider.getPlatformUser(code);
-        final SignUserDto signUserDto = memberService.findOrCreateMember(userInfoDto);
-        return signUserDto;
+        return memberService.findOrCreateMember(userInfoDto);
     }
 
     public String getLoginRedirectUri() {
