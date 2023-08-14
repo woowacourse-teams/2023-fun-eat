@@ -28,15 +28,18 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
   }
 
   return (
-    <RecommendListContainer>
-      {products.map(({ id, name, categoryType }) => (
-        <li key={id}>
-          <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${categoryType}/${id}`} block>
-            <MarkedText text={name} mark={searchQuery} />
-          </Link>
-        </li>
-      ))}
-    </RecommendListContainer>
+    <>
+      <RecommendListContainer>
+        {products.map(({ id, name, categoryType }) => (
+          <li key={id}>
+            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${categoryType}/${id}`} block>
+              <MarkedText text={name} mark={searchQuery} />
+            </Link>
+          </li>
+        ))}
+      </RecommendListContainer>
+      <div ref={scrollRef} aria-hidden />
+    </>
   );
 };
 
