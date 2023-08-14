@@ -26,7 +26,9 @@ export interface NavigationMenu {
 
 export type ProductSortOption = 'price' | 'averageRating' | 'reviewCount';
 
-export type ReviewSortOption = 'favoriteCount' | 'rating';
+export type ReviewSortOption = 'favoriteCount' | 'rating' | 'createdAt';
+
+export type RecipeSortOption = 'favoriteCount' | 'createdAt';
 
 export type SortOption = (typeof PRODUCT_SORT_OPTIONS)[number] | (typeof REVIEW_SORT_OPTIONS)[number];
 
