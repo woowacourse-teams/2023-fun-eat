@@ -1,6 +1,6 @@
 import { Spacing, Text, theme } from '@fun-eat/design-system';
 import { useRef } from 'react';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { RecipeItem } from '@/components/Recipe';
 import { useIntersectionObserver } from '@/hooks/common';
