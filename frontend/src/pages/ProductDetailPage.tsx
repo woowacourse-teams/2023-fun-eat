@@ -1,4 +1,4 @@
-import { BottomSheet, Button, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { useState, useRef, Suspense } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
@@ -13,6 +13,7 @@ import {
   ErrorBoundary,
   ErrorComponent,
 } from '@/components/Common';
+import RegisterButton from '@/components/Common/RegisterButton/RegisterButton';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
@@ -73,19 +74,11 @@ const ProductDetailPage = () => {
       )}
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
-        <ReviewRegisterButton
-          type="button"
-          customWidth="100%"
-          customHeight="60px"
-          color={member ? 'primary' : 'gray3'}
-          textColor={member ? 'default' : 'white'}
-          size="xl"
-          weight="bold"
+        <RegisterButton
+          activeLabel="리뷰 작성하기"
+          disabledLabel="로그인 후 리뷰를 작성할 수 있어요"
           onClick={handleOpenRegisterReviewSheet}
-          disabled={!member}
-        >
-          {member ? '리뷰 작성하기' : '로그인 후 리뷰를 작성할 수 있어요'}
-        </ReviewRegisterButton>
+        />
       </ReviewRegisterButtonWrapper>
       <ScrollButton />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
@@ -146,8 +139,4 @@ const ReviewRegisterButtonWrapper = styled.div`
   height: 80px;
   background: ${({ theme }) => theme.backgroundColors.default};
   transform: translateX(-50%);
-`;
-
-const ReviewRegisterButton = styled(Button)`
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

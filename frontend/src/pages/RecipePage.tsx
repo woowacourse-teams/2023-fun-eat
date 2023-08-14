@@ -1,4 +1,4 @@
-import { BottomSheet, Button, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { BottomSheet, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -13,10 +13,10 @@ import {
   SortOptionList,
   SvgIcon,
 } from '@/components/Common';
+import RegisterButton from '@/components/Common/RegisterButton/RegisterButton';
 import { RecipeList } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
 import { useSortOption } from '@/hooks/common';
-import { useMemberValueContext } from '@/hooks/context';
 
 const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
@@ -27,8 +27,6 @@ const RecipePage = () => {
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { reset } = useQueryErrorResetBoundary();
-
-  const member = useMemberValueContext();
 
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
@@ -58,18 +56,11 @@ const RecipePage = () => {
       </ErrorBoundary>
       <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
-        <RecipeRegisterButton
-          type="button"
-          customWidth="100%"
-          customHeight="60px"
-          color={member ? 'primary' : 'gray3'}
-          textColor={member ? 'default' : 'white'}
-          size="lg"
-          weight="bold"
+        <RegisterButton
+          activeLabel={REGISTER_RECIPE}
+          disabledLabel={REGISTER_RECIPE_AFTER_LOGIN}
           onClick={handleOpenRegisterRecipeSheet}
-        >
-          {member ? REGISTER_RECIPE : REGISTER_RECIPE_AFTER_LOGIN}
-        </RecipeRegisterButton>
+        />
       </RecipeRegisterButtonWrapper>
       <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
@@ -116,8 +107,4 @@ const RecipeRegisterButtonWrapper = styled.div`
   @media screen and (min-width: 600px) {
     left: calc(50% - 280px);
   }
-`;
-
-const RecipeRegisterButton = styled(Button)`
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
