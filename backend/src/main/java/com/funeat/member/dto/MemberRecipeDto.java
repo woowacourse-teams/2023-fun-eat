@@ -1,5 +1,8 @@
 package com.funeat.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.funeat.product.domain.Product;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
@@ -18,6 +21,12 @@ public class MemberRecipeDto {
     private final List<String> products;
 
     private MemberRecipeDto(final Long id, final String title, final String content, final LocalDateTime createdAt,
+                            final Long favoriteCount, final List<String> products) {
+        this(id, title, content, createdAt, null, favoriteCount, products);
+    }
+
+    @JsonCreator
+    private MemberRecipeDto(final Long id, final String title, final String content, final LocalDateTime createdAt,
                             final String image, final Long favoriteCount, final List<String> products) {
         this.id = id;
         this.title = title;
@@ -34,6 +43,10 @@ public class MemberRecipeDto {
                 .map(Product::getName)
                 .collect(Collectors.toList());
 
+        if (findRecipeImages.isEmpty()) {
+            return new MemberRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getContent(), recipe.getCreatedAt(),
+                    recipe.getFavoriteCount(), productNames);
+        }
         return new MemberRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getContent(), recipe.getCreatedAt(),
                 findRecipeImages.get(0).getImage(), recipe.getFavoriteCount(), productNames);
     }
