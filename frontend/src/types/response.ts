@@ -34,7 +34,7 @@ export interface RecipeResponse {
   page: Page;
   recipes: Recipe[];
 }
-  
+
 export interface SearchedProductResponse {
   page: Page;
   products: SearchedProduct[];
@@ -43,4 +43,9 @@ export interface SearchedProductResponse {
 export interface MemberReviewResponse {
   page: Page;
   reviews: ReviewRanking[];
+}
+
+export interface ErrorResponse {
+  code: number;
+  message: string;
 }

@@ -66,7 +66,7 @@ export const productHandlers = [
     const isProductIdValid = commonProducts.products.some(({ id }) => id === Number(productId));
 
     if (!isProductIdValid) {
-      return res(ctx.status(400));
+      return res(ctx.status(400), ctx.json({ message: '존재하지 않는 상품입니다.' }));
     }
 
     const targetProduct = productDetails.find(({ id }) => id === Number(productId));
