@@ -52,7 +52,6 @@ export default RecipeItem;
 
 const RecipeItemContainer = styled.div`
   height: 280px;
-  margin-bottom: 25px;
 `;
 
 const ImageWrapper = styled.div`

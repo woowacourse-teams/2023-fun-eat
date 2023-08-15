@@ -52,7 +52,7 @@ const MemberRecipeListContainer = styled.section`
 const MemberRecipeListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
 `;
 
 const TotalRecipeCount = styled(Text)`
