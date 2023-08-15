@@ -1,7 +1,7 @@
 import { Button, Heading, Spacing } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
 import { useFormData, useImageUploader } from '@/hooks/common';
