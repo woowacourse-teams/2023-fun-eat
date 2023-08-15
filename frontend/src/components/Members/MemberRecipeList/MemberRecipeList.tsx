@@ -20,7 +20,7 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  const totalRecipeCount = data?.pages.flatMap((page) => page.page.totalDataCount);
+  const totalRecipeCount = data?.pages[0].page.totalDataCount;
 
   return (
     <MemberRecipeListContainer>
