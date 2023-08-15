@@ -50,7 +50,7 @@ class RecipeFavoriteRepositoryTest {
     private RecipeFavoriteRepository recipeFavoriteRepository;
 
     @Test
-    void 해당_사용자의_해당_레시피에_대한_좋아요_현황을_반환_수_있다() {
+    void 해당_사용자의_해당_레시피에_대한_좋아요_현황을_반환할_수_있다() {
         // given
         final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD));
         final var product1 = 상품_추가_요청(new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category));
@@ -93,8 +93,10 @@ class RecipeFavoriteRepositoryTest {
         final var fakeMember = 멤버_추가_요청(new Member("fake", "image.png", "3"));
         레시피_좋아요_요청(new RecipeFavorite(realMember, recipe, true));
 
-        final var realMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(realMember, recipe);
-        final var fakeMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(fakeMember, recipe);
+        final var realMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(realMember,
+                recipe);
+        final var fakeMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(fakeMember,
+                recipe);
 
         // then
         assertThat(realMemberActual).isTrue();

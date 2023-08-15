@@ -50,12 +50,10 @@ public class RecipeSteps {
         return given()
                 .cookie("JSESSIONID", loginCookie)
                 .contentType("application/json")
-                .log().all()
                 .body(request)
                 .when()
                 .patch("/api/recipes/{recipeId}", recipeId)
                 .then()
-                .log().all()
                 .extract();
     }
 

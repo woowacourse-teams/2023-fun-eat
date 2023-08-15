@@ -356,6 +356,7 @@ class RecipeServiceTest extends ServiceTest {
 
     @Nested
     class likeRecipe_실패_테스트 {
+
         @Test
         void 존재하지_않는_멤버가_레시피에_좋아요를_하면_예외가_발생한다() {
             // given
