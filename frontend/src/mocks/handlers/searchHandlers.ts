@@ -1,9 +1,10 @@
 import { rest } from 'msw';
 
+import recipeResponse from '../data/recipes.json';
 import searchedProducts from '../data/searchedProducts.json';
 
 export const searchHandlers = [
-  rest.get('/api/search/:searchId', (req, res, ctx) => {
+  rest.get('/api/search/:searchId/results', (req, res, ctx) => {
     const { searchId } = req.params;
     const query = req.url.searchParams.get('query');
     const page = Number(req.url.searchParams.get('page'));
@@ -22,13 +23,14 @@ export const searchHandlers = [
       return res(ctx.status(200), ctx.json(filteredProducts), ctx.delay(1000));
     }
 
-    // TODO: 꿀조합 목 데이터 만들기
     if (searchId === 'recipes') {
-      const filteredProducts = {
-        page: { ...searchedProducts.page },
-        products: searchedProducts.products.filter((product) => product.name.includes(query)),
+      const filteredRecipes = {
+        page: { ...recipeResponse.page },
+        products: recipeResponse.recipes.filter((recipe) =>
+          recipe.products.some((product) => product.name.includes(query))
+        ),
       };
-      return res(ctx.status(200), ctx.json(filteredProducts));
+      return res(ctx.status(200), ctx.json(filteredRecipes));
     }
 
     return res(ctx.status(400));
