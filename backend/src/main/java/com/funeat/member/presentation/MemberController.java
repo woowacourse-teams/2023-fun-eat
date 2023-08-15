@@ -3,6 +3,7 @@ package com.funeat.member.presentation;
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.member.dto.MemberProfileResponse;
+import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewsResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,5 +43,14 @@ public interface MemberController {
     )
     @GetMapping
     ResponseEntity<MemberReviewsResponse> getMemberReview(@AuthenticationPrincipal LoginInfo loginInfo,
+                                                          @PageableDefault Pageable pageable);
+
+    @Operation(summary = "사용자 꿀조합 조회", description = "사용자가 작성한 꿀조합을 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "사용자 꿀조합 조회 성공."
+    )
+    @GetMapping
+    ResponseEntity<MemberRecipesResponse> getMemberRecipe(@AuthenticationPrincipal LoginInfo loginInfo,
                                                           @PageableDefault Pageable pageable);
 }

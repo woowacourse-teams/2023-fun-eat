@@ -4,11 +4,14 @@ import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.member.application.MemberService;
 import com.funeat.member.dto.MemberProfileResponse;
+import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewsResponse;
+import com.funeat.recipe.application.RecipeService;
 import com.funeat.review.application.ReviewService;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,10 +25,13 @@ public class MemberApiController implements MemberController {
 
     private final MemberService memberService;
     private final ReviewService reviewService;
+    private final RecipeService recipeService;
 
-    public MemberApiController(final MemberService memberService, final ReviewService reviewService) {
+    public MemberApiController(final MemberService memberService, final ReviewService reviewService,
+                               final RecipeService recipeService) {
         this.memberService = memberService;
         this.reviewService = reviewService;
+        this.recipeService = recipeService;
     }
 
     @GetMapping
@@ -50,8 +56,16 @@ public class MemberApiController implements MemberController {
 
     @GetMapping("/reviews")
     public ResponseEntity<MemberReviewsResponse> getMemberReview(@AuthenticationPrincipal final LoginInfo loginInfo,
-                                                                 final Pageable pageable) {
+                                                                 @PageableDefault final Pageable pageable) {
         final MemberReviewsResponse response = reviewService.findReviewByMember(loginInfo.getId(), pageable);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/recipes")
+    public ResponseEntity<MemberRecipesResponse> getMemberRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                                 @PageableDefault final Pageable pageable) {
+        final MemberRecipesResponse response = recipeService.findRecipeByMember(loginInfo.getId(), pageable);
 
         return ResponseEntity.ok().body(response);
     }

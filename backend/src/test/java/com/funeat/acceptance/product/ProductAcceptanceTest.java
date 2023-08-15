@@ -45,12 +45,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.common.dto.PageDto;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
-import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.product.dto.RankingProductDto;
-import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.tag.domain.Tag;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -92,7 +91,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product8, product5, product7, product4, product10, product9,
                         product3, product2, product11, product6);
@@ -126,7 +125,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                         product5, product4, product3, product2);
@@ -164,7 +163,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product11, product6, product1, product3, product2, product10,
                         product9, product7, product4, product8);
@@ -198,7 +197,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                         product5, product4, product3, product2);
@@ -236,7 +235,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product1, product5, product4, product9, product2, product7,
                         product6, product11, product10, product8);
@@ -270,7 +269,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                         product5, product4, product3, product2);
@@ -308,7 +307,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product11, product10, product8, product3, product7, product6,
                         product9, product2, product5, product4);
@@ -342,7 +341,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
                         product10, product11);
 
-                final var pageDto = new SortingReviewsPageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
                         product5, product4, product3, product2);
@@ -386,7 +385,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var review3_3 = 리뷰_이미지test2_평점2점_재구매X_생성(member3, product3, 0L);
                 복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1, review3_2, review3_3);
 
-                final var pageDto = new SortingReviewsPageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product3, product1, product2);
 
@@ -420,7 +419,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
                 복수_리뷰_저장(review1_1, review2_1, review3_1);
 
-                final var pageDto = new SortingReviewsPageDto(5L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(5L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 final var expectedProducts = List.of(product3, product2, product1, product5, product4);
 
@@ -566,8 +565,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 .collect(Collectors.toList());
     }
 
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final SortingReviewsPageDto expected) {
-        final var actual = response.jsonPath().getObject("page", ProductsInCategoryPageDto.class);
+    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
+        final var actual = response.jsonPath().getObject("page", PageDto.class);
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
