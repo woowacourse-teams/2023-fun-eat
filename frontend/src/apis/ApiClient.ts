@@ -59,7 +59,7 @@ export class ApiClient {
     return fetchApi(this.getUrl(params, queries), {
       method: 'PUT',
       headers: this.#headers,
-      body: body ? JSON.stringify(body) : null,
+      body: body ? body : null,
       credentials: credentials ? 'include' : 'omit',
     });
   }
