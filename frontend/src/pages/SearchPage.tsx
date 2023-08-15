@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
-import { RecommendList, SearchedList, RecipeSearchResultList } from '@/components/Search';
+import { RecommendList, SearchResultList, RecipeSearchResultList } from '@/components/Search';
 import { SEARCH_PAGE_TABS } from '@/constants';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
@@ -67,7 +67,7 @@ const SearchPage = () => {
               </Heading>
               <Spacing size={20} />
               {selectedTabMenu === SEARCH_PAGE_TABS[0] ? (
-                <SearchedList searchQuery={debouncedSearchQuery} />
+                <SearchResultList searchQuery={debouncedSearchQuery} />
               ) : (
                 <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
               )}
