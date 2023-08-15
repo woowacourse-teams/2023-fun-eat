@@ -24,15 +24,36 @@ public class RecipeFavorite {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    private Boolean favorite;
+    private Boolean favorite = false;
 
     protected RecipeFavorite() {
+    }
+
+    public RecipeFavorite(final Member member, final Recipe recipe) {
+        this.member = member;
+        this.recipe = recipe;
     }
 
     public RecipeFavorite(final Member member, final Recipe recipe, final Boolean favorite) {
         this.member = member;
         this.recipe = recipe;
         this.favorite = favorite;
+    }
+
+    public static RecipeFavorite create(final Member member, final Recipe recipe) {
+        return new RecipeFavorite(member, recipe);
+    }
+
+    public void updateFavorite(final Boolean request) {
+        if (!this.favorite && request) {
+            this.recipe.addFavoriteCount();
+            this.favorite = request;
+            return;
+        }
+        if (this.favorite && !request) {
+            this.recipe.minusFavoriteCount();
+            this.favorite = request;
+        }
     }
 
     public Long getId() {
