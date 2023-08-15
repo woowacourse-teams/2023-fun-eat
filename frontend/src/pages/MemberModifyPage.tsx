@@ -36,24 +36,24 @@ const MemberModifyPage = () => {
   return (
     <>
       <SectionTitle name="" />
-      <MemberImageUploaderContainer>
-        <MemberImageUploaderWrapper>
-          <UserProfileImageWrapper>
-            {previewImage ? (
-              <ProfileImage src={previewImage} alt="업로드한 사진" width={80} />
-            ) : (
-              <SvgIcon variant="modifyProfile" width={80} height={80} />
-            )}
-          </UserProfileImageWrapper>
-          <UserImageUploaderLabel>
-            <input type="file" accept="image/*" onChange={uploadImage} />
-            <SvgIcon variant="camera" width={20} height={20} />
-          </UserImageUploaderLabel>
-        </MemberImageUploaderWrapper>
-      </MemberImageUploaderContainer>
-      <Spacing size={44} />
       <MemberForm onSubmit={handleSubmit}>
         <div>
+          <MemberImageUploaderContainer>
+            <MemberImageUploaderWrapper>
+              <UserProfileImageWrapper>
+                {previewImage ? (
+                  <ProfileImage src={previewImage} alt="업로드한 사진" width={80} />
+                ) : (
+                  <SvgIcon variant="modifyProfile" width={80} height={80} />
+                )}
+              </UserProfileImageWrapper>
+              <UserImageUploaderLabel>
+                <input type="file" accept="image/*" onChange={uploadImage} />
+                <SvgIcon variant="camera" width={20} height={20} />
+              </UserImageUploaderLabel>
+            </MemberImageUploaderWrapper>
+          </MemberImageUploaderContainer>
+          <Spacing size={44} />
           <Heading as="h2" size="xl" tabIndex={0}>
             닉네임
           </Heading>
@@ -116,7 +116,7 @@ const UserImageUploaderLabel = styled.label`
 `;
 
 const MemberForm = styled.form`
-  height: 72%;
+  height: 92%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
