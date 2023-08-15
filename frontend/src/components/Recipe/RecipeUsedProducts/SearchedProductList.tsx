@@ -4,15 +4,15 @@ import styled from 'styled-components';
 
 import { MarkedText } from '@/components/Common';
 import { useIntersectionObserver } from '@/hooks/common';
-import { useInfiniteSearchedProductsQuery } from '@/hooks/queries/search';
+import { useInfiniteProductSearchAutocompleteQuery } from '@/hooks/queries/search';
 
-interface RecommendListProps {
+interface SearchedProductListProps {
   searchQuery: string;
   addUsedProducts: (id: number, name: string) => void;
 }
 
-const RecommendList = ({ searchQuery, addUsedProducts }: RecommendListProps) => {
-  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteSearchedProductsQuery(searchQuery);
+const SearchedProductList = ({ searchQuery, addUsedProducts }: SearchedProductListProps) => {
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchAutocompleteQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
@@ -32,22 +32,24 @@ const RecommendList = ({ searchQuery, addUsedProducts }: RecommendListProps) => 
   }
 
   return (
-    <RecommendListContainer>
-      {products.map(({ id, name }) => (
-        <li key={id}>
-          <Button type="button" variant="transparent" onClick={() => addUsedProducts(id, name)}>
-            <MarkedText text={name} mark={searchQuery} />
-          </Button>
-        </li>
-      ))}
+    <>
+      <SearchedProductListContainer>
+        {products.map(({ id, name }) => (
+          <li key={id}>
+            <Button type="button" variant="transparent" onClick={() => addUsedProducts(id, name)}>
+              <MarkedText text={name} mark={searchQuery} />
+            </Button>
+          </li>
+        ))}
+      </SearchedProductListContainer>
       <div ref={scrollRef} aria-hidden />
-    </RecommendListContainer>
+    </>
   );
 };
 
-export default RecommendList;
+export default SearchedProductList;
 
-const RecommendListContainer = styled.ul`
+const SearchedProductListContainer = styled.ul`
   height: 100%;
 
   & > li {

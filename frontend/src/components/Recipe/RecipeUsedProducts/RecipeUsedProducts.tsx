@@ -2,7 +2,7 @@ import { Badge, Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import RecommendList from './RecommendedList';
+import SearchedProductList from './SearchedProductList';
 
 import { Input, SvgIcon } from '@/components/Common';
 import { useDebounce } from '@/hooks/common';
@@ -56,7 +56,7 @@ const RecipeUsedProducts = () => {
         disabled={usedProducts.length === MAX_USED_PRODUCTS_COUNT}
       />
       {usedProducts.length < MAX_USED_PRODUCTS_COUNT && debouncedSearchQuery && (
-        <RecommendList searchQuery={debouncedSearchQuery} addUsedProducts={addUsedProducts} />
+        <SearchedProductList searchQuery={debouncedSearchQuery} addUsedProducts={addUsedProducts} />
       )}
       <Spacing size={12} />
       {usedProducts.length ? (
