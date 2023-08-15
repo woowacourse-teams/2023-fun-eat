@@ -1,6 +1,8 @@
 import { rest } from 'msw';
 
+import { isRecipeSortOption, isSortOrder } from './utils';
 import recipeDetail from '../data/recipeDetail.json';
+import mockRecipes from '../data/recipes.json';
 
 export const recipeHandlers = [
   rest.get('/api/recipes/:recipeId', (req, res, ctx) => {
@@ -19,5 +21,38 @@ export const recipeHandlers = [
 
   rest.patch('/api/recipes/:recipeId', (req, res, ctx) => {
     return res(ctx.status(200));
+  }),
+
+  rest.get('/api/recipes', (req, res, ctx) => {
+    const sortOptions = req.url.searchParams.get('sort');
+    const page = Number(req.url.searchParams.get('page'));
+
+    if (sortOptions === null) {
+      return res(ctx.status(400));
+    }
+
+    const [key, sortOrder] = sortOptions.split(',');
+
+    if (!isRecipeSortOption(key) || !isSortOrder(sortOrder)) {
+      return res(ctx.status(400));
+    }
+
+    const sortedRecipes = {
+      ...mockRecipes,
+      recipes: [...mockRecipes.recipes].sort((cur, next) => {
+        if (key === 'createdAt') {
+          return sortOrder === 'asc'
+            ? new Date(cur[key]).getTime() - new Date(next[key]).getTime()
+            : new Date(next[key]).getTime() - new Date(cur[key]).getTime();
+        }
+
+        return sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key];
+      }),
+    };
+
+    return res(
+      ctx.status(200),
+      ctx.json({ page: sortedRecipes.page, recipes: sortedRecipes.recipes.slice(page * 5, (page + 1) * 5) })
+    );
   }),
 ];

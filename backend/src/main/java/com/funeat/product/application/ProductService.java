@@ -3,12 +3,12 @@ package com.funeat.product.application;
 import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 
+import com.funeat.common.dto.PageDto;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductReviewCountDto;
-import com.funeat.product.dto.ProductsInCategoryPageDto;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
@@ -56,7 +56,7 @@ public class ProductService {
 
         final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
 
-        final ProductsInCategoryPageDto pageDto = ProductsInCategoryPageDto.toDto(pages);
+        final PageDto pageDto = PageDto.toDto(pages);
         final List<ProductInCategoryDto> productDtos = pages.getContent();
 
         return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
