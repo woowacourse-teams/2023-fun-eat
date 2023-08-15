@@ -2,7 +2,8 @@ import { Heading, Spacing, Text, theme } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SectionTitle, SvgIcon } from '@/components/Common';
+import { SectionTitle } from '@/components/Common';
+import { RecipeFavorite } from '@/components/Recipe';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -15,7 +16,7 @@ const RecipeDetailPage = () => {
     return null;
   }
 
-  const { images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
+  const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
     <>
@@ -37,16 +38,7 @@ const RecipeDetailPage = () => {
             <Text color={theme.textColors.info}> {getFormattedDate(createdAt)}</Text>
           </div>
         </AuthorWrapper>
-        <FavoriteWrapper>
-          <SvgIcon
-            variant={favorite ? 'favoriteFilled' : 'favorite'}
-            color={favorite ? 'red' : theme.colors.gray4}
-            width={18}
-          />
-          <Text weight="bold" size="lg">
-            {favoriteCount}
-          </Text>
-        </FavoriteWrapper>
+        <RecipeFavorite recipeId={id} favorite={favorite} favoriteCount={favoriteCount} />
       </AuthorFavoriteWrapper>
       <Spacing size={24} />
       <RecipeUsedProductsWrapper>
@@ -104,12 +96,6 @@ const AuthorWrapper = styled.div`
 const AuthorProfileImage = styled.img`
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.primary};
-`;
-
-const FavoriteWrapper = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
 `;
 
 const RecipeUsedProductsWrapper = styled.div`
