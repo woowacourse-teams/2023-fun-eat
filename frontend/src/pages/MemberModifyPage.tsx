@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
 import { useFormData, useImageUploader } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
-import { useModifyMember } from '@/hooks/queries/members';
+import { useMemberModifyMutation } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
@@ -14,7 +14,7 @@ const MemberModifyPage = () => {
   const member = useMemberValueContext();
   const [nickname, setNickname] = useState(member?.nickname);
 
-  const { mutate } = useModifyMember();
+  const { mutate } = useMemberModifyMutation();
 
   const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
     setNickname(event.target.value);

@@ -6,10 +6,10 @@ const putModifyMember = (body: FormData) => {
   return memberApi.put({ credentials: true }, body);
 };
 
-const useModifyMember = () => {
+const useMemberModifyMutation = () => {
   return useMutation({
     mutationFn: (body: FormData) => putModifyMember(body),
   });
 };
 
-export default useModifyMember;
+export default useMemberModifyMutation;
