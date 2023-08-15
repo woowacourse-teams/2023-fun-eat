@@ -1,1 +1,2 @@
-export { default as useInfiniteSearchedProductsQuery } from './useInfiniteSearchedProductsQuery';
+export { default as useInfiniteProductSearchResultsQuery } from './useInfiniteProductSearchResultsQuery';
+export { default as useInfiniteProductSearchAutocompleteQuery } from './useInfiniteProductSearchAutocompleteQuery';
