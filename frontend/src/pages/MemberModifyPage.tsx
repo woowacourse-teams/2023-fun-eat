@@ -14,6 +14,10 @@ const MemberModifyPage = () => {
   const member = useMemberValueContext();
   const [nickname, setNickname] = useState(member?.nickname);
 
+  if (!nickname) {
+    return;
+  }
+
   const { mutate } = useMemberModifyMutation();
 
   const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {

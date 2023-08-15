@@ -4,5 +4,5 @@ export interface Member {
 }
 
 export interface MemberRequest {
-  nickname?: string;
+  nickname: string;
 }
