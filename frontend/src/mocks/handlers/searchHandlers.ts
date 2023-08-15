@@ -26,9 +26,7 @@ export const searchHandlers = [
     if (searchId === 'recipes') {
       const filteredRecipes = {
         page: { ...recipeResponse.page },
-        products: recipeResponse.recipes.filter((recipe) =>
-          recipe.products.some((product) => product.name.includes(query))
-        ),
+        recipes: recipeResponse.recipes.filter((recipe) => recipe.products.some((product) => product.name === query)),
       };
       return res(ctx.status(200), ctx.json(filteredRecipes));
     }

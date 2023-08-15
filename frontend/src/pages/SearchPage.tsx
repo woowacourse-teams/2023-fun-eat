@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
-import { RecommendList, SearchedList } from '@/components/Search';
+import { RecommendList, SearchedList, RecipeSearchResultList } from '@/components/Search';
 import { SEARCH_PAGE_TABS } from '@/constants';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
@@ -66,11 +66,15 @@ const SearchPage = () => {
                 <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
               </Heading>
               <Spacing size={20} />
-              {selectedTabMenu === SEARCH_PAGE_TABS[0] ? <SearchedList searchQuery={debouncedSearchQuery} /> : null}
+              {selectedTabMenu === SEARCH_PAGE_TABS[0] ? (
+                <SearchedList searchQuery={debouncedSearchQuery} />
+              ) : (
+                <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
+              )}
             </Suspense>
           </ErrorBoundary>
         ) : (
-          <Text>상품을 검색해보세요.</Text>
+          <Text>{selectedTabMenu}을 검색해보세요.</Text>
         )}
       </SearchResultSection>
     </>

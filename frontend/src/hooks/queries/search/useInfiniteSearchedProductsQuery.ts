@@ -4,7 +4,7 @@ import { searchApi } from '@/apis';
 import type { SearchedProductResponse } from '@/types/response';
 
 const fetchSearchedProducts = async (query: string, page: number) => {
-  const response = await searchApi.get({ params: '/products', queries: `?query=${query}&page=${page}` });
+  const response = await searchApi.get({ params: '/products/results', queries: `?query=${query}&page=${page}` });
   const data: SearchedProductResponse = await response.json();
 
   return data;
