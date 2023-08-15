@@ -5,11 +5,11 @@ import com.funeat.member.domain.Member;
 public class RecipeAuthorDto {
 
     private final String profileImage;
-    private final String nickName;
+    private final String nickname;
 
-    private RecipeAuthorDto(final String profileImage, final String nickName) {
+    private RecipeAuthorDto(final String profileImage, final String nickname) {
         this.profileImage = profileImage;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 
     public static RecipeAuthorDto toDto(final Member member) {
@@ -20,7 +20,7 @@ public class RecipeAuthorDto {
         return profileImage;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 }

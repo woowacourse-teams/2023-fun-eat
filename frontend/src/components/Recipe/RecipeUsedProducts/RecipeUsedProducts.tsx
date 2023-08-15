@@ -2,10 +2,10 @@ import { Badge, Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design
 import styled from 'styled-components';
 
 import { Input, SvgIcon } from '@/components/Common';
-import type { RecipeUsedProduct } from '@/types/recipe';
+import type { RecipeProduct } from '@/types/recipe';
 
 interface RecipeUsedProductsProps {
-  usedProducts: RecipeUsedProduct[];
+  usedProducts: RecipeProduct[];
   removeUsedProducts: (id: number) => void;
 }
 

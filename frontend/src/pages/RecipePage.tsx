@@ -41,7 +41,7 @@ const RecipePage = () => {
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>
-      <RecipeList />
+      <RecipeList selectedOption={selectedOption} />
       <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
         <RecipeRegisterButton

@@ -1,9 +1,8 @@
-package com.funeat.review.presentation.dto;
+package com.funeat.common.dto;
 
-import com.funeat.review.domain.Review;
 import org.springframework.data.domain.Page;
 
-public class SortingReviewsPageDto {
+public class PageDto {
 
     private final Long totalDataCount;
     private final Long totalPages;
@@ -12,12 +11,8 @@ public class SortingReviewsPageDto {
     private final Long requestPage;
     private final Long requestSize;
 
-    public SortingReviewsPageDto(final Long totalDataCount,
-                                 final Long totalPages,
-                                 final boolean firstPage,
-                                 final boolean lastPage,
-                                 final Long requestPage,
-                                 final Long requestSize) {
+    public PageDto(final Long totalDataCount, final Long totalPages, final boolean firstPage, final boolean lastPage,
+                   final Long requestPage, final Long requestSize) {
         this.totalDataCount = totalDataCount;
         this.totalPages = totalPages;
         this.firstPage = firstPage;
@@ -26,8 +21,8 @@ public class SortingReviewsPageDto {
         this.requestSize = requestSize;
     }
 
-    public static SortingReviewsPageDto toDto(final Page<Review> page) {
-        return new SortingReviewsPageDto(
+    public static <T> PageDto toDto(final Page<T> page) {
+        return new PageDto(
                 page.getTotalElements(),
                 Long.valueOf(page.getTotalPages()),
                 page.isFirst(),

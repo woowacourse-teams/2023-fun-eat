@@ -5,8 +5,11 @@ import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 import com.funeat.common.ImageService;
+import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
+import com.funeat.member.dto.MemberReviewDto;
+import com.funeat.member.dto.MemberReviewsResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
@@ -23,7 +26,6 @@ import com.funeat.review.presentation.dto.RankingReviewsResponse;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
 import com.funeat.review.presentation.dto.SortingReviewDto;
-import com.funeat.review.presentation.dto.SortingReviewsPageDto;
 import com.funeat.review.presentation.dto.SortingReviewsResponse;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
@@ -122,7 +124,7 @@ public class ReviewService {
 
         final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
 
-        final SortingReviewsPageDto pageDto = SortingReviewsPageDto.toDto(reviewPage);
+        final PageDto pageDto = PageDto.toDto(reviewPage);
         final List<SortingReviewDto> reviewDtos = reviewPage.stream()
                 .map(review -> SortingReviewDto.toDto(review, member))
                 .collect(Collectors.toList());
@@ -138,5 +140,19 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return RankingReviewsResponse.toResponse(dtos);
+    }
+
+    public MemberReviewsResponse findReviewByMember(final Long memberId, final Pageable pageable) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+
+        final Page<Review> sortedReviewPages = reviewRepository.findReviewsByMember(findMember, pageable);
+        final PageDto pageDto = PageDto.toDto(sortedReviewPages);
+
+        final List<MemberReviewDto> dtos = sortedReviewPages.stream()
+                .map(MemberReviewDto::toDto)
+                .collect(Collectors.toList());
+
+        return MemberReviewsResponse.toResponse(pageDto, dtos);
     }
 }

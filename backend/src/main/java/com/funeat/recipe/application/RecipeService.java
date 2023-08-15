@@ -5,7 +5,10 @@ import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
 import com.funeat.common.ImageService;
+import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
@@ -23,6 +26,9 @@ import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,5 +98,23 @@ public class RecipeService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         return recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(member, recipe);
+    }
+
+    public MemberRecipesResponse findRecipeByMember(final Long memberId, final Pageable pageable) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+
+        final Page<Recipe> sortedRecipePages = recipeRepository.findRecipesByMember(findMember, pageable);
+
+        final PageDto page = PageDto.toDto(sortedRecipePages);
+        final List<MemberRecipeDto> dtos = sortedRecipePages.stream()
+                .map(recipe -> {
+                    final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
+                    final List<Product> productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                    return MemberRecipeDto.toDto(recipe, findRecipeImages, productsByRecipe);
+                })
+                .collect(Collectors.toList());
+
+        return MemberRecipesResponse.toResponse(page, dtos);
     }
 }

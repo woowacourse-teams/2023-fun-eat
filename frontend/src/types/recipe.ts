@@ -1,8 +1,6 @@
 import type { Member } from './member';
 import type { Product } from './product';
 
-export type RecipeUsedProduct = Pick<Product, 'id' | 'name'>;
-
 export interface RecipeRequest {
   title: string;
   productIds: number[];
@@ -16,10 +14,11 @@ export interface RecipePostRequestBody extends FormData {
 
 export type RecipeRequestKey = keyof RecipeRequest;
 
-interface RecipeProduct {
-  id: number;
-  name: string;
-  price: number;
+export interface RecipeDetail extends Recipe {
+  images: string[];
+  content: string;
+  totalPrice: number;
+  favorite: boolean;
 }
 
 export interface BaseRecipe {
@@ -32,9 +31,12 @@ export interface BaseRecipe {
 
 export interface Recipe extends BaseRecipe {
   author: Member;
-  products: RecipeProduct[];
+  products: RecipeProductWithPrice[];
 }
 
 export interface MemberRecipe extends BaseRecipe {
-  products: string[];
+  products: RecipeProduct[];
 }
+
+type RecipeProductWithPrice = Pick<Product, 'id' | 'name' | 'price'>;
+export type RecipeProduct = Omit<RecipeProductWithPrice, 'price'>;

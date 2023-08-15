@@ -1,6 +1,8 @@
 package com.funeat.recipe.domain;
 
 import com.funeat.member.domain.Member;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,9 @@ public class Recipe {
     private String title;
 
     private String content;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -52,5 +57,9 @@ public class Recipe {
 
     public Long getFavoriteCount() {
         return favoriteCount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

@@ -28,4 +28,28 @@ public class MemberSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 사용자_리뷰_조회_요청(final String loginCookie, final String sort,
+                                                             final Integer page) {
+        return given()
+                .when()
+                .cookie("JSESSIONID", loginCookie)
+                .queryParam("sort", sort)
+                .queryParam("page", page)
+                .get("/api/members/reviews")
+                .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 사용자_꿀조합_조회_요청(final String loginCookie, final String sort,
+                                                              final Integer page) {
+        return given()
+                .when()
+                .cookie("JSESSIONID", loginCookie)
+                .queryParam("sort", sort)
+                .queryParam("page", page)
+                .get("/api/members/recipes")
+                .then()
+                .extract();
+    }
 }
