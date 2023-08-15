@@ -1,4 +1,5 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import type { MouseEventHandler } from 'react';
 import { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,12 +12,17 @@ import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useSortOption } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
 
+const getProductDetailPageTabMenus = (reviewCount: number) => [`리뷰 ${reviewCount}`, '꿀조합'];
+
 const ProductDetailPage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
   const tabRef = useRef<HTMLUListElement>(null);
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
+
+  const tabMenus = getProductDetailPageTabMenus(10);
+  const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
 
   const member = useMemberValueContext();
 
@@ -30,12 +36,21 @@ const ProductDetailPage = () => {
     handleOpenBottomSheet();
   };
 
+  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
+    setSelectedTabMenu(event.currentTarget.value);
+  };
+
   return (
     <>
       <ProductDetailItem productId={Number(productId)} />
       <Spacing size={36} />
       {/* 나중에 API 수정하면 이 부분도 같이 수정해주세요 */}
-      <TabMenu ref={tabRef} tabMenus={['리뷰 10', '꿀조합']} />
+      <TabMenu
+        ref={tabRef}
+        tabMenus={tabMenus}
+        selectedTabMenu={selectedTabMenu}
+        handleTabMenuSelect={handleTabMenuSelect}
+      />
       <SortButtonWrapper>
         <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
       </SortButtonWrapper>

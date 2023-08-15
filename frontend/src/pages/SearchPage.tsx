@@ -1,15 +1,22 @@
 import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import type { MouseEventHandler } from 'react';
 import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, SearchedList } from '@/components/Search';
+import { SEARCH_PAGE_TABS } from '@/constants';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
 const SearchPage = () => {
   const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
+  const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
+
+  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
+    setSelectedTabMenu(event.currentTarget.value);
+  };
 
   useDebounce(
     () => {
@@ -46,7 +53,11 @@ const SearchPage = () => {
         )}
       </SearchSection>
       <Spacing size={20} />
-      <TabMenu tabMenus={['상품', '꿀조합']} />
+      <TabMenu
+        tabMenus={SEARCH_PAGE_TABS}
+        selectedTabMenu={selectedTabMenu}
+        handleTabMenuSelect={handleTabMenuSelect}
+      />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
           <ErrorBoundary fallback={ErrorComponent}>
@@ -55,7 +66,7 @@ const SearchPage = () => {
                 <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
               </Heading>
               <Spacing size={20} />
-              <SearchedList searchQuery={debouncedSearchQuery} />
+              {selectedTabMenu === SEARCH_PAGE_TABS[0] ? <SearchedList searchQuery={debouncedSearchQuery} /> : null}
             </Suspense>
           </ErrorBoundary>
         ) : (
