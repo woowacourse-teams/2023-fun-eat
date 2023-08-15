@@ -1,7 +1,7 @@
 import type { Product } from './product';
 
-export interface ProductSearchResults extends Product {
+export interface ProductSearchResult extends Product {
   categoryType: string;
 }
 
-export type SearchingProduct = Pick<ProductSearchResults, 'id' | 'name' | 'categoryType'>;
+export type ProductSearchAutocomplete = Pick<ProductSearchResult, 'id' | 'name' | 'categoryType'>;

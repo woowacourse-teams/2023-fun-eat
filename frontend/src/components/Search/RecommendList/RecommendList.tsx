@@ -6,14 +6,14 @@ import styled from 'styled-components';
 import { MarkedText } from '@/components/Common';
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
-import { useInfiniteSearchingProductsQuery } from '@/hooks/queries/search';
+import { useInfiniteProductSearchAutocompleteQuery } from '@/hooks/queries/search';
 
 interface RecommendListProps {
   searchQuery: string;
 }
 
 const RecommendList = ({ searchQuery }: RecommendListProps) => {
-  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteSearchingProductsQuery(searchQuery);
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchAutocompleteQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
