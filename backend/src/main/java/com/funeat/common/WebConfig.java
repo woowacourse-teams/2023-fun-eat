@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/products/**/reviews/**")
                 .addPathPatterns("/api/members/**");
         registry.addInterceptor(recipeHandlerInterceptor)
-                .addPathPatterns("/api/recipes");
+                .addPathPatterns("/api/recipes/**");
     }
 
     @Override
