@@ -4,6 +4,7 @@ import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생�
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
@@ -13,6 +14,7 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점4점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
 import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
+import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,6 +32,7 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -259,6 +262,142 @@ class RecipeServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> recipeService.findRecipeByMember(notExistMemberId, page))
                     .isInstanceOf(MemberNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class likeRecipe_성공_테스트 {
+
+        @Test
+        void 꿀조합에_좋아요를_할_수_있다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var member = 멤버_멤버2_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var image1 = 이미지_생성();
+            final var image2 = 이미지_생성();
+            final var image3 = 이미지_생성();
+            final var images = List.of(image1, image2, image3);
+
+            final var createRequest = 레시피추가요청_생성(productIds);
+            final var recipeId = recipeService.create(authorId, images, createRequest);
+
+            // when
+            final var favoriteRequest = 레시피좋아요요청_생성(true);
+            recipeService.likeRecipe(memberId, recipeId, favoriteRequest);
+
+            final var actualRecipe = recipeRepository.findById(recipeId).get();
+            final var actualRecipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, actualRecipe).get();
+
+            // then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(actualRecipe.getFavoriteCount())
+                        .isOne();
+                softAssertions.assertThat(actualRecipeFavorite.getFavorite())
+                        .isTrue();
+            });
+        }
+
+        @Test
+        void 꿀조합에_좋아요를_취소_할_수_있다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var member = 멤버_멤버2_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var image1 = 이미지_생성();
+            final var image2 = 이미지_생성();
+            final var image3 = 이미지_생성();
+            final var images = List.of(image1, image2, image3);
+
+            final var createRequest = 레시피추가요청_생성(productIds);
+            final var recipeId = recipeService.create(authorId, images, createRequest);
+
+            final var favoriteRequest = 레시피좋아요요청_생성(true);
+            recipeService.likeRecipe(memberId, recipeId, favoriteRequest);
+
+            // when
+            final var cancelFavoriteRequest = 레시피좋아요요청_생성(false);
+            recipeService.likeRecipe(memberId, recipeId, cancelFavoriteRequest);
+
+            final var actualRecipe = recipeRepository.findById(recipeId).get();
+            final var actualRecipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, actualRecipe).get();
+
+            // then
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(actualRecipe.getFavoriteCount())
+                        .isZero();
+                softAssertions.assertThat(actualRecipeFavorite.getFavorite())
+                        .isFalse();
+            });
+        }
+    }
+
+    @Nested
+    class likeRecipe_실패_테스트 {
+        @Test
+        void 존재하지_않는_멤버가_레시피에_좋아요를_하면_예외가_발생한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var wrongMemberId = authorId + 1L;
+
+            final var image1 = 이미지_생성();
+            final var image2 = 이미지_생성();
+            final var image3 = 이미지_생성();
+            final var images = List.of(image1, image2, image3);
+
+            final var createRequest = 레시피추가요청_생성(productIds);
+            final var recipeId = recipeService.create(authorId, images, createRequest);
+
+            // when & then
+            final var favoriteRequest = 레시피좋아요요청_생성(true);
+            assertThatThrownBy(() -> recipeService.likeRecipe(wrongMemberId, recipeId, favoriteRequest))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+
+        @Test
+        void 멤버가_존재하지_않는_레시피에_좋아요를_하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var wrongRecipeId = 999L;
+
+            // when & then
+            final var favoriteRequest = 레시피좋아요요청_생성(true);
+            assertThatThrownBy(() -> recipeService.likeRecipe(memberId, wrongRecipeId, favoriteRequest))
+                    .isInstanceOf(RecipeNotFoundException.class);
         }
     }
 

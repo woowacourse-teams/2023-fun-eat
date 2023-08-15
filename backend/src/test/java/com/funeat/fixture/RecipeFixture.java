@@ -4,6 +4,7 @@ import com.funeat.member.domain.Member;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
+import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -15,6 +16,10 @@ public class RecipeFixture {
 
     public static RecipeCreateRequest 레시피추가요청_생성(final List<Long> productIds) {
         return new RecipeCreateRequest("제일로 맛있는 레시피", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+    }
+
+    public static RecipeFavoriteRequest 레시피좋아요요청_생성(final boolean favorite) {
+        return new RecipeFavoriteRequest(favorite);
     }
 
     public static RecipeImage 레시피이미지_생성(final Recipe recipe) {
