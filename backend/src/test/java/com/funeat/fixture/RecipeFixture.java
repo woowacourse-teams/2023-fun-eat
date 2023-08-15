@@ -18,7 +18,7 @@ public class RecipeFixture {
         return new RecipeCreateRequest("제일로 맛있는 레시피", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
     }
 
-    public static RecipeFavoriteRequest 레시피좋아요요청_생성(final boolean favorite) {
+    public static RecipeFavoriteRequest 레시피좋아요요청_생성(final Boolean favorite) {
         return new RecipeFavoriteRequest(favorite);
     }
 

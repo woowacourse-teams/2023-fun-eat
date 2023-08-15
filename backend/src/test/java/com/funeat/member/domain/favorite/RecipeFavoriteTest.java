@@ -25,7 +25,7 @@ class RecipeFavoriteTest {
 
     @Nested
     class updateFavorite_테스트 {
-        
+
         @Test
         void 기존_false_신규_true_경우_recipe의_favoriteCount는_1_증가() {
             // given
@@ -107,5 +107,4 @@ class RecipeFavoriteTest {
             });
         }
     }
-
 }
