@@ -5,14 +5,17 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,5 +45,14 @@ public class RecipeApiController implements RecipeController {
         final RecipeDetailResponse response = recipeService.getRecipeDetail(loginInfo.getId(), recipeId);
         
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping(value = "/api/recipes/{recipeId}")
+    public ResponseEntity<Void> likeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                @PathVariable final Long recipeId,
+                                                @RequestBody RecipeFavoriteRequest request) {
+        recipeService.likeRecipe(loginInfo.getId(), recipeId, request);
+
+        return ResponseEntity.noContent().build();
     }
 }
