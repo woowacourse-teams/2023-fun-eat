@@ -67,6 +67,29 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
         }
+
+        @Test
+        void 이미지가_없어도_레시피를_작성할_수_있다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+            final var request = 레시피추가요청_생성(productIds);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var response = 레시피_생성_요청(request, null, loginCookie);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_생성);
+        }
     }
 
     @Nested

@@ -22,9 +22,14 @@ public class MemberSteps {
     public static ExtractableResponse<Response> 사용자_정보_수정_요청(final String loginCookie,
                                                              final MultiPartSpecification image,
                                                              final MemberRequest request) {
-        return given()
-                .cookie("JSESSIONID", loginCookie)
-                .multiPart(image)
+        final var requestSpec = given()
+                .cookie("JSESSIONID", loginCookie);
+
+        if (image != null) {
+            requestSpec.multiPart(image);
+        }
+
+        return requestSpec
                 .multiPart("request", request, "application/json")
                 .body(request)
                 .when()

@@ -13,9 +13,14 @@ public class ReviewSteps {
 
     public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final MultiPartSpecification image,
                                                          final ReviewCreateRequest request, final String loginCookie) {
-        return given()
-                .cookie("JSESSIONID", loginCookie)
-                .multiPart(image)
+        final var requestSpec = given()
+                .cookie("JSESSIONID", loginCookie);
+
+        if (image != null) {
+            requestSpec.multiPart(image);
+        }
+
+        return requestSpec
                 .multiPart("reviewRequest", request, "application/json")
                 .when()
                 .post("/api/products/{productId}/reviews", productId)

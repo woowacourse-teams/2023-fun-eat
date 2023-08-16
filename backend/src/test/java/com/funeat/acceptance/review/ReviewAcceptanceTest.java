@@ -90,6 +90,31 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
         }
+
+        @Test
+        void 이미지가_없어도_리뷰를_작성할_수_있다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var response = 단일_리뷰_요청(productId, null, request, loginCookie);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_생성);
+        }
     }
 
     @Nested

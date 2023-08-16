@@ -75,6 +75,9 @@ public class Member {
     }
 
     public void modifyName(final String nickname) {
+        if (Objects.isNull(nickname)) {
+            throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
+        }
         this.nickname = nickname;
     }
 }

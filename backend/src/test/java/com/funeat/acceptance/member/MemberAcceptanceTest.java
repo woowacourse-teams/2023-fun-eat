@@ -101,6 +101,39 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
         }
+
+        @Test
+        void 사용자_닉네임을_수정하다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var image = 사진_명세_요청();
+            final var request = new MemberRequest(member.getNickname());
+
+            // when
+            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+        }
+
+        @Test
+        void 사용자_이미지를_수정하다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var request = new MemberRequest("after");
+
+            // when
+            final var response = 사용자_정보_수정_요청(loginCookie, null, request);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+        }
     }
 
     @Nested
@@ -137,25 +170,6 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
             final var expectedMessage = "닉네임을 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
-
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
-        }
-
-        void 사용자가_사용자_정보_수정할때_이미지_미기입시_예외가_발생한다() {
-            // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
-            final var request = new MemberRequest("test");
-
-            // when
-            final var response = 사용자_정보_수정_요청(loginCookie, null, request);
-
-            // then
-            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
-            final var expectedMessage = "프로필 이미지를 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
