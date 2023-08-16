@@ -22,6 +22,7 @@ import com.funeat.common.ServiceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.domain.Category;
@@ -220,7 +221,10 @@ class RecipeServiceTest extends ServiceTest {
                     .map(recipe -> {
                         final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
                         final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productsByRecipe);
+                        final var memberRecipeProductDtos = productsByRecipe.stream()
+                                .map(MemberRecipeProductDto::toDto)
+                                .collect(Collectors.toList());
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                     })
                     .collect(Collectors.toList());
             final var expectedPage = new PageDto(2L, 1L, true, true, 0L, 10L);

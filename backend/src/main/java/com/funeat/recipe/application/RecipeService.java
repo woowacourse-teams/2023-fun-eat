@@ -8,6 +8,7 @@ import com.funeat.common.ImageService;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
@@ -111,7 +112,10 @@ public class RecipeService {
                 .map(recipe -> {
                     final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
                     final List<Product> productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                    return MemberRecipeDto.toDto(recipe, findRecipeImages, productsByRecipe);
+                    final List<MemberRecipeProductDto> memberRecipeProductDtos = productsByRecipe.stream()
+                            .map(MemberRecipeProductDto::toDto)
+                            .collect(Collectors.toList());
+                    return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                 })
                 .collect(Collectors.toList());
 
