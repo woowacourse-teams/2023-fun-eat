@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findRecipesByMember(final Member member, final Pageable pageable);
+
+    Page<Recipe> findAll(final Pageable pageable);
 }

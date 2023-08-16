@@ -23,7 +23,9 @@ import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
@@ -122,6 +124,21 @@ public class RecipeService {
                 .collect(Collectors.toList());
 
         return MemberRecipesResponse.toResponse(page, dtos);
+    }
+
+    public SortingRecipesResponse getSortingRecipes(final Pageable pageable) {
+        final Page<Recipe> pages = recipeRepository.findAll(pageable);
+
+        final PageDto page = PageDto.toDto(pages);
+        final List<RecipeDto> recipes = pages.getContent().stream()
+                .map(recipe -> {
+                    final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
+                    final List<Product> products = productRecipeRepository.findProductByRecipe(recipe);
+                    return RecipeDto.toDto(recipe, images, products);
+                })
+                .collect(Collectors.toList());
+
+        return SortingRecipesResponse.toResponse(page, recipes);
     }
 
     @Transactional

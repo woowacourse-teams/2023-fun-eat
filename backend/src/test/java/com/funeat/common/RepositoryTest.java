@@ -118,6 +118,28 @@ public abstract class RepositoryTest {
         reviewRepository.saveAll(reviews);
     }
 
+    protected Long 단일_꿀조합_저장(final Recipe recipe) {
+        return recipeRepository.save(recipe).getId();
+    }
+
+    protected void 복수_꿀조합_저장(final Recipe... recipesToSave) {
+        final var recipes = List.of(recipesToSave);
+
+        recipeRepository.saveAll(recipes);
+    }
+
+    protected void 복수_꿀조합_이미지_저장(final RecipeImage... recipeImageToSave) {
+        final var recipeFavorites = List.of(recipeImageToSave);
+
+        recipeImageRepository.saveAll(recipeFavorites);
+    }
+
+    protected void 복수_꿀조합_상품_저장(final ProductRecipe... productRecipeImageToSave) {
+        final var productRecipes = List.of(productRecipeImageToSave);
+
+        productRecipeRepository.saveAll(productRecipes);
+    }
+
     protected Long 단일_태그_저장(final Tag tag) {
         return tagRepository.save(tag).getId();
     }

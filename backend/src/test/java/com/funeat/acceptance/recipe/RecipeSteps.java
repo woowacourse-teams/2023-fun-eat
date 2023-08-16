@@ -45,6 +45,17 @@ public class RecipeSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 레시피_목록_요청(final String sortType, final String sortOrderType,
+                                                          final int page) {
+        return given()
+                .queryParam("sort", sortType + "," + sortOrderType)
+                .queryParam("page", page)
+                .when()
+                .get("/api/recipes")
+                .then()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 레시피_좋아요_요청(final String loginCookie, final Long recipeId,
                                                            final RecipeFavoriteRequest request) {
         return given()
