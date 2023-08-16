@@ -24,8 +24,8 @@ import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
-import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
@@ -140,7 +140,7 @@ public class RecipeService {
 
         return SortingRecipesResponse.toResponse(page, recipes);
     }
-  
+
     @Transactional
     public void likeRecipe(final Long memberId, final Long recipeId, final RecipeFavoriteRequest request) {
         final Member member = memberRepository.findById(memberId)

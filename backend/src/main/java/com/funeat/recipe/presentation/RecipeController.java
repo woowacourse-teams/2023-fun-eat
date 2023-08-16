@@ -4,8 +4,8 @@ import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
-import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,7 +42,7 @@ public interface RecipeController {
     @GetMapping
     ResponseEntity<RecipeDetailResponse> getRecipeDetail(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                          @PathVariable final Long recipeId);
-  
+
     @Operation(summary = "꿀조합 목록 조회", description = "꿀조합의 목록을 조회한다.")
     @ApiResponse(
             responseCode = "200",

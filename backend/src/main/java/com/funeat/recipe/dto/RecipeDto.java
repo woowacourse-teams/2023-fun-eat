@@ -29,15 +29,18 @@ public class RecipeDto {
         this.createdAt = createdAt;
     }
 
-    public static RecipeDto toDto(final Recipe recipe, final List<RecipeImage> recipeImages, final List<Product> products) {
+    public static RecipeDto toDto(final Recipe recipe, final List<RecipeImage> recipeImages,
+                                  final List<Product> products) {
         final RecipeAuthorDto authorDto = RecipeAuthorDto.toDto(recipe.getMember());
         final List<ProductRecipeDto> productDtos = products.stream()
                 .map(ProductRecipeDto::toDto)
                 .collect(Collectors.toList());
         if (recipeImages.isEmpty()) {
-             return new RecipeDto(recipe.getId(), null, recipe.getTitle(), authorDto, productDtos, recipe.getFavoriteCount(), recipe.getCreatedAt());
+            return new RecipeDto(recipe.getId(), null, recipe.getTitle(), authorDto, productDtos,
+                    recipe.getFavoriteCount(), recipe.getCreatedAt());
         }
-        return new RecipeDto(recipe.getId(), recipeImages.get(0).getImage(), recipe.getTitle(), authorDto, productDtos, recipe.getFavoriteCount(), recipe.getCreatedAt());
+        return new RecipeDto(recipe.getId(), recipeImages.get(0).getImage(), recipe.getTitle(), authorDto, productDtos,
+                recipe.getFavoriteCount(), recipe.getCreatedAt());
     }
 
     public Long getId() {

@@ -5,8 +5,8 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
-import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -56,7 +56,7 @@ public class RecipeApiController implements RecipeController {
 
         return ResponseEntity.ok(response);
     }
-  
+
     @PatchMapping(value = "/api/recipes/{recipeId}")
     public ResponseEntity<Void> likeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
                                            @PathVariable final Long recipeId,

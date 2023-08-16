@@ -46,7 +46,7 @@ public class Recipe {
         this.member = member;
         this.favoriteCount = favoriteCount;
     }
-  
+
     public void addFavoriteCount() {
         this.favoriteCount++;
     }
