@@ -44,15 +44,15 @@ public class RecipeFavorite {
         return new RecipeFavorite(member, recipe);
     }
 
-    public void updateFavorite(final Boolean request) {
-        if (!this.favorite && request) {
+    public void updateFavorite(final Boolean favorite) {
+        if (!this.favorite && favorite) {
             this.recipe.addFavoriteCount();
-            this.favorite = request;
+            this.favorite = favorite;
             return;
         }
-        if (this.favorite && !request) {
+        if (this.favorite && !favorite) {
             this.recipe.minusFavoriteCount();
-            this.favorite = request;
+            this.favorite = favorite;
         }
     }
 
