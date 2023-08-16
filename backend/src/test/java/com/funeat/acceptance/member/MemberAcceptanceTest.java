@@ -25,7 +25,6 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.common.dto.PageDto;
@@ -370,7 +369,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        void 사용자가_작성한_꿀조합에_이미지가_없을때_꿀조합은_이미지없이_조회된다() throws JsonProcessingException {
+        void 사용자가_작성한_꿀조합에_이미지가_없을때_꿀조합은_이미지없이_조회된다() {
             // given
             final var member1 = 멤버_멤버1_생성();
             단일_멤버_저장(member1);
