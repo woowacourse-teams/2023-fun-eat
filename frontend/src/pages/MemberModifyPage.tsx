@@ -46,11 +46,7 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                {profileImage ? (
-                  <ProfileImage src={profileImage} alt="업로드한 사진" width={80} />
-                ) : (
-                  <SvgIcon variant="modifyProfile" width={80} height={80} />
-                )}
+                <ProfileImage src={profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
                 <input type="file" accept="image/*" onChange={uploadImage} />
