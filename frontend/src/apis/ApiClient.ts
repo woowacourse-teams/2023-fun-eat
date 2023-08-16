@@ -55,6 +55,15 @@ export class ApiClient {
     });
   }
 
+  put({ params, queries, credentials = false }: RequestOptions, body?: FormData) {
+    return fetchApi(this.getUrl(params, queries), {
+      method: 'PUT',
+      headers: this.#headers,
+      body: body ? body : null,
+      credentials: credentials ? 'include' : 'omit',
+    });
+  }
+
   delete<B>({ params, queries, credentials = false }: RequestOptions, body?: B) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'DELETE',
