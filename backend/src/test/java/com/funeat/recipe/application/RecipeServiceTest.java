@@ -2,7 +2,7 @@ package com.funeat.recipe.application;
 
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
-import static com.funeat.fixture.ImageFixture.이미지_생성;
+import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockMultipartFile;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -62,10 +61,7 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
 
-            final var image1 = 이미지_생성();
-            final var image2 = 이미지_생성();
-            final var image3 = 이미지_생성();
-            final var images = List.of(image1, image2, image3);
+            final var images = 여러_이미지_생성(3);
 
             // when
             final var request = 레시피추가요청_생성(productIds);
@@ -97,15 +93,13 @@ class RecipeServiceTest extends ServiceTest {
         단일_멤버_저장(author);
         final var authorId = author.getId();
 
-        final var image1 = new MockMultipartFile("image1", "image1.jpg", "image/jpeg", new byte[]{1, 2, 3});
-        final var image2 = new MockMultipartFile("image2", "image2.jpg", "image/jpeg", new byte[]{1, 2, 3});
-        final var image3 = new MockMultipartFile("image3", "image3.jpg", "image/jpeg", new byte[]{1, 2, 3});
+        final var images = 여러_이미지_생성(3);
 
         final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
         final var request = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
                 "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
 
-        final var recipeId = recipeService.create(authorId, List.of(image1, image2, image3), request);
+        final var recipeId = recipeService.create(authorId, images, request);
 
         // when
         final var actual = recipeService.getRecipeDetail(authorId, recipeId);
@@ -138,10 +132,7 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버1_생성();
             final var wrongMemberId = 단일_멤버_저장(member) + 1L;
 
-            final var image1 = 이미지_생성();
-            final var image2 = 이미지_생성();
-            final var image3 = 이미지_생성();
-            final var images = List.of(image1, image2, image3);
+            final var images = 여러_이미지_생성(3);
 
             final var request = 레시피추가요청_생성(productIds);
 
@@ -166,10 +157,7 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
 
-            final var image1 = 이미지_생성();
-            final var image2 = 이미지_생성();
-            final var image3 = 이미지_생성();
-            final var images = List.of(image1, image2, image3);
+            final var images = 여러_이미지_생성(3);
 
             final var request = 레시피추가요청_생성(wrongProductIds);
 
@@ -285,10 +273,7 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버2_생성();
             final var memberId = 단일_멤버_저장(member);
 
-            final var image1 = 이미지_생성();
-            final var image2 = 이미지_생성();
-            final var image3 = 이미지_생성();
-            final var images = List.of(image1, image2, image3);
+            final var images = 여러_이미지_생성(3);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var recipeId = recipeService.create(authorId, images, createRequest);
@@ -326,10 +311,7 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버2_생성();
             final var memberId = 단일_멤버_저장(member);
 
-            final var image1 = 이미지_생성();
-            final var image2 = 이미지_생성();
-            final var image3 = 이미지_생성();
-            final var images = List.of(image1, image2, image3);
+            final var images = 여러_이미지_생성(3);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var recipeId = recipeService.create(authorId, images, createRequest);
@@ -373,10 +355,7 @@ class RecipeServiceTest extends ServiceTest {
             final var authorId = 단일_멤버_저장(author);
             final var wrongMemberId = authorId + 1L;
 
-            final var image1 = 이미지_생성();
-            final var image2 = 이미지_생성();
-            final var image3 = 이미지_생성();
-            final var images = List.of(image1, image2, image3);
+            final var images = 여러_이미지_생성(3);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var recipeId = recipeService.create(authorId, images, createRequest);
