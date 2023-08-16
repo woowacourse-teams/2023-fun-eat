@@ -1,5 +1,6 @@
 import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import type { MouseEventHandler } from 'react';
 import { useState, useRef, Suspense } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,8 +13,8 @@ import {
   Loading,
   ErrorBoundary,
   ErrorComponent,
+  RegisterButton,
 } from '@/components/Common';
-import RegisterButton from '@/components/Common/RegisterButton/RegisterButton';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
@@ -25,12 +26,17 @@ import { useMemberQuery } from '@/hooks/queries/members';
 const LOGIN_ERROR_MESSAGE =
   '로그인 해야 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
 
+const getProductDetailPageTabMenus = (reviewCount: number) => [`리뷰 ${reviewCount}`, '꿀조합'];
+
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { data: member } = useMemberQuery();
   const { reset } = useQueryErrorResetBoundary();
+
+  const tabMenus = getProductDetailPageTabMenus(10);
+  const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
   const tabRef = useRef<HTMLUListElement>(null);
@@ -45,12 +51,21 @@ const ProductDetailPage = () => {
     handleOpenBottomSheet();
   };
 
+  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
+    setSelectedTabMenu(event.currentTarget.value);
+  };
+
   return (
     <>
       <ProductDetailItem productId={Number(productId)} />
       <Spacing size={36} />
       {/* 나중에 API 수정하면 이 부분도 같이 수정해주세요 */}
-      <TabMenu ref={tabRef} tabMenus={['리뷰 10', '꿀조합']} />
+      <TabMenu
+        ref={tabRef}
+        tabMenus={tabMenus}
+        selectedTabMenu={selectedTabMenu}
+        handleTabMenuSelect={handleTabMenuSelect}
+      />
       {member ? (
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>

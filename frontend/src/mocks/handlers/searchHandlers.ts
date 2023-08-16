@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
 import productSearchResults from '../data/productSearchResults.json';
+import recipeResponse from '../data/recipes.json';
 import searchingProducts from '../data/searchingProducts.json';
 
 export const searchHandlers = [
@@ -23,13 +24,12 @@ export const searchHandlers = [
       return res(ctx.status(200), ctx.json(filteredProducts), ctx.delay(1000));
     }
 
-    // TODO: 꿀조합 목 데이터 만들기
     if (searchId === 'recipes') {
-      const filteredProducts = {
-        page: { ...productSearchResults.page },
-        products: productSearchResults.products.filter((product) => product.name.includes(query)),
+      const filteredRecipes = {
+        page: { ...recipeResponse.page },
+        recipes: recipeResponse.recipes.filter((recipe) => recipe.products.some((product) => product.name === query)),
       };
-      return res(ctx.status(200), ctx.json(filteredProducts));
+      return res(ctx.status(200), ctx.json(filteredRecipes));
     }
 
     return res(ctx.status(400));
@@ -54,13 +54,13 @@ export const searchHandlers = [
       return res(ctx.status(200), ctx.json(filteredProducts), ctx.delay(1000));
     }
 
-    // TODO: 꿀조합 목 데이터 만들기
     if (searchId === 'recipes') {
       const filteredProducts = {
         page: { ...searchingProducts.page },
         products: searchingProducts.products.filter((product) => product.name.includes(query)),
       };
-      return res(ctx.status(200), ctx.json(filteredProducts));
+
+      return res(ctx.status(200), ctx.json(filteredProducts), ctx.delay(1000));
     }
 
     return res(ctx.status(400));

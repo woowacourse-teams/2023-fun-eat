@@ -8,14 +8,18 @@ import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
 import { useInfiniteProductSearchResultsQuery } from '@/hooks/queries/search';
 
-interface SearchResultListProps {
+interface ProductSearchResultListProps {
   searchQuery: string;
 }
 
-const SearchResultList = ({ searchQuery }: SearchResultListProps) => {
+const ProductSearchResultList = ({ searchQuery }: ProductSearchResultListProps) => {
   const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchResultsQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+
+  if (!searchResponse) {
+    return null;
+  }
 
   const products = searchResponse.pages.flatMap((page) => page.products);
 
@@ -25,7 +29,7 @@ const SearchResultList = ({ searchQuery }: SearchResultListProps) => {
 
   return (
     <>
-      <SearchResultListContainer>
+      <ProductSearchResultListContainer>
         {products.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${product.categoryType}/${product.id}`}>
@@ -33,15 +37,15 @@ const SearchResultList = ({ searchQuery }: SearchResultListProps) => {
             </Link>
           </li>
         ))}
-      </SearchResultListContainer>
+      </ProductSearchResultListContainer>
       <div ref={scrollRef} aria-hidden />
     </>
   );
 };
 
-export default SearchResultList;
+export default ProductSearchResultList;
 
-const SearchResultListContainer = styled.ul`
+const ProductSearchResultListContainer = styled.ul`
   display: flex;
   flex-direction: column;
 
