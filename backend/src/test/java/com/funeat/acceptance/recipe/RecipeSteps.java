@@ -66,4 +66,14 @@ public class RecipeSteps {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public static ExtractableResponse<Response> 레시피_검색_결과_조회_요청(final String query, final int page) {
+        return given()
+                .queryParam("query", query)
+                .queryParam("page", page)
+                .when()
+                .get("/api/search/recipes/results")
+                .then()
+                .extract();
+    }
 }
