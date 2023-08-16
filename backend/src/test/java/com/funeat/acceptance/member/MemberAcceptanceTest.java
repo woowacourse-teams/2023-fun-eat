@@ -25,11 +25,14 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.recipe.domain.Recipe;
@@ -42,9 +45,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberAcceptanceTest extends AcceptanceTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Nested
     class getMemberProfile_성공_테스트 {
@@ -310,8 +317,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedRecipeResponses = member1SortedRecipes.stream()
                     .map(recipe -> {
                         final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
-                        final var productByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productByRecipe);
+                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                        final var memberRecipeProductDtos = productsByRecipe.stream()
+                                .map(MemberRecipeProductDto::toDto)
+                                .collect(Collectors.toList());
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                     })
                     .collect(Collectors.toList());
 
@@ -360,7 +370,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        void 사용자가_작성한_꿀조합에_이미지가_없을때_꿀조합은_이미지없이_조회된다() {
+        void 사용자가_작성한_꿀조합에_이미지가_없을때_꿀조합은_이미지없이_조회된다() throws JsonProcessingException {
             // given
             final var member1 = 멤버_멤버1_생성();
             단일_멤버_저장(member1);
@@ -392,8 +402,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedRecipeResponses = expectedRecipes.stream()
                     .map(recipe -> {
                         final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
-                        final var productByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productByRecipe);
+                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                        final var memberRecipeProductDtos = productsByRecipe.stream()
+                                .map(MemberRecipeProductDto::toDto)
+                                .collect(Collectors.toList());
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                     })
                     .collect(Collectors.toList());
             final var actualRecipeImage = response.jsonPath().getList("recipes", MemberRecipeDto.class).get(0)
