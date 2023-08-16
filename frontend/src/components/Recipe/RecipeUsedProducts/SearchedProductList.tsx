@@ -50,7 +50,16 @@ const SearchedProductList = ({ searchQuery, addUsedProducts }: SearchedProductLi
 export default SearchedProductList;
 
 const SearchedProductListContainer = styled.ul`
-  height: 100%;
+  width: 300px;
+  height: 80%;
+  border: 1px solid ${({ theme }) => theme.borderColors.default};
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  overflow: auto;
+
+  &::-webkit-scrollbar: horizontal {
+    display: none;
+  }
 
   & > li {
     height: 36px;

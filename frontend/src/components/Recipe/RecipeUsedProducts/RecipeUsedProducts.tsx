@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Badge, Button, Heading, Text, useTheme } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -47,18 +47,6 @@ const RecipeUsedProducts = () => {
         사용한 상품
         <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
-      <Spacing size={12} />
-      <Input
-        placeholder="상품 이름을 검색해보세요."
-        rightIcon={<SvgIcon variant="search" />}
-        value={searchQuery}
-        onChange={handleSearchQuery}
-        disabled={usedProducts.length === MAX_USED_PRODUCTS_COUNT}
-      />
-      {usedProducts.length < MAX_USED_PRODUCTS_COUNT && debouncedSearchQuery && (
-        <SearchedProductList searchQuery={debouncedSearchQuery} addUsedProducts={addUsedProducts} />
-      )}
-      <Spacing size={12} />
       {usedProducts.length ? (
         <BadgeWrapper>
           {usedProducts.map(({ id, name }) => (
@@ -73,10 +61,22 @@ const RecipeUsedProducts = () => {
           ))}
         </BadgeWrapper>
       ) : (
-        <ProductUploadLimitMessage color={theme.textColors.info}>
+        <ProductUploadLimitMessage color={theme.textColors.disabled}>
           사용한 상품은 6개까지 업로드 할 수 있어요 😉
         </ProductUploadLimitMessage>
       )}
+      <SearchInputWrapper>
+        <Input
+          placeholder="상품 이름을 검색해보세요."
+          rightIcon={<SvgIcon variant="search" width={20} height={20} />}
+          value={usedProducts.length === MAX_USED_PRODUCTS_COUNT ? '' : searchQuery}
+          onChange={handleSearchQuery}
+          disabled={usedProducts.length === MAX_USED_PRODUCTS_COUNT}
+        />
+        {usedProducts.length < MAX_USED_PRODUCTS_COUNT && debouncedSearchQuery && (
+          <SearchedProductList searchQuery={debouncedSearchQuery} addUsedProducts={addUsedProducts} />
+        )}
+      </SearchInputWrapper>
     </>
   );
 };
@@ -91,12 +91,17 @@ const BadgeWrapper = styled.ul`
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
-  max-width: 300px;
-  height: 56px;
+  height: 48px;
 `;
 
 const ProductUploadLimitMessage = styled(Text)`
-  height: 56px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+`;
+
+const SearchInputWrapper = styled.div`
+  height: 100px;
 `;
 
 const RemoveButton = styled(Button)`

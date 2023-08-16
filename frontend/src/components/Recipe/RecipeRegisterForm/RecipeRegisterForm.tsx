@@ -54,7 +54,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
       <Spacing size={36} />
       <form onSubmit={handleRecipeFormSubmit}>
         <RecipeNameInput recipeName={recipeFormValue.title} />
-        <Spacing size={36} />
+        <Spacing size={40} />
         <RecipeUsedProducts />
         <Spacing size={36} />
         <Heading as="h2" size="xl" tabIndex={0}>
@@ -66,9 +66,9 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
         </Text>
         <Spacing size={12} />
         <ImageUploader previewImage={previewImage} uploadImage={uploadImage} deleteImage={deleteImage} />
-        <Spacing size={36} />
+        <Spacing size={40} />
         <RecipeDetailTextarea recipeDetail={recipeFormValue.content} />
-        <Spacing size={36} />
+        <Spacing size={40} />
         <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
           레시피 등록하기
         </FormButton>
