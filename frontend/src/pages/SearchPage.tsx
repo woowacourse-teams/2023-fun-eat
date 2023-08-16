@@ -1,7 +1,7 @@
 import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import type { MouseEventHandler } from 'react';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
@@ -15,6 +15,7 @@ const SearchPage = () => {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
   const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
   const { reset } = useQueryErrorResetBoundary();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     setSelectedTabMenu(event.currentTarget.value);
@@ -27,6 +28,12 @@ const SearchPage = () => {
     200,
     [searchQuery]
   );
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
     <>
@@ -42,6 +49,7 @@ const SearchPage = () => {
             }
             value={searchQuery}
             onChange={handleSearchQuery}
+            ref={inputRef}
           />
         </form>
         {!isSubmitted && debouncedSearchQuery && (
