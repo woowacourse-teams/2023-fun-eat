@@ -50,9 +50,8 @@ public interface ProductController {
             description = "상품 검색 성공."
     )
     @GetMapping
-    ResponseEntity<SearchProductsResponse> searchProducts(
-            @RequestParam final String query, @PageableDefault final Pageable pageable
-    );
+    ResponseEntity<SearchProductsResponse> searchProducts(@RequestParam final String query,
+                                                          @PageableDefault final Pageable pageable);
 
     @Operation(summary = "상품 검색 결과 조회", description = "문자열을 받아 상품을 검색하고 검색 결과들을 조회한다.")
     @ApiResponse(
@@ -60,7 +59,6 @@ public interface ProductController {
             description = "상품 검색 결과 조회 성공."
     )
     @GetMapping
-    ResponseEntity<SearchProductResultsResponse> getSearchResults(
-            @RequestParam final String query, @PageableDefault final Pageable pageable
-    );
+    ResponseEntity<SearchProductResultsResponse> getSearchResults(@RequestParam final String query,
+                                                                  @PageableDefault final Pageable pageable);
 }
