@@ -7,7 +7,7 @@ export interface FallbackProps {
 }
 
 interface ErrorBoundaryProps {
-  handleReset?: Function;
+  handleReset?: () => void;
   fallback: ComponentType<FallbackProps>;
 }
 
