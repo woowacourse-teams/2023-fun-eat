@@ -25,7 +25,10 @@ import { useSortOption } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
-const LOGIN_ERROR_MESSAGE = '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
+const LOGIN_ERROR_MESSAGE_REVIEW =
+  '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 리뷰를 확인해보세요 😊';
+const LOGIN_ERROR_MESSAGE_RECIPE =
+  '로그인 후 상품 꿀조합을 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 꿀조합을 확인해보세요 😊';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -95,7 +98,7 @@ const ProductDetailPage = () => {
       ) : (
         <ErrorContainer>
           <ErrorDescription align="center" weight="bold" size="lg">
-            {LOGIN_ERROR_MESSAGE}
+            {isRecipeTab ? LOGIN_ERROR_MESSAGE_RECIPE : LOGIN_ERROR_MESSAGE_REVIEW}
           </ErrorDescription>
           <LoginLink as={RouterLink} to={PATH.LOGIN} block>
             로그인하러 가기
