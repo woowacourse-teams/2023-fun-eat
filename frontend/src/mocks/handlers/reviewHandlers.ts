@@ -29,9 +29,15 @@ export const reviewHandlers = [
 
     const sortedReviews = {
       ...mockReviews,
-      reviews: [...mockReviews.reviews].sort((cur, next) =>
-        sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key]
-      ),
+      reviews: [...mockReviews.reviews].sort((cur, next) => {
+        if (key === 'createdAt') {
+          return sortOrder === 'asc'
+            ? new Date(cur[key]).getTime() - new Date(next[key]).getTime()
+            : new Date(next[key]).getTime() - new Date(cur[key]).getTime();
+        }
+
+        return sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key];
+      }),
     };
 
     return res(
