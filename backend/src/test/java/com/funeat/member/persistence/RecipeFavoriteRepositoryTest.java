@@ -9,12 +9,12 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점2점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
+import static com.funeat.fixture.RecipeFixture.레시피_좋아요_생성;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
 import com.funeat.common.RepositoryTest;
-import com.funeat.member.domain.favorite.RecipeFavorite;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -58,7 +58,9 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
             final var realMember = 멤버_멤버2_생성();
             final var fakeMember = 멤버_멤버3_생성();
             복수_멤버_저장(realMember, fakeMember);
-            레시피_좋아요_저장(new RecipeFavorite(realMember, recipe, true));
+
+            final var recipeFavorite = 레시피_좋아요_생성(realMember, recipe, true);
+            레시피_좋아요_저장(recipeFavorite);
 
             // when
             final var realMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(realMember, recipe);
@@ -102,7 +104,9 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
             final var realMember = 멤버_멤버2_생성();
             final var fakeMember = 멤버_멤버3_생성();
             복수_멤버_저장(realMember, fakeMember);
-            레시피_좋아요_저장(new RecipeFavorite(realMember, recipe, true));
+
+            final var recipeFavorite = 레시피_좋아요_생성(realMember, recipe, true);
+            레시피_좋아요_저장(recipeFavorite);
 
             // when
             final var realMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(realMember,

@@ -35,9 +35,9 @@ class RecipeFavoriteTest {
             // given
             final var member = 멤버_멤버1_생성();
             final var recipe = 레시피_생성(member);
+            final var recipeFavorite = RecipeFavorite.create(member, recipe);
 
             // when
-            final var recipeFavorite = RecipeFavorite.create(member, recipe);
             recipeFavorite.updateFavorite(true);
 
             // then
