@@ -3,6 +3,6 @@ export const PATH = {
   SEARCH: '/search',
   PRODUCT_LIST: '/products',
   MEMBER: '/members',
-  RECIPE: '/recipe',
+  RECIPE: '/recipes',
   LOGIN: '/login',
 } as const;

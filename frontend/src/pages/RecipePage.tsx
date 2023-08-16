@@ -4,8 +4,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ScrollButton, SortButton, SortOptionList, SvgIcon } from '@/components/Common';
-import { RecipeList } from '@/components/Recipe';
+import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
+import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useSortOption } from '@/hooks/common';
 import { useMemberValueContext } from '@/hooks/context';
 
@@ -66,8 +67,11 @@ const RecipePage = () => {
             selectSortOption={selectSortOption}
             close={handleCloseBottomSheet}
           />
-        ) : null}
-        {/*폼 추가되면 여기에 들어갈 예정*/}
+        ) : (
+          <RecipeFormProvider>
+            <RecipeRegisterForm closeRecipeDialog={handleCloseBottomSheet} />
+          </RecipeFormProvider>
+        )}
       </BottomSheet>
     </>
   );

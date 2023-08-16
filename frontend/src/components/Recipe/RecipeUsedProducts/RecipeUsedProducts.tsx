@@ -1,16 +1,45 @@
-import { Badge, Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Badge, Button, Heading, Text, useTheme } from '@fun-eat/design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
 
+import SearchedProductList from './SearchedProductList';
+
 import { Input, SvgIcon } from '@/components/Common';
+import { useDebounce } from '@/hooks/common';
+import { useRecipeFormActionContext } from '@/hooks/context';
+import { useSearch } from '@/hooks/search';
 import type { RecipeProduct } from '@/types/recipe';
 
-interface RecipeUsedProductsProps {
-  usedProducts: RecipeProduct[];
-  removeUsedProducts: (id: number) => void;
-}
+const MAX_USED_PRODUCTS_COUNT = 6;
 
-const RecipeUsedProducts = ({ usedProducts, removeUsedProducts }: RecipeUsedProductsProps) => {
+const RecipeUsedProducts = () => {
   const theme = useTheme();
+
+  const { searchQuery, handleSearchQuery } = useSearch();
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
+  useDebounce(
+    () => {
+      setDebouncedSearchQuery(searchQuery);
+    },
+    200,
+    [searchQuery]
+  );
+
+  const [usedProducts, setUsedProducts] = useState<RecipeProduct[]>([]);
+  const { handleRecipeFormValue } = useRecipeFormActionContext();
+
+  const removeUsedProducts = (id: number) => {
+    setUsedProducts((prev) => prev.filter((usedProduct) => usedProduct.id !== id));
+    handleRecipeFormValue({ target: 'productIds', value: id, action: 'remove' });
+  };
+
+  const addUsedProducts = (id: number, name: string) => {
+    setUsedProducts((prev) => {
+      if (prev.some((product) => product.id === id)) return prev;
+      return [...prev, { id: id, name: name }];
+    });
+    handleRecipeFormValue({ target: 'productIds', value: id, action: 'add' });
+  };
 
   return (
     <>
@@ -18,10 +47,6 @@ const RecipeUsedProducts = ({ usedProducts, removeUsedProducts }: RecipeUsedProd
         사용한 상품
         <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
-      <Spacing size={12} />
-      {/* TODO: 검색 컴포넌트로 교체하기 */}
-      <Input />
-      <Spacing size={12} />
       {usedProducts.length ? (
         <BadgeWrapper>
           {usedProducts.map(({ id, name }) => (
@@ -36,10 +61,22 @@ const RecipeUsedProducts = ({ usedProducts, removeUsedProducts }: RecipeUsedProd
           ))}
         </BadgeWrapper>
       ) : (
-        <ProductUploadLimitMessage color={theme.textColors.info}>
+        <ProductUploadLimitMessage color={theme.textColors.disabled}>
           사용한 상품은 6개까지 업로드 할 수 있어요 😉
         </ProductUploadLimitMessage>
       )}
+      <SearchInputWrapper>
+        <Input
+          placeholder="상품 이름을 검색해보세요."
+          rightIcon={<SvgIcon variant="search" width={20} height={20} />}
+          value={usedProducts.length === MAX_USED_PRODUCTS_COUNT ? '' : searchQuery}
+          onChange={handleSearchQuery}
+          disabled={usedProducts.length === MAX_USED_PRODUCTS_COUNT}
+        />
+        {usedProducts.length < MAX_USED_PRODUCTS_COUNT && debouncedSearchQuery && (
+          <SearchedProductList searchQuery={debouncedSearchQuery} addUsedProducts={addUsedProducts} />
+        )}
+      </SearchInputWrapper>
     </>
   );
 };
@@ -54,12 +91,17 @@ const BadgeWrapper = styled.ul`
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
-  max-width: 300px;
-  height: 56px;
+  height: 48px;
 `;
 
 const ProductUploadLimitMessage = styled(Text)`
-  height: 56px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+`;
+
+const SearchInputWrapper = styled.div`
+  height: 100px;
 `;
 
 const RemoveButton = styled(Button)`
