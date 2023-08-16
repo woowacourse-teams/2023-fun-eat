@@ -25,7 +25,6 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -44,13 +43,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberAcceptanceTest extends AcceptanceTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Nested
     class getMemberProfile_성공_테스트 {
