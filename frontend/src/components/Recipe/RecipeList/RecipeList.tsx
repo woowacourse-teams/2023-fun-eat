@@ -18,10 +18,6 @@ const RecipeList = ({ selectedOption }: RecipeListProps) => {
   const { fetchNextPage, hasNextPage, data } = useInfiniteRecipesQuery(selectedOption.value);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!data) {
-    return null;
-  }
-
   const recipes = data.pages.flatMap((page) => page.recipes);
 
   return (

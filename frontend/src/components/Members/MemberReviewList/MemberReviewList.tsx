@@ -15,7 +15,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteMemberReviewQuery();
-  const memberReviews = data?.pages.flatMap((page) => page.reviews);
+  const memberReviews = data.pages.flatMap((page) => page.reviews);
   const reviewsToDisplay = useDisplaySlice(isMemberPage, memberReviews);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
@@ -31,7 +31,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
       )}
       <Spacing size={20} />
       <MemberReviewListWrapper>
-        {reviewsToDisplay?.map((reviewRanking) => (
+        {reviewsToDisplay.map((reviewRanking) => (
           <li key={reviewRanking.reviewId}>
             <ReviewRankingItem reviewRanking={reviewRanking} />
           </li>

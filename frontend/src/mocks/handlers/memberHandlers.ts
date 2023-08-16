@@ -32,6 +32,10 @@ export const memberHandlers = [
     return res(ctx.status(403));
   }),
 
+  rest.put('/api/members', (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
   rest.get('/api/members/reviews', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockMemberReviews));
   }),

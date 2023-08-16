@@ -18,13 +18,13 @@ const PBProductList = ({ isHomePage }: PBProductListProps) => {
   const { categoryIds } = useCategoryContext();
 
   const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
-  const pbProductList = pbProductListResponse?.pages.flatMap((page) => page.products);
-  const pbProductsToDisplay = displaySlice(isHomePage, pbProductList, 10);
+  const pbProducts = pbProductListResponse.pages.flatMap((page) => page.products);
+  const pbProductsToDisplay = displaySlice(isHomePage, pbProducts, 10);
 
   return (
     <>
       <PBProductListContainer>
-        {pbProductsToDisplay?.map((pbProduct) => (
+        {pbProductsToDisplay.map((pbProduct) => (
           <li key={pbProduct.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
               <PBProductItem pbProduct={pbProduct} />

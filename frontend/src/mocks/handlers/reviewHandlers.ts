@@ -14,7 +14,7 @@ export const reviewHandlers = [
     const page = Number(req.url.searchParams.get('page'));
 
     if (!mockSessionId) {
-      return res(ctx.status(403));
+      return res(ctx.status(401));
     }
 
     if (sortOptions === null) {
@@ -42,7 +42,8 @@ export const reviewHandlers = [
 
     return res(
       ctx.status(200),
-      ctx.json({ page: sortedReviews.page, reviews: sortedReviews.reviews.slice(page * 5, (page + 1) * 5) })
+      ctx.json({ page: sortedReviews.page, reviews: sortedReviews.reviews }),
+      ctx.delay(1000)
     );
   }),
 
