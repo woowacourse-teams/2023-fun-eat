@@ -24,7 +24,11 @@ const MemberPage = () => {
       </ErrorBoundary>
       <Spacing size={45} />
       <NavigableSectionTitle title="내가 작성한 꿀조합" routeDestination={`${PATH.MEMBER}/recipe`} />
-      <MemberRecipeList isMemberPage />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <MemberRecipeList isMemberPage />
+        </Suspense>
+      </ErrorBoundary>
       <Spacing size={40} />
     </>
   );

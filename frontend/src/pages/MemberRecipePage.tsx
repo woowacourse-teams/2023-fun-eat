@@ -1,14 +1,22 @@
 import { Spacing } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
-import { ScrollButton, SectionTitle } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Loading, ScrollButton, SectionTitle } from '@/components/Common';
 import { MemberRecipeList } from '@/components/Members';
 
 const MemberRecipePage = () => {
+  const { reset } = useQueryErrorResetBoundary();
+
   return (
     <>
       <SectionTitle name="내가 작성한 레시피" />
       <Spacing size={18} />
-      <MemberRecipeList />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <MemberRecipeList />
+        </Suspense>
+      </ErrorBoundary>
       <ScrollButton />
     </>
   );
