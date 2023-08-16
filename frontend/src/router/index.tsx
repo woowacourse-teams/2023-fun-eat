@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
-import ErrorBoundary from '@/components/Common/ErrorBoundary/ErrorBoundary';
+import { AuthLayout } from '@/components/Layout';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import AuthPage from '@/pages/AuthPage';
@@ -22,11 +22,7 @@ import SearchPage from '@/pages/SearchPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <ErrorBoundary fallback={NotFoundPage}>
-        <App />
-      </ErrorBoundary>
-    ),
+    element: <App />,
     errorElement: <NotFoundPage />,
     children: [
       {
@@ -51,7 +47,11 @@ const router = createBrowserRouter([
       },
       {
         path: `${PATH.RECIPE}/:recipeId`,
-        element: <RecipeDetailPage />,
+        element: (
+          <AuthLayout>
+            <RecipeDetailPage />
+          </AuthLayout>
+        ),
       },
       {
         path: PATH.SEARCH,
@@ -59,25 +59,42 @@ const router = createBrowserRouter([
       },
       {
         path: PATH.MEMBER,
-        element: <MemberPage />,
+        element: (
+          <AuthLayout>
+            <MemberPage />
+          </AuthLayout>
+        ),
       },
       {
         path: `${PATH.MEMBER}/modify`,
-        element: <MemberModifyPage />,
+        element: (
+          <AuthLayout>
+            <MemberModifyPage />
+          </AuthLayout>
+        ),
       },
       {
         path: `${PATH.MEMBER}/review`,
-        element: <MemberReviewPage />,
+        element: (
+          <AuthLayout>
+            <MemberReviewPage />
+          </AuthLayout>
+        ),
       },
       {
         path: `${PATH.MEMBER}/recipe`,
-        element: <MemberRecipePage />,
+        element: (
+          <AuthLayout>
+            <MemberRecipePage />
+          </AuthLayout>
+        ),
       },
     ],
   },
   {
     path: '/',
-    element: <App layout="auth" />,
+    element: <App layout="minimal" />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: PATH.LOGIN,
@@ -91,7 +108,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App layout="detail" />,
+    element: <App layout="headerOnly" />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,

@@ -19,3 +19,7 @@ logging:
 
 image:
   path:
+
+kakao:
+  rest-api-key: { LOCAL_REST_API_KEY }
+  redirect-uri: { LOCAL_REDIRECT_URI }

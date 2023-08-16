@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspendedInfiniteQuery } from '..';
 
 import { searchApi } from '@/apis';
 import type { ProductSearchAutocompleteResponse } from '@/types/response';
@@ -11,16 +11,17 @@ const fetchProductSearchAutocomplete = async (query: string, page: number) => {
 };
 
 const useInfiniteProductSearchAutocompleteQuery = (query: string) => {
-  return useInfiniteQuery({
-    queryKey: ['search', 'products', query],
-    queryFn: ({ pageParam = 0 }) => fetchProductSearchAutocomplete(query, pageParam),
-    getNextPageParam: (prevResponse: ProductSearchAutocompleteResponse) => {
-      const isLast = prevResponse.page.lastPage;
-      const nextPage = prevResponse.page.requestPage + 1;
-      return isLast ? undefined : nextPage;
-    },
-    suspense: true,
-  });
+  return useSuspendedInfiniteQuery(
+    ['search', 'products', query],
+    ({ pageParam = 0 }) => fetchProductSearchAutocomplete(query, pageParam),
+    {
+      getNextPageParam: (prevResponse: ProductSearchAutocompleteResponse) => {
+        const isLast = prevResponse.page.lastPage;
+        const nextPage = prevResponse.page.requestPage + 1;
+        return isLast ? undefined : nextPage;
+      },
+    }
+  );
 };
 
 export default useInfiniteProductSearchAutocompleteQuery;

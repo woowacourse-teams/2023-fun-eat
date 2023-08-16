@@ -1,13 +1,23 @@
-import { BottomSheet, Button, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { BottomSheet, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ScrollButton, SortButton, SortOptionList, SvgIcon } from '@/components/Common';
-import { RecipeList } from '@/components/Recipe';
+import {
+  ErrorBoundary,
+  ErrorComponent,
+  Loading,
+  RegisterButton,
+  ScrollButton,
+  SortButton,
+  SortOptionList,
+  SvgIcon,
+} from '@/components/Common';
+import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
+import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useSortOption } from '@/hooks/common';
-import { useMemberValueContext } from '@/hooks/context';
 
 const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
@@ -17,8 +27,7 @@ const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-
-  const member = useMemberValueContext();
+  const { reset } = useQueryErrorResetBoundary();
 
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
@@ -38,24 +47,21 @@ const RecipePage = () => {
       <SearchPageLink as={RouterLink} to="/search">
         <SvgIcon variant="search" />
       </SearchPageLink>
-      <SortButtonWrapper>
-        <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-      </SortButtonWrapper>
-      <RecipeList selectedOption={selectedOption} />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <SortButtonWrapper>
+            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+          </SortButtonWrapper>
+          <RecipeList selectedOption={selectedOption} />
+        </Suspense>
+      </ErrorBoundary>
       <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
-        <RecipeRegisterButton
-          type="button"
-          customWidth="100%"
-          customHeight="60px"
-          color={member ? 'primary' : 'gray3'}
-          textColor={member ? 'default' : 'white'}
-          size="lg"
-          weight="bold"
+        <RegisterButton
+          activeLabel={REGISTER_RECIPE}
+          disabledLabel={REGISTER_RECIPE_AFTER_LOGIN}
           onClick={handleOpenRegisterRecipeSheet}
-        >
-          {member ? REGISTER_RECIPE : REGISTER_RECIPE_AFTER_LOGIN}
-        </RecipeRegisterButton>
+        />
       </RecipeRegisterButtonWrapper>
       <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
@@ -66,8 +72,11 @@ const RecipePage = () => {
             selectSortOption={selectSortOption}
             close={handleCloseBottomSheet}
           />
-        ) : null}
-        {/*폼 추가되면 여기에 들어갈 예정*/}
+        ) : (
+          <RecipeFormProvider>
+            <RecipeRegisterForm closeRecipeDialog={handleCloseBottomSheet} />
+          </RecipeFormProvider>
+        )}
       </BottomSheet>
     </>
   );
@@ -102,8 +111,4 @@ const RecipeRegisterButtonWrapper = styled.div`
   @media screen and (min-width: 600px) {
     left: calc(50% - 280px);
   }
-`;
-
-const RecipeRegisterButton = styled(Button)`
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

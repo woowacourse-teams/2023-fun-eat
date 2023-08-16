@@ -1,15 +1,24 @@
 import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import type { MouseEventHandler } from 'react';
 import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
-import { RecommendList, SearchResultList } from '@/components/Search';
+import { RecommendList, ProductSearchResultList, RecipeSearchResultList } from '@/components/Search';
+import { SEARCH_PAGE_TABS } from '@/constants';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
 const SearchPage = () => {
   const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
+  const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
+  const { reset } = useQueryErrorResetBoundary();
+
+  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
+    setSelectedTabMenu(event.currentTarget.value);
+  };
 
   useDebounce(
     () => {
@@ -37,7 +46,7 @@ const SearchPage = () => {
         </form>
         {!isSubmitted && debouncedSearchQuery && (
           <RecommendWrapper>
-            <ErrorBoundary fallback={ErrorComponent}>
+            <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
               <Suspense fallback={<Loading />}>
                 <RecommendList searchQuery={debouncedSearchQuery} />
               </Suspense>
@@ -46,20 +55,30 @@ const SearchPage = () => {
         )}
       </SearchSection>
       <Spacing size={20} />
-      <TabMenu tabMenus={['상품', '꿀조합']} />
+      <TabMenu
+        tabMenus={SEARCH_PAGE_TABS}
+        selectedTabMenu={selectedTabMenu}
+        handleTabMenuSelect={handleTabMenuSelect}
+      />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
-          <ErrorBoundary fallback={ErrorComponent}>
-            <Suspense fallback={<Loading />}>
-              <Heading as="h2" size="lg" weight="regular">
-                <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
-              </Heading>
-              <Spacing size={20} />
-              <SearchResultList searchQuery={debouncedSearchQuery} />
-            </Suspense>
-          </ErrorBoundary>
+          <>
+            <Heading as="h2" size="lg" weight="regular">
+              <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
+            </Heading>
+            <ErrorBoundary fallback={ErrorComponent}>
+              <Suspense fallback={<Loading />}>
+                <Spacing size={20} />
+                {selectedTabMenu === SEARCH_PAGE_TABS[0] ? (
+                  <ProductSearchResultList searchQuery={debouncedSearchQuery} />
+                ) : (
+                  <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
+                )}
+              </Suspense>
+            </ErrorBoundary>
+          </>
         ) : (
-          <Text>상품을 검색해보세요.</Text>
+          <Text>{selectedTabMenu}을 검색해보세요.</Text>
         )}
       </SearchResultSection>
     </>

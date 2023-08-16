@@ -9,6 +9,7 @@ import {
   rankingHandlers,
   memberHandlers,
   recipeHandlers,
+  searchHandlers,
 } from '../src/mocks/handlers';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -51,6 +52,7 @@ const preview: Preview = {
         ...rankingHandlers,
         ...memberHandlers,
         ...recipeHandlers,
+        ...searchHandlers,
       ],
     },
   },

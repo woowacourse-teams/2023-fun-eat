@@ -15,6 +15,10 @@ spring:
 image:
   path: { PROD_IMAGE_PATH }
 
+kakao:
+  rest-api-key: { PROD_REST_API_KEY }
+  redirect-uri: { PROD_REDIRECT_URI }
+
 management:
   endpoints:
     enabled-by-default: false
