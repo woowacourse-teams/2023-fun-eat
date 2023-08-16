@@ -288,6 +288,35 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     class getRecipeDetail_실패_테스트 {
 
         @Test
+        void 로그인_하지않은_사용자가_레시피_상세_조회시_예외가_발생한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds = 상품_아이디_변환(product1, product2, product3);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            final var createRequest = 레시피추가요청_생성(productIds);
+            final var images = 여러_사진_요청(3);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+
+            // when
+            final var response = 레시피_상세_정보_요청(null, recipeId);
+
+            // then
+            final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
+            final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
+
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @Test
         void 존재하지_않는_레시피_사용자가_레시피_상세_조회시_예외가_발생한다() {
             // given
             final var notExistRecipeId = 99999L;
