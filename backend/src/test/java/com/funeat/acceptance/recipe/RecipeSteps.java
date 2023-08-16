@@ -44,6 +44,16 @@ public class RecipeSteps {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 레시피_목록_요청(final String sortType, final String sortOrderType, final int page) {
+        return given()
+                .queryParam("sort", sortType + "," + sortOrderType)
+                .queryParam("page", page)
+                .when()
+                .get("/api/recipes")
+                .then()
+                .extract();
+    }
+
     public static List<MultiPartSpecification> 여러_사진_요청(final int count) {
         return IntStream.range(0, count)
                 .mapToObj(i -> new MultiPartSpecBuilder("image".getBytes())
