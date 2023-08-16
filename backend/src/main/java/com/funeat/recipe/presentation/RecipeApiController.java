@@ -3,6 +3,7 @@ package com.funeat.recipe.presentation;
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.application.RecipeService;
+import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
@@ -64,5 +65,12 @@ public class RecipeApiController implements RecipeController {
         recipeService.likeRecipe(loginInfo.getId(), recipeId, request);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/ranks/recipes")
+    public ResponseEntity<RankingRecipesResponse> getRankingRecipes() {
+        final RankingRecipesResponse response = recipeService.getTop3Recipes();
+
+        return ResponseEntity.ok(response);
     }
 }

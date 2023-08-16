@@ -21,6 +21,9 @@ import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
+import com.funeat.recipe.dto.RankingRecipeDto;
+import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeAuthorDto;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
@@ -33,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +45,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional(readOnly = true)
 public class RecipeService {
+
+    private static final int THREE = 3;
+    private static final int TOP = 0;
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -157,5 +164,18 @@ public class RecipeService {
     private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
         final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
         return recipeFavoriteRepository.save(recipeFavorite);
+    }
+
+    public RankingRecipesResponse getTop3Recipes() {
+        final List<Recipe> recipes = recipeRepository.findRecipesByOrderByFavoriteCountDesc(PageRequest.of(TOP, THREE));
+
+        final List<RankingRecipeDto> dtos = recipes.stream()
+                .map(recipe -> {
+                    final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
+                    final RecipeAuthorDto author = RecipeAuthorDto.toDto(recipe.getMember());
+                    return RankingRecipeDto.toDto(recipe, findRecipeImages, author);
+                })
+                .collect(Collectors.toList());
+        return RankingRecipesResponse.toResponse(dtos);
     }
 }
