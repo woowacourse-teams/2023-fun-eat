@@ -1,4 +1,4 @@
-import type { ChangeEventHandler, FormEventHandler } from 'react';
+import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 'react';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -33,7 +33,15 @@ const useSearch = () => {
     setSearchParams({ query: trimmedSearchQuery });
   };
 
-  return { searchQuery, isSubmitted, handleSearchQuery, handleSearch };
+  const handleSearchClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    const { value } = event.currentTarget;
+
+    setSearchQuery(value);
+    setIsSubmitted(true);
+    setSearchParams({ query: value });
+  };
+
+  return { searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick };
 };
 
 export default useSearch;

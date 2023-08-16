@@ -15,7 +15,7 @@ const getInputPlaceholder = (tabMenu: string) =>
   isProductSearchTab(tabMenu) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
 
 const SearchPage = () => {
-  const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
+  const { searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
   const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
   const { reset } = useQueryErrorResetBoundary();
@@ -60,7 +60,7 @@ const SearchPage = () => {
           <RecommendWrapper>
             <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
               <Suspense fallback={<Loading />}>
-                <RecommendList searchQuery={debouncedSearchQuery} />
+                <RecommendList searchQuery={debouncedSearchQuery} handleSearchClick={handleSearchClick} />
               </Suspense>
             </ErrorBoundary>
           </RecommendWrapper>
