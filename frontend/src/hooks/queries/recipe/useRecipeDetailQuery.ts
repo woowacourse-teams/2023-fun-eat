@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '..';
 
 import { recipeApi } from '@/apis';
 import type { RecipeDetail } from '@/types/recipe';
@@ -10,10 +10,7 @@ const fetchRecipeDetail = async (recipeId: number) => {
 };
 
 const useRecipeDetailQuery = (recipeId: number) => {
-  return useQuery({
-    queryKey: ['recipeDetail', recipeId],
-    queryFn: () => fetchRecipeDetail(recipeId),
-  });
+  return useSuspendedQuery(['recipeDetail', recipeId], () => fetchRecipeDetail(recipeId));
 };
 
 export default useRecipeDetailQuery;

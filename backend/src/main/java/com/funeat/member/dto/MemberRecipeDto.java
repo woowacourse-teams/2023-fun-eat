@@ -1,8 +1,6 @@
 package com.funeat.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.funeat.product.domain.Product;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
@@ -18,16 +16,16 @@ public class MemberRecipeDto {
     private final LocalDateTime createdAt;
     private final String image;
     private final Long favoriteCount;
-    private final List<String> products;
+    private final List<MemberRecipeProductDto> products;
 
     private MemberRecipeDto(final Long id, final String title, final String content, final LocalDateTime createdAt,
-                            final Long favoriteCount, final List<String> products) {
+                            final Long favoriteCount, final List<MemberRecipeProductDto> products) {
         this(id, title, content, createdAt, null, favoriteCount, products);
     }
 
     @JsonCreator
     private MemberRecipeDto(final Long id, final String title, final String content, final LocalDateTime createdAt,
-                            final String image, final Long favoriteCount, final List<String> products) {
+                            final String image, final Long favoriteCount, final List<MemberRecipeProductDto> products) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -38,17 +36,13 @@ public class MemberRecipeDto {
     }
 
     public static MemberRecipeDto toDto(final Recipe recipe, final List<RecipeImage> findRecipeImages,
-                                        final List<Product> products) {
-        final List<String> productNames = products.stream()
-                .map(Product::getName)
-                .collect(Collectors.toList());
-
+                                        final List<MemberRecipeProductDto> memberRecipeProductDtos) {
         if (findRecipeImages.isEmpty()) {
             return new MemberRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getContent(), recipe.getCreatedAt(),
-                    recipe.getFavoriteCount(), productNames);
+                    recipe.getFavoriteCount(), memberRecipeProductDtos);
         }
         return new MemberRecipeDto(recipe.getId(), recipe.getTitle(), recipe.getContent(), recipe.getCreatedAt(),
-                findRecipeImages.get(0).getImage(), recipe.getFavoriteCount(), productNames);
+                findRecipeImages.get(0).getImage(), recipe.getFavoriteCount(), memberRecipeProductDtos);
     }
 
     public Long getId() {
@@ -75,7 +69,7 @@ public class MemberRecipeDto {
         return favoriteCount;
     }
 
-    public List<String> getProducts() {
+    public List<MemberRecipeProductDto> getProducts() {
         return products;
     }
 }

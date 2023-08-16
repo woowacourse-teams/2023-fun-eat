@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
-import { RecommendList, SearchedList } from '@/components/Search';
+import { RecommendList, SearchResultList } from '@/components/Search';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
@@ -58,7 +58,7 @@ const SearchPage = () => {
             <Spacing size={20} />
             <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
               <Suspense fallback={<Loading />}>
-                <SearchedList searchQuery={debouncedSearchQuery} />
+                <SearchResultList searchQuery={debouncedSearchQuery} />
               </Suspense>
             </ErrorBoundary>
           </>

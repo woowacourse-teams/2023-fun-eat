@@ -78,7 +78,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
       </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
-        <ProductOverviewItem name={productDetail?.name} image={productDetail?.image} />
+        <ProductOverviewItem name={productDetail.name} image={productDetail.image} />
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>

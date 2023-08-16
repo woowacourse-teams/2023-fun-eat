@@ -14,8 +14,9 @@ import {
   SvgIcon,
 } from '@/components/Common';
 import RegisterButton from '@/components/Common/RegisterButton/RegisterButton';
-import { RecipeList } from '@/components/Recipe';
+import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
+import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useSortOption } from '@/hooks/common';
 
 const RECIPE_PAGE_TITLE = '🍯 꿀조합';
@@ -51,7 +52,7 @@ const RecipePage = () => {
           <SortButtonWrapper>
             <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
           </SortButtonWrapper>
-          <RecipeList />
+          <RecipeList selectedOption={selectedOption} />
         </Suspense>
       </ErrorBoundary>
       <Spacing size={80} />
@@ -71,8 +72,11 @@ const RecipePage = () => {
             selectSortOption={selectSortOption}
             close={handleCloseBottomSheet}
           />
-        ) : null}
-        {/*폼 추가되면 여기에 들어갈 예정*/}
+        ) : (
+          <RecipeFormProvider>
+            <RecipeRegisterForm closeRecipeDialog={handleCloseBottomSheet} />
+          </RecipeFormProvider>
+        )}
       </BottomSheet>
     </>
   );

@@ -14,11 +14,7 @@ interface ReviewTagListProps {
 
 const ReviewTagList = ({ selectedTags }: ReviewTagListProps) => {
   const { data: tagsData } = useReviewTagsQuery();
-  const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData ?? [], MIN_DISPLAYED_TAGS_LENGTH);
-
-  if (!tagsData) {
-    return null;
-  }
+  const { minDisplayedTags, canShowMore, showMoreTags } = useDisplayTag(tagsData, MIN_DISPLAYED_TAGS_LENGTH);
 
   return (
     <ReviewTagListContainer>

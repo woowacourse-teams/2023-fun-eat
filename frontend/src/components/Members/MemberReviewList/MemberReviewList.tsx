@@ -14,11 +14,12 @@ interface MemberReviewListProps {
 const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { fetchNextPage, hasNextPage, data } = useInfiniteMemberReviewQuery();
+  const memberReviews = data.pages.flatMap((page) => page.reviews);
+  const reviewsToDisplay = useDisplaySlice(isMemberPage, memberReviews);
+
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  const memberReviews = data?.pages.flatMap((page) => page.reviews);
-  const reviewsToDisplay = useDisplaySlice(isMemberPage, memberReviews);
-  const totalReviewCount = data?.pages.flatMap((page) => page.page.totalDataCount);
+  const totalReviewCount = data.pages[0].page.totalDataCount;
 
   if (memberReviews?.length === 0) {
     return <Text>앗, 작성한 리뷰가 없어요</Text>;
@@ -33,7 +34,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
       )}
       <Spacing size={20} />
       <MemberReviewListWrapper>
-        {reviewsToDisplay?.map((reviewRanking) => (
+        {reviewsToDisplay.map((reviewRanking) => (
           <li key={reviewRanking.reviewId}>
             <ReviewRankingItem reviewRanking={reviewRanking} />
           </li>

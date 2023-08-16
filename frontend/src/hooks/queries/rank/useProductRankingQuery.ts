@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '..';
 
 import { rankApi } from '@/apis';
 import type { ProductRankingResponse } from '@/types/response';
@@ -10,10 +10,7 @@ const fetchProductRanking = async () => {
 };
 
 const useProductRankingQuery = () => {
-  return useQuery({
-    queryKey: ['productRanking'],
-    queryFn: () => fetchProductRanking(),
-  });
+  return useSuspendedQuery(['ranking', 'product'], () => fetchProductRanking());
 };
 
 export default useProductRankingQuery;

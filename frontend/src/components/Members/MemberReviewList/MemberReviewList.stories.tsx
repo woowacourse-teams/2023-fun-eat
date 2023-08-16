@@ -1,17 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import mockMemberReview from '@/mocks/data/profileReviews.json';
-import MemberReview from '@/pages/MemberReviewPage';
+import MemberReviewList from './MemberReviewList';
 
-const meta: Meta<typeof MemberReview> = {
-  title: 'members/MemberReview',
-  component: MemberReview,
-  args: {
-    member: mockMemberReview,
-  },
+const meta: Meta<typeof MemberReviewList> = {
+  title: 'members/MemberReviewList',
+  component: MemberReviewList,
 };
 
 export default meta;
-type Story = StoryObj<typeof MemberReview>;
+type Story = StoryObj<typeof MemberReviewList>;
 
 export const Default: Story = {};

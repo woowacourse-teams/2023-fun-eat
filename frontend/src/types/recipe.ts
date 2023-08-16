@@ -20,14 +20,26 @@ export interface RecipeDetail extends Recipe {
   totalPrice: number;
   favorite: boolean;
 }
-export interface Recipe {
+
+export interface BaseRecipe {
   id: number;
   image: string;
   title: string;
+  createdAt: string;
+  favoriteCount: number;
+}
+
+export interface Recipe extends BaseRecipe {
   author: Member;
   products: RecipeProductWithPrice[];
-  favoriteCount: number;
-  createdAt: string;
+}
+
+export interface MemberRecipe extends BaseRecipe {
+  products: RecipeProduct[];
+}
+
+export interface RecipeFavoriteRequestBody {
+  favorite: boolean;
 }
 
 type RecipeProductWithPrice = Pick<Product, 'id' | 'name' | 'price'>;

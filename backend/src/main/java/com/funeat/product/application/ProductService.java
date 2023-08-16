@@ -12,6 +12,10 @@ import com.funeat.product.dto.ProductReviewCountDto;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
+import com.funeat.product.dto.SearchProductDto;
+import com.funeat.product.dto.SearchProductResultDto;
+import com.funeat.product.dto.SearchProductResultsResponse;
+import com.funeat.product.dto.SearchProductsResponse;
 import com.funeat.product.exception.CategoryException.CategoryNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
@@ -92,5 +96,27 @@ public class ProductService {
                 .collect(Collectors.toList());
 
         return RankingProductsResponse.toResponse(rankingProductDtos);
+    }
+
+    public SearchProductsResponse searchProducts(final String query, final Pageable pageable) {
+        final Page<Product> products = productRepository.findAllByNameContaining(query, pageable);
+
+        final PageDto pageDto = PageDto.toDto(products);
+        final List<SearchProductDto> productDtos = products.stream()
+                .map(SearchProductDto::toDto)
+                .collect(Collectors.toList());
+
+        return SearchProductsResponse.toResponse(pageDto, productDtos);
+    }
+
+    public SearchProductResultsResponse getSearchResults(final String query, final Pageable pageable) {
+        final Page<ProductReviewCountDto> products = productRepository.findAllWithReviewCountByNameContaining(query, pageable);
+
+        final PageDto pageDto = PageDto.toDto(products);
+        final List<SearchProductResultDto> resultDtos = products.stream()
+                .map(it -> SearchProductResultDto.toDto(it.getProduct(), it.getReviewCount()))
+                .collect(Collectors.toList());
+
+        return SearchProductResultsResponse.toResponse(pageDto, resultDtos);
     }
 }

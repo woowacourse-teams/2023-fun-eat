@@ -6,46 +6,42 @@ import styled from 'styled-components';
 import { ProductItem } from '@/components/Product';
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
-import { useInfiniteSearchedProductsQuery } from '@/hooks/queries/search';
+import { useInfiniteProductSearchResultsQuery } from '@/hooks/queries/search';
 
-interface SearchedListProps {
+interface SearchResultListProps {
   searchQuery: string;
 }
 
-const SearchedList = ({ searchQuery }: SearchedListProps) => {
-  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteSearchedProductsQuery(searchQuery);
+const SearchResultList = ({ searchQuery }: SearchResultListProps) => {
+  const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchResultsQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
-
-  if (!searchResponse) {
-    return null;
-  }
 
   const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
-    return <Text>앗! 아무것도 없네요</Text>;
+    return <Text>검색한 상품을 찾을 수 없습니다.</Text>;
   }
 
   return (
     <>
-      <SearchedListContainer>
+      <SearchResultListContainer>
         {products.map((product) => (
           <li key={product.id}>
-            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/food/${product.id}`}>
+            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${product.categoryType}/${product.id}`}>
               <ProductItem product={product} />
             </Link>
           </li>
         ))}
-      </SearchedListContainer>
+      </SearchResultListContainer>
       <div ref={scrollRef} aria-hidden />
     </>
   );
 };
 
-export default SearchedList;
+export default SearchResultList;
 
-const SearchedListContainer = styled.ul`
+const SearchResultListContainer = styled.ul`
   display: flex;
   flex-direction: column;
 

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import ReviewItem from '../ReviewItem/ReviewItem';
 
+import { Loading } from '@/components/Common';
 import { useIntersectionObserver } from '@/hooks/common';
 import { useInfiniteProductReviewsQuery } from '@/hooks/queries/product';
 import type { SortOption } from '@/types/common';
@@ -14,14 +15,12 @@ interface ReviewListProps {
 }
 
 const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
+  const { fetchNextPage, hasNextPage, data, isFetchingNextPage } = useInfiniteProductReviewsQuery(
+    productId,
+    selectedOption.value
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const { fetchNextPage, hasNextPage, data } = useInfiniteProductReviewsQuery(productId, selectedOption.value);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
-
-  if (!data) {
-    return null;
-  }
 
   const reviews = data.pages.flatMap((page) => page.reviews);
 
@@ -39,6 +38,7 @@ const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
         ))}
       </ReviewListContainer>
       <div ref={scrollRef} aria-hidden />
+      {isFetchingNextPage && <Loading />}
     </>
   );
 };
