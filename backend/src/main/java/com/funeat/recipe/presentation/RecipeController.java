@@ -2,6 +2,7 @@ package com.funeat.recipe.presentation;
 
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
+import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
@@ -60,4 +61,12 @@ public interface RecipeController {
     ResponseEntity<Void> likeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
                                     @PathVariable final Long recipeId,
                                     @RequestBody RecipeFavoriteRequest request);
+
+    @Operation(summary = "꿀조합 랭킹 조회", description = "전체 꿀조합들 중에서 랭킹 TOP3를 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "꿀조합 랭킹 조회 성공."
+    )
+    @GetMapping
+    ResponseEntity<RankingRecipesResponse> getRankingRecipes();
 }
