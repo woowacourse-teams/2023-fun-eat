@@ -100,7 +100,7 @@ public class ReviewService {
     public void likeReview(final Long reviewId, final Long memberId, final ReviewFavoriteRequest request) {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-        final Review findReview = reviewRepository.findById(reviewId)
+        final Review findReview = reviewRepository.findByIdForUpdate(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
 
         final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
