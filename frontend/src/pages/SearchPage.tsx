@@ -10,6 +10,10 @@ import { SEARCH_PAGE_TABS } from '@/constants';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
+const isProductSearchTab = (tabMenu: string) => tabMenu === SEARCH_PAGE_TABS[0];
+const getInputPlaceholder = (tabMenu: string) =>
+  isProductSearchTab(tabMenu) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
+
 const SearchPage = () => {
   const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
@@ -41,7 +45,7 @@ const SearchPage = () => {
         <form onSubmit={handleSearch}>
           <Input
             customWidth="100%"
-            placeholder="상품 이름을 검색해보세요."
+            placeholder={getInputPlaceholder(selectedTabMenu)}
             rightIcon={
               <Button customHeight="36px" color="white">
                 <SvgIcon variant="search" />
@@ -77,7 +81,7 @@ const SearchPage = () => {
             <ErrorBoundary fallback={ErrorComponent}>
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
-                {selectedTabMenu === SEARCH_PAGE_TABS[0] ? (
+                {isProductSearchTab(selectedTabMenu) ? (
                   <ProductSearchResultList searchQuery={debouncedSearchQuery} />
                 ) : (
                   <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
