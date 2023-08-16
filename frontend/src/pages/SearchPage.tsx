@@ -108,7 +108,6 @@ const RecommendWrapper = styled.div`
   top: 100%;
   left: 0;
   right: 0;
-  height: fit-content;
   max-height: 150px;
   padding: 10px 0;
   background-color: ${({ theme }) => theme.backgroundColors.default};
