@@ -38,5 +38,9 @@ export interface MemberRecipe extends BaseRecipe {
   products: RecipeProduct[];
 }
 
+export interface RecipeFavoriteRequestBody {
+  favorite: boolean;
+}
+
 type RecipeProductWithPrice = Pick<Product, 'id' | 'name' | 'price'>;
 export type RecipeProduct = Omit<RecipeProductWithPrice, 'price'>;
