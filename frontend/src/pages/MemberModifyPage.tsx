@@ -6,27 +6,16 @@ import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
 import { useFormData, useImageUploader } from '@/hooks/common';
-import { useMemberValueContext } from '@/hooks/context';
-import { useMemberModifyMutation } from '@/hooks/queries/members';
+import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
+  const { data: member } = useMemberQuery();
   const { previewImage, imageFile, uploadImage } = useImageUploader();
-  const member = useMemberValueContext();
-  const [nickname, setNickname] = useState(member?.nickname);
-  const [profileImage, _] = useState(member?.profileImage);
-
-  const navigate = useNavigate();
-
-  if (!nickname) {
-    return;
-  }
-
+  const [nickname, setNickname] = useState(member?.nickname ?? '');
   const { mutate } = useMemberModifyMutation();
 
-  const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setNickname(event.target.value);
-  };
+  const navigate = useNavigate();
 
   const formData = useFormData<MemberRequest>({
     imageKey: 'image',
@@ -34,6 +23,14 @@ const MemberModifyPage = () => {
     formContentKey: 'memberRequest',
     formContent: { nickname },
   });
+
+  if (!member) {
+    return null;
+  }
+
+  const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setNickname(event.target.value);
+  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -50,7 +47,7 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                <ProfileImage src={previewImage || profileImage} alt="업로드한 사진" width={80} />
+                <ProfileImage src={previewImage || member.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
                 <input type="file" accept="image/*" onChange={uploadImage} />
