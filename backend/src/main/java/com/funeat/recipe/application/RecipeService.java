@@ -24,6 +24,8 @@ import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+import com.funeat.recipe.dto.SearchRecipeResultDto;
+import com.funeat.recipe.dto.SearchRecipeResultsResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
@@ -140,5 +142,19 @@ public class RecipeService {
     private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
         final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
         return recipeFavoriteRepository.save(recipeFavorite);
+    }
+
+    public SearchRecipeResultsResponse getSearchResults(final String query, final Pageable pageable) {
+        final Page<Recipe> recipePages = recipeRepository.findAllByProductNameContaining(query, pageable);
+
+        final PageDto page = PageDto.toDto(recipePages);
+        final List<SearchRecipeResultDto> dtos = recipePages.stream()
+                .map(recipe -> {
+                    final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
+                    final List<Product> productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                    return SearchRecipeResultDto.toDto(recipe, findRecipeImages, productsByRecipe);
+                })
+                .collect(Collectors.toList());
+        return SearchRecipeResultsResponse.toResponse(page, dtos);
     }
 }
