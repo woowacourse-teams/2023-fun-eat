@@ -14,6 +14,7 @@ import {
   ErrorBoundary,
   ErrorComponent,
   RegisterButton,
+  SectionTitle,
 } from '@/components/Common';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
@@ -22,6 +23,7 @@ import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useSortOption } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
+import { useProductDetailQuery } from '@/hooks/queries/product';
 
 const LOGIN_ERROR_MESSAGE =
   '로그인 해야 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
@@ -35,7 +37,9 @@ const ProductDetailPage = () => {
   const { data: member } = useMemberQuery();
   const { reset } = useQueryErrorResetBoundary();
 
-  const tabMenus = getProductDetailPageTabMenus(10);
+  const { data: productDetail } = useProductDetailQuery(Number(productId));
+
+  const tabMenus = getProductDetailPageTabMenus(productDetail.reviewCount);
   const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
@@ -57,9 +61,10 @@ const ProductDetailPage = () => {
 
   return (
     <>
-      <ProductDetailItem productId={Number(productId)} />
+      <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      {/* 나중에 API 수정하면 이 부분도 같이 수정해주세요 */}
+      <ProductDetailItem productDetail={productDetail} />
+      <Spacing size={36} />
       <TabMenu
         ref={tabRef}
         tabMenus={tabMenus}
