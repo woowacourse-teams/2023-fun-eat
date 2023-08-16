@@ -60,14 +60,14 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOT_FOUND, memberId));
 
         final String nickname = request.getNickname();
-        final String profileImage = image.getOriginalFilename();
+        final String newImageName = imageService.getRandomImageName(image);
 
-        if (findMember.isSameImage(profileImage)) {
-            findMember.modifyProfile(nickname, profileImage);
+        if (findMember.isSameImage(image.getOriginalFilename())) {
+            findMember.modifyProfile(nickname, image.getOriginalFilename());
             return;
         }
-        findMember.modifyProfile(nickname, profileImage);
-        imageService.upload(image);
+        findMember.modifyProfile(nickname, newImageName);
+        imageService.upload(image, newImageName);
     }
 
     private void checkExistImage(final MultipartFile image) {
