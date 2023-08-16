@@ -31,8 +31,19 @@ const MemberModifyPage = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await mutate(formData);
-    navigate('/members');
+    mutate(formData, {
+      onSuccess: () => {
+        navigate('/members');
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
+
+        alert('회원정보 수정을 다시 시도해주세요.');
+      },
+    });
   };
 
   return (
