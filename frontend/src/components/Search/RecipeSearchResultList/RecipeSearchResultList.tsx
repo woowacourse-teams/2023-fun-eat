@@ -17,10 +17,6 @@ const RecipeSearchResultList = ({ searchQuery }: RecipeSearchResultListProps) =>
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!searchResponse) {
-    return null;
-  }
-
   const recipes = searchResponse.pages.flatMap((page) => page.recipes);
 
   if (recipes.length === 0) {

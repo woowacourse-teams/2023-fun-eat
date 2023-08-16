@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspendedInfiniteQuery } from '..';
 
 import { searchApi } from '@/apis';
 import type { RecipeResponse } from '@/types/response';
@@ -11,16 +11,17 @@ const fetchRecipeSearchResults = async (query: string, page: number) => {
 };
 
 const useInfiniteRecipeSearchResultsQuery = (query: string) => {
-  return useInfiniteQuery({
-    queryKey: ['search', 'recipes', query],
-    queryFn: ({ pageParam = 0 }) => fetchRecipeSearchResults(query, pageParam),
-    getNextPageParam: (prevResponse: RecipeResponse) => {
-      const isLast = prevResponse.page.lastPage;
-      const nextPage = prevResponse.page.requestPage + 1;
-      return isLast ? undefined : nextPage;
-    },
-    suspense: true,
-  });
+  return useSuspendedInfiniteQuery(
+    ['search', 'recipes', query],
+    ({ pageParam = 0 }) => fetchRecipeSearchResults(query, pageParam),
+    {
+      getNextPageParam: (prevResponse: RecipeResponse) => {
+        const isLast = prevResponse.page.lastPage;
+        const nextPage = prevResponse.page.requestPage + 1;
+        return isLast ? undefined : nextPage;
+      },
+    }
+  );
 };
 
 export default useInfiniteRecipeSearchResultsQuery;
