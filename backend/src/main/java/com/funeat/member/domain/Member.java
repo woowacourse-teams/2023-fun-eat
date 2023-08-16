@@ -1,9 +1,13 @@
 package com.funeat.member.domain;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_UPDATE_ERROR;
+
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
+import com.funeat.member.exception.MemberException.MemberUpdateException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -63,7 +67,14 @@ public class Member {
     }
 
     public void modifyProfile(final String nickname, final String profileImage) {
+        if (Objects.isNull(nickname) || Objects.isNull(profileImage)) {
+            throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
+        }
         this.nickname = nickname;
         this.profileImage = profileImage;
+    }
+
+    public boolean isSameImage(final String profileImage) {
+        return profileImage.equals(profileImage);
     }
 }

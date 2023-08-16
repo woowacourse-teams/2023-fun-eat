@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
-import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
@@ -55,13 +54,5 @@ public class ReviewSteps {
                 .get("/api/ranks/reviews")
                 .then()
                 .extract();
-    }
-
-    public static MultiPartSpecification 리뷰_사진_명세_요청() {
-        return new MultiPartSpecBuilder("image".getBytes())
-                .fileName("testImage.png")
-                .controlName("image")
-                .mimeType("image/png")
-                .build();
     }
 }

@@ -1,7 +1,9 @@
 package com.funeat.member.domain;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.funeat.member.exception.MemberException.MemberUpdateException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -47,12 +49,9 @@ public class MemberTest {
 
             final var expectedProfileImage = "http://www.after.com";
 
-            // when
-            member.modifyProfile(null, expectedProfileImage);
-            final var actualNickname = member.getNickname();
-            final var actualProfileImage = member.getProfileImage();
-
-            // then
+            // when & then
+            assertThatThrownBy(() -> member.modifyProfile(null, expectedProfileImage))
+                    .isInstanceOf(MemberUpdateException.class);
         }
 
         @Test
@@ -62,12 +61,9 @@ public class MemberTest {
 
             final var expectedNickname = "after";
 
-            // when
-            member.modifyProfile(expectedNickname, null);
-            final var actualNickname = member.getNickname();
-            final var actualProfileImage = member.getProfileImage();
-
-            // then
+            // when & then
+            assertThatThrownBy(() -> member.modifyProfile(expectedNickname, null))
+                    .isInstanceOf(MemberUpdateException.class);
         }
     }
 }
