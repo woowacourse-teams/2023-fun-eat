@@ -285,4 +285,39 @@ class MemberServiceTest extends ServiceTest {
             // when & then
         }
     }
+
+    @Nested
+    class findPlatformId_성공_테스트 {
+
+        @Test
+        void 사용자의_OAUTH_회원번호를_확인하다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var expected = member.getPlatformId();
+
+            // when
+            final String actual = memberService.findPlatformId(memberId);
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+    }
+
+    @Nested
+    class findPlatformId_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_사용자의_OAUTH_회원번호를_확인하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var wrongMemberId = 단일_멤버_저장(member) + 1L;
+
+            // when & then
+            assertThatThrownBy(() -> memberService.findPlatformId(wrongMemberId))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+    }
 }

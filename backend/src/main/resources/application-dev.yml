@@ -19,6 +19,7 @@ image:
 kakao:
   rest-api-key: { DEV_REST_API_KEY }
   redirect-uri: { DEV_REDIRECT_URI }
+  admin-key: { DEV_ADMIN_KEY }
 
 management:
   endpoints:

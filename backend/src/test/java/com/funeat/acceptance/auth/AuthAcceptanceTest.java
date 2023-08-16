@@ -86,12 +86,14 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         void 로그아웃을_하다() {
             // given
             final var loginCookie = 로그인_쿠키를_얻는다();
+            final var expected = "/";
 
             // when
             final var response = 로그아웃_요청(loginCookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
+            STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);
+            REDIRECT_URL을_검증한다(response, expected);
         }
     }
 
