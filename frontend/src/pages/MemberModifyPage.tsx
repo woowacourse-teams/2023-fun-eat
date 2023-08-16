@@ -1,6 +1,7 @@
 import { Button, Heading, Spacing } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
@@ -14,6 +15,8 @@ const MemberModifyPage = () => {
   const member = useMemberValueContext();
   const [nickname, setNickname] = useState(member?.nickname);
   const [profileImage, _] = useState(member?.profileImage);
+
+  const navigate = useNavigate();
 
   if (!nickname) {
     return;
@@ -36,6 +39,7 @@ const MemberModifyPage = () => {
     event.preventDefault();
 
     await mutate(formData);
+    navigate('/members');
   };
 
   return (
