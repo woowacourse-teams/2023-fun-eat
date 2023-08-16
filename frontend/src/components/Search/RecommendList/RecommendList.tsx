@@ -17,14 +17,10 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!searchResponse) {
-    return null;
-  }
-
   const products = searchResponse.pages.flatMap((page) => page.products);
 
   if (products.length === 0) {
-    return <ErrorText>검색어에 해당 하는 상품이 없습니다.</ErrorText>;
+    return <ErrorText>검색어가 포함된 상품을 찾지 못했어요</ErrorText>;
   }
 
   return (

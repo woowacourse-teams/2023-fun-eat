@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
 import { SvgSprite } from './components/Common';
-import MemberProvider from './contexts/MemberContext';
 import router from './router';
 import GlobalStyle from './styles';
 
@@ -18,19 +17,23 @@ const main = async () => {
 };
 await main();
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <MemberProvider>
-        <FunEatProvider>
-          <SvgSprite />
-          <GlobalStyle />
-          <RouterProvider router={router} />
-        </FunEatProvider>
-      </MemberProvider>
+      <FunEatProvider>
+        <SvgSprite />
+        <GlobalStyle />
+        <RouterProvider router={router} />
+      </FunEatProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>

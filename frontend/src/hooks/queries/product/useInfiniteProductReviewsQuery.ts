@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspendedInfiniteQuery } from '..';
 
 import { productApi } from '@/apis';
 import type { ProductReviewResponse } from '@/types/response';
@@ -15,15 +15,17 @@ const fetchProductReviews = async (pageParam: number, productId: number, sort: s
 };
 
 const useInfiniteProductReviewsQuery = (productId: number, sort: string) => {
-  return useInfiniteQuery({
-    queryKey: ['productReviews', productId, sort],
-    queryFn: ({ pageParam = 0 }) => fetchProductReviews(pageParam, productId, sort),
-    getNextPageParam: (prevResponse: ProductReviewResponse) => {
-      const isLast = prevResponse.page.lastPage;
-      const nextPage = prevResponse.page.requestPage + 1;
-      return isLast ? undefined : nextPage;
-    },
-  });
+  return useSuspendedInfiniteQuery(
+    ['productReviews', productId, sort],
+    ({ pageParam = 0 }) => fetchProductReviews(pageParam, productId, sort),
+    {
+      getNextPageParam: (prevResponse: ProductReviewResponse) => {
+        const isLast = prevResponse.page.lastPage;
+        const nextPage = prevResponse.page.requestPage + 1;
+        return isLast ? undefined : nextPage;
+      },
+    }
+  );
 };
 
 export default useInfiniteProductReviewsQuery;

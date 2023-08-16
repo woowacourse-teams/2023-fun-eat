@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '..';
 
 import { productApi } from '@/apis';
 import type { ProductDetail } from '@/types/product';
@@ -10,10 +10,7 @@ const fetchProductDetail = async (productId: number) => {
 };
 
 const useProductDetailQuery = (productId: number) => {
-  return useQuery({
-    queryKey: ['productDetail', productId],
-    queryFn: () => fetchProductDetail(productId),
-  });
+  return useSuspendedQuery(['productDetail', productId], () => fetchProductDetail(productId));
 };
 
 export default useProductDetailQuery;

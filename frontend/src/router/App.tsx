@@ -1,32 +1,49 @@
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthLayout, DefaultLayout, DetailLayout } from '@/components/Layout';
+import { ErrorBoundary, ErrorComponent, Loading } from '@/components/Common';
+import { MinimalLayout, DefaultLayout, HeaderOnlyLayout } from '@/components/Layout';
 
 interface AppProps {
-  layout?: 'auth' | 'detail' | 'default';
+  layout?: 'default' | 'headerOnly' | 'minimal';
 }
 
 const App = ({ layout = 'default' }: AppProps) => {
-  if (layout === 'auth') {
+  const { reset } = useQueryErrorResetBoundary();
+
+  if (layout === 'minimal') {
     return (
-      <AuthLayout>
-        <Outlet />
-      </AuthLayout>
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <MinimalLayout>
+            <Outlet />
+          </MinimalLayout>
+        </Suspense>
+      </ErrorBoundary>
     );
   }
 
-  if (layout === 'detail') {
+  if (layout === 'headerOnly') {
     return (
-      <DetailLayout>
-        <Outlet />
-      </DetailLayout>
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <HeaderOnlyLayout>
+            <Outlet />
+          </HeaderOnlyLayout>
+        </Suspense>
+      </ErrorBoundary>
     );
   }
 
   return (
-    <DefaultLayout>
-      <Outlet />
-    </DefaultLayout>
+    <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+      <Suspense fallback={<Loading />}>
+        <DefaultLayout>
+          <Outlet />
+        </DefaultLayout>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 export default App;

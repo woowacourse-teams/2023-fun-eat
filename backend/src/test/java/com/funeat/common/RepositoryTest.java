@@ -1,6 +1,7 @@
 package com.funeat.common;
 
 import com.funeat.member.domain.Member;
+import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ProductBookmarkRepository;
@@ -189,5 +190,9 @@ public abstract class RepositoryTest {
         final var productRecipes = List.of(productRecipeToSave);
 
         productRecipeRepository.saveAll(productRecipes);
+    }
+
+    protected void 레시피_좋아요_저장(final RecipeFavorite recipeFavorite) {
+        recipeFavoriteRepository.save(recipeFavorite);
     }
 }

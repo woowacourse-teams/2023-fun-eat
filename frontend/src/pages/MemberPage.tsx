@@ -1,32 +1,35 @@
 import { Spacing } from '@fun-eat/design-system';
-import { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
-import { NavigableSectionTitle } from '@/components/Common';
-import { MembersInfo, MemberReviewList } from '@/components/Members';
+import { ErrorBoundary, ErrorComponent, Loading, NavigableSectionTitle } from '@/components/Common';
+import { MembersInfo, MemberReviewList, MemberRecipeList } from '@/components/Members';
 import { PATH } from '@/constants/path';
-import { useMember } from '@/hooks/auth';
-import { useMemberValueContext } from '@/hooks/context';
 
 const MemberPage = () => {
-  const member = useMemberValueContext();
-  const getMember = useMember();
-
-  useEffect(() => {
-    getMember();
-  }, []);
-
-  if (member === null) {
-    return <Navigate to={PATH.LOGIN} replace />;
-  }
+  const { reset } = useQueryErrorResetBoundary();
 
   return (
     <>
-      <MembersInfo member={member} />
+      <Suspense fallback={<Loading />}>
+        <MembersInfo />
+      </Suspense>
       <Spacing size={40} />
       <NavigableSectionTitle title="내가 작성한 리뷰" routeDestination={`${PATH.MEMBER}/review`} />
-      <Spacing size={24} />
-      <MemberReviewList isMemberPage />
+      <Spacing size={5} />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <MemberReviewList isMemberPage />
+        </Suspense>
+      </ErrorBoundary>
+      <Spacing size={45} />
+      <NavigableSectionTitle title="내가 작성한 꿀조합" routeDestination={`${PATH.MEMBER}/recipe`} />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <MemberRecipeList isMemberPage />
+        </Suspense>
+      </ErrorBoundary>
+      <Spacing size={40} />
     </>
   );
 };

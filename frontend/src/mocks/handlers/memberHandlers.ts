@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
-import mockProfileReviews from '../data/profileReviews.json';
+import mockMemberRecipes from '../data/memberRecipes.json';
+import mockMemberReviews from '../data/memberReviews.json';
 
 export const memberHandlers = [
   rest.get('/api/members', (req, res, ctx) => {
@@ -28,10 +29,18 @@ export const memberHandlers = [
       );
     }
 
-    return res(ctx.status(403));
+    return res(ctx.status(401), ctx.json({ message: '로그인이 필요합니다.' }));
+  }),
+
+  rest.put('/api/members', (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 
   rest.get('/api/members/reviews', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockProfileReviews));
+    return res(ctx.status(200), ctx.json(mockMemberReviews));
+  }),
+
+  rest.get('/api/members/recipes', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockMemberRecipes));
   }),
 ];

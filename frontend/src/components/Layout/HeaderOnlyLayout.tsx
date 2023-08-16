@@ -3,18 +3,18 @@ import styled from 'styled-components';
 
 import Header from '../Common/Header/Header';
 
-const DetailLayout = ({ children }: PropsWithChildren) => {
+const HeaderOnlyLayout = ({ children }: PropsWithChildren) => {
   return (
-    <DetailLayoutContainer>
+    <HeaderOnlyLayoutContainer>
       <Header />
       <MainWrapper id="main">{children}</MainWrapper>
-    </DetailLayoutContainer>
+    </HeaderOnlyLayoutContainer>
   );
 };
 
-export default DetailLayout;
+export default HeaderOnlyLayout;
 
-const DetailLayoutContainer = styled.div`
+const HeaderOnlyLayoutContainer = styled.div`
   max-width: 600px;
   height: 100%;
   margin: 0 auto;

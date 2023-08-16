@@ -1,14 +1,18 @@
 import { Heading, Link, Spacing } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryMenu, SvgIcon, ScrollButton } from '@/components/Common';
+import { CategoryMenu, SvgIcon, ScrollButton, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
 
 const HomePage = () => {
+  const { reset } = useQueryErrorResetBoundary();
+
   channelTalk.loadScript();
 
   channelTalk.boot({
@@ -22,12 +26,18 @@ const HomePage = () => {
           공통 상품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuVariant="food" />
+        <Suspense fallback={null}>
+          <CategoryMenu menuVariant="food" />
+        </Suspense>
         <Spacing size={12} />
-        <ProductList category="food" isHomePage />
-        <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
-          전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
-        </ProductListRouteLink>
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
+            <ProductList category="food" isHomePage />
+            <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
+              전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
+            </ProductListRouteLink>
+          </Suspense>
+        </ErrorBoundary>
       </section>
       <Spacing size={36} />
       <section>
@@ -35,9 +45,15 @@ const HomePage = () => {
           편의점 특산품
         </Heading>
         <Spacing size={16} />
-        <CategoryMenu menuVariant="store" />
+        <Suspense fallback={null}>
+          <CategoryMenu menuVariant="store" />
+        </Suspense>
         <Spacing size={16} />
-        <PBProductList isHomePage />
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
+            <PBProductList isHomePage />
+          </Suspense>
+        </ErrorBoundary>
       </section>
       <Spacing size={36} />
       <section>
@@ -45,7 +61,11 @@ const HomePage = () => {
           👑 랭킹
         </Heading>
         <Spacing size={12} />
-        <ProductRankingList isHomePage />
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
+            <ProductRankingList isHomePage />
+          </Suspense>
+        </ErrorBoundary>
       </section>
       <Spacing size={36} />
       <section>
@@ -53,7 +73,11 @@ const HomePage = () => {
           리뷰 랭킹
         </Heading>
         <Spacing size={12} />
-        <ReviewRankingList isHomePage />
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
+            <ReviewRankingList isHomePage />
+          </Suspense>
+        </ErrorBoundary>
       </section>
       <ScrollButton />
     </>

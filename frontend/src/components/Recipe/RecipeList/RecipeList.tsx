@@ -1,4 +1,4 @@
-import { Link } from '@fun-eat/design-system';
+import { Link, Text } from '@fun-eat/design-system';
 import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -18,11 +18,11 @@ const RecipeList = ({ selectedOption }: RecipeListProps) => {
   const { fetchNextPage, hasNextPage, data } = useInfiniteRecipesQuery(selectedOption.value);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  if (!data) {
-    return null;
-  }
-
   const recipes = data.pages.flatMap((page) => page.recipes);
+
+  if (recipes.length === 0) {
+    return <Text>꿀조합을 작성해보세요</Text>;
+  }
 
   return (
     <>
