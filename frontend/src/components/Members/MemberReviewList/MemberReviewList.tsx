@@ -20,7 +20,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  const totalReviewCount = data.pages.flatMap((page) => page.page.totalDataCount);
+  const totalReviewCount = data?.pages[0].page.totalDataCount;
 
   return (
     <MemberReviewListContainer>
