@@ -16,18 +16,21 @@ const useSearch = () => {
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    const trimmedSearchQuery = searchQuery.trim();
 
-    if (!searchQuery) {
+    if (!trimmedSearchQuery) {
       alert('검색어를 입력해주세요');
+      setSearchQuery('');
       return;
     }
 
-    if (currentSearchQuery === searchQuery) {
+    if (currentSearchQuery === trimmedSearchQuery) {
       return;
     }
 
+    setSearchQuery(trimmedSearchQuery);
     setIsSubmitted(true);
-    setSearchParams({ query: searchQuery });
+    setSearchParams({ query: trimmedSearchQuery });
   };
 
   return { searchQuery, isSubmitted, handleSearchQuery, handleSearch };
