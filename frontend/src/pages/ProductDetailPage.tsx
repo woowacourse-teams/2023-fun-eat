@@ -40,9 +40,9 @@ const ProductDetailPage = () => {
   const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
   const tabRef = useRef<HTMLUListElement>(null);
 
-  const isRecipeTab = selectedTabMenu === tabMenus[1];
-  const initialSortOption = isRecipeTab ? RECIPE_SORT_OPTIONS[0] : REVIEW_SORT_OPTIONS[0];
-  const sortOptions = isRecipeTab ? RECIPE_SORT_OPTIONS : REVIEW_SORT_OPTIONS;
+  const isReviewTab = selectedTabMenu === tabMenus[0];
+  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
+  const initialSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
 
   const { selectedOption, selectSortOption } = useSortOption(initialSortOption);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
@@ -83,14 +83,14 @@ const ProductDetailPage = () => {
               <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
             </SortButtonWrapper>
             <section>
-              {isRecipeTab ? (
+              {isReviewTab ? (
+                <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+              ) : (
                 <ProductRecipeList
                   productId={Number(productId)}
                   productName={productDetail.name}
                   selectedOption={selectedOption}
                 />
-              ) : (
-                <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
               )}
             </section>
           </Suspense>
@@ -98,7 +98,7 @@ const ProductDetailPage = () => {
       ) : (
         <ErrorContainer>
           <ErrorDescription align="center" weight="bold" size="lg">
-            {isRecipeTab ? LOGIN_ERROR_MESSAGE_RECIPE : LOGIN_ERROR_MESSAGE_REVIEW}
+            {isReviewTab ? LOGIN_ERROR_MESSAGE_REVIEW : LOGIN_ERROR_MESSAGE_RECIPE}
           </ErrorDescription>
           <LoginLink as={RouterLink} to={PATH.LOGIN} block>
             로그인하러 가기
