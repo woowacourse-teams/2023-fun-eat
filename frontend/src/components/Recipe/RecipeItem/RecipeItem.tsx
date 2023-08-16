@@ -34,12 +34,9 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
           {title}
         </Heading>
         <Text as="span" color={theme.textColors.info}>
-          {products.map((product, index) => {
-            const isStringType = typeof product === 'string';
-            const id = isStringType ? `recipeProduct-${index}` : product.id;
-            const name = isStringType ? product : product.name;
-            return <Fragment key={id}>#{name}</Fragment>;
-          })}
+          {products.map(({ id, name }) => (
+            <Fragment key={id}>#{name}</Fragment>
+          ))}
         </Text>
         <FavoriteWrapper>
           <SvgIcon variant="favoriteFilled" width={16} height={16} />
