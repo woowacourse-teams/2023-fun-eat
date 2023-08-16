@@ -10,9 +10,10 @@ import { useMemberModifyMutation } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
-  const { previewImage, imageFile, uploadImage } = useImageUploader();
+  const { imageFile, uploadImage } = useImageUploader();
   const member = useMemberValueContext();
   const [nickname, setNickname] = useState(member?.nickname);
+  const [profileImage, _] = useState(member?.profileImage);
 
   if (!nickname) {
     return;
@@ -45,8 +46,8 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                {previewImage ? (
-                  <ProfileImage src={previewImage} alt="업로드한 사진" width={80} />
+                {profileImage ? (
+                  <ProfileImage src={profileImage} alt="업로드한 사진" width={80} />
                 ) : (
                   <SvgIcon variant="modifyProfile" width={80} height={80} />
                 )}
