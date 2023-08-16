@@ -64,7 +64,7 @@ const MemberModifyPage = () => {
           <Spacing size={12} />
           <Input value={nickname} customWidth="100%" onChange={modifyNickname} />
         </div>
-        <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold">
+        <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold">
           수정하기
         </FormButton>
       </MemberForm>
