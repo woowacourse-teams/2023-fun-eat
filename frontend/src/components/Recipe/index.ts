@@ -4,3 +4,4 @@ export { default as RecipeUsedProducts } from './RecipeUsedProducts/RecipeUsedPr
 export { default as RecipeItem } from './RecipeItem/RecipeItem';
 export { default as RecipeList } from './RecipeList/RecipeList';
 export { default as RecipeFavorite } from './RecipeFavorite/RecipeFavorite';
+export { default as RecipeRankingList } from './RecipeRankingList/RecipeRankingList';
