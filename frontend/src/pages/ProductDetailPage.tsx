@@ -1,9 +1,17 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
-import { useState, useRef } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/Common';
+import {
+  SortButton,
+  SortOptionList,
+  TabMenu,
+  ScrollButton,
+  Loading,
+  ErrorBoundary,
+  ErrorComponent,
+} from '@/components/Common';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
@@ -36,12 +44,16 @@ const ProductDetailPage = () => {
       <Spacing size={36} />
       {/* 나중에 API 수정하면 이 부분도 같이 수정해주세요 */}
       <TabMenu ref={tabRef} tabMenus={['리뷰 10', '꿀조합']} />
-      <SortButtonWrapper>
-        <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-      </SortButtonWrapper>
-      <section>
-        <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
-      </section>
+      <ErrorBoundary fallback={ErrorComponent}>
+        <Suspense fallback={<Loading />}>
+          <SortButtonWrapper>
+            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+          </SortButtonWrapper>
+          <section>
+            <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+          </section>
+        </Suspense>
+      </ErrorBoundary>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
         <ReviewRegisterButton
