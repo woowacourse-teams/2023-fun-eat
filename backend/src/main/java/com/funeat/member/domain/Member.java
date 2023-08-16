@@ -74,7 +74,7 @@ public class Member {
         this.profileImage = profileImage;
     }
 
-    public boolean isSameImage(final String profileImage) {
-        return profileImage.equals(profileImage);
+    public void modifyName(final String nickname) {
+        this.nickname = nickname;
     }
 }

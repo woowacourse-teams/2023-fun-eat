@@ -1,12 +1,10 @@
 package com.funeat.member.application;
 
-import static com.funeat.exception.CommonErrorCode.IMAGE_VALID_ERROR_CODE;
 import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.common.ImageService;
-import com.funeat.exception.CommonException.ImageNotExistException;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
@@ -55,24 +53,18 @@ public class MemberService {
 
     @Transactional
     public void modify(final Long memberId, final MultipartFile image, final MemberRequest request) {
-        checkExistImage(image);
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOT_FOUND, memberId));
 
         final String nickname = request.getNickname();
-        final String newImageName = imageService.getRandomImageName(image);
 
-        if (findMember.isSameImage(image.getOriginalFilename())) {
-            findMember.modifyProfile(nickname, image.getOriginalFilename());
+        if (Objects.isNull(image)) {
+            findMember.modifyName(nickname);
             return;
         }
+
+        final String newImageName = imageService.getRandomImageName(image);
         findMember.modifyProfile(nickname, newImageName);
         imageService.upload(image, newImageName);
-    }
-
-    private void checkExistImage(final MultipartFile image) {
-        if (Objects.isNull(image)) {
-            throw new ImageNotExistException(IMAGE_VALID_ERROR_CODE);
-        }
     }
 }

@@ -8,8 +8,6 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.common.ServiceTest;
-import com.funeat.exception.CommonException.ImageNotExistException;
-import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
@@ -271,19 +269,6 @@ class MemberServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> memberService.modify(memberId, image, request))
                     .isInstanceOf(MemberUpdateException.class);
-        }
-
-        @Test
-        void 프로필_이미지_요청_값을_null로_설정하면_예외가_발생해야_하지만_통과하고_있다() {
-            // given
-            final var member = new Member("before", "test.jpg", "1");
-            final var memberId = 단일_멤버_저장(member);
-
-            final var request = new MemberRequest("test");
-
-            // when & then
-            assertThatThrownBy(() -> memberService.modify(memberId, null, request))
-                    .isInstanceOf(ImageNotExistException.class);
         }
     }
 }
