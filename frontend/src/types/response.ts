@@ -50,6 +50,11 @@ export interface MemberReviewResponse {
   reviews: ReviewRanking[];
 }
 
+export interface ErrorResponse {
+  code: number;
+  message: string;
+}
+
 export interface MemberRecipeResponse {
   page: Page;
   recipes: MemberRecipe[];

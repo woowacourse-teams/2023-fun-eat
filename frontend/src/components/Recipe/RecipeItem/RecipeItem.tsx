@@ -24,7 +24,6 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
           {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
         </ImageWrapper>
       )}
-
       <RecipeInfoWrapper>
         <Text color={theme.textColors.sub}>
           {author && `${author.nickname} 님 | `}

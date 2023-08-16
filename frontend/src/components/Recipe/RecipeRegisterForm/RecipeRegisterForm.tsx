@@ -38,10 +38,22 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
 
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    await mutate(formData);
 
-    resetRecipeFormValue();
-    closeRecipeDialog();
+    mutate(formData, {
+      onSuccess: () => {
+        deleteImage();
+        resetRecipeFormValue();
+        closeRecipeDialog();
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
+
+        alert('꿀조합 등록을 다시 시도해주세요');
+      },
+    });
   };
 
   return (
