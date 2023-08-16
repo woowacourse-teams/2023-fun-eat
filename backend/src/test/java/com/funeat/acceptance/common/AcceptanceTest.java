@@ -4,6 +4,7 @@ import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
+import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
@@ -70,6 +71,9 @@ public abstract class AcceptanceTest {
 
     @Autowired
     protected ProductRecipeRepository productRecipeRepository;
+
+    @Autowired
+    public RecipeFavoriteRepository recipeFavoriteRepository;
 
     @BeforeEach
     void setUp() {
