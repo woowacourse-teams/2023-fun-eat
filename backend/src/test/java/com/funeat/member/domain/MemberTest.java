@@ -43,7 +43,7 @@ public class MemberTest {
     class modifyProfile_실패_테스트 {
 
         @Test
-        void 사용자의_닉네임_변경_값이_null이면_예외를_발생해야_하지만_통과하고_있다() {
+        void 사용자의_닉네임_변경_값이_null이면_예외가_발생한다() {
             // given
             final var member = new Member("test", "http://www.before.com", "1");
 
@@ -55,7 +55,7 @@ public class MemberTest {
         }
 
         @Test
-        void 사용자의_프로필_이미지_변경_값이_null이면_예외를_발생해야_하지만_통과하고_있다() {
+        void 사용자의_프로필_이미지_변경_값이_null이면_예외가_발생한다() {
             // given
             final var member = new Member("test", "http://www.before.com", "1");
 

@@ -258,7 +258,7 @@ class MemberServiceTest extends ServiceTest {
         }
 
         @Test
-        void 닉네임_수정_요청_값을_null로_설정하면_예외가_발생해야_하지만_통과하고_있다() {
+        void 닉네임_수정_요청_값을_null로_설정하면_예외가_발생한다() {
             // given
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
