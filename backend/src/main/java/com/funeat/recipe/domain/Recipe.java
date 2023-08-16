@@ -39,6 +39,14 @@ public class Recipe {
         this.member = member;
     }
 
+    public void addFavoriteCount() {
+        this.favoriteCount++;
+    }
+
+    public void minusFavoriteCount() {
+        this.favoriteCount--;
+    }
+
     public Long getId() {
         return id;
     }

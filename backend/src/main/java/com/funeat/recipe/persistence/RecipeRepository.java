@@ -10,5 +10,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Page<Recipe> findRecipesByMember(final Member member, final Pageable pageable);
 
-    Page<Recipe> findAllRecipes(final Pageable pageable);
+    Page<Recipe> findAll(final Pageable pageable);
 }

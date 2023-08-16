@@ -121,7 +121,7 @@ public class RecipeService {
     }
 
     public SortingRecipesResponse getSortingRecipes(final Pageable pageable) {
-        final Page<Recipe> pages = recipeRepository.findAllRecipes(pageable);
+        final Page<Recipe> pages = recipeRepository.findAll(pageable);
 
         final PageDto page = PageDto.toDto(pages);
         final List<RecipeDto> recipes = pages.getContent().stream()
