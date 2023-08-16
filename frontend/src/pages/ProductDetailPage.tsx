@@ -1,10 +1,18 @@
 import { BottomSheet, Button, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import type { MouseEventHandler } from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SortButton, SortOptionList, TabMenu, ScrollButton } from '@/components/Common';
+import {
+  SortButton,
+  SortOptionList,
+  TabMenu,
+  ScrollButton,
+  Loading,
+  ErrorBoundary,
+  ErrorComponent,
+} from '@/components/Common';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
@@ -51,12 +59,16 @@ const ProductDetailPage = () => {
         selectedTabMenu={selectedTabMenu}
         handleTabMenuSelect={handleTabMenuSelect}
       />
-      <SortButtonWrapper>
-        <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-      </SortButtonWrapper>
-      <section>
-        <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
-      </section>
+      <ErrorBoundary fallback={ErrorComponent}>
+        <Suspense fallback={<Loading />}>
+          <SortButtonWrapper>
+            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+          </SortButtonWrapper>
+          <section>
+            <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+          </section>
+        </Suspense>
+      </ErrorBoundary>
       <Spacing size={100} />
       <ReviewRegisterButtonWrapper>
         <ReviewRegisterButton

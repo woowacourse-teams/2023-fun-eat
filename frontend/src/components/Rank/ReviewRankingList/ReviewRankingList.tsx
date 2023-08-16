@@ -9,13 +9,13 @@ interface ReviewRankingListProps {
   isHomePage?: boolean;
 }
 
-const ReviewRankingList = ({ isHomePage }: ReviewRankingListProps) => {
+const ReviewRankingList = ({ isHomePage = false }: ReviewRankingListProps) => {
   const { data: reviewRankings } = useReviewRankingQuery();
-  const reviewsToDisplay = useDisplaySlice(isHomePage, reviewRankings?.reviews);
+  const reviewsToDisplay = useDisplaySlice(isHomePage, reviewRankings.reviews);
 
   return (
     <ReviewRankingListContainer>
-      {reviewsToDisplay?.map((reviewRanking) => (
+      {reviewsToDisplay.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>

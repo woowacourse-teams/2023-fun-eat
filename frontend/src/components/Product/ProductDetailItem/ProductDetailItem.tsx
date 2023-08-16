@@ -10,15 +10,10 @@ interface ProductDetailItemProps {
 }
 
 const ProductDetailItem = ({ productId }: ProductDetailItemProps) => {
-  const theme = useTheme();
-
   const { data: productDetail } = useProductDetailQuery(productId);
-
-  if (!productDetail) {
-    return null;
-  }
-
   const { name, price, image, content, averageRating, tags, bookmark } = productDetail;
+
+  const theme = useTheme();
 
   return (
     <>
