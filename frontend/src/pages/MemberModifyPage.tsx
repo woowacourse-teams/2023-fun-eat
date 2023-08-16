@@ -12,7 +12,7 @@ import type { MemberRequest } from '@/types/member';
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
   const { previewImage, imageFile, uploadImage } = useImageUploader();
-  const [nickname, setNickname] = useState(member?.nickname ?? '');
+  const [nickname, setNickname] = useState(member.nickname);
   const { mutate } = useMemberModifyMutation();
 
   const navigate = useNavigate();
@@ -23,10 +23,6 @@ const MemberModifyPage = () => {
     formContentKey: 'memberRequest',
     formContent: { nickname },
   });
-
-  if (!member) {
-    return null;
-  }
 
   const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
     setNickname(event.target.value);

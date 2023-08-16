@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '..';
 
 import { memberApi } from '@/apis';
 import type { Member } from '@/types/member';
@@ -10,9 +10,7 @@ const fetchMember = async () => {
 };
 
 const useMemberQuery = () => {
-  return useQuery({
-    queryKey: ['member'],
-    queryFn: fetchMember,
+  return useSuspendedQuery(['member'], fetchMember, {
     staleTime: 15 * 60 * 1000,
     refetchOnWindowFocus: false,
     useErrorBoundary: false,

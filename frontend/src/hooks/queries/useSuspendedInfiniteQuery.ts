@@ -99,5 +99,3 @@ export function useSuspendedInfiniteQuery<
     ...options,
   }) as UseSuspendedInfiniteQueryResult<TData>;
 }
-
-export default useSuspendedInfiniteQuery;
