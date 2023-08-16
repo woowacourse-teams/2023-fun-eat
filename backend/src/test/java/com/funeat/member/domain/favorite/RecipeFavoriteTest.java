@@ -10,21 +10,25 @@ import org.junit.jupiter.api.Test;
 
 class RecipeFavoriteTest {
 
-    @Test
-    void create를_통한_생성시_favorite은_false로_초기화된다() {
-        // given
-        final var member = 멤버_멤버1_생성();
-        final var recipe = 레시피_생성(member);
+    @Nested
+    class create_성공_테스트 {
 
-        // when
-        final var actual = RecipeFavorite.create(member, recipe);
+        @Test
+        void create를_통한_생성시_favorite은_false로_초기화된다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            final var recipe = 레시피_생성(member);
 
-        // then
-        assertThat(actual.getFavorite()).isFalse();
+            // when
+            final var actual = RecipeFavorite.create(member, recipe);
+
+            // then
+            assertThat(actual.getFavorite()).isFalse();
+        }
     }
 
     @Nested
-    class updateFavorite_테스트 {
+    class updateFavorite_성공_테스트 {
 
         @Test
         void 기존_false_신규_true_경우_recipe의_favoriteCount는_1_증가() {

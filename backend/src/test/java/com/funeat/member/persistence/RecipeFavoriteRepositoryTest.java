@@ -5,15 +5,16 @@ import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점2점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
 import com.funeat.common.RepositoryTest;
 import com.funeat.member.domain.favorite.RecipeFavorite;
-import com.funeat.product.domain.Product;
-import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -34,15 +35,13 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
         final var category = 카테고리_즉석조리_생성();
         단일_카테고리_저장(category);
 
-        final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
-        final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
-        final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+        final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+        final var product2 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+        final var product3 = 상품_삼각김밥_가격3000원_평점2점_생성(category);
         복수_상품_저장(product1, product2, product3);
 
         final var recipeAuthor = 멤버_멤버1_생성();
         단일_멤버_저장(recipeAuthor);
-
-        final var products = List.of(product1, product2, product3);
 
         final var recipe = 레시피_생성(recipeAuthor);
         단일_레시피_저장(recipe);
@@ -62,8 +61,12 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
         final var fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
 
         // then
-        assertThat(realMemberActual).isNotEmpty();
-        assertThat(fakeMemberActual).isEmpty();
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(realMemberActual)
+                    .isNotEmpty();
+            softAssertions.assertThat(fakeMemberActual)
+                    .isEmpty();
+        });
     }
 
     @Test
@@ -72,15 +75,13 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
         final var category = 카테고리_즉석조리_생성();
         단일_카테고리_저장(category);
 
-        final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
-        final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
-        final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+        final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+        final var product2 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+        final var product3 = 상품_삼각김밥_가격3000원_평점2점_생성(category);
         복수_상품_저장(product1, product2, product3);
 
         final var recipeAuthor = 멤버_멤버1_생성();
         단일_멤버_저장(recipeAuthor);
-
-        final var products = List.of(product1, product2, product3);
 
         final var recipe = 레시피_생성(recipeAuthor);
         단일_레시피_저장(recipe);
@@ -102,7 +103,11 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
                 recipe);
 
         // then
-        assertThat(realMemberActual).isTrue();
-        assertThat(fakeMemberActual).isFalse();
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(realMemberActual)
+                    .isTrue();
+            softAssertions.assertThat(fakeMemberActual)
+                    .isFalse();
+        });
     }
 }
