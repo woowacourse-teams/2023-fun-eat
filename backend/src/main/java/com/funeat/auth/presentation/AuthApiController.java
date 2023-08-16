@@ -18,6 +18,7 @@ public class AuthApiController implements AuthController {
 
     private static final String HOME = "/";
     private static final String MY_PAGE = "/members";
+
     private final AuthService authService;
 
     public AuthApiController(final AuthService authService) {
