@@ -17,8 +17,9 @@ import {
   SectionTitle,
 } from '@/components/Common';
 import { ProductDetailItem } from '@/components/Product';
+import { RecipeList } from '@/components/Recipe';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
-import { REVIEW_SORT_OPTIONS } from '@/constants';
+import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useSortOption } from '@/hooks/common';
@@ -28,22 +29,24 @@ import { useProductDetailQuery } from '@/hooks/queries/product';
 const LOGIN_ERROR_MESSAGE =
   '로그인 해야 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
 
-const getProductDetailPageTabMenus = (reviewCount: number) => [`리뷰 ${reviewCount}`, '꿀조합'];
-
 const ProductDetailPage = () => {
   const { productId } = useParams();
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { data: member } = useMemberQuery();
+  const { data: productDetail } = useProductDetailQuery(Number(productId));
   const { reset } = useQueryErrorResetBoundary();
 
-  const { data: productDetail } = useProductDetailQuery(Number(productId));
-
-  const tabMenus = getProductDetailPageTabMenus(productDetail.reviewCount);
+  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
   const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
+  const tabRef = useRef<HTMLUListElement>(null);
+
+  const isRecipeTab = selectedTabMenu === tabMenus[1];
+  const initialSortOption = isRecipeTab ? RECIPE_SORT_OPTIONS[0] : REVIEW_SORT_OPTIONS[0];
+  const sortOptions = isRecipeTab ? RECIPE_SORT_OPTIONS : REVIEW_SORT_OPTIONS;
+
+  const { selectedOption, selectSortOption } = useSortOption(initialSortOption);
+  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
-  const tabRef = useRef<HTMLUListElement>(null);
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -57,6 +60,7 @@ const ProductDetailPage = () => {
 
   const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     setSelectedTabMenu(event.currentTarget.value);
+    selectSortOption(initialSortOption);
   };
 
   return (
@@ -78,7 +82,11 @@ const ProductDetailPage = () => {
               <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
             </SortButtonWrapper>
             <section>
-              <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+              {isRecipeTab ? (
+                <RecipeList selectedOption={selectedOption} />
+              ) : (
+                <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+              )}
             </section>
           </Suspense>
         </ErrorBoundary>
@@ -112,7 +120,7 @@ const ProductDetailPage = () => {
           </ReviewFormProvider>
         ) : (
           <SortOptionList
-            options={REVIEW_SORT_OPTIONS}
+            options={sortOptions}
             selectedOption={selectedOption}
             selectSortOption={selectSortOption}
             close={handleCloseBottomSheet}
