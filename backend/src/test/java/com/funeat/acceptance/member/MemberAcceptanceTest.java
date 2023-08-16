@@ -30,6 +30,7 @@ import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.recipe.domain.Recipe;
@@ -310,8 +311,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedRecipeResponses = member1SortedRecipes.stream()
                     .map(recipe -> {
                         final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
-                        final var productByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productByRecipe);
+                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                        final var memberRecipeProductDtos = productsByRecipe.stream()
+                                .map(MemberRecipeProductDto::toDto)
+                                .collect(Collectors.toList());
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                     })
                     .collect(Collectors.toList());
 
@@ -392,8 +396,11 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var expectedRecipeResponses = expectedRecipes.stream()
                     .map(recipe -> {
                         final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
-                        final var productByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, productByRecipe);
+                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
+                        final var memberRecipeProductDtos = productsByRecipe.stream()
+                                .map(MemberRecipeProductDto::toDto)
+                                .collect(Collectors.toList());
+                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                     })
                     .collect(Collectors.toList());
             final var actualRecipeImage = response.jsonPath().getList("recipes", MemberRecipeDto.class).get(0)

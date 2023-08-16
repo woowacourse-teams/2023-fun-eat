@@ -1,4 +1,5 @@
 import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import type { MouseEventHandler } from 'react';
 import { Suspense, useState } from 'react';
 import styled from 'styled-components';
@@ -13,6 +14,7 @@ const SearchPage = () => {
   const { searchQuery, isSubmitted, handleSearchQuery, handleSearch } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
   const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
+  const { reset } = useQueryErrorResetBoundary();
 
   const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     setSelectedTabMenu(event.currentTarget.value);
@@ -44,7 +46,7 @@ const SearchPage = () => {
         </form>
         {!isSubmitted && debouncedSearchQuery && (
           <RecommendWrapper>
-            <ErrorBoundary fallback={ErrorComponent}>
+            <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
               <Suspense fallback={<Loading />}>
                 <RecommendList searchQuery={debouncedSearchQuery} />
               </Suspense>
@@ -60,19 +62,21 @@ const SearchPage = () => {
       />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
-          <ErrorBoundary fallback={ErrorComponent}>
-            <Suspense fallback={<Loading />}>
-              <Heading as="h2" size="lg" weight="regular">
-                <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
-              </Heading>
-              <Spacing size={20} />
-              {selectedTabMenu === SEARCH_PAGE_TABS[0] ? (
-                <ProductSearchResultList searchQuery={debouncedSearchQuery} />
-              ) : (
-                <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
-              )}
-            </Suspense>
-          </ErrorBoundary>
+          <>
+            <Heading as="h2" size="lg" weight="regular">
+              <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
+            </Heading>
+            <ErrorBoundary fallback={ErrorComponent}>
+              <Suspense fallback={<Loading />}>
+                <Spacing size={20} />
+                {selectedTabMenu === SEARCH_PAGE_TABS[0] ? (
+                  <ProductSearchResultList searchQuery={debouncedSearchQuery} />
+                ) : (
+                  <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
+                )}
+              </Suspense>
+            </ErrorBoundary>
+          </>
         ) : (
           <Text>{selectedTabMenu}을 검색해보세요.</Text>
         )}

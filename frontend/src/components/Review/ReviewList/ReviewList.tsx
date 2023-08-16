@@ -1,3 +1,4 @@
+import { Text } from '@fun-eat/design-system';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
@@ -23,19 +24,9 @@ const ReviewList = ({ productId, selectedOption }: ReviewListProps) => {
 
   const reviews = data.pages.flatMap((page) => page.reviews);
 
-  // TODO: 로그인 에러 페이지로 이동 예정. 다른 브랜치에서 작업중
-  //if (isError) {
-  //  return (
-  //    <ErrorContainer>
-  //      <ErrorDescription align="center" weight="bold" size="lg">
-  //        {LOGIN_ERROR_MESSAGE}
-  //      </ErrorDescription>
-  //      <LoginLink as={RouterLink} to={PATH.LOGIN} block>
-  //        로그인하러 가기
-  //      </LoginLink>
-  //    </ErrorContainer>
-  //  );
-  //}
+  if (reviews.length === 0) {
+    return <Text>상품의 첫 리뷰를 작성해주세요</Text>;
+  }
 
   return (
     <>

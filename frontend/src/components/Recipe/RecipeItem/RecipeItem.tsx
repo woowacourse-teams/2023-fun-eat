@@ -1,38 +1,40 @@
 import { Heading, Text, useTheme } from '@fun-eat/design-system';
+import { Fragment } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import type { Recipe } from '@/types/recipe';
+import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 
 interface RecipeItemProps {
-  recipe: Recipe;
+  recipe: Recipe | MemberRecipe;
+  isMemberPage?: boolean;
 }
 
-const RecipeItem = ({ recipe }: RecipeItemProps) => {
-  const { image, title, author, createdAt, favoriteCount, products } = recipe;
+const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
+  const { image, title, createdAt, favoriteCount, products } = recipe;
+  const author = 'author' in recipe ? recipe.author : null;
   const theme = useTheme();
 
   return (
-    <RecipeItemContainer>
-      <ImageWrapper>
-        <RecipeImage src={image} alt={`조리된 ${title}`} />
-        <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />
-      </ImageWrapper>
+    <>
+      {!isMemberPage && (
+        <ImageWrapper>
+          <RecipeImage src={image} alt={`조리된 ${title}`} />
+          {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
+        </ImageWrapper>
+      )}
       <RecipeInfoWrapper>
         <Text color={theme.textColors.sub}>
-          {author.nickname} 님 | {getFormattedDate(createdAt)}
+          {author && `${author.nickname} 님 | `}
+          {getFormattedDate(createdAt)}
         </Text>
         <Heading as="h3" size="xl" weight="bold">
           {title}
         </Heading>
-        <Text>
+        <Text as="span" color={theme.textColors.info}>
           {products.map(({ id, name }) => (
-            <>
-              <Text as="span" key={id} color={theme.textColors.info}>
-                #{name}
-              </Text>{' '}
-            </>
+            <Fragment key={id}>#{name}</Fragment>
           ))}
         </Text>
         <FavoriteWrapper>
@@ -42,15 +44,11 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
           </Text>
         </FavoriteWrapper>
       </RecipeInfoWrapper>
-    </RecipeItemContainer>
+    </>
   );
 };
 
 export default RecipeItem;
-
-const RecipeItemContainer = styled.div`
-  height: 280px;
-`;
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -82,7 +80,7 @@ const RecipeInfoWrapper = styled.div`
   justify-content: space-between;
   position: relative;
   height: 100px;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const FavoriteWrapper = styled.div`

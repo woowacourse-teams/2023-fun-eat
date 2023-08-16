@@ -9,6 +9,7 @@ import StarRate from '../StarRate/StarRate';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
+import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
 import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
@@ -34,10 +35,10 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
   const { mutate } = useReviewRegisterFormMutation(productId);
   const { scrollToPosition } = useScroll();
 
-  // TODO: 태그 아이디 개수 조건 수정
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
-    reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
+    reviewFormValue.tagIds.length >= MIN_SELECTED_TAGS_COUNT &&
+    reviewFormValue.tagIds.length <= MIN_DISPLAYED_TAGS_LENGTH &&
     reviewFormValue.content.length > MIN_CONTENT_LENGTH;
 
   const formData = useFormData<ReviewRequest>({
@@ -50,13 +51,23 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await mutate(formData);
+    mutate(formData, {
+      onSuccess: () => {
+        deleteImage();
+        resetReviewFormValue();
 
-    deleteImage();
-    resetReviewFormValue();
+        closeReviewDialog();
+        scrollToPosition(targetRef);
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
 
-    closeReviewDialog();
-    scrollToPosition(targetRef);
+        alert('리뷰 등록을 다시 시도해주세요');
+      },
+    });
   };
 
   return (

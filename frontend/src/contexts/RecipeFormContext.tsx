@@ -6,6 +6,7 @@ import type { RecipeRequest, RecipeRequestKey } from '@/types/recipe';
 interface RecipeFormActionParams {
   target: RecipeRequestKey;
   value: string | number;
+  action?: 'add' | 'remove';
 }
 
 interface RecipeFormAction {
@@ -29,12 +30,22 @@ const RecipeFormProvider = ({ children }: PropsWithChildren) => {
     content: '',
   });
 
-  const handleRecipeFormValue = ({ target, value }: RecipeFormActionParams) => {
+  const handleRecipeFormValue = ({ target, value, action }: RecipeFormActionParams) => {
     setRecipeFormValue((prev) => {
       const targetValue = prev[target];
+
       if (Array.isArray(targetValue)) {
-        return { ...prev, [target]: targetValue.filter((id) => id !== value) };
+        if (action === 'remove') {
+          return { ...prev, [target]: targetValue.filter((id) => id !== value) };
+        }
+
+        if (targetValue.includes(Number(value))) {
+          return prev;
+        }
+
+        return { ...prev, [target]: [...targetValue, value] };
       }
+
       return { ...prev, [target]: value };
     });
   };

@@ -3,6 +3,7 @@ package com.funeat.acceptance.recipe;
 import static io.restassured.RestAssured.given;
 
 import com.funeat.recipe.dto.RecipeCreateRequest;
+import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -40,6 +41,18 @@ public class RecipeSteps {
                 .cookie("JSESSIONID", loginCookie)
                 .when()
                 .get("/api/recipes/{recipeId}", recipeId)
+                .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 레시피_좋아요_요청(final String loginCookie, final Long recipeId,
+                                                           final RecipeFavoriteRequest request) {
+        return given()
+                .cookie("JSESSIONID", loginCookie)
+                .contentType("application/json")
+                .body(request)
+                .when()
+                .patch("/api/recipes/{recipeId}", recipeId)
                 .then()
                 .extract();
     }

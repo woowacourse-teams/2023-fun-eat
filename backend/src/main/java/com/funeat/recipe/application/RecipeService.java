@@ -7,7 +7,9 @@ import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 import com.funeat.common.ImageService;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
+import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRecipesResponse;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
@@ -21,6 +23,7 @@ import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
@@ -111,10 +114,31 @@ public class RecipeService {
                 .map(recipe -> {
                     final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
                     final List<Product> productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                    return MemberRecipeDto.toDto(recipe, findRecipeImages, productsByRecipe);
+                    final List<MemberRecipeProductDto> memberRecipeProductDtos = productsByRecipe.stream()
+                            .map(MemberRecipeProductDto::toDto)
+                            .collect(Collectors.toList());
+                    return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
                 })
                 .collect(Collectors.toList());
 
         return MemberRecipesResponse.toResponse(page, dtos);
+    }
+
+    @Transactional
+    public void likeRecipe(final Long memberId, final Long recipeId, final RecipeFavoriteRequest request) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+        final Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
+
+        final RecipeFavorite recipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
+                .orElseGet(() -> createAndSaveRecipeFavorite(member, recipe));
+
+        recipeFavorite.updateFavorite(request.getFavorite());
+    }
+
+    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
+        final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
+        return recipeFavoriteRepository.save(recipeFavorite);
     }
 }

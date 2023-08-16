@@ -48,6 +48,12 @@ export const reviewHandlers = [
   }),
 
   rest.post('/api/products/:productId/reviews', (req, res, ctx) => {
+    const { mockSessionId } = req.cookies;
+
+    if (!mockSessionId) {
+      return res(ctx.status(401), ctx.json({ message: '로그인이 필요합니다.' }));
+    }
+
     const formData = req.body;
 
     if (!formData) {
