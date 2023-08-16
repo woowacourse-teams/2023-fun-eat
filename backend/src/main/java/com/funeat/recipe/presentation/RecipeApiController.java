@@ -50,7 +50,7 @@ public class RecipeApiController implements RecipeController {
     @PatchMapping(value = "/api/recipes/{recipeId}")
     public ResponseEntity<Void> likeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
                                            @PathVariable final Long recipeId,
-                                           @RequestBody @Valid RecipeFavoriteRequest request) {
+                                           @RequestBody @Valid final RecipeFavoriteRequest request) {
         recipeService.likeRecipe(loginInfo.getId(), recipeId, request);
 
         return ResponseEntity.noContent().build();

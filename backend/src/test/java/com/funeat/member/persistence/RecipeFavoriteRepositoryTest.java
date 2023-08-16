@@ -1,26 +1,23 @@
 package com.funeat.member.persistence;
 
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
+import static com.funeat.fixture.RecipeFixture.레시피_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.common.DataCleaner;
 import com.funeat.common.DataClearExtension;
-import com.funeat.member.domain.Member;
+import com.funeat.common.RepositoryTest;
 import com.funeat.member.domain.favorite.RecipeFavorite;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
-import com.funeat.product.domain.ProductRecipe;
-import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductRecipeRepository;
-import com.funeat.product.persistence.ProductRepository;
-import com.funeat.recipe.domain.Recipe;
-import com.funeat.recipe.persistence.RecipeRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
@@ -29,44 +26,38 @@ import org.springframework.context.annotation.Import;
 @ExtendWith(DataClearExtension.class)
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-class RecipeFavoriteRepositoryTest {
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private RecipeRepository recipeRepository;
-
-    @Autowired
-    private ProductRecipeRepository productRecipeRepository;
-
-    @Autowired
-    private RecipeFavoriteRepository recipeFavoriteRepository;
+class RecipeFavoriteRepositoryTest extends RepositoryTest {
 
     @Test
     void 해당_사용자의_해당_레시피에_대한_좋아요_현황을_반환할_수_있다() {
         // given
-        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD));
-        final var product1 = 상품_추가_요청(new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category));
-        final var product2 = 상품_추가_요청(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
-        final var product3 = 상품_추가_요청(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
-        final var recipeAuthor = 멤버_추가_요청(new Member("author", "image.png", "1"));
+        final var category = 카테고리_즉석조리_생성();
+        단일_카테고리_저장(category);
+
+        final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
+        final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
+        final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+        복수_상품_저장(product1, product2, product3);
+
+        final var recipeAuthor = 멤버_멤버1_생성();
+        단일_멤버_저장(recipeAuthor);
+
         final var products = List.of(product1, product2, product3);
 
-        final var recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", recipeAuthor));
-        products.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
+        final var recipe = 레시피_생성(recipeAuthor);
+        단일_레시피_저장(recipe);
+
+        final var productRecipe1 = 레시피_안에_들어가는_상품_생성(product1, recipe);
+        final var productRecipe2 = 레시피_안에_들어가는_상품_생성(product2, recipe);
+        final var productRecipe3 = 레시피_안에_들어가는_상품_생성(product3, recipe);
+        복수_레시피_상품_저장(productRecipe1, productRecipe2, productRecipe3);
+
+        final var realMember = 멤버_멤버2_생성();
+        final var fakeMember = 멤버_멤버3_생성();
+        복수_멤버_저장(realMember, fakeMember);
+        레시피_좋아요_저장(new RecipeFavorite(realMember, recipe, true));
 
         // when
-        final var realMember = 멤버_추가_요청(new Member("real", "image.png", "2"));
-        final var fakeMember = 멤버_추가_요청(new Member("fake", "image.png", "3"));
-        레시피_좋아요_요청(new RecipeFavorite(realMember, recipe, true));
-
         final var realMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(realMember, recipe);
         final var fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
 
@@ -78,21 +69,33 @@ class RecipeFavoriteRepositoryTest {
     @Test
     void 해당_사용자가_해당_레시피에_좋아요를_눌렀는지_알_수_있다() {
         // given
-        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD));
-        final var product1 = 상품_추가_요청(new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category));
-        final var product2 = 상품_추가_요청(new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category));
-        final var product3 = 상품_추가_요청(new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category));
-        final var recipeAuthor = 멤버_추가_요청(new Member("author", "image.png", "1"));
+        final var category = 카테고리_즉석조리_생성();
+        단일_카테고리_저장(category);
+
+        final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
+        final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
+        final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+        복수_상품_저장(product1, product2, product3);
+
+        final var recipeAuthor = 멤버_멤버1_생성();
+        단일_멤버_저장(recipeAuthor);
+
         final var products = List.of(product1, product2, product3);
 
-        final var recipe = 레시피_추가_요청(new Recipe("레시피1", "밥 넣고 밥 넣자", recipeAuthor));
-        products.forEach(it -> 레시피에_사용된_상품_추가_요청(new ProductRecipe(it, recipe)));
+        final var recipe = 레시피_생성(recipeAuthor);
+        단일_레시피_저장(recipe);
+
+        final var productRecipe1 = 레시피_안에_들어가는_상품_생성(product1, recipe);
+        final var productRecipe2 = 레시피_안에_들어가는_상품_생성(product2, recipe);
+        final var productRecipe3 = 레시피_안에_들어가는_상품_생성(product3, recipe);
+        복수_레시피_상품_저장(productRecipe1, productRecipe2, productRecipe3);
+
+        final var realMember = 멤버_멤버2_생성();
+        final var fakeMember = 멤버_멤버3_생성();
+        복수_멤버_저장(realMember, fakeMember);
+        레시피_좋아요_저장(new RecipeFavorite(realMember, recipe, true));
 
         // when
-        final var realMember = 멤버_추가_요청(new Member("real", "image.png", "2"));
-        final var fakeMember = 멤버_추가_요청(new Member("fake", "image.png", "3"));
-        레시피_좋아요_요청(new RecipeFavorite(realMember, recipe, true));
-
         final var realMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(realMember,
                 recipe);
         final var fakeMemberActual = recipeFavoriteRepository.existsByMemberAndRecipeAndFavoriteTrue(fakeMember,
@@ -101,29 +104,5 @@ class RecipeFavoriteRepositoryTest {
         // then
         assertThat(realMemberActual).isTrue();
         assertThat(fakeMemberActual).isFalse();
-    }
-
-    private Category 카테고리_추가_요청(final Category category) {
-        return categoryRepository.save(category);
-    }
-
-    private Product 상품_추가_요청(final Product product) {
-        return productRepository.save(product);
-    }
-
-    private Member 멤버_추가_요청(final Member member) {
-        return memberRepository.save(member);
-    }
-
-    private Recipe 레시피_추가_요청(final Recipe recipe) {
-        return recipeRepository.save(recipe);
-    }
-
-    private ProductRecipe 레시피에_사용된_상품_추가_요청(final ProductRecipe productRecipe) {
-        return productRecipeRepository.save(productRecipe);
-    }
-
-    private RecipeFavorite 레시피_좋아요_요청(final RecipeFavorite recipeFavorite) {
-        return recipeFavoriteRepository.save(recipeFavorite);
     }
 }
