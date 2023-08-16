@@ -11,7 +11,7 @@ const MemberPage = () => {
 
   return (
     <>
-      <Suspense fallback={null}>
+      <Suspense fallback={<Loading />}>
         <MembersInfo />
       </Suspense>
       <Spacing size={40} />
