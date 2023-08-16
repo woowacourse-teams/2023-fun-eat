@@ -18,3 +18,4 @@ export { default as Loading } from './Loading/Loading';
 export { default as MarkedText } from './MarkedText/MarkedText';
 export { default as MoreButton } from './MoreButton/MoreButton';
 export { default as NavigableSectionTitle } from './NavigableSectionTitle/NavigableSectionTitle';
+export { default as Carousel } from './Carousel/Carousel';
