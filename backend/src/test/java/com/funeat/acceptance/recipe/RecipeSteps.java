@@ -77,4 +77,12 @@ public class RecipeSteps {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public static ExtractableResponse<Response> 레시피_랭킹_조회_요청() {
+        return given()
+                .when()
+                .get("/api/ranks/recipes")
+                .then()
+                .extract();
+    }
 }
