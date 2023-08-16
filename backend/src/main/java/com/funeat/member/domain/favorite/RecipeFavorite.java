@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "review_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "recipe_id"}))
 public class RecipeFavorite {
 
     @Id
