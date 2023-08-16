@@ -8,12 +8,12 @@ import {
   ErrorBoundary,
   ErrorComponent,
   Loading,
+  RegisterButton,
   ScrollButton,
   SortButton,
   SortOptionList,
   SvgIcon,
 } from '@/components/Common';
-import RegisterButton from '@/components/Common/RegisterButton/RegisterButton';
 import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
 import RecipeFormProvider from '@/contexts/RecipeFormContext';

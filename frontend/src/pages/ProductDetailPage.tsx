@@ -13,8 +13,8 @@ import {
   Loading,
   ErrorBoundary,
   ErrorComponent,
+  RegisterButton,
 } from '@/components/Common';
-import RegisterButton from '@/components/Common/RegisterButton/RegisterButton';
 import { ProductDetailItem } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { REVIEW_SORT_OPTIONS } from '@/constants';
