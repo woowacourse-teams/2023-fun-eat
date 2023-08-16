@@ -33,7 +33,7 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
       <MemberRecipeListWrapper>
         {recipeToDisplay?.map((recipe) => (
           <li key={recipe.id}>
-            <RecipeItem recipe={recipe} />
+            <RecipeItem recipe={recipe} isMemberPage={isMemberPage} />
           </li>
         ))}
       </MemberRecipeListWrapper>
@@ -52,7 +52,7 @@ const MemberRecipeListContainer = styled.section`
 const MemberRecipeListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
 `;
 
 const TotalRecipeCount = styled(Text)`

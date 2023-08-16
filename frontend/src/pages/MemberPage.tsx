@@ -27,9 +27,9 @@ const MemberPage = () => {
       <NavigableSectionTitle title="내가 작성한 리뷰" routeDestination={`${PATH.MEMBER}/review`} />
       <Spacing size={5} />
       <MemberReviewList isMemberPage />
-      <Spacing size={40} />
+      <Spacing size={45} />
       <NavigableSectionTitle title="내가 작성한 꿀조합" routeDestination={`${PATH.MEMBER}/recipe`} />
-      <Spacing size={5} />
+      {/* <Spacing size={5} /> */}
       <MemberRecipeList isMemberPage />
       <Spacing size={40} />
     </>

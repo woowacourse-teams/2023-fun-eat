@@ -8,19 +8,23 @@ import { getFormattedDate } from '@/utils/date';
 
 interface RecipeItemProps {
   recipe: Recipe | MemberRecipe;
+  isMemberPage?: boolean;
 }
 
-const RecipeItem = ({ recipe }: RecipeItemProps) => {
+const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
   const { image, title, createdAt, favoriteCount, products } = recipe;
   const author = 'author' in recipe ? recipe.author : null;
   const theme = useTheme();
 
   return (
-    <RecipeItemContainer>
-      <ImageWrapper>
-        <RecipeImage src={image} alt={`조리된 ${title}`} />
-        {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
-      </ImageWrapper>
+    <>
+      {!isMemberPage && (
+        <ImageWrapper>
+          <RecipeImage src={image} alt={`조리된 ${title}`} />
+          {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
+        </ImageWrapper>
+      )}
+
       <RecipeInfoWrapper>
         <Text color={theme.textColors.sub}>
           {author && `${author.nickname} 님 | `}
@@ -44,15 +48,11 @@ const RecipeItem = ({ recipe }: RecipeItemProps) => {
           </Text>
         </FavoriteWrapper>
       </RecipeInfoWrapper>
-    </RecipeItemContainer>
+    </>
   );
 };
 
 export default RecipeItem;
-
-const RecipeItemContainer = styled.div`
-  height: 280px;
-`;
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -84,7 +84,7 @@ const RecipeInfoWrapper = styled.div`
   justify-content: space-between;
   position: relative;
   height: 100px;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const FavoriteWrapper = styled.div`
