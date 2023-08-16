@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { loginApi } from '@/apis';
+import { PATH } from '@/constants/path';
 import { useMemberQuery } from '@/hooks/queries/members';
 
 const AuthPage = () => {
@@ -14,7 +15,7 @@ const AuthPage = () => {
   const navigate = useNavigate();
 
   if (member) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={PATH.HOME} replace />;
   }
 
   const getSessionId = async () => {

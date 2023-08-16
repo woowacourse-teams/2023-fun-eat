@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { DefaultLayout } from '@/components/Layout';
+import { PATH } from '@/constants/path';
 
 const NotFoundPage = () => {
   return (
@@ -10,7 +11,7 @@ const NotFoundPage = () => {
       <NotFoundSection>
         <Heading size="xl">존재하지 않는 페이지입니다</Heading>
         <Spacing size={20} />
-        <HomePageLink as={RouterLink} to="/">
+        <HomePageLink as={RouterLink} to={PATH.HOME}>
           홈으로 가기
         </HomePageLink>
       </NotFoundSection>
