@@ -5,9 +5,12 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +44,13 @@ public class RecipeApiController implements RecipeController {
                                                                 @PathVariable final Long recipeId) {
         final RecipeDetailResponse response = recipeService.getRecipeDetail(loginInfo.getId(), recipeId);
         
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/api/recipes")
+    public ResponseEntity<SortingRecipesResponse> getSortingRecipes(@PageableDefault final Pageable pageable) {
+        final SortingRecipesResponse response = recipeService.getSortingRecipes(pageable);
+
         return ResponseEntity.ok(response);
     }
 }
