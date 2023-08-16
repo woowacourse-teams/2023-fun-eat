@@ -41,7 +41,7 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
                                      final ObjectMapper objectMapper,
                                      @Value("${kakao.rest-api-key}") final String kakaoRestApiKey,
                                      @Value("${kakao.redirect-uri}") final String redirectUri,
-                                     @Value("${kakao.admin-key") final String kakaoAdminKey) {
+                                     @Value("${kakao.admin-key}") final String kakaoAdminKey) {
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
         this.kakaoRestApiKey = kakaoRestApiKey;
