@@ -16,8 +16,7 @@ import {
   RegisterButton,
   SectionTitle,
 } from '@/components/Common';
-import { ProductDetailItem } from '@/components/Product';
-import { RecipeList } from '@/components/Recipe';
+import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
@@ -26,8 +25,7 @@ import { useSortOption } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
-const LOGIN_ERROR_MESSAGE =
-  '로그인 해야 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
+const LOGIN_ERROR_MESSAGE = '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -83,7 +81,11 @@ const ProductDetailPage = () => {
             </SortButtonWrapper>
             <section>
               {isRecipeTab ? (
-                <RecipeList selectedOption={selectedOption} />
+                <ProductRecipeList
+                  productId={Number(productId)}
+                  productName={productDetail.name}
+                  selectedOption={selectedOption}
+                />
               ) : (
                 <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
               )}
@@ -147,7 +149,7 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorDescription = styled(Text)`
-  padding: 40px 0;
+  padding: 40px 0 20px;
   white-space: pre-line;
   word-break: break-all;
 `;
