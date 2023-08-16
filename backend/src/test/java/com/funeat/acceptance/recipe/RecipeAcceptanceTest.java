@@ -299,7 +299,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    class getSortingRecipes_테스트 {
+    class getSortingRecipes_성공_테스트 {
 
         @Test
         void 꿀조합을_좋아요가_많은_순으로_정렬할_수_있다() {

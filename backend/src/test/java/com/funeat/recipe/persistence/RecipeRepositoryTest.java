@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 class RecipeRepositoryTest extends RepositoryTest {
 
     @Nested
-    class findAllRecipes_테스트 {
+    class findAllRecipes_성공_테스트 {
 
         @Test
         void 꿀조합을_좋아요가_많은_순으로_정렬한다() {
