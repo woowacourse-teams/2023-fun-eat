@@ -13,6 +13,7 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
 import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
+import static org.assertj.core.api.Assertions.*;
 
 import com.funeat.common.RepositoryTest;
 import java.util.List;
@@ -41,9 +42,9 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
             복수_상품_저장(product1, product2, product3);
 
-            final var recipe1_1 = 레시피_생성(member1);
-            final var recipe1_2 = 레시피_생성(member1);
-            final var recipe1_3 = 레시피_생성(member1);
+            final var recipe1_1 = 레시피_생성(member1, 1L);
+            final var recipe1_2 = 레시피_생성(member1, 3L);
+            final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 
             final var product_recipe_1_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_1);
@@ -58,13 +59,6 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
 
-            recipe1_1.addFavoriteCount();
-            recipe1_2.addFavoriteCount();
-            recipe1_2.addFavoriteCount();
-            recipe1_2.addFavoriteCount();
-            recipe1_3.addFavoriteCount();
-            recipe1_3.addFavoriteCount();
-
             final var page = 페이지요청_좋아요_내림차순_생성(0, 10);
             final var expected = List.of(recipe1_2, recipe1_3, recipe1_1);
 
@@ -72,7 +66,7 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var actual = recipeRepository.findAll(page).getContent();
 
             // then
-            Assertions.assertThat(actual)
+            assertThat(actual)
                     .usingRecursiveComparison()
                     .isEqualTo(expected);
         }
@@ -93,9 +87,9 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
             복수_상품_저장(product1, product2, product3);
 
-            final var recipe1_1 = 레시피_생성(member1);
-            final var recipe1_2 = 레시피_생성(member1);
-            final var recipe1_3 = 레시피_생성(member1);
+            final var recipe1_1 = 레시피_생성(member1, 1L);
+            final var recipe1_2 = 레시피_생성(member1, 3L);
+            final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 
             final var product_recipe_1_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_1);
@@ -117,7 +111,7 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var actual = recipeRepository.findAll(page).getContent();
 
             // then
-            Assertions.assertThat(actual)
+            assertThat(actual)
                     .usingRecursiveComparison()
                     .isEqualTo(expected);
         }
@@ -138,9 +132,9 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
             복수_상품_저장(product1, product2, product3);
 
-            final var recipe1_1 = 레시피_생성(member1);
-            final var recipe1_2 = 레시피_생성(member1);
-            final var recipe1_3 = 레시피_생성(member1);
+            final var recipe1_1 = 레시피_생성(member1, 1L);
+            final var recipe1_2 = 레시피_생성(member1, 3L);
+            final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 
             final var product_recipe_1_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_1);
@@ -162,7 +156,7 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var actual = recipeRepository.findAll(page).getContent();
 
             // then
-            Assertions.assertThat(actual)
+            assertThat(actual)
                     .usingRecursiveComparison()
                     .isEqualTo(expected);
         }

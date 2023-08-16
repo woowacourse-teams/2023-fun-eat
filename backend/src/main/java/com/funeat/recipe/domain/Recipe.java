@@ -39,6 +39,14 @@ public class Recipe {
         this.member = member;
     }
 
+    public Recipe(final String title, final String content, final Member member,
+                  final Long favoriteCount) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.favoriteCount = favoriteCount;
+    }
+
     public void addFavoriteCount() {
         this.favoriteCount++;
     }
@@ -69,5 +77,14 @@ public class Recipe {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", favoriteCount=" + favoriteCount +
+                '}';
     }
 }
