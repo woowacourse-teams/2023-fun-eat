@@ -147,7 +147,7 @@ public class RecipeService {
     public void likeRecipe(final Long memberId, final Long recipeId, final RecipeFavoriteRequest request) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-        final Recipe recipe = recipeRepository.findById(recipeId)
+        final Recipe recipe = recipeRepository.findByIdForUpdate(recipeId)
                 .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
 
         final RecipeFavorite recipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
