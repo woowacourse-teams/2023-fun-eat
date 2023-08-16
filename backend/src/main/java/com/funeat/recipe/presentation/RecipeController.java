@@ -46,7 +46,7 @@ public interface RecipeController {
     @Operation(summary = "꿀조합 목록 조회", description = "꿀조합의 목록을 조회한다.")
     @ApiResponse(
             responseCode = "200",
-            description = "꿀조합 목₩ 조회 성공."
+            description = "꿀조합 목록 조회 성공."
     )
     @GetMapping
     ResponseEntity<SortingRecipesResponse> getSortingRecipes(@PageableDefault Pageable pageable);

@@ -78,13 +78,4 @@ public class Recipe {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", favoriteCount=" + favoriteCount +
-                '}';
-    }
 }

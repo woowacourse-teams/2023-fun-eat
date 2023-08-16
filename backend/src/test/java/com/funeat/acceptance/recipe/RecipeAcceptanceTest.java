@@ -301,7 +301,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             RESPONSE_CODE와_MESSAGE를_검증한다(response, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
         }
     }
-  
+
     @Nested
     class likeRecipe_성공_테스트 {
 
@@ -460,8 +460,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             RESPONSE_CODE와_MESSAGE를_검증한다(response, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
         }
     }
-  
-  @Nested
+
+    @Nested
     class getSortingRecipes_성공_테스트 {
 
         @Test
@@ -624,14 +624,14 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
-  
+
     private void 레시피_목록을_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> expected) {
         final var actual = response.jsonPath().getList("recipes", RecipeDto.class);
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
-  
+
     private void 레시피_좋아요_결과를_검증한다(final Member member, final Long recipeId, final Long expectedFavoriteCount,
                                   final boolean expectedFavorite) {
         final var actualRecipe = recipeRepository.findById(recipeId).get();
