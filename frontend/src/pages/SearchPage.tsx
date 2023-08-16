@@ -3,7 +3,7 @@ import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
-import { RecommendList, SearchedList } from '@/components/Search';
+import { RecommendList, SearchResultList } from '@/components/Search';
 import { useDebounce } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
@@ -55,7 +55,7 @@ const SearchPage = () => {
                 <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
               </Heading>
               <Spacing size={20} />
-              <SearchedList searchQuery={debouncedSearchQuery} />
+              <SearchResultList searchQuery={debouncedSearchQuery} />
             </Suspense>
           </ErrorBoundary>
         ) : (
