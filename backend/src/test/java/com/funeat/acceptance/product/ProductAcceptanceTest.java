@@ -6,6 +6,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.product.ProductSteps.상품_검색_결과_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
+import static com.funeat.acceptance.product.ProductSteps.상품_레시피_목록_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_자동_완성_검색_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
@@ -15,6 +16,7 @@ import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
@@ -33,6 +35,8 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000원_평점5점_생성;
+import static com.funeat.fixture.RecipeFixture.레시피_생성;
+import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
@@ -56,6 +60,7 @@ import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.SearchProductDto;
 import com.funeat.product.dto.SearchProductResultDto;
+import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.tag.domain.Tag;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -681,6 +686,148 @@ class ProductAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    class getProductRecipes_성공_테스트 {
+
+        @Test
+        void 해당_상품의_꿀조합_목록을_좋아요가_많은_순으로_조회할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var recipe1 = 레시피_생성(member, 1L);
+            final var recipe2 = 레시피_생성(member, 3L);
+            final var recipe3 = 레시피_생성(member, 2L);
+            복수_꿀조합_저장(recipe1, recipe2, recipe3);
+
+            final var product_recipe_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1);
+            final var product_recipe_1_2 = 레시피_안에_들어가는_상품_생성(product1, recipe2);
+            final var product_recipe_2_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1);
+            final var product_recipe_3_1 = 레시피_안에_들어가는_상품_생성(product3, recipe1);
+            final var product_recipe_3_2 = 레시피_안에_들어가는_상품_생성(product3, recipe2);
+            복수_꿀조합_상품_저장(product_recipe_1_1, product_recipe_2_1, product_recipe_3_1, product_recipe_1_2,
+                    product_recipe_3_2);
+
+            final var recipeImage1_1 = 레시피이미지_생성(recipe1);
+            final var recipeImage2_1 = 레시피이미지_생성(recipe2);
+            final var recipeImage2_2 = 레시피이미지_생성(recipe2);
+            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
+
+            final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
+            final var sortingRecipes = List.of(
+                    RecipeDto.toDto(recipe2, List.of(recipeImage2_1, recipeImage2_2), List.of(product1, product3)),
+                    RecipeDto.toDto(recipe1, List.of(recipeImage1_1), List.of(product1, product2, product3))
+            );
+
+            // when
+            final var response = 상품_레시피_목록_요청(product1.getId(), "favoriteCount", "desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            상품_레시피_목록_조회_결과를_검증한다(response, sortingRecipes, pageDto);
+        }
+
+        @Test
+        void 해당_상품의_꿀조합_목록을_최신순으로_조회할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var recipe1 = 레시피_생성(member, 1L);
+            final var recipe2 = 레시피_생성(member, 3L);
+            final var recipe3 = 레시피_생성(member, 2L);
+            복수_꿀조합_저장(recipe1, recipe2, recipe3);
+
+            final var product_recipe_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1);
+            final var product_recipe_1_2 = 레시피_안에_들어가는_상품_생성(product1, recipe2);
+            final var product_recipe_2_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1);
+            final var product_recipe_3_1 = 레시피_안에_들어가는_상품_생성(product3, recipe1);
+            final var product_recipe_3_2 = 레시피_안에_들어가는_상품_생성(product3, recipe2);
+            복수_꿀조합_상품_저장(product_recipe_1_1, product_recipe_2_1, product_recipe_3_1, product_recipe_1_2,
+                    product_recipe_3_2);
+
+            final var recipeImage1_1 = 레시피이미지_생성(recipe1);
+            final var recipeImage2_1 = 레시피이미지_생성(recipe2);
+            final var recipeImage2_2 = 레시피이미지_생성(recipe2);
+            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
+
+            final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
+            final var sortingRecipes = List.of(
+                    RecipeDto.toDto(recipe2, List.of(recipeImage2_1, recipeImage2_2), List.of(product1, product3)),
+                    RecipeDto.toDto(recipe1, List.of(recipeImage1_1), List.of(product1, product2, product3))
+            );
+
+            // when
+            final var response = 상품_레시피_목록_요청(product1.getId(), "createdAt", "desc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            상품_레시피_목록_조회_결과를_검증한다(response, sortingRecipes, pageDto);
+        }
+
+        @Test
+        void 해당_상품의_꿀조합_목록을_오래된순으로_조회할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+
+            final var recipe1 = 레시피_생성(member, 1L);
+            final var recipe2 = 레시피_생성(member, 3L);
+            final var recipe3 = 레시피_생성(member, 2L);
+            복수_꿀조합_저장(recipe1, recipe2, recipe3);
+
+            final var product_recipe_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1);
+            final var product_recipe_1_2 = 레시피_안에_들어가는_상품_생성(product1, recipe2);
+            final var product_recipe_2_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1);
+            final var product_recipe_3_1 = 레시피_안에_들어가는_상품_생성(product3, recipe1);
+            final var product_recipe_3_2 = 레시피_안에_들어가는_상품_생성(product3, recipe2);
+            복수_꿀조합_상품_저장(product_recipe_1_1, product_recipe_2_1, product_recipe_3_1, product_recipe_1_2,
+                    product_recipe_3_2);
+
+            final var recipeImage1_1 = 레시피이미지_생성(recipe1);
+            final var recipeImage2_1 = 레시피이미지_생성(recipe2);
+            final var recipeImage2_2 = 레시피이미지_생성(recipe2);
+            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
+
+            final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
+            final var sortingRecipes = List.of(
+                    RecipeDto.toDto(recipe1, List.of(recipeImage1_1), List.of(product1, product2, product3)),
+                    RecipeDto.toDto(recipe2, List.of(recipeImage2_1, recipeImage2_2), List.of(product1, product3))
+            );
+
+            // when
+            final var response = 상품_레시피_목록_요청(product1.getId(), "createdAt", "asc", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            상품_레시피_목록_조회_결과를_검증한다(response, sortingRecipes, pageDto);
+        }
+    }
+
     private List<Long> 태그_아이디_변환(final Tag... tags) {
         return Arrays.stream(tags)
                 .map(Tag::getId)
@@ -741,6 +888,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
     private <T> void 상품_검색_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> expected) {
         final var actual = response.jsonPath()
                 .getList("products", SearchProductResultDto.class);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
+    }
+
+    private void 상품_레시피_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> recipes,
+                                       final PageDto pageDto) {
+        페이지를_검증한다(response, pageDto);
+        상품_레시피_목록을_검증한다(response, recipes);
+    }
+
+    private void 상품_레시피_목록을_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> expected) {
+        final var actual = response.jsonPath().getList("recipes", RecipeDto.class);
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
