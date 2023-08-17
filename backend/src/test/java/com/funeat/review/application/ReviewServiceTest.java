@@ -15,12 +15,14 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지없음_평점1점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_false_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_true_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
@@ -586,6 +588,179 @@ class ReviewServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> reviewService.findReviewByMember(notExistMemberId, page))
                     .isInstanceOf(MemberNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class updateProductImage_성공_테스트 {
+
+        @Test
+        void 처음_리뷰가_등록되면_해당_리뷰의_이미지로_상품_이미지가_변경된다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
+            final var reviewId = 단일_리뷰_저장(review);
+
+            final var expected = review.getImage();
+
+            // when
+            reviewService.updateProductImage(reviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        void 가장_많은_좋아요를_받은_리뷰가_바뀌면_해당_리뷰의_이미지로_상품_이미지가_변경된다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var firstReview = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 1L);
+            final var firstReviewId = 단일_리뷰_저장(firstReview);
+            reviewService.updateProductImage(firstReviewId);
+
+            final var secondReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 2L);
+            final var secondReviewId = 단일_리뷰_저장(secondReview);
+
+            final var expected = secondReview.getImage();
+
+            // when
+            reviewService.updateProductImage(secondReviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        void 리뷰에_좋아요를_했지만_가장_많은_좋아요인_리뷰가_바뀌지_않으면_상품_이미지는_변경되지_않는다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var firstReview = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 100L);
+            final var firstReviewId = 단일_리뷰_저장(firstReview);
+            reviewService.updateProductImage(firstReviewId);
+
+            final var secondReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 0L);
+            final var secondReviewId = 단일_리뷰_저장(secondReview);
+
+            final var expected = firstReview.getImage();
+
+            // when
+            reviewService.updateProductImage(secondReviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        void 리뷰에_좋아요를_했는데_가장_많은_좋아요가_된_리뷰가_여러개면_최근에_가장_많은_좋아요_리뷰_이미지로_바뀐다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var firstReview = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
+            final var firstReviewId = 단일_리뷰_저장(firstReview);
+            reviewService.updateProductImage(firstReviewId);
+
+            final var secondReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 0L);
+            final var secondReviewId = 단일_리뷰_저장(secondReview);
+
+            final var expected = secondReview.getImage();
+
+            // when
+            reviewService.updateProductImage(secondReviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        void 가장_많은_좋아요를_받은_리뷰들에_이미지가_없으면_이미지가_존재하는_좋아요를_많이_받은_리뷰_이미지로_바뀐다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
+            final var firstReviewId = 단일_리뷰_저장(firstReview);
+            reviewService.updateProductImage(firstReviewId);
+
+            final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
+            final var secondReviewId = 단일_리뷰_저장(secondReview);
+            reviewService.updateProductImage(secondReviewId);
+
+            final var thirdReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
+            final var thirdReviewId = 단일_리뷰_저장(thirdReview);
+
+            final var expected = thirdReview.getImage();
+
+            // when
+            reviewService.updateProductImage(thirdReviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class updateProductImage_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_리뷰로_상품_업데이트를_시도하면_예외가_발생한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
+            final var wrongReviewId = 단일_리뷰_저장(review) + 1L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.updateProductImage(wrongReviewId))
+                    .isInstanceOf(ReviewNotFoundException.class);
         }
     }
 

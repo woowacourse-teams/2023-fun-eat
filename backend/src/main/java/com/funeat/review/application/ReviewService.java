@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional(readOnly = true)
 public class ReviewService {
+
+    private static final int TOP = 0;
+    private static final int ONE = 1;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -119,6 +123,22 @@ public class ReviewService {
             return reviewFavoriteRepository.save(reviewFavorite);
         } catch (final DataIntegrityViolationException e) {
             throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
+        }
+    }
+
+    @Transactional
+    public void updateProductImage(final Long reviewId) {
+        final Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+
+        final Product product = review.getProduct();
+        final Long productId = product.getId();
+        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
+
+        final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
+        if (!topFavoriteReview.isEmpty()) {
+            final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
+            product.updateImage(topFavoriteReviewImage);
         }
     }
 
