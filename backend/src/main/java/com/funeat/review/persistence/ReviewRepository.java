@@ -27,7 +27,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Lock(PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Review r WHERE r.id=:id")
     Optional<Review> findByIdForUpdate(final Long id);
-    
+
     @Query("SELECT r "
             + "FROM Review r "
             + "LEFT JOIN r.product p "
