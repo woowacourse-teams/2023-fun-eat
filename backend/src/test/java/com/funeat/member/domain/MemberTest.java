@@ -1,7 +1,9 @@
 package com.funeat.member.domain;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.funeat.member.exception.MemberException.MemberUpdateException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
@@ -41,33 +43,27 @@ public class MemberTest {
     class modifyProfile_실패_테스트 {
 
         @Test
-        void 사용자의_닉네임_변경_값이_null이면_예외를_발생해야_하지만_통과하고_있다() {
+        void 사용자의_닉네임_변경_값이_null이면_예외가_발생한다() {
             // given
             final var member = new Member("test", "http://www.before.com", "1");
 
             final var expectedProfileImage = "http://www.after.com";
 
-            // when
-            member.modifyProfile(null, expectedProfileImage);
-            final var actualNickname = member.getNickname();
-            final var actualProfileImage = member.getProfileImage();
-
-            // then
+            // when & then
+            assertThatThrownBy(() -> member.modifyProfile(null, expectedProfileImage))
+                    .isInstanceOf(MemberUpdateException.class);
         }
 
         @Test
-        void 사용자의_프로필_이미지_변경_값이_null이면_예외를_발생해야_하지만_통과하고_있다() {
+        void 사용자의_프로필_이미지_변경_값이_null이면_예외가_발생한다() {
             // given
             final var member = new Member("test", "http://www.before.com", "1");
 
             final var expectedNickname = "after";
 
-            // when
-            member.modifyProfile(expectedNickname, null);
-            final var actualNickname = member.getNickname();
-            final var actualProfileImage = member.getProfileImage();
-
-            // then
+            // when & then
+            assertThatThrownBy(() -> member.modifyProfile(expectedNickname, null))
+                    .isInstanceOf(MemberUpdateException.class);
         }
     }
 }

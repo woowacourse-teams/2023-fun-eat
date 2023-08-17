@@ -39,6 +39,14 @@ public class Recipe {
         this.member = member;
     }
 
+    public Recipe(final String title, final String content, final Member member,
+                  final Long favoriteCount) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.favoriteCount = favoriteCount;
+    }
+
     public void addFavoriteCount() {
         this.favoriteCount++;
     }

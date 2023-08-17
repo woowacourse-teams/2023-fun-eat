@@ -7,6 +7,8 @@ import { RecipeFavorite } from '@/components/Recipe';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
+const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
+
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
@@ -20,7 +22,7 @@ const RecipeDetailPage = () => {
       <RecipeImageContainer>
         {images.map((image) => (
           <li key={image}>
-            <RecipeImage src={image} alt={`${title} 꿀조합 사진`} width={312} height={210} />
+            <RecipeImage src={srcPath + image} alt={`${title} 꿀조합 사진`} width={312} height={210} />
           </li>
         ))}
       </RecipeImageContainer>

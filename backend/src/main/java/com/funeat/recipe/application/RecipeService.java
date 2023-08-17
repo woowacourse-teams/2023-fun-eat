@@ -1,5 +1,6 @@
 package com.funeat.recipe.application;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
@@ -11,6 +12,7 @@ import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.dto.MemberRecipeDto;
 import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRecipesResponse;
+import com.funeat.member.exception.MemberException.MemberDuplicateFavoriteException;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
@@ -23,15 +25,18 @@ import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import com.funeat.recipe.dto.SearchRecipeResultDto;
 import com.funeat.recipe.dto.SearchRecipeResultsResponse;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -77,9 +82,11 @@ public class RecipeService {
                 .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
 
         if (Objects.nonNull(images)) {
-            images.stream()
-                    .peek(it -> recipeImageRepository.save(new RecipeImage(it.getOriginalFilename(), savedRecipe)))
-                    .forEach(imageService::upload);
+            images.forEach(it -> {
+                final String newFileName = imageService.getRandomImageName(it);
+                recipeImageRepository.save(new RecipeImage(newFileName, savedRecipe));
+                imageService.upload(it, newFileName);
+            });
         }
 
         return savedRecipe.getId();
@@ -126,11 +133,26 @@ public class RecipeService {
         return MemberRecipesResponse.toResponse(page, dtos);
     }
 
+    public SortingRecipesResponse getSortingRecipes(final Pageable pageable) {
+        final Page<Recipe> pages = recipeRepository.findAll(pageable);
+
+        final PageDto page = PageDto.toDto(pages);
+        final List<RecipeDto> recipes = pages.getContent().stream()
+                .map(recipe -> {
+                    final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
+                    final List<Product> products = productRecipeRepository.findProductByRecipe(recipe);
+                    return RecipeDto.toDto(recipe, images, products);
+                })
+                .collect(Collectors.toList());
+
+        return SortingRecipesResponse.toResponse(page, recipes);
+    }
+
     @Transactional
     public void likeRecipe(final Long memberId, final Long recipeId, final RecipeFavoriteRequest request) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-        final Recipe recipe = recipeRepository.findById(recipeId)
+        final Recipe recipe = recipeRepository.findByIdForUpdate(recipeId)
                 .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
 
         final RecipeFavorite recipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
@@ -140,8 +162,12 @@ public class RecipeService {
     }
 
     private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
-        final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
-        return recipeFavoriteRepository.save(recipeFavorite);
+        try {
+            final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
+            return recipeFavoriteRepository.save(recipeFavorite);
+        } catch (final DataIntegrityViolationException e) {
+            throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
+        }
     }
 
     public SearchRecipeResultsResponse getSearchResults(final String query, final Pageable pageable) {

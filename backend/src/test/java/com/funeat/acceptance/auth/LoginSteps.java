@@ -32,7 +32,7 @@ public class LoginSteps {
         return given()
                 .cookie("JSESSIONID", loginCookie)
                 .when()
-                .get("/api/logout")
+                .post("/api/logout")
                 .then()
                 .extract();
     }

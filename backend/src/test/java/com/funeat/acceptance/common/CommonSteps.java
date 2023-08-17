@@ -2,8 +2,10 @@ package com.funeat.acceptance.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import io.restassured.specification.MultiPartSpecification;
 import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -38,5 +40,13 @@ public class CommonSteps {
         final var actual = LOCATION_헤더에서_리다이렉트_주소_추출(response);
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    public static MultiPartSpecification 사진_명세_요청() {
+        return new MultiPartSpecBuilder("image".getBytes())
+                .fileName("testImage.png")
+                .controlName("image")
+                .mimeType("image/png")
+                .build();
     }
 }

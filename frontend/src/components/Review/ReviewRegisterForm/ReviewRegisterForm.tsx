@@ -102,6 +102,10 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
         <Spacing size={80} />
         <RebuyCheckbox />
         <Spacing size={16} />
+        <Text size="sm" color={theme.textColors.disabled}>
+          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.{' '}
+        </Text>
+        <Spacing size={10} />
         <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
           {isValid ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>

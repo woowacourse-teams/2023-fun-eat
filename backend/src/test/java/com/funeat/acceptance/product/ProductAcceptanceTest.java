@@ -2,6 +2,7 @@ package com.funeat.acceptance.product;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.product.ProductSteps.상품_검색_결과_조회_요청;
@@ -10,7 +11,6 @@ import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_�
 import static com.funeat.acceptance.product.ProductSteps.상품_자동_완성_검색_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_요청;
-import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
@@ -485,7 +485,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var tag3 = 태그_간식_ETC_생성();
             복수_태그_저장(tag1, tag2, tag3);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
 
             final var request1 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag1, tag2, tag3));
             final var request2 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag2, tag3));
@@ -631,7 +631,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var tag2 = 태그_간식_ETC_생성();
             복수_태그_저장(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
 
             final var request1 = 리뷰추가요청_재구매X_생성(5L, 태그_아이디_변환(tag1, tag2));
             final var request2 = 리뷰추가요청_재구매X_생성(5L, 태그_아이디_변환(tag1));

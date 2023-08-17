@@ -6,6 +6,7 @@ import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.dto.SearchRecipeResultsResponse;
 import java.net.URI;
 import java.util.List;
@@ -48,6 +49,13 @@ public class RecipeApiController implements RecipeController {
     public ResponseEntity<RecipeDetailResponse> getRecipeDetail(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                                 @PathVariable final Long recipeId) {
         final RecipeDetailResponse response = recipeService.getRecipeDetail(loginInfo.getId(), recipeId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/api/recipes")
+    public ResponseEntity<SortingRecipesResponse> getSortingRecipes(@PageableDefault final Pageable pageable) {
+        final SortingRecipesResponse response = recipeService.getSortingRecipes(pageable);
 
         return ResponseEntity.ok(response);
     }
