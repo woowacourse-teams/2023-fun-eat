@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { CarouselItem } from '@/types/common';
+import type { CarouselChildren } from '@/types/common';
 
 interface CarouselProps {
-  carouselList: CarouselItem[];
+  carouselList: CarouselChildren[];
 }
 
 const CAROUSEL_WIDTH = 374;
