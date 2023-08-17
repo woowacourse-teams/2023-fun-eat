@@ -20,13 +20,15 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
 
   return (
     <ProductDetailContainer>
-      {image !== null ? (
-        <img src={IMAGE_SRC_PATH + image} width={300} alt={name} />
-      ) : category === CATEGORY_TYPE.FOOD ? (
-        <PreviewImage width={300} />
-      ) : (
-        <PBPreviewImage width={300} />
-      )}
+      <ImageWrapper>
+        {image !== null ? (
+          <img src={IMAGE_SRC_PATH + image} width={300} alt={name} />
+        ) : category === CATEGORY_TYPE.FOOD ? (
+          <PreviewImage width={300} />
+        ) : (
+          <PBPreviewImage width={300} />
+        )}
+      </ImageWrapper>
       <DetailInfoWrapper>
         <DescriptionWrapper>
           <Text weight="bold">가격</Text>
@@ -59,6 +61,12 @@ const ProductDetailContainer = styled.div`
   svg {
     align-self: center;
   }
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const DetailInfoWrapper = styled.div`
