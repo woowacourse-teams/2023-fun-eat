@@ -2,21 +2,30 @@ import { Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
+import PBPreviewImage from '@/assets/samgakgimbab.svg';
 import { SvgIcon, TagList } from '@/components/Common';
+import { CATEGORY_TYPE } from '@/constants';
 import type { ProductDetail } from '@/types/product';
 
 interface ProductDetailItemProps {
+  category: string;
   productDetail: ProductDetail;
 }
 
-const ProductDetailItem = ({ productDetail }: ProductDetailItemProps) => {
+const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) => {
   const { name, price, image, content, averageRating, tags } = productDetail;
 
   const theme = useTheme();
 
   return (
     <ProductDetailContainer>
-      {image ? <img src={image} width={300} alt={name} /> : <PreviewImage width={300} />}
+      {image !== null ? (
+        <img src={image} width={300} alt={name} />
+      ) : category === CATEGORY_TYPE.FOOD ? (
+        <PreviewImage width={300} />
+      ) : (
+        <PBPreviewImage width={300} />
+      )}
       <DetailInfoWrapper>
         <DescriptionWrapper>
           <Text weight="bold">가격</Text>

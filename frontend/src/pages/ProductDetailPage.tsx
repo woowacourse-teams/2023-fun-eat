@@ -31,7 +31,7 @@ const LOGIN_ERROR_MESSAGE =
 const getProductDetailPageTabMenus = (reviewCount: number) => [`리뷰 ${reviewCount}`, '꿀조합'];
 
 const ProductDetailPage = () => {
-  const { productId } = useParams();
+  const { category, productId } = useParams();
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { data: member } = useMemberQuery();
@@ -44,6 +44,10 @@ const ProductDetailPage = () => {
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
   const tabRef = useRef<HTMLUListElement>(null);
+
+  if (!category) {
+    return null;
+  }
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -63,7 +67,7 @@ const ProductDetailPage = () => {
     <>
       <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      <ProductDetailItem productDetail={productDetail} />
+      <ProductDetailItem category={category} productDetail={productDetail} />
       <Spacing size={36} />
       <TabMenu
         ref={tabRef}
