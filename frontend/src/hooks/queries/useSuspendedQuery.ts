@@ -4,18 +4,26 @@ import type { QueryFunction, QueryKey, UseQueryOptions, UseQueryResult } from '@
 export type UseSuspendedQueryResult<TData> = Omit<
   UseQueryResult<TData, never>,
   'error' | 'isLoading' | 'isError' | 'isFetching' | 'status' | 'data'
-> & { data: TData; status: 'idle' | 'success' };
+>;
 
 export type UseSuspendedQueryResultOnSuccess<TData> = UseSuspendedQueryResult<TData> & {
+  data: TData;
   status: 'success';
   isSuccess: true;
   isIdle: false;
 };
 
 export type UseSuspendedQueryResultOnIdle = UseSuspendedQueryResult<undefined> & {
+  data: undefined;
   status: 'idle';
   isSuccess: false;
   isIdle: true;
+};
+
+export type UseSuspendedQueryResultOnError = UseSuspendedQueryResult<undefined> & {
+  data: undefined;
+  status: 'error';
+  isSuccess: false;
 };
 
 export type UseSuspendedQueryOptions<
@@ -23,14 +31,17 @@ export type UseSuspendedQueryOptions<
   TError = unknown,
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey
-> = Omit<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'suspense' | 'queryKey' | 'queryFn'>;
+> = Omit<
+  UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  'suspense' | 'queryKey' | 'queryFn' | 'useErrorBoundary'
+>;
 
 export type UseSuspendedQueryOptionWithoutEnabled<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey
-> = Omit<UseSuspendedQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'enabled'>;
+> = Omit<UseSuspendedQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'enabled'> & { useErrorBoundary?: true };
 
 export function useSuspendedQuery<
   TQueryFnData = unknown,
@@ -73,8 +84,21 @@ export function useSuspendedQuery<
 >(
   queryKey: TQueryKey,
   queryFn: QueryFunction<TQueryFnData, TQueryKey>,
+  options: UseSuspendedQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
+    useErrorBoundary: false;
+  }
+): UseSuspendedQueryResultOnSuccess<TData> | UseSuspendedQueryResultOnError;
+
+export function useSuspendedQuery<
+  TQueryFnData = unknown,
+  TError = unknown,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey
+>(
+  queryKey: TQueryKey,
+  queryFn: QueryFunction<TQueryFnData, TQueryKey>,
   options: UseSuspendedQueryOptionWithoutEnabled<TQueryFnData, TError, TData, TQueryKey>
-): UseSuspendedQueryResultOnSuccess<TData> | UseSuspendedQueryResultOnIdle;
+): UseSuspendedQueryResultOnSuccess<TData> | UseSuspendedQueryResultOnIdle | UseSuspendedQueryResultOnError;
 
 export function useSuspendedQuery<
   TQueryFnData = unknown,
