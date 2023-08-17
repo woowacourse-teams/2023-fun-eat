@@ -10,7 +10,7 @@ const MemberRecipePage = () => {
 
   return (
     <>
-      <SectionTitle name="내가 작성한 레시피" />
+      <SectionTitle name="내가 작성한 꿀조합" />
       <Spacing size={18} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>

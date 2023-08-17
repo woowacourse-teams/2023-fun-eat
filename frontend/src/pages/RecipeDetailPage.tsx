@@ -8,6 +8,7 @@ import { RecipeFavorite } from '@/components/Recipe';
 import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
+import { isChangedImage } from '@/utils/image';
 
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
@@ -19,7 +20,7 @@ const RecipeDetailPage = () => {
     <>
       <SectionTitle name={title} />
       <Spacing size={24} />
-      {images !== null ? (
+      {images.length > 0 ? (
         <RecipeImageContainer>
           {images.map((image, index) => (
             <li key={image}>
@@ -40,7 +41,12 @@ const RecipeDetailPage = () => {
       <Spacing size={24} />
       <AuthorFavoriteWrapper>
         <AuthorWrapper>
-          <AuthorProfileImage src={author.profileImage} alt={`${author.nickname}님의 프로필`} width={45} height={45} />
+          <AuthorProfileImage
+            src={isChangedImage(author.profileImage) ? IMAGE_SRC_PATH + author.profileImage : author.profileImage}
+            alt={`${author.nickname}님의 프로필`}
+            width={45}
+            height={45}
+          />
           <div>
             <Text color={theme.textColors.info}>{author.nickname} 님</Text>
             <Text color={theme.textColors.info}> {getFormattedDate(createdAt)}</Text>

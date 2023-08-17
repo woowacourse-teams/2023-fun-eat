@@ -5,6 +5,7 @@ import PreviewImage from '@/assets/characters.svg';
 import PBPreviewImage from '@/assets/samgakgimbab.svg';
 import { SvgIcon, TagList } from '@/components/Common';
 import { CATEGORY_TYPE } from '@/constants';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { ProductDetail } from '@/types/product';
 
 interface ProductDetailItemProps {
@@ -20,7 +21,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
   return (
     <ProductDetailContainer>
       {image !== null ? (
-        <img src={image} width={300} alt={name} />
+        <img src={IMAGE_SRC_PATH + image} width={300} alt={name} />
       ) : category === CATEGORY_TYPE.FOOD ? (
         <PreviewImage width={300} />
       ) : (

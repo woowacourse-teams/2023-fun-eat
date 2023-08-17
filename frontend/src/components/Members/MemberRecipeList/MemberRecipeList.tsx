@@ -42,14 +42,16 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
     <MemberRecipeListContainer>
       {!isMemberPage && (
         <TotalRecipeCount color={theme.colors.gray4}>
-          총 <strong>{totalRecipeCount}</strong>개의 레시피를 남겼어요!
+          총 <strong>{totalRecipeCount}</strong>개의 꿀조합을 남겼어요!
         </TotalRecipeCount>
       )}
       <Spacing size={20} />
       <MemberRecipeListWrapper>
         {recipeToDisplay?.map((recipe) => (
           <li key={recipe.id}>
-            <RecipeItem recipe={recipe} isMemberPage={isMemberPage} />
+            <Link as={RouterLink} to={`${PATH.RECIPE}/${recipe.id}`}>
+              <RecipeItem recipe={recipe} isMemberPage={isMemberPage} />
+            </Link>
           </li>
         ))}
       </MemberRecipeListWrapper>
