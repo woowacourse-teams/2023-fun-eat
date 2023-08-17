@@ -77,9 +77,11 @@ public class RecipeService {
                 .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
 
         if (Objects.nonNull(images)) {
-            images.stream()
-                    .peek(it -> recipeImageRepository.save(new RecipeImage(it.getOriginalFilename(), savedRecipe)))
-                    .forEach(imageService::upload);
+            images.forEach(it -> {
+                final String newFileName = imageService.getRandomImageName(it);
+                recipeImageRepository.save(new RecipeImage(newFileName, savedRecipe));
+                imageService.upload(it, newFileName);
+            });
         }
 
         return savedRecipe.getId();

@@ -27,4 +27,9 @@ public class AuthService {
     public String getLoginRedirectUri() {
         return platformUserProvider.getRedirectURI();
     }
+
+    public void logoutWithKakao(final Long memberId) {
+        final String platformId = memberService.findPlatformId(memberId);
+        platformUserProvider.logout(platformId);
+    }
 }
