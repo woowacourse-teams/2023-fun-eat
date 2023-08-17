@@ -16,34 +16,38 @@ import {
   RegisterButton,
   SectionTitle,
 } from '@/components/Common';
-import { ProductDetailItem } from '@/components/Product';
+import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
 import { ReviewList, ReviewRegisterForm } from '@/components/Review';
-import { REVIEW_SORT_OPTIONS } from '@/constants';
+import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useSortOption } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
-const LOGIN_ERROR_MESSAGE =
-  '로그인 해야 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품의 리뷰를 확인해보세요 😊';
-
-const getProductDetailPageTabMenus = (reviewCount: number) => [`리뷰 ${reviewCount}`, '꿀조합'];
+const LOGIN_ERROR_MESSAGE_REVIEW =
+  '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 리뷰를 확인해보세요 😊';
+const LOGIN_ERROR_MESSAGE_RECIPE =
+  '로그인 후 상품 꿀조합을 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 꿀조합을 확인해보세요 😊';
 
 const ProductDetailPage = () => {
   const { category, productId } = useParams();
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { data: member } = useMemberQuery();
+  const { data: productDetail } = useProductDetailQuery(Number(productId));
   const { reset } = useQueryErrorResetBoundary();
 
-  const { data: productDetail } = useProductDetailQuery(Number(productId));
-
-  const tabMenus = getProductDetailPageTabMenus(productDetail.reviewCount);
+  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
   const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
+  const tabRef = useRef<HTMLUListElement>(null);
+
+  const isReviewTab = selectedTabMenu === tabMenus[0];
+  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
+  const initialSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
+
+  const { selectedOption, selectSortOption } = useSortOption(initialSortOption);
+  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
-  const tabRef = useRef<HTMLUListElement>(null);
 
   if (!category) {
     return null;
@@ -61,6 +65,7 @@ const ProductDetailPage = () => {
 
   const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     setSelectedTabMenu(event.currentTarget.value);
+    selectSortOption(initialSortOption);
   };
 
   return (
@@ -82,14 +87,22 @@ const ProductDetailPage = () => {
               <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
             </SortButtonWrapper>
             <section>
-              <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+              {isReviewTab ? (
+                <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
+              ) : (
+                <ProductRecipeList
+                  productId={Number(productId)}
+                  productName={productDetail.name}
+                  selectedOption={selectedOption}
+                />
+              )}
             </section>
           </Suspense>
         </ErrorBoundary>
       ) : (
         <ErrorContainer>
           <ErrorDescription align="center" weight="bold" size="lg">
-            {LOGIN_ERROR_MESSAGE}
+            {isReviewTab ? LOGIN_ERROR_MESSAGE_REVIEW : LOGIN_ERROR_MESSAGE_RECIPE}
           </ErrorDescription>
           <LoginLink as={RouterLink} to={PATH.LOGIN} block>
             로그인하러 가기
@@ -116,7 +129,7 @@ const ProductDetailPage = () => {
           </ReviewFormProvider>
         ) : (
           <SortOptionList
-            options={REVIEW_SORT_OPTIONS}
+            options={sortOptions}
             selectedOption={selectedOption}
             selectSortOption={selectSortOption}
             close={handleCloseBottomSheet}
@@ -143,7 +156,7 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorDescription = styled(Text)`
-  padding: 40px 0;
+  padding: 40px 0 20px;
   white-space: pre-line;
   word-break: break-all;
 `;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import { useMemberQuery } from '@/hooks/queries/members';
+import { useLogoutMutation, useMemberQuery } from '@/hooks/queries/members';
 
 const MembersInfo = () => {
   const { data: member } = useMemberQuery();
@@ -17,6 +17,12 @@ const MembersInfo = () => {
 
   const { nickname, profileImage } = member;
 
+  const { mutate } = useLogoutMutation();
+
+  const handleLogout = () => {
+    mutate();
+  };
+
   return (
     <MembersInfoContainer>
       <MemberInfoWrapper>
@@ -28,7 +34,7 @@ const MembersInfo = () => {
           <SvgIcon variant="pencil" width={20} height={24} color={theme.colors.gray3} />
         </MemberModifyLink>
       </MemberInfoWrapper>
-      <Button type="button" textColor="disabled" variant="transparent">
+      <Button type="button" textColor="disabled" variant="transparent" onClick={handleLogout}>
         로그아웃
       </Button>
     </MembersInfoContainer>
