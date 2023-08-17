@@ -7,7 +7,8 @@ const useReviewRegisterFormMutation = (productId: number) => {
 
   return useMutation({
     mutationFn: (data: FormData) => productApi.postData({ params: `/${productId}/reviews`, credentials: true }, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['productReviews', productId, 'createdAt,desc'] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['productReviews', productId, 'createdAt,desc', 'productDetail'] }),
   });
 };
 
