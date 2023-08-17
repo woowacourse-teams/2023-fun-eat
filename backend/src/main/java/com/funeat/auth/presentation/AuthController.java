@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "06.Login", description = "로그인 관련 API 입니다.")
@@ -31,9 +32,9 @@ public interface AuthController {
 
     @Operation(summary = "로그아웃", description = "로그아웃을 한다")
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "302",
             description = "로그아웃 성공."
     )
-    @GetMapping
+    @PostMapping
     ResponseEntity<Void> logout(@AuthenticationPrincipal LoginInfo loginInfo, HttpServletRequest request);
 }

@@ -2,27 +2,27 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
-import ErrorBoundary from '@/components/Common/ErrorBoundary/ErrorBoundary';
+import { AuthLayout } from '@/components/Layout';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import AuthPage from '@/pages/AuthPage';
 import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
+import MemberModifyPage from '@/pages/MemberModifyPage';
+import MemberPage from '@/pages/MemberPage';
+import MemberRecipePage from '@/pages/MemberRecipePage';
+import MemberReviewPage from '@/pages/MemberReviewPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import ProductListPage from '@/pages/ProductListPage';
-import ProfilePage from '@/pages/ProfilePage';
+import RecipeDetailPage from '@/pages/RecipeDetailPage';
 import RecipePage from '@/pages/RecipePage';
 import SearchPage from '@/pages/SearchPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <ErrorBoundary fallback={NotFoundPage}>
-        <App />
-      </ErrorBoundary>
-    ),
+    element: <App />,
     errorElement: <NotFoundPage />,
     children: [
       {
@@ -46,18 +46,55 @@ const router = createBrowserRouter([
         element: <RecipePage />,
       },
       {
+        path: `${PATH.RECIPE}/:recipeId`,
+        element: (
+          <AuthLayout>
+            <RecipeDetailPage />
+          </AuthLayout>
+        ),
+      },
+      {
         path: PATH.SEARCH,
         element: <SearchPage />,
       },
       {
-        path: PATH.PROFILE,
-        element: <ProfilePage />,
+        path: PATH.MEMBER,
+        element: (
+          <AuthLayout>
+            <MemberPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: `${PATH.MEMBER}/modify`,
+        element: (
+          <AuthLayout>
+            <MemberModifyPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: `${PATH.MEMBER}/review`,
+        element: (
+          <AuthLayout>
+            <MemberReviewPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: `${PATH.MEMBER}/recipe`,
+        element: (
+          <AuthLayout>
+            <MemberRecipePage />
+          </AuthLayout>
+        ),
       },
     ],
   },
   {
     path: '/',
-    element: <App layout="auth" />,
+    element: <App layout="minimal" />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: PATH.LOGIN,
@@ -71,7 +108,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App layout="detail" />,
+    element: <App layout="headerOnly" />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,

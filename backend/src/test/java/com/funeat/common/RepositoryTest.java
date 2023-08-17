@@ -1,6 +1,7 @@
 package com.funeat.common;
 
 import com.funeat.member.domain.Member;
+import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ProductBookmarkRepository;
@@ -117,6 +118,28 @@ public abstract class RepositoryTest {
         reviewRepository.saveAll(reviews);
     }
 
+    protected Long 단일_꿀조합_저장(final Recipe recipe) {
+        return recipeRepository.save(recipe).getId();
+    }
+
+    protected void 복수_꿀조합_저장(final Recipe... recipesToSave) {
+        final var recipes = List.of(recipesToSave);
+
+        recipeRepository.saveAll(recipes);
+    }
+
+    protected void 복수_꿀조합_이미지_저장(final RecipeImage... recipeImageToSave) {
+        final var recipeFavorites = List.of(recipeImageToSave);
+
+        recipeImageRepository.saveAll(recipeFavorites);
+    }
+
+    protected void 복수_꿀조합_상품_저장(final ProductRecipe... productRecipeImageToSave) {
+        final var productRecipes = List.of(productRecipeImageToSave);
+
+        productRecipeRepository.saveAll(productRecipes);
+    }
+
     protected Long 단일_태그_저장(final Tag tag) {
         return tagRepository.save(tag).getId();
     }
@@ -167,5 +190,9 @@ public abstract class RepositoryTest {
         final var productRecipes = List.of(productRecipeToSave);
 
         productRecipeRepository.saveAll(productRecipes);
+    }
+
+    protected void 레시피_좋아요_저장(final RecipeFavorite recipeFavorite) {
+        recipeFavoriteRepository.save(recipeFavorite);
     }
 }

@@ -1,24 +1,17 @@
 import type { PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import { Navigate } from 'react-router-dom';
+
+import { PATH } from '@/constants/path';
+import { useMemberQuery } from '@/hooks/queries/members';
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
-  return (
-    <AuthLayoutContainer>
-      <MainWrapper>{children}</MainWrapper>
-    </AuthLayoutContainer>
-  );
+  const { data: member } = useMemberQuery();
+
+  if (!member) {
+    return <Navigate to={PATH.LOGIN} replace />;
+  }
+
+  return children;
 };
 
 export default AuthLayout;
-
-const AuthLayoutContainer = styled.div`
-  max-width: 600px;
-  height: 100%;
-  margin: 0 auto;
-`;
-
-const MainWrapper = styled.main`
-  height: 100%;
-  padding: 20px;
-  overflow-y: auto;
-`;

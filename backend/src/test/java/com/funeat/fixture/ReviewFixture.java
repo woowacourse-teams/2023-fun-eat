@@ -14,6 +14,10 @@ public class ReviewFixture {
         return new Review(member, product, "test1", 1L, "test", true, count);
     }
 
+    public static Review 리뷰_이미지없음_평점1점_재구매O_생성(final Member member, final Product product, final Long count) {
+        return new Review(member, product, null, 1L, "test", true, count);
+    }
+
     public static Review 리뷰_이미지test1_평점1점_재구매X_생성(final Member member, final Product product, final Long count) {
         return new Review(member, product, "test1", 1L, "test", false, count);
     }

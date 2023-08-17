@@ -11,12 +11,8 @@ public class RankingReviewDto {
     private final Long rating;
     private final Long favoriteCount;
 
-    public RankingReviewDto(final Long reviewId,
-                            final Long productId,
-                            final String productName,
-                            final String content,
-                            final Long rating,
-                            final Long favoriteCount) {
+    private RankingReviewDto(final Long reviewId, final Long productId, final String productName, final String content,
+                             final Long rating, final Long favoriteCount) {
         this.reviewId = reviewId;
         this.productId = productId;
         this.productName = productName;

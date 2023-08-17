@@ -1,20 +1,18 @@
 package com.funeat.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotBlank;
+
 public class MemberRequest {
 
+    @NotBlank(message = "닉네임을 확인해주세요")
     private final String nickname;
-    private final String profileImage;
 
-    public MemberRequest(final String nickname, final String profileImage) {
+    public MemberRequest(@JsonProperty("nickname") final String nickname) {
         this.nickname = nickname;
-        this.profileImage = profileImage;
     }
 
     public String getNickname() {
         return nickname;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
     }
 }
