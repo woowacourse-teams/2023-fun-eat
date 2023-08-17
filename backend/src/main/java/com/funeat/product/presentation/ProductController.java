@@ -5,6 +5,7 @@ import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductsResponse;
 import com.funeat.product.dto.SearchProductResultsResponse;
 import com.funeat.product.dto.SearchProductsResponse;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,4 +62,13 @@ public interface ProductController {
     @GetMapping
     ResponseEntity<SearchProductResultsResponse> getSearchResults(@RequestParam final String query,
                                                                   @PageableDefault final Pageable pageable);
+
+    @Operation(summary = "해당 상품 꿀조합 목록 조회", description = "해당 상품이 포함된 꿀조합 목록을 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "해당 상품 꿀조합 목록 조회 성공."
+    )
+    @GetMapping
+    ResponseEntity<SortingRecipesResponse> getProductRecipes(@PathVariable final Long productId,
+                                                             @PageableDefault final Pageable pageable);
 }

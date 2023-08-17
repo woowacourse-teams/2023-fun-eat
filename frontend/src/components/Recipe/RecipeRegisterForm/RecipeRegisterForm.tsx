@@ -36,16 +36,21 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
     formContent: recipeFormValue,
   });
 
+  const resetAndCloseForm = () => {
+    deleteImage();
+    resetRecipeFormValue();
+    closeRecipeDialog();
+  };
+
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
     mutate(formData, {
       onSuccess: () => {
-        deleteImage();
-        resetRecipeFormValue();
-        closeRecipeDialog();
+        resetAndCloseForm();
       },
       onError: (error) => {
+        resetAndCloseForm();
         if (error instanceof Error) {
           alert(error.message);
           return;

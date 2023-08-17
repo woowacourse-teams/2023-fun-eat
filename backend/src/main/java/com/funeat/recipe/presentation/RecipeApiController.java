@@ -3,13 +3,16 @@ package com.funeat.recipe.presentation;
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.application.RecipeService;
+import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import com.funeat.recipe.dto.SortingRecipesResponse;
+import com.funeat.recipe.dto.SearchRecipeResultsResponse;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,5 +68,21 @@ public class RecipeApiController implements RecipeController {
         recipeService.likeRecipe(loginInfo.getId(), recipeId, request);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/ranks/recipes")
+    public ResponseEntity<RankingRecipesResponse> getRankingRecipes() {
+        final RankingRecipesResponse response = recipeService.getTop3Recipes();
+  
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/search/recipes/results")
+    public ResponseEntity<SearchRecipeResultsResponse> getSearchResults(@RequestParam final String query,
+                                                                        @PageableDefault final Pageable pageable) {
+        final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        final SearchRecipeResultsResponse response = recipeService.getSearchResults(query, pageRequest);
+
+        return ResponseEntity.ok(response);
     }
 }
