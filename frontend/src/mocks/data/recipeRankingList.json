@@ -1,0 +1,34 @@
+{
+  "recipes": [
+    {
+      "id": 3,
+      "image": "image1.jpg",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "profileImage": "profile.png",
+        "nickName": "funeat"
+      },
+      "favoriteCount": 153
+    },
+    {
+      "id": 3,
+      "image": "image1.jpg",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "profileImage": "profile.png",
+        "nickName": "funeat"
+      },
+      "favoriteCount": 153
+    },
+    {
+      "id": 3,
+      "image": "image1.jpg",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "profileImage": "profile.png",
+        "nickName": "funeat"
+      },
+      "favoriteCount": 153
+    }
+  ]
+}
