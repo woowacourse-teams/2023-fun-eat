@@ -6,6 +6,7 @@ import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductsResponse;
 import com.funeat.product.dto.SearchProductResultsResponse;
 import com.funeat.product.dto.SearchProductsResponse;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -58,6 +59,13 @@ public class ProductApiController implements ProductController {
                                                                          @PageableDefault final Pageable pageable) {
         final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         final SearchProductResultsResponse response = productService.getSearchResults(query, pageRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/products/{productId}/recipes")
+    public ResponseEntity<SortingRecipesResponse> getProductRecipes(@PathVariable final Long productId,
+                                                             @PageableDefault Pageable pageable) {
+        final SortingRecipesResponse response = productService.getProductRecipes(productId, pageable);
         return ResponseEntity.ok(response);
     }
 }

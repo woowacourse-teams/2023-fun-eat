@@ -19,7 +19,14 @@ import com.funeat.product.dto.SearchProductsResponse;
 import com.funeat.product.exception.CategoryException.CategoryNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
+import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.recipe.domain.Recipe;
+import com.funeat.recipe.domain.RecipeImage;
+import com.funeat.recipe.dto.RecipeDto;
+import com.funeat.recipe.dto.SortingRecipesResponse;
+import com.funeat.recipe.persistence.RecipeImageRepository;
+import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
@@ -44,13 +51,21 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ReviewTagRepository reviewTagRepository;
     private final ReviewRepository reviewRepository;
+    private final ProductRecipeRepository productRecipeRepository;
+    private final RecipeImageRepository recipeImageRepository;
+    private final RecipeRepository recipeRepository;
 
     public ProductService(final CategoryRepository categoryRepository, final ProductRepository productRepository,
-                          final ReviewTagRepository reviewTagRepository, final ReviewRepository reviewRepository) {
+                          final ReviewTagRepository reviewTagRepository, final ReviewRepository reviewRepository,
+                          final ProductRecipeRepository productRecipeRepository,
+                          final RecipeImageRepository recipeImageRepository, final RecipeRepository recipeRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.reviewRepository = reviewRepository;
+        this.productRecipeRepository = productRecipeRepository;
+        this.recipeImageRepository = recipeImageRepository;
+        this.recipeRepository = recipeRepository;
     }
 
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
@@ -118,5 +133,22 @@ public class ProductService {
                 .collect(Collectors.toList());
 
         return SearchProductResultsResponse.toResponse(pageDto, resultDtos);
+    }
+
+    public SortingRecipesResponse getProductRecipes(final Long productId, final Pageable pageable) {
+        final Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
+
+        final Page<Recipe> recipes = recipeRepository.findRecipesByProduct(product, pageable);
+
+        final PageDto pageDto = PageDto.toDto(recipes);
+        final List<RecipeDto> recipeDtos = recipes.stream()
+                .map(recipe -> {
+                    final List<RecipeImage> images = recipeImageRepository.findByRecipe(recipe);
+                    final List<Product> products = productRecipeRepository.findProductByRecipe(recipe);
+                    return RecipeDto.toDto(recipe, images, products);
+                })
+                .collect(Collectors.toList());
+        return SortingRecipesResponse.toResponse(pageDto, recipeDtos);
     }
 }
