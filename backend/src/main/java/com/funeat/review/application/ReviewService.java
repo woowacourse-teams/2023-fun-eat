@@ -48,6 +48,7 @@ public class ReviewService {
 
     private static final int TOP = 0;
     private static final int ONE = 1;
+
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
     private final ReviewTagRepository reviewTagRepository;
@@ -134,9 +135,9 @@ public class ReviewService {
         final Long productId = product.getId();
         final PageRequest pageRequest = PageRequest.of(TOP, ONE);
 
-        final List<Review> topFavoriteReview = reviewRepository.findPopularImage(productId, pageRequest);
+        final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
-            final String topFavoriteReviewImage = topFavoriteReview.get(0).getImage();
+            final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
             product.updateImage(topFavoriteReviewImage);
         }
     }

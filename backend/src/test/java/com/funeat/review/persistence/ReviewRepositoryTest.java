@@ -151,7 +151,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var pageable = PageRequest.of(0, 1);
 
             // when
-            final var actual = reviewRepository.findPopularImage(productId, pageable);
+            final var actual = reviewRepository.findPopularReviewWithImage(productId, pageable);
 
             // then
             assertThat(actual).isEmpty();
@@ -176,7 +176,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var pageable = PageRequest.of(0, 1);
 
             // when
-            final var actual = reviewRepository.findPopularImage(productId, pageable).get(0);
+            final var actual = reviewRepository.findPopularReviewWithImage(productId, pageable).get(0);
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(review1);
@@ -201,7 +201,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var pageable = PageRequest.of(0, 1);
 
             // when
-            final var actual = reviewRepository.findPopularImage(productId, pageable).get(0);
+            final var actual = reviewRepository.findPopularReviewWithImage(productId, pageable).get(0);
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(review2);
