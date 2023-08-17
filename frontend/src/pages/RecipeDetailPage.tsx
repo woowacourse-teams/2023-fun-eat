@@ -4,10 +4,9 @@ import styled from 'styled-components';
 
 import { SectionTitle } from '@/components/Common';
 import { RecipeFavorite } from '@/components/Recipe';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
@@ -20,9 +19,9 @@ const RecipeDetailPage = () => {
       <SectionTitle name={title} />
       <Spacing size={24} />
       <RecipeImageContainer>
-        {images.map((image) => (
+        {images.map((image, index) => (
           <li key={image}>
-            <RecipeImage src={srcPath + image} alt={`${title} 꿀조합 사진`} width={312} height={210} />
+            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`${title} 꿀조합 사진 ${index}`} width={312} height={210} />
           </li>
         ))}
       </RecipeImageContainer>

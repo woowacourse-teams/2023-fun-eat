@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import PreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -11,8 +12,6 @@ interface RecipeItemProps {
   recipe: Recipe | MemberRecipe;
   isMemberPage?: boolean;
 }
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
   const { image, title, createdAt, favoriteCount, products } = recipe;
@@ -24,7 +23,7 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
       {!isMemberPage && (
         <ImageWrapper>
           {image !== null ? (
-            <RecipeImage src={srcPath + image} alt={`조리된 ${title}`} />
+            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`조리된 ${title}`} />
           ) : (
             <PreviewImage width={160} height={160} />
           )}
