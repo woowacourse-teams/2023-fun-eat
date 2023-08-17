@@ -1,4 +1,4 @@
-import type { ChangeEventHandler, FormEventHandler } from 'react';
+import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 'react';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -16,21 +16,32 @@ const useSearch = () => {
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    const trimmedSearchQuery = searchQuery.trim();
 
-    if (!searchQuery) {
+    if (!trimmedSearchQuery) {
       alert('검색어를 입력해주세요');
+      setSearchQuery('');
       return;
     }
 
-    if (currentSearchQuery === searchQuery) {
+    if (currentSearchQuery === trimmedSearchQuery) {
       return;
     }
 
+    setSearchQuery(trimmedSearchQuery);
     setIsSubmitted(true);
-    setSearchParams({ query: searchQuery });
+    setSearchParams({ query: trimmedSearchQuery });
   };
 
-  return { searchQuery, isSubmitted, handleSearchQuery, handleSearch };
+  const handleSearchClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    const { value } = event.currentTarget;
+
+    setSearchQuery(value);
+    setIsSubmitted(true);
+    setSearchParams({ query: value });
+  };
+
+  return { searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick };
 };
 
 export default useSearch;

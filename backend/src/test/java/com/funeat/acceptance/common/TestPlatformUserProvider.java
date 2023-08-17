@@ -18,4 +18,8 @@ public class TestPlatformUserProvider implements PlatformUserProvider {
     public String getRedirectURI() {
         return "www.test.com";
     }
+
+    @Override
+    public void logout(final String platformId) {
+    }
 }

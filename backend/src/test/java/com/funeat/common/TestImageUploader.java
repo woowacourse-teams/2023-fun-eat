@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class TestImageUploader implements ImageService {
 
     @Override
-    public void upload(final MultipartFile image) {
+    public void upload(final MultipartFile image, final String newImageName) {
         // 실제로 IO 작업을 수행하는 대신, 임시 디렉토리로 복사하도록 수정
         try {
             final String temporaryPath = String.valueOf(System.currentTimeMillis());
@@ -27,6 +27,11 @@ public class TestImageUploader implements ImageService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String getRandomImageName(final MultipartFile image) {
+        return image.getOriginalFilename();
     }
 
     private void deleteDirectory(Path directory) throws IOException {
