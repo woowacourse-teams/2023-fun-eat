@@ -21,5 +21,6 @@ const MainWrapper = styled.main`
   position: relative;
   height: 100%;
   padding: 20px;
+  overflow-x: hidden;
   overflow-y: auto;
 `;
