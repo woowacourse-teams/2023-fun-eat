@@ -61,7 +61,6 @@ const LoginSection = styled.section`
 
 const Description = styled(Text)`
   white-space: pre-wrap;
-  word-break: break-all;
 `;
 
 const LoginLinkWrapper = styled.div`
