@@ -137,10 +137,7 @@ public class ReviewService {
         final List<Review> topFavoriteReview = reviewRepository.findPopularImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
             final String topFavoriteReviewImage = topFavoriteReview.get(0).getImage();
-
-            if (product.isNotEqualImage(topFavoriteReviewImage)) {
-                product.updateImage(topFavoriteReviewImage);
-            }
+            product.updateImage(topFavoriteReviewImage);
         }
     }
 
