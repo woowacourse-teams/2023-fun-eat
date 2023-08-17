@@ -89,9 +89,12 @@ const RequiredMark = styled.sup`
 
 const BadgeWrapper = styled.ul`
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
+  align-content: flex-start;
   column-gap: 8px;
   height: 48px;
+  overflow-x: auto;
 `;
 
 const ProductUploadLimitMessage = styled(Text)`
