@@ -8,6 +8,7 @@ import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/date';
+import { isChangedImage } from '@/utils/image';
 
 interface ReviewItemProps {
   productId: number;
@@ -49,7 +50,12 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
     <ReviewItemContainer>
       <ReviewerWrapper>
         <ReviewerInfoWrapper>
-          <ReviewerImage src={profileImage} width={40} height={40} alt={`${userName}의 프로필`} />
+          <ReviewerImage
+            src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
+            width={40}
+            height={40}
+            alt={`${userName}의 프로필`}
+          />
           <div>
             <Text weight="bold">{userName}</Text>
             <RatingIconWrapper>

@@ -5,6 +5,7 @@ import RecipePreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
 import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { RecipeRanking } from '@/types/ranking';
+import { isChangedImage } from '@/utils/image';
 
 interface RecipeRankingItemProps {
   rank: number;
@@ -13,7 +14,12 @@ interface RecipeRankingItemProps {
 
 const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
   const theme = useTheme();
-  const { image, title, author, favoriteCount } = recipe;
+  const {
+    image,
+    title,
+    author: { nickname, profileImage },
+    favoriteCount,
+  } = recipe;
 
   return (
     <>
@@ -38,9 +44,14 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
         </TitleFavoriteWrapper>
         <Spacing direction="horizontal" size={56} />
         <AuthorWrapper>
-          <AuthorImage src={author.profileImage} alt={`${author.nickname} 님의 프로필`} width={40} height={40} />
+          <AuthorImage
+            src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
+            alt={`${nickname} 님의 프로필`}
+            width={40}
+            height={40}
+          />
           <Text size="sm" color={theme.textColors.sub}>
-            {author.nickname} 님
+            {nickname} 님
           </Text>
         </AuthorWrapper>
       </RecipeRankingItemContainer>

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { SvgIcon } from '@/components/Common';
 import { IMAGE_SRC_PATH, PATH } from '@/constants/path';
 import { useLogoutMutation, useMemberQuery } from '@/hooks/queries/members';
+import { isChangedImage } from '@/utils/image';
 
 const MembersInfo = () => {
   const { data: member } = useMemberQuery();
@@ -16,8 +17,6 @@ const MembersInfo = () => {
 
   const { nickname, profileImage } = member;
 
-  const isChangedProfileImage = !profileImage.includes('https');
-
   const handleLogout = () => {
     mutate();
   };
@@ -26,7 +25,7 @@ const MembersInfo = () => {
     <MembersInfoContainer>
       <MemberInfoWrapper>
         <MembersImage
-          src={isChangedProfileImage ? IMAGE_SRC_PATH + profileImage : profileImage}
+          src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
           width={45}
           height={45}
           alt={`${nickname}의 프로필`}

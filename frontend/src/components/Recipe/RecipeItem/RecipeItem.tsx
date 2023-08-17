@@ -7,6 +7,7 @@ import { SvgIcon } from '@/components/Common';
 import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
+import { isChangedImage } from '@/utils/image';
 
 interface RecipeItemProps {
   recipe: Recipe | MemberRecipe;
@@ -27,7 +28,12 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
           ) : (
             <PreviewImage width={160} height={160} />
           )}
-          {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
+          {author && (
+            <ProfileImage
+              src={isChangedImage(author.profileImage) ? IMAGE_SRC_PATH + author.profileImage : author.profileImage}
+              alt={`${author.nickname}의 프로필`}
+            />
+          )}
         </ImageWrapper>
       )}
       <RecipeInfoWrapper>
