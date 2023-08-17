@@ -11,7 +11,7 @@ export const rankingHandlers = [
   rest.get('/api/ranks/reviews', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockReviewRankingList), ctx.delay(1000));
   }),
-  rest.get('/api/rnaks/recipes', (req, res, ctx) => {
+  rest.get('/api/ranks/recipes', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(mockRecipeRankingList), ctx.delay(1000));
   }),
 ];
