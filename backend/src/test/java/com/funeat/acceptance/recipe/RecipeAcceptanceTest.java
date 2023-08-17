@@ -8,8 +8,8 @@ import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
-import static com.funeat.acceptance.recipe.RecipeSteps.레시피_랭킹_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_검색_결과_조회_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_랭킹_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_목록_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_상세_정보_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_생성_요청;
@@ -20,10 +20,10 @@ import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
-import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
+import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
@@ -47,8 +47,8 @@ import com.funeat.recipe.dto.RankingRecipeDto;
 import com.funeat.recipe.dto.RecipeAuthorDto;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
-import com.funeat.recipe.dto.SearchRecipeResultDto;
 import com.funeat.recipe.dto.RecipeDto;
+import com.funeat.recipe.dto.SearchRecipeResultDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Collections;
@@ -528,7 +528,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     class getSearchResults_성공_테스트 {
 
         @Test
-        void 레시피_검색_결과들을_조회한다() {
+        void 검색어에_해당하는_상품이_포함된_레시피가_2개면_레시피_2개를_반환한다() {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
@@ -553,6 +553,38 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var expectedDto1 = 예상_레시피_검색_결과_변환(loginCookie, recipeId1);
             final var expectedDto2 = 예상_레시피_검색_결과_변환(loginCookie, recipeId2);
             final var expected = List.of(expectedDto1, expectedDto2);
+
+            // when
+            final var response = 레시피_검색_결과_조회_요청("망고", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, pageDto);
+            레시피_검색_결과를_검증한다(response, expected);
+        }
+
+        @Test
+        void 검색어에_해당하는_상품이_2개고_상품이_포함된_레시피가_1개면_레시피_1개를_반환한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds1 = 상품_아이디_변환(product1, product2, product3);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            final var createRequest1 = 레시피추가요청_생성(productIds1);
+            final var images = 여러_사진_요청(3);
+            final var recipeId1 = 레시피_추가_요청하고_id_반환(createRequest1, images, loginCookie);
+
+            final var pageDto = new PageDto(1L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+
+            final var expectedDto1 = 예상_레시피_검색_결과_변환(loginCookie, recipeId1);
+            final var expected = List.of(expectedDto1);
 
             // when
             final var response = 레시피_검색_결과_조회_요청("망고", 0);
