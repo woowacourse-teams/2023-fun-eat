@@ -1,5 +1,6 @@
 package com.funeat.recipe.application;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
@@ -11,6 +12,7 @@ import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.dto.MemberRecipeDto;
 import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRecipesResponse;
+import com.funeat.member.exception.MemberException.MemberDuplicateFavoriteException;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
@@ -32,6 +34,7 @@ import com.funeat.recipe.persistence.RecipeRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -147,7 +150,7 @@ public class RecipeService {
     public void likeRecipe(final Long memberId, final Long recipeId, final RecipeFavoriteRequest request) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-        final Recipe recipe = recipeRepository.findById(recipeId)
+        final Recipe recipe = recipeRepository.findByIdForUpdate(recipeId)
                 .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
 
         final RecipeFavorite recipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
@@ -157,7 +160,11 @@ public class RecipeService {
     }
 
     private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
-        final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
-        return recipeFavoriteRepository.save(recipeFavorite);
+        try {
+            final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
+            return recipeFavoriteRepository.save(recipeFavorite);
+        } catch (final DataIntegrityViolationException e) {
+            throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
+        }
     }
 }
