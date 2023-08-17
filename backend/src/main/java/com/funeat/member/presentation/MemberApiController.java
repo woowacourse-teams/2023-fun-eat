@@ -49,10 +49,10 @@ public class MemberApiController implements MemberController {
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                  @RequestPart(required = false) final MultipartFile image,
-                                                 @RequestPart @Valid final MemberRequest request) {
+                                                 @RequestPart @Valid final MemberRequest memberRequest) {
         final Long memberId = loginInfo.getId();
 
-        memberService.modify(memberId, image, request);
+        memberService.modify(memberId, image, memberRequest);
 
         return ResponseEntity.ok().build();
     }
