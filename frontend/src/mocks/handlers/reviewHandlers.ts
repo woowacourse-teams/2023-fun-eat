@@ -11,7 +11,6 @@ export const reviewHandlers = [
   rest.get('/api/products/:productId/reviews', (req, res, ctx) => {
     const { mockSessionId } = req.cookies;
     const sortOptions = req.url.searchParams.get('sort');
-    const page = Number(req.url.searchParams.get('page'));
 
     if (!mockSessionId) {
       return res(ctx.status(401));
