@@ -1,18 +1,18 @@
-import { Link, Text } from '@fun-eat/design-system';
+import { Button, Text } from '@fun-eat/design-system';
+import type { MouseEventHandler } from 'react';
 import { useRef } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { MarkedText } from '@/components/Common';
-import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
 import { useInfiniteProductSearchAutocompleteQuery } from '@/hooks/queries/search';
 
 interface RecommendListProps {
   searchQuery: string;
+  handleSearchClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const RecommendList = ({ searchQuery }: RecommendListProps) => {
+const RecommendList = ({ searchQuery, handleSearchClick }: RecommendListProps) => {
   const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchAutocompleteQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
@@ -26,11 +26,18 @@ const RecommendList = ({ searchQuery }: RecommendListProps) => {
   return (
     <>
       <RecommendListContainer>
-        {products.map(({ id, name, categoryType }) => (
+        {products.map(({ id, name }) => (
           <li key={id}>
-            <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${categoryType}/${id}`} block>
+            <ProductButton
+              type="button"
+              customWidth="100%"
+              customHeight="100%"
+              color="white"
+              value={name}
+              onClick={handleSearchClick}
+            >
               <MarkedText text={name} mark={searchQuery} />
-            </Link>
+            </ProductButton>
           </li>
         ))}
       </RecommendListContainer>
@@ -49,6 +56,10 @@ const RecommendListContainer = styled.ul`
     line-height: 36px;
     padding: 0 10px;
   }
+`;
+
+const ProductButton = styled(Button)`
+  text-align: left;
 `;
 
 const ErrorText = styled(Text)`
