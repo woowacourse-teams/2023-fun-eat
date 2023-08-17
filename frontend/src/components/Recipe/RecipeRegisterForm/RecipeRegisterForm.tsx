@@ -81,9 +81,14 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
         <Spacing size={40} />
         <RecipeDetailTextarea recipeDetail={recipeFormValue.content} />
         <Spacing size={40} />
+        <Text size="sm" color={theme.textColors.disabled}>
+          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.
+        </Text>
+        <Spacing size={10} />
         <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
           레시피 등록하기
         </FormButton>
+        <Spacing size={50} />
       </form>
     </RecipeRegisterFormContainer>
   );

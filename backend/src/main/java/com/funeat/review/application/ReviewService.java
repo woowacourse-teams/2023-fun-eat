@@ -1,5 +1,6 @@
 package com.funeat.review.application;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
@@ -10,6 +11,7 @@ import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.member.dto.MemberReviewsResponse;
+import com.funeat.member.exception.MemberException.MemberDuplicateFavoriteException;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
@@ -32,6 +34,7 @@ import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -77,10 +80,11 @@ public class ReviewService {
                     new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
                             reviewRequest.getRebuy()));
         } else {
+            final String newImageName = imageService.getRandomImageName(image);
             savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
+                    new Review(findMember, findProduct, newImageName, reviewRequest.getRating(),
                             reviewRequest.getContent(), reviewRequest.getRebuy()));
-            imageService.upload(image);
+            imageService.upload(image, newImageName);
         }
 
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
@@ -99,7 +103,7 @@ public class ReviewService {
     public void likeReview(final Long reviewId, final Long memberId, final ReviewFavoriteRequest request) {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-        final Review findReview = reviewRepository.findById(reviewId)
+        final Review findReview = reviewRepository.findByIdForUpdate(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
 
         final ReviewFavorite savedReviewFavorite = reviewFavoriteRepository.findByMemberAndReview(findMember,
@@ -109,10 +113,13 @@ public class ReviewService {
     }
 
     private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
-        final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review,
-                favorite);
-
-        return reviewFavoriteRepository.save(reviewFavorite);
+        try {
+            final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review,
+                    favorite);
+            return reviewFavoriteRepository.save(reviewFavorite);
+        } catch (final DataIntegrityViolationException e) {
+            throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
+        }
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {

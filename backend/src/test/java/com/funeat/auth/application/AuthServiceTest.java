@@ -2,6 +2,7 @@ package com.funeat.auth.application;
 
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.common.ServiceTest;
@@ -28,6 +29,22 @@ public class AuthServiceTest extends ServiceTest {
             assertThat(actual).usingRecursiveComparison()
                     .ignoringFields("member.id")
                     .isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class logoutWithKakao_성공_테스트 {
+
+        @Test
+        void 카카오_로그인한_멤버를_로그아웃한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var memberId = member.getId();
+
+            // when & then
+            assertDoesNotThrow(() -> authService.logoutWithKakao(memberId));
         }
     }
 }

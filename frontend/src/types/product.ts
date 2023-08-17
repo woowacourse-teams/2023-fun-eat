@@ -16,6 +16,7 @@ export interface ProductDetail {
   image: string;
   content: string;
   averageRating: number;
+  reviewCount: number;
   bookmark: boolean;
   tags: Tag[];
 }

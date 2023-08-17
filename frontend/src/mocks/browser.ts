@@ -8,6 +8,7 @@ import {
   memberHandlers,
   recipeHandlers,
   searchHandlers,
+  logoutHandlers,
 } from './handlers';
 
 export const worker = setupWorker(
@@ -17,5 +18,6 @@ export const worker = setupWorker(
   ...rankingHandlers,
   ...memberHandlers,
   ...recipeHandlers,
-  ...searchHandlers
+  ...searchHandlers,
+  ...logoutHandlers
 );

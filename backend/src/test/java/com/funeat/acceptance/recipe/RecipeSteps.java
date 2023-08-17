@@ -9,6 +9,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,10 +19,14 @@ public class RecipeSteps {
     public static ExtractableResponse<Response> 레시피_생성_요청(final RecipeCreateRequest recipeRequest,
                                                           final List<MultiPartSpecification> images,
                                                           final String loginCookie) {
-        final var request = given()
+        final var requestSpec = given()
                 .cookie("JSESSIONID", loginCookie);
-        images.forEach(request::multiPart);
-        return request
+
+        if (Objects.nonNull(images) && !images.isEmpty()) {
+            images.forEach(requestSpec::multiPart);
+        }
+
+        return requestSpec
                 .multiPart("recipeRequest", recipeRequest, "application/json")
                 .when()
                 .post("/api/recipes")
@@ -76,5 +81,15 @@ public class RecipeSteps {
                         .mimeType("image/png")
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public static ExtractableResponse<Response> 레시피_검색_결과_조회_요청(final String query, final int page) {
+        return given()
+                .queryParam("query", query)
+                .queryParam("page", page)
+                .when()
+                .get("/api/search/recipes/results")
+                .then()
+                .extract();
     }
 }

@@ -11,7 +11,7 @@ const useRecipeRegisterFormMutation = () => {
     onSuccess: (response) => {
       const location = response.headers.get('Location');
       if (!location) return;
-      navigate(location);
+      navigate(location.replace('/api', ''));
     },
   });
 };

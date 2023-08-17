@@ -28,23 +28,28 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
     private static final String OAUTH_URI = "/oauth/authorize";
     private static final String ACCESS_TOKEN_URI = "/oauth/token";
     private static final String USER_INFO_URI = "/v2/user/me";
+    private static final String LOGOUT_URI = "/v1/user/logout";
     private static final String AUTHORIZATION_CODE = "authorization_code";
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final String kakaoRestApiKey;
     private final String redirectUri;
+    private final String kakaoAdminKey;
 
     public KakaoPlatformUserProvider(final RestTemplateBuilder restTemplateBuilder,
                                      final ObjectMapper objectMapper,
                                      @Value("${kakao.rest-api-key}") final String kakaoRestApiKey,
-                                     @Value("${kakao.redirect-uri}") final String redirectUri) {
+                                     @Value("${kakao.redirect-uri}") final String redirectUri,
+                                     @Value("${kakao.admin-key}") final String kakaoAdminKey) {
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
         this.kakaoRestApiKey = kakaoRestApiKey;
         this.redirectUri = redirectUri;
+        this.kakaoAdminKey = kakaoAdminKey;
     }
 
+    @Override
     public UserInfoDto getPlatformUser(final String code) {
         final KakaoTokenDto accessTokenDto = findAccessToken(code);
         final KakaoUserInfoDto kakaoUserInfoDto = findKakaoUserInfo(accessTokenDto.getAccessToken());
@@ -119,5 +124,19 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
         joiner.add("redirect_uri=" + redirectUri);
 
         return AUTHORIZATION_BASE_URL + OAUTH_URI + "?" + joiner;
+    }
+
+    @Override
+    public void logout(final String platformId) {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("Authorization", "KakaoAK " + kakaoAdminKey);
+
+        final MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("target_id_type", "user_id");
+        body.add("target_id", platformId);
+
+        final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        restTemplate.postForEntity(RESOURCE_BASE_URL + LOGOUT_URI, request, String.class);
     }
 }
