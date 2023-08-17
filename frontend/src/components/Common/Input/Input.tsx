@@ -1,4 +1,4 @@
-import { Button, Text, theme } from '@fun-eat/design-system';
+import { Text, theme } from '@fun-eat/design-system';
 import type { ComponentPropsWithRef, ForwardedRef, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
