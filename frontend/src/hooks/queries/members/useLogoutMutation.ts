@@ -1,17 +1,18 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { logoutApi } from '@/apis';
+import { PATH } from '@/constants/path';
 
 const useLogoutMutation = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => logoutApi.post({ credentials: true }),
-    onSuccess: (response) => {
-      const location = response.headers.get('Location');
-      if (!location) return;
-      navigate(location);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['member'] });
+      navigate(PATH.HOME);
     },
     onError: (error) => {
       if (error instanceof Error) {
