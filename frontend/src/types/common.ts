@@ -26,7 +26,7 @@ export interface NavigationMenu {
   path: (typeof PATH)[keyof typeof PATH] | '/products/food' | '/products/store';
 }
 
-export interface CarouselItem {
+export interface CarouselChildren {
   id: number;
   children: ReactNode;
 }
