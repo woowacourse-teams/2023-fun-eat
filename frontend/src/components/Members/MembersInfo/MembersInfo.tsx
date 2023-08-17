@@ -3,19 +3,20 @@ import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import { PATH } from '@/constants/path';
+import { IMAGE_SRC_PATH, PATH } from '@/constants/path';
 import { useLogoutMutation, useMemberQuery } from '@/hooks/queries/members';
 
 const MembersInfo = () => {
   const { data: member } = useMemberQuery();
+  const { mutate } = useLogoutMutation();
 
   if (!member) {
     return null;
   }
-        
+
   const { nickname, profileImage } = member;
 
-  const { mutate } = useLogoutMutation();
+  const isChangedProfileImage = !profileImage.includes('https');
 
   const handleLogout = () => {
     mutate();
@@ -24,7 +25,12 @@ const MembersInfo = () => {
   return (
     <MembersInfoContainer>
       <MemberInfoWrapper>
-        <MembersImage src={profileImage} width={45} height={45} alt={`${nickname}의 프로필`} />
+        <MembersImage
+          src={isChangedProfileImage ? IMAGE_SRC_PATH + profileImage : profileImage}
+          width={45}
+          height={45}
+          alt={`${nickname}의 프로필`}
+        />
         <Heading size="xl" weight="bold">
           {nickname} 님
         </Heading>
