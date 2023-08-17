@@ -31,6 +31,7 @@ import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -114,6 +115,25 @@ public class ReviewService {
                 favorite);
 
         return reviewFavoriteRepository.save(reviewFavorite);
+    }
+
+    @Transactional
+    public void updateProductImage(final Long reviewId) {
+        final Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+
+        final Product product = review.getProduct();
+        final Optional<Review> topFavoriteReview = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product);
+        if (topFavoriteReview.isEmpty()) {
+            return;
+        }
+
+        final Long topReviewFavoriteCount = topFavoriteReview.get().getFavoriteCount();
+        final String reviewImage = review.getImage();
+
+        if (review.isEqualFavoriteCount(topReviewFavoriteCount) && product.isNotEqualImage(reviewImage)) {
+            product.updateImage(reviewImage);
+        }
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {

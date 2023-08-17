@@ -3,6 +3,7 @@ package com.funeat.product.domain;
 import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -72,6 +73,14 @@ public class Product {
         final double exponent = -Math.log10(reviewCount + 1);
         final double factor = Math.pow(2, exponent);
         return averageRating - (averageRating - 3.0) * factor;
+    }
+
+    public void updateImage(final String topFavoriteImage) {
+        this.image = topFavoriteImage;
+    }
+
+    public boolean isNotEqualImage(final String anotherImage) {
+        return !Objects.equals(this.image, anotherImage);
     }
 
     public Long getId() {

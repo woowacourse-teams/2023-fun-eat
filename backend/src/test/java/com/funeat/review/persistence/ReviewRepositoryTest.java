@@ -1,12 +1,15 @@
 package com.funeat.review.persistence;
 
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
@@ -129,6 +132,72 @@ class ReviewRepositoryTest extends RepositoryTest {
             // then
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class findTopByProductOrderByFavoriteCountDesc_성공_테스트 {
+
+        @Test
+        void 리뷰가_존재하지_않으면_빈_값을_반환하다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            단일_상품_저장(product);
+
+            // when
+            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product);
+
+            // then
+            assertThat(actual).isEmpty();
+        }
+
+        @Test
+        void 리뷰가_존재하면_좋아요_수가_몇개이든_리뷰를_반환하다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 2L);
+            final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
+            복수_리뷰_저장(review1, review2);
+
+            // when
+            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product).get();
+
+            // then
+            assertThat(actual).usingRecursiveComparison().isEqualTo(review1);
+        }
+
+        @Test
+        void 좋아요_수가_같으면_좋아요가_높은_리뷰를_반환하다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
+            final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 0L);
+            복수_리뷰_저장(review1, review2);
+
+            // when
+            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product).get();
+
+            // then
+            assertThat(actual).usingRecursiveComparison().isEqualTo(review1);
         }
     }
 }

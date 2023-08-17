@@ -49,4 +49,12 @@ public class CommonSteps {
                 .mimeType("image/png")
                 .build();
     }
+
+    public static MultiPartSpecification 사진_명세_요청(final String name) {
+        return new MultiPartSpecBuilder("image".getBytes())
+                .fileName(String.format("%s.png", name))
+                .controlName("image")
+                .mimeType("image/png")
+                .build();
+    }
 }

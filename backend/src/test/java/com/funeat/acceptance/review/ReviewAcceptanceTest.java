@@ -41,7 +41,7 @@ import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
-import com.funeat.product.domain.Category;
+import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import com.funeat.review.presentation.dto.RankingReviewDto;
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
@@ -69,7 +69,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 리뷰를_작성한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -95,7 +95,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 이미지가_없어도_리뷰를_작성할_수_있다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -124,7 +124,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 로그인_하지않은_사용자가_리뷰_작성시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -153,7 +153,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 사용자가_리뷰_작성할때_태그들이_NULL일시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -177,7 +177,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 사용자가_리뷰_작성할때_태그들이_비어있을시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -201,7 +201,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 사용자가_리뷰_작성할때_평점이_비어있을시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -232,7 +232,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 사용자가_리뷰_작성할때_리뷰내용이_비어있을시_예외가_발생한다(final String content) {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -262,7 +262,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 사용자가_리뷰_작성할때_재구매여부가_비어있을시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -292,7 +292,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 사용자가_리뷰_작성할때_리뷰내용이_200자_초과시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -330,7 +330,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var memberId = 단일_멤버_저장(member);
 
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -365,7 +365,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var memberId = 단일_멤버_저장(member);
 
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -397,6 +397,53 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
             리뷰_좋아요_결과를_검증한다(actual, memberId, reviewId, false);
         }
+
+        @Test
+        void 가장_좋아요를_많이_받은_리뷰가_존재하면_상품_이미지가_바뀐다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var firstImage = 사진_명세_요청("first");
+            final var secondImage = 사진_명세_요청("second");
+            final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            단일_리뷰_요청(productId, firstImage, reviewRequest, loginCookie);
+            단일_리뷰_요청(productId, secondImage, reviewRequest, loginCookie);
+
+            final var firstReview = reviewRepository.findById(1L).get();
+            final var firstReviewId = firstReview.getId();
+            final var secondReview = reviewRepository.findById(2L).get();
+            final var secondReviewId = secondReview.getId();
+
+            final var trueFavoriteRequest = 리뷰좋아요요청_true_생성();
+            리뷰_좋아요_요청(productId, secondReviewId, trueFavoriteRequest, loginCookie);
+            final var falseFavoriteRequest = 리뷰좋아요요청_false_생성();
+            리뷰_좋아요_요청(productId, secondReviewId, falseFavoriteRequest, loginCookie);
+
+            final var expected = reviewRepository.findAll().get(0);
+
+            // when
+            final var response = 리뷰_좋아요_요청(productId, firstReviewId, trueFavoriteRequest, loginCookie);
+            final var actual = productRepository.findAll().get(0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+            상품_사진을_검증한다(actual, expected);
+        }
     }
 
     @Nested
@@ -409,7 +456,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var memberId = 단일_멤버_저장(member);
 
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -446,7 +493,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var memberId = 단일_멤버_저장(member);
 
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -480,7 +527,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 존재하지_않는_리뷰에_사용자가_좋아요를_할때_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -508,7 +555,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 좋아요_수가_서로_다르면_좋아요_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -540,7 +587,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 좋아요_수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -575,7 +622,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -606,7 +653,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -641,7 +688,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -672,7 +719,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -707,7 +754,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             void 등록_시간이_서로_다르면_최신순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_즉석조리_생성();
-                카테고리_단일_저장(category);
+                단일_카테고리_저장(category);
 
                 final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
                 final var productId = 단일_상품_저장(product);
@@ -743,7 +790,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 로그인_하지않은_사용자가_리뷰_목록을_조회시_예외가_발생한다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
@@ -791,7 +838,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 리뷰_랭킹을_조회하다() {
             // given
             final var category = 카테고리_즉석조리_생성();
-            카테고리_단일_저장(category);
+            단일_카테고리_저장(category);
 
             final var product1 = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
@@ -849,10 +896,6 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         });
     }
 
-    private Long 카테고리_단일_저장(final Category category) {
-        return categoryRepository.save(category).getId();
-    }
-
     private List<Long> 태그_아이디_변환(final Tag... tags) {
         return Stream.of(tags)
                 .map(Tag::getId)
@@ -892,5 +935,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
+    }
+
+    private void 상품_사진을_검증한다(final Product product, final Review review) {
+        final var actual = product.getImage();
+        final var expected = review.getImage();
+
+        assertThat(actual).isEqualTo(expected);
     }
 }
