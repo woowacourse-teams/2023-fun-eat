@@ -11,7 +11,7 @@ const useLogoutMutation = () => {
   return useMutation({
     mutationFn: () => logoutApi.post({ credentials: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['member'] });
+      queryClient.removeQueries({ queryKey: ['member'] });
       navigate(PATH.HOME);
     },
     onError: (error) => {
