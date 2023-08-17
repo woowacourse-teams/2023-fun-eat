@@ -11,6 +11,8 @@ interface RecipeItemProps {
   isMemberPage?: boolean;
 }
 
+const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
+
 const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
   const { image, title, createdAt, favoriteCount, products } = recipe;
   const author = 'author' in recipe ? recipe.author : null;
@@ -20,7 +22,7 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
     <>
       {!isMemberPage && (
         <ImageWrapper>
-          <RecipeImage src={image} alt={`조리된 ${title}`} />
+          <RecipeImage src={srcPath + image} alt={`조리된 ${title}`} />
           {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
         </ImageWrapper>
       )}

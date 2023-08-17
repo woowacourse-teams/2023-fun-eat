@@ -16,12 +16,13 @@ const useFormData = <T>({ imageKey, imageFile, formContentKey, formContent }: us
 
   if (Array.isArray(imageFile)) {
     imageFile.forEach((file) => {
-      formData.append(imageKey, file);
+      formData.append(imageKey, file, file.name);
     });
     return formData;
   }
 
-  formData.append(imageKey, imageFile);
+  formData.append(imageKey, imageFile, imageFile.name);
+
   return formData;
 };
 
