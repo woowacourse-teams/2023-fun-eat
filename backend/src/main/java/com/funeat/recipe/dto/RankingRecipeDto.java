@@ -8,12 +8,15 @@ public class RankingRecipeDto {
 
     private final Long id;
     private final String image;
+    private final String title;
     private final RecipeAuthorDto author;
     private final Long favoriteCount;
 
-    public RankingRecipeDto(final Long id, final String image, final RecipeAuthorDto author, final Long favoriteCount) {
+    public RankingRecipeDto(final Long id, final String image, final String title, final RecipeAuthorDto author,
+                            final Long favoriteCount) {
         this.id = id;
         this.image = image;
+        this.title = title;
         this.author = author;
         this.favoriteCount = favoriteCount;
     }
@@ -21,9 +24,9 @@ public class RankingRecipeDto {
     public static RankingRecipeDto toDto(final Recipe recipe, final List<RecipeImage> images,
                                          final RecipeAuthorDto author) {
         if (images.isEmpty()) {
-            return new RankingRecipeDto(recipe.getId(), null, author, recipe.getFavoriteCount());
+            return new RankingRecipeDto(recipe.getId(), null, recipe.getTitle(), author, recipe.getFavoriteCount());
         }
-        return new RankingRecipeDto(recipe.getId(), images.get(0).getImage(), author, recipe.getFavoriteCount());
+        return new RankingRecipeDto(recipe.getId(), images.get(0).getImage(), recipe.getTitle(), author, recipe.getFavoriteCount());
     }
 
     public Long getId() {
@@ -32,6 +35,10 @@ public class RankingRecipeDto {
 
     public String getImage() {
         return image;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public RecipeAuthorDto getAuthor() {
