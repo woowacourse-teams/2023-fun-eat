@@ -10,9 +10,16 @@ import { useInfiniteProductSearchAutocompleteQuery } from '@/hooks/queries/searc
 interface RecommendListProps {
   searchQuery: string;
   handleSearchClick: MouseEventHandler<HTMLButtonElement>;
+  isAutocompleteOpen: boolean;
+  handleAutocompleteClose: MouseEventHandler<HTMLDivElement>;
 }
 
-const RecommendList = ({ searchQuery, handleSearchClick }: RecommendListProps) => {
+const RecommendList = ({
+  searchQuery,
+  handleSearchClick,
+  isAutocompleteOpen,
+  handleAutocompleteClose,
+}: RecommendListProps) => {
   const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchAutocompleteQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
@@ -24,8 +31,9 @@ const RecommendList = ({ searchQuery, handleSearchClick }: RecommendListProps) =
   }
 
   return (
-    <>
-      <RecommendListContainer>
+    <RecommendListContainer isAutocompleteOpen={isAutocompleteOpen}>
+      <Backdrop onClick={handleAutocompleteClose} />
+      <RecommendListWrapper>
         {products.map(({ id, name }) => (
           <li key={id}>
             <ProductButton
@@ -40,16 +48,38 @@ const RecommendList = ({ searchQuery, handleSearchClick }: RecommendListProps) =
             </ProductButton>
           </li>
         ))}
-      </RecommendListContainer>
+      </RecommendListWrapper>
       <div ref={scrollRef} aria-hidden />
-    </>
+    </RecommendListContainer>
   );
 };
 
 export default RecommendList;
 
-const RecommendListContainer = styled.ul`
-  height: 100%;
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+`;
+
+const RecommendListContainer = styled.div<{ isAutocompleteOpen: boolean }>`
+  display: ${({ isAutocompleteOpen }) => (isAutocompleteOpen ? 'block' : 'none')};
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 150px;
+  padding: 10px 0;
+  background-color: #ffffff;
+  border: 1px solid #a0a0a0;
+  overflow-y: auto;
+`;
+
+const RecommendListWrapper = styled.ul`
+  position: relative;
+  width: 100%;
 
   & > li {
     height: 36px;
