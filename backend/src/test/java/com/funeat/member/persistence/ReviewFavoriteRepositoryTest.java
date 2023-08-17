@@ -36,10 +36,10 @@ class ReviewFavoriteRepositoryTest extends RepositoryTest {
             final var review = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
             단일_리뷰_저장(review);
 
-            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            final var reviewFavorite = ReviewFavorite.create(member, review, true);
             단일_리뷰_좋아요_저장(reviewFavorite);
 
-            final var expected = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            final var expected = ReviewFavorite.create(member, review, true);
 
             // when
             final var actual = reviewFavoriteRepository.findByMemberAndReview(member, review).get();
@@ -95,7 +95,7 @@ class ReviewFavoriteRepositoryTest extends RepositoryTest {
             final var review = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
             단일_리뷰_저장(review);
 
-            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            final var reviewFavorite = ReviewFavorite.create(member, review, true);
             단일_리뷰_좋아요_저장(reviewFavorite);
 
             final var wrongReview = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 0L);
