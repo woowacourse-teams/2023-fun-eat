@@ -12,11 +12,7 @@ const fetchProductDetail = async (productId: number) => {
 };
 
 const useProductDetailQuery = (productId: number) => {
-  const queryClient = useQueryClient();
-
-  return useSuspendedQuery(['productDetail', productId], () => fetchProductDetail(productId), {
-    onSuccess: () => queryClient.invalidateQueries(['productDetail']),
-  });
+  return useSuspendedQuery(['productDetail', productId], () => fetchProductDetail(productId));
 };
 
 export default useProductDetailQuery;
