@@ -19,7 +19,7 @@ const RecipeDetailPage = () => {
     <>
       <SectionTitle name={title} />
       <Spacing size={24} />
-      {images !== null ? (
+      {images.length > 0 ? (
         <RecipeImageContainer>
           {images.map((image, index) => (
             <li key={image}>
