@@ -64,13 +64,12 @@ const SearchPage = () => {
             ref={inputRef}
           />
         </form>
-        {!isSubmitted && debouncedSearchQuery && (
+        {!isSubmitted && debouncedSearchQuery && isAutocompleteOpen && (
           <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
             <Suspense fallback={<Loading />}>
               <RecommendList
                 searchQuery={debouncedSearchQuery}
                 handleSearchClick={handleSearchClick}
-                isAutocompleteOpen={isAutocompleteOpen}
                 handleAutocompleteClose={handleAutocompleteClose}
               />
             </Suspense>

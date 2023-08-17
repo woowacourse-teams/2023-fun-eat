@@ -10,16 +10,10 @@ import { useInfiniteProductSearchAutocompleteQuery } from '@/hooks/queries/searc
 interface RecommendListProps {
   searchQuery: string;
   handleSearchClick: MouseEventHandler<HTMLButtonElement>;
-  isAutocompleteOpen: boolean;
   handleAutocompleteClose: MouseEventHandler<HTMLDivElement>;
 }
 
-const RecommendList = ({
-  searchQuery,
-  handleSearchClick,
-  isAutocompleteOpen,
-  handleAutocompleteClose,
-}: RecommendListProps) => {
+const RecommendList = ({ searchQuery, handleSearchClick, handleAutocompleteClose }: RecommendListProps) => {
   const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchAutocompleteQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
@@ -31,7 +25,7 @@ const RecommendList = ({
   }
 
   return (
-    <RecommendListContainer isAutocompleteOpen={isAutocompleteOpen}>
+    <RecommendListContainer>
       <Backdrop onClick={handleAutocompleteClose} />
       <RecommendListWrapper>
         {products.map(({ id, name }) => (
@@ -64,8 +58,7 @@ const Backdrop = styled.div`
   left: 0;
 `;
 
-const RecommendListContainer = styled.div<{ isAutocompleteOpen: boolean }>`
-  display: ${({ isAutocompleteOpen }) => (isAutocompleteOpen ? 'block' : 'none')};
+const RecommendListContainer = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
