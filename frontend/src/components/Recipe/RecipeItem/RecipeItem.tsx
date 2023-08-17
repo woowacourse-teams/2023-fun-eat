@@ -39,11 +39,13 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
         <Heading as="h3" size="xl" weight="bold">
           {title}
         </Heading>
-        <Text as="span" color={theme.textColors.info}>
+        <RecipeProductText>
           {products.map(({ id, name }) => (
-            <Fragment key={id}>#{name}</Fragment>
+            <Text as="span" key={id} color={theme.textColors.info}>
+              #{name}
+            </Text>
           ))}
-        </Text>
+        </RecipeProductText>
         <FavoriteWrapper>
           <SvgIcon variant="favoriteFilled" width={16} height={16} />
           <Text as="span" weight="bold">
@@ -101,4 +103,10 @@ const FavoriteWrapper = styled.div`
   right: 0;
   bottom: 50%;
   transform: translateY(-50%);
+`;
+
+const RecipeProductText = styled(Text)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
