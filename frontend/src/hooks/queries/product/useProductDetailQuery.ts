@@ -1,5 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
-
 import { useSuspendedQuery } from '..';
 
 import { productApi } from '@/apis';
