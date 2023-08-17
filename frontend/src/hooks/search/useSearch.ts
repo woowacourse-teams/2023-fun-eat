@@ -1,13 +1,19 @@
-import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 'react';
+import type { ChangeEventHandler, FormEventHandler, MouseEventHandler, RefObject } from 'react';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-const useSearch = () => {
+const useSearch = (inputRef?: RefObject<HTMLInputElement>) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSearchQuery = searchParams.get('query');
 
   const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
   const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
+
+  const focusInput = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
+  };
 
   const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
     setIsSubmitted(false);
@@ -16,6 +22,7 @@ const useSearch = () => {
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    focusInput();
     const trimmedSearchQuery = searchQuery.trim();
 
     if (!trimmedSearchQuery) {
