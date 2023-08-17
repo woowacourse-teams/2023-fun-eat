@@ -24,11 +24,25 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
 
   const totalRecipeCount = data?.pages[0].page.totalDataCount;
 
+  if (totalRecipeCount === 0) {
+    return (
+      <ErrorContainer>
+        <Text size="lg" weight="bold">
+          앗, 작성한 꿀조합이 없네요 🥲
+        </Text>
+        <Spacing size={16} />
+        <RecipeLink as={RouterLink} to={`${PATH.RECIPE}`} block>
+          꿀조합 작성하러 가기
+        </RecipeLink>
+      </ErrorContainer>
+    );
+  }
+
   return (
     <MemberRecipeListContainer>
       {!isMemberPage && (
         <TotalRecipeCount color={theme.colors.gray4}>
-          총 <strong>&apos;{totalRecipeCount}&apos;</strong>개의 꿀조합을 남겼어요!
+          총 <strong>{totalRecipeCount}</strong>개의 꿀조합을 남겼어요!
         </TotalRecipeCount>
       )}
       <Spacing size={20} />
@@ -61,4 +75,17 @@ const MemberRecipeListWrapper = styled.ul`
 
 const TotalRecipeCount = styled(Text)`
   text-align: right;
+`;
+
+const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const RecipeLink = styled(Link)`
+  padding: 12px 12px;
+  border: 1px solid ${({ theme }) => theme.colors.gray4};
+  border-radius: 8px;
 `;

@@ -7,7 +7,7 @@ interface CarouselProps {
   carouselList: CarouselChildren[];
 }
 
-const CAROUSEL_WIDTH = 374;
+const CAROUSEL_WIDTH = window.innerWidth;
 
 const Carousel = ({ carouselList }: CarouselProps) => {
   const extendedCarouselList = [...carouselList, carouselList[0]];
