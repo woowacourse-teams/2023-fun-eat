@@ -83,6 +83,14 @@ public class RecipeSteps {
                 .collect(Collectors.toList());
     }
 
+    public static ExtractableResponse<Response> 레시피_랭킹_조회_요청() {
+        return given()
+                .when()
+                .get("/api/ranks/recipes")
+                .then()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 레시피_검색_결과_조회_요청(final String query, final int page) {
         return given()
                 .queryParam("query", query)

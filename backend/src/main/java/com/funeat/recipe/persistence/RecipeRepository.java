@@ -4,6 +4,7 @@ import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
 import com.funeat.member.domain.Member;
 import com.funeat.recipe.domain.Recipe;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<Recipe> findAllByProductNameContaining(@Param("name") final String name, final Pageable pageable);
 
     Page<Recipe> findAll(final Pageable pageable);
+
+    List<Recipe> findRecipesByOrderByFavoriteCountDesc(final Pageable pageable);
 
     @Lock(PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Recipe r WHERE r.id=:id")

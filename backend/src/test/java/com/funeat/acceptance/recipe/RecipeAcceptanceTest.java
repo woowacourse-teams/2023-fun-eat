@@ -8,6 +8,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_랭킹_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_검색_결과_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_목록_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_상세_정보_요청;
@@ -41,6 +42,9 @@ import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
+import com.funeat.recipe.domain.Recipe;
+import com.funeat.recipe.dto.RankingRecipeDto;
+import com.funeat.recipe.dto.RecipeAuthorDto;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.SearchRecipeResultDto;
@@ -745,6 +749,33 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    class getRankingRecipes_성공_테스트 {
+
+        @Test
+        void 전체_꿀조합들_중에서_랭킹_TOP3를_조회할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var recipe1 = 레시피_생성(member, 1L);
+            final var recipe2 = 레시피_생성(member, 2L);
+            final var recipe3 = 레시피_생성(member, 3L);
+            final var recipe4 = 레시피_생성(member, 4L);
+            복수_꿀조합_저장(recipe1, recipe2, recipe3, recipe4);
+
+            final var expectedRecipes = List.of(recipe4, recipe3, recipe2);
+            final var expected = 예상_레시피_랭킹_변환(expectedRecipes, member);
+
+            // when
+            final var response = 레시피_랭킹_조회_요청();
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            레시피_랭킹_조회_결과를_검증한다(response, expected);
+        }
+    }
+
     private void 레시피_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> recipes,
                                     final PageDto pageDto) {
         페이지를_검증한다(response, pageDto);
@@ -803,6 +834,21 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         return Stream.of(products)
                 .map(Product::getId)
                 .collect(Collectors.toList());
+    }
+
+    private List<RankingRecipeDto> 예상_레시피_랭킹_변환(final List<Recipe> recipes, final Member member) {
+        return recipes.stream()
+                .map(it -> RankingRecipeDto.toDto(it, Collections.emptyList(), RecipeAuthorDto.toDto(member)))
+                .collect(Collectors.toList());
+    }
+
+    private void 레시피_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response,
+                                    final List<RankingRecipeDto> expected) {
+        final var actual = response.jsonPath()
+                .getList("recipes", RankingRecipeDto.class);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     private SearchRecipeResultDto 예상_레시피_검색_결과_변환(final String loginCookie, final Long recipeId1) {
