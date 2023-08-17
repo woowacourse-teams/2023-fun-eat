@@ -54,4 +54,15 @@ public class ProductSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 상품_레시피_목록_요청(final Long productId, final String sortType,
+                                                             final String sortOrderType, final int page) {
+        return given()
+                .queryParam("sort", sortType + "," + sortOrderType)
+                .queryParam("page", page)
+                .when()
+                .get("/api/products/{productId}/recipes", productId)
+                .then()
+                .extract();
+    }
 }
