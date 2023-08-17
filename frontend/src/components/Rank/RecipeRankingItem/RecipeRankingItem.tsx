@@ -49,6 +49,9 @@ export default RecipeRankingItem;
 const RecipeRankingItemContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  max-width: 560px;
+  width: calc(100% - 50px);
   height: 72px;
   margin: 12px 0;
 `;
