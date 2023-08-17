@@ -1,12 +1,12 @@
-import RecipeItem from '../RecipeItem/RecipeItem';
+import RecipeRankingItem from '../RecipeRankingItem/RecipeRankingItem';
 
 import { Carousel } from '@/components/Common';
-import mockRecipeList from '@/mocks/data/recipes.json';
+import mockRecipeList from '@/mocks/data/recipeRankingList.json';
 
 const RecipeRankingList = () => {
   const carouselList = mockRecipeList.recipes.map((recipe, index) => ({
     id: index,
-    children: <RecipeItem recipe={recipe} />,
+    children: <RecipeRankingItem rank={index + 1} recipe={recipe} />,
   }));
 
   return <Carousel carouselList={carouselList} />;

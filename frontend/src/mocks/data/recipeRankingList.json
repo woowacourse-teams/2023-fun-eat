@@ -1,0 +1,34 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "image": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed",
+        "nickname": "funeat"
+      },
+      "favoriteCount": 153
+    },
+    {
+      "id": 2,
+      "image": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed",
+        "nickname": "funeat"
+      },
+      "favoriteCount": 153
+    },
+    {
+      "id": 3,
+      "image": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34",
+      "title": "초특급불닭콘치즈",
+      "author": {
+        "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/991f7b69-53bf-4d03-96e1-988c34d010ed",
+        "nickname": "funeat"
+      },
+      "favoriteCount": 153
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { CategoryMenu, SvgIcon, ScrollButton, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
-import { ProductRankingList, ReviewRankingList } from '@/components/Rank';
+import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
 
@@ -55,10 +55,17 @@ const HomePage = () => {
           </Suspense>
         </ErrorBoundary>
       </section>
+      <Spacing size={40} />
+      <section>
+        <Heading as="h2" size="xl">
+          🍯 꿀조합 랭킹
+        </Heading>
+        <RecipeRankingList />
+      </section>
       <Spacing size={36} />
       <section>
         <Heading as="h2" size="xl">
-          👑 랭킹
+          👑 상품 랭킹
         </Heading>
         <Spacing size={12} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
