@@ -22,27 +22,28 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
   } = recipe;
 
   return (
-    <>
-      <RecipeRankingItemContainer>
-        <Spacing direction="horizontal" size={12} />
-        <Text weight="bold">{rank}</Text>
-        <Spacing direction="horizontal" size={12} />
-        {image !== null ? (
-          <RecipeImage src={IMAGE_SRC_PATH + image} alt={`${rank}위 꿀조합`} width={60} height={60} />
-        ) : (
-          <RecipePreviewImage width={60} height={60} />
-        )}
-        <Spacing direction="horizontal" size={12} />
-        <TitleFavoriteWrapper>
-          <Text weight="bold">{title}</Text>
-          <FavoriteWrapper>
-            <SvgIcon variant="favoriteFilled" width={16} height={16} color="red" />
-            <Text as="span" size="sm" weight="bold">
-              {favoriteCount}
-            </Text>
-          </FavoriteWrapper>
-        </TitleFavoriteWrapper>
-        <Spacing direction="horizontal" size={56} />
+    <RecipeRankingItemContainer>
+      <Spacing direction="horizontal" size={12} />
+      <RecipeRankingWrapper>
+        <RankingRecipeWrapper>
+          <Text weight="bold">{rank}</Text>
+          <Spacing direction="horizontal" size={12} />
+          {image !== null ? (
+            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`${rank}위 꿀조합`} width={60} height={60} />
+          ) : (
+            <RecipePreviewImage width={60} height={60} />
+          )}
+          <Spacing direction="horizontal" size={12} />
+          <TitleFavoriteWrapper>
+            <Text weight="bold">{title}</Text>
+            <FavoriteWrapper>
+              <SvgIcon variant="favoriteFilled" width={16} height={16} color="red" />
+              <Text as="span" size="sm" weight="bold">
+                {favoriteCount}
+              </Text>
+            </FavoriteWrapper>
+          </TitleFavoriteWrapper>
+        </RankingRecipeWrapper>
         <AuthorWrapper>
           <AuthorImage
             src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
@@ -54,21 +55,30 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
             {nickname} 님
           </Text>
         </AuthorWrapper>
-      </RecipeRankingItemContainer>
-    </>
+      </RecipeRankingWrapper>
+    </RecipeRankingItemContainer>
   );
 };
 
 export default RecipeRankingItem;
 
 const RecipeRankingItemContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   max-width: 560px;
   width: calc(100% - 50px);
   height: 72px;
   margin: 12px 0;
+  padding: 0 24px;
+`;
+
+const RecipeRankingWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const RankingRecipeWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const RecipeImage = styled.img`
