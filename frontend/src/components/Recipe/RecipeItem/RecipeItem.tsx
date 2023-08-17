@@ -2,6 +2,7 @@ import { Heading, Text, useTheme } from '@fun-eat/design-system';
 import { Fragment } from 'react';
 import styled from 'styled-components';
 
+import PreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
@@ -22,7 +23,11 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
     <>
       {!isMemberPage && (
         <ImageWrapper>
-          <RecipeImage src={srcPath + image} alt={`조리된 ${title}`} />
+          {image !== null ? (
+            <RecipeImage src={srcPath + image} alt={`조리된 ${title}`} />
+          ) : (
+            <PreviewImage width={160} height={160} />
+          )}
           {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
         </ImageWrapper>
       )}
@@ -53,6 +58,8 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
 export default RecipeItem;
 
 const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   position: relative;
   width: 100%;
   height: 160px;
