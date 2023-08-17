@@ -8,6 +8,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_검색_결과_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_목록_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_상세_정보_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_생성_요청;
@@ -18,6 +19,7 @@ import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
@@ -26,6 +28,7 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점1점_생성;
+import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000원_평점5점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
 import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
 import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
@@ -40,6 +43,7 @@ import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.SearchRecipeResultDto;
 import com.funeat.recipe.dto.RecipeDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -54,6 +58,9 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class RecipeAcceptanceTest extends AcceptanceTest {
+
+    private static final Long PAGE_SIZE = 10L;
+    private static final Long FIRST_PAGE = 0L;
 
     @Nested
     class writeRecipe_성공_테스트 {
@@ -514,6 +521,80 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
+    class getSearchResults_성공_테스트 {
+
+        @Test
+        void 레시피_검색_결과들을_조회한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds1 = 상품_아이디_변환(product1, product2);
+            final var productIds2 = 상품_아이디_변환(product1, product3);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            final var createRequest1 = 레시피추가요청_생성(productIds1);
+            final var createRequest2 = 레시피추가요청_생성(productIds2);
+            final var images = 여러_사진_요청(3);
+            final var recipeId1 = 레시피_추가_요청하고_id_반환(createRequest1, images, loginCookie);
+            final var recipeId2 = 레시피_추가_요청하고_id_반환(createRequest2, images, loginCookie);
+
+            final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+
+            final var expectedDto1 = 예상_레시피_검색_결과_변환(loginCookie, recipeId1);
+            final var expectedDto2 = 예상_레시피_검색_결과_변환(loginCookie, recipeId2);
+            final var expected = List.of(expectedDto1, expectedDto2);
+
+            // when
+            final var response = 레시피_검색_결과_조회_요청("망고", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, pageDto);
+            레시피_검색_결과를_검증한다(response, expected);
+        }
+
+        @Test
+        void 검색_결과에_레시피가_없으면_빈_리스트를_반환한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
+            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var productIds1 = 상품_아이디_변환(product1, product2);
+            final var productIds2 = 상품_아이디_변환(product1, product3);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            final var createRequest1 = 레시피추가요청_생성(productIds1);
+            final var createRequest2 = 레시피추가요청_생성(productIds2);
+            final var images = 여러_사진_요청(3);
+
+            레시피_생성_요청(createRequest1, images, loginCookie);
+            레시피_생성_요청(createRequest2, images, loginCookie);
+
+            final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
+            final var expected = Collections.emptyList();
+
+            // when
+            final var response = 레시피_검색_결과_조회_요청("참치", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, pageDto);
+            레시피_검색_결과를_검증한다(response, expected);
+        }
+    }
+
+    @Nested
     class getSortingRecipes_성공_테스트 {
 
         @Test
@@ -722,5 +803,19 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         return Stream.of(products)
                 .map(Product::getId)
                 .collect(Collectors.toList());
+    }
+
+    private SearchRecipeResultDto 예상_레시피_검색_결과_변환(final String loginCookie, final Long recipeId1) {
+        final var response = 레시피_상세_정보_요청(loginCookie, recipeId1).as(RecipeDetailResponse.class);
+        return new SearchRecipeResultDto(response.getId(), response.getImages().get(0), response.getTitle(),
+                response.getAuthor(), response.getProducts(), response.getFavoriteCount(), response.getCreatedAt());
+    }
+
+    private <T> void 레시피_검색_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> expected) {
+        final var actual = response.jsonPath()
+                .getList("recipes", SearchRecipeResultDto.class);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }
