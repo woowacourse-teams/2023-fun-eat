@@ -39,8 +39,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p "
             + "WHERE p.name LIKE CONCAT('%', :name, '%') "
-            + "ORDER BY CASE "
-            + "WHEN p.name LIKE CONCAT(:name, '%') THEN 1 "
+            + "ORDER BY p.id DESC, "
+            + "CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 "
             + "ELSE 2 END")
     Page<Product> findAllByNameContaining(@Param("name") final String name, final Pageable pageable);
 
@@ -48,8 +48,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "LEFT JOIN Review r ON r.product.id = p.id "
             + "WHERE p.name LIKE CONCAT('%', :name, '%') "
             + "GROUP BY p.id "
-            + "ORDER BY CASE "
-            + "WHEN p.name LIKE CONCAT(:name, '%') THEN 1 "
+            + "ORDER BY p.id DESC, "
+            + "CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 "
             + "ELSE 2 END")
     Page<ProductReviewCountDto> findAllWithReviewCountByNameContaining(@Param("name") final String name, final Pageable pageable);
 }
