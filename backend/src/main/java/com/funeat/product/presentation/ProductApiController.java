@@ -64,7 +64,7 @@ public class ProductApiController implements ProductController {
 
     @GetMapping("/products/{productId}/recipes")
     public ResponseEntity<SortingRecipesResponse> getProductRecipes(@PathVariable final Long productId,
-                                                             @PageableDefault Pageable pageable) {
+                                                                    @PageableDefault final Pageable pageable) {
         final SortingRecipesResponse response = productService.getProductRecipes(productId, pageable);
         return ResponseEntity.ok(response);
     }

@@ -70,5 +70,5 @@ public interface ProductController {
     )
     @GetMapping
     ResponseEntity<SortingRecipesResponse> getProductRecipes(@PathVariable final Long productId,
-                                                             @PageableDefault Pageable pageable);
+                                                             @PageableDefault final Pageable pageable);
 }
