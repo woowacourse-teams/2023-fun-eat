@@ -50,6 +50,10 @@ const useSearch = () => {
     setIsAutocompleteOpen(false);
   };
 
+  const resetSearchQuery = () => {
+    setSearchQuery('');
+  };
+
   return {
     searchQuery,
     isSubmitted,
@@ -58,6 +62,7 @@ const useSearch = () => {
     handleSearch,
     handleSearchClick,
     handleAutocompleteClose,
+    resetSearchQuery,
   };
 };
 

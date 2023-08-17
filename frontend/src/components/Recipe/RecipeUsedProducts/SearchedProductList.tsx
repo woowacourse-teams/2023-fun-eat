@@ -1,4 +1,5 @@
 import { Button, Text } from '@fun-eat/design-system';
+import type { MouseEventHandler } from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
@@ -9,9 +10,10 @@ import { useInfiniteProductSearchAutocompleteQuery } from '@/hooks/queries/searc
 interface SearchedProductListProps {
   searchQuery: string;
   addUsedProducts: (id: number, name: string) => void;
+  handleAutocompleteClose: MouseEventHandler<HTMLDivElement>;
 }
 
-const SearchedProductList = ({ searchQuery, addUsedProducts }: SearchedProductListProps) => {
+const SearchedProductList = ({ searchQuery, addUsedProducts, handleAutocompleteClose }: SearchedProductListProps) => {
   const { data: searchResponse, fetchNextPage, hasNextPage } = useInfiniteProductSearchAutocompleteQuery(searchQuery);
   const scrollRef = useRef<HTMLDivElement>(null);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
@@ -32,8 +34,9 @@ const SearchedProductList = ({ searchQuery, addUsedProducts }: SearchedProductLi
   }
 
   return (
-    <>
-      <SearchedProductListContainer>
+    <SearchedProductListContainer>
+      <Backdrop onClick={handleAutocompleteClose} />
+      <SearchedProductListWrapper>
         {products.map(({ id, name }) => (
           <li key={id}>
             <Button type="button" variant="transparent" onClick={() => addUsedProducts(id, name)}>
@@ -41,15 +44,31 @@ const SearchedProductList = ({ searchQuery, addUsedProducts }: SearchedProductLi
             </Button>
           </li>
         ))}
-      </SearchedProductListContainer>
+      </SearchedProductListWrapper>
       <div ref={scrollRef} aria-hidden />
-    </>
+    </SearchedProductListContainer>
   );
 };
 
 export default SearchedProductList;
 
-const SearchedProductListContainer = styled.ul`
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  backround: rgba(0, 0, 0, 0.24);
+`;
+
+const SearchedProductListContainer = styled.div`
+  max-height: 150px;
+  background-color: #ffffff;
+  overflow-y: auto;
+`;
+
+const SearchedProductListWrapper = styled.ul`
+  position: relative;
   width: 300px;
   height: 80%;
   border: 1px solid ${({ theme }) => theme.borderColors.default};
