@@ -1,7 +1,9 @@
 import { Button, Heading, Link, theme } from '@fun-eat/design-system';
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { logoutApi } from '@/apis';
 import { SvgIcon } from '@/components/Common';
 import { PATH } from '@/constants/path';
 import { useMemberQuery } from '@/hooks/queries/members';
@@ -17,6 +19,34 @@ const MembersInfo = () => {
 
   const { nickname, profileImage } = member;
 
+  const [location, setLocation] = useState('');
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    const response = await logoutApi.post({
+      credentials: true,
+    });
+
+    if (!response) {
+      throw new Error('로그아웃에 실패했습니다.');
+    }
+
+    const location = response.headers.get('Location');
+
+    if (location === null) {
+      throw new Error('Location이 없습니다.');
+    }
+
+    setLocation(location);
+  };
+
+  useEffect(() => {
+    if (location === '') {
+      return;
+    }
+    navigate(location, { replace: true });
+  }, [location]);
+
   return (
     <MembersInfoContainer>
       <MemberInfoWrapper>
@@ -28,7 +58,7 @@ const MembersInfo = () => {
           <SvgIcon variant="pencil" width={20} height={24} color={theme.colors.gray3} />
         </MemberModifyLink>
       </MemberInfoWrapper>
-      <Button type="button" textColor="disabled" variant="transparent">
+      <Button type="button" textColor="disabled" variant="transparent" onClick={logout}>
         로그아웃
       </Button>
     </MembersInfoContainer>
