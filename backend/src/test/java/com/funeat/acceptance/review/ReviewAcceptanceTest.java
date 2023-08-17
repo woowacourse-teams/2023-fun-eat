@@ -399,7 +399,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         }
 
         @Test
-        void 가장_좋아요를_많이_받은_리뷰가_존재하면_상품_이미지가_바뀐다() {
+        void 상품_이미지가_존재하는_좋아요를_가장_많이_받은_리뷰로_상품_이미지가_바뀐다() {
             // given
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -416,13 +416,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var firstImage = 사진_명세_요청("first");
-            final var secondImage = 사진_명세_요청("second");
+            final var image = 사진_명세_요청("first");
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
 
-            단일_리뷰_요청(productId, firstImage, reviewRequest, loginCookie);
-            단일_리뷰_요청(productId, secondImage, reviewRequest, loginCookie);
+            단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
+            단일_리뷰_요청(productId, null, reviewRequest, loginCookie);
 
             final var firstReview = reviewRepository.findById(1L).get();
             final var firstReviewId = firstReview.getId();

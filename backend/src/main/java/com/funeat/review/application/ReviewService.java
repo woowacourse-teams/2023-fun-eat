@@ -31,9 +31,9 @@ import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +43,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class ReviewService {
 
+    private static final int TOP = 0;
+    private static final int ONE = 1;
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
     private final ReviewTagRepository reviewTagRepository;
@@ -123,16 +125,16 @@ public class ReviewService {
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
 
         final Product product = review.getProduct();
-        final Optional<Review> topFavoriteReview = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product);
-        if (topFavoriteReview.isEmpty()) {
-            return;
-        }
+        final Long productId = product.getId();
+        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
 
-        final Long topReviewFavoriteCount = topFavoriteReview.get().getFavoriteCount();
-        final String reviewImage = review.getImage();
+        final List<Review> topFavoriteReview = reviewRepository.findPopularImage(productId, pageRequest);
+        if (!topFavoriteReview.isEmpty()) {
+            final String topFavoriteReviewImage = topFavoriteReview.get(0).getImage();
 
-        if (review.isEqualFavoriteCount(topReviewFavoriteCount) && product.isNotEqualImage(reviewImage)) {
-            product.updateImage(reviewImage);
+            if (product.isNotEqualImage(topFavoriteReviewImage)) {
+                product.updateImage(topFavoriteReviewImage);
+            }
         }
     }
 

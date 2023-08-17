@@ -22,6 +22,7 @@ import com.funeat.common.RepositoryTest;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewRepositoryTest extends RepositoryTest {
@@ -145,10 +146,12 @@ class ReviewRepositoryTest extends RepositoryTest {
             단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-            단일_상품_저장(product);
+            final var productId = 단일_상품_저장(product);
+
+            final var pageable = PageRequest.of(0, 1);
 
             // when
-            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product);
+            final var actual = reviewRepository.findPopularImage(productId, pageable);
 
             // then
             assertThat(actual).isEmpty();
@@ -161,7 +164,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-            단일_상품_저장(product);
+            final var productId = 단일_상품_저장(product);
 
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -170,21 +173,23 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
             복수_리뷰_저장(review1, review2);
 
+            final var pageable = PageRequest.of(0, 1);
+
             // when
-            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product).get();
+            final var actual = reviewRepository.findPopularImage(productId, pageable).get(0);
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(review1);
         }
 
         @Test
-        void 좋아요_수가_같으면_좋아요가_높은_리뷰를_반환하다() {
+        void 좋아요_수가_같으면_최신_리뷰를_반환하다() {
             // given
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
 
             final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-            단일_상품_저장(product);
+            final var productId = 단일_상품_저장(product);
 
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -193,11 +198,13 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 0L);
             복수_리뷰_저장(review1, review2);
 
+            final var pageable = PageRequest.of(0, 1);
+
             // when
-            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDesc(product).get();
+            final var actual = reviewRepository.findPopularImage(productId, pageable).get(0);
 
             // then
-            assertThat(actual).usingRecursiveComparison().isEqualTo(review1);
+            assertThat(actual).usingRecursiveComparison().isEqualTo(review2);
         }
     }
 }

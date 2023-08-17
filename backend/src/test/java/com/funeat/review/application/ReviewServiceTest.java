@@ -22,6 +22,7 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지없음_평점1점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_false_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_true_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
@@ -699,6 +700,39 @@ class ReviewServiceTest extends ServiceTest {
 
             // when
             reviewService.updateProductImage(secondReviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        void 가장_많은_좋아요를_받은_리뷰들에_이미지가_없으면_이미지가_존재하는_좋아요를_많이_받은_리뷰_이미지로_바뀐다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
+            final var firstReviewId = 단일_리뷰_저장(firstReview);
+            reviewService.updateProductImage(firstReviewId);
+
+            final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
+            final var secondReviewId = 단일_리뷰_저장(secondReview);
+            reviewService.updateProductImage(secondReviewId);
+
+            final var thirdReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
+            final var thirdReviewId = 단일_리뷰_저장(thirdReview);
+
+            final var expected = thirdReview.getImage();
+
+            // when
+            reviewService.updateProductImage(thirdReviewId);
             final var actual = product.getImage();
 
             // then
