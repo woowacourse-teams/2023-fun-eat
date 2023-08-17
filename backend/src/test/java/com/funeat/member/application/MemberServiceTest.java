@@ -1,5 +1,6 @@
 package com.funeat.member.application;
 
+import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,12 +8,13 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.auth.dto.UserInfoDto;
 import com.funeat.common.ServiceTest;
-import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
+import com.funeat.member.exception.MemberException.MemberUpdateException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockMultipartFile;
 
 @SuppressWarnings("NonAsciiCharacters")
 class MemberServiceTest extends ServiceTest {
@@ -121,8 +123,8 @@ class MemberServiceTest extends ServiceTest {
         void 닉네임과_프로필_사진이_그대로면_사용자_정보는_바뀌지_않는다() {
             // given
             final var nickname = "member1";
-            final var profileImage = "www.member1.com";
-            final var request = new MemberRequest(nickname, profileImage);
+            final var image = new MockMultipartFile("image", "www.member1.com", "image/jpeg", new byte[]{1, 2, 3});
+            final var request = new MemberRequest(nickname);
 
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
@@ -132,7 +134,7 @@ class MemberServiceTest extends ServiceTest {
             final var expectedProfileImage = expected.getProfileImage();
 
             // when
-            memberService.modify(memberId, request);
+            memberService.modify(memberId, image, request);
             final var actual = memberRepository.findById(memberId).get();
             final var actualNickname = actual.getNickname();
             final var actualProfileImage = actual.getProfileImage();
@@ -149,9 +151,10 @@ class MemberServiceTest extends ServiceTest {
         @Test
         void 닉네임만_바뀌고_프로필_사진은_그대로면_닉네임만_바뀐다() {
             // given
-            final var profileImage = "www.member1.com";
+            final var profileImage = new MockMultipartFile("image", "www.member1.com", "image/jpeg",
+                    new byte[]{1, 2, 3});
             final var afterNickname = "after";
-            final var request = new MemberRequest(afterNickname, profileImage);
+            final var request = new MemberRequest(afterNickname);
 
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
@@ -161,7 +164,7 @@ class MemberServiceTest extends ServiceTest {
             final var expectedProfileImage = expected.getProfileImage();
 
             // when
-            memberService.modify(memberId, request);
+            memberService.modify(memberId, profileImage, request);
             final var actual = memberRepository.findById(memberId).get();
             final var actualNickname = actual.getNickname();
             final var actualProfileImage = actual.getProfileImage();
@@ -179,9 +182,8 @@ class MemberServiceTest extends ServiceTest {
         void 닉네임은_그대로이고_프로필_사진이_바뀌면_프로필_사진만_바뀐다() {
             // given
             final var nickname = "member1";
-            final var afterProfileImage = "www.after.com";
-
-            final var request = new MemberRequest(nickname, afterProfileImage);
+            final var afterProfileImage = 이미지_생성();
+            final var request = new MemberRequest(nickname);
 
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
@@ -191,7 +193,7 @@ class MemberServiceTest extends ServiceTest {
             final var expectedProfileImage = expected.getProfileImage();
 
             // when
-            memberService.modify(memberId, request);
+            memberService.modify(memberId, afterProfileImage, request);
             final var actual = memberRepository.findById(memberId).get();
             final var actualNickname = actual.getNickname();
             final var actualProfileImage = actual.getProfileImage();
@@ -209,9 +211,9 @@ class MemberServiceTest extends ServiceTest {
         void 닉네임과_프로필_사진_모두_바뀌면_모두_바뀐다() {
             // given
             final var afterNickname = "after";
-            final var afterProfileImage = "http://www.after.com";
+            final var afterProfileImage = 이미지_생성();
 
-            final var request = new MemberRequest(afterNickname, afterProfileImage);
+            final var request = new MemberRequest(afterNickname);
 
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
@@ -221,7 +223,7 @@ class MemberServiceTest extends ServiceTest {
             final var expectedProfileImage = expected.getProfileImage();
 
             // when
-            memberService.modify(memberId, request);
+            memberService.modify(memberId, afterProfileImage, request);
             final var actual = memberRepository.findById(memberId).get();
             final var actualNickname = actual.getNickname();
             final var actualProfileImage = actual.getProfileImage();
@@ -243,46 +245,30 @@ class MemberServiceTest extends ServiceTest {
         void 존재하지않는_멤버를_수정하면_예외가_발생한다() {
             // given
             final var afterNickname = "after";
-            final var afterProfileImage = "www.after.com";
+            final var afterProfileImage = 이미지_생성();
 
             final var member = 멤버_멤버1_생성();
             final var wrongMemberId = 단일_멤버_저장(member) + 1L;
 
-            final var request = new MemberRequest(afterNickname, afterProfileImage);
+            final var request = new MemberRequest(afterNickname);
 
             // when
-            assertThatThrownBy(() -> memberService.modify(wrongMemberId, request))
+            assertThatThrownBy(() -> memberService.modify(wrongMemberId, afterProfileImage, request))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
         @Test
-        void 닉네임_수정_요청_값을_null로_설정하면_예외가_발생해야_하지만_통과하고_있다() {
+        void 닉네임_수정_요청_값을_null로_설정하면_예외가_발생한다() {
             // given
-            final var nickname = "test";
-            final var beforeProfileImage = "www.before.com";
-            final var afterProfileImage = "www.after.com";
-
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
 
-            final var request = new MemberRequest(null, afterProfileImage);
+            final var request = new MemberRequest(null);
+            final var image = 이미지_생성();
 
             // when & then
-        }
-
-        @Test
-        void 프로필_이미지_요청_값을_null로_설정하면_예외가_발생해야_하지만_통과하고_있다() {
-            // given
-            final var beforeNickname = "before";
-            final var afterNickname = "after";
-            final var profileImage = "www.test.com";
-
-            final var member = new Member(beforeNickname, profileImage, "1");
-            final var memberId = 단일_멤버_저장(member);
-
-            final var request = new MemberRequest(afterNickname, null);
-
-            // when & then
+            assertThatThrownBy(() -> memberService.modify(memberId, image, request))
+                    .isInstanceOf(MemberUpdateException.class);
         }
     }
 }

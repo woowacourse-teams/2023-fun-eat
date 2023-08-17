@@ -2,6 +2,7 @@ package com.funeat.acceptance.review;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_생성;
@@ -10,7 +11,6 @@ import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
-import static com.funeat.acceptance.review.ReviewSteps.리뷰_사진_명세_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
@@ -80,12 +80,37 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
             final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_생성);
+        }
+
+        @Test
+        void 이미지가_없어도_리뷰를_작성할_수_있다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            카테고리_단일_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_푸짐해요_PRICE_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+
+            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            final var loginCookie = 로그인_쿠키를_얻는다();
+
+            // when
+            final var response = 단일_리뷰_요청(productId, null, request, loginCookie);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
@@ -110,7 +135,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
             // when
@@ -133,7 +158,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
@@ -157,7 +182,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
@@ -187,7 +212,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
@@ -218,7 +243,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
@@ -248,7 +273,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
@@ -278,7 +303,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
@@ -316,7 +341,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
@@ -351,7 +376,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
 
@@ -395,7 +420,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
@@ -432,7 +457,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var image = 리뷰_사진_명세_요청();
+            final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
             final var loginCookie = 로그인_쿠키를_얻는다();
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);

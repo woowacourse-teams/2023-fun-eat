@@ -77,10 +77,11 @@ public class ReviewService {
                     new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
                             reviewRequest.getRebuy()));
         } else {
+            final String newImageName = imageService.getRandomImageName(image);
             savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, image.getOriginalFilename(), reviewRequest.getRating(),
+                    new Review(findMember, findProduct, newImageName, reviewRequest.getRating(),
                             reviewRequest.getContent(), reviewRequest.getRebuy()));
-            imageService.upload(image);
+            imageService.upload(image, newImageName);
         }
 
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
