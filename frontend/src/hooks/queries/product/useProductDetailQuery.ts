@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useSuspendedQuery } from '..';
 
 import { productApi } from '@/apis';
@@ -10,7 +12,11 @@ const fetchProductDetail = async (productId: number) => {
 };
 
 const useProductDetailQuery = (productId: number) => {
-  return useSuspendedQuery(['productDetail', productId], () => fetchProductDetail(productId));
+  const queryClient = useQueryClient();
+
+  return useSuspendedQuery(['productDetail', productId], () => fetchProductDetail(productId), {
+    onSuccess: () => queryClient.invalidateQueries(['productDetail']),
+  });
 };
 
 export default useProductDetailQuery;
