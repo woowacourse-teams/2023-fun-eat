@@ -8,7 +8,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
   const { data: member } = useMemberQuery();
 
   if (!member) {
-    <Navigate to={PATH.HOME} replace />;
+    return <Navigate to={PATH.LOGIN} replace />;
   }
 
   return children;
