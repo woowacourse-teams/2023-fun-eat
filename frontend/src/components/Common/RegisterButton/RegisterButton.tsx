@@ -22,6 +22,7 @@ const RegisterButton = ({ activeLabel, disabledLabel, onClick }: RegisterButtonP
       size="lg"
       weight="bold"
       onClick={onClick}
+      disabled={!member}
     >
       {member ? activeLabel : disabledLabel}
     </RegisterButtonContainer>
