@@ -12,6 +12,7 @@ const useImageUploader = () => {
     maxSizeMB: 1,
     maxWidthOrHeight: 1920,
     useWebWorker: true,
+    fileType: 'image/png',
   };
 
   const uploadImage: ChangeEventHandler<HTMLInputElement> = async (event) => {
