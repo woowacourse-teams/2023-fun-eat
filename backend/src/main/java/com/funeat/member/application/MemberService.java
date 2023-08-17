@@ -1,5 +1,6 @@
 package com.funeat.member.application;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 import com.funeat.auth.dto.SignUserDto;
@@ -66,5 +67,12 @@ public class MemberService {
         final String newImageName = imageService.getRandomImageName(image);
         findMember.modifyProfile(nickname, newImageName);
         imageService.upload(image, newImageName);
+    }
+
+    public String findPlatformId(final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+
+        return member.getPlatformId();
     }
 }

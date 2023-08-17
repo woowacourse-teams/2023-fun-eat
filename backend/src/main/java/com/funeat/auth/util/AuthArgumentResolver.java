@@ -23,10 +23,6 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        System.out.println("request.getSession().getAttribute(\"member\"))"+ request.getSession().getAttribute("member"));
-        System.out.println("request.getHeader(\"Cookie\")"+ request.getHeader("Cookie"));
-        System.out.println("request.getRequestURL().toString()"+request.getRequestURL().toString());
-
         final HttpSession session = Objects.requireNonNull(request).getSession();
         final String id = String.valueOf(session.getAttribute("member"));
 

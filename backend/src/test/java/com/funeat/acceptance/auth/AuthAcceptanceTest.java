@@ -8,6 +8,7 @@ import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_리
 import static com.funeat.acceptance.common.CommonSteps.REDIRECT_URL을_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.리다이렉션_영구_이동;
+import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +20,6 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuthAcceptanceTest extends AcceptanceTest {
@@ -86,12 +86,14 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         void 로그아웃을_하다() {
             // given
             final var loginCookie = 로그인_쿠키를_얻는다();
+            final var expected = "/";
 
             // when
             final var response = 로그아웃_요청(loginCookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
+            STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);
+            REDIRECT_URL을_검증한다(response, expected);
         }
     }
 
@@ -104,7 +106,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
             final var response = 로그아웃_요청(null);
 
             // then
-            STATUS_CODE를_검증한다(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
         }
     }
 
