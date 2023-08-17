@@ -30,7 +30,7 @@ public class MemberSteps {
         }
 
         return requestSpec
-                .multiPart("request", request, "application/json")
+                .multiPart("memberRequest", request, "application/json")
                 .body(request)
                 .when()
                 .put("/api/members")
