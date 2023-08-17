@@ -63,7 +63,7 @@ const RecipePage = () => {
           onClick={handleOpenRegisterRecipeSheet}
         />
       </RecipeRegisterButtonWrapper>
-      <ScrollButton />
+      <ScrollButton isRecipePage />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         {activeSheet === 'sortOption' ? (
           <SortOptionList
@@ -102,11 +102,12 @@ const SortButtonWrapper = styled.div`
 
 const RecipeRegisterButtonWrapper = styled.div`
   position: fixed;
-  bottom: 80px;
+  bottom: 60px;
   left: 20px;
-  width: calc(100% - 100px);
-  max-width: 500px;
-  height: 60px;
+  width: calc(100% - 40px);
+  max-width: 560px;
+  height: 80px;
+  background: ${({ theme }) => theme.backgroundColors.default};
 
   @media screen and (min-width: 600px) {
     left: calc(50% - 280px);
