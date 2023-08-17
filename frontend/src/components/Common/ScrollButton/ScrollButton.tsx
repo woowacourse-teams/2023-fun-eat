@@ -6,7 +6,11 @@ import SvgIcon from '../Svg/SvgIcon';
 
 import { useScroll } from '@/hooks/common';
 
-const ScrollButton = () => {
+interface ScrollButtonProps {
+  isRecipePage?: boolean;
+}
+
+const ScrollButton = ({ isRecipePage = false }: ScrollButtonProps) => {
   const { scrollToTop } = useScroll();
   const [scrollTop, setScrollTop] = useState(false);
 
@@ -23,7 +27,14 @@ const ScrollButton = () => {
   }, [scrollTop]);
 
   return (
-    <ScrollButtonWrapper customWidth="45px" customHeight="45px" variant="filled" color="gray5" onClick={handleScroll}>
+    <ScrollButtonWrapper
+      isRecipePage={isRecipePage}
+      customWidth="45px"
+      customHeight="45px"
+      variant="filled"
+      color="gray5"
+      onClick={handleScroll}
+    >
       <SvgIcon variant="triangle" color="white" width={16} height={14} />
     </ScrollButtonWrapper>
   );
@@ -31,9 +42,9 @@ const ScrollButton = () => {
 
 export default ScrollButton;
 
-const ScrollButtonWrapper = styled(Button)`
+const ScrollButtonWrapper = styled(Button)<ScrollButtonProps>`
   position: fixed;
-  bottom: 90px;
+  bottom: ${({ isRecipePage }) => (isRecipePage ? '150px' : '90px')};
   right: 20px;
   border-radius: 50%;
 
