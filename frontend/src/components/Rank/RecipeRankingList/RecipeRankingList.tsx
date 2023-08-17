@@ -1,12 +1,22 @@
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
+
 import RecipeRankingItem from '../RecipeRankingItem/RecipeRankingItem';
 
 import { Carousel } from '@/components/Common';
-import mockRecipeList from '@/mocks/data/recipeRankingList.json';
+import { PATH } from '@/constants/path';
+import { useRecipeRankingQuery } from '@/hooks/queries/rank';
 
 const RecipeRankingList = () => {
-  const carouselList = mockRecipeList.recipes.map((recipe, index) => ({
+  const { data: recipeResponse } = useRecipeRankingQuery();
+
+  const carouselList = recipeResponse.recipes.map((recipe, index) => ({
     id: index,
-    children: <RecipeRankingItem rank={index + 1} recipe={recipe} />,
+    children: (
+      <Link as={RouterLink} to={`${PATH.RECIPE}/${recipe.id}`}>
+        <RecipeRankingItem rank={index + 1} recipe={recipe} />
+      </Link>
+    ),
   }));
 
   return <Carousel carouselList={carouselList} />;

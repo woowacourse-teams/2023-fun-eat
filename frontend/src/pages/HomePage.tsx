@@ -60,7 +60,11 @@ const HomePage = () => {
         <Heading as="h2" size="xl">
           🍯 꿀조합 랭킹
         </Heading>
-        <RecipeRankingList />
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
+            <RecipeRankingList />
+          </Suspense>
+        </ErrorBoundary>
       </section>
       <Spacing size={36} />
       <section>
