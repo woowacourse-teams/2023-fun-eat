@@ -31,7 +31,7 @@ const LOGIN_ERROR_MESSAGE_RECIPE =
   '로그인 후 상품 꿀조합을 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 꿀조합을 확인해보세요 😊';
 
 const ProductDetailPage = () => {
-  const { productId } = useParams();
+  const { category, productId } = useParams();
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
   const { reset } = useQueryErrorResetBoundary();
@@ -48,6 +48,10 @@ const ProductDetailPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+
+  if (!category) {
+    return null;
+  }
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
@@ -68,7 +72,7 @@ const ProductDetailPage = () => {
     <>
       <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
-      <ProductDetailItem productDetail={productDetail} />
+      <ProductDetailItem category={category} productDetail={productDetail} />
       <Spacing size={36} />
       <TabMenu
         ref={tabRef}

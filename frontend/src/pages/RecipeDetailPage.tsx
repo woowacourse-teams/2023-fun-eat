@@ -2,12 +2,12 @@ import { Heading, Spacing, Text, theme } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import RecipePreviewImage from '@/assets/plate.svg';
 import { SectionTitle } from '@/components/Common';
 import { RecipeFavorite } from '@/components/Recipe';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
@@ -19,13 +19,24 @@ const RecipeDetailPage = () => {
     <>
       <SectionTitle name={title} />
       <Spacing size={24} />
-      <RecipeImageContainer>
-        {images.map((image) => (
-          <li key={image}>
-            <RecipeImage src={srcPath + image} alt={`${title} 꿀조합 사진`} width={312} height={210} />
-          </li>
-        ))}
-      </RecipeImageContainer>
+      {images !== null ? (
+        <RecipeImageContainer>
+          {images.map((image, index) => (
+            <li key={image}>
+              <RecipeImage
+                src={IMAGE_SRC_PATH + image}
+                alt={`${title} 꿀조합 사진 ${index}`}
+                width={312}
+                height={210}
+              />
+            </li>
+          ))}
+        </RecipeImageContainer>
+      ) : (
+        <RecipePreviewImageWrapper>
+          <RecipePreviewImage width={210} height={210} />
+        </RecipePreviewImageWrapper>
+      )}
       <Spacing size={24} />
       <AuthorFavoriteWrapper>
         <AuthorWrapper>
@@ -76,6 +87,11 @@ const RecipeImageContainer = styled.ul`
 const RecipeImage = styled.img`
   object-fit: cover;
   border-radius: 10px;
+`;
+
+const RecipePreviewImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const AuthorFavoriteWrapper = styled.div`

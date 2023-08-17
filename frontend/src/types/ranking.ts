@@ -14,7 +14,7 @@ export interface ReviewRanking {
 
 export interface RecipeRanking {
   id: number;
-  image: string;
+  image: string | null;
   title: string;
   author: Member;
   favoriteCount: number;

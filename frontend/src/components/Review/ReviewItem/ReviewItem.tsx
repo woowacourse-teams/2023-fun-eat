@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
@@ -12,8 +13,6 @@ interface ReviewItemProps {
   productId: number;
   review: Review;
 }
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
@@ -75,7 +74,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={srcPath + image} height={150} alt={`${userName}의 리뷰`} />}
+      {image !== null && <ReviewImage src={IMAGE_SRC_PATH + image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <Text css="white-space: pre-wrap">{content}</Text>
       <FavoriteButton

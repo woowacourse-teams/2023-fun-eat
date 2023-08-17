@@ -15,7 +15,11 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
   return (
     <ProductItemContainer>
-      {image ? <img src={image} width={90} height={90} alt={`${name}사진`} /> : <PreviewImage width={90} height={90} />}
+      {image !== null ? (
+        <img src={image} width={90} height={90} alt={`${name}사진`} />
+      ) : (
+        <PreviewImage width={90} height={90} />
+      )}
       <ProductInfoWrapper>
         <Text size="lg" weight="bold">
           {name}

@@ -14,7 +14,7 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
 
   return (
     <PBProductItemContainer>
-      {image ? (
+      {image !== null ? (
         <PBProductImage src={image} alt={`${name}사진`} width={110} height={110} />
       ) : (
         <PBPreviewImage width={110} height={110} />

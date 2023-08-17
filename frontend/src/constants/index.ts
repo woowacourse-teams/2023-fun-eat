@@ -59,3 +59,8 @@ export const TAG_TITLE = {
 export const MIN_DISPLAYED_TAGS_LENGTH = 3;
 
 export const SEARCH_PAGE_TABS = ['상품', '꿀조합'] as const;
+
+export const CATEGORY_TYPE = {
+  FOOD: 'food',
+  STORE: 'store',
+} as const;

@@ -15,7 +15,7 @@ export interface RecipePostRequestBody extends FormData {
 export type RecipeRequestKey = keyof RecipeRequest;
 
 export interface RecipeDetail extends Recipe {
-  images: string[];
+  images: string[] | null;
   content: string;
   totalPrice: number;
   favorite: boolean;
@@ -23,7 +23,7 @@ export interface RecipeDetail extends Recipe {
 
 export interface BaseRecipe {
   id: number;
-  image: string;
+  image: string | null;
   title: string;
   createdAt: string;
   favoriteCount: number;

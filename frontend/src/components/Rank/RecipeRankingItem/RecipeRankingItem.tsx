@@ -1,15 +1,15 @@
 import { Spacing, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
+import RecipePreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { RecipeRanking } from '@/types/ranking';
 
 interface RecipeRankingItemProps {
   rank: number;
   recipe: RecipeRanking;
 }
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
   const theme = useTheme();
@@ -21,7 +21,11 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
         <Spacing direction="horizontal" size={12} />
         <Text weight="bold">{rank}</Text>
         <Spacing direction="horizontal" size={12} />
-        <RecipeImage src={srcPath + image} alt={`${rank}위 꿀조합`} width={60} height={60} />
+        {image !== null ? (
+          <RecipeImage src={IMAGE_SRC_PATH + image} alt={`${rank}위 꿀조합`} width={60} height={60} />
+        ) : (
+          <RecipePreviewImage width={60} height={60} />
+        )}
         <Spacing direction="horizontal" size={12} />
         <TitleFavoriteWrapper>
           <Text weight="bold">{title}</Text>

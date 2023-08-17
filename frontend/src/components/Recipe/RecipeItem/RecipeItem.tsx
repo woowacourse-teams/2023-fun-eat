@@ -2,7 +2,9 @@ import { Heading, Text, useTheme } from '@fun-eat/design-system';
 import { Fragment } from 'react';
 import styled from 'styled-components';
 
+import PreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
+import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -10,8 +12,6 @@ interface RecipeItemProps {
   recipe: Recipe | MemberRecipe;
   isMemberPage?: boolean;
 }
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
   const { image, title, createdAt, favoriteCount, products } = recipe;
@@ -22,7 +22,11 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
     <>
       {!isMemberPage && (
         <ImageWrapper>
-          <RecipeImage src={srcPath + image} alt={`조리된 ${title}`} />
+          {image !== null ? (
+            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`조리된 ${title}`} />
+          ) : (
+            <PreviewImage width={160} height={160} />
+          )}
           {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
         </ImageWrapper>
       )}
@@ -34,11 +38,13 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
         <Heading as="h3" size="xl" weight="bold">
           {title}
         </Heading>
-        <Text as="span" color={theme.textColors.info}>
+        <RecipeProductText>
           {products.map(({ id, name }) => (
-            <Fragment key={id}>#{name}</Fragment>
+            <Text as="span" key={id} color={theme.textColors.info}>
+              #{name}
+            </Text>
           ))}
-        </Text>
+        </RecipeProductText>
         <FavoriteWrapper>
           <SvgIcon variant="favoriteFilled" width={16} height={16} color={theme.colors.error} />
           <Text as="span" weight="bold">
@@ -53,6 +59,8 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
 export default RecipeItem;
 
 const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   position: relative;
   width: 100%;
   height: 160px;
@@ -94,4 +102,10 @@ const FavoriteWrapper = styled.div`
   right: 0;
   bottom: 50%;
   transform: translateY(-50%);
+`;
+
+const RecipeProductText = styled(Text)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;

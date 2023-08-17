@@ -6,3 +6,5 @@ export const PATH = {
   RECIPE: '/recipes',
   LOGIN: '/login',
 } as const;
+
+export const IMAGE_SRC_PATH = process.env.NODE_ENV === 'development' ? '' : '/images/';

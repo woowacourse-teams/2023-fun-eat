@@ -12,7 +12,7 @@ const MembersInfo = () => {
   if (!member) {
     return null;
   }
-
+        
   const { nickname, profileImage } = member;
 
   const { mutate } = useLogoutMutation();
