@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type { SvgIconVariant } from '@/components/Common/Svg/SvgIcon';
 import type { TAG_TITLE, PRODUCT_SORT_OPTIONS, REVIEW_SORT_OPTIONS, RECIPE_SORT_OPTIONS } from '@/constants';
 import type { PATH } from '@/constants/path';
@@ -22,6 +24,11 @@ export interface NavigationMenu {
   variant: SvgIconVariant;
   name: '검색' | '목록' | '홈' | '꿀조합' | '마이';
   path: (typeof PATH)[keyof typeof PATH] | '/products/food' | '/products/store';
+}
+
+export interface CarouselChildren {
+  id: number;
+  children: ReactNode;
 }
 
 export type ProductSortOption = 'price' | 'averageRating' | 'reviewCount';
