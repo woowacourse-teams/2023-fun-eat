@@ -41,7 +41,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
     <MemberReviewListContainer>
       {!isMemberPage && (
         <TotalReviewCount color={theme.colors.gray4}>
-          총 <strong>&apos;{totalReviewCount}&apos;</strong>개의 리뷰를 남겼어요!
+          총 <strong>{totalReviewCount}</strong>개의 리뷰를 남겼어요!
         </TotalReviewCount>
       )}
       <Spacing size={20} />
