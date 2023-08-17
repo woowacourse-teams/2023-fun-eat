@@ -28,7 +28,7 @@ const ProductRecipeList = ({ productId, productName, selectedOption }: ProductRe
         <ErrorDescription align="center" weight="bold" size="lg">
           {productName}을/를 사용한 꿀조합을 만들어보세요 🍯
         </ErrorDescription>
-        <RecipeLink as={RouterLink} to={`PATH.RECIPE`} block>
+        <RecipeLink as={RouterLink} to={`${PATH.RECIPE}`} block>
           꿀조합 작성하러 가기
         </RecipeLink>
       </ErrorContainer>
