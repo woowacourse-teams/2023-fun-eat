@@ -3,6 +3,7 @@ package com.funeat.recipe.persistence;
 import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
 import com.funeat.member.domain.Member;
+import com.funeat.product.domain.Product;
 import com.funeat.recipe.domain.Recipe;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<Recipe> findAllByProductNameContaining(@Param("name") final String name, final Pageable pageable);
 
     Page<Recipe> findAll(final Pageable pageable);
+
+    @Query("SELECT r FROM Recipe r LEFT JOIN ProductRecipe pr ON pr.product = :product WHERE pr.recipe.id = r.id")
+    Page<Recipe> findRecipesByProduct(final Product product, final Pageable pageable);
 
     List<Recipe> findRecipesByOrderByFavoriteCountDesc(final Pageable pageable);
 

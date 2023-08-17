@@ -48,18 +48,22 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
     formContent: reviewFormValue,
   });
 
+  const resetAndCloseForm = () => {
+    deleteImage();
+    resetReviewFormValue();
+    closeReviewDialog();
+  };
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
     mutate(formData, {
       onSuccess: () => {
-        deleteImage();
-        resetReviewFormValue();
-
-        closeReviewDialog();
+        resetAndCloseForm();
         scrollToPosition(targetRef);
       },
       onError: (error) => {
+        resetAndCloseForm();
         if (error instanceof Error) {
           alert(error.message);
           return;

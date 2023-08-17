@@ -8,6 +8,11 @@ import { useLogoutMutation, useMemberQuery } from '@/hooks/queries/members';
 
 const MembersInfo = () => {
   const { data: member } = useMemberQuery();
+
+  if (!member) {
+    return null;
+  }
+        
   const { nickname, profileImage } = member;
 
   const { mutate } = useLogoutMutation();

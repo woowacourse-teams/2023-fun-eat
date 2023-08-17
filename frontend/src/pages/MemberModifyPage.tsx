@@ -11,8 +11,9 @@ import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
+
   const { previewImage, imageFile, uploadImage } = useImageUploader();
-  const [nickname, setNickname] = useState(member.nickname);
+  const [nickname, setNickname] = useState(member?.nickname ?? '');
   const { mutate } = useMemberModifyMutation();
 
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                <ProfileImage src={previewImage || member.profileImage} alt="업로드한 사진" width={80} />
+                <ProfileImage src={previewImage || member?.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
                 <input type="file" accept="image/*" onChange={uploadImage} />

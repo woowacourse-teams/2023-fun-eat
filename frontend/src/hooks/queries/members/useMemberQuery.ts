@@ -11,7 +11,6 @@ const fetchMember = async () => {
 
 const useMemberQuery = () => {
   return useSuspendedQuery(['member'], fetchMember, {
-    staleTime: 15 * 60 * 1000,
     refetchOnWindowFocus: false,
     useErrorBoundary: false,
   });

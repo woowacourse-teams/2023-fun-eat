@@ -46,7 +46,7 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
           ))}
         </RecipeProductText>
         <FavoriteWrapper>
-          <SvgIcon variant="favoriteFilled" width={16} height={16} />
+          <SvgIcon variant="favoriteFilled" width={16} height={16} color={theme.colors.error} />
           <Text as="span" weight="bold">
             {favoriteCount}
           </Text>
