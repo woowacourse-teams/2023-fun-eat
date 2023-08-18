@@ -37,8 +37,7 @@ public class ReviewFavorite {
         this.review = review;
     }
 
-    public static ReviewFavorite createReviewFavoriteByMemberAndReview(final Member member, final Review review,
-                                                                       final Boolean favorite) {
+    public static ReviewFavorite create(final Member member, final Review review, final Boolean favorite) {
         final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
         reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.member.getReviewFavorites().add(reviewFavorite);

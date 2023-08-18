@@ -118,7 +118,7 @@ public class ReviewService {
 
     private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
         try {
-            final ReviewFavorite reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review,
+            final ReviewFavorite reviewFavorite = ReviewFavorite.create(member, review,
                     favorite);
             return reviewFavoriteRepository.save(reviewFavorite);
         } catch (final DataIntegrityViolationException e) {
