@@ -63,17 +63,19 @@ const Backdrop = styled.div`
 
 const SearchedProductListContainer = styled.div`
   max-height: 150px;
-  background-color: ${({ theme }) => theme.backgroundColor.default};
+  background-color: ${({ theme }) => theme.backgroundColors.default};
   overflow-y: auto;
 `;
 
 const SearchedProductListWrapper = styled.ul`
   position: relative;
   width: 300px;
-  height: 80%;
+  max-height: 150px;
+  height: 100%;
   border: 1px solid ${({ theme }) => theme.borderColors.default};
   border-top: none;
   border-radius: 0 0 5px 5px;
+  background: ${({ theme }) => theme.backgroundColors.default};
   overflow: auto;
 
   &::-webkit-scrollbar: horizontal {
