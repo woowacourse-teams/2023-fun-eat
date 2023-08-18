@@ -5,6 +5,7 @@ import static com.funeat.fixture.CategoryFixture.카테고리_EMART24_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_GS25_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_과자류_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_세븐일레븐_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_식품_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_아이스크림_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_음료_생성;
@@ -35,7 +36,8 @@ public class CategoryRepositoryTest extends RepositoryTest {
             final var CU = 카테고리_CU_생성();
             final var GS25 = 카테고리_GS25_생성();
             final var EMART24 = 카테고리_EMART24_생성();
-            복수_카테고리_저장(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
+            final var 세븐일레븐 = 카테고리_세븐일레븐_생성();
+            복수_카테고리_저장(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24, 세븐일레븐);
 
             final var expected = List.of(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료);
 
@@ -59,9 +61,10 @@ public class CategoryRepositoryTest extends RepositoryTest {
             final var CU = 카테고리_CU_생성();
             final var GS25 = 카테고리_GS25_생성();
             final var EMART24 = 카테고리_EMART24_생성();
-            복수_카테고리_저장(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24);
+            final var 세븐일레븐 = 카테고리_세븐일레븐_생성();
+            복수_카테고리_저장(간편식사, 즉석조리, 과자류, 아이스크림, 식품, 음료, CU, GS25, EMART24, 세븐일레븐);
 
-            final var expected = List.of(CU, GS25, EMART24);
+            final var expected = List.of(CU, GS25, EMART24, 세븐일레븐);
 
             // when
             final var actual = categoryRepository.findAllByType(CategoryType.STORE);

@@ -1,10 +1,11 @@
 import { Badge, Button, Heading, Text, useTheme } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import SearchedProductList from './SearchedProductList';
 
-import { Input, SvgIcon } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon } from '@/components/Common';
 import { useDebounce } from '@/hooks/common';
 import { useRecipeFormActionContext } from '@/hooks/context';
 import { useSearch } from '@/hooks/search';
@@ -14,8 +15,9 @@ const MAX_USED_PRODUCTS_COUNT = 6;
 
 const RecipeUsedProducts = () => {
   const theme = useTheme();
+  const { reset } = useQueryErrorResetBoundary();
 
-  const { searchQuery, handleSearchQuery } = useSearch();
+  const { searchQuery, handleSearchQuery, isAutocompleteOpen, handleAutocompleteClose, resetSearchQuery } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
   useDebounce(
     () => {
@@ -39,6 +41,9 @@ const RecipeUsedProducts = () => {
       return [...prev, { id: id, name: name }];
     });
     handleRecipeFormValue({ target: 'productIds', value: id, action: 'add' });
+
+    handleAutocompleteClose();
+    resetSearchQuery();
   };
 
   return (
@@ -73,8 +78,16 @@ const RecipeUsedProducts = () => {
           onChange={handleSearchQuery}
           disabled={usedProducts.length === MAX_USED_PRODUCTS_COUNT}
         />
-        {usedProducts.length < MAX_USED_PRODUCTS_COUNT && debouncedSearchQuery && (
-          <SearchedProductList searchQuery={debouncedSearchQuery} addUsedProducts={addUsedProducts} />
+        {usedProducts.length < MAX_USED_PRODUCTS_COUNT && debouncedSearchQuery && isAutocompleteOpen && (
+          <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+            <Suspense fallback={<Loading />}>
+              <SearchedProductList
+                searchQuery={debouncedSearchQuery}
+                addUsedProducts={addUsedProducts}
+                handleAutocompleteClose={handleAutocompleteClose}
+              />
+            </Suspense>
+          </ErrorBoundary>
         )}
       </SearchInputWrapper>
     </>
