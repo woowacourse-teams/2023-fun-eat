@@ -15,7 +15,7 @@ const fetchProductRecipes = async (pageParam: number, productId: number, sort: s
 
 const useInfiniteProductRecipesQuery = (productId: number, sort: string) => {
   return useSuspendedInfiniteQuery(
-    ['product', 'recipes', productId, sort],
+    ['product', productId, 'recipes', sort],
     ({ pageParam = 0 }) => fetchProductRecipes(pageParam, productId, sort),
     {
       getNextPageParam: (prevResponse: RecipeResponse) => {

@@ -10,7 +10,7 @@ const fetchMemberReview = async (pageParam: number) => {
 };
 
 const useInfiniteMemberReviewQuery = () => {
-  return useSuspendedInfiniteQuery(['member', 'reviews'], ({ pageParam = 0 }) => fetchMemberReview(pageParam), {
+  return useSuspendedInfiniteQuery(['member', 'review'], ({ pageParam = 0 }) => fetchMemberReview(pageParam), {
     getNextPageParam: (prevResponse: MemberReviewResponse) => {
       const isLast = prevResponse.page.lastPage;
       const nextPage = prevResponse.page.requestPage + 1;
