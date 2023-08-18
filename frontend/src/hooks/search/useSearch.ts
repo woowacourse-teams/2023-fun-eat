@@ -1,8 +1,10 @@
 import type { ChangeEventHandler, FormEventHandler, MouseEventHandler, RefObject } from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-const useSearch = (inputRef?: RefObject<HTMLInputElement>) => {
+const useSearch = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSearchQuery = searchParams.get('query');
 
@@ -22,11 +24,12 @@ const useSearch = (inputRef?: RefObject<HTMLInputElement>) => {
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    focusInput();
+
     const trimmedSearchQuery = searchQuery.trim();
 
     if (!trimmedSearchQuery) {
       alert('검색어를 입력해주세요');
+      focusInput();
       setSearchQuery('');
       return;
     }
@@ -48,7 +51,7 @@ const useSearch = (inputRef?: RefObject<HTMLInputElement>) => {
     setSearchParams({ query: value });
   };
 
-  return { searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick };
+  return { inputRef, searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick };
 };
 
 export default useSearch;
