@@ -63,7 +63,7 @@ const Backdrop = styled.div`
 
 const SearchedProductListContainer = styled.div`
   max-height: 150px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.backgroundColor.default};
   overflow-y: auto;
 `;
 

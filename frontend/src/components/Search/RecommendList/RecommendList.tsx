@@ -61,12 +61,12 @@ const Backdrop = styled.div`
 const RecommendListContainer = styled.div`
   position: absolute;
   top: 100%;
-  left: 0;
   right: 0;
+  left: 0;
   max-height: 150px;
   padding: 10px 0;
-  background-color: #ffffff;
-  border: 1px solid #a0a0a0;
+  background-color: ${({ theme }) => theme.backgroundColors.default};
+  border: 1px solid ${({ theme }) => theme.borderColors.default};
   overflow-y: auto;
 `;
 
