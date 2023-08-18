@@ -1,8 +1,10 @@
-import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 'react';
-import { useEffect, useState } from 'react';
+import type { ChangeEventHandler, FormEventHandler, MouseEventHandler, RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const useSearch = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const currentSearchQuery = searchParams.get('query');
 
@@ -14,6 +16,12 @@ const useSearch = () => {
     setIsAutocompleteOpen(searchQuery.length > 0);
   }, [searchQuery]);
 
+  const focusInput = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
+  };
+
   const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
     setIsSubmitted(false);
     setSearchQuery(event.currentTarget.value);
@@ -21,10 +29,12 @@ const useSearch = () => {
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+
     const trimmedSearchQuery = searchQuery.trim();
 
     if (!trimmedSearchQuery) {
       alert('검색어를 입력해주세요');
+      focusInput();
       setSearchQuery('');
       return;
     }
@@ -55,6 +65,7 @@ const useSearch = () => {
   };
 
   return {
+    inputRef,
     searchQuery,
     isSubmitted,
     isAutocompleteOpen,
