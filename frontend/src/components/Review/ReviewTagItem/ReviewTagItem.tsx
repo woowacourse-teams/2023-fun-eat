@@ -3,8 +3,7 @@ import type { RuleSet } from 'styled-components';
 import styled, { css } from 'styled-components';
 
 import { useReviewFormActionContext } from '@/hooks/context';
-
-type TagVariants = 'TASTE' | 'PRICE' | 'ETC';
+import type { TagVariants } from '@/types/common';
 
 interface ReviewTagItemProps {
   id: number;
@@ -50,7 +49,7 @@ const tagColorStyles: TagVariantStyles = {
     border: 2px solid ${({ theme }) => theme.colors.tertiary};
     background: ${({ theme }) => isSelected && theme.colors.tertiary};
   `,
-  PRICE: (isSelected) => css`
+  QUANTITY: (isSelected) => css`
     border: 2px solid ${({ theme }) => theme.colors.secondary};
     background: ${({ theme }) => isSelected && theme.colors.secondary};
   `,

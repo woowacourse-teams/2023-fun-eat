@@ -52,7 +52,7 @@ export const RECIPE_SORT_OPTIONS = [
 
 export const TAG_TITLE = {
   TASTE: '맛',
-  PRICE: '가격/양',
+  QUANTITY: '가격/양',
   ETC: '기타',
 } as const;
 

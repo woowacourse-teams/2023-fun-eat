@@ -42,4 +42,4 @@ export type SortOption =
   | (typeof REVIEW_SORT_OPTIONS)[number]
   | (typeof RECIPE_SORT_OPTIONS)[number];
 
-export type TagNameOption = keyof typeof TAG_TITLE;
+export type TagVariants = keyof typeof TAG_TITLE;
