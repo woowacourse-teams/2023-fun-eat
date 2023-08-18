@@ -44,7 +44,7 @@ export default ScrollButton;
 
 const ScrollButtonWrapper = styled(Button)<ScrollButtonProps>`
   position: fixed;
-  bottom: ${({ isRecipePage }) => (isRecipePage ? '150px' : '90px')};
+  bottom: ${({ isRecipePage }) => (isRecipePage ? '210px' : '90px')};
   right: 20px;
   border-radius: 50%;
 
