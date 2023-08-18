@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Logo from '@/assets/logo.svg';
 import { SvgIcon } from '@/components/Common';
 import { useRoutePage } from '@/hooks/common';
-import { useMemberValueContext } from '@/hooks/context';
+import { useMemberQuery } from '@/hooks/queries/members';
 
 const SLOGAN = '궁금해? 맛있을걸? 먹어봐 🥄';
 const DESCRIPTION = '편의점 음식을 편리하게 찾아보고\n꿀조합 레시피를 공유해보세요.';
@@ -15,9 +15,9 @@ const loginLink = process.env.NODE_ENV === 'development' ? '/login/kakao?code=qw
 
 const LoginPage = () => {
   const { routeBack } = useRoutePage();
-  const member = useMemberValueContext();
+  const { data: member } = useMemberQuery();
 
-  if (member !== null) {
+  if (member) {
     return <Navigate to="/" replace />;
   }
 
@@ -61,7 +61,6 @@ const LoginSection = styled.section`
 
 const Description = styled(Text)`
   white-space: pre-wrap;
-  word-break: break-all;
 `;
 
 const LoginLinkWrapper = styled.div`

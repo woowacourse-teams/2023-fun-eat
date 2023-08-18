@@ -3,17 +3,17 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
-import { useDebounce } from '@/hooks/common';
+import { IMAGE_SRC_PATH } from '@/constants/path';
+import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
-import { getRelativeDate } from '@/utils/relativeDate';
+import { getRelativeDate } from '@/utils/date';
+import { isChangedImage } from '@/utils/image';
 
 interface ReviewItemProps {
   productId: number;
   review: Review;
 }
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
@@ -32,20 +32,30 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           setIsFavorite((prev) => !prev);
           setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
         },
-        onError: () => {
+        onError: (error) => {
+          if (error instanceof Error) {
+            alert(error.message);
+            return;
+          }
+
           alert('리뷰 좋아요를 다시 시도해주세요.');
         },
       }
     );
   };
 
-  const [debouncedToggleFavorite] = useDebounce(handleToggleFavorite, 200);
+  const [debouncedToggleFavorite] = useTimeout(handleToggleFavorite, 200);
 
   return (
     <ReviewItemContainer>
       <ReviewerWrapper>
         <ReviewerInfoWrapper>
-          <ReviewerImage src={profileImage} width={40} height={40} alt={`${userName}의 프로필`} />
+          <ReviewerImage
+            src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
+            width={40}
+            height={40}
+            alt={`${userName}의 프로필`}
+          />
           <div>
             <Text weight="bold">{userName}</Text>
             <RatingIconWrapper>
@@ -70,9 +80,9 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={srcPath + image} height={150} alt={`${userName}의 리뷰`} />}
+      {image !== null && <ReviewImage src={IMAGE_SRC_PATH + image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
-      <Text css="white-space: pre-wrap">{content}</Text>
+      <ReviewContent>{content}</ReviewContent>
       <FavoriteButton
         type="button"
         variant="transparent"
@@ -129,6 +139,10 @@ const RatingIconWrapper = styled.div`
 
 const ReviewImage = styled.img`
   align-self: center;
+`;
+
+const ReviewContent = styled(Text)`
+  white-space: pre-wrap;
 `;
 
 const FavoriteButton = styled(Button)`

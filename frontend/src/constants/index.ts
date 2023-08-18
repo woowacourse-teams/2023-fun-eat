@@ -24,9 +24,9 @@ export const NAVIGATION_MENU: NavigationMenu[] = [
     path: PATH.RECIPE,
   },
   {
-    variant: 'profile',
+    variant: 'member',
     name: '마이',
-    path: PATH.PROFILE,
+    path: PATH.MEMBER,
   },
 ];
 
@@ -45,10 +45,22 @@ export const REVIEW_SORT_OPTIONS = [
   { label: '추천순', value: 'favoriteCount,desc' },
 ] as const;
 
+export const RECIPE_SORT_OPTIONS = [
+  { label: '최신 작성순', value: 'createdAt,desc' },
+  { label: '추천순', value: 'favoriteCount,desc' },
+] as const;
+
 export const TAG_TITLE = {
   TASTE: '맛',
-  PRICE: '가격/양',
+  QUANTITY: '가격/양',
   ETC: '기타',
 } as const;
 
 export const MIN_DISPLAYED_TAGS_LENGTH = 3;
+
+export const SEARCH_PAGE_TABS = ['상품', '꿀조합'] as const;
+
+export const CATEGORY_TYPE = {
+  FOOD: 'food',
+  STORE: 'store',
+} as const;

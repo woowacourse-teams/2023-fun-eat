@@ -6,7 +6,7 @@ export const convertTagColor = (variant?: string): string => {
   switch (variant) {
     case 'TASTE':
       return theme.colors.tertiary;
-    case 'PRICE':
+    case 'QUANTITY':
       return theme.colors.secondary;
     case 'ETC':
       return theme.colors.primary;

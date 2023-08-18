@@ -3,9 +3,10 @@
   "name": "꼬북칩",
   "price": 1500,
   "image": "https://i.namu.wiki/i/9wnvUaEa1EkDqG-M0Pbwfdf19FJQQXV_-bnlU2SYaNcG05y2wbabiIrfrGES1M4xSgDjY39RwOvLNggDd3Huuw.webp",
-  "content": "할머니가 먹을 거 같은 맛입니다. 1960년 전쟁 때 맛 보고 싶었는데 그때는 너무 가난해서 먹을 수 없었는데, 맛있어요.",
+  "content": "할머니가 먹을 거 같은 맛입니다.\n1960년 전쟁 때 맛 보고 싶었는데 그때는 너무 가난해서 먹을 수 없었는데, 맛있어요.",
   "averageRating": 4.5,
   "bookmark": false,
+  "reviewCount": 100,
   "tags": [
     {
       "id": 5,
@@ -15,7 +16,7 @@
     {
       "id": 1,
       "name": "🥭 망고망고",
-      "tagType": "PRICE"
+      "tagType": "QUANTITY"
     },
     {
       "id": 3,

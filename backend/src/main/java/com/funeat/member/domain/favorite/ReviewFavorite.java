@@ -8,8 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "review_id"}))
 public class ReviewFavorite {
 
     @Id
@@ -34,8 +37,7 @@ public class ReviewFavorite {
         this.review = review;
     }
 
-    public static ReviewFavorite createReviewFavoriteByMemberAndReview(final Member member, final Review review,
-                                                                       final Boolean favorite) {
+    public static ReviewFavorite create(final Member member, final Review review, final Boolean favorite) {
         final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
         reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.member.getReviewFavorites().add(reviewFavorite);

@@ -1,20 +1,20 @@
-import { Button, Divider, Heading, Spacing, theme } from '@fun-eat/design-system';
-import type { RefObject } from 'react';
+import { Button, Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import type { FormEventHandler, RefObject } from 'react';
 import styled from 'styled-components';
 
 import RebuyCheckbox from '../RebuyCheckbox/RebuyCheckbox';
-import ReviewImageUploader from '../ReviewImageUploader/ReviewImageUploader';
 import ReviewTagList from '../ReviewTagList/ReviewTagList';
 import ReviewTextarea from '../ReviewTextarea/ReviewTextarea';
 import StarRate from '../StarRate/StarRate';
 
-import { SvgIcon } from '@/components/Common';
+import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
-import { useScroll } from '@/hooks/common';
+import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
+import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
-import { useReviewImageUploader, useFormData } from '@/hooks/review';
+import type { ReviewRequest } from '@/types/review';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
@@ -27,8 +27,7 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
-  const { reviewPreviewImage, setReviewPreviewImage, reviewImageFile, uploadReviewImage, deleteReviewImage } =
-    useReviewImageUploader();
+  const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
@@ -36,29 +35,43 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
   const { mutate } = useReviewRegisterFormMutation(productId);
   const { scrollToPosition } = useScroll();
 
-  // TODO: 태그 아이디 개수 조건 수정
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
-    reviewFormValue.tagIds.length === MIN_SELECTED_TAGS_COUNT &&
+    reviewFormValue.tagIds.length >= MIN_SELECTED_TAGS_COUNT &&
+    reviewFormValue.tagIds.length <= MIN_DISPLAYED_TAGS_LENGTH &&
     reviewFormValue.content.length > MIN_CONTENT_LENGTH;
 
-  const formData = useFormData({
+  const formData = useFormData<ReviewRequest>({
     imageKey: 'image',
-    imageFile: reviewImageFile,
+    imageFile: imageFile,
     formContentKey: 'reviewRequest',
     formContent: reviewFormValue,
   });
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+  const resetAndCloseForm = () => {
+    deleteImage();
+    resetReviewFormValue();
+    closeReviewDialog();
+  };
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await mutate(formData);
+    mutate(formData, {
+      onSuccess: () => {
+        resetAndCloseForm();
+        scrollToPosition(targetRef);
+      },
+      onError: (error) => {
+        resetAndCloseForm();
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
 
-    setReviewPreviewImage('');
-    resetReviewFormValue();
-
-    closeReviewDialog();
-    scrollToPosition(targetRef);
+        alert('리뷰 등록을 다시 시도해주세요');
+      },
+    });
   };
 
   return (
@@ -69,15 +82,21 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
       </CloseButton>
       <Divider />
       <ProductOverviewItemWrapper>
-        <ProductOverviewItem name={productDetail?.name} image={productDetail?.image} />
+        <ProductOverviewItem name={productDetail.name} image={productDetail.image} />
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
       <RegisterForm onSubmit={handleSubmit}>
-        <ReviewImageUploader
-          reviewPreviewImage={reviewPreviewImage}
-          uploadReviewImage={uploadReviewImage}
-          deleteReviewImage={deleteReviewImage}
-        />
+        <ReviewImageUploaderContainer>
+          <Heading as="h2" size="xl" tabIndex={0}>
+            구매한 상품 사진이 있다면 올려주세요.
+          </Heading>
+          <Spacing size={2} />
+          <Text color={theme.textColors.disabled} tabIndex={0}>
+            (사진은 5MB 이하, 1장까지 업로드 할 수 있어요.)
+          </Text>
+          <Spacing size={20} />
+          <ImageUploader previewImage={previewImage} uploadImage={uploadImage} deleteImage={deleteImage} />
+        </ReviewImageUploaderContainer>
         <Spacing size={60} />
         <StarRate rating={reviewFormValue.rating} />
         <Spacing size={60} />
@@ -87,6 +106,10 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
         <Spacing size={80} />
         <RebuyCheckbox />
         <Spacing size={16} />
+        <Text size="sm" color={theme.textColors.disabled}>
+          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.{' '}
+        </Text>
+        <Spacing size={10} />
         <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
           {isValid ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>
@@ -121,6 +144,12 @@ const ProductOverviewItemWrapper = styled.div`
 
 const RegisterForm = styled.form`
   padding: 50px 20px;
+`;
+
+const ReviewImageUploaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const FormButton = styled(Button)`

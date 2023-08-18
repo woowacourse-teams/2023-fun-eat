@@ -7,6 +7,6 @@ public class StringToCategoryTypeConverter implements Converter<String, Category
 
     @Override
     public CategoryType convert(final String source) {
-        return CategoryType.valueOf(source.toUpperCase());
+        return CategoryType.findCategoryType(source);
     }
 }

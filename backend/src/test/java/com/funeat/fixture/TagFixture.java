@@ -1,7 +1,7 @@
 package com.funeat.fixture;
 
 import static com.funeat.tag.domain.TagType.ETC;
-import static com.funeat.tag.domain.TagType.PRICE;
+import static com.funeat.tag.domain.TagType.QUANTITY;
 import static com.funeat.tag.domain.TagType.TASTE;
 
 import com.funeat.tag.domain.Tag;
@@ -18,11 +18,11 @@ public class TagFixture {
     }
 
     public static Tag 태그_갓성비_PRICE_생성() {
-        return new Tag("갓성비", PRICE);
+        return new Tag("갓성비", QUANTITY);
     }
 
     public static Tag 태그_푸짐해요_PRICE_생성() {
-        return new Tag("푸짐해요", PRICE);
+        return new Tag("푸짐해요", QUANTITY);
     }
 
     public static Tag 태그_간식_ETC_생성() {
