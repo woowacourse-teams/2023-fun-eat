@@ -157,8 +157,7 @@ const ErrorContainer = styled.div`
 
 const ErrorDescription = styled(Text)`
   padding: 40px 0 20px;
-  white-space: pre-line;
-  word-break: break-all;
+  white-space: pre-wrap;
 `;
 
 const LoginLink = styled(Link)`

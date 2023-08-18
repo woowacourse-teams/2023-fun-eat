@@ -34,7 +34,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
         </DescriptionWrapper>
         <DescriptionWrapper>
           <Text weight="bold">상품 설명</Text>
-          <Text>{content}</Text>
+          <ProductContent>{content}</ProductContent>
         </DescriptionWrapper>
         <DescriptionWrapper aria-label={`평균 평점 ${averageRating}점`}>
           <Text weight="bold">평균 평점</Text>
@@ -75,6 +75,10 @@ const DescriptionWrapper = styled.div`
     flex-shrink: 0;
     width: 60px;
   }
+`;
+
+const ProductContent = styled(Text)`
+  white-space: pre-wrap;
 `;
 
 const RatingIconWrapper = styled.div`
