@@ -39,17 +39,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p "
             + "WHERE p.name LIKE CONCAT('%', :name, '%') "
-            + "ORDER BY p.id DESC, "
-            + "CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 "
-            + "ELSE 2 END")
+            + "ORDER BY "
+            + "(CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 ELSE 2 END), "
+            + "p.id DESC")
     Page<Product> findAllByNameContaining(@Param("name") final String name, final Pageable pageable);
 
     @Query("SELECT new com.funeat.product.dto.ProductReviewCountDto(p, COUNT(r.id)) FROM Product p "
             + "LEFT JOIN Review r ON r.product.id = p.id "
             + "WHERE p.name LIKE CONCAT('%', :name, '%') "
             + "GROUP BY p.id "
-            + "ORDER BY p.id DESC, "
-            + "CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 "
-            + "ELSE 2 END")
+            + "ORDER BY "
+            + "(CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 ELSE 2 END), p.id DESC")
     Page<ProductReviewCountDto> findAllWithReviewCountByNameContaining(@Param("name") final String name, final Pageable pageable);
 }
