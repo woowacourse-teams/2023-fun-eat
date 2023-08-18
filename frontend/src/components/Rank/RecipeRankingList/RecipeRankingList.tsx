@@ -1,4 +1,4 @@
-import { Link } from '@fun-eat/design-system';
+import { Link, Text } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 
 import RecipeRankingItem from '../RecipeRankingItem/RecipeRankingItem';
@@ -9,6 +9,8 @@ import { useRecipeRankingQuery } from '@/hooks/queries/rank';
 
 const RecipeRankingList = () => {
   const { data: recipeResponse } = useRecipeRankingQuery();
+
+  if (recipeResponse.recipes.length === 0) return <Text size="lg">아직 랭킹이 없어요!</Text>;
 
   const carouselList = recipeResponse.recipes.map((recipe, index) => ({
     id: index,

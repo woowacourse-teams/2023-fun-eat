@@ -82,7 +82,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
       </ReviewerWrapper>
       {image !== null && <ReviewImage src={IMAGE_SRC_PATH + image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
-      <Text css="white-space: pre-wrap">{content}</Text>
+      <ReviewContent>{content}</ReviewContent>
       <FavoriteButton
         type="button"
         variant="transparent"
@@ -139,6 +139,10 @@ const RatingIconWrapper = styled.div`
 
 const ReviewImage = styled.img`
   align-self: center;
+`;
+
+const ReviewContent = styled(Text)`
+  white-space: pre-wrap;
 `;
 
 const FavoriteButton = styled(Button)`

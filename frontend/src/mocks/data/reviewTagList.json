@@ -21,7 +21,7 @@
     ]
   },
   {
-    "tagType": "PRICE",
+    "tagType": "QUANTITY",
     "tags": [
       {
         "id": 10,

@@ -1,4 +1,4 @@
-import { Button, Text, theme } from '@fun-eat/design-system';
+import { Text, theme } from '@fun-eat/design-system';
 import type { ComponentPropsWithRef, ForwardedRef, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
@@ -31,7 +31,7 @@ const Input = forwardRef(
       <>
         <InputContainer customWidth={customWidth}>
           <CustomInput ref={ref} isError={isError} {...props} />
-          {rightIcon && <IconWrapper variant="transparent">{rightIcon}</IconWrapper>}
+          {rightIcon && <IconWrapper>{rightIcon}</IconWrapper>}
         </InputContainer>
         {isError && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </>
@@ -76,7 +76,9 @@ const CustomInput = styled.input<CustomInputStyleProps>`
   }
 `;
 
-const IconWrapper = styled(Button)`
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
   position: absolute;
   top: 0;
   right: 0;
