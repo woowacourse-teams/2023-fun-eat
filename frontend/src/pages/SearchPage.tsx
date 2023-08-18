@@ -15,7 +15,15 @@ const getInputPlaceholder = (tabMenu: string) =>
   isProductSearchTab(tabMenu) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
 
 const SearchPage = () => {
-  const { searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick } = useSearch();
+  const {
+    searchQuery,
+    isSubmitted,
+    isAutocompleteOpen,
+    handleSearchQuery,
+    handleSearch,
+    handleSearchClick,
+    handleAutocompleteClose,
+  } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
   const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
   const { reset } = useQueryErrorResetBoundary();
@@ -56,14 +64,16 @@ const SearchPage = () => {
             ref={inputRef}
           />
         </form>
-        {!isSubmitted && debouncedSearchQuery && (
-          <RecommendWrapper>
-            <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-              <Suspense fallback={<Loading />}>
-                <RecommendList searchQuery={debouncedSearchQuery} handleSearchClick={handleSearchClick} />
-              </Suspense>
-            </ErrorBoundary>
-          </RecommendWrapper>
+        {!isSubmitted && debouncedSearchQuery && isAutocompleteOpen && (
+          <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+            <Suspense fallback={<Loading />}>
+              <RecommendList
+                searchQuery={debouncedSearchQuery}
+                handleSearchClick={handleSearchClick}
+                handleAutocompleteClose={handleAutocompleteClose}
+              />
+            </Suspense>
+          </ErrorBoundary>
         )}
       </SearchSection>
       <Spacing size={20} />
@@ -101,18 +111,6 @@ export default SearchPage;
 
 const SearchSection = styled.section`
   position: relative;
-`;
-
-const RecommendWrapper = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  max-height: 150px;
-  padding: 10px 0;
-  background-color: ${({ theme }) => theme.backgroundColors.default};
-  border: 1px solid ${({ theme }) => theme.borderColors.default};
-  overflow-y: auto;
 `;
 
 const SearchResultSection = styled.section`
