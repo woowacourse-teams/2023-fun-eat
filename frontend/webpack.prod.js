@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
@@ -13,6 +14,12 @@ module.exports = merge(common, {
         removeComments: true,
       },
       hash: true,
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public/assets', to: 'assets' },
+        { from: 'public/manifest.json', to: 'manifest.json' },
+      ],
     }),
   ],
 });
