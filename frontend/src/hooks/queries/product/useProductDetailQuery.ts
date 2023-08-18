@@ -10,7 +10,7 @@ const fetchProductDetail = async (productId: number) => {
 };
 
 const useProductDetailQuery = (productId: number) => {
-  return useSuspendedQuery(['product', 'detail', productId], () => fetchProductDetail(productId));
+  return useSuspendedQuery(['product', productId, 'detail'], () => fetchProductDetail(productId));
 };
 
 export default useProductDetailQuery;
