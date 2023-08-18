@@ -645,6 +645,39 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // then
             결과값이_이전_요청_결과값에_중복되는지_검증(response1, response2);
         }
+
+        @Test
+        void 페이지가_넘어가도_시작되는_단어_우선_조회한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product2 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product4 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product5 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product6 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product7 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product8 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product9 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product10 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product11 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                    product10, product11);
+
+            final var pageDto = new PageDto(11L, 2L, true, false, 0L, PAGE_SIZE);
+            final var expectedProducts = List.of(product11, product1, product10, product9, product8, product7, product6,
+                    product5, product4, product3);
+
+            // when
+            final var response = 상품_자동_완성_검색_요청("망고", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, pageDto);
+            상품_자동_완성_검색_결과를_검증한다(response, expectedProducts);
+        }
     }
 
     @Nested
@@ -740,10 +773,53 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // then
             결과값이_이전_요청_결과값에_중복되는지_검증(response1, response2);
         }
+
+        @Test
+        void 페이지가_넘어가도_시작되는_단어_우선_조회한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product2 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product4 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product5 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product6 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product7 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product8 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product9 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product10 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product11 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
+                    product10, product11);
+
+            final var pageDto = new PageDto(11L, 2L, true, false, 0L, PAGE_SIZE);
+            final var expectedDto1 = SearchProductResultDto.toDto(product11, 0L);
+            final var expectedDto2 = SearchProductResultDto.toDto(product1, 0L);
+            final var expectedDto3 = SearchProductResultDto.toDto(product10, 0L);
+            final var expectedDto4 = SearchProductResultDto.toDto(product9, 0L);
+            final var expectedDto5 = SearchProductResultDto.toDto(product8, 0L);
+            final var expectedDto6 = SearchProductResultDto.toDto(product7, 0L);
+            final var expectedDto7 = SearchProductResultDto.toDto(product6, 0L);
+            final var expectedDto8 = SearchProductResultDto.toDto(product5, 0L);
+            final var expectedDto9 = SearchProductResultDto.toDto(product4, 0L);
+            final var expectedDto10 = SearchProductResultDto.toDto(product3, 0L);
+            final var expected = List.of(expectedDto1, expectedDto2, expectedDto3, expectedDto4, expectedDto5,
+                    expectedDto6, expectedDto7, expectedDto8, expectedDto9, expectedDto10);
+
+            // when
+            final var response = 상품_검색_결과_조회_요청("망고", 0);
+
+            // then
+            STATUS_CODE를_검증한다(response, 정상_처리);
+            페이지를_검증한다(response, pageDto);
+            상품_검색_결과를_검증한다(response, expected);
+        }
     }
 
     private void 결과값이_이전_요청_결과값에_중복되는지_검증(final ExtractableResponse<Response> response1,
-                           final ExtractableResponse<Response> response2) {
+                                          final ExtractableResponse<Response> response2) {
         final var lastResponses = response1.jsonPath()
                 .getList("products", SearchProductResultDto.class);
         final var currentResponse = response2.jsonPath()
