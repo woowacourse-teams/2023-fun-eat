@@ -1,5 +1,5 @@
 import type { ChangeEventHandler, FormEventHandler, MouseEventHandler, RefObject } from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const useSearch = () => {
@@ -10,6 +10,11 @@ const useSearch = () => {
 
   const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
   const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
+  const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(searchQuery.length > 0);
+
+  useEffect(() => {
+    setIsAutocompleteOpen(searchQuery.length > 0);
+  }, [searchQuery]);
 
   const focusInput = () => {
     if (inputRef?.current) {
@@ -51,7 +56,25 @@ const useSearch = () => {
     setSearchParams({ query: value });
   };
 
-  return { inputRef, searchQuery, isSubmitted, handleSearchQuery, handleSearch, handleSearchClick };
+  const handleAutocompleteClose = () => {
+    setIsAutocompleteOpen(false);
+  };
+
+  const resetSearchQuery = () => {
+    setSearchQuery('');
+  };
+
+  return {
+    inputRef,
+    searchQuery,
+    isSubmitted,
+    isAutocompleteOpen,
+    handleSearchQuery,
+    handleSearch,
+    handleSearchClick,
+    handleAutocompleteClose,
+    resetSearchQuery,
+  };
 };
 
 export default useSearch;

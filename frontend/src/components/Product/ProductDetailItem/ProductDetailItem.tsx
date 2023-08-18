@@ -20,13 +20,15 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
 
   return (
     <ProductDetailContainer>
-      {image !== null ? (
-        <img src={IMAGE_SRC_PATH + image} width={300} alt={name} />
-      ) : category === CATEGORY_TYPE.FOOD ? (
-        <PreviewImage width={300} />
-      ) : (
-        <PBPreviewImage width={300} />
-      )}
+      <ImageWrapper>
+        {image !== null ? (
+          <img src={IMAGE_SRC_PATH + image} width={300} alt={name} />
+        ) : category === CATEGORY_TYPE.FOOD ? (
+          <PreviewImage width={300} />
+        ) : (
+          <PBPreviewImage width={300} />
+        )}
+      </ImageWrapper>
       <DetailInfoWrapper>
         <DescriptionWrapper>
           <Text weight="bold">가격</Text>
@@ -34,7 +36,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
         </DescriptionWrapper>
         <DescriptionWrapper>
           <Text weight="bold">상품 설명</Text>
-          <Text>{content}</Text>
+          <ProductContent>{content}</ProductContent>
         </DescriptionWrapper>
         <DescriptionWrapper aria-label={`평균 평점 ${averageRating}점`}>
           <Text weight="bold">평균 평점</Text>
@@ -61,6 +63,12 @@ const ProductDetailContainer = styled.div`
   }
 `;
 
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const DetailInfoWrapper = styled.div`
   & > div + div {
     margin-top: 10px;
@@ -75,6 +83,10 @@ const DescriptionWrapper = styled.div`
     flex-shrink: 0;
     width: 60px;
   }
+`;
+
+const ProductContent = styled(Text)`
+  white-space: pre-wrap;
 `;
 
 const RatingIconWrapper = styled.div`

@@ -16,7 +16,7 @@ const fetchProductReviews = async (pageParam: number, productId: number, sort: s
 
 const useInfiniteProductReviewsQuery = (productId: number, sort: string) => {
   return useSuspendedInfiniteQuery(
-    ['productReviews', productId, sort],
+    ['product', 'review', productId, sort],
     ({ pageParam = 0 }) => fetchProductReviews(pageParam, productId, sort),
     {
       getNextPageParam: (prevResponse: ProductReviewResponse) => {
