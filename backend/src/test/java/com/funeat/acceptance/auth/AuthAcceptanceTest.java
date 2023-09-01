@@ -20,8 +20,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -103,9 +102,8 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Nested
     class logout_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생한다(final String cookie) {
             // given & when
             final var response = 로그아웃_요청(cookie);

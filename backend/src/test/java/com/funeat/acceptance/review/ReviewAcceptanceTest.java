@@ -58,8 +58,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
@@ -122,9 +120,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Nested
     class writeReview_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_리뷰_작성시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_즉석조리_생성();
@@ -452,9 +449,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Nested
     class toggleLikeReview_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_리뷰에_좋아요를_할때_예외가_발생한다(final String cookie) {
             // given
             final var member = 멤버_멤버1_생성();
@@ -791,9 +787,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Nested
     class getSortingReviews_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_리뷰_목록을_조회시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_즉석조리_생성();

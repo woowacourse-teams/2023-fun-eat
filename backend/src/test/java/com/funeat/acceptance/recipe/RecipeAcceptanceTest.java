@@ -123,9 +123,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     @Nested
     class writeRecipe_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_레시피_작성시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_간편식사_생성();
@@ -325,9 +324,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     @Nested
     class getRecipeDetail_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_레시피_상세_조회시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_간편식사_생성();
@@ -442,9 +440,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     @Nested
     class likeRecipe_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_레시피에_좋아요를_할때_예외가_발생한다(final String cookie) {
             // given
             final var member = 멤버_멤버1_생성();

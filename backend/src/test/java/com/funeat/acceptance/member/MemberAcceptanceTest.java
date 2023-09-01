@@ -44,8 +44,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberAcceptanceTest extends AcceptanceTest {
@@ -73,9 +71,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class getMemberProfile_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보를_확인시_예외가_발생한다(final String cookie) {
             // given & when
             final var response = 사용자_정보_조회_요청(cookie);
@@ -143,9 +140,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class putMemberProfile_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다(final String cookie) {
             // given
             final var image = 사진_명세_요청();
@@ -260,9 +256,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class getMemberReviews_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다(final String cookie) {
             // given & when
             final var response = 사용자_리뷰_조회_요청(cookie, "createdAt,desc", 0);
@@ -438,9 +433,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class getMemberRecipes_실패_테스트 {
 
-        @NullSource
         @ParameterizedTest
-        @ValueSource(strings = "expired")
+        @NullAndEmptySource
         void 로그인하지_않은_사용자가_작성한_꿀조합을_조회할때_예외가_발생한다(final String cookie) {
             // given & when
             final var response = 사용자_꿀조합_조회_요청(cookie, "createdAt,desc", 0);
