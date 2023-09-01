@@ -20,10 +20,10 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
+                                  final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        final HttpSession session = Objects.requireNonNull(request).getSession();
+        final HttpSession session = Objects.requireNonNull(request).getSession(false);
         final String id = String.valueOf(session.getAttribute("member"));
 
         return new LoginInfo(Long.valueOf(id));

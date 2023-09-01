@@ -58,6 +58,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
@@ -120,8 +122,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Nested
     class writeReview_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_리뷰_작성시_예외가_발생한다() {
+        @NullSource
+        @ParameterizedTest
+        @ValueSource(strings = "expired")
+        void 로그인_하지않은_사용자가_리뷰_작성시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
@@ -139,7 +143,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
             // when
-            final var response = 단일_리뷰_요청(productId, image, request, null);
+            final var response = 단일_리뷰_요청(productId, image, request, cookie);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
@@ -448,11 +452,13 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Nested
     class toggleLikeReview_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_리뷰에_좋아요를_할때_예외가_발생한다() {
+        @NullSource
+        @ParameterizedTest
+        @ValueSource(strings = "expired")
+        void 로그인_하지않은_사용자가_리뷰에_좋아요를_할때_예외가_발생한다(final String cookie) {
             // given
             final var member = 멤버_멤버1_생성();
-            final var memberId = 단일_멤버_저장(member);
+            단일_멤버_저장(member);
 
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
@@ -475,7 +481,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var favoriteRequest = 리뷰좋아요요청_true_생성();
 
             // when
-            final var response = 리뷰_좋아요_요청(productId, reviewId, favoriteRequest, null);
+            final var response = 리뷰_좋아요_요청(productId, reviewId, favoriteRequest, cookie);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
@@ -785,8 +791,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     @Nested
     class getSortingReviews_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_리뷰_목록을_조회시_예외가_발생한다() {
+        @NullSource
+        @ParameterizedTest
+        @ValueSource(strings = "expired")
+        void 로그인_하지않은_사용자가_리뷰_목록을_조회시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
@@ -805,7 +813,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             복수_리뷰_저장(review1, review2, review3);
 
             // when
-            final var response = 정렬된_리뷰_목록_조회_요청(null, productId, "favoriteCount,desc", 0);
+            final var response = 정렬된_리뷰_목록_조회_요청(cookie, productId, "favoriteCount,desc", 0);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();

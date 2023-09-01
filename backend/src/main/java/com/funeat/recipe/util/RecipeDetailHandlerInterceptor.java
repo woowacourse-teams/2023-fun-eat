@@ -12,11 +12,14 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class RecipeDetailHandlerInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        final HttpSession session = request.getSession();
-        if (session.getAttribute("member") == null) {
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
+                             final Object handler) {
+        final HttpSession session = request.getSession(false);
+
+        if (session == null) {
             throw new NotLoggedInException(AuthErrorCode.LOGIN_MEMBER_NOT_FOUND);
         }
+
         return true;
     }
 }
