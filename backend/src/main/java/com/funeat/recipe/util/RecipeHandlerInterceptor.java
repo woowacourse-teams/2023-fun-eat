@@ -2,6 +2,7 @@ package com.funeat.recipe.util;
 
 import com.funeat.auth.exception.AuthErrorCode;
 import com.funeat.auth.exception.AuthException.NotLoggedInException;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,7 +21,7 @@ public class RecipeHandlerInterceptor implements HandlerInterceptor {
 
         final HttpSession session = request.getSession(false);
 
-        if (session == null) {
+        if (Objects.isNull(session)) {
             throw new NotLoggedInException(AuthErrorCode.LOGIN_MEMBER_NOT_FOUND);
         }
 
