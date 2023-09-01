@@ -71,14 +71,15 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class getMemberProfile_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_사용자_정보를_확인시_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인_하지않은_사용자가_사용자_정보를_확인시_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_정보_조회_요청(null);
+            final var response = 사용자_정보_조회_요청(cookie);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
-            사용자_승인되지_않음을_검증하다(response);
+            비로그인_사용자는_승인되지_않음을_검증하다(response);
         }
     }
 
@@ -139,18 +140,19 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class putMemberProfile_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다(final String cookie) {
             // given
             final var image = 사진_명세_요청();
             final var request = new MemberRequest("after");
 
             // when
-            final var response = 사용자_정보_수정_요청(null, image, request);
+            final var response = 사용자_정보_수정_요청(cookie, image, request);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
-            사용자_승인되지_않음을_검증하다(response);
+            비로그인_사용자는_승인되지_않음을_검증하다(response);
         }
 
         @ParameterizedTest
@@ -254,15 +256,15 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class getMemberReviews_실패_테스트 {
 
-        @Test
-        void 로그인하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_리뷰_조회_요청(null, "createdAt,desc", 0);
+            final var response = 사용자_리뷰_조회_요청(cookie, "createdAt,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, LOGIN_MEMBER_NOT_FOUND.getCode(),
-                    LOGIN_MEMBER_NOT_FOUND.getMessage());
+            비로그인_사용자는_승인되지_않음을_검증하다(response);
         }
     }
 
@@ -431,15 +433,15 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Nested
     class getMemberRecipes_실패_테스트 {
 
-        @Test
-        void 로그인하지_않은_사용자가_작성한_꿀조합을_조회할때_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인하지_않은_사용자가_작성한_꿀조합을_조회할때_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_꿀조합_조회_요청(null, "createdAt,desc", 0);
+            final var response = 사용자_꿀조합_조회_요청(cookie, "createdAt,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, LOGIN_MEMBER_NOT_FOUND.getCode(),
-                    LOGIN_MEMBER_NOT_FOUND.getMessage());
+            비로그인_사용자는_승인되지_않음을_검증하다(response);
         }
     }
 
@@ -503,7 +505,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         });
     }
 
-    private void 사용자_승인되지_않음을_검증하다(final ExtractableResponse<Response> response) {
+    private void 비로그인_사용자는_승인되지_않음을_검증하다(final ExtractableResponse<Response> response) {
         final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
         final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
 
