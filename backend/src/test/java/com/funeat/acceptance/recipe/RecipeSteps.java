@@ -5,11 +5,11 @@ import static io.restassured.RestAssured.given;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import io.restassured.builder.MultiPartSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,27 +17,19 @@ import java.util.stream.IntStream;
 public class RecipeSteps {
 
     public static ExtractableResponse<Response> 레시피_생성_요청(final RecipeCreateRequest recipeRequest,
-                                                          final List<MultiPartSpecification> images,
                                                           final String loginCookie) {
-        final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
-
-        if (Objects.nonNull(images) && !images.isEmpty()) {
-            images.forEach(requestSpec::multiPart);
-        }
-
-        return requestSpec
-                .multiPart("recipeRequest", recipeRequest, "application/json")
+        return given()
+                .cookie("FUNEAT", loginCookie)
+                .body(recipeRequest)
+                .contentType(ContentType.JSON)
                 .when()
                 .post("/api/recipes")
                 .then()
                 .extract();
     }
 
-    public static Long 레시피_추가_요청하고_id_반환(final RecipeCreateRequest recipeRequest,
-                                         final List<MultiPartSpecification> imageList,
-                                         final String loginCookie) {
-        final var response = 레시피_생성_요청(recipeRequest, imageList, loginCookie);
+    public static Long 레시피_추가_요청하고_id_반환(final RecipeCreateRequest recipeRequest, final String loginCookie) {
+        final var response = 레시피_생성_요청(recipeRequest, loginCookie);
         return Long.parseLong(response.header("Location").split("/")[3]);
     }
 

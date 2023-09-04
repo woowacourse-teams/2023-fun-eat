@@ -3,9 +3,9 @@ package com.funeat.acceptance.member;
 import static io.restassured.RestAssured.given;
 
 import com.funeat.member.dto.MemberRequest;
+import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.MultiPartSpecification;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberSteps {
@@ -20,21 +20,16 @@ public class MemberSteps {
     }
 
     public static ExtractableResponse<Response> 사용자_정보_수정_요청(final String loginCookie,
-                                                             final MultiPartSpecification image,
-                                                             final MemberRequest request) {
-        final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
-
-        if (image != null) {
-            requestSpec.multiPart(image);
-        }
-
-        return requestSpec
-                .multiPart("memberRequest", request, "application/json")
-                .body(request)
+                                                             final MemberRequest memberRequest) {
+        return given()
+                .cookie("FUNEAT", loginCookie)
+                .contentType(ContentType.JSON)
+                .body(memberRequest)
+                .log().all()
                 .when()
                 .put("/api/members")
                 .then()
+                .log().all()
                 .extract();
     }
 

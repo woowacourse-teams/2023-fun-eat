@@ -5,7 +5,6 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
-import com.funeat.common.ImageService;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
@@ -40,7 +39,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,40 +53,35 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
-    private final ImageService imageService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
-                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageService imageService) {
+                         final ReviewFavoriteRepository reviewFavoriteRepository) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
-        this.imageService = imageService;
     }
 
     @Transactional
-    public void create(final Long productId, final Long memberId, final MultipartFile image,
-                       final ReviewCreateRequest reviewRequest) {
+    public void create(final Long productId, final Long memberId, final ReviewCreateRequest reviewRequest) {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final Review savedReview;
-        if (Objects.isNull(image)) {
+        if (Objects.isNull(reviewRequest.getImage())) {
             savedReview = reviewRepository.save(
                     new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
                             reviewRequest.getRebuy()));
         } else {
-            final String newImageName = imageService.getRandomImageName(image);
             savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, newImageName, reviewRequest.getRating(),
+                    new Review(findMember, findProduct, reviewRequest.getImage(), reviewRequest.getRating(),
                             reviewRequest.getContent(), reviewRequest.getRebuy()));
-            imageService.upload(image, newImageName);
         }
 
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());

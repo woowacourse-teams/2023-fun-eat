@@ -4,24 +4,19 @@ import static io.restassured.RestAssured.given;
 
 import com.funeat.review.presentation.dto.ReviewCreateRequest;
 import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
+import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.MultiPartSpecification;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReviewSteps {
 
-    public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final MultiPartSpecification image,
-                                                         final ReviewCreateRequest request, final String loginCookie) {
-        final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
-
-        if (image != null) {
-            requestSpec.multiPart(image);
-        }
-
-        return requestSpec
-                .multiPart("reviewRequest", request, "application/json")
+    public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final ReviewCreateRequest request,
+                                                         final String loginCookie) {
+        return given()
+                .cookie("FUNEAT", loginCookie)
+                .body(request)
+                .contentType(ContentType.JSON)
                 .when()
                 .post("/api/products/{productId}/reviews", productId)
                 .then()

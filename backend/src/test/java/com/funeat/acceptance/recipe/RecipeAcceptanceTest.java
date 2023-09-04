@@ -59,8 +59,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class RecipeAcceptanceTest extends AcceptanceTest {
@@ -85,12 +83,10 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var productIds = 상품_아이디_변환(product1, product2, product3);
             final var request = 레시피추가요청_생성(productIds);
 
-            final var images = 여러_사진_요청(3);
-
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 레시피_생성_요청(request, images, loginCookie);
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
@@ -113,7 +109,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 레시피_생성_요청(request, null, loginCookie);
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
@@ -141,7 +137,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var images = 여러_사진_요청(3);
 
             // when
-            final var response = 레시피_생성_요청(request, images, cookie);
+            final var response = 레시피_생성_요청(request, cookie);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
@@ -164,14 +160,13 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
 
             final var productIds = 상품_아이디_변환(product1, product2, product3);
-            final var request = new RecipeCreateRequest(title, productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
-
-            final var images = 여러_사진_요청(3);
+            final var request = new RecipeCreateRequest(title, productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!",
+                    List.of("test1.png", "test2.png"));
 
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 레시피_생성_요청(request, images, loginCookie);
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
@@ -184,14 +179,15 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자가_레시피_작성할때_상품들이_NULL일시_예외가_발생한다() {
             // given
-            final var request = new RecipeCreateRequest("title", null, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var request = new RecipeCreateRequest("title", null, "밥 추가, 밥 추가, 밥 추가.. 끝!!",
+                    List.of("test1.png", "test2.png"));
 
             final var images = 여러_사진_요청(3);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 레시피_생성_요청(request, images, loginCookie);
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
@@ -204,14 +200,15 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자가_레시피_작성할때_상품들이_비어있을시_예외가_발생한다() {
             // given
-            final var request = new RecipeCreateRequest("title", Collections.emptyList(), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var request = new RecipeCreateRequest("title", Collections.emptyList(), "밥 추가, 밥 추가, 밥 추가.. 끝!!",
+                    List.of("test1.png", "test2.png"));
 
             final var images = 여러_사진_요청(3);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 레시피_생성_요청(request, images, loginCookie);
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
@@ -235,14 +232,12 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var productIds = 상품_아이디_변환(product1, product2, product3);
 
-            final var request = new RecipeCreateRequest("title", productIds, content);
-
-            final var images = 여러_사진_요청(3);
+            final var request = new RecipeCreateRequest("title", productIds, content, List.of("test.png"));
 
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             // when
-            final var response = 레시피_생성_요청(request, images, loginCookie);
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
@@ -271,8 +266,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             // when
             final var maxContent = "tests".repeat(100) + "a";
-            final var request = new RecipeCreateRequest("title", productIds, maxContent);
-            final var response = 레시피_생성_요청(request, images, loginCookie);
+            final var request = new RecipeCreateRequest("title", productIds, maxContent, List.of("test.png"));
+            final var response = 레시피_생성_요청(request, loginCookie);
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
@@ -303,8 +298,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var images = 여러_사진_요청(3);
-            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
             final var recipe = recipeRepository.findById(recipeId).get();
             final var findImages = recipeImageRepository.findByRecipe(recipe);
@@ -340,8 +334,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var images = 여러_사진_요청(3);
-            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
             // when
             final var response = 레시피_상세_정보_요청(cookie, recipeId);
@@ -390,8 +383,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var images = 여러_사진_요청(3);
-            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
             final var favoriteRequest = 레시피좋아요요청_생성(true);
 
@@ -421,8 +413,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var images = 여러_사진_요청(3);
-            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
             final var favoriteRequest = 레시피좋아요요청_생성(true);
             레시피_좋아요_요청(loginCookie, recipeId, favoriteRequest);
@@ -459,8 +450,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var images = 여러_사진_요청(3);
-            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
             final var favoriteRequest = 레시피좋아요요청_생성(true);
 
@@ -493,8 +483,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var images = 여러_사진_요청(3);
-            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
+            final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
             final var favoriteRequest = 레시피좋아요요청_생성(null);
 
@@ -549,9 +538,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var createRequest1 = 레시피추가요청_생성(productIds1);
             final var createRequest2 = 레시피추가요청_생성(productIds2);
-            final var images = 여러_사진_요청(3);
-            final var recipeId1 = 레시피_추가_요청하고_id_반환(createRequest1, images, loginCookie);
-            final var recipeId2 = 레시피_추가_요청하고_id_반환(createRequest2, images, loginCookie);
+            final var recipeId1 = 레시피_추가_요청하고_id_반환(createRequest1, loginCookie);
+            final var recipeId2 = 레시피_추가_요청하고_id_반환(createRequest2, loginCookie);
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -583,8 +571,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var loginCookie = 로그인_쿠키를_얻는다();
 
             final var createRequest1 = 레시피추가요청_생성(productIds1);
-            final var images = 여러_사진_요청(3);
-            final var recipeId1 = 레시피_추가_요청하고_id_반환(createRequest1, images, loginCookie);
+            final var recipeId1 = 레시피_추가_요청하고_id_반환(createRequest1, loginCookie);
 
             final var pageDto = new PageDto(1L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -617,10 +604,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var createRequest1 = 레시피추가요청_생성(productIds1);
             final var createRequest2 = 레시피추가요청_생성(productIds2);
-            final var images = 여러_사진_요청(3);
 
-            레시피_생성_요청(createRequest1, images, loginCookie);
-            레시피_생성_요청(createRequest2, images, loginCookie);
+            레시피_생성_요청(createRequest1, loginCookie);
+            레시피_생성_요청(createRequest2, loginCookie);
 
             final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
             final var expected = Collections.emptyList();
