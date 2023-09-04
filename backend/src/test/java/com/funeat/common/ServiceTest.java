@@ -100,9 +100,6 @@ public abstract class ServiceTest {
     protected ProductService productService;
 
     @Autowired
-    protected ImageService imageService;
-
-    @Autowired
     protected ReviewService reviewService;
 
     @Autowired
