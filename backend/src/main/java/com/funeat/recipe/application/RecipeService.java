@@ -79,12 +79,12 @@ public class RecipeService {
         final Recipe savedRecipe = recipeRepository.save(new Recipe(request.getTitle(), request.getContent(), member));
         request.getProductIds()
                 .stream()
-                .map(it -> productRepository.findById(it)
-                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, it)))
-                .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
+                .map(productId -> productRepository.findById(productId)
+                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId)))
+                .forEach(product -> productRecipeRepository.save(new ProductRecipe(product, savedRecipe)));
 
         if (Objects.nonNull(request.getImages())) {
-            request.getImages().forEach(it -> recipeImageRepository.save(new RecipeImage(it, savedRecipe)));
+            request.getImages().forEach(image -> recipeImageRepository.save(new RecipeImage(image, savedRecipe)));
         }
 
         return savedRecipe.getId();

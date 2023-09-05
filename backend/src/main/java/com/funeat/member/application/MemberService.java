@@ -11,7 +11,6 @@ import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.exception.MemberErrorCode;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
-import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,14 +52,7 @@ public class MemberService {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.MEMBER_NOT_FOUND, memberId));
 
-        final String nickname = request.getNickname();
-
-        if (Objects.isNull(request.getImage())) {
-            findMember.modifyName(nickname);
-            return;
-        }
-
-        findMember.modifyProfile(nickname, request.getImage());
+        findMember.modifyProfile(request.getNickname(), request.getImage());
     }
 
     public String findPlatformId(final Long memberId) {

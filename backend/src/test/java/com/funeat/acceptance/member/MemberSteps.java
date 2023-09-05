@@ -25,11 +25,9 @@ public class MemberSteps {
                 .cookie("FUNEAT", loginCookie)
                 .contentType(ContentType.JSON)
                 .body(memberRequest)
-                .log().all()
                 .when()
                 .put("/api/members")
                 .then()
-                .log().all()
                 .extract();
     }
 

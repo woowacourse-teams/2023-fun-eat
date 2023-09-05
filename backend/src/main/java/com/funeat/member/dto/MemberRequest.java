@@ -7,6 +7,7 @@ public class MemberRequest {
     @NotBlank(message = "닉네임을 확인해주세요")
     private final String nickname;
 
+    @NotBlank(message = "이미지를 확인해주세요")
     private final String image;
 
     public MemberRequest(final String nickname, final String image) {

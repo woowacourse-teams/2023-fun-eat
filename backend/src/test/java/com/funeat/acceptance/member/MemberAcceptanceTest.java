@@ -171,6 +171,27 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
         }
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 사용자가_사용자_정보_수정할때_이미지_미기입시_예외가_발생한다(final String image) {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var request = new MemberRequest("test", image);
+
+            // when
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "이미지를 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
     }
 
     @Nested
