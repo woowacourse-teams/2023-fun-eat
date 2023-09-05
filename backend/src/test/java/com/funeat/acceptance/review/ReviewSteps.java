@@ -2,8 +2,8 @@ package com.funeat.acceptance.review;
 
 import static io.restassured.RestAssured.given;
 
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewFavoriteRequest;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

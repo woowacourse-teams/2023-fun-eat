@@ -2,10 +2,10 @@ package com.funeat.review.presentation;
 
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
-import com.funeat.review.presentation.dto.RankingReviewsResponse;
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
-import com.funeat.review.presentation.dto.SortingReviewsResponse;
+import com.funeat.review.dto.RankingReviewsResponse;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewFavoriteRequest;
+import com.funeat.review.dto.SortingReviewsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
