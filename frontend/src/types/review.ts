@@ -24,9 +24,8 @@ export interface ReviewRequest {
   tagIds: number[];
   content: string;
   rebuy: boolean;
+  image: string | null;
 }
-
-export type ReviewRequestKey = keyof ReviewRequest;
 
 export interface ReviewPostRequestBody extends FormData {
   image: File;
