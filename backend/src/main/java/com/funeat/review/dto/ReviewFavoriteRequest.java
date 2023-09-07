@@ -1,4 +1,4 @@
-package com.funeat.review.presentation.dto;
+package com.funeat.review.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
