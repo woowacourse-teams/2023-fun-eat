@@ -1,10 +1,8 @@
-import { Link, Text, theme } from '@fun-eat/design-system';
+import { Heading, Link, theme } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SvgIcon from '../Svg/SvgIcon';
-
-import { PATH } from '@/constants/path';
 
 interface TitleProps {
   headingTitle: string;
@@ -14,15 +12,13 @@ interface TitleProps {
 const Title = ({ headingTitle, routeDestination }: TitleProps) => {
   return (
     <TitleContainer>
-      <HomeLink as={RouterLink} to={PATH.HOME}>
-        <SvgIcon variant="arrow" color={theme.colors.gray5} width={20} height={20} />
-      </HomeLink>
       <TitleLink as={RouterLink} to={routeDestination} replace>
-        <Text as="span" size="xl" weight="bold">
-          {headingTitle}
-        </Text>
+        <HeadingTitle>{headingTitle}</HeadingTitle>
         <DropDownIcon variant="arrow" color={theme.colors.black} width={15} height={15} />
       </TitleLink>
+      <Link as={RouterLink} to="/search" style={{ marginLeft: 'auto' }}>
+        <SvgIcon variant="search" />
+      </Link>
     </TitleContainer>
   );
 };
@@ -32,20 +28,19 @@ export default Title;
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  position: relative;
-`;
-
-const HomeLink = styled(Link)`
-  position: absolute;
-  top: 8px;
-  left: 0;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const TitleLink = styled(Link)`
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-left: 40%;
+`;
+
+const HeadingTitle = styled(Heading)`
+  font-size: 2.4rem;
 `;
 
 const DropDownIcon = styled(SvgIcon)`

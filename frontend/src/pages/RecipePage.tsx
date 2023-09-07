@@ -41,9 +41,7 @@ const RecipePage = () => {
 
   return (
     <>
-      <Title size="xl" weight="bold">
-        {RECIPE_PAGE_TITLE}
-      </Title>
+      <Title>{RECIPE_PAGE_TITLE}</Title>
       <SearchPageLink as={RouterLink} to="/search">
         <SvgIcon variant="search" />
       </SearchPageLink>
