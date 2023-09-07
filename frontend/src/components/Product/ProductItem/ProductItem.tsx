@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
 import { SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { Product } from '@/types/product';
 
 interface ProductItemProps {
@@ -17,7 +16,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
   return (
     <ProductItemContainer>
       {image !== null ? (
-        <img src={IMAGE_SRC_PATH + image} width={90} height={90} alt={`${name}사진`} />
+        <img src={image} width={90} height={90} alt={`${name}사진`} />
       ) : (
         <PreviewImage width={90} height={90} />
       )}

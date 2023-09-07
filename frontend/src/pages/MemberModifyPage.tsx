@@ -5,10 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
-import { isChangedImage } from '@/utils/image';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
@@ -60,17 +58,7 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                <ProfileImage
-                  src={
-                    previewImage
-                      ? previewImage
-                      : isChangedImage(member.profileImage)
-                      ? IMAGE_SRC_PATH + member.profileImage
-                      : member.profileImage
-                  }
-                  alt="업로드한 사진"
-                  width={80}
-                />
+                <ProfileImage src={previewImage ? previewImage : member.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
                 <input type="file" accept="image/*" onChange={uploadImage} />

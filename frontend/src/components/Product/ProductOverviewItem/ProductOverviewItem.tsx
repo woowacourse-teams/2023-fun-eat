@@ -2,7 +2,6 @@ import { Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 
 interface ProductOverviewItemProps {
   name: string;
@@ -17,7 +16,7 @@ const ProductOverviewItem = ({ name, image, rank }: ProductOverviewItemProps) =>
         {rank ?? ''}
       </Text>
       {image !== null ? (
-        <ProductOverviewImage src={IMAGE_SRC_PATH + image} alt={rank ? `${rank}위 상품` : `${name}사진`} />
+        <ProductOverviewImage src={image} alt={rank ? `${rank}위 상품` : `${name}사진`} />
       ) : (
         <ProductPreviewImage width={45} height={45} />
       )}
