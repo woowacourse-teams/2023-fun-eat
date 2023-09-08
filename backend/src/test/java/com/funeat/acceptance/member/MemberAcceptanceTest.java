@@ -2,7 +2,6 @@ package com.funeat.acceptance.member;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
-import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
@@ -93,11 +92,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_멤버_저장(member);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest("after");
+            final var request = new MemberRequest("after", "test.png");
 
             // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -110,11 +108,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_멤버_저장(member);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest(member.getNickname());
+            final var request = new MemberRequest(member.getNickname(), "test.png");
 
             // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -127,10 +124,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_멤버_저장(member);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
-            final var request = new MemberRequest("after");
+            final var request = new MemberRequest("after", "test.png");
 
             // when
-            final var response = 사용자_정보_수정_요청(loginCookie, null, request);
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -144,11 +141,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다(final String cookie) {
             // given
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest("after");
+            final var request = new MemberRequest("after", "test.png");
 
             // when
-            final var response = 사용자_정보_수정_요청(cookie, image, request);
+            final var response = 사용자_정보_수정_요청(cookie, request);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
@@ -163,15 +159,35 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_멤버_저장(member);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest(nickname);
+            final var request = new MemberRequest(nickname, "test.png");
 
             // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
 
             // then
             final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
             final var expectedMessage = "닉네임을 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
+
+            STATUS_CODE를_검증한다(response, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+        }
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 사용자가_사용자_정보_수정할때_이미지_미기입시_예외가_발생한다(final String image) {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var request = new MemberRequest("test", image);
+
+            // when
+            final var response = 사용자_정보_수정_요청(loginCookie, request);
+
+            // then
+            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
+            final var expectedMessage = "이미지를 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
 
             STATUS_CODE를_검증한다(response, 잘못된_요청);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);

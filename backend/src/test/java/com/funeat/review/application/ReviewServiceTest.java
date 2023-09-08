@@ -1,7 +1,6 @@
 package com.funeat.review.application;
 
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
-import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
@@ -38,6 +37,7 @@ import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
+import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.tag.domain.Tag;
@@ -70,15 +70,13 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
-            final var imageFileName = image.getOriginalFilename();
 
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
-            final var expected = new Review(member, product, imageFileName, 4L, "test", true);
+            final var expected = new Review(member, product, "test.png", 4L, "test", true);
 
             // when
-            reviewService.create(productId, memberId, image, request);
+            reviewService.create(productId, memberId, request);
             final var actual = reviewRepository.findAll().get(0);
 
             // then
@@ -105,12 +103,12 @@ class ReviewServiceTest extends ServiceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
-            final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            final var request = new ReviewCreateRequest(4L, tagIds, "test", true, null);
 
             final var expected = new Review(member, product, null, 4L, "test", true);
 
             // when
-            reviewService.create(productId, memberId, null, request);
+            reviewService.create(productId, memberId, request);
             final var actual = reviewRepository.findAll().get(0);
 
             // then
@@ -140,12 +138,11 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
 
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
             // when & then
-            assertThatThrownBy(() -> reviewService.create(productId, wrongMemberId, image, request))
+            assertThatThrownBy(() -> reviewService.create(productId, wrongMemberId, request))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -166,12 +163,11 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
 
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
             // when & then
-            assertThatThrownBy(() -> reviewService.create(wrongProductId, memberId, image, request))
+            assertThatThrownBy(() -> reviewService.create(wrongProductId, memberId, request))
                     .isInstanceOf(ProductNotFoundException.class);
         }
     }
@@ -196,9 +192,8 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
             final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            reviewService.create(productId, memberId, image, reviewCreaterequest);
+            reviewService.create(productId, memberId, reviewCreaterequest);
 
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();
@@ -237,9 +232,8 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
             final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            reviewService.create(productId, memberId, image, reviewCreaterequest);
+            reviewService.create(productId, memberId, reviewCreaterequest);
 
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();
@@ -285,9 +279,8 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
             final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            reviewService.create(productId, memberId, image, reviewCreaterequest);
+            reviewService.create(productId, memberId, reviewCreaterequest);
 
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();
@@ -316,9 +309,8 @@ class ReviewServiceTest extends ServiceTest {
             복수_태그_저장(tag1, tag2);
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
-            final var image = 이미지_생성();
             final var reviewCreaterequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            reviewService.create(productId, memberId, image, reviewCreaterequest);
+            reviewService.create(productId, memberId, reviewCreaterequest);
 
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();

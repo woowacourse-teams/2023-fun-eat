@@ -13,9 +13,6 @@ spring:
         format_sql: true
         show_sql: true
 
-image:
-  path: { DEV_IMAGE_PATH }
-
 kakao:
   rest-api-key: { DEV_REST_API_KEY }
   redirect-uri: { DEV_REDIRECT_URI }

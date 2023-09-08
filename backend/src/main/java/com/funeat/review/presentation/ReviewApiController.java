@@ -2,7 +2,6 @@ package com.funeat.review.presentation;
 
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
-import com.funeat.product.application.ProductService;
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
@@ -12,35 +11,28 @@ import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class ReviewApiController implements ReviewController {
 
     private final ReviewService reviewService;
-    private final ProductService productService;
 
-    public ReviewApiController(final ReviewService reviewService, final ProductService productService) {
+    public ReviewApiController(final ReviewService reviewService) {
         this.reviewService = reviewService;
-        this.productService = productService;
     }
 
-    @PostMapping(value = "/api/products/{productId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping("/api/products/{productId}/reviews")
     public ResponseEntity<Void> writeReview(@PathVariable final Long productId,
                                             @AuthenticationPrincipal final LoginInfo loginInfo,
-                                            @RequestPart(required = false) final MultipartFile image,
-                                            @RequestPart @Valid final ReviewCreateRequest reviewRequest) {
-        reviewService.create(productId, loginInfo.getId(), image, reviewRequest);
+                                            @RequestBody @Valid final ReviewCreateRequest reviewRequest) {
+        reviewService.create(productId, loginInfo.getId(), reviewRequest);
 
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
     }

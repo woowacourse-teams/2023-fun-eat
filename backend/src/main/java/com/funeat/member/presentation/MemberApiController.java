@@ -12,14 +12,12 @@ import com.funeat.review.application.ReviewService;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/members")
@@ -46,13 +44,12 @@ public class MemberApiController implements MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping
     public ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo,
-                                                 @RequestPart(required = false) final MultipartFile image,
-                                                 @RequestPart @Valid final MemberRequest memberRequest) {
+                                                 @RequestBody @Valid final MemberRequest memberRequest) {
         final Long memberId = loginInfo.getId();
 
-        memberService.modify(memberId, image, memberRequest);
+        memberService.modify(memberId, memberRequest);
 
         return ResponseEntity.ok().build();
     }
