@@ -2,6 +2,7 @@ import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/desig
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import type { MouseEventHandler } from 'react';
 import { useState, useRef, Suspense } from 'react';
+import ReactGA from 'react-ga4';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -66,6 +67,12 @@ const ProductDetailPage = () => {
   const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     setSelectedTabMenu(event.currentTarget.value);
     selectSortOption(initialSortOption);
+
+    ReactGA.event({
+      category: '버튼',
+      action: '카테고리 이동 클릭 액션',
+      label: 'category',
+    });
   };
 
   return (

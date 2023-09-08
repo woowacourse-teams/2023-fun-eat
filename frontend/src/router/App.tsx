@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 import { ErrorBoundary, ErrorComponent, Loading } from '@/components/Common';
 import { MinimalLayout, DefaultLayout, HeaderOnlyLayout } from '@/components/Layout';
+import { useRouteChangeTracker } from '@/hooks/common';
 
 interface AppProps {
   layout?: 'default' | 'headerOnly' | 'minimal';
@@ -11,6 +12,8 @@ interface AppProps {
 
 const App = ({ layout = 'default' }: AppProps) => {
   const { reset } = useQueryErrorResetBoundary();
+
+  useRouteChangeTracker();
 
   if (layout === 'minimal') {
     return (
