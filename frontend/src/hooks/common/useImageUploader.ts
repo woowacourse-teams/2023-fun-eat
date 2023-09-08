@@ -36,6 +36,7 @@ const useImageUploader = () => {
       setImageUrl(`${process.env.CLOUDFRONT_URL}/${IMAGE_ENVIRONMENT}/${imageFile.name}`);
     } catch (error) {
       alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+      console.log(error);
     }
   };
 
