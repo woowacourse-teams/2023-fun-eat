@@ -10,7 +10,12 @@ import { SvgSprite } from './components/Common';
 import router from './router';
 import GlobalStyle from './styles';
 
-ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID as string);
+const initializeReactGA = () => {
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID as string);
+  }
+};
+initializeReactGA();
 
 const main = async () => {
   if (process.env.NODE_ENV === 'development') {

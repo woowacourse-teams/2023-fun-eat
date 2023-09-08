@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 const MAX_SIZE = 5 * 1024 * 1024;
-const client = new S3Client({});
+const client = new S3Client({ region: 'ap-northeast-2' });
 const IMAGE_ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod';
 
 const useImageUploader = () => {
@@ -31,8 +31,8 @@ const useImageUploader = () => {
         Body: imageFile,
       });
 
-      setPreviewImage(URL.createObjectURL(imageFile));
       await client.send(image);
+      setPreviewImage(URL.createObjectURL(imageFile));
       setImageUrl(`${process.env.CLOUDFRONT_URL}/${IMAGE_ENVIRONMENT}/${imageFile.name}`);
     } catch (error) {
       alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
