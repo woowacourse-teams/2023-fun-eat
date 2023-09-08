@@ -2,7 +2,7 @@ import { Heading, Link, theme } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import SvgIcon from '../Svg/SvgIcon';
+import SvgIcon from '../../Common/Svg/SvgIcon';
 
 interface TitleProps {
   headingTitle: string;
@@ -16,7 +16,7 @@ const Title = ({ headingTitle, routeDestination }: TitleProps) => {
         <HeadingTitle>{headingTitle}</HeadingTitle>
         <DropDownIcon variant="arrow" color={theme.colors.black} width={15} height={15} />
       </TitleLink>
-      <Link as={RouterLink} to="/search" style={{ marginLeft: 'auto' }}>
+      <Link as={RouterLink} to="/search">
         <SvgIcon variant="search" />
       </Link>
     </TitleContainer>

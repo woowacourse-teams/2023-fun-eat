@@ -8,13 +8,12 @@ import {
   CategoryMenu,
   SortButton,
   SortOptionList,
-  Title,
   ScrollButton,
   Loading,
   ErrorBoundary,
   ErrorComponent,
 } from '@/components/Common';
-import { ProductList } from '@/components/Product';
+import { Title, ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useSortOption } from '@/hooks/common';
