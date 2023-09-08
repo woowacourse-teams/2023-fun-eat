@@ -5,4 +5,5 @@ export interface Member {
 
 export interface MemberRequest {
   nickname: string;
+  image: string;
 }

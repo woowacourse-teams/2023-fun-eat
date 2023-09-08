@@ -7,10 +7,9 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useFormData, useImageUploader } from '@/hooks/common';
+import { useImageUploader } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
-import type { RecipeRequest } from '@/types/recipe';
 
 interface RecipeRegisterFormProps {
   closeRecipeDialog: () => void;
@@ -19,7 +18,7 @@ interface RecipeRegisterFormProps {
 const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   const theme = useTheme();
 
-  const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
+  const { previewImage, imageUrl, uploadImage, deleteImage } = useImageUploader();
 
   const recipeFormValue = useRecipeFormValueContext();
   const { resetRecipeFormValue } = useRecipeFormActionContext();
@@ -29,12 +28,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   const isValid =
     recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
 
-  const formData = useFormData<RecipeRequest>({
-    imageKey: 'images',
-    imageFile: imageFile === null ? imageFile : [imageFile],
-    formContentKey: 'recipeRequest',
-    formContent: recipeFormValue,
-  });
+  const images = imageUrl === null ? imageUrl : [imageUrl];
 
   const resetAndCloseForm = () => {
     deleteImage();
@@ -45,20 +39,23 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    mutate(formData, {
-      onSuccess: () => {
-        resetAndCloseForm();
-      },
-      onError: (error) => {
-        resetAndCloseForm();
-        if (error instanceof Error) {
-          alert(error.message);
-          return;
-        }
+    mutate(
+      { ...recipeFormValue, images },
+      {
+        onSuccess: () => {
+          resetAndCloseForm();
+        },
+        onError: (error) => {
+          resetAndCloseForm();
+          if (error instanceof Error) {
+            alert(error.message);
+            return;
+          }
 
-        alert('꿀조합 등록을 다시 시도해주세요');
-      },
-    });
+          alert('꿀조합 등록을 다시 시도해주세요');
+        },
+      }
+    );
   };
 
   return (

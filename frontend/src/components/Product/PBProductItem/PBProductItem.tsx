@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import PBPreviewImage from '@/assets/samgakgimbab.svg';
 import { SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { PBProduct } from '@/types/product';
 
 interface PBProductItemProps {
@@ -16,7 +15,7 @@ const PBProductItem = ({ pbProduct }: PBProductItemProps) => {
   return (
     <PBProductItemContainer>
       {image !== null ? (
-        <PBProductImage src={IMAGE_SRC_PATH + image} alt={`${name}사진`} width={110} height={110} />
+        <PBProductImage src={image} alt={`${name}사진`} width={110} height={110} />
       ) : (
         <PBPreviewImage width={110} height={110} />
       )}

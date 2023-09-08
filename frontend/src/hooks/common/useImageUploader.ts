@@ -1,19 +1,15 @@
-import imageCompression from 'browser-image-compression';
 import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+
 const MAX_SIZE = 5 * 1024 * 1024;
+const client = new S3Client({});
+const IMAGE_ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod';
 
 const useImageUploader = () => {
   const [previewImage, setPreviewImage] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
-  const options = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 1920,
-    useWebWorker: true,
-    fileType: 'image/png',
-  };
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const uploadImage: ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (!event.target.files) {
@@ -29,29 +25,29 @@ const useImageUploader = () => {
     }
 
     try {
-      const compressedFile = await imageCompression(imageFile, options);
-      const compressedImageFilePromise = imageCompression.getFilefromDataUrl(
-        await imageCompression.getDataUrlFromFile(compressedFile),
-        compressedFile.name
-      );
-      compressedImageFilePromise.then((result) => {
-        setImageFile(result);
+      const image = new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `${process.env.S3_DIRECTORY}/${IMAGE_ENVIRONMENT}/${imageFile.name}`,
+        Body: imageFile,
       });
-    } catch (error) {
-      console.log(error);
-    }
 
-    setPreviewImage(URL.createObjectURL(imageFile));
+      setPreviewImage(URL.createObjectURL(imageFile));
+      await client.send(image);
+      setImageUrl(`${process.env.CLOUDFRONT_URL}/${IMAGE_ENVIRONMENT}/${imageFile.name}`);
+    } catch (error) {
+      alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   const deleteImage = () => {
     URL.revokeObjectURL(previewImage);
     setPreviewImage('');
+    setImageUrl(null);
   };
 
   return {
     previewImage,
-    imageFile,
+    imageUrl,
     uploadImage,
     deleteImage,
   };

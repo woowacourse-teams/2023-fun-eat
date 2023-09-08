@@ -5,27 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
-import { useFormData, useImageUploader } from '@/hooks/common';
+import { useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
-import type { MemberRequest } from '@/types/member';
-import { isChangedImage } from '@/utils/image';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
 
-  const { previewImage, imageFile, uploadImage } = useImageUploader();
+  const { previewImage, imageUrl, uploadImage } = useImageUploader();
   const [nickname, setNickname] = useState(member?.nickname ?? '');
   const { mutate } = useMemberModifyMutation();
 
   const navigate = useNavigate();
-
-  const formData = useFormData<MemberRequest>({
-    imageKey: 'image',
-    imageFile: imageFile,
-    formContentKey: 'memberRequest',
-    formContent: { nickname },
-  });
 
   if (!member) {
     return null;
@@ -38,19 +28,26 @@ const MemberModifyPage = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    mutate(formData, {
-      onSuccess: () => {
-        navigate('/members');
-      },
-      onError: (error) => {
-        if (error instanceof Error) {
-          alert(error.message);
-          return;
-        }
+    if (imageUrl === null) {
+      return;
+    }
 
-        alert('회원정보 수정을 다시 시도해주세요.');
-      },
-    });
+    mutate(
+      { nickname, image: imageUrl },
+      {
+        onSuccess: () => {
+          navigate('/members');
+        },
+        onError: (error) => {
+          if (error instanceof Error) {
+            alert(error.message);
+            return;
+          }
+
+          alert('회원정보 수정을 다시 시도해주세요.');
+        },
+      }
+    );
   };
 
   return (
@@ -61,17 +58,7 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                <ProfileImage
-                  src={
-                    previewImage
-                      ? previewImage
-                      : isChangedImage(member.profileImage)
-                      ? IMAGE_SRC_PATH + member.profileImage
-                      : member.profileImage
-                  }
-                  alt="업로드한 사진"
-                  width={80}
-                />
+                <ProfileImage src={previewImage ? previewImage : member.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
                 <input type="file" accept="image/*" onChange={uploadImage} />

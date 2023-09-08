@@ -5,14 +5,8 @@ export interface RecipeRequest {
   title: string;
   productIds: number[];
   content: string;
+  images: string[] | null;
 }
-
-export interface RecipePostRequestBody extends FormData {
-  images: File[];
-  recipeRequest: RecipeRequest;
-}
-
-export type RecipeRequestKey = keyof RecipeRequest;
 
 export interface RecipeDetail extends Recipe {
   images: string[];

@@ -4,10 +4,8 @@ import styled from 'styled-components';
 
 import PreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
-import { isChangedImage } from '@/utils/image';
 
 interface RecipeItemProps {
   recipe: Recipe | MemberRecipe;
@@ -24,16 +22,11 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
       {!isMemberPage && (
         <ImageWrapper>
           {image !== null ? (
-            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`조리된 ${title}`} />
+            <RecipeImage src={image} alt={`조리된 ${title}`} />
           ) : (
             <PreviewImage width={160} height={160} />
           )}
-          {author && (
-            <ProfileImage
-              src={isChangedImage(author.profileImage) ? IMAGE_SRC_PATH + author.profileImage : author.profileImage}
-              alt={`${author.nickname}의 프로필`}
-            />
-          )}
+          {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
         </ImageWrapper>
       )}
       <RecipeInfoWrapper>
