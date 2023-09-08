@@ -1,18 +1,20 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import type { MouseEventHandler } from 'react';
 import { Suspense, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon } from '@/components/Common';
 import { RecommendList, ProductSearchResultList, RecipeSearchResultList } from '@/components/Search';
-import { SEARCH_PAGE_TABS } from '@/constants';
+import { SEARCH_PAGE_VARIANTS } from '@/constants';
 import { useDebounce, useRoutePage } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
-const isProductSearchTab = (tabMenu: string) => tabMenu === SEARCH_PAGE_TABS[0];
-const getInputPlaceholder = (tabMenu: string) =>
-  isProductSearchTab(tabMenu) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
+const isProductSearchPage = (path: string) => path === 'products';
+const getInputPlaceholder = (path: string) =>
+  isProductSearchPage(path) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
+
+type SearchPageType = keyof typeof SEARCH_PAGE_VARIANTS;
 
 const SearchPage = () => {
   const {
@@ -26,14 +28,13 @@ const SearchPage = () => {
     handleAutocompleteClose,
   } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
-  const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
   const { reset } = useQueryErrorResetBoundary();
   const { routeBack } = useRoutePage();
-  const theme = useTheme();
 
-  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
-    setSelectedTabMenu(event.currentTarget.value);
-  };
+  const { pathname } = useLocation();
+  const [, , currentPath] = pathname.split('/');
+
+  const theme = useTheme();
 
   useDebounce(
     () => {
@@ -56,13 +57,13 @@ const SearchPage = () => {
           <Button type="button" variant="transparent" onClick={routeBack} aria-label="뒤로 가기">
             <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
           </Button>
-          <HeadingTitle>{selectedTabMenu} 검색</HeadingTitle>
+          <HeadingTitle>{SEARCH_PAGE_VARIANTS[currentPath as SearchPageType]} 검색</HeadingTitle>
         </TitleWrapper>
         <Spacing size={16} />
         <form onSubmit={handleSearch}>
           <Input
             customWidth="100%"
-            placeholder={getInputPlaceholder(selectedTabMenu)}
+            placeholder={getInputPlaceholder(currentPath)}
             rightIcon={
               <Button customHeight="36px" color="white">
                 <SvgIcon variant="search" />
@@ -85,12 +86,6 @@ const SearchPage = () => {
           </ErrorBoundary>
         )}
       </SearchSection>
-      <Spacing size={20} />
-      <TabMenu
-        tabMenus={SEARCH_PAGE_TABS}
-        selectedTabMenu={selectedTabMenu}
-        handleTabMenuSelect={handleTabMenuSelect}
-      />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
           <>
@@ -100,7 +95,7 @@ const SearchPage = () => {
             <ErrorBoundary fallback={ErrorComponent}>
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
-                {isProductSearchTab(selectedTabMenu) ? (
+                {isProductSearchPage(currentPath) ? (
                   <ProductSearchResultList searchQuery={debouncedSearchQuery} />
                 ) : (
                   <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
@@ -109,7 +104,7 @@ const SearchPage = () => {
             </ErrorBoundary>
           </>
         ) : (
-          <Text>{selectedTabMenu}을 검색해보세요.</Text>
+          <Text>{SEARCH_PAGE_VARIANTS[currentPath as SearchPageType]}을 검색해보세요.</Text>
         )}
       </SearchResultSection>
     </>

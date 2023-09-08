@@ -16,6 +16,7 @@ import {
 } from '@/components/Common';
 import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
+import { PATH } from '@/constants/path';
 import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useSortOption } from '@/hooks/common';
 
@@ -42,7 +43,7 @@ const RecipePage = () => {
   return (
     <>
       <Title>{RECIPE_PAGE_TITLE}</Title>
-      <SearchPageLink as={RouterLink} to="/search">
+      <SearchPageLink as={RouterLink} to={`${PATH.SEARCH}/recipes`}>
         <SvgIcon variant="search" />
       </SearchPageLink>
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>

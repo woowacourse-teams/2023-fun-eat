@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import SvgIcon from '../../Common/Svg/SvgIcon';
 
+import { PATH } from '@/constants/path';
+
 interface TitleProps {
   headingTitle: string;
   routeDestination: string;
@@ -16,7 +18,7 @@ const Title = ({ headingTitle, routeDestination }: TitleProps) => {
         <HeadingTitle>{headingTitle}</HeadingTitle>
         <DropDownIcon variant="arrow" color={theme.colors.black} width={15} height={15} />
       </TitleLink>
-      <Link as={RouterLink} to="/search">
+      <Link as={RouterLink} to={`${PATH.SEARCH}/products`}>
         <SvgIcon variant="search" />
       </Link>
     </TitleContainer>
