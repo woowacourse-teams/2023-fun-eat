@@ -300,7 +300,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var createRequest = 레시피추가요청_생성(productIds);
             final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, loginCookie);
 
-            final var recipe = recipeRepository.findById(recipeId).get();
+            final var recipe = recipeRepository.findRecipeWithMemberById(recipeId);
             final var findImages = recipeImageRepository.findByRecipe(recipe);
 
             final var expected = RecipeDetailResponse.toResponse(recipe, findImages, products, totalPrice, false);
