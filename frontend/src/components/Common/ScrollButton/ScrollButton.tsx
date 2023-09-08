@@ -48,12 +48,12 @@ const ScrollButtonWrapper = styled(Button)<ScrollButtonProps>`
   right: 20px;
   border-radius: 50%;
 
+  @media screen and (min-width: 600px) {
+    left: calc(50% + 234px);
+  }
+
   &:hover {
     transform: scale(1.1);
     transition: all 200ms ease-in-out;
-  }
-
-  @media screen and (min-width: 600px) {
-    left: calc(50% + 234px);
   }
 `;

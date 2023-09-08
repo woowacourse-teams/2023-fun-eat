@@ -31,10 +31,10 @@ export default ProductOverviewItem;
 
 const ProductOverviewContainer = styled.div<Pick<ProductOverviewItemProps, 'rank'>>`
   display: flex;
+  gap: 15px;
   align-items: center;
   height: 50px;
   padding-left: 15px;
-  gap: 15px;
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   background: ${({ theme, rank }) => (rank ? theme.colors.gray1 : theme.colors.white)};
 `;

@@ -42,8 +42,8 @@ export default MembersInfo;
 
 const MembersInfoContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const MemberInfoWrapper = styled.div`
@@ -58,6 +58,6 @@ const MemberModifyLink = styled(Link)`
 
 const MembersImage = styled.img`
   margin-right: 16px;
-  border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;

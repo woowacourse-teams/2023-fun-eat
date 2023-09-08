@@ -36,13 +36,13 @@ export default ImageUploader;
 
 const ImageUploadLabel = styled.label`
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 92px;
   height: 95px;
-  background: ${({ theme }) => theme.colors.gray1};
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: ${({ theme }) => theme.borderRadius.xs};
+  background: ${({ theme }) => theme.colors.gray1};
   cursor: pointer;
 
   & > input {
@@ -53,6 +53,6 @@ const ImageUploadLabel = styled.label`
 const PreviewImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 `;
