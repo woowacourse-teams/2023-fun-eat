@@ -1,54 +1,38 @@
-import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-
-const MAX_SIZE = 5 * 1024 * 1024;
-const client = new S3Client({ region: 'ap-northeast-2' });
-const IMAGE_ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod';
+import { uuid } from '@/utils/uuid';
 
 const useImageUploader = () => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState('');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [fileName, setFileName] = useState('');
 
-  const uploadImage: ChangeEventHandler<HTMLInputElement> = async (event) => {
-    if (!event.target.files) {
-      return;
-    }
+  const editImageFileName = (imageFile: File) => {
+    const fileName = imageFile.name;
+    const fileExtension = fileName.split('.').pop();
+    const newFileName = `${uuid()}.${fileExtension}`;
 
-    const imageFile = event.target.files[0];
+    setFileName(newFileName);
+    return new File([imageFile], newFileName, { type: imageFile.type });
+  };
 
-    if (imageFile.size > MAX_SIZE) {
-      alert('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
-      event.target.value = '';
-      return;
-    }
+  const uploadImage = (imageFile: File) => {
+    const editedImageFile = editImageFileName(imageFile);
 
-    try {
-      const image = new PutObjectCommand({
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: `${process.env.S3_DIRECTORY}/${IMAGE_ENVIRONMENT}/${imageFile.name}`,
-        Body: imageFile,
-      });
-
-      await client.send(image);
-      setPreviewImage(URL.createObjectURL(imageFile));
-      setImageUrl(`${process.env.CLOUDFRONT_URL}/${IMAGE_ENVIRONMENT}/${imageFile.name}`);
-    } catch (error) {
-      alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-      console.log(error);
-    }
+    setPreviewImage(URL.createObjectURL(editedImageFile));
+    setImageFile(editedImageFile);
   };
 
   const deleteImage = () => {
     URL.revokeObjectURL(previewImage);
     setPreviewImage('');
-    setImageUrl(null);
+    setImageFile(null);
   };
 
   return {
     previewImage,
-    imageUrl,
+    imageFile,
+    fileName,
     uploadImage,
     deleteImage,
   };
