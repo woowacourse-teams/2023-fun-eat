@@ -33,4 +33,4 @@ cloud:
       bucket: testBucket
       folder: testFolder
       expiration:
-        time: testExpiration
+        time: 1111
