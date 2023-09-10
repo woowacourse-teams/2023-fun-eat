@@ -24,3 +24,13 @@ server:
     session:
       cookie:
         name: FUNEAT
+
+cloud:
+  aws:
+    region:
+      static: testRegion
+    s3:
+      bucket: testBucket
+      folder: testFolder
+      expiration:
+        time: testExpiration
