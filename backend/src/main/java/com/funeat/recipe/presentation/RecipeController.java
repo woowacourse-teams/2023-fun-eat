@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "07. Recipe", description = "꿀조합 관련 API 입니다.")
+@Tag(name = "07.Recipe", description = "꿀조합 관련 API 입니다.")
 public interface RecipeController {
 
     @Operation(summary = "꿀조합 추가", description = "꿀조합을 작성한다.")
