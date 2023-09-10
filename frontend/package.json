@@ -13,7 +13,6 @@
     "test:coverage": "jest --watchAll --coverage"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.405.0",
     "@fun-eat/design-system": "^0.3.11",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",
