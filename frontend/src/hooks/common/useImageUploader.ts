@@ -5,14 +5,12 @@ import { uuid } from '@/utils/uuid';
 const useImageUploader = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState('');
-  const [fileName, setFileName] = useState('');
 
   const editImageFileName = (imageFile: File) => {
     const fileName = imageFile.name;
     const fileExtension = fileName.split('.').pop();
     const newFileName = `${uuid()}.${fileExtension}`;
 
-    setFileName(newFileName);
     return new File([imageFile], newFileName, { type: imageFile.type });
   };
 
@@ -32,7 +30,6 @@ const useImageUploader = () => {
   return {
     previewImage,
     imageFile,
-    fileName,
     uploadImage,
     deleteImage,
   };
