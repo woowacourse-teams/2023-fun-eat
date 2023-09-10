@@ -5,16 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
+import { IMAGE_MAX_SIZE } from '@/constants';
 import { useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
+import { useS3Upload } from '@/hooks/s3';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
+  const { mutateAsync } = useMemberModifyMutation();
 
-  const { previewImage, imageUrl, uploadImage } = useImageUploader();
+  const { previewImage, imageFile, uploadImage } = useImageUploader();
+  const { uploadToS3, fileUrl } = useS3Upload(imageFile);
+
   const [nickname, setNickname] = useState(member?.nickname ?? '');
-  const { mutate } = useMemberModifyMutation();
-
   const navigate = useNavigate();
 
   if (!member) {
@@ -25,29 +28,47 @@ const MemberModifyPage = () => {
     setNickname(event.target.value);
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault();
-
-    if (imageUrl === null) {
+  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (!event.target.files) {
       return;
     }
 
-    mutate(
-      { nickname, image: imageUrl },
-      {
-        onSuccess: () => {
-          navigate('/members');
-        },
-        onError: (error) => {
-          if (error instanceof Error) {
-            alert(error.message);
-            return;
-          }
+    const imageFile = event.target.files[0];
 
-          alert('회원정보 수정을 다시 시도해주세요.');
-        },
+    if (imageFile.size > IMAGE_MAX_SIZE) {
+      alert('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
+      event.target.value = '';
+      return;
+    }
+
+    uploadImage(imageFile);
+  };
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    if (imageFile === null || fileUrl === null) {
+      return;
+    }
+
+    try {
+      await uploadToS3();
+      await mutateAsync(
+        { nickname, image: fileUrl },
+        {
+          onSuccess: () => {
+            navigate('/members');
+          },
+        }
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+        return;
       }
-    );
+
+      alert('회원정보 수정을 다시 시도해주세요.');
+    }
   };
 
   return (
@@ -61,7 +82,7 @@ const MemberModifyPage = () => {
                 <ProfileImage src={previewImage ? previewImage : member.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
-                <input type="file" accept="image/*" onChange={uploadImage} />
+                <input type="file" accept="image/*" onChange={handleImageUpload} />
                 <SvgIcon variant="camera" width={20} height={20} />
               </UserImageUploaderLabel>
             </MemberImageUploaderWrapper>
