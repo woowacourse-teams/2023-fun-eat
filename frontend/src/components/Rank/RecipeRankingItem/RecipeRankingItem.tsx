@@ -56,9 +56,9 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
 export default RecipeRankingItem;
 
 const RecipeRankingItemContainer = styled.div`
-  max-width: 560px;
   width: calc(100% - 50px);
   height: 72px;
+  max-width: 560px;
   margin: 12px 0;
   padding: 0 24px;
 `;
@@ -87,15 +87,15 @@ const TitleFavoriteWrapper = styled.div`
 
 const FavoriteWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
 `;
 
 const AuthorWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-around;
+  align-items: center;
   height: 100%;
 `;
 

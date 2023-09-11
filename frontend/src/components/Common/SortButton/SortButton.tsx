@@ -25,8 +25,8 @@ export default SortButton;
 
 const SortButtonContainer = styled(Button)`
   display: flex;
-  align-items: center;
   justify-content: flex-end;
-  column-gap: 4px;
+  align-items: center;
   padding: 0;
+  column-gap: 4px;
 `;

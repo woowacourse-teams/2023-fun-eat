@@ -53,20 +53,20 @@ export default RecommendList;
 const Backdrop = styled.div`
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
 `;
 
 const RecommendListContainer = styled.div`
   position: absolute;
   top: 100%;
-  right: 0;
   left: 0;
+  right: 0;
   max-height: 150px;
   padding: 10px 0;
-  background-color: ${({ theme }) => theme.backgroundColors.default};
   border: 1px solid ${({ theme }) => theme.borderColors.default};
+  background-color: ${({ theme }) => theme.backgroundColors.default};
   overflow-y: auto;
 `;
 
@@ -76,8 +76,8 @@ const RecommendListWrapper = styled.ul`
 
   & > li {
     height: 36px;
-    line-height: 36px;
     padding: 0 10px;
+    line-height: 36px;
   }
 `;
 

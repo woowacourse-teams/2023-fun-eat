@@ -74,13 +74,13 @@ export default RecipeDetailPage;
 const RecipeImageContainer = styled.ul`
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 `;
 
 const RecipeImage = styled.img`
-  object-fit: cover;
   border-radius: 10px;
+  object-fit: cover;
 `;
 
 const RecipePreviewImageWrapper = styled.div`
@@ -90,8 +90,8 @@ const RecipePreviewImageWrapper = styled.div`
 
 const AuthorFavoriteWrapper = styled.div`
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const AuthorWrapper = styled.div`
@@ -101,8 +101,8 @@ const AuthorWrapper = styled.div`
 `;
 
 const AuthorProfileImage = styled.img`
-  border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;
 
 const RecipeUsedProductsWrapper = styled.div`

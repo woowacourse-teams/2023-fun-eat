@@ -61,8 +61,8 @@ const CustomInput = styled.input<CustomInputStyleProps>`
   border-radius: 5px;
 
   &:focus {
-    outline: none;
     border: 2px solid ${({ isError }) => (isError ? theme.colors.error : theme.borderColors.strong)};
+    outline: none;
   }
 
   &:disabled {
@@ -71,22 +71,22 @@ const CustomInput = styled.input<CustomInputStyleProps>`
   }
 
   &::placeholder {
-    font-size: ${theme.fontSizes.sm};
     color: ${theme.textColors.disabled};
+    font-size: ${theme.fontSizes.sm};
   }
 `;
 
 const IconWrapper = styled.div`
-  display: flex;
-  align-items: center;
   position: absolute;
   top: 0;
   right: 0;
+  display: flex;
+  align-items: center;
   height: 100%;
   margin-right: 8px;
 `;
 
 const ErrorMessage = styled(Text)`
-  font-size: ${theme.fontSizes.xs};
   color: ${theme.colors.error};
+  font-size: ${theme.fontSizes.xs};
 `;

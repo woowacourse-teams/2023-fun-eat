@@ -37,3 +37,13 @@ management:
       enabled: true
   server:
     port: { SERVER_PORT }
+
+cloud:
+  aws:
+    region:
+      static: { S3_REGION }
+    s3:
+      bucket: { S3_BUCKET }
+      folder: { S3_DEV_FOLDER }
+      expiration:
+        time: { S3_EXPIRATION }

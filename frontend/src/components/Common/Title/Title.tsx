@@ -30,10 +30,10 @@ const Title = ({ headingTitle, routeDestination }: TitleProps) => {
 export default Title;
 
 const TitleContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  position: relative;
 `;
 
 const HomeLink = styled(Link)`
@@ -44,8 +44,8 @@ const HomeLink = styled(Link)`
 
 const TitleLink = styled(Link)`
   display: flex;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 `;
 
 const DropDownIcon = styled(SvgIcon)`

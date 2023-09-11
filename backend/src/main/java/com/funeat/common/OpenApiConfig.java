@@ -15,6 +15,11 @@ import org.springframework.context.annotation.Configuration;
                 @Tag(name = "01.Product", description = "상품 기능"),
                 @Tag(name = "02.Category", description = "카테고리 기능"),
                 @Tag(name = "03.Review", description = "리뷰 기능"),
+                @Tag(name = "04.Tag", description = "태그 기능"),
+                @Tag(name = "05.Member", description = "사용자 기능"),
+                @Tag(name = "06.Login", description = "로그인 기능"),
+                @Tag(name = "07.Recipe", description = "꿀조합 기능"),
+                @Tag(name = "08.S3", description = "S3 기능"),
         }
 )
 @Configuration

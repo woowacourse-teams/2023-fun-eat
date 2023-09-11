@@ -17,8 +17,8 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
 export default DefaultLayout;
 
 const DefaultLayoutContainer = styled.div`
-  max-width: 600px;
   height: 100%;
+  max-width: 600px;
   margin: 0 auto;
 `;
 

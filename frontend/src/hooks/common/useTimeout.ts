@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 const useTimeout = (fn: Function, ms = 0) => {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<number | null>(null);
   const callbackRef = useRef(fn);
 
   const timeoutFn = useCallback(() => {
@@ -9,7 +9,7 @@ const useTimeout = (fn: Function, ms = 0) => {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       callbackRef.current();
     }, ms);
   }, [ms]);

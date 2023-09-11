@@ -43,9 +43,9 @@ export default PBProductList;
 
 const PBProductListContainer = styled.ul`
   display: flex;
+  gap: 40px;
   overflow-x: auto;
   overflow-y: hidden;
-  gap: 40px;
 
   &::-webkit-scrollbar {
     display: none;

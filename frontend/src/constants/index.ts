@@ -64,3 +64,5 @@ export const CATEGORY_TYPE = {
   FOOD: 'food',
   STORE: 'store',
 } as const;
+
+export const IMAGE_MAX_SIZE = 5 * 1024 * 1024;
