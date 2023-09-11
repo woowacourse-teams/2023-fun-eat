@@ -10,6 +10,7 @@ import { ImageUploader, SvgIcon } from '@/components/Common';
 import { useImageUploader } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
+import { useS3Upload } from '@/hooks/s3';
 
 interface RecipeRegisterFormProps {
   closeRecipeDialog: () => void;
@@ -18,17 +19,16 @@ interface RecipeRegisterFormProps {
 const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   const theme = useTheme();
 
-  const { previewImage, imageUrl, uploadImage, deleteImage } = useImageUploader();
+  const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
+  const { uploadToS3, fileUrl } = useS3Upload(imageFile);
 
   const recipeFormValue = useRecipeFormValueContext();
   const { resetRecipeFormValue } = useRecipeFormActionContext();
 
-  const { mutate } = useRecipeRegisterFormMutation();
+  const { mutateAsync } = useRecipeRegisterFormMutation();
 
   const isValid =
     recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
-
-  const images = imageUrl === null ? imageUrl : [imageUrl];
 
   const resetAndCloseForm = () => {
     deleteImage();
@@ -39,23 +39,26 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    mutate(
-      { ...recipeFormValue, images },
-      {
-        onSuccess: () => {
-          resetAndCloseForm();
-        },
-        onError: (error) => {
-          resetAndCloseForm();
-          if (error instanceof Error) {
-            alert(error.message);
-            return;
-          }
+    try {
+      await uploadToS3();
+      await mutateAsync(
+        { ...recipeFormValue, images: fileUrl !== null ? [fileUrl] : null },
+        {
+          onSuccess: () => {
+            resetAndCloseForm();
+          },
+        }
+      );
+    } catch (error) {
+      resetAndCloseForm();
 
-          alert('꿀조합 등록을 다시 시도해주세요');
-        },
+      if (error instanceof Error) {
+        alert(error.message);
+        return;
       }
-    );
+
+      alert('꿀조합 등록을 다시 시도해주세요.');
+    }
   };
 
   return (

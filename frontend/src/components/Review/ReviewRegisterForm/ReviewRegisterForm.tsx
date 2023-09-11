@@ -14,6 +14,7 @@ import { useImageUploader, useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
+import { useS3Upload } from '@/hooks/s3';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
@@ -26,13 +27,16 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
-  const { previewImage, imageUrl, uploadImage, deleteImage } = useImageUploader();
+  const { scrollToPosition } = useScroll();
+
+  const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
+  const { uploadToS3, fileUrl } = useS3Upload(imageFile);
+
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
   const { data: productDetail } = useProductDetailQuery(productId);
-  const { mutate } = useReviewRegisterFormMutation(productId);
-  const { scrollToPosition } = useScroll();
+  const { mutateAsync } = useReviewRegisterFormMutation(productId);
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
@@ -49,24 +53,27 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    mutate(
-      { ...reviewFormValue, image: imageUrl },
-      {
-        onSuccess: () => {
-          resetAndCloseForm();
-          scrollToPosition(targetRef);
-        },
-        onError: (error) => {
-          resetAndCloseForm();
-          if (error instanceof Error) {
-            alert(error.message);
-            return;
-          }
+    try {
+      await uploadToS3();
+      await mutateAsync(
+        { ...reviewFormValue, image: fileUrl },
+        {
+          onSuccess: () => {
+            resetAndCloseForm();
+            scrollToPosition(targetRef);
+          },
+        }
+      );
+    } catch (error) {
+      resetAndCloseForm();
 
-          alert('리뷰 등록을 다시 시도해주세요');
-        },
+      if (error instanceof Error) {
+        alert(error.message);
+        return;
       }
-    );
+
+      alert('리뷰 등록을 다시 시도해주세요');
+    }
   };
 
   return (
