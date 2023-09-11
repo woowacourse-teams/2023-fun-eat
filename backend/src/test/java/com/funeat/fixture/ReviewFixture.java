@@ -55,11 +55,11 @@ public class ReviewFixture {
     }
 
     public static ReviewCreateRequest 리뷰추가요청_재구매O_생성(final Long rating, final List<Long> tagIds) {
-        return new ReviewCreateRequest(rating, tagIds, "test", true, "test.png");
+        return new ReviewCreateRequest(rating, tagIds, "test", true);
     }
 
     public static ReviewCreateRequest 리뷰추가요청_재구매X_생성(final Long rating, final List<Long> tagIds) {
-        return new ReviewCreateRequest(rating, tagIds, "test", false, "test.png");
+        return new ReviewCreateRequest(rating, tagIds, "test", false);
     }
 
     public static ReviewFavoriteRequest 리뷰좋아요요청_true_생성() {

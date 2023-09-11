@@ -74,7 +74,7 @@ class RecipeServiceTest extends ServiceTest {
             final var expected = 레시피_생성(member);
 
             // when
-            final var recipeId = recipeService.create(memberId, request);
+            final var recipeId = recipeService.create(memberId, images, request);
             final var actual = recipeRepository.findById(recipeId).get();
 
             // then
@@ -98,11 +98,13 @@ class RecipeServiceTest extends ServiceTest {
         단일_멤버_저장(author);
         final var authorId = author.getId();
 
+        final var images = 여러_이미지_생성(3);
+
         final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
         final var request = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
-                "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!", List.of("test.png"));
+                "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
 
-        final var recipeId = recipeService.create(authorId, request);
+        final var recipeId = recipeService.create(authorId, images, request);
 
         // when
         final var actual = recipeService.getRecipeDetail(authorId, recipeId);
@@ -135,10 +137,12 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버1_생성();
             final var wrongMemberId = 단일_멤버_저장(member) + 1L;
 
+            final var images = 여러_이미지_생성(3);
+
             final var request = 레시피추가요청_생성(productIds);
 
             // when & then
-            assertThatThrownBy(() -> recipeService.create(wrongMemberId, request))
+            assertThatThrownBy(() -> recipeService.create(wrongMemberId, images, request))
                     .isInstanceOf(MemberNotFoundException.class);
         }
 
@@ -158,10 +162,12 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
 
+            final var images = 여러_이미지_생성(3);
+
             final var request = 레시피추가요청_생성(wrongProductIds);
 
             // when & then
-            assertThatThrownBy(() -> recipeService.create(memberId, request))
+            assertThatThrownBy(() -> recipeService.create(memberId, images, request))
                     .isInstanceOf(ProductNotFoundException.class);
         }
     }
@@ -429,8 +435,10 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버2_생성();
             final var memberId = 단일_멤버_저장(member);
 
+            final var images = 여러_이미지_생성(3);
+
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var recipeId = recipeService.create(authorId, createRequest);
+            final var recipeId = recipeService.create(authorId, images, createRequest);
 
             // when
             final var favoriteRequest = 레시피좋아요요청_생성(true);
@@ -465,8 +473,10 @@ class RecipeServiceTest extends ServiceTest {
             final var member = 멤버_멤버2_생성();
             final var memberId = 단일_멤버_저장(member);
 
+            final var images = 여러_이미지_생성(3);
+
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var recipeId = recipeService.create(authorId, createRequest);
+            final var recipeId = recipeService.create(authorId, images, createRequest);
 
             final var favoriteRequest = 레시피좋아요요청_생성(true);
             recipeService.likeRecipe(memberId, recipeId, favoriteRequest);
@@ -507,8 +517,10 @@ class RecipeServiceTest extends ServiceTest {
             final var authorId = 단일_멤버_저장(author);
             final var wrongMemberId = authorId + 1L;
 
+            final var images = 여러_이미지_생성(3);
+
             final var createRequest = 레시피추가요청_생성(productIds);
-            final var recipeId = recipeService.create(authorId, createRequest);
+            final var recipeId = recipeService.create(authorId, images, createRequest);
 
             // when & then
             final var favoriteRequest = 레시피좋아요요청_생성(true);

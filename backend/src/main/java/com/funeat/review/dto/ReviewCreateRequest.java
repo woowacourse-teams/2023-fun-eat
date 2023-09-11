@@ -21,15 +21,11 @@ public class ReviewCreateRequest {
     @NotNull(message = "재구매 여부를 입력해주세요")
     private final Boolean rebuy;
 
-    private final String image;
-
-    public ReviewCreateRequest(final Long rating, final List<Long> tagIds, final String content, final Boolean rebuy,
-                               final String image) {
+    public ReviewCreateRequest(final Long rating, final List<Long> tagIds, final String content, final Boolean rebuy) {
         this.rating = rating;
         this.tagIds = tagIds;
         this.content = content;
         this.rebuy = rebuy;
-        this.image = image;
     }
 
     public Long getRating() {
@@ -46,9 +42,5 @@ public class ReviewCreateRequest {
 
     public List<Long> getTagIds() {
         return tagIds;
-    }
-
-    public String getImage() {
-        return image;
     }
 }
