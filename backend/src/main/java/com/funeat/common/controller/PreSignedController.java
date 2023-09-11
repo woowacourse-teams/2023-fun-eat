@@ -16,5 +16,5 @@ public interface PreSignedController {
             description = "업로드 URL 요청 성공."
     )
     @PostMapping
-    ResponseEntity<S3UrlResponse> getPreSingedUrl(@RequestBody final S3UrlRequest request);
+    ResponseEntity<S3UrlResponse> getPreSignedUrl(@RequestBody final S3UrlRequest request);
 }

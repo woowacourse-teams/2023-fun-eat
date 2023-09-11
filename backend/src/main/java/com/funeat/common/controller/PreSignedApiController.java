@@ -19,7 +19,7 @@ public class PreSignedApiController implements PreSignedController {
     }
 
     @PostMapping("/api/s3/presigned")
-    public ResponseEntity<S3UrlResponse> getPreSingedUrl(@RequestBody final S3UrlRequest request) {
+    public ResponseEntity<S3UrlResponse> getPreSignedUrl(@RequestBody final S3UrlRequest request) {
         final S3UrlResponse preSignedUrl = s3UploadUrlGenerator.getPreSignedUrl(request.getFileName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
