@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PreSingedApiController implements PreSingedController {
+public class PreSignedApiController implements PreSignedController {
 
     private final S3UploadUrlGenerator s3UploadUrlGenerator;
 
-    public PreSingedApiController(final S3UploadUrlGenerator s3UploadUrlGenerator) {
+    public PreSignedApiController(final S3UploadUrlGenerator s3UploadUrlGenerator) {
         this.s3UploadUrlGenerator = s3UploadUrlGenerator;
     }
 
     @PostMapping("/api/s3/presigned")
-    public ResponseEntity<S3UrlResponse> getPreSingedUrl(@RequestBody final S3UrlRequest request) {
+    public ResponseEntity<S3UrlResponse> getPreSignedUrl(@RequestBody final S3UrlRequest request) {
         final S3UrlResponse preSignedUrl = s3UploadUrlGenerator.getPreSignedUrl(request.getFileName());
 
         return ResponseEntity.status(HttpStatus.CREATED)

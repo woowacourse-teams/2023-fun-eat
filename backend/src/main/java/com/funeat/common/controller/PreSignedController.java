@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-public interface PreSingedController {
+public interface PreSignedController {
 
     @Operation(summary = "S3 업로드 URL 요청", description = "S3 업로드 URL 요청한다.")
     @ApiResponse(
@@ -16,5 +16,5 @@ public interface PreSingedController {
             description = "업로드 URL 요청 성공."
     )
     @PostMapping
-    ResponseEntity<S3UrlResponse> getPreSingedUrl(@RequestBody final S3UrlRequest request);
+    ResponseEntity<S3UrlResponse> getPreSignedUrl(@RequestBody final S3UrlRequest request);
 }

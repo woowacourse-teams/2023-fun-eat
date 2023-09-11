@@ -2,13 +2,13 @@ package com.funeat.common.dto;
 
 public class S3UrlResponse {
 
-    private final String preSingedUrl;
+    private final String preSignedUrl;
 
-    public S3UrlResponse(final String preSingedUrl) {
-        this.preSingedUrl = preSingedUrl;
+    public S3UrlResponse(final String preSignedUrl) {
+        this.preSignedUrl = preSignedUrl;
     }
 
-    public String getPreSingedUrl() {
-        return preSingedUrl;
+    public String getPreSignedUrl() {
+        return preSignedUrl;
     }
 }
