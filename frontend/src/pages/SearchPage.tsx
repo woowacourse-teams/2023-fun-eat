@@ -1,7 +1,7 @@
 import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon } from '@/components/Common';
@@ -31,10 +31,17 @@ const SearchPage = () => {
   const { reset } = useQueryErrorResetBoundary();
   const { routeBack } = useRoutePage();
 
-  const { pathname } = useLocation();
-  const [, , currentPath] = pathname.split('/');
-
   const theme = useTheme();
+
+  const { searchVariant } = useParams();
+
+  const isSearchVariant = (value: string): value is SearchPageType => {
+    return value === 'products' || value === 'recipes';
+  };
+
+  if (!searchVariant || !isSearchVariant(searchVariant)) {
+    return null;
+  }
 
   useDebounce(
     () => {
@@ -57,13 +64,13 @@ const SearchPage = () => {
           <Button type="button" variant="transparent" onClick={routeBack} aria-label="뒤로 가기">
             <SvgIcon variant="arrow" color={theme.colors.gray5} width={15} height={15} />
           </Button>
-          <HeadingTitle>{SEARCH_PAGE_VARIANTS[currentPath as SearchPageType]} 검색</HeadingTitle>
+          <HeadingTitle>{SEARCH_PAGE_VARIANTS[searchVariant]} 검색</HeadingTitle>
         </TitleWrapper>
         <Spacing size={16} />
         <form onSubmit={handleSearch}>
           <Input
             customWidth="100%"
-            placeholder={getInputPlaceholder(currentPath)}
+            placeholder={getInputPlaceholder(searchVariant)}
             rightIcon={
               <Button customHeight="36px" color="white">
                 <SvgIcon variant="search" />
@@ -95,7 +102,7 @@ const SearchPage = () => {
             <ErrorBoundary fallback={ErrorComponent}>
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
-                {isProductSearchPage(currentPath) ? (
+                {isProductSearchPage(searchVariant) ? (
                   <ProductSearchResultList searchQuery={debouncedSearchQuery} />
                 ) : (
                   <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
@@ -104,7 +111,7 @@ const SearchPage = () => {
             </ErrorBoundary>
           </>
         ) : (
-          <Text>{SEARCH_PAGE_VARIANTS[currentPath as SearchPageType]}을 검색해보세요.</Text>
+          <Text>{SEARCH_PAGE_VARIANTS[searchVariant]}을 검색해보세요.</Text>
         )}
       </SearchResultSection>
     </>
