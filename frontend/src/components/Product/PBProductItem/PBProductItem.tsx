@@ -55,15 +55,15 @@ const PBProductInfoWrapper = styled.div`
 const PBProductName = styled(Text)`
   display: inline-block;
   width: 100%;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
   overflow: hidden;
 `;
 
 const PBProductReviewWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   margin: 5px 0;
 `;
 

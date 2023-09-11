@@ -58,9 +58,9 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
 export default RecipeItem;
 
 const ImageWrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
-  position: relative;
   width: 100%;
   height: 160px;
 `;
@@ -74,37 +74,37 @@ const RecipeImage = styled.img`
 
 const ProfileImage = styled.img`
   position: absolute;
-  right: 16px;
   bottom: -20px;
+  right: 16px;
   width: 60px;
   height: 60px;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
   background-color: ${({ theme }) => theme.backgroundColors.default};
-  border: 2px solid ${({ theme }) => theme.colors.primary};
 `;
 
 const RecipeInfoWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
   height: 100px;
   margin-top: 10px;
 `;
 
 const FavoriteWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
   position: absolute;
   top: 50%;
-  right: 0;
   bottom: 50%;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
   transform: translateY(-50%);
 `;
 
 const RecipeProductText = styled(Text)`
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
   overflow: hidden;
 `;

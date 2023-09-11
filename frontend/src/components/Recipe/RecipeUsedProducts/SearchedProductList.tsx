@@ -55,9 +55,9 @@ export default SearchedProductList;
 const Backdrop = styled.div`
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   backround: rgba(0, 0, 0, 0.24);
 `;
 
@@ -70,8 +70,8 @@ const SearchedProductListContainer = styled.div`
 const SearchedProductListWrapper = styled.ul`
   position: relative;
   width: 300px;
-  max-height: 150px;
   height: 100%;
+  max-height: 150px;
   border: 1px solid ${({ theme }) => theme.borderColors.default};
   border-top: none;
   border-radius: 0 0 5px 5px;
@@ -84,8 +84,8 @@ const SearchedProductListWrapper = styled.ul`
 
   & > li {
     height: 36px;
-    line-height: 36px;
     padding: 0 10px;
+    line-height: 36px;
   }
 `;
 

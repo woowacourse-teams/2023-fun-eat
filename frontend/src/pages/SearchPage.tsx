@@ -118,6 +118,6 @@ const SearchResultSection = styled.section`
 `;
 
 const Mark = styled.mark`
-  background-color: ${({ theme }) => theme.backgroundColors.default};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
+  background-color: ${({ theme }) => theme.backgroundColors.default};
 `;

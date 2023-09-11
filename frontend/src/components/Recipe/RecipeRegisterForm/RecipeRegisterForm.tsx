@@ -106,9 +106,9 @@ const RecipeRegisterFormContainer = styled.div`
 
 const RecipeHeading = styled(Heading)`
   height: 80px;
-  text-align: center;
   font-size: 2.4rem;
   line-height: 80px;
+  text-align: center;
 `;
 
 const CloseButton = styled(Button)`
@@ -118,7 +118,7 @@ const CloseButton = styled(Button)`
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

@@ -91,8 +91,8 @@ const ProductContent = styled(Text)`
 const RatingIconWrapper = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 4px;
   margin-left: -4px;
+  column-gap: 4px;
 
   & > svg {
     padding-bottom: 2px;
