@@ -43,16 +43,16 @@ export default ReviewRankingItem;
 const ReviewRankingItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 12px;
   gap: 4px;
+  padding: 12px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
 `;
 
 const ReviewText = styled(Text)`
   display: -webkit-inline-box;
-  overflow: hidden;
   text-overflow: ellipsis;
+  overflow: hidden;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `;
@@ -64,14 +64,14 @@ const FavoriteStarWrapper = styled.div`
 
 const FavoriteIconWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
 `;
 
 const RatingIconWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 2px;
+  align-items: center;
 
   & > svg {
     padding-bottom: 2px;

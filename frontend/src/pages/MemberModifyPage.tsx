@@ -116,9 +116,9 @@ const MemberImageUploaderWrapper = styled.div`
 const UserProfileImageWrapper = styled.div`
   width: 80px;
   height: 80px;
-  background: ${({ theme }) => theme.backgroundColors.default};
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: 50%;
+  background: ${({ theme }) => theme.backgroundColors.default};
   overflow: hidden;
 `;
 
@@ -134,10 +134,10 @@ const UserImageUploaderLabel = styled.label`
   right: -5px;
   width: 30px;
   height: 30px;
-  background: ${({ theme }) => theme.backgroundColors.default};
+  text-align: center;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: 50%;
-  text-align: center;
+  background: ${({ theme }) => theme.backgroundColors.default};
   cursor: pointer;
 
   & > input {
@@ -150,13 +150,13 @@ const UserImageUploaderLabel = styled.label`
 `;
 
 const MemberForm = styled.form`
-  height: 92%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 92%;
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.primary};
 `;

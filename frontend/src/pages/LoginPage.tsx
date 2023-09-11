@@ -73,8 +73,8 @@ const KakaoLoginLink = styled(Link)`
   width: 100%;
   height: 54px;
   padding: 0 16px;
-  background-color: #fee500;
   border-radius: 12px;
+  background-color: #fee500;
 
   & > span {
     width: 100%;

@@ -105,8 +105,8 @@ const BadgeWrapper = styled.ul`
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
-  column-gap: 8px;
   height: 48px;
+  column-gap: 8px;
   overflow-x: auto;
 `;
 
