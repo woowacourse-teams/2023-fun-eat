@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.funeat.common.dto.S3UrlResponse;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,10 +28,10 @@ public class S3UploadUrlGenerator {
         this.amazonS3 = amazonS3;
     }
 
-    public String getPreSignedUrl(final String fileName) {
+    public S3UrlResponse getPreSignedUrl(final String fileName) {
         final GeneratePresignedUrlRequest generatePresignedUrlRequest = getPreSignedUrlRequest(bucket, fileName);
 
-        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+        return new S3UrlResponse(amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString());
     }
 
     private GeneratePresignedUrlRequest getPreSignedUrlRequest(final String bucket, final String fileName) {

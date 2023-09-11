@@ -1,6 +1,7 @@
 package com.funeat.common.controller;
 
 import com.funeat.common.dto.S3UrlRequest;
+import com.funeat.common.dto.S3UrlResponse;
 import com.funeat.common.s3.S3UploadUrlGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ public class PreSingedApiController implements PreSingedController {
     }
 
     @PostMapping("/api/s3/presigned")
-    public ResponseEntity<String> getPreSingedUrl(@RequestBody final S3UrlRequest request) {
-        final String preSignedUrl = s3UploadUrlGenerator.getPreSignedUrl(request.getFileName());
+    public ResponseEntity<S3UrlResponse> getPreSingedUrl(@RequestBody final S3UrlRequest request) {
+        final S3UrlResponse preSignedUrl = s3UploadUrlGenerator.getPreSignedUrl(request.getFileName());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(preSignedUrl);
     }
