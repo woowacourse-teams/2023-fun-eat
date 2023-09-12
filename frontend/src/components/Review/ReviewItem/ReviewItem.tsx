@@ -73,7 +73,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
+      {image && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <ReviewContent>{content}</ReviewContent>
       <FavoriteButton
