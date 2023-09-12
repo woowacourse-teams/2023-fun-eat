@@ -7,12 +7,12 @@ import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.exception.MemberException.MemberUpdateException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class Member {
@@ -67,7 +67,7 @@ public class Member {
     }
 
     public void modifyProfile(final String nickname, final String profileImage) {
-        if (Objects.isNull(nickname) || Objects.isNull(profileImage) || profileImage.isBlank()) {
+        if (!StringUtils.hasText(nickname) || !StringUtils.hasText(profileImage)) {
             throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
         }
         this.nickname = nickname;

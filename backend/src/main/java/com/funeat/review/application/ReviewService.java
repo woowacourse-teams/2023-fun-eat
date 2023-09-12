@@ -32,7 +32,7 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -78,10 +78,9 @@ public class ReviewService {
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        String imageUrl = "";
-        if (Objects.nonNull(image)) {
-            imageUrl = imageUploader.upload(image);
-        }
+        final String imageUrl = Optional.ofNullable(image)
+                .map(imageUploader::upload)
+                .orElse("");
         final Review savedReview = reviewRepository.save(
                 new Review(findMember, findProduct, imageUrl, reviewRequest.getRating(), reviewRequest.getContent(),
                         reviewRequest.getRebuy()));

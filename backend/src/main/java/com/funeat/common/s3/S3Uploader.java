@@ -39,8 +39,8 @@ public class S3Uploader implements ImageUploader {
     @Override
     public String upload(final MultipartFile image) {
         validateExtension(image);
-        final ObjectMetadata metadata = getMetadata(image);
         final String key = getKey(image);
+        final ObjectMetadata metadata = getMetadata(image);
         try {
             amazonS3.putObject(getPutObjectRequest(image, key, metadata));
             return amazonS3.getUrl(bucket, key).toString();

@@ -83,13 +83,13 @@ public class RecipeService {
         final Recipe savedRecipe = recipeRepository.save(new Recipe(request.getTitle(), request.getContent(), member));
         request.getProductIds()
                 .stream()
-                .map(it -> productRepository.findById(it)
-                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, it)))
-                .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
+                .map(productId -> productRepository.findById(productId)
+                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId)))
+                .forEach(product -> productRecipeRepository.save(new ProductRecipe(product, savedRecipe)));
 
         if (Objects.nonNull(images)) {
-            images.forEach(it -> {
-                final String imageUrl = imageUploader.upload(it);
+            images.forEach(image -> {
+                final String imageUrl = imageUploader.upload(image);
                 recipeImageRepository.save(new RecipeImage(imageUrl, savedRecipe));
             });
         }
