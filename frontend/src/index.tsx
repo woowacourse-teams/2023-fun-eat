@@ -8,7 +8,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { SvgSprite } from './components/Common';
 import router from './router';
-import GlobalStyle from './styles';
+import GlobalStyle from './styles/globalStyle';
 
 const initializeReactGA = () => {
   if (process.env.NODE_ENV === 'production') {
