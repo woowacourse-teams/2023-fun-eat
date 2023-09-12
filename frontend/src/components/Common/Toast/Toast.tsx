@@ -1,4 +1,5 @@
 import { Text, useTheme } from '@fun-eat/design-system';
+import { createPortal } from 'react-dom';
 import styled, { css, keyframes } from 'styled-components';
 
 import { useToast } from '@/hooks/common';
@@ -12,10 +13,11 @@ const Toast = ({ message }: ToastProps) => {
   const theme = useTheme();
   const { isAnimating } = useToast();
 
-  return (
+  return createPortal(
     <ToastContainer isAnimating={isAnimating}>
       <MessageWrapper color={theme.colors.white}>{message}</MessageWrapper>
-    </ToastContainer>
+    </ToastContainer>,
+    document.body
   );
 };
 
