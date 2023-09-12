@@ -32,3 +32,4 @@ cloud:
     s3:
       bucket: testBucket
       folder: testFolder
+      cloudfrontPath: testCloudfrontPath

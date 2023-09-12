@@ -29,6 +29,9 @@ public class S3Uploader implements ImageUploader {
     @Value("${cloud.aws.s3.folder}")
     private String folder;
 
+    @Value("${cloud.aws.s3.cloudfrontPath}")
+    private String cloudfrontPath;
+
     private final AmazonS3 amazonS3;
 
     public S3Uploader(final AmazonS3 amazonS3) {
@@ -38,11 +41,13 @@ public class S3Uploader implements ImageUploader {
     @Override
     public String upload(final MultipartFile image) {
         validateExtension(image);
-        final String key = getKey(image);
+        final String randomImageName = getRandomImageName(image);
         final ObjectMetadata metadata = getMetadata(image);
         try {
+            final String key = folder + randomImageName;
             amazonS3.putObject(getPutObjectRequest(image, key, metadata));
-            return amazonS3.getUrl(bucket, key).toString();
+
+            return getCloudfrontImagePath(key);
         } catch (IOException e) {
             throw new S3UploadFailException(UNKNOWN_SERVER_ERROR_CODE);
         }
@@ -55,17 +60,9 @@ public class S3Uploader implements ImageUploader {
         }
     }
 
-    private String getKey(final MultipartFile image) {
-        return folder + getRandomImageName(image) + "." + getFormat(image);
-    }
-
-    private String getFormat(final MultipartFile image) {
-        final String contentType = image.getContentType();
-        return contentType.substring(contentType.lastIndexOf("/") + 1);
-    }
-
     private String getRandomImageName(final MultipartFile image) {
-        return UUID.randomUUID() + image.getOriginalFilename();
+        final String randomImageName = UUID.randomUUID() + image.getOriginalFilename();
+        return randomImageName.substring(0, randomImageName.lastIndexOf("."));
     }
 
     private ObjectMetadata getMetadata(final MultipartFile image) {
@@ -78,5 +75,10 @@ public class S3Uploader implements ImageUploader {
     private PutObjectRequest getPutObjectRequest(final MultipartFile image, final String key,
                                                  final ObjectMetadata metadata) throws IOException {
         return new PutObjectRequest(bucket, key, image.getInputStream(), metadata);
+    }
+
+    private String getCloudfrontImagePath(final String key) {
+        final String s3Url = amazonS3.getUrl(bucket, key).toString();
+        return cloudfrontPath + s3Url.substring(s3Url.lastIndexOf("/"));
     }
 }
