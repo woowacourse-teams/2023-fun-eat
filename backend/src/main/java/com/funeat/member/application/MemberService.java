@@ -12,7 +12,7 @@ import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.exception.MemberErrorCode;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.member.persistence.MemberRepository;
-import java.util.Optional;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,10 +59,11 @@ public class MemberService {
 
         final String nickname = request.getNickname();
 
-        final String imageUrl = Optional.ofNullable(image)
-                .map(imageUploader::upload)
-                .orElse("");
-
+        if (Objects.isNull(image)) {
+            findMember.modifyNickname(nickname);
+            return;
+        }
+        final String imageUrl = imageUploader.upload(image);
         findMember.modifyProfile(nickname, imageUrl);
     }
 

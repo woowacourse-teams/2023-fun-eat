@@ -74,4 +74,11 @@ public class Member {
         this.nickname = nickname;
         this.profileImage = profileImage;
     }
+
+    public void modifyNickname(final String nickname) {
+        if (!StringUtils.hasText(nickname)) {
+            throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
+        }
+        this.nickname = nickname;
+    }
 }
