@@ -5,6 +5,7 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
+import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.RecipeFavorite;
@@ -44,6 +45,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
@@ -58,21 +60,23 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeImageRepository recipeImageRepository;
     private final RecipeFavoriteRepository recipeFavoriteRepository;
+    private final ImageUploader imageUploader;
 
     public RecipeService(final MemberRepository memberRepository, final ProductRepository productRepository,
                          final ProductRecipeRepository productRecipeRepository, final RecipeRepository recipeRepository,
                          final RecipeImageRepository recipeImageRepository,
-                         final RecipeFavoriteRepository recipeFavoriteRepository) {
+                         final RecipeFavoriteRepository recipeFavoriteRepository, final ImageUploader imageUploader) {
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.productRecipeRepository = productRecipeRepository;
         this.recipeRepository = recipeRepository;
         this.recipeImageRepository = recipeImageRepository;
         this.recipeFavoriteRepository = recipeFavoriteRepository;
+        this.imageUploader = imageUploader;
     }
 
     @Transactional
-    public Long create(final Long memberId, final RecipeCreateRequest request) {
+    public Long create(final Long memberId, final List<MultipartFile> images, final RecipeCreateRequest request) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
 
@@ -83,8 +87,11 @@ public class RecipeService {
                         .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId)))
                 .forEach(product -> productRecipeRepository.save(new ProductRecipe(product, savedRecipe)));
 
-        if (Objects.nonNull(request.getImages())) {
-            request.getImages().forEach(image -> recipeImageRepository.save(new RecipeImage(image, savedRecipe)));
+        if (Objects.nonNull(images)) {
+            images.forEach(image -> {
+                final String imageUrl = imageUploader.upload(image);
+                recipeImageRepository.save(new RecipeImage(imageUrl, savedRecipe));
+            });
         }
 
         return savedRecipe.getId();

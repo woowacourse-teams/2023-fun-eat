@@ -44,5 +44,3 @@ cloud:
     s3:
       bucket: { S3_BUCKET }
       folder: { S3_PROD_FOLDER }
-      expiration:
-        time: { S3_EXPIRATION }

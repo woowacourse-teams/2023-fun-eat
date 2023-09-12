@@ -24,8 +24,7 @@ public class RecipeFixture {
     }
 
     public static RecipeCreateRequest 레시피추가요청_생성(final List<Long> productIds) {
-        return new RecipeCreateRequest("제일로 맛있는 레시피", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!",
-                List.of("test1.png", "test2.png"));
+        return new RecipeCreateRequest("제일로 맛있는 레시피", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
     }
 
     public static RecipeFavoriteRequest 레시피좋아요요청_생성(final Boolean favorite) {

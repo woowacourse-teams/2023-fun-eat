@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "03.Review", description = "리뷰관련 API 입니다.")
 public interface ReviewController {
@@ -28,7 +30,7 @@ public interface ReviewController {
     )
     @PostMapping
     ResponseEntity<Void> writeReview(@PathVariable Long productId, @AuthenticationPrincipal LoginInfo loginInfo,
-                                     @RequestBody ReviewCreateRequest reviewRequest);
+                                     @RequestPart MultipartFile image, @RequestPart ReviewCreateRequest reviewRequest);
 
     @Operation(summary = "리뷰 좋아요", description = "리뷰에 좋아요 또는 취소를 한다.")
     @ApiResponse(
