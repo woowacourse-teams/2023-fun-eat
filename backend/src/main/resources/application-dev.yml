@@ -45,3 +45,4 @@ cloud:
     s3:
       bucket: { S3_BUCKET }
       folder: { S3_DEV_FOLDER }
+      cloudfrontPath: { S3_DEV_CLOUDFRONT_PATH }
