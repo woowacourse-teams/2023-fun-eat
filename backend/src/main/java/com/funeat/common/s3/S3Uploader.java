@@ -57,7 +57,12 @@ public class S3Uploader implements ImageUploader {
     }
 
     private String getKey(final MultipartFile image) {
-        return folder + getRandomImageName(image);
+        return folder + getRandomImageName(image) + "." + getFormat(image);
+    }
+
+    private String getFormat(final MultipartFile image) {
+        final String contentType = image.getContentType();
+        return contentType.substring(contentType.lastIndexOf("/") + 1);
     }
 
     private String getRandomImageName(final MultipartFile image) {
