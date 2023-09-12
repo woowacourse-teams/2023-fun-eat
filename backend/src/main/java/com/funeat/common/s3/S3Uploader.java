@@ -4,7 +4,6 @@ import static com.funeat.exception.CommonErrorCode.IMAGE_EXTENSION_ERROR_CODE;
 import static com.funeat.exception.CommonErrorCode.UNKNOWN_SERVER_ERROR_CODE;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.funeat.common.ImageUploader;
@@ -78,7 +77,6 @@ public class S3Uploader implements ImageUploader {
 
     private PutObjectRequest getPutObjectRequest(final MultipartFile image, final String key,
                                                  final ObjectMetadata metadata) throws IOException {
-        return new PutObjectRequest(bucket, key, image.getInputStream(), metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead);
+        return new PutObjectRequest(bucket, key, image.getInputStream(), metadata);
     }
 }
