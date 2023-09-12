@@ -37,11 +37,11 @@ export class ApiClient {
     });
   }
 
-  postData({ params, queries, credentials = false }: RequestOptions, body?: FormData) {
+  postData({ params, queries, credentials = false }: RequestOptions, body: FormData) {
     return fetchApi(this.getUrl(params, queries), {
       method: 'POST',
       headers: this.#headers,
-      body: body ? body : null,
+      body: body,
       credentials: credentials ? 'include' : 'omit',
     });
   }
@@ -60,6 +60,15 @@ export class ApiClient {
       method: 'PUT',
       headers: headers,
       body: body ? JSON.stringify(body) : null,
+      credentials: credentials ? 'include' : 'omit',
+    });
+  }
+
+  putData({ params, queries, credentials = false }: RequestOptions, body: FormData) {
+    return fetchApi(this.getUrl(params, queries), {
+      method: 'PUT',
+      headers: this.#headers,
+      body: body,
       credentials: credentials ? 'include' : 'omit',
     });
   }

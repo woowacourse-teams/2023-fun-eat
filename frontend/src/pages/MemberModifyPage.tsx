@@ -6,19 +6,25 @@ import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
 import { IMAGE_MAX_SIZE } from '@/constants';
-import { useImageUploader } from '@/hooks/common';
+import { useFormData, useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
-import { useS3Upload } from '@/hooks/s3';
+import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
-  const { mutateAsync } = useMemberModifyMutation();
+  const { mutate } = useMemberModifyMutation();
 
   const { previewImage, imageFile, uploadImage } = useImageUploader();
-  const { uploadToS3, fileUrl } = useS3Upload(imageFile);
 
   const [nickname, setNickname] = useState(member?.nickname ?? '');
   const navigate = useNavigate();
+
+  const formData = useFormData<MemberRequest>({
+    imageKey: 'image',
+    imageFile: imageFile,
+    formContentKey: 'memberRequest',
+    formContent: { nickname },
+  });
 
   if (!member) {
     return null;
@@ -47,28 +53,19 @@ const MemberModifyPage = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    if (imageFile === null || fileUrl === null) {
-      return;
-    }
-
-    try {
-      await uploadToS3();
-      await mutateAsync(
-        { nickname, image: fileUrl },
-        {
-          onSuccess: () => {
-            navigate('/members');
-          },
+    mutate(formData, {
+      onSuccess: () => {
+        navigate('/members');
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
         }
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-        return;
-      }
 
-      alert('회원정보 수정을 다시 시도해주세요.');
-    }
+        alert('회원정보 수정을 다시 시도해주세요.');
+      },
+    });
   };
 
   return (
