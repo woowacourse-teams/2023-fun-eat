@@ -1,16 +1,6 @@
 import { useState } from 'react';
 
-import { uuid } from '@/utils/uuid';
-
 const isImageFile = (file: File) => file.type !== 'image/png' && file.type !== 'image/jpeg';
-
-const editImageFileName = (imageFile: File) => {
-  const fileName = imageFile.name;
-  const fileExtension = fileName.split('.').pop();
-  const newFileName = `${uuid()}.${fileExtension}`;
-
-  return new File([imageFile], newFileName, { type: imageFile.type });
-};
 
 const useImageUploader = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -22,10 +12,8 @@ const useImageUploader = () => {
       return;
     }
 
-    const editedImageFile = editImageFileName(imageFile);
-
-    setPreviewImage(URL.createObjectURL(editedImageFile));
-    setImageFile(editedImageFile);
+    setPreviewImage(URL.createObjectURL(imageFile));
+    setImageFile(imageFile);
   };
 
   const deleteImage = () => {

@@ -10,11 +10,11 @@ import StarRate from '../StarRate/StarRate';
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
-import { useImageUploader, useScroll } from '@/hooks/common';
+import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
-import { useS3Upload } from '@/hooks/s3';
+import type { ReviewRequest } from '@/types/review';
 
 const MIN_RATING_SCORE = 0;
 const MIN_SELECTED_TAGS_COUNT = 1;
@@ -28,21 +28,26 @@ interface ReviewRegisterFormProps {
 
 const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
   const { scrollToPosition } = useScroll();
-
   const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
-  const { uploadToS3, fileUrl } = useS3Upload(imageFile);
 
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
   const { data: productDetail } = useProductDetailQuery(productId);
-  const { mutateAsync } = useReviewRegisterFormMutation(productId);
+  const { mutate } = useReviewRegisterFormMutation(productId);
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
     reviewFormValue.tagIds.length >= MIN_SELECTED_TAGS_COUNT &&
     reviewFormValue.tagIds.length <= MIN_DISPLAYED_TAGS_LENGTH &&
     reviewFormValue.content.length > MIN_CONTENT_LENGTH;
+
+  const formData = useFormData<ReviewRequest>({
+    imageKey: 'image',
+    imageFile: imageFile,
+    formContentKey: 'reviewRequest',
+    formContent: reviewFormValue,
+  });
 
   const resetAndCloseForm = () => {
     deleteImage();
@@ -53,27 +58,21 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    try {
-      await uploadToS3();
-      await mutateAsync(
-        { ...reviewFormValue, image: fileUrl },
-        {
-          onSuccess: () => {
-            resetAndCloseForm();
-            scrollToPosition(targetRef);
-          },
+    mutate(formData, {
+      onSuccess: () => {
+        resetAndCloseForm();
+        scrollToPosition(targetRef);
+      },
+      onError: (error) => {
+        resetAndCloseForm();
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
         }
-      );
-    } catch (error) {
-      resetAndCloseForm();
 
-      if (error instanceof Error) {
-        alert(error.message);
-        return;
-      }
-
-      alert('리뷰 등록을 다시 시도해주세요');
-    }
+        alert('리뷰 등록을 다시 시도해주세요');
+      },
+    });
   };
 
   return (

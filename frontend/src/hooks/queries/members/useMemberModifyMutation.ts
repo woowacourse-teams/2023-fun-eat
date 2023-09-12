@@ -1,19 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { memberApi } from '@/apis';
-import type { MemberRequest } from '@/types/member';
 
-const headers = { 'Content-Type': 'application/json' };
-
-const putModifyMember = (body: MemberRequest) => {
-  return memberApi.put({ credentials: true }, headers, body);
+const putModifyMember = (body: FormData) => {
+  return memberApi.putData({ credentials: true }, body);
 };
 
 const useMemberModifyMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (body: MemberRequest) => putModifyMember(body),
+    mutationFn: (body: FormData) => putModifyMember(body),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['member'] }),
   });
 };
