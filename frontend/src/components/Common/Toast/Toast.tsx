@@ -1,8 +1,9 @@
 import { Text, useTheme } from '@fun-eat/design-system';
 import { createPortal } from 'react-dom';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { useToast } from '@/hooks/common';
+import { fadeOut, slideIn } from '@/styles/animations';
 
 interface ToastProps {
   isOpen: boolean;
@@ -22,28 +23,6 @@ const Toast = ({ message }: ToastProps) => {
 };
 
 export default Toast;
-
-const slideIn = keyframes`
-  0% {
-    transform: translateY(-100px);
-  }
-
-  100% {
-    transform: translateY(70px);
-  }
-`;
-
-const fadeOut = keyframes`
-  0% {
-    transform: translateY(70px);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(70px);
-    opacity:0;
-  }
-`;
 
 const ToastContainer = styled.div<{ isAnimating?: boolean }>`
   position: fixed;
