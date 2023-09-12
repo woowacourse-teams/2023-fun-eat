@@ -47,7 +47,7 @@ public class S3Uploader implements ImageUploader {
             final String key = folder + randomImageName;
             amazonS3.putObject(getPutObjectRequest(image, key, metadata));
 
-            return getCloudfrontImagePath(key);
+            return getCloudfrontImagePath(randomImageName);
         } catch (IOException e) {
             throw new S3UploadFailException(UNKNOWN_SERVER_ERROR_CODE);
         }
@@ -61,8 +61,7 @@ public class S3Uploader implements ImageUploader {
     }
 
     private String getRandomImageName(final MultipartFile image) {
-        final String randomImageName = UUID.randomUUID() + image.getOriginalFilename();
-        return randomImageName.substring(0, randomImageName.lastIndexOf("."));
+        return UUID.randomUUID() + image.getOriginalFilename();
     }
 
     private ObjectMetadata getMetadata(final MultipartFile image) {
@@ -77,8 +76,7 @@ public class S3Uploader implements ImageUploader {
         return new PutObjectRequest(bucket, key, image.getInputStream(), metadata);
     }
 
-    private String getCloudfrontImagePath(final String key) {
-        final String s3Url = amazonS3.getUrl(bucket, key).toString();
-        return cloudfrontPath + s3Url.substring(s3Url.lastIndexOf("/"));
+    private String getCloudfrontImagePath(final String imageName) {
+        return cloudfrontPath + imageName;
     }
 }
