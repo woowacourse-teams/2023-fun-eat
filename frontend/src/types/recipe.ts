@@ -5,8 +5,9 @@ export interface RecipeRequest {
   title: string;
   productIds: number[];
   content: string;
-  images: string[] | null;
 }
+
+export type RecipeRequestKey = keyof RecipeRequest;
 
 export interface RecipeDetail extends Recipe {
   images: string[];
