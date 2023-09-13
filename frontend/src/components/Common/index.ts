@@ -1,4 +1,4 @@
-export { default as CategoryMenu } from './CategoryMenu/CategoryMenu';
+export { default as CategoryTab } from './CategoryTab/CategoryTab';
 export { default as Header } from './Header/Header';
 export { default as NavigationBar } from './NavigationBar/NavigationBar';
 export { default as SortButton } from './SortButton/SortButton';

@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryMenu, SvgIcon, ScrollButton, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
+import { CategoryTab, SvgIcon, ScrollButton, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
 import { PBProductList, ProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
@@ -27,7 +27,7 @@ const HomePage = () => {
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryMenu menuVariant="food" />
+          <CategoryTab tabVariant="food" />
         </Suspense>
         <Spacing size={12} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
@@ -46,7 +46,7 @@ const HomePage = () => {
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryMenu menuVariant="store" />
+          <CategoryTab tabVariant="store" />
         </Suspense>
         <Spacing size={16} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
