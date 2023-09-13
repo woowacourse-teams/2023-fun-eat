@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
-import { useIntersectionObserver } from '@/hooks/common';
+import { useIntersectionObserver, useScrollRestoration } from '@/hooks/common';
 import { useCategoryContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import type { CategoryVariant, SortOption } from '@/types/common';
@@ -31,6 +31,7 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
   const productsToDisplay = displaySlice(isHomePage, productList);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+  useScrollRestoration(categoryIds[category]);
 
   return (
     <>

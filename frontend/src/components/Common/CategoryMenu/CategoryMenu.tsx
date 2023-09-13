@@ -2,7 +2,6 @@ import { Button, theme } from '@fun-eat/design-system';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
-import { useScrollRestoration } from '@/hooks/common';
 import { useCategoryContext } from '@/hooks/context';
 import { useCategoryQuery } from '@/hooks/queries/product';
 import type { CategoryVariant } from '@/types/common';
@@ -15,8 +14,6 @@ const CategoryMenu = ({ menuVariant }: CategoryMenuProps) => {
   const { data: categories } = useCategoryQuery(menuVariant);
   const { categoryIds, selectCategory } = useCategoryContext();
   const currentCategoryId = categoryIds[menuVariant];
-
-  useScrollRestoration(currentCategoryId);
 
   return (
     <CategoryMenuContainer>
