@@ -1,18 +1,16 @@
 import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import type { MouseEventHandler } from 'react';
 import { Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, ProductSearchResultList, RecipeSearchResultList } from '@/components/Search';
 import { SEARCH_PAGE_TABS } from '@/constants';
-import { useDebounce } from '@/hooks/common';
+import { useDebounce, useTabMenu } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
-const isProductSearchTab = (tabMenu: string) => tabMenu === SEARCH_PAGE_TABS[0];
-const getInputPlaceholder = (tabMenu: string) =>
-  isProductSearchTab(tabMenu) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
+const PRODUCT_PLACEHOLDER = '상품 이름을 검색해보세요.';
+const RECIPE_PLACEHOLDER = '꿀조합에 포함된 상품을 입력해보세요.';
 
 const SearchPage = () => {
   const {
@@ -26,12 +24,10 @@ const SearchPage = () => {
     handleAutocompleteClose,
   } = useSearch();
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery || '');
-  const [selectedTabMenu, setSelectedTabMenu] = useState<string>(SEARCH_PAGE_TABS[0]);
   const { reset } = useQueryErrorResetBoundary();
 
-  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
-    setSelectedTabMenu(event.currentTarget.value);
-  };
+  const { selectedTabMenu, isFirstTabMenu: isProductSearchTab, handleTabMenuClick } = useTabMenu();
+  const inputPlaceholder = isProductSearchTab ? PRODUCT_PLACEHOLDER : RECIPE_PLACEHOLDER;
 
   useDebounce(
     () => {
@@ -53,7 +49,7 @@ const SearchPage = () => {
         <form onSubmit={handleSearch}>
           <Input
             customWidth="100%"
-            placeholder={getInputPlaceholder(selectedTabMenu)}
+            placeholder={inputPlaceholder}
             rightIcon={
               <Button customHeight="36px" color="white">
                 <SvgIcon variant="search" />
@@ -77,11 +73,7 @@ const SearchPage = () => {
         )}
       </SearchSection>
       <Spacing size={20} />
-      <TabMenu
-        tabMenus={SEARCH_PAGE_TABS}
-        selectedTabMenu={selectedTabMenu}
-        handleTabMenuSelect={handleTabMenuSelect}
-      />
+      <TabMenu tabMenus={SEARCH_PAGE_TABS} selectedTabMenu={selectedTabMenu} handleTabMenuSelect={handleTabMenuClick} />
       <SearchResultSection>
         {isSubmitted && debouncedSearchQuery ? (
           <>
@@ -91,7 +83,7 @@ const SearchPage = () => {
             <ErrorBoundary fallback={ErrorComponent}>
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
-                {isProductSearchTab(selectedTabMenu) ? (
+                {isProductSearchTab ? (
                   <ProductSearchResultList searchQuery={debouncedSearchQuery} />
                 ) : (
                   <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
@@ -100,7 +92,7 @@ const SearchPage = () => {
             </ErrorBoundary>
           </>
         ) : (
-          <Text>{selectedTabMenu}을 검색해보세요.</Text>
+          <Text>{SEARCH_PAGE_TABS[selectedTabMenu]}을 검색해보세요.</Text>
         )}
       </SearchResultSection>
     </>
