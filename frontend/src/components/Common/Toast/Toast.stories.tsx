@@ -27,7 +27,26 @@ export const Default: Story = {
       <>
         <div style={{ width: '375px' }}>
           <button onClick={handleClick}>토스트 테스트</button>
-          {isOpen && <Toast isOpen={isOpen} message="토스트 메세지" />}
+          {isOpen && <Toast message="토스트 메세지" />}
+        </div>
+      </>
+    );
+  },
+};
+
+export const Error: Story = {
+  render: () => {
+    const { isOpen, showToast } = useToast();
+
+    const handleClick = () => {
+      showToast();
+    };
+
+    return (
+      <>
+        <div style={{ width: '375px' }}>
+          <button onClick={handleClick}>토스트 테스트</button>
+          {isOpen && <Toast isError message="토스트 메세지" />}
         </div>
       </>
     );
