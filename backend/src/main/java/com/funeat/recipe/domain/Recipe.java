@@ -1,7 +1,10 @@
 package com.funeat.recipe.domain;
 
 import com.funeat.member.domain.Member;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +22,10 @@ public class Recipe {
 
     private String content;
 
-    @ManyToOne
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -32,6 +38,22 @@ public class Recipe {
         this.title = title;
         this.content = content;
         this.member = member;
+    }
+
+    public Recipe(final String title, final String content, final Member member,
+                  final Long favoriteCount) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.favoriteCount = favoriteCount;
+    }
+
+    public void addFavoriteCount() {
+        this.favoriteCount++;
+    }
+
+    public void minusFavoriteCount() {
+        this.favoriteCount--;
     }
 
     public Long getId() {
@@ -52,5 +74,9 @@ public class Recipe {
 
     public Long getFavoriteCount() {
         return favoriteCount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

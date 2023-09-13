@@ -3,24 +3,28 @@ package com.funeat.member.domain.favorite;
 import com.funeat.member.domain.Member;
 import com.funeat.review.domain.Review;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"member_id", "review_id"}))
 public class ReviewFavorite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
 
@@ -34,8 +38,7 @@ public class ReviewFavorite {
         this.review = review;
     }
 
-    public static ReviewFavorite createReviewFavoriteByMemberAndReview(final Member member, final Review review,
-                                                                       final Boolean favorite) {
+    public static ReviewFavorite create(final Member member, final Review review, final Boolean favorite) {
         final ReviewFavorite reviewFavorite = new ReviewFavorite(member, review);
         reviewFavorite.review.getReviewFavorites().add(reviewFavorite);
         reviewFavorite.member.getReviewFavorites().add(reviewFavorite);

@@ -11,10 +11,9 @@ export const reviewHandlers = [
   rest.get('/api/products/:productId/reviews', (req, res, ctx) => {
     const { mockSessionId } = req.cookies;
     const sortOptions = req.url.searchParams.get('sort');
-    const page = Number(req.url.searchParams.get('page'));
 
     if (!mockSessionId) {
-      return res(ctx.status(403));
+      return res(ctx.status(401));
     }
 
     if (sortOptions === null) {
@@ -29,18 +28,31 @@ export const reviewHandlers = [
 
     const sortedReviews = {
       ...mockReviews,
-      reviews: [...mockReviews.reviews].sort((cur, next) =>
-        sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key]
-      ),
+      reviews: [...mockReviews.reviews].sort((cur, next) => {
+        if (key === 'createdAt') {
+          return sortOrder === 'asc'
+            ? new Date(cur[key]).getTime() - new Date(next[key]).getTime()
+            : new Date(next[key]).getTime() - new Date(cur[key]).getTime();
+        }
+
+        return sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key];
+      }),
     };
 
     return res(
       ctx.status(200),
-      ctx.json({ page: sortedReviews.page, reviews: sortedReviews.reviews.slice(page * 5, (page + 1) * 5) })
+      ctx.json({ page: sortedReviews.page, reviews: sortedReviews.reviews }),
+      ctx.delay(1000)
     );
   }),
 
   rest.post('/api/products/:productId/reviews', (req, res, ctx) => {
+    const { mockSessionId } = req.cookies;
+
+    if (!mockSessionId) {
+      return res(ctx.status(401), ctx.json({ message: '로그인이 필요합니다.' }));
+    }
+
     const formData = req.body;
 
     if (!formData) {

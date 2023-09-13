@@ -27,7 +27,7 @@ public class ReviewFavoriteTest {
 
             final var member = 멤버_멤버1_생성();
             final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
-            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            final var reviewFavorite = ReviewFavorite.create(member, review, true);
 
             // when
             reviewFavorite.updateChecked(false);
@@ -45,7 +45,7 @@ public class ReviewFavoriteTest {
 
             final var member = 멤버_멤버1_생성();
             final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
-            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, false);
+            final var reviewFavorite = ReviewFavorite.create(member, review, false);
 
             // when
             reviewFavorite.updateChecked(true);
@@ -67,7 +67,7 @@ public class ReviewFavoriteTest {
 
             final var member = 멤버_멤버1_생성();
             final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
-            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, true);
+            final var reviewFavorite = ReviewFavorite.create(member, review, true);
 
             // when
             reviewFavorite.updateChecked(true);
@@ -85,7 +85,7 @@ public class ReviewFavoriteTest {
 
             final var member = 멤버_멤버1_생성();
             final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
-            final var reviewFavorite = ReviewFavorite.createReviewFavoriteByMemberAndReview(member, review, false);
+            final var reviewFavorite = ReviewFavorite.create(member, review, false);
 
             // when
             reviewFavorite.updateChecked(false);

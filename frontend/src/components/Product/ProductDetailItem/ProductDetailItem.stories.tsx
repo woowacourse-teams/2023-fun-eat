@@ -2,13 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import ProductDetailItem from './ProductDetailItem';
 
-import productDetails from '@/mocks/data/productDetails.json';
+import productDetail from '@/mocks/data/productDetail.json';
 
 const meta: Meta<typeof ProductDetailItem> = {
   title: 'product/ProductDetailItem',
   component: ProductDetailItem,
   args: {
-    productId: productDetails[0].id,
+    productDetail: productDetail,
   },
 };
 

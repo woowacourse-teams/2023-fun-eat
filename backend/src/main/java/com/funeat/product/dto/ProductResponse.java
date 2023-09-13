@@ -14,26 +14,28 @@ public class ProductResponse {
     private final String image;
     private final String content;
     private final Double averageRating;
+    private final Long reviewCount;
     private final List<TagDto> tags;
 
-    public ProductResponse(final Long id, final String name, final Long price, final String image,
-                           final String content, final Double averageRating, final List<TagDto> tags) {
+    public ProductResponse(final Long id, final String name, final Long price, final String image, final String content,
+                           final Double averageRating, final Long reviewCount, final List<TagDto> tags) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
         this.content = content;
         this.averageRating = averageRating;
+        this.reviewCount = reviewCount;
         this.tags = tags;
     }
 
-    public static ProductResponse toResponse(final Product product, final List<Tag> tags) {
+    public static ProductResponse toResponse(final Product product, final Long reviewCount, final List<Tag> tags) {
         List<TagDto> tagDtos = new ArrayList<>();
         for (Tag tag : tags) {
             tagDtos.add(TagDto.toDto(tag));
         }
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(), product.getImage(),
-                product.getContent(), product.getAverageRating(), tagDtos);
+                product.getContent(), product.getAverageRating(), reviewCount, tagDtos);
     }
 
     public Long getId() {
@@ -58,6 +60,10 @@ public class ProductResponse {
 
     public Double getAverageRating() {
         return averageRating;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
     }
 
     public List<TagDto> getTags() {

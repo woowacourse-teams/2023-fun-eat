@@ -48,8 +48,8 @@ const SortOptionListContainer = styled.ul`
 
   & > li {
     height: 60px;
-    border-bottom: 1px solid ${({ theme }) => theme.dividerColors.disabled};
     line-height: 60px;
+    border-bottom: 1px solid ${({ theme }) => theme.dividerColors.disabled};
   }
 
   & > li:last-of-type {
@@ -59,13 +59,13 @@ const SortOptionListContainer = styled.ul`
 
 const SortOptionButton = styled(Button)`
   padding: 10px 0;
+  text-align: left;
   border: none;
   outline: transparent;
-  text-align: left;
 
   &:hover {
-    font-weight: ${({ theme }) => theme.fontWeights.bold};
     color: ${({ theme }) => theme.textColors.default};
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
     transition: all 200ms ease-in;
   }
 `;

@@ -12,8 +12,10 @@ spring:
       hibernate:
         show_sql: true
 
-image:
-  path: { PROD_IMAGE_PATH }
+kakao:
+  rest-api-key: { PROD_REST_API_KEY }
+  redirect-uri: { PROD_REDIRECT_URI }
+  admin-key: { PROD_ADMIN_KEY }
 
 management:
   endpoints:
@@ -35,3 +37,11 @@ management:
   server:
     port: { SERVER_PORT }
 
+cloud:
+  aws:
+    region:
+      static: { S3_REGION }
+    s3:
+      bucket: { S3_BUCKET }
+      folder: { S3_PROD_FOLDER }
+      cloudfrontPath: { S3_PROD_CLOUDFRONT_PATH }

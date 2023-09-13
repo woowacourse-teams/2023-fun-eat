@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import ReviewRegisterForm from './ReviewRegisterForm';
 
+import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import productDetail from '@/mocks/data/productDetail.json';
 
 const meta: Meta<typeof ReviewRegisterForm> = {
@@ -10,6 +11,13 @@ const meta: Meta<typeof ReviewRegisterForm> = {
   args: {
     productId: productDetail.id,
   },
+  decorators: [
+    (Story) => (
+      <ReviewFormProvider>
+        <Story />
+      </ReviewFormProvider>
+    ),
+  ],
 };
 
 export default meta;

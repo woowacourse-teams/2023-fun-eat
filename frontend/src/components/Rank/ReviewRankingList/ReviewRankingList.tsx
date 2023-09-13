@@ -6,16 +6,16 @@ import { useReviewRankingQuery } from '@/hooks/queries/rank';
 import useDisplaySlice from '@/utils/displaySlice';
 
 interface ReviewRankingListProps {
-  isHome?: boolean;
+  isHomePage?: boolean;
 }
 
-const ReviewRankingList = ({ isHome }: ReviewRankingListProps) => {
+const ReviewRankingList = ({ isHomePage = false }: ReviewRankingListProps) => {
   const { data: reviewRankings } = useReviewRankingQuery();
-  const reviewsToDisplay = useDisplaySlice(isHome, reviewRankings?.reviews);
+  const reviewsToDisplay = useDisplaySlice(isHomePage, reviewRankings.reviews);
 
   return (
     <ReviewRankingListContainer>
-      {reviewsToDisplay?.map((reviewRanking) => (
+      {reviewsToDisplay.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
           <ReviewRankingItem reviewRanking={reviewRanking} />
         </li>

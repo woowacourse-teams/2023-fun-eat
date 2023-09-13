@@ -2,9 +2,8 @@ package com.funeat.acceptance.review;
 
 import static io.restassured.RestAssured.given;
 
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
-import io.restassured.builder.MultiPartSpecBuilder;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewFavoriteRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
@@ -14,9 +13,14 @@ public class ReviewSteps {
 
     public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final MultiPartSpecification image,
                                                          final ReviewCreateRequest request, final String loginCookie) {
-        return given()
-                .cookie("JSESSIONID", loginCookie)
-                .multiPart(image)
+        final var requestSpec = given()
+                .cookie("FUNEAT", loginCookie);
+
+        if (image != null) {
+            requestSpec.multiPart(image);
+        }
+
+        return requestSpec
                 .multiPart("reviewRequest", request, "application/json")
                 .when()
                 .post("/api/products/{productId}/reviews", productId)
@@ -28,7 +32,7 @@ public class ReviewSteps {
                                                           final ReviewFavoriteRequest request,
                                                           final String loginCookie) {
         return given()
-                .cookie("JSESSIONID", loginCookie)
+                .cookie("FUNEAT", loginCookie)
                 .contentType("application/json")
                 .body(request)
                 .when()
@@ -40,7 +44,7 @@ public class ReviewSteps {
     public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie, final Long productId,
                                                                 final String sort, final Integer page) {
         return given()
-                .cookie("JSESSIONID", loginCookie)
+                .cookie("FUNEAT", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .when()
@@ -55,13 +59,5 @@ public class ReviewSteps {
                 .get("/api/ranks/reviews")
                 .then()
                 .extract();
-    }
-
-    public static MultiPartSpecification 리뷰_사진_명세_요청() {
-        return new MultiPartSpecBuilder("image".getBytes())
-                .fileName("testImage.png")
-                .controlName("image")
-                .mimeType("image/png")
-                .build();
     }
 }
