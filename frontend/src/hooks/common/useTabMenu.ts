@@ -11,10 +11,15 @@ const useTabMenu = () => {
     setSelectedTabMenu(index);
   };
 
+  const setFirstTabMenu = () => {
+    setSelectedTabMenu(INIT_TAB_INDEX);
+  };
+
   return {
     selectedTabMenu,
     isFirstTabMenu,
     handleTabMenuClick,
+    setFirstTabMenu,
   };
 };
 
