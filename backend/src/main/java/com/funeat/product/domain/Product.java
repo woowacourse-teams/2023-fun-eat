@@ -43,6 +43,8 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
 
+    private Long reviewCount = 0L;
+
     protected Product() {
     }
 
@@ -110,5 +112,9 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
     }
 }
