@@ -38,8 +38,8 @@ export default SectionTitle;
 
 const SectionTitleContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const SectionTitleWrapper = styled.div`

@@ -53,9 +53,9 @@ export default StarRate;
 
 const StarRateContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const RequiredMark = styled.sup`

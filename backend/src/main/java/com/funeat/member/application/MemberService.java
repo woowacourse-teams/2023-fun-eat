@@ -5,7 +5,7 @@ import static org.springframework.transaction.annotation.Propagation.REQUIRES_NE
 
 import com.funeat.auth.dto.SignUserDto;
 import com.funeat.auth.dto.UserInfoDto;
-import com.funeat.common.ImageService;
+import com.funeat.common.ImageUploader;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRequest;
@@ -22,11 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ImageService imageService;
+    private final ImageUploader imageUploader;
 
-    public MemberService(final MemberRepository memberRepository, final ImageService imageService) {
+    public MemberService(final MemberRepository memberRepository, final ImageUploader imageUploader) {
         this.memberRepository = memberRepository;
-        this.imageService = imageService;
+        this.imageUploader = imageUploader;
     }
 
     @Transactional(propagation = REQUIRES_NEW)
@@ -60,13 +60,11 @@ public class MemberService {
         final String nickname = request.getNickname();
 
         if (Objects.isNull(image)) {
-            findMember.modifyName(nickname);
+            findMember.modifyNickname(nickname);
             return;
         }
-
-        final String newImageName = imageService.getRandomImageName(image);
-        findMember.modifyProfile(nickname, newImageName);
-        imageService.upload(image, newImageName);
+        final String imageUrl = imageUploader.upload(image);
+        findMember.modifyProfile(nickname, imageUrl);
     }
 
     public String findPlatformId(final Long memberId) {

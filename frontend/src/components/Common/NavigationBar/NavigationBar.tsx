@@ -41,13 +41,13 @@ const NavigationBarContainer = styled.nav`
 
 const NavigationBarList = styled.ul`
   display: flex;
-  align-items: center;
   justify-content: space-around;
+  align-items: center;
   padding-top: 12px;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-bottom: none;
-  border-top-right-radius: 20px;
   border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;
 
 const NavigationItem = styled.li`
@@ -57,7 +57,7 @@ const NavigationItem = styled.li`
 const NavigationLink = styled(Link)`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
   gap: 4px;
+  justify-content: flex-end;
+  align-items: center;
 `;

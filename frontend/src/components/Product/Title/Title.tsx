@@ -28,6 +28,7 @@ const Title = ({ headingTitle, routeDestination }: TitleProps) => {
 export default Title;
 
 const TitleContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -36,7 +37,6 @@ const TitleContainer = styled.div`
 
 const TitleLink = styled(Link)`
   display: flex;
-  align-items: center;
   gap: 20px;
   margin-left: 40%;
 `;

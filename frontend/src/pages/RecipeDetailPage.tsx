@@ -5,10 +5,8 @@ import styled from 'styled-components';
 import RecipePreviewImage from '@/assets/plate.svg';
 import { SectionTitle } from '@/components/Common';
 import { RecipeFavorite } from '@/components/Recipe';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
-import { isChangedImage } from '@/utils/image';
 
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
@@ -24,12 +22,7 @@ const RecipeDetailPage = () => {
         <RecipeImageContainer>
           {images.map((image, index) => (
             <li key={image}>
-              <RecipeImage
-                src={IMAGE_SRC_PATH + image}
-                alt={`${title} 꿀조합 사진 ${index}`}
-                width={312}
-                height={210}
-              />
+              <RecipeImage src={image} alt={`${title} 꿀조합 사진 ${index}`} width={312} height={210} />
             </li>
           ))}
         </RecipeImageContainer>
@@ -41,12 +34,7 @@ const RecipeDetailPage = () => {
       <Spacing size={24} />
       <AuthorFavoriteWrapper>
         <AuthorWrapper>
-          <AuthorProfileImage
-            src={isChangedImage(author.profileImage) ? IMAGE_SRC_PATH + author.profileImage : author.profileImage}
-            alt={`${author.nickname}님의 프로필`}
-            width={45}
-            height={45}
-          />
+          <AuthorProfileImage src={author.profileImage} alt={`${author.nickname}님의 프로필`} width={45} height={45} />
           <div>
             <Text color={theme.textColors.info}>{author.nickname} 님</Text>
             <Text color={theme.textColors.info}> {getFormattedDate(createdAt)}</Text>
@@ -86,13 +74,13 @@ export default RecipeDetailPage;
 const RecipeImageContainer = styled.ul`
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 `;
 
 const RecipeImage = styled.img`
-  object-fit: cover;
   border-radius: 10px;
+  object-fit: cover;
 `;
 
 const RecipePreviewImageWrapper = styled.div`
@@ -102,8 +90,8 @@ const RecipePreviewImageWrapper = styled.div`
 
 const AuthorFavoriteWrapper = styled.div`
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const AuthorWrapper = styled.div`
@@ -113,8 +101,8 @@ const AuthorWrapper = styled.div`
 `;
 
 const AuthorProfileImage = styled.img`
-  border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;
 
 const RecipeUsedProductsWrapper = styled.div`

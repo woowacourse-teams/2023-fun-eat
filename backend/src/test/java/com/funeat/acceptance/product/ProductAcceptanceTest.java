@@ -829,6 +829,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 .doesNotContain(currentResponse);
     }
 
+    /**
+     * AssertJ assertions "allMatch" and "doesNotContains" should also test for emptiness
+     */
     @Nested
     class getProductRecipes_성공_테스트 {
 

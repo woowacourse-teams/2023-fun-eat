@@ -354,7 +354,8 @@ class RecipeServiceTest extends ServiceTest {
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
             final var expected = List.of(
                     RecipeDto.toDto(recipe1_3, List.of(), List.of()),
-                    RecipeDto.toDto(recipe1_2, List.of(recipeImage1_2_1, recipeImage1_2_2), List.of(product1, product3)),
+                    RecipeDto.toDto(recipe1_2, List.of(recipeImage1_2_1, recipeImage1_2_2),
+                            List.of(product1, product3)),
                     RecipeDto.toDto(recipe1_1, List.of(recipeImage1_1_1), List.of(product1, product2, product3)));
 
             // then
@@ -403,7 +404,8 @@ class RecipeServiceTest extends ServiceTest {
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
             final var expected = List.of(
                     RecipeDto.toDto(recipe1_1, List.of(recipeImage1_1_1), List.of(product1, product2, product3)),
-                    RecipeDto.toDto(recipe1_2, List.of(recipeImage1_2_1, recipeImage1_2_2), List.of(product1, product3)),
+                    RecipeDto.toDto(recipe1_2, List.of(recipeImage1_2_1, recipeImage1_2_2),
+                            List.of(product1, product3)),
                     RecipeDto.toDto(recipe1_3, List.of(), List.of()));
 
             // then
@@ -412,7 +414,8 @@ class RecipeServiceTest extends ServiceTest {
                     .isEqualTo(expected);
         }
     }
-  
+
+    @Nested
     class likeRecipe_성공_테스트 {
 
         @Test

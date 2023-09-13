@@ -6,15 +6,18 @@ public class RankingReviewDto {
 
     private final Long reviewId;
     private final Long productId;
+    private final String categoryType;
     private final String productName;
     private final String content;
     private final Long rating;
     private final Long favoriteCount;
 
-    private RankingReviewDto(final Long reviewId, final Long productId, final String productName, final String content,
-                             final Long rating, final Long favoriteCount) {
+    private RankingReviewDto(final Long reviewId, final Long productId, final String categoryType,
+                            final String productName, final String content,
+                            final Long rating, final Long favoriteCount) {
         this.reviewId = reviewId;
         this.productId = productId;
+        this.categoryType = categoryType;
         this.productName = productName;
         this.content = content;
         this.rating = rating;
@@ -25,6 +28,7 @@ public class RankingReviewDto {
         return new RankingReviewDto(
                 review.getId(),
                 review.getProduct().getId(),
+                review.getProduct().getCategory().getType().getName(),
                 review.getProduct().getName(),
                 review.getContent(),
                 review.getRating(),
@@ -54,5 +58,9 @@ public class RankingReviewDto {
 
     public Long getFavoriteCount() {
         return favoriteCount;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
     }
 }

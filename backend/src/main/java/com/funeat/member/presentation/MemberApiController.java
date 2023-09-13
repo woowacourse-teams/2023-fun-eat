@@ -37,8 +37,7 @@ public class MemberApiController implements MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberProfileResponse> getMemberProfile(
-            @AuthenticationPrincipal final LoginInfo loginInfo) {
+    public ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo) {
         final Long memberId = loginInfo.getId();
 
         final MemberProfileResponse response = memberService.getMemberProfile(memberId);
