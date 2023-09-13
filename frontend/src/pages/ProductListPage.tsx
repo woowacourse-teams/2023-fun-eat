@@ -61,7 +61,7 @@ const ProductListPage = () => {
             </SortButtonWrapper>
           </Suspense>
         </div>
-        <Spacing size={120} />
+        <Spacing size={140} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <ProductList category={category} selectedOption={selectedOption} />
