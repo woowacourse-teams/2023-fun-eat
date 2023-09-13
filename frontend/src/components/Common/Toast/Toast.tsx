@@ -6,16 +6,16 @@ import { useToast } from '@/hooks/common';
 import { fadeOut, slideIn } from '@/styles/animations';
 
 interface ToastProps {
-  isOpen: boolean;
+  isError?: boolean;
   message: string;
 }
 
-const Toast = ({ message }: ToastProps) => {
+const Toast = ({ isError, message }: ToastProps) => {
   const theme = useTheme();
   const { isAnimating } = useToast();
 
   return createPortal(
-    <ToastContainer isAnimating={isAnimating}>
+    <ToastContainer isError={isError} isAnimating={isAnimating}>
       <MessageWrapper color={theme.colors.white}>{message}</MessageWrapper>
     </ToastContainer>,
     document.body
@@ -24,14 +24,15 @@ const Toast = ({ message }: ToastProps) => {
 
 export default Toast;
 
-const ToastContainer = styled.div<{ isAnimating?: boolean }>`
+type ToastStyleProps = Pick<ToastProps, 'isError'>;
+
+const ToastContainer = styled.div<ToastStyleProps & { isAnimating?: boolean }>`
   position: fixed;
   width: calc(100% - 40px);
   max-width: 560px;
   height: 55px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.black};
-
+  background: ${({ isError, theme }) => (isError ? theme.colors.error : theme.colors.black)};
   animation: ${({ isAnimating }) =>
     css`
       ${isAnimating ? slideIn : fadeOut} .3s ease-in-out forwards;
