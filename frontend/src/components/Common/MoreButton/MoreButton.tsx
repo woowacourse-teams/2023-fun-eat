@@ -36,8 +36,8 @@ const MoreButtonWrapper = styled.div`
 
 const PlusIconWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
   margin-bottom: 5px;

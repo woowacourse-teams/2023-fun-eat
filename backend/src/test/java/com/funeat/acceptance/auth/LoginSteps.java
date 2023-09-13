@@ -20,7 +20,7 @@ public class LoginSteps {
 
     public static ExtractableResponse<Response> 로그인_시도_요청(final String code, final String loginCookie) {
         return given()
-                .cookie("JSESSIONID", loginCookie)
+                .cookie("FUNEAT", loginCookie)
                 .param("code", code)
                 .when()
                 .get("/api/login/oauth2/code/kakao")
@@ -30,9 +30,9 @@ public class LoginSteps {
 
     public static ExtractableResponse<Response> 로그아웃_요청(final String loginCookie) {
         return given()
-                .cookie("JSESSIONID", loginCookie)
+                .cookie("FUNEAT", loginCookie)
                 .when()
-                .get("/api/logout")
+                .post("/api/logout")
                 .then()
                 .extract();
     }
@@ -45,6 +45,6 @@ public class LoginSteps {
                 .then()
                 .extract()
                 .response()
-                .getCookie("JSESSIONID");
+                .getCookie("FUNEAT");
     }
 }

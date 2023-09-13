@@ -8,7 +8,7 @@ export const loginHandlers = [
       return res(
         ctx.status(200),
         ctx.cookie('mockSessionId', 'abc123', { path: '/' }),
-        ctx.set('Location', '/profile')
+        ctx.set('Location', '/members')
       );
     }
 

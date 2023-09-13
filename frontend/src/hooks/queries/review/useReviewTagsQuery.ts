@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '..';
 
 import { tagApi } from '@/apis';
 import type { ReviewTag } from '@/types/review';
@@ -10,10 +10,7 @@ const fetchReviewTags = async () => {
 };
 
 const useReviewTagsQuery = () => {
-  return useQuery({
-    queryKey: ['reviewTags'],
-    queryFn: () => fetchReviewTags(),
-  });
+  return useSuspendedQuery(['review', 'tags'], () => fetchReviewTags());
 };
 
 export default useReviewTagsQuery;

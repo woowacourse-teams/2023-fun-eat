@@ -1,0 +1,32 @@
+{
+  "page": {
+    "totalDataCount": 99,
+    "totalPages": 10,
+    "firstPage": true,
+    "lastPage": false,
+    "requestPage": 1,
+    "requestSize": 10
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "꼬북칩",
+      "categoryType": "food"
+    },
+    {
+      "id": 2,
+      "name": "새우깡",
+      "categoryType": "food"
+    },
+    {
+      "id": 11,
+      "name": "PB 꼬북칩",
+      "categoryType": "store"
+    },
+    {
+      "id": 12,
+      "name": "PB 새우깡",
+      "categoryType": "store"
+    }
+  ]
+}

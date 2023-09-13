@@ -13,8 +13,10 @@ spring:
         format_sql: true
         show_sql: true
 
-image:
-  path: { DEV_IMAGE_PATH }
+kakao:
+  rest-api-key: { DEV_REST_API_KEY }
+  redirect-uri: { DEV_REDIRECT_URI }
+  admin-key: { DEV_ADMIN_KEY }
 
 management:
   endpoints:
@@ -35,3 +37,12 @@ management:
       enabled: true
   server:
     port: { SERVER_PORT }
+
+cloud:
+  aws:
+    region:
+      static: { S3_REGION }
+    s3:
+      bucket: { S3_BUCKET }
+      folder: { S3_DEV_FOLDER }
+      cloudfrontPath: { S3_DEV_CLOUDFRONT_PATH }

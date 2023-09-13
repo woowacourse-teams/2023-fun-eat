@@ -1,23 +1,22 @@
 import { Button } from '@fun-eat/design-system';
-import type { ForwardedRef } from 'react';
-import { forwardRef, useState } from 'react';
+import type { ForwardedRef, MouseEventHandler } from 'react';
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 interface TabMenuProps {
-  tabMenus: string[];
+  tabMenus: readonly string[];
+  selectedTabMenu: string;
+  handleTabMenuSelect: MouseEventHandler<HTMLButtonElement>;
 }
 
-const TabMenu = ({ tabMenus }: TabMenuProps, ref: ForwardedRef<HTMLUListElement>) => {
-  const [selectedTab, setSelectedTab] = useState(0);
-
-  const selectTabMenu = (selectedIndex: number) => {
-    setSelectedTab(selectedIndex);
-  };
-
+const TabMenu = (
+  { tabMenus, selectedTabMenu, handleTabMenuSelect }: TabMenuProps,
+  ref: ForwardedRef<HTMLUListElement>
+) => {
   return (
     <TabMenuContainer ref={ref}>
-      {tabMenus.map((menu, index) => {
-        const isSelected = selectedTab === index;
+      {tabMenus.map((menu) => {
+        const isSelected = selectedTabMenu === menu;
         return (
           <TabMenuItem key={menu} isSelected={isSelected}>
             <TabMenuButton
@@ -27,7 +26,8 @@ const TabMenu = ({ tabMenus }: TabMenuProps, ref: ForwardedRef<HTMLUListElement>
               textColor={isSelected ? 'default' : 'disabled'}
               weight={isSelected ? 'bold' : 'regular'}
               variant="transparent"
-              onClick={() => selectTabMenu(index)}
+              value={menu}
+              onClick={handleTabMenuSelect}
             >
               {menu}
             </TabMenuButton>

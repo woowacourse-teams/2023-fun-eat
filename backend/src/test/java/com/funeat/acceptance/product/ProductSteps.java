@@ -34,4 +34,35 @@ public class ProductSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 상품_자동_완성_검색_요청(final String query, final int page) {
+        return given()
+                .queryParam("query", query)
+                .queryParam("page", page)
+                .when()
+                .get("/api/search/products")
+                .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 상품_검색_결과_조회_요청(final String query, final int page) {
+        return given()
+                .queryParam("query", query)
+                .queryParam("page", page)
+                .when()
+                .get("/api/search/products/results")
+                .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 상품_레시피_목록_요청(final Long productId, final String sortType,
+                                                             final String sortOrderType, final int page) {
+        return given()
+                .queryParam("sort", sortType + "," + sortOrderType)
+                .queryParam("page", page)
+                .when()
+                .get("/api/products/{productId}/recipes", productId)
+                .then()
+                .extract();
+    }
 }

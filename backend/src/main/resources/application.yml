@@ -11,10 +11,12 @@ springdoc:
     enabled: true
     tags-sorter: alpha
 
-kakao:
-  rest-api-key: { REST_API_KEY }
-  redirect-uri: { REDIRECT_URI }
-
 logging:
   file:
     path: { LOG_DIR }
+
+server:
+  servlet:
+    session:
+      cookie:
+        name: FUNEAT

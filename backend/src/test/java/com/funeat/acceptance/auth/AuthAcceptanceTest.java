@@ -8,6 +8,7 @@ import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_리
 import static com.funeat.acceptance.common.CommonSteps.REDIRECT_URL을_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.리다이렉션_영구_이동;
+import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,8 +19,9 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuthAcceptanceTest extends AcceptanceTest {
@@ -58,7 +60,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            헤더에_리다이렉트가_존재하는지_검증한다(response, "/profile");
+            헤더에_리다이렉트가_존재하는지_검증한다(response, "/members");
         }
 
         @Test
@@ -86,25 +88,28 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         void 로그아웃을_하다() {
             // given
             final var loginCookie = 로그인_쿠키를_얻는다();
+            final var expected = "/";
 
             // when
             final var response = 로그아웃_요청(loginCookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
+            STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);
+            REDIRECT_URL을_검증한다(response, expected);
         }
     }
 
     @Nested
     class logout_실패_테스트 {
 
-        @Test
-        void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생해야하는데_통과하고_있다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 쿠키가_존재하지_않을_때_로그아웃을_하면_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 로그아웃_요청(null);
+            final var response = 로그아웃_요청(cookie);
 
             // then
-            STATUS_CODE를_검증한다(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            STATUS_CODE를_검증한다(response, 인증되지_않음);
         }
     }
 

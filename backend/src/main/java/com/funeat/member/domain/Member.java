@@ -1,14 +1,19 @@
 package com.funeat.member.domain;
 
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_UPDATE_ERROR;
+
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
+import com.funeat.member.exception.MemberException.MemberUpdateException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class Member {
@@ -63,7 +68,17 @@ public class Member {
     }
 
     public void modifyProfile(final String nickname, final String profileImage) {
+        if (!StringUtils.hasText(nickname) || Objects.isNull(profileImage)) {
+            throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
+        }
         this.nickname = nickname;
         this.profileImage = profileImage;
+    }
+
+    public void modifyNickname(final String nickname) {
+        if (!StringUtils.hasText(nickname)) {
+            throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
+        }
+        this.nickname = nickname;
     }
 }

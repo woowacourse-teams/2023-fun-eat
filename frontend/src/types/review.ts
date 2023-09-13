@@ -1,4 +1,4 @@
-import type { Tag, TagNameOption } from './common';
+import type { Tag, TagVariants } from './common';
 
 export interface Review {
   id: number;
@@ -15,7 +15,7 @@ export interface Review {
 }
 
 export interface ReviewTag {
-  tagType: TagNameOption;
+  tagType: TagVariants;
   tags: Tag[];
 }
 
@@ -27,11 +27,6 @@ export interface ReviewRequest {
 }
 
 export type ReviewRequestKey = keyof ReviewRequest;
-
-export interface ReviewPostRequestBody extends FormData {
-  image: File;
-  reviewRequest: ReviewRequest;
-}
 
 export interface ReviewFavoriteRequestBody {
   favorite: boolean;

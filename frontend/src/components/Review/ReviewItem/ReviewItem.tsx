@@ -3,17 +3,15 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
-import { useDebounce } from '@/hooks/common';
+import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
-import { getRelativeDate } from '@/utils/relativeDate';
+import { getRelativeDate } from '@/utils/date';
 
 interface ReviewItemProps {
   productId: number;
   review: Review;
 }
-
-const srcPath = process.env.NODE_ENV === 'development' ? '' : '/images/';
 
 const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
@@ -32,14 +30,19 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           setIsFavorite((prev) => !prev);
           setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
         },
-        onError: () => {
+        onError: (error) => {
+          if (error instanceof Error) {
+            alert(error.message);
+            return;
+          }
+
           alert('리뷰 좋아요를 다시 시도해주세요.');
         },
       }
     );
   };
 
-  const [debouncedToggleFavorite] = useDebounce(handleToggleFavorite, 200);
+  const [debouncedToggleFavorite] = useTimeout(handleToggleFavorite, 200);
 
   return (
     <ReviewItemContainer>
@@ -70,9 +73,9 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={srcPath + image} height={150} alt={`${userName}의 리뷰`} />}
+      {image && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
-      <Text css="white-space: pre-wrap">{content}</Text>
+      <ReviewContent>{content}</ReviewContent>
       <FavoriteButton
         type="button"
         variant="transparent"
@@ -98,8 +101,8 @@ const ReviewItemContainer = styled.div`
 
 const ReviewerWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ReviewerInfoWrapper = styled.div`
@@ -113,8 +116,8 @@ const RebuyBadge = styled(Badge)`
 `;
 
 const ReviewerImage = styled.img`
-  border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;
 
 const RatingIconWrapper = styled.div`
@@ -131,9 +134,13 @@ const ReviewImage = styled.img`
   align-self: center;
 `;
 
+const ReviewContent = styled(Text)`
+  white-space: pre-wrap;
+`;
+
 const FavoriteButton = styled(Button)`
   display: flex;
   align-items: center;
-  column-gap: 8px;
   padding: 0;
+  column-gap: 8px;
 `;

@@ -6,8 +6,10 @@ import com.funeat.product.domain.Product;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,11 +35,11 @@ public class Review {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -84,6 +86,10 @@ public class Review {
 
     public void minusFavoriteCount() {
         this.favoriteCount--;
+    }
+
+    public boolean isEqualFavoriteCount(final Long anotherFavoriteCount) {
+        return Objects.equals(this.favoriteCount, anotherFavoriteCount);
     }
 
     public Long getId() {

@@ -1,4 +1,4 @@
-import { Button, Text, theme } from '@fun-eat/design-system';
+import { Text, theme } from '@fun-eat/design-system';
 import type { ComponentPropsWithRef, ForwardedRef, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
@@ -31,7 +31,7 @@ const Input = forwardRef(
       <>
         <InputContainer customWidth={customWidth}>
           <CustomInput ref={ref} isError={isError} {...props} />
-          {rightIcon && <IconWrapper variant="transparent">{rightIcon}</IconWrapper>}
+          {rightIcon && <IconWrapper>{rightIcon}</IconWrapper>}
         </InputContainer>
         {isError && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </>
@@ -61,25 +61,32 @@ const CustomInput = styled.input<CustomInputStyleProps>`
   border-radius: 5px;
 
   &:focus {
-    outline: none;
     border: 2px solid ${({ isError }) => (isError ? theme.colors.error : theme.borderColors.strong)};
+    outline: none;
+  }
+
+  &:disabled {
+    border: 1px solid ${({ theme }) => theme.borderColors.disabled};
+    background: ${({ theme }) => theme.colors.gray1};
   }
 
   &::placeholder {
-    font-size: ${theme.fontSizes.sm};
     color: ${theme.textColors.disabled};
+    font-size: ${theme.fontSizes.sm};
   }
 `;
 
-const IconWrapper = styled(Button)`
+const IconWrapper = styled.div`
   position: absolute;
   top: 0;
   right: 0;
+  display: flex;
+  align-items: center;
   height: 100%;
   margin-right: 8px;
 `;
 
 const ErrorMessage = styled(Text)`
-  font-size: ${theme.fontSizes.xs};
   color: ${theme.colors.error};
+  font-size: ${theme.fontSizes.xs};
 `;

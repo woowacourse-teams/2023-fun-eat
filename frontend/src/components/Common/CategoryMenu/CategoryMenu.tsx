@@ -11,14 +11,14 @@ interface CategoryMenuProps {
 }
 
 const CategoryMenu = ({ menuVariant }: CategoryMenuProps) => {
-  const { data: categoryList } = useCategoryQuery(menuVariant);
+  const { data: categories } = useCategoryQuery(menuVariant);
   const { categoryIds, selectCategory } = useCategoryContext();
 
   const currentCategoryId = categoryIds[menuVariant];
 
   return (
     <CategoryMenuContainer>
-      {categoryList?.map((menu) => {
+      {categories.map((menu) => {
         const isSelected = menu.id === currentCategoryId;
         return (
           <li key={menu.id}>

@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { loginApi } from '@/apis';
-import { useMember } from '@/hooks/auth';
+import { PATH } from '@/constants/path';
+import { useMemberQuery } from '@/hooks/queries/members';
 
 const AuthPage = () => {
   const { authProvider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
-  const getMember = useMember();
 
+  const { data: member, refetch: refetchMember } = useMemberQuery();
   const [location, setLocation] = useState('');
+  const navigate = useNavigate();
+
+  if (member) {
+    return <Navigate to={PATH.HOME} replace />;
+  }
 
   const getSessionId = async () => {
     const response = await loginApi.get({
@@ -45,7 +51,8 @@ const AuthPage = () => {
       return;
     }
 
-    getMember(location);
+    refetchMember();
+    navigate(location, { replace: true });
   }, [location]);
 
   return <></>;
