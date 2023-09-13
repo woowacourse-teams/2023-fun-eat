@@ -7,13 +7,15 @@ import ReactGA from 'react-ga4';
 import { RouterProvider } from 'react-router-dom';
 
 import { SvgSprite } from './components/Common';
+import { ENVIRONMENT } from './constants';
 import router from './router';
 import GlobalStyle from './styles';
 
 const initializeReactGA = () => {
-  if (process.env.NODE_ENV === 'production') {
-    ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID as string);
-  }
+  if (process.env.NODE_ENV === 'development') return;
+  if (ENVIRONMENT === 'dev') return;
+
+  ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID as string);
 };
 initializeReactGA();
 
