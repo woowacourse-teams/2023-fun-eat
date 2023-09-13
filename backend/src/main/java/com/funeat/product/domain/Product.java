@@ -117,4 +117,8 @@ public class Product {
     public Long getReviewCount() {
         return reviewCount;
     }
+
+    public void addReviewCount() {
+        reviewCount++;
+    }
 }

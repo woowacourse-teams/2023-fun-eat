@@ -94,6 +94,7 @@ public class ReviewService {
         final Long countByProduct = reviewRepository.countByProduct(findProduct);
 
         findProduct.updateAverageRating(savedReview.getRating(), countByProduct);
+        findProduct.addReviewCount();
         reviewTagRepository.saveAll(reviewTags);
     }
 
