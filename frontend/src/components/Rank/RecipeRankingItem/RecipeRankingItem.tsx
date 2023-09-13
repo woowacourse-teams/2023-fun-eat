@@ -3,9 +3,7 @@ import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { RecipeRanking } from '@/types/ranking';
-import { isChangedImage } from '@/utils/image';
 
 interface RecipeRankingItemProps {
   rank: number;
@@ -29,7 +27,7 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
           <Text weight="bold">{rank}</Text>
           <Spacing direction="horizontal" size={12} />
           {image !== null ? (
-            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`${rank}위 꿀조합`} width={60} height={60} />
+            <RecipeImage src={image} alt={`${rank}위 꿀조합`} width={60} height={60} />
           ) : (
             <RecipePreviewImage width={60} height={60} />
           )}
@@ -45,12 +43,7 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
           </TitleFavoriteWrapper>
         </RankingRecipeWrapper>
         <AuthorWrapper>
-          <AuthorImage
-            src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
-            alt={`${nickname} 님의 프로필`}
-            width={40}
-            height={40}
-          />
+          <AuthorImage src={profileImage} alt={`${nickname} 님의 프로필`} width={40} height={40} />
           <Text size="sm" color={theme.textColors.sub}>
             {nickname} 님
           </Text>
@@ -63,9 +56,9 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
 export default RecipeRankingItem;
 
 const RecipeRankingItemContainer = styled.div`
-  max-width: 560px;
   width: calc(100% - 50px);
   height: 72px;
+  max-width: 560px;
   margin: 12px 0;
   padding: 0 24px;
 `;
@@ -94,15 +87,15 @@ const TitleFavoriteWrapper = styled.div`
 
 const FavoriteWrapper = styled.div`
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
 `;
 
 const AuthorWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-around;
+  align-items: center;
   height: 100%;
 `;
 

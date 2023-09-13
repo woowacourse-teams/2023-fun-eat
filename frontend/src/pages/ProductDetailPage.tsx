@@ -2,6 +2,7 @@ import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/desig
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import type { MouseEventHandler } from 'react';
 import { useState, useRef, Suspense } from 'react';
+import ReactGA from 'react-ga4';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -66,6 +67,12 @@ const ProductDetailPage = () => {
   const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     setSelectedTabMenu(event.currentTarget.value);
     selectSortOption(initialSortOption);
+
+    ReactGA.event({
+      category: '버튼',
+      action: '카테고리 이동 클릭 액션',
+      label: 'category',
+    });
   };
 
   return (
@@ -144,8 +151,8 @@ export default ProductDetailPage;
 
 const SortButtonWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
   margin: 20px 0;
 `;
 
@@ -168,11 +175,11 @@ const LoginLink = styled(Link)`
 
 const ReviewRegisterButtonWrapper = styled.div`
   position: fixed;
-  bottom: 0;
   left: 50%;
+  bottom: 0;
   width: calc(100% - 40px);
-  max-width: 560px;
   height: 80px;
+  max-width: 560px;
   background: ${({ theme }) => theme.backgroundColors.default};
   transform: translateX(-50%);
 `;

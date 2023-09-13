@@ -99,8 +99,8 @@ export default HomePage;
 
 const ProductListRouteLink = styled(Link)`
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 100%;
   padding: 12px 0;
   text-align: center;

@@ -121,8 +121,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     @Nested
     class writeRecipe_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_레시피_작성시_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인_하지않은_사용자가_레시피_작성시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
@@ -138,7 +139,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var images = 여러_사진_요청(3);
 
             // when
-            final var response = 레시피_생성_요청(request, images, null);
+            final var response = 레시피_생성_요청(request, images, cookie);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
@@ -303,7 +304,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var images = 여러_사진_요청(3);
             final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
 
-            final var recipe = recipeRepository.findById(recipeId).get();
+            final var recipe = recipeRepository.findRecipeWithMemberById(recipeId);
             final var findImages = recipeImageRepository.findByRecipe(recipe);
 
             final var expected = RecipeDetailResponse.toResponse(recipe, findImages, products, totalPrice, false);
@@ -321,8 +322,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     @Nested
     class getRecipeDetail_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_레시피_상세_조회시_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인_하지않은_사용자가_레시피_상세_조회시_예외가_발생한다(final String cookie) {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
@@ -340,7 +342,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
 
             // when
-            final var response = 레시피_상세_정보_요청(null, recipeId);
+            final var response = 레시피_상세_정보_요청(cookie, recipeId);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
@@ -436,11 +438,12 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     @Nested
     class likeRecipe_실패_테스트 {
 
-        @Test
-        void 로그인_하지않은_사용자가_레시피에_좋아요를_할때_예외가_발생한다() {
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인_하지않은_사용자가_레시피에_좋아요를_할때_예외가_발생한다(final String cookie) {
             // given
             final var member = 멤버_멤버1_생성();
-            final var memberId = 단일_멤버_저장(member);
+            단일_멤버_저장(member);
 
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
@@ -460,7 +463,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var favoriteRequest = 레시피좋아요요청_생성(true);
 
             // when
-            final var response = 레시피_좋아요_요청(null, recipeId, favoriteRequest);
+            final var response = 레시피_좋아요_요청(cookie, recipeId, favoriteRequest);
 
             // then
             final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();

@@ -28,11 +28,6 @@ export interface ReviewRequest {
 
 export type ReviewRequestKey = keyof ReviewRequest;
 
-export interface ReviewPostRequestBody extends FormData {
-  image: File;
-  reviewRequest: ReviewRequest;
-}
-
 export interface ReviewFavoriteRequestBody {
   favorite: boolean;
 }

@@ -14,3 +14,9 @@ springdoc:
 logging:
   file:
     path: { LOG_DIR }
+
+server:
+  servlet:
+    session:
+      cookie:
+        name: FUNEAT

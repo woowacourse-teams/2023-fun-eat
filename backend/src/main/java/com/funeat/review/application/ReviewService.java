@@ -5,7 +5,7 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
-import com.funeat.common.ImageService;
+import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
@@ -20,19 +20,19 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
+import com.funeat.review.dto.RankingReviewDto;
+import com.funeat.review.dto.RankingReviewsResponse;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewFavoriteRequest;
+import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.dto.SortingReviewsResponse;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
-import com.funeat.review.presentation.dto.RankingReviewDto;
-import com.funeat.review.presentation.dto.RankingReviewsResponse;
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
-import com.funeat.review.presentation.dto.SortingReviewDto;
-import com.funeat.review.presentation.dto.SortingReviewsResponse;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -55,19 +55,19 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
-    private final ImageService imageService;
+    private final ImageUploader imageUploader;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
-                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageService imageService) {
+                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageUploader imageUploader) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
-        this.imageService = imageService;
+        this.imageUploader = imageUploader;
     }
 
     @Transactional
@@ -78,18 +78,12 @@ public class ReviewService {
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Review savedReview;
-        if (Objects.isNull(image)) {
-            savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
-                            reviewRequest.getRebuy()));
-        } else {
-            final String newImageName = imageService.getRandomImageName(image);
-            savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, newImageName, reviewRequest.getRating(),
-                            reviewRequest.getContent(), reviewRequest.getRebuy()));
-            imageService.upload(image, newImageName);
-        }
+        final String imageUrl = Optional.ofNullable(image)
+                .map(imageUploader::upload)
+                .orElse("");
+        final Review savedReview = reviewRepository.save(
+                new Review(findMember, findProduct, imageUrl, reviewRequest.getRating(), reviewRequest.getContent(),
+                        reviewRequest.getRebuy()));
 
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
 

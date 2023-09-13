@@ -26,8 +26,8 @@ export default NavigableSectionTitle;
 
 const NavigableSectionTitleContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ArrowIcon = styled(SvgIcon)`

@@ -1,4 +1,4 @@
-package com.funeat.review.presentation.dto;
+package com.funeat.review.dto;
 
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;

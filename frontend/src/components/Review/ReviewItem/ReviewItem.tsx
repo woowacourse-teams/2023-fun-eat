@@ -3,12 +3,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import { useTimeout } from '@/hooks/common';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/date';
-import { isChangedImage } from '@/utils/image';
 
 interface ReviewItemProps {
   productId: number;
@@ -50,12 +48,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
     <ReviewItemContainer>
       <ReviewerWrapper>
         <ReviewerInfoWrapper>
-          <ReviewerImage
-            src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
-            width={40}
-            height={40}
-            alt={`${userName}의 프로필`}
-          />
+          <ReviewerImage src={profileImage} width={40} height={40} alt={`${userName}의 프로필`} />
           <div>
             <Text weight="bold">{userName}</Text>
             <RatingIconWrapper>
@@ -80,7 +73,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={IMAGE_SRC_PATH + image} height={150} alt={`${userName}의 리뷰`} />}
+      {image && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <ReviewContent>{content}</ReviewContent>
       <FavoriteButton
@@ -108,8 +101,8 @@ const ReviewItemContainer = styled.div`
 
 const ReviewerWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ReviewerInfoWrapper = styled.div`
@@ -123,8 +116,8 @@ const RebuyBadge = styled(Badge)`
 `;
 
 const ReviewerImage = styled.img`
-  border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;
 
 const RatingIconWrapper = styled.div`
@@ -148,6 +141,6 @@ const ReviewContent = styled(Text)`
 const FavoriteButton = styled(Button)`
   display: flex;
   align-items: center;
-  column-gap: 8px;
   padding: 0;
+  column-gap: 8px;
 `;

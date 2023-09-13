@@ -2,12 +2,11 @@ package com.funeat.review.presentation;
 
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
-import com.funeat.product.application.ProductService;
 import com.funeat.review.application.ReviewService;
-import com.funeat.review.presentation.dto.RankingReviewsResponse;
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
-import com.funeat.review.presentation.dto.SortingReviewsResponse;
+import com.funeat.review.dto.RankingReviewsResponse;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewFavoriteRequest;
+import com.funeat.review.dto.SortingReviewsResponse;
 import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReviewApiController implements ReviewController {
 
     private final ReviewService reviewService;
-    private final ProductService productService;
 
-    public ReviewApiController(final ReviewService reviewService, final ProductService productService) {
+    public ReviewApiController(final ReviewService reviewService) {
         this.reviewService = reviewService;
-        this.productService = productService;
     }
 
     @PostMapping(value = "/api/products/{productId}/reviews", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,

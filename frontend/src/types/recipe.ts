@@ -7,11 +7,6 @@ export interface RecipeRequest {
   content: string;
 }
 
-export interface RecipePostRequestBody extends FormData {
-  images: File[];
-  recipeRequest: RecipeRequest;
-}
-
 export type RecipeRequestKey = keyof RecipeRequest;
 
 export interface RecipeDetail extends Recipe {

@@ -38,8 +38,8 @@ import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
+import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
-import com.funeat.review.presentation.dto.SortingReviewDto;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,7 +107,7 @@ class ReviewServiceTest extends ServiceTest {
 
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
-            final var expected = new Review(member, product, null, 4L, "test", true);
+            final var expected = new Review(member, product, "", 4L, "test", true);
 
             // when
             reviewService.create(productId, memberId, null, request);

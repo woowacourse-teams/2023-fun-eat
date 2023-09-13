@@ -15,8 +15,8 @@ const HeaderOnlyLayout = ({ children }: PropsWithChildren) => {
 export default HeaderOnlyLayout;
 
 const HeaderOnlyLayoutContainer = styled.div`
-  max-width: 600px;
   height: 100%;
+  max-width: 600px;
   margin: 0 auto;
 `;
 

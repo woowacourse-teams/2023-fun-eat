@@ -1,4 +1,4 @@
-package com.funeat.review.presentation.dto;
+package com.funeat.review.dto;
 
 import com.funeat.common.dto.PageDto;
 import java.util.List;

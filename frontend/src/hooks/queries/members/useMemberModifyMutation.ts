@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { memberApi } from '@/apis';
 
 const putModifyMember = (body: FormData) => {
-  return memberApi.put({ credentials: true }, body);
+  return memberApi.putData({ credentials: true }, body);
 };
 
 const useMemberModifyMutation = () => {

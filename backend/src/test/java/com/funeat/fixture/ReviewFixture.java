@@ -3,8 +3,8 @@ package com.funeat.fixture;
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
-import com.funeat.review.presentation.dto.ReviewCreateRequest;
-import com.funeat.review.presentation.dto.ReviewFavoriteRequest;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewFavoriteRequest;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")

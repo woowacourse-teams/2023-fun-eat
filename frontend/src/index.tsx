@@ -3,11 +3,21 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import ReactGA from 'react-ga4';
 import { RouterProvider } from 'react-router-dom';
 
 import { SvgSprite } from './components/Common';
+import { ENVIRONMENT } from './constants';
 import router from './router';
 import GlobalStyle from './styles';
+
+const initializeReactGA = () => {
+  if (process.env.NODE_ENV === 'development') return;
+  if (ENVIRONMENT === 'dev') return;
+
+  ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID as string);
+};
+initializeReactGA();
 
 const main = async () => {
   if (process.env.NODE_ENV === 'development') {

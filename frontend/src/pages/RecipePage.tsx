@@ -102,11 +102,11 @@ const SortButtonWrapper = styled.div`
 
 const RecipeRegisterButtonWrapper = styled.div`
   position: fixed;
-  bottom: 60px;
   left: 20px;
+  bottom: 60px;
   width: calc(100% - 40px);
-  max-width: 560px;
   height: 80px;
+  max-width: 560px;
   background: ${({ theme }) => theme.backgroundColors.default};
 
   @media screen and (min-width: 600px) {

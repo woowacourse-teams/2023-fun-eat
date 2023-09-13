@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class Member {
@@ -67,15 +68,15 @@ public class Member {
     }
 
     public void modifyProfile(final String nickname, final String profileImage) {
-        if (Objects.isNull(nickname) || Objects.isNull(profileImage)) {
+        if (!StringUtils.hasText(nickname) || Objects.isNull(profileImage)) {
             throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
         }
         this.nickname = nickname;
         this.profileImage = profileImage;
     }
 
-    public void modifyName(final String nickname) {
-        if (Objects.isNull(nickname)) {
+    public void modifyNickname(final String nickname) {
+        if (!StringUtils.hasText(nickname)) {
             throw new MemberUpdateException(MEMBER_UPDATE_ERROR);
         }
         this.nickname = nickname;

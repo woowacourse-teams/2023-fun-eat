@@ -16,6 +16,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
+    @Query("SELECT r FROM Recipe r "
+            + "JOIN FETCH r.member m")
+    Recipe findRecipeWithMemberById(final Long id);
+
     Page<Recipe> findRecipesByMember(final Member member, final Pageable pageable);
 
     @Query("SELECT DISTINCT r FROM Recipe r "
