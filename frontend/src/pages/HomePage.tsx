@@ -21,7 +21,8 @@ const HomePage = () => {
   return (
     <>
       <section>
-        <Link as={RouterLink} to={'https://www.naver.com'}>
+        {/* TODO: 추후 이벤트 페이지로 이동 */}
+        <Link as={RouterLink} to={''}>
           <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
         </Link>
       </section>
@@ -41,6 +42,7 @@ const HomePage = () => {
         <Heading as="h2" size="xl">
           🍯 꿀조합 랭킹
         </Heading>
+        <Spacing size={16} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <RecipeRankingList />
