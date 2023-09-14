@@ -44,5 +44,5 @@ const ImageWrapper = styled.div`
 const CategoryName = styled.p`
   margin-top: 10px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 0.8rem;
 `;
