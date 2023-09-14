@@ -16,6 +16,7 @@ import {
 } from '@/components/Common';
 import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
+import { PATH } from '@/constants/path';
 import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useSortOption } from '@/hooks/common';
 
@@ -41,12 +42,12 @@ const RecipePage = () => {
 
   return (
     <>
-      <Title size="xl" weight="bold">
-        {RECIPE_PAGE_TITLE}
-      </Title>
-      <SearchPageLink as={RouterLink} to="/search">
-        <SvgIcon variant="search" />
-      </SearchPageLink>
+      <TitleWrapper>
+        <Title>{RECIPE_PAGE_TITLE}</Title>
+        <Link as={RouterLink} to={`${PATH.SEARCH}/recipes`}>
+          <SvgIcon variant="search" />
+        </Link>
+      </TitleWrapper>
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
           <SortButtonWrapper>
@@ -84,14 +85,14 @@ const RecipePage = () => {
 
 export default RecipePage;
 
-const Title = styled(Heading)`
-  font-size: 24px;
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const SearchPageLink = styled(Link)`
-  position: absolute;
-  top: 24px;
-  right: 20px;
+const Title = styled(Heading)`
+  font-size: 24px;
 `;
 
 const SortButtonWrapper = styled.div`

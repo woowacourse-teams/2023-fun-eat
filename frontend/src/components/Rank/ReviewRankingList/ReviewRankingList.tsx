@@ -1,7 +1,10 @@
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ReviewRankingItem from '../ReviewRankingItem/ReviewRankingItem';
 
+import { PATH } from '@/constants/path';
 import { useReviewRankingQuery } from '@/hooks/queries/rank';
 import useDisplaySlice from '@/utils/displaySlice';
 
@@ -17,7 +20,13 @@ const ReviewRankingList = ({ isHomePage = false }: ReviewRankingListProps) => {
     <ReviewRankingListContainer>
       {reviewsToDisplay.map((reviewRanking) => (
         <li key={reviewRanking.reviewId}>
-          <ReviewRankingItem reviewRanking={reviewRanking} />
+          <Link
+            as={RouterLink}
+            to={`${PATH.PRODUCT_LIST}/${reviewRanking.categoryType}/${reviewRanking.productId}`}
+            block
+          >
+            <ReviewRankingItem reviewRanking={reviewRanking} />
+          </Link>
         </li>
       ))}
     </ReviewRankingListContainer>

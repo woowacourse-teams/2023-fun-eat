@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
-import { useIntersectionObserver } from '@/hooks/common';
-import { useCategoryContext } from '@/hooks/context';
+import { useIntersectionObserver, useScrollRestoration } from '@/hooks/common';
+import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import type { CategoryVariant, SortOption } from '@/types/common';
 
@@ -18,20 +18,24 @@ interface ProductListProps {
 
 const ProductList = ({ category, selectedOption }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const productListRef = useRef<HTMLDivElement>(null);
 
-  const { categoryIds } = useCategoryContext();
+  const { categoryIds } = useCategoryValueContext();
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(
     categoryIds[category],
     selectedOption?.value ?? 'reviewCount,desc'
   );
-  const productList = data.pages.flatMap((page) => page.products);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
+  useScrollRestoration(categoryIds[category], productListRef);
+
+  const productList = data.pages.flatMap((page) => page.products);
+
   return (
-    <>
-      <ProductListContainer>
+    <ProductListContainer ref={productListRef}>
+      <ProductListWrapper>
         {productList.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
@@ -39,14 +43,19 @@ const ProductList = ({ category, selectedOption }: ProductListProps) => {
             </Link>
           </li>
         ))}
-      </ProductListContainer>
+      </ProductListWrapper>
       <div ref={scrollRef} aria-hidden />
-    </>
+    </ProductListContainer>
   );
 };
 export default ProductList;
 
-const ProductListContainer = styled.ul`
+const ProductListContainer = styled.div`
+  height: calc(100% - 150px);
+  overflow-y: auto;
+`;
+
+const ProductListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
 

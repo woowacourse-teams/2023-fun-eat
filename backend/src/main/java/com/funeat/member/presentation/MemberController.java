@@ -26,7 +26,7 @@ public interface MemberController {
             description = "사용자 정보 조회 성공."
     )
     @GetMapping
-    ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal LoginInfo loginInfo);
+    ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo);
 
     @Operation(summary = "사용자 정보 수정", description = "사용자 닉네임과 프로필 사진을 수정한다.")
     @ApiResponse(
@@ -44,8 +44,8 @@ public interface MemberController {
             description = "사용자 리뷰 조회 성공."
     )
     @GetMapping
-    ResponseEntity<MemberReviewsResponse> getMemberReview(@AuthenticationPrincipal LoginInfo loginInfo,
-                                                          @PageableDefault Pageable pageable);
+    ResponseEntity<MemberReviewsResponse> getMemberReview(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                          @PageableDefault final Pageable pageable);
 
     @Operation(summary = "사용자 꿀조합 조회", description = "사용자가 작성한 꿀조합을 조회한다.")
     @ApiResponse(
@@ -53,6 +53,6 @@ public interface MemberController {
             description = "사용자 꿀조합 조회 성공."
     )
     @GetMapping
-    ResponseEntity<MemberRecipesResponse> getMemberRecipe(@AuthenticationPrincipal LoginInfo loginInfo,
-                                                          @PageableDefault Pageable pageable);
+    ResponseEntity<MemberRecipesResponse> getMemberRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                          @PageableDefault final Pageable pageable);
 }

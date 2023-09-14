@@ -73,6 +73,7 @@ const HomePage = () => {
           </Suspense>
         </ErrorBoundary>
       </section>
+      <Spacing size={36} />
       <ScrollButton />
     </>
   );

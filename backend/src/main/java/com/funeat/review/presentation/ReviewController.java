@@ -29,8 +29,10 @@ public interface ReviewController {
             description = "리뷰 작성 성공."
     )
     @PostMapping
-    ResponseEntity<Void> writeReview(@PathVariable Long productId, @AuthenticationPrincipal LoginInfo loginInfo,
-                                     @RequestPart MultipartFile image, @RequestPart ReviewCreateRequest reviewRequest);
+    ResponseEntity<Void> writeReview(@PathVariable final Long productId,
+                                     @AuthenticationPrincipal final LoginInfo loginInfo,
+                                     @RequestPart final MultipartFile image,
+                                     @RequestPart final ReviewCreateRequest reviewRequest);
 
     @Operation(summary = "리뷰 좋아요", description = "리뷰에 좋아요 또는 취소를 한다.")
     @ApiResponse(
@@ -38,8 +40,9 @@ public interface ReviewController {
             description = "리뷰 좋아요(취소) 성공."
     )
     @PatchMapping
-    ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId, @AuthenticationPrincipal LoginInfo loginInfo,
-                                          @RequestBody ReviewFavoriteRequest request);
+    ResponseEntity<Void> toggleLikeReview(@PathVariable final Long reviewId,
+                                          @AuthenticationPrincipal final LoginInfo loginInfo,
+                                          @RequestBody final ReviewFavoriteRequest request);
 
     @Operation(summary = "리뷰를 정렬후 조회", description = "리뷰를 정렬후 조회한다.")
     @ApiResponse(
@@ -47,9 +50,9 @@ public interface ReviewController {
             description = "리뷰 정렬후 조회 성공."
     )
     @GetMapping
-    ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal LoginInfo loginInfo,
-                                                             @PathVariable Long productId,
-                                                             @PageableDefault Pageable pageable);
+    ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                             @PathVariable final Long productId,
+                                                             @PageableDefault final Pageable pageable);
 
     @Operation(summary = "리뷰 랭킹 Top3 조회", description = "리뷰 랭킹 Top3 조회한다.")
     @ApiResponse(

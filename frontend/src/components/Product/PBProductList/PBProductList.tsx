@@ -6,11 +6,11 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 
 import { MoreButton } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 
 const PBProductList = () => {
-  const { categoryIds } = useCategoryContext();
+  const { categoryIds } = useCategoryValueContext();
 
   const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
   const pbProducts = pbProductListResponse.pages.flatMap((page) => page.products);

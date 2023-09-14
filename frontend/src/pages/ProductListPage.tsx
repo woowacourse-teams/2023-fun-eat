@@ -8,13 +8,12 @@ import {
   CategoryTab,
   SortButton,
   SortOptionList,
-  Title,
   ScrollButton,
   Loading,
   ErrorBoundary,
   ErrorComponent,
 } from '@/components/Common';
-import { ProductList } from '@/components/Product';
+import { ProductTitle, ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useSortOption } from '@/hooks/common';
@@ -23,25 +22,21 @@ import { isCategoryVariant } from '@/types/common';
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
 const ProductListPage = () => {
+  const { category } = useParams();
+
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
   const { reset } = useQueryErrorResetBoundary();
 
-  const { category } = useParams();
-
-  if (!category) {
-    return null;
-  }
-
-  if (!isCategoryVariant(category)) {
+  if (!category || !isCategoryVariant(category)) {
     return null;
   }
 
   return (
     <>
-      <section>
-        <Title
-          headingTitle={PAGE_TITLE[category]}
+      <ProductListSection>
+        <ProductTitle
+          content={PAGE_TITLE[category]}
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={30} />
@@ -56,7 +51,7 @@ const ProductListPage = () => {
             <ProductList category={category} selectedOption={selectedOption} />
           </Suspense>
         </ErrorBoundary>
-      </section>
+      </ProductListSection>
       <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
@@ -71,8 +66,12 @@ const ProductListPage = () => {
 };
 export default ProductListPage;
 
+const ProductListSection = styled.section`
+  height: 100%;
+`;
+
 const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 20px 0;
+  margin-top: 20px;
 `;
