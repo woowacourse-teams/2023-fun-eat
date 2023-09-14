@@ -4,6 +4,7 @@ import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
 
-    private Long reviewCount = 0L;
+    private AtomicLong reviewCount = new AtomicLong();
 
     protected Product() {
     }
@@ -55,6 +56,7 @@ public class Product {
         this.image = image;
         this.content = content;
         this.category = category;
+        reviewCount.set(0L);
     }
 
     public Product(final String name, final Long price, final String image, final String content,
@@ -65,6 +67,7 @@ public class Product {
         this.content = content;
         this.averageRating = averageRating;
         this.category = category;
+        reviewCount.set(0L);
     }
 
     public void updateAverageRating(final Long rating, final Long count) {
@@ -115,10 +118,10 @@ public class Product {
     }
 
     public Long getReviewCount() {
-        return reviewCount;
+        return reviewCount.get();
     }
 
     public void addReviewCount() {
-        reviewCount++;
+        reviewCount.incrementAndGet();
     }
 }
