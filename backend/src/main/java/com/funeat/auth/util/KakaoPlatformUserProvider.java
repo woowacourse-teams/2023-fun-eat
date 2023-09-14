@@ -118,10 +118,10 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
 
     @Override
     public String getRedirectURI() {
-        final StringJoiner joiner = new StringJoiner("&");
-        joiner.add("response_type=code");
-        joiner.add("client_id=" + kakaoRestApiKey);
-        joiner.add("redirect_uri=" + redirectUri);
+        final StringJoiner joiner = new StringJoiner("&")
+                .add("response_type=code")
+                .add("client_id=" + kakaoRestApiKey)
+                .add("redirect_uri=" + redirectUri);
 
         return AUTHORIZATION_BASE_URL + OAUTH_URI + "?" + joiner;
     }
