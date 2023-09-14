@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 
-import type { Category } from '@/types/common';
-
 interface CategoryItemProps {
-  category: Category;
+  name: string;
+  image: string;
 }
 
-const CategoryItem = ({ category }: CategoryItemProps) => {
-  const { name, image } = category;
-
+const CategoryItem = ({ name, image }: CategoryItemProps) => {
   return (
     <CategoryItemContainer>
       <ImageWrapper>
@@ -34,7 +31,13 @@ const ImageWrapper = styled.div`
   width: 70px;
   height: 70px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) => theme.colors.gray4};
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
 `;
 
 const CategoryName = styled.p`

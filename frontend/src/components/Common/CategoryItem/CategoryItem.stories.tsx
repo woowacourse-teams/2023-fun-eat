@@ -6,11 +6,8 @@ const meta: Meta<typeof CategoryItem> = {
   title: 'common/CategoryItem',
   component: CategoryItem,
   args: {
-    category: {
-      id: 1,
-      name: '즉석 식품',
-      image: 'https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg',
-    },
+    name: '즉석 식품',
+    image: 'https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg',
   },
 };
 

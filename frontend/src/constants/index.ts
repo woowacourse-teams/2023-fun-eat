@@ -71,11 +71,11 @@ export const ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod'
 
 export const IMAGE_URL = process.env.CLOUDFRONT_URL;
 
-export const CATEGORY_NAME = ['간편식사', '과자류', '아이스크림', '식품', '음료'] as const;
+export const MENU_NAME = ['간편식사', '과자류', '아이스크림', '식품', '음료'] as const;
 
 export const STORE_NAMES = ['CU', 'GS25', '이마트24', '세븐일레븐'] as const;
 
-export const CATEGORY_IMAGES = [
+export const MENU_IMAGES = [
   `${IMAGE_URL}/${ENVIRONMENT}/food.jpeg`,
   `${IMAGE_URL}/${ENVIRONMENT}/snack.jpeg`,
   `${IMAGE_URL}/${ENVIRONMENT}/icecream.jpeg`,
@@ -83,4 +83,9 @@ export const CATEGORY_IMAGES = [
   `${IMAGE_URL}/${ENVIRONMENT}/tea.jpeg`,
 ];
 
-export const STORE_IMAGES = [];
+export const STORE_IMAGES = [
+  `${IMAGE_URL}/${ENVIRONMENT}/cu.jpg`,
+  `${IMAGE_URL}/${ENVIRONMENT}/gs.png`,
+  `${IMAGE_URL}/${ENVIRONMENT}/emart24.png`,
+  `${IMAGE_URL}/${ENVIRONMENT}/seven.png`,
+];

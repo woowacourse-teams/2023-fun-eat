@@ -20,3 +20,5 @@ export { default as MoreButton } from './MoreButton/MoreButton';
 export { default as NavigableSectionTitle } from './NavigableSectionTitle/NavigableSectionTitle';
 export { default as Carousel } from './Carousel/Carousel';
 export { default as RegisterButton } from './RegisterButton/RegisterButton';
+export { default as CategoryItem } from './CategoryItem/CategoryItem';
+export { default as CategoryList } from './CategoryList/CategoryList';
