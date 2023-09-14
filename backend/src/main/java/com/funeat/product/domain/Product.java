@@ -44,7 +44,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
 
-    private AtomicLong reviewCount = new AtomicLong();
+    private AtomicLong reviewCount = new AtomicLong(0);
 
     protected Product() {
     }
@@ -56,7 +56,6 @@ public class Product {
         this.image = image;
         this.content = content;
         this.category = category;
-        reviewCount.set(0L);
     }
 
     public Product(final String name, final Long price, final String image, final String content,
@@ -67,7 +66,6 @@ public class Product {
         this.content = content;
         this.averageRating = averageRating;
         this.category = category;
-        reviewCount.set(0L);
     }
 
     public void updateAverageRating(final Long rating, final Long count) {
