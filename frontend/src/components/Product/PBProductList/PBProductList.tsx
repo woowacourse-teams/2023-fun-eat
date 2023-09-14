@@ -6,7 +6,7 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 
 import { MoreButton } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import displaySlice from '@/utils/displaySlice';
 
@@ -15,7 +15,7 @@ interface PBProductListProps {
 }
 
 const PBProductList = ({ isHomePage }: PBProductListProps) => {
-  const { categoryIds } = useCategoryContext();
+  const { categoryIds } = useCategoryValueContext();
 
   const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
   const pbProducts = pbProductListResponse.pages.flatMap((page) => page.products);

@@ -10,6 +10,7 @@ export interface ReviewRanking {
   content: string;
   rating: number;
   favoriteCount: number;
+  categoryType: string;
 }
 
 export interface RecipeRanking {

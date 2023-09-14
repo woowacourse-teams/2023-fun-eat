@@ -4,19 +4,19 @@ import styled from 'styled-components';
 import Header from '../Common/Header/Header';
 import NavigationBar from '../Common/NavigationBar/NavigationBar';
 
-const DefaultLayout = ({ children }: PropsWithChildren) => {
+const SimpleHeaderLayout = ({ children }: PropsWithChildren) => {
   return (
-    <DefaultLayoutContainer>
-      <Header />
+    <SimpleHeaderLayoutContainer>
+      <Header hasSearch={false} />
       <MainWrapper id="main">{children}</MainWrapper>
       <NavigationBar />
-    </DefaultLayoutContainer>
+    </SimpleHeaderLayoutContainer>
   );
 };
 
-export default DefaultLayout;
+export default SimpleHeaderLayout;
 
-const DefaultLayoutContainer = styled.div`
+const SimpleHeaderLayoutContainer = styled.div`
   height: 100%;
   max-width: 600px;
   margin: 0 auto;
@@ -25,7 +25,7 @@ const DefaultLayoutContainer = styled.div`
 const MainWrapper = styled.main`
   position: relative;
   height: calc(100% - 120px);
-  padding: 0 20px;
+  padding: 20px;
   overflow-x: hidden;
   overflow-y: auto;
 `;

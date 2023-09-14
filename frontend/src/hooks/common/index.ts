@@ -9,3 +9,4 @@ export { default as useFormData } from './useFormData';
 export { default as useTimeout } from './useTimeout';
 export { default as useRouteChangeTracker } from './useRouteChangeTracker';
 export { default as useTabMenu } from './useTabMenu';
+export { default as useScrollRestoration } from './useScrollRestoration';
