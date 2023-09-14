@@ -123,7 +123,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자_이미지를_수정하다() {
             // given
-            final var member = new Member("member1", "testImage.png", "1");
+            final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
