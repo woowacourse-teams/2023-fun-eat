@@ -78,11 +78,10 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         @Test
         void 로그아웃을_하다() {
             // given
-            final var loginCookie = 로그인_쿠키를_얻는다(1L);
             final var expected = "/";
 
             // when
-            final var response = 로그아웃_요청(loginCookie);
+            final var response = 로그아웃_요청(로그인_쿠키를_얻는다(1L));
 
             // then
             STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);
