@@ -31,14 +31,15 @@ const TitleContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const TitleLink = styled(Link)`
   display: flex;
   gap: 20px;
-  margin-left: 40%;
+  align-items: center;
+  margin-left: 36%;
 `;
 
 const HeadingTitle = styled(Heading)`
