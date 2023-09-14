@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { ScrollButton, Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { IMAGE_URL } from '@/constants';
-import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
 
 const HomePage = () => {
@@ -22,7 +21,9 @@ const HomePage = () => {
   return (
     <>
       <section>
-        <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
+        <Link as={RouterLink} to={'https://www.naver.com'}>
+          <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
+        </Link>
       </section>
       <Spacing size={40} />
       <section>
