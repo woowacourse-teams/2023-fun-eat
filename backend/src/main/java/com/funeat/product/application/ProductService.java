@@ -32,6 +32,7 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -83,7 +84,7 @@ public class ProductService {
     }
 
     private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
-        if (pageable.getSort().getOrderFor(REVIEW_COUNT) != null) {
+        if (Objects.nonNull(pageable.getSort().getOrderFor(REVIEW_COUNT))) {
             final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
             return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
         }
