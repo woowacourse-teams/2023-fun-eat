@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -32,13 +34,13 @@ public class LoggingAspect {
     }
 
     @Before("allPresentation() && logging()")
-    public void requestLogging(final JoinPoint joinPoint) throws JsonProcessingException {
+    public void requestLogging(final JoinPoint joinPoint) {
         final Signature signature = joinPoint.getSignature();
         final String classAndMethodName = signature.toShortString();
 
         final Map<String, Object> args = getSpecificParameters(joinPoint);
 
-        log.info("method={} args={}", classAndMethodName, objectMapper.writeValueAsString(args));
+        printLog("[REQUEST] method={} args={}", classAndMethodName, args);
     }
 
     private Map<String, Object> getSpecificParameters(final JoinPoint joinPoint) {
@@ -55,4 +57,21 @@ public class LoggingAspect {
 
         return params;
     }
+
+    private void printLog(final String logFormat, final String classAndMethodName, final Object value) {
+        try {
+            log.info(logFormat, classAndMethodName, objectMapper.writeValueAsString(value));
+        } catch (final JsonProcessingException e) {
+            log.warn("로깅에 실패했습니다");
+        }
+    }
+
+    @AfterReturning(value = "allPresentation() && logging()", returning = "responseEntity")
+    public void requestLogging(final JoinPoint joinPoint, final ResponseEntity<?> responseEntity) {
+        final Signature signature = joinPoint.getSignature();
+        final String classAndMethodName = signature.toShortString();
+
+        printLog("[RESPONSE] method={} responseBody={}", classAndMethodName, responseEntity.getClass());
+    }
+
 }
