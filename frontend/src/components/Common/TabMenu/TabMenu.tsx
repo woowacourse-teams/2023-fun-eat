@@ -5,18 +5,26 @@ import styled from 'styled-components';
 
 interface TabMenuProps {
   tabMenus: readonly string[];
-  selectedTabMenu: string;
-  handleTabMenuSelect: MouseEventHandler<HTMLButtonElement>;
+  selectedTabMenu: number;
+  handleTabMenuSelect: (index: number) => void;
 }
 
 const TabMenu = (
   { tabMenus, selectedTabMenu, handleTabMenuSelect }: TabMenuProps,
   ref: ForwardedRef<HTMLUListElement>
 ) => {
+  const handleTabMenuClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    const { index } = event.currentTarget.dataset;
+
+    if (index) {
+      handleTabMenuSelect(Number(index));
+    }
+  };
+
   return (
     <TabMenuContainer ref={ref}>
-      {tabMenus.map((menu) => {
-        const isSelected = selectedTabMenu === menu;
+      {tabMenus.map((menu, index) => {
+        const isSelected = selectedTabMenu === index;
         return (
           <TabMenuItem key={menu} isSelected={isSelected}>
             <TabMenuButton
@@ -27,7 +35,8 @@ const TabMenu = (
               weight={isSelected ? 'bold' : 'regular'}
               variant="transparent"
               value={menu}
-              onClick={handleTabMenuSelect}
+              onClick={handleTabMenuClick}
+              data-index={index}
             >
               {menu}
             </TabMenuButton>
