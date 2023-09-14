@@ -6,28 +6,28 @@ import SvgIcon from '../../Common/Svg/SvgIcon';
 
 import { PATH } from '@/constants/path';
 
-interface TitleProps {
-  headingTitle: string;
+interface ProductTitleProps {
+  content: string;
   routeDestination: string;
 }
 
-const Title = ({ headingTitle, routeDestination }: TitleProps) => {
+const ProductTitle = ({ content, routeDestination }: ProductTitleProps) => {
   return (
-    <TitleContainer>
-      <TitleLink as={RouterLink} to={routeDestination} replace>
-        <HeadingTitle>{headingTitle}</HeadingTitle>
+    <ProductTitleContainer>
+      <ProductTitleLink as={RouterLink} to={routeDestination} replace>
+        <HeadingTitle>{content}</HeadingTitle>
         <DropDownIcon variant="arrow" color={theme.colors.black} width={15} height={15} />
-      </TitleLink>
+      </ProductTitleLink>
       <Link as={RouterLink} to={`${PATH.SEARCH}/products`}>
         <SvgIcon variant="search" />
       </Link>
-    </TitleContainer>
+    </ProductTitleContainer>
   );
 };
 
-export default Title;
+export default ProductTitle;
 
-const TitleContainer = styled.div`
+const ProductTitleContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
@@ -35,7 +35,7 @@ const TitleContainer = styled.div`
   align-items: center;
 `;
 
-const TitleLink = styled(Link)`
+const ProductTitleLink = styled(Link)`
   display: flex;
   gap: 20px;
   align-items: center;
