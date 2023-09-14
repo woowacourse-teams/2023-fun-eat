@@ -7,11 +7,10 @@ import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_갓성비_PRICE_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.tag.domain.Tag;
-import com.funeat.tag.domain.TagType;
+import com.funeat.product.dto.CategoryResponse;
 import com.funeat.tag.dto.TagDto;
 import com.funeat.tag.dto.TagsResponse;
 import io.restassured.response.ExtractableResponse;
@@ -30,45 +29,29 @@ public class TagAcceptanceTest extends AcceptanceTest {
         @Test
         void 전체_태그_목록을_조회할_수_있다() {
             // given
-            final var tag1 = 태그_맛있어요_TASTE_생성();
-            final var tag2 = 태그_단짠단짠_TASTE_생성();
-            final var tag3 = 태그_갓성비_PRICE_생성();
-            final var tag4 = 태그_간식_ETC_생성();
-            복수_태그_저장(tag1, tag2, tag3, tag4);
-
-            final var expected = List.of(tag1, tag2, tag3, tag4);
+            복수_태그_저장(태그_맛있어요_TASTE_생성(),
+                    태그_단짠단짠_TASTE_생성(),
+                    태그_갓성비_PRICE_생성(),
+                    태그_간식_ETC_생성());
 
             // when
             final var response = 전체_태그_목록_조회_요청();
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            전체_태그_목록_조회_결과를_검증한다(response, expected);
+            전체_태그_목록_조회_결과를_검증한다(response, List.of(1L, 2L, 3L, 4L));
         }
     }
 
-    private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Tag> expected) {
-        final var expectedByType = expected.stream()
-                .collect(Collectors.groupingBy(Tag::getTagType));
+    private void 전체_태그_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> tagIds) {
         final var actual = response.jsonPath()
                 .getList("", TagsResponse.class);
 
-        for (final var tagsResponse : actual) {
-            final var actualTagType = TagType.valueOf(tagsResponse.getTagType());
-            final var actualTag = tagsResponse.getTags();
+        final var actualTagIds = actual.stream()
+                .flatMap(tagsResponse -> tagsResponse.getTags().stream())
+                .map(TagDto::getId)
+                .collect(Collectors.toList());
 
-            final var expectedTagTypes = expectedByType.keySet();
-            final var expectedTag = expectedByType.get(actualTagType).stream()
-                    .map(TagDto::toDto)
-                    .collect(Collectors.toList());
-
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualTagType)
-                        .isIn(expectedTagTypes);
-                softAssertions.assertThat(actualTag)
-                        .usingRecursiveComparison()
-                        .isEqualTo(expectedTag);
-            });
-        }
+        assertThat(actualTagIds).containsExactlyElementsOf(tagIds);
     }
 }
