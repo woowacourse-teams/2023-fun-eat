@@ -41,7 +41,7 @@ const ProductListPage = () => {
         />
         <Spacing size={30} />
         <Suspense fallback={null}>
-          <CategoryTab tabVariant={category} />
+          <CategoryTab menuVariant={category} />
         </Suspense>
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>

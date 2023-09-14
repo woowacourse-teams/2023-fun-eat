@@ -12,12 +12,12 @@ type Story = StoryObj<typeof CategoryTab>;
 
 export const FoodCategory: Story = {
   args: {
-    tabVariant: 'food',
+    menuVariant: 'food',
   },
 };
 
 export const StoreCategory: Story = {
   args: {
-    tabVariant: 'store',
+    menuVariant: 'store',
   },
 };

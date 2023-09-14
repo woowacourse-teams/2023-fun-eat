@@ -6,22 +6,22 @@ import { useCategoryValueContext, useCategoryActionContext } from '@/hooks/conte
 import { useCategoryQuery } from '@/hooks/queries/product';
 import type { CategoryVariant } from '@/types/common';
 
-interface CategoryTabProps {
-  tabVariant: CategoryVariant;
+interface CategoryMenuProps {
+  menuVariant: CategoryVariant;
 }
 
-const CategoryTab = ({ tabVariant }: CategoryTabProps) => {
-  const { data: categories } = useCategoryQuery(tabVariant);
+const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
+  const { data: categories } = useCategoryQuery(menuVariant);
   const { categoryIds } = useCategoryValueContext();
   const { selectCategory } = useCategoryActionContext();
-  const currentCategoryId = categoryIds[tabVariant];
+  const currentCategoryId = categoryIds[menuVariant];
 
   return (
-    <CategoryTabContainer>
-      {categories.map((tab) => {
-        const isSelected = tab.id === currentCategoryId;
+    <CategoryMenuContainer>
+      {categories.map((menu) => {
+        const isSelected = menu.id === currentCategoryId;
         return (
-          <li key={tab.id}>
+          <li key={menu.id}>
             <CategoryButton
               type="button"
               customHeight="30px"
@@ -30,24 +30,24 @@ const CategoryTab = ({ tabVariant }: CategoryTabProps) => {
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
               isSelected={isSelected}
-              tabVariant={tabVariant}
-              onClick={() => selectCategory(tabVariant, tab.id)}
+              menuVariant={menuVariant}
+              onClick={() => selectCategory(menuVariant, menu.id)}
               aria-pressed={isSelected}
             >
-              {tab.name}
+              {menu.name}
             </CategoryButton>
           </li>
         );
       })}
-    </CategoryTabContainer>
+    </CategoryMenuContainer>
   );
 };
 
 export default CategoryTab;
 
-type CategoryTabStyleProps = Pick<CategoryTabProps, 'tabVariant'>;
+type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 
-const CategoryTabContainer = styled.ul`
+const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
   white-space: nowrap;
@@ -58,12 +58,12 @@ const CategoryTabContainer = styled.ul`
   }
 `;
 
-const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryTabStyleProps>`
+const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryMenuStyleProps>`
   padding: 6px 12px;
-  ${({ isSelected, tabVariant }) => (isSelected ? selectedCategoryTabStyles[tabVariant] : '')}
+  ${({ isSelected, menuVariant }) => (isSelected ? selectedCategoryMenuStyles[menuVariant] : '')}
 `;
 
-const selectedCategoryTabStyles: Record<CategoryTabStyleProps['tabVariant'], CSSProp> = {
+const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['menuVariant'], CSSProp> = {
   food: `
     background: ${theme.colors.gray5};
     color: ${theme.textColors.white};
