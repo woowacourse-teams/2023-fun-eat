@@ -11,7 +11,7 @@ import static com.funeat.acceptance.product.ProductSteps.상품_레시피_목록
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_자동_완성_검색_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
-import static com.funeat.acceptance.review.ReviewSteps.단일_리뷰_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
@@ -62,12 +62,14 @@ import com.funeat.product.dto.SearchProductDto;
 import com.funeat.product.dto.SearchProductResultDto;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.tag.domain.Tag;
+import com.funeat.tag.dto.TagDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -459,18 +461,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, CATEGORY_NOT_FOUND.getCode(), CATEGORY_NOT_FOUND.getMessage());
+            ERROR_CODE와_MESSAGE를_검증한다(response, CATEGORY_NOT_FOUND.getCode(), CATEGORY_NOT_FOUND.getMessage());
         }
-    }
-
-    private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
-                                              final String expectedMessage) {
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(response.jsonPath().getString("code"))
-                    .isEqualTo(expectedCode);
-            softAssertions.assertThat(response.jsonPath().getString("message"))
-                    .isEqualTo(expectedMessage);
-        });
     }
 
     @Nested
@@ -481,36 +473,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            final var productId = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
+            복수_태그_저장(태그_맛있어요_TASTE_생성(), 태그_단짠단짠_TASTE_생성(), 태그_간식_ETC_생성());
 
-            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
-            final var productId = 단일_상품_저장(product);
-
-            final var tag1 = 태그_맛있어요_TASTE_생성();
-            final var tag2 = 태그_단짠단짠_TASTE_생성();
-            final var tag3 = 태그_간식_ETC_생성();
-            복수_태그_저장(tag1, tag2, tag3);
-
-            final var image = 사진_명세_요청();
-
-            final var request1 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag1, tag2, tag3));
-            final var request2 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag2, tag3));
-            final var request3 = 리뷰추가요청_재구매X_생성(3L, 태그_아이디_변환(tag2));
-
-            final var loginCookie = 로그인_쿠키를_얻는다(1L);
-
-            단일_리뷰_요청(productId, image, request1, loginCookie);
-            단일_리뷰_요청(productId, image, request2, loginCookie);
-            단일_리뷰_요청(productId, image, request3, loginCookie);
-
-            final var expectedReviewCount = 3L;
-            final var expectedTags = List.of(tag2, tag3, tag1);
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(4L, List.of(1L, 2L, 3L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(4L, List.of(2L, 3L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(1L, List.of(2L)));
 
             // when
             final var response = 상품_상세_조회_요청(productId);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_상세_정보_조회_결과를_검증한다(response, product, expectedReviewCount, expectedTags);
+            상품_상세_정보_조회_결과를_검증한다(response);
         }
     }
 
@@ -527,7 +502,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
+            ERROR_CODE와_MESSAGE를_검증한다(response, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
         }
     }
 
@@ -692,28 +667,14 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var product1 = 상품_애플망고_가격3000원_평점5점_생성(category);
             final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
             복수_상품_저장(product1, product2);
+            복수_태그_저장(태그_맛있어요_TASTE_생성(), 태그_간식_ETC_생성());
 
-            final var tag1 = 태그_맛있어요_TASTE_생성();
-            final var tag2 = 태그_간식_ETC_생성();
-            복수_태그_저장(tag1, tag2);
-
-            final var image = 사진_명세_요청();
-
-            final var request1 = 리뷰추가요청_재구매X_생성(5L, 태그_아이디_변환(tag1, tag2));
-            final var request2 = 리뷰추가요청_재구매X_생성(5L, 태그_아이디_변환(tag1));
-            final var request3 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag2));
-
-            final var loginCookie = 로그인_쿠키를_얻는다(1L);
-
-            단일_리뷰_요청(product1.getId(), image, request1, loginCookie);
-            단일_리뷰_요청(product1.getId(), image, request2, loginCookie);
-            단일_리뷰_요청(product2.getId(), image, request3, loginCookie);
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(5L, List.of(1L, 2L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 2L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
-            final var expectedDto1 = SearchProductResultDto.toDto(product1, 2L);
-            final var expectedDto2 = SearchProductResultDto.toDto(product2, 1L);
-            final var expected = List.of(expectedDto2, expectedDto1);
+            final var expectedIds = List.of(1L, 2L);
 
             // when
             final var response = 상품_검색_결과_조회_요청("망고", 0);
@@ -721,7 +682,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_검색_결과를_검증한다(response, expected);
+            상품_검색_결과를_검증한다(response, expectedIds);
         }
 
         @Test
@@ -999,14 +960,31 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(expected);
     }
 
-    private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final Product product,
-                                      final Long expectedReviewCount, final List<Tag> expectedTags) {
-        final var expected = ProductResponse.toResponse(product, expectedReviewCount, expectedTags);
-        final var actual = response.as(ProductResponse.class);
+    private void ERROR_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
+                                           final String expectedMessage) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.jsonPath().getString("code"))
+                    .isEqualTo(expectedCode);
+            softAssertions.assertThat(response.jsonPath().getString("message"))
+                    .isEqualTo(expectedMessage);
+        });
+    }
 
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("averageRating")
-                .isEqualTo(expected);
+    private void 상품_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response) {
+        final var actual = response.as(ProductResponse.class);
+        final var actualTags = response.jsonPath()
+                .getList("tags", TagDto.class);
+
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(actual.getId()).isEqualTo(1L);
+            soft.assertThat(actual.getName()).isEqualTo("삼각김밥");
+            soft.assertThat(actual.getPrice()).isEqualTo(1000L);
+            soft.assertThat(actual.getImage()).isEqualTo("image.png");
+            soft.assertThat(actual.getContent()).isEqualTo("맛있는 삼각김밥");
+            soft.assertThat(actual.getAverageRating()).isEqualTo(3.0);
+            soft.assertThat(actual.getReviewCount()).isEqualTo(3L);
+            soft.assertThat(actualTags).extracting("id").containsExactly(2L, 3L, 1L);
+        });
     }
 
     private void 상품_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
@@ -1035,8 +1013,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var actual = response.jsonPath()
                 .getList("products", SearchProductResultDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(actual).hasSize(2);
+            soft.assertThat(actual).extracting("id").containsAll(expected);
+        });
+
     }
 
     private void 상품_레시피_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> recipes,

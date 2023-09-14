@@ -21,6 +21,8 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -34,7 +36,6 @@ import com.funeat.member.dto.MemberRecipeProductDto;
 import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.recipe.domain.Recipe;
-import com.funeat.review.dto.ReviewCreateRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Collections;
@@ -175,18 +176,12 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             // given\
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
+            final var productId = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            final var tagIds = List.of(단일_태그_저장(태그_맛있어요_TASTE_생성()));
 
-            final var product = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var productId = 단일_상품_저장(product);
-
-            final var tagId = 단일_태그_저장(태그_맛있어요_TASTE_생성());
-
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("1"),
-                    new ReviewCreateRequest(2L, List.of(tagId), "review1", false));
-            리뷰_작성_요청(로그인_쿠키를_얻는다(2L), productId, 사진_명세_요청("2"),
-                    new ReviewCreateRequest(1L, List.of(tagId), "review2", true));
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("3"),
-                    new ReviewCreateRequest(3L, List.of(tagId), "review3", false));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(2L, tagIds));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(2L), productId, 사진_명세_요청("2"), 리뷰추가요청_재구매O_생성(1L, tagIds));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(3L, tagIds));
 
             // when
             final var response = 사용자_리뷰_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
@@ -202,20 +197,13 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
+            final var productId = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            final var tagIds = List.of(단일_태그_저장(태그_맛있어요_TASTE_생성()));
 
-            final var product = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var productId = 단일_상품_저장(product);
-
-            final var tagId = 단일_태그_저장(태그_맛있어요_TASTE_생성());
-
-            final var 멤버1_쿠키 = 로그인_쿠키를_얻는다(1L);
-            final var 멤버2_쿠키 = 로그인_쿠키를_얻는다(2L);
-
-            리뷰_작성_요청(멤버2_쿠키, productId, 사진_명세_요청("1"),
-                    new ReviewCreateRequest(2L, List.of(tagId), "review1", false));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(2L), productId, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(2L, tagIds));
 
             // when
-            final var response = 사용자_리뷰_조회_요청(멤버1_쿠키, "createdAt,desc", 0);
+            final var response = 사용자_리뷰_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
             final var page = new PageDto(0L, 0L, true, true, 0L, 10L);
 
             // then
