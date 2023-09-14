@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import { ScrollButton, Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
+import { IMAGE_URL } from '@/constants';
 import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
 
@@ -21,6 +22,10 @@ const HomePage = () => {
   return (
     <>
       <section>
+        <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
+      </section>
+      <Spacing size={40} />
+      <section>
         <Heading as="h2" size="xl">
           카테고리
         </Heading>
@@ -28,7 +33,7 @@ const HomePage = () => {
         <Suspense fallback={null}>
           <CategoryList />
         </Suspense>
-        <Spacing size={12} />
+        <Spacing size={15} />
       </section>
       <Spacing size={40} />
       <section>
@@ -46,7 +51,7 @@ const HomePage = () => {
         <Heading as="h2" size="xl">
           👑 상품 랭킹
         </Heading>
-        <Spacing size={12} />
+        <Spacing size={15} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <ProductRankingList isHomePage />
@@ -56,9 +61,9 @@ const HomePage = () => {
       <Spacing size={36} />
       <section>
         <Heading as="h2" size="xl">
-          리뷰 랭킹
+          📝 리뷰 랭킹
         </Heading>
-        <Spacing size={12} />
+        <Spacing size={15} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
             <ReviewRankingList isHomePage />
@@ -72,17 +77,6 @@ const HomePage = () => {
 
 export default HomePage;
 
-const ProductListRouteLink = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Banner = styled.img`
   width: 100%;
-  padding: 12px 0;
-  text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.borderColors.disabled};
-
-  svg {
-    margin-left: 4px;
-    transform: rotate(180deg);
-  }
 `;
