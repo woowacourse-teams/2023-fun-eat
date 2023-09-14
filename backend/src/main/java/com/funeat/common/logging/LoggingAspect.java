@@ -72,7 +72,6 @@ public class LoggingAspect {
                     request.getMethod(), request.getRequestURI(), objectMapper.writeValueAsString(value));
         } catch (final JsonProcessingException e) {
             log.warn("[LOGGING ERROR] Request 로깅에 실패했습니다");
-            e.printStackTrace();
         }
     }
 
