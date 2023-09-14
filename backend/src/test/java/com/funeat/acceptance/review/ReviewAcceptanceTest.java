@@ -82,7 +82,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var image = 사진_명세_요청();
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 단일_리뷰_요청(productId, image, request, loginCookie);
@@ -107,7 +107,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 단일_리뷰_요청(productId, null, request, loginCookie);
@@ -160,7 +160,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var productId = 단일_상품_저장(product);
 
             final var image = 사진_명세_요청();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var request = 리뷰추가요청_재구매O_생성(4L, null);
@@ -184,7 +184,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var productId = 단일_상품_저장(product);
 
             final var image = 사진_명세_요청();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var request = 리뷰추가요청_재구매O_생성(4L, Collections.emptyList());
@@ -214,7 +214,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
             final var image = 사진_명세_요청();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var request = 리뷰추가요청_재구매O_생성(null, tagIds);
@@ -245,7 +245,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
             final var image = 사진_명세_요청();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var request = new ReviewCreateRequest(1L, tagIds, content, true);
@@ -275,7 +275,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
             final var image = 사진_명세_요청();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var request = new ReviewCreateRequest(1L, tagIds, "content", null);
@@ -305,7 +305,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var tagIds = 태그_아이디_변환(tag1, tag2);
 
             final var image = 사진_명세_요청();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var maxContent = "test".repeat(50) + "a";
@@ -344,7 +344,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
 
             final var reviewId = reviewRepository.findAll().get(0).getId();
@@ -379,7 +379,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
 
@@ -419,7 +419,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var image = 사진_명세_요청("first");
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
             단일_리뷰_요청(productId, null, reviewRequest, loginCookie);
@@ -470,7 +470,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
 
             final var reviewId = reviewRepository.findAll().get(0).getId();
@@ -507,7 +507,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             final var image = 사진_명세_요청();
             final var reviewRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
             단일_리뷰_요청(productId, image, reviewRequest, loginCookie);
 
             final var reviewId = reviewRepository.findAll().get(0).getId();
@@ -534,7 +534,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var productId = 단일_상품_저장(product);
 
             final var favoriteRequest = 리뷰좋아요요청_true_생성();
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var notExistReviewId = 99999L;
@@ -574,7 +574,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var sortingReviews = List.of(review2, review3, review1);
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
@@ -605,7 +605,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 final var sortingReviews = List.of(review3, review2, review1);
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "favoriteCount,desc", 0);
@@ -639,7 +639,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review1, review3, review2);
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
@@ -671,7 +671,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 final var sortingReviews = List.of(review3, review2, review1);
                 final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,asc", 0);
@@ -706,7 +706,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 final var sortingReviews = List.of(review2, review3, review1);
                 final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
@@ -737,7 +737,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 final var sortingReviews = List.of(review3, review2, review1);
                 final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "rating,desc", 0);
@@ -771,7 +771,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 복수_리뷰_저장(review1, review2, review3);
 
                 final var sortingReviews = List.of(review3, review2, review1);
-                final var loginCookie = 로그인_쿠키를_얻는다();
+                final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, productId, "createdAt,desc", 0);
@@ -822,7 +822,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         void 존재하지_않는_상품의_리뷰_목록을_조회시_예외가_발생한다() {
             // given
             final var notExistProductId = 99999L;
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 정렬된_리뷰_목록_조회_요청(loginCookie, notExistProductId, "favoriteCount,desc", 0);

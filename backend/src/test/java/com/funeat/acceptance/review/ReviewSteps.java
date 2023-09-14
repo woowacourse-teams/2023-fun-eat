@@ -2,15 +2,35 @@ package com.funeat.acceptance.review;
 
 import static io.restassured.RestAssured.given;
 
+import com.amazonaws.Request;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReviewSteps {
+
+    public static ExtractableResponse<Response> 리뷰_작성_요청(final String loginCookie, final Long productId,
+                                                         final MultiPartSpecification image,
+                                                         final ReviewCreateRequest request) {
+        final var requestSpec = given()
+                .cookie("FUNEAT", loginCookie);
+
+        if (Objects.nonNull(image)) {
+            requestSpec.multiPart(image);
+        }
+
+        return requestSpec
+                .multiPart("reviewRequest", request, "application/json").log().all()
+                .when()
+                .post("/api/products/{productId}/reviews", productId)
+                .then().log().all()
+                .extract();
+    }
 
     public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final MultiPartSpecification image,
                                                          final ReviewCreateRequest request, final String loginCookie) {
@@ -22,10 +42,10 @@ public class ReviewSteps {
         }
 
         return requestSpec
-                .multiPart("reviewRequest", request, "application/json")
+                .multiPart("reviewRequest", request, "application/json").log().all()
                 .when()
                 .post("/api/products/{productId}/reviews", productId)
-                .then()
+                .then().log().all()
                 .extract();
     }
 

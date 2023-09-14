@@ -85,7 +85,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var images = 여러_사진_요청(3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_생성_요청(request, images, loginCookie);
@@ -108,7 +108,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var productIds = 상품_아이디_변환(product1, product2, product3);
             final var request = 레시피추가요청_생성(productIds);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_생성_요청(request, null, loginCookie);
@@ -166,7 +166,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var images = 여러_사진_요청(3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_생성_요청(request, images, loginCookie);
@@ -186,7 +186,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var images = 여러_사진_요청(3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_생성_요청(request, images, loginCookie);
@@ -206,7 +206,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var images = 여러_사진_요청(3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_생성_요청(request, images, loginCookie);
@@ -237,7 +237,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var images = 여러_사진_요청(3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_생성_요청(request, images, loginCookie);
@@ -265,7 +265,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
             final var images = 여러_사진_요청(3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var maxContent = "tests".repeat(100) + "a";
@@ -298,7 +298,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var productIds = 상품_아이디_변환(product1, product2, product3);
             final var totalPrice = 상품_총가격_계산(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
@@ -335,7 +335,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
             final var productIds = 상품_아이디_변환(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
@@ -356,7 +356,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         void 존재하지_않는_레시피_사용자가_레시피_상세_조회시_예외가_발생한다() {
             // given
             final var notExistRecipeId = 99999L;
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             // when
             final var response = 레시피_상세_정보_요청(loginCookie, notExistRecipeId);
@@ -385,7 +385,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
             final var productIds = 상품_아이디_변환(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
@@ -416,7 +416,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
             final var productIds = 상품_아이디_변환(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
@@ -454,7 +454,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
             final var productIds = 상품_아이디_변환(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
@@ -488,7 +488,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
             final var productIds = 상품_아이디_변환(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest = 레시피추가요청_생성(productIds);
             final var images = 여러_사진_요청(3);
@@ -513,7 +513,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var favoriteRequest = 레시피좋아요요청_생성(true);
 
@@ -543,7 +543,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var productIds1 = 상품_아이디_변환(product1, product2);
             final var productIds2 = 상품_아이디_변환(product1, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest1 = 레시피추가요청_생성(productIds1);
             final var createRequest2 = 레시피추가요청_생성(productIds2);
@@ -578,7 +578,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             복수_상품_저장(product1, product2, product3);
             final var productIds1 = 상품_아이디_변환(product1, product2, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest1 = 레시피추가요청_생성(productIds1);
             final var images = 여러_사진_요청(3);
@@ -611,7 +611,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var productIds1 = 상품_아이디_변환(product1, product2);
             final var productIds2 = 상품_아이디_변환(product1, product3);
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             final var createRequest1 = 레시피추가요청_생성(productIds1);
             final var createRequest2 = 레시피추가요청_생성(productIds2);

@@ -18,10 +18,9 @@ public class LoginSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 로그인_시도_요청(final String code, final String loginCookie) {
+    public static ExtractableResponse<Response> 로그인_시도_요청(final Long memberId) {
         return given()
-                .cookie("FUNEAT", loginCookie)
-                .param("code", code)
+                .param("code", String.valueOf(memberId))
                 .when()
                 .get("/api/login/oauth2/code/kakao")
                 .then()
@@ -37,9 +36,9 @@ public class LoginSteps {
                 .extract();
     }
 
-    public static String 로그인_쿠키를_얻는다() {
+    public static String 로그인_쿠키를_얻는다(final Long memberId) {
         return RestAssured.given()
-                .queryParam("code", "test")
+                .queryParam("code", String.valueOf(memberId))
                 .when()
                 .get("/api/login/oauth2/code/kakao")
                 .then()

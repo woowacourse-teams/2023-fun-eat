@@ -18,7 +18,7 @@ public class AuthServiceTest extends ServiceTest {
         @Test
         void 카카오_로그인을_하여_멤버_정보를_가져온다() {
             // given
-            final var code = "member1";
+            final var code = "1";
             final var member = 멤버_멤버1_생성();
             final var expected = SignUserDto.of(true, member);
 

@@ -10,7 +10,6 @@ import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한�
 import static com.funeat.acceptance.common.CommonSteps.리다이렉션_영구_이동;
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
-import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
@@ -51,12 +50,8 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 신규_유저라면_마이페이지_경로를_헤더에_담아_응답을_보낸다() {
-            // given
-            final var code = "member1";
-            final var loginCookie = "12345";
-
-            // when
-            final var response = 로그인_시도_요청(code, loginCookie);
+            // given && when
+            final var response = 로그인_시도_요청(1L);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -66,14 +61,10 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         @Test
         void 기존_유저라면_메인페이지_경로를_헤더에_담아_응답을_보낸다() {
             // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
-            final var code = "member1";
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            로그인_쿠키를_얻는다(1L);
 
             // when
-            final var response = 로그인_시도_요청(code, loginCookie);
+            final var response = 로그인_시도_요청(1L);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -87,7 +78,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         @Test
         void 로그아웃을_하다() {
             // given
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
             final var expected = "/";
 
             // when

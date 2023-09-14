@@ -496,7 +496,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var request2 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag2, tag3));
             final var request3 = 리뷰추가요청_재구매X_생성(3L, 태그_아이디_변환(tag2));
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             단일_리뷰_요청(productId, image, request1, loginCookie);
             단일_리뷰_요청(productId, image, request2, loginCookie);
@@ -703,7 +703,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var request2 = 리뷰추가요청_재구매X_생성(5L, 태그_아이디_변환(tag1));
             final var request3 = 리뷰추가요청_재구매X_생성(4L, 태그_아이디_변환(tag2));
 
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var loginCookie = 로그인_쿠키를_얻는다(1L);
 
             단일_리뷰_요청(product1.getId(), image, request1, loginCookie);
             단일_리뷰_요청(product1.getId(), image, request2, loginCookie);
