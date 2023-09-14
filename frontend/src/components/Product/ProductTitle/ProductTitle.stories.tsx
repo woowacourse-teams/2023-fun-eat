@@ -6,7 +6,7 @@ const meta: Meta<typeof ProductTitle> = {
   title: 'common/ProductTitle',
   component: ProductTitle,
   args: {
-    headingTitle: '상품 목록',
+    content: '상품 목록',
   },
 };
 
