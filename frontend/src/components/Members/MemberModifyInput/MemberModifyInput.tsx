@@ -20,9 +20,9 @@ const MemberModifyInput = ({ nickname, modifyNickname }: MemberModifyInputProps)
       <Heading as="h2" size="xl" tabIndex={0}>
         닉네임
       </Heading>
-      <ReviewWritingStatusText color={theme.textColors.info} tabIndex={0}>
+      <NicknameStatusText color={theme.textColors.info} tabIndex={0}>
         {nickname.length} / {MAX_LENGTH}
-      </ReviewWritingStatusText>
+      </NicknameStatusText>
       <Spacing size={12} />
       <Input
         value={nickname}
@@ -41,7 +41,7 @@ const MemberModifyInputContainer = styled.div`
   position: relative;
 `;
 
-const ReviewWritingStatusText = styled(Text)`
+const NicknameStatusText = styled(Text)`
   position: absolute;
   top: 0;
   right: 0;
