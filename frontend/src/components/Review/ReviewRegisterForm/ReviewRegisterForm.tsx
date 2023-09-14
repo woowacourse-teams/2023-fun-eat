@@ -24,10 +24,10 @@ interface ReviewRegisterFormProps {
   productId: number;
   targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
-  setFirstTabMenu: () => void;
+  initTabMenu: () => void;
 }
 
-const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, setFirstTabMenu }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMenu }: ReviewRegisterFormProps) => {
   const { scrollToPosition } = useScroll();
   const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
 
@@ -62,7 +62,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, setFirstT
     mutate(formData, {
       onSuccess: () => {
         resetAndCloseForm();
-        setFirstTabMenu();
+        initTabMenu();
         scrollToPosition(targetRef);
       },
       onError: (error) => {

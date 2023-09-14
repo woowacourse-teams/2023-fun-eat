@@ -37,7 +37,7 @@ const ProductDetailPage = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
-  const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, setFirstTabMenu } = useTabMenu();
+  const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
   const tabRef = useRef<HTMLUListElement>(null);
 
   const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
@@ -130,7 +130,7 @@ const ProductDetailPage = () => {
               targetRef={tabRef}
               productId={Number(productId)}
               closeReviewDialog={handleCloseBottomSheet}
-              setFirstTabMenu={setFirstTabMenu}
+              initTabMenu={initTabMenu}
             />
           </ReviewFormProvider>
         ) : (
