@@ -5,6 +5,7 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
+import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
@@ -31,7 +32,7 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
@@ -53,36 +55,35 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
+    private final ImageUploader imageUploader;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
-                         final ReviewFavoriteRepository reviewFavoriteRepository) {
+                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageUploader imageUploader) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
+        this.imageUploader = imageUploader;
     }
 
     @Transactional
-    public void create(final Long productId, final Long memberId, final ReviewCreateRequest reviewRequest) {
+    public void create(final Long productId, final Long memberId, final MultipartFile image,
+                       final ReviewCreateRequest reviewRequest) {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Review savedReview;
-        if (Objects.isNull(reviewRequest.getImage())) {
-            savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, reviewRequest.getRating(), reviewRequest.getContent(),
-                            reviewRequest.getRebuy()));
-        } else {
-            savedReview = reviewRepository.save(
-                    new Review(findMember, findProduct, reviewRequest.getImage(), reviewRequest.getRating(),
-                            reviewRequest.getContent(), reviewRequest.getRebuy()));
-        }
+        final String imageUrl = Optional.ofNullable(image)
+                .map(imageUploader::upload)
+                .orElse("");
+        final Review savedReview = reviewRepository.save(
+                new Review(findMember, findProduct, imageUrl, reviewRequest.getRating(), reviewRequest.getContent(),
+                        reviewRequest.getRebuy()));
 
         final List<Tag> findTags = tagRepository.findTagsByIdIn(reviewRequest.getTagIds());
 

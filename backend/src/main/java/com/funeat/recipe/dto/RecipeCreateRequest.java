@@ -18,14 +18,10 @@ public class RecipeCreateRequest {
     @Size(max = 500, message = "꿀조합 내용은 최대 500자까지 입력 가능합니다")
     private final String content;
 
-    private final List<String> images;
-
-    public RecipeCreateRequest(final String title, final List<Long> productIds, final String content,
-                               final List<String> images) {
+    public RecipeCreateRequest(final String title, final List<Long> productIds, final String content) {
         this.title = title;
         this.productIds = productIds;
         this.content = content;
-        this.images = images;
     }
 
     public String getTitle() {
@@ -38,9 +34,5 @@ public class RecipeCreateRequest {
 
     public String getContent() {
         return content;
-    }
-
-    public List<String> getImages() {
-        return images;
     }
 }

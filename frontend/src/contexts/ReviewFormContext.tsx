@@ -2,12 +2,10 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useState } from 'react';
 
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
-import type { ReviewRequest } from '@/types/review';
-
-type ReviewValue = Omit<ReviewRequest, 'image'>;
+import type { ReviewRequest, ReviewRequestKey } from '@/types/review';
 
 interface ReviewFormActionParams {
-  target: keyof ReviewValue;
+  target: ReviewRequestKey;
   value: string | number | boolean;
   isSelected?: boolean;
 }
@@ -17,14 +15,14 @@ interface ReviewFormAction {
   resetReviewFormValue: () => void;
 }
 
-const initialReviewFormValue: ReviewValue = {
+const initialReviewFormValue: ReviewRequest = {
   rating: 0,
   tagIds: [],
   content: '',
   rebuy: false,
 };
 
-export const ReviewFormValueContext = createContext<ReviewValue | null>(null);
+export const ReviewFormValueContext = createContext<ReviewRequest | null>(null);
 export const ReviewFormActionContext = createContext<ReviewFormAction | null>(null);
 
 const ReviewFormProvider = ({ children }: PropsWithChildren) => {

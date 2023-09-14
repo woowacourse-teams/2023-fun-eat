@@ -1,12 +1,10 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useState } from 'react';
 
-import type { RecipeRequest } from '@/types/recipe';
-
-type RecipeValue = Omit<RecipeRequest, 'images'>;
+import type { RecipeRequest, RecipeRequestKey } from '@/types/recipe';
 
 interface RecipeFormActionParams {
-  target: keyof RecipeValue;
+  target: RecipeRequestKey;
   value: string | number;
   action?: 'add' | 'remove';
 }
@@ -16,17 +14,17 @@ interface RecipeFormAction {
   resetRecipeFormValue: () => void;
 }
 
-const initialRecipeFormValue: RecipeValue = {
+const initialRecipeFormValue: RecipeRequest = {
   title: '',
   productIds: [],
   content: '',
 };
 
-export const RecipeFormValueContext = createContext<RecipeValue | null>(null);
+export const RecipeFormValueContext = createContext<RecipeRequest | null>(null);
 export const RecipeFormActionContext = createContext<RecipeFormAction | null>(null);
 
 const RecipeFormProvider = ({ children }: PropsWithChildren) => {
-  const [recipeFormValue, setRecipeFormValue] = useState<RecipeValue>({
+  const [recipeFormValue, setRecipeFormValue] = useState<RecipeRequest>({
     title: '',
     productIds: [],
     content: '',

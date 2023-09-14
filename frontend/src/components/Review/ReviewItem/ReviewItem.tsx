@@ -73,7 +73,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
           </RebuyBadge>
         )}
       </ReviewerWrapper>
-      {image !== null && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
+      {image && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <ReviewContent>{content}</ReviewContent>
       <FavoriteButton
@@ -101,8 +101,8 @@ const ReviewItemContainer = styled.div`
 
 const ReviewerWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ReviewerInfoWrapper = styled.div`
@@ -116,8 +116,8 @@ const RebuyBadge = styled(Badge)`
 `;
 
 const ReviewerImage = styled.img`
-  border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;
 
 const RatingIconWrapper = styled.div`
@@ -141,6 +141,6 @@ const ReviewContent = styled(Text)`
 const FavoriteButton = styled(Button)`
   display: flex;
   align-items: center;
-  column-gap: 8px;
   padding: 0;
+  column-gap: 8px;
 `;

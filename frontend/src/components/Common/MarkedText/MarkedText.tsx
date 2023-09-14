@@ -23,6 +23,6 @@ const MarkedText = ({ text, mark }: MarkedTextProps) => {
 export default MarkedText;
 
 const Mark = styled.mark`
-  background-color: ${({ theme }) => theme.backgroundColors.default};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
+  background-color: ${({ theme }) => theme.backgroundColors.default};
 `;

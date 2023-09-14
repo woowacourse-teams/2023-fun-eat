@@ -64,8 +64,8 @@ const ProductInfoWrapper = styled.div`
 
 const ProductReviewWrapper = styled.div`
   display: flex;
-  column-gap: 20px;
   margin-left: -2px;
+  column-gap: 20px;
 `;
 
 const RatingIconWrapper = styled.div`

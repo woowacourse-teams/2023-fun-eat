@@ -5,17 +5,26 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
-import { useImageUploader } from '@/hooks/common';
+import { IMAGE_MAX_SIZE } from '@/constants';
+import { useFormData, useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
+import type { MemberRequest } from '@/types/member';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
-
-  const { previewImage, imageUrl, uploadImage } = useImageUploader();
-  const [nickname, setNickname] = useState(member?.nickname ?? '');
   const { mutate } = useMemberModifyMutation();
 
+  const { previewImage, imageFile, uploadImage } = useImageUploader();
+
+  const [nickname, setNickname] = useState(member?.nickname ?? '');
   const navigate = useNavigate();
+
+  const formData = useFormData<MemberRequest>({
+    imageKey: 'image',
+    imageFile: imageFile,
+    formContentKey: 'memberRequest',
+    formContent: { nickname },
+  });
 
   if (!member) {
     return null;
@@ -25,29 +34,38 @@ const MemberModifyPage = () => {
     setNickname(event.target.value);
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault();
-
-    if (imageUrl === null) {
+  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (!event.target.files) {
       return;
     }
 
-    mutate(
-      { nickname, image: imageUrl },
-      {
-        onSuccess: () => {
-          navigate('/members');
-        },
-        onError: (error) => {
-          if (error instanceof Error) {
-            alert(error.message);
-            return;
-          }
+    const imageFile = event.target.files[0];
 
-          alert('회원정보 수정을 다시 시도해주세요.');
-        },
-      }
-    );
+    if (imageFile.size > IMAGE_MAX_SIZE) {
+      alert('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
+      event.target.value = '';
+      return;
+    }
+
+    uploadImage(imageFile);
+  };
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    mutate(formData, {
+      onSuccess: () => {
+        navigate('/members');
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          alert(error.message);
+          return;
+        }
+
+        alert('회원정보 수정을 다시 시도해주세요.');
+      },
+    });
   };
 
   return (
@@ -61,7 +79,7 @@ const MemberModifyPage = () => {
                 <ProfileImage src={previewImage ? previewImage : member.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
-                <input type="file" accept="image/*" onChange={uploadImage} />
+                <input type="file" accept="image/*" onChange={handleImageUpload} />
                 <SvgIcon variant="camera" width={20} height={20} />
               </UserImageUploaderLabel>
             </MemberImageUploaderWrapper>
@@ -95,9 +113,9 @@ const MemberImageUploaderWrapper = styled.div`
 const UserProfileImageWrapper = styled.div`
   width: 80px;
   height: 80px;
-  background: ${({ theme }) => theme.backgroundColors.default};
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: 50%;
+  background: ${({ theme }) => theme.backgroundColors.default};
   overflow: hidden;
 `;
 
@@ -113,10 +131,10 @@ const UserImageUploaderLabel = styled.label`
   right: -5px;
   width: 30px;
   height: 30px;
-  background: ${({ theme }) => theme.backgroundColors.default};
+  text-align: center;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: 50%;
-  text-align: center;
+  background: ${({ theme }) => theme.backgroundColors.default};
   cursor: pointer;
 
   & > input {
@@ -129,13 +147,13 @@ const UserImageUploaderLabel = styled.label`
 `;
 
 const MemberForm = styled.form`
-  height: 92%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 92%;
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.primary};
 `;
