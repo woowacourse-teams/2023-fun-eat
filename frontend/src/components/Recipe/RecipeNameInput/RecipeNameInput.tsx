@@ -55,4 +55,5 @@ const RecipeNameStatusText = styled(Text)`
   position: absolute;
   top: 0;
   right: 0;
+  line-height: 28px;
 `;
