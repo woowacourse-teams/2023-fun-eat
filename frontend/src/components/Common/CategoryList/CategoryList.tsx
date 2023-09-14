@@ -53,10 +53,10 @@ const CategoryListContainer = styled.div`
 
 const MenuListWrapper = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 20px;
 `;
 
 const StoreListWrapper = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 20px;
 `;
