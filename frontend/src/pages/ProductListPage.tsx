@@ -8,13 +8,12 @@ import {
   CategoryMenu,
   SortButton,
   SortOptionList,
-  Title,
   ScrollButton,
   Loading,
   ErrorBoundary,
   ErrorComponent,
 } from '@/components/Common';
-import { ProductList } from '@/components/Product';
+import { ProductTitle, ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useSortOption } from '@/hooks/common';
@@ -36,8 +35,8 @@ const ProductListPage = () => {
   return (
     <>
       <ProductListSection>
-        <Title
-          headingTitle={PAGE_TITLE[category]}
+        <ProductTitle
+          content={PAGE_TITLE[category]}
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={30} />
