@@ -23,16 +23,16 @@ import SearchPage from '@/pages/SearchPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <CategoryProvider>
+        <App />
+      </CategoryProvider>
+    ),
     errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
-        element: (
-          <CategoryProvider>
-            <HomePage />
-          </CategoryProvider>
-        ),
+        element: <HomePage />,
       },
       {
         path: `${PATH.RECIPE}/:recipeId`,
@@ -93,7 +93,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App layout="headerOnly" />,
+    element: (
+      <CategoryProvider>
+        <App layout="headerOnly" />
+      </CategoryProvider>
+    ),
     errorElement: <NotFoundPage />,
     children: [
       {
@@ -104,16 +108,16 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App layout="simpleHeader" />,
+    element: (
+      <CategoryProvider>
+        <App layout="simpleHeader" />
+      </CategoryProvider>
+    ),
     errorElement: <NotFoundPage />,
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category`,
-        element: (
-          <CategoryProvider>
-            <ProductListPage />
-          </CategoryProvider>
-        ),
+        element: <ProductListPage />,
       },
       {
         path: PATH.RECIPE,
