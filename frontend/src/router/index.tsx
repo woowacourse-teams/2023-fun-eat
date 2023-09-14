@@ -23,7 +23,11 @@ import SearchPage from '@/pages/SearchPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <CategoryProvider>
+        <App />
+      </CategoryProvider>
+    ),
     errorElement: <NotFoundPage />,
     children: [
       {
