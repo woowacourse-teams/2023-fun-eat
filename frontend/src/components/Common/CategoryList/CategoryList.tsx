@@ -22,12 +22,12 @@ const CategoryList = () => {
     <CategoryListContainer>
       <MenuListWrapper>
         {menuList.map((menu, index) => (
-          <CategoryItem key={index} name={menu.name} image={menu.image} />
+          <CategoryItem key={`menuItem-${index}`} name={menu.name} image={menu.image} />
         ))}
       </MenuListWrapper>
       <StoreListWrapper>
         {storeList.map((menu, index) => (
-          <CategoryItem key={index} name={menu.name} image={menu.image} />
+          <CategoryItem key={`storeItem-${index}`} name={menu.name} image={menu.image} />
         ))}
       </StoreListWrapper>
     </CategoryListContainer>
