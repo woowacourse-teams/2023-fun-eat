@@ -18,7 +18,7 @@ import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useScrollRestoration, useSortOption } from '@/hooks/common';
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext } from '@/hooks/context';
 import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
@@ -34,7 +34,7 @@ const ProductListPage = () => {
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
   const { reset } = useQueryErrorResetBoundary();
 
-  const { categoryIds, currentTabScroll } = useCategoryContext();
+  const { categoryIds, currentTabScroll } = useCategoryValueContext();
   const currentCategoryId = categoryIds[category];
 
   const productListRef = useRef<HTMLDivElement>(null);

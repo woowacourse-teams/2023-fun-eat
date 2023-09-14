@@ -2,7 +2,7 @@ import { Button, theme } from '@fun-eat/design-system';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext, useCategoryActionContext } from '@/hooks/context';
 import { useCategoryQuery } from '@/hooks/queries/product';
 import type { CategoryVariant } from '@/types/common';
 
@@ -12,7 +12,8 @@ interface CategoryMenuProps {
 
 const CategoryMenu = ({ menuVariant }: CategoryMenuProps) => {
   const { data: categories } = useCategoryQuery(menuVariant);
-  const { categoryIds, selectCategory } = useCategoryContext();
+  const { categoryIds } = useCategoryValueContext();
+  const { selectCategory } = useCategoryActionContext();
   const currentCategoryId = categoryIds[menuVariant];
 
   return (

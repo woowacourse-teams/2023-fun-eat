@@ -7,7 +7,7 @@ import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver, useScrollRestoration } from '@/hooks/common';
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import type { CategoryVariant, SortOption } from '@/types/common';
 import displaySlice from '@/utils/displaySlice';
@@ -21,7 +21,7 @@ interface ProductListProps {
 const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { categoryIds } = useCategoryContext();
+  const { categoryIds } = useCategoryValueContext();
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(
     categoryIds[category],

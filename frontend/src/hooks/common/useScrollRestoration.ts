@@ -2,10 +2,10 @@ import type { RefObject } from 'react';
 import { useEffect } from 'react';
 
 import useTimeout from './useTimeout';
-import { useCategoryContext } from '../context';
+import { useCategoryActionContext } from '../context';
 
 const useScrollRestoration = (currentCategoryId: number, ref: RefObject<HTMLElement>) => {
-  const { saveCurrentTabScroll } = useCategoryContext();
+  const { saveCurrentTabScroll } = useCategoryActionContext();
 
   const handleScroll = () => {
     if (!ref.current) return;
