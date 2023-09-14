@@ -26,7 +26,8 @@ public class RankingRecipeDto {
         if (images.isEmpty()) {
             return new RankingRecipeDto(recipe.getId(), null, recipe.getTitle(), author, recipe.getFavoriteCount());
         }
-        return new RankingRecipeDto(recipe.getId(), images.get(0).getImage(), recipe.getTitle(), author, recipe.getFavoriteCount());
+        return new RankingRecipeDto(recipe.getId(), images.get(0).getImage(), recipe.getTitle(), author,
+                recipe.getFavoriteCount());
     }
 
     public Long getId() {

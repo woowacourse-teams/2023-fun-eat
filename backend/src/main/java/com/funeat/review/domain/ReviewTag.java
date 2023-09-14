@@ -1,7 +1,6 @@
 package com.funeat.review.domain;
 
 import com.funeat.tag.domain.Tag;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;

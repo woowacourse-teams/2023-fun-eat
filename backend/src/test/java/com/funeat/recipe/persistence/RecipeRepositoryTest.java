@@ -8,7 +8,6 @@ import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_오름차순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
@@ -66,7 +65,7 @@ class RecipeRepositoryTest extends RepositoryTest {
 
             // then
             assertThat(actual).usingRecursiveComparison()
-              .isEqualTo(expected);
+                    .isEqualTo(expected);
         }
     }
 
@@ -248,7 +247,7 @@ class RecipeRepositoryTest extends RepositoryTest {
 
             // when
             final var actual = recipeRepository.findRecipesByProduct(product1, page).getContent();
-  
+
             // then
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
@@ -262,7 +261,7 @@ class RecipeRepositoryTest extends RepositoryTest {
         void 좋아요순으로_상위_3개의_레시피들을_조회한다() {
             // given
             final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);  
+            단일_멤버_저장(member);
 
             final var recipe1 = 레시피_생성(member, 1L);
             final var recipe2 = 레시피_생성(member, 2L);

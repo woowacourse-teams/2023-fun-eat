@@ -125,7 +125,8 @@ public class ProductService {
     }
 
     public SearchProductResultsResponse getSearchResults(final String query, final Pageable pageable) {
-        final Page<ProductReviewCountDto> products = productRepository.findAllWithReviewCountByNameContaining(query, pageable);
+        final Page<ProductReviewCountDto> products = productRepository.findAllWithReviewCountByNameContaining(query,
+                pageable);
 
         final PageDto pageDto = PageDto.toDto(products);
         final List<SearchProductResultDto> resultDtos = products.stream()
