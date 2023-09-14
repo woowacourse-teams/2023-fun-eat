@@ -31,8 +31,6 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
   const productsToDisplay = displaySlice(isHomePage, productList);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
-  useScrollRestoration(categoryIds[category]);
-
   return (
     <>
       <ProductListContainer>

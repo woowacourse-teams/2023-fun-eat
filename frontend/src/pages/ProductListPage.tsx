@@ -1,6 +1,6 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -17,7 +17,7 @@ import {
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
-import { useSortOption } from '@/hooks/common';
+import { useScrollRestoration, useSortOption } from '@/hooks/common';
 import { useCategoryContext } from '@/hooks/context';
 import { isCategoryVariant } from '@/types/common';
 
@@ -37,37 +37,36 @@ const ProductListPage = () => {
   const { categoryIds, currentTabScroll } = useCategoryContext();
   const currentCategoryId = categoryIds[category];
 
-  useEffect(() => {
-    const mainElement = document.getElementById('main');
-    if (!mainElement) return;
+  const productListRef = useRef<HTMLDivElement>(null);
+  useScrollRestoration(currentCategoryId, productListRef);
 
+  useEffect(() => {
     const scrollY = currentTabScroll[currentCategoryId];
-    mainElement.scrollTo(0, scrollY);
+    productListRef.current?.scrollTo(0, scrollY);
   }, [currentCategoryId]);
 
   return (
     <>
-      <section>
-        <div style={{ position: 'fixed', background: 'white', top: '60px', width: 'calc(100% - 40px)' }}>
-          <Title
-            headingTitle={PAGE_TITLE[category]}
-            routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
-          />
-          <Spacing size={30} />
-          <Suspense fallback={null}>
-            <CategoryMenu menuVariant={category} />
+      <ProductListSection>
+        <Title
+          headingTitle={PAGE_TITLE[category]}
+          routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
+        />
+        <Spacing size={30} />
+        <Suspense fallback={null}>
+          <CategoryMenu menuVariant={category} />
+        </Suspense>
+        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+          <Suspense fallback={<Loading />}>
             <SortButtonWrapper>
               <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
             </SortButtonWrapper>
-          </Suspense>
-        </div>
-        <Spacing size={140} />
-        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-          <Suspense fallback={<Loading />}>
-            <ProductList category={category} selectedOption={selectedOption} />
+            <ProductListWrapper ref={productListRef}>
+              <ProductList category={category} selectedOption={selectedOption} />
+            </ProductListWrapper>
           </Suspense>
         </ErrorBoundary>
-      </section>
+      </ProductListSection>
       <ScrollButton />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
@@ -82,8 +81,17 @@ const ProductListPage = () => {
 };
 export default ProductListPage;
 
+const ProductListSection = styled.section`
+  height: 100%;
+`;
+
 const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+`;
+
+const ProductListWrapper = styled.div`
+  height: calc(100% - 150px);
+  overflow-y: auto;
 `;
