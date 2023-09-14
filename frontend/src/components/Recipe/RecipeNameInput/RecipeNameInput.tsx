@@ -26,7 +26,7 @@ const RecipeNameInput = ({ recipeName }: RecipeNameInputProps) => {
         <RequiredMark aria-label="필수 작성">*</RequiredMark>
       </Heading>
       <RecipeNameStatusText color={theme.textColors.info} tabIndex={0}>
-        {recipeName.length} / {MAX_LENGTH}
+        {recipeName.length}자 / {MAX_LENGTH}자
       </RecipeNameStatusText>
       <Spacing size={12} />
       <Input

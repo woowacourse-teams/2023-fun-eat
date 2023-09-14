@@ -21,7 +21,7 @@ const MemberModifyInput = ({ nickname, modifyNickname }: MemberModifyInputProps)
         닉네임
       </Heading>
       <NicknameStatusText color={theme.textColors.info} tabIndex={0}>
-        {nickname.length} / {MAX_LENGTH}
+        {nickname.length}자 / {MAX_LENGTH}자
       </NicknameStatusText>
       <Spacing size={12} />
       <Input
