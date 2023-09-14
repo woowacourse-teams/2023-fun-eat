@@ -43,10 +43,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: `${PATH.SEARCH}/integrated`,
-        element: <IntegratedSearchPage />,
-      },
-      {
         path: PATH.MEMBER,
         element: (
           <AuthLayout>
@@ -122,6 +118,10 @@ const router = createBrowserRouter([
       {
         path: PATH.RECIPE,
         element: <RecipePage />,
+      },
+      {
+        path: `${PATH.SEARCH}/integrated`,
+        element: <IntegratedSearchPage />,
       },
       {
         path: `${PATH.SEARCH}/:searchVariant`,
