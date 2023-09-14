@@ -20,6 +20,7 @@ interface ProductListProps {
 
 const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const productListRef = useRef<HTMLDivElement>(null);
 
   const { categoryIds } = useCategoryValueContext();
 
@@ -27,13 +28,17 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
     categoryIds[category],
     selectedOption?.value ?? 'reviewCount,desc'
   );
+
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+
+  useScrollRestoration(categoryIds[category], productListRef);
+
   const productList = data.pages.flatMap((page) => page.products);
   const productsToDisplay = displaySlice(isHomePage, productList);
 
-  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
   return (
-    <>
-      <ProductListContainer>
+    <ProductListContainer ref={productListRef}>
+      <ProductListWrapper>
         {productsToDisplay.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
@@ -41,14 +46,19 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
             </Link>
           </li>
         ))}
-      </ProductListContainer>
+      </ProductListWrapper>
       <div ref={scrollRef} aria-hidden />
-    </>
+    </ProductListContainer>
   );
 };
 export default ProductList;
 
-const ProductListContainer = styled.ul`
+const ProductListContainer = styled.div`
+  height: calc(100% - 150px);
+  overflow-y: auto;
+`;
+
+const ProductListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
 

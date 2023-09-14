@@ -1,6 +1,6 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -17,8 +17,7 @@ import {
 import { ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
-import { useScrollRestoration, useSortOption } from '@/hooks/common';
-import { useCategoryValueContext } from '@/hooks/context';
+import { useSortOption } from '@/hooks/common';
 import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
@@ -26,24 +25,13 @@ const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 const ProductListPage = () => {
   const { category } = useParams();
 
-  if (!category || !isCategoryVariant(category)) {
-    return null;
-  }
-
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
   const { reset } = useQueryErrorResetBoundary();
 
-  const { categoryIds, currentTabScroll } = useCategoryValueContext();
-  const currentCategoryId = categoryIds[category];
-
-  const productListRef = useRef<HTMLDivElement>(null);
-  useScrollRestoration(currentCategoryId, productListRef);
-
-  useEffect(() => {
-    const scrollY = currentTabScroll[currentCategoryId];
-    productListRef.current?.scrollTo(0, scrollY);
-  }, [currentCategoryId]);
+  if (!category || !isCategoryVariant(category)) {
+    return null;
+  }
 
   return (
     <>
@@ -61,9 +49,7 @@ const ProductListPage = () => {
             <SortButtonWrapper>
               <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
             </SortButtonWrapper>
-            <ProductListWrapper ref={productListRef}>
-              <ProductList category={category} selectedOption={selectedOption} />
-            </ProductListWrapper>
+            <ProductList category={category} selectedOption={selectedOption} />
           </Suspense>
         </ErrorBoundary>
       </ProductListSection>
@@ -89,9 +75,4 @@ const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-`;
-
-const ProductListWrapper = styled.div`
-  height: calc(100% - 150px);
-  overflow-y: auto;
 `;
