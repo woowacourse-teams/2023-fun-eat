@@ -33,20 +33,20 @@ public class KakaoPlatformUserProvider implements PlatformUserProvider {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-    private final String kakaoRestApiKey;
-    private final String redirectUri;
-    private final String kakaoAdminKey;
+
+    @Value("${kakao.rest-api-key}")
+    private String kakaoRestApiKey;
+
+    @Value("${kakao.redirect-uri}")
+    private String redirectUri;
+
+    @Value("${kakao.admin-key}")
+    private String kakaoAdminKey;
 
     public KakaoPlatformUserProvider(final RestTemplateBuilder restTemplateBuilder,
-                                     final ObjectMapper objectMapper,
-                                     @Value("${kakao.rest-api-key}") final String kakaoRestApiKey,
-                                     @Value("${kakao.redirect-uri}") final String redirectUri,
-                                     @Value("${kakao.admin-key}") final String kakaoAdminKey) {
+                                     final ObjectMapper objectMapper) {
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
-        this.kakaoRestApiKey = kakaoRestApiKey;
-        this.redirectUri = redirectUri;
-        this.kakaoAdminKey = kakaoAdminKey;
     }
 
     @Override
