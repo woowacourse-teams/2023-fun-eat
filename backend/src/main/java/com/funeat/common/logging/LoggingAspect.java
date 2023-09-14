@@ -24,7 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class LoggingAspect {
 
-    private static final List<String> excludeNames = Arrays.asList("image", "request");
+    private static final List<String> excludeNames = Arrays.asList("image", "images", "request");
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -72,6 +72,7 @@ public class LoggingAspect {
                     request.getMethod(), request.getRequestURI(), objectMapper.writeValueAsString(value));
         } catch (final JsonProcessingException e) {
             log.warn("[LOGGING ERROR] Request 로깅에 실패했습니다");
+            e.printStackTrace();
         }
     }
 
