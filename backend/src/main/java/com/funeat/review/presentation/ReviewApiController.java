@@ -43,9 +43,9 @@ public class ReviewApiController implements ReviewController {
     }
 
     @PatchMapping("/api/products/{productId}/reviews/{reviewId}")
-    public ResponseEntity<Void> toggleLikeReview(@PathVariable Long reviewId,
-                                                 @AuthenticationPrincipal LoginInfo loginInfo,
-                                                 @RequestBody @Valid ReviewFavoriteRequest request) {
+    public ResponseEntity<Void> toggleLikeReview(@PathVariable final Long reviewId,
+                                                 @AuthenticationPrincipal final LoginInfo loginInfo,
+                                                 @RequestBody @Valid final ReviewFavoriteRequest request) {
         reviewService.likeReview(reviewId, loginInfo.getId(), request);
         reviewService.updateProductImage(reviewId);
 
@@ -53,9 +53,9 @@ public class ReviewApiController implements ReviewController {
     }
 
     @GetMapping("/api/products/{productId}/reviews")
-    public ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal LoginInfo loginInfo,
-                                                                    @PathVariable Long productId,
-                                                                    @PageableDefault Pageable pageable) {
+    public ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                                    @PathVariable final Long productId,
+                                                                    @PageableDefault final Pageable pageable) {
         final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable, loginInfo.getId());
 
         return ResponseEntity.ok(response);
