@@ -46,6 +46,7 @@ public class ProductService {
     private static final int THREE = 3;
     private static final int TOP = 0;
     public static final String REVIEW_COUNT = "reviewCount";
+    private static final int RANKING_SIZE = 3;
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -106,7 +107,7 @@ public class ProductService {
 
         final List<RankingProductDto> rankingProductDtos = productsAndReviewCounts.stream()
                 .sorted(rankingScoreComparator)
-                .limit(3)
+                .limit(RANKING_SIZE)
                 .map(it -> RankingProductDto.toDto(it.getProduct()))
                 .collect(Collectors.toList());
 
