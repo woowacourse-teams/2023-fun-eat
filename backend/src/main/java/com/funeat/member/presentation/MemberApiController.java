@@ -38,9 +38,7 @@ public class MemberApiController implements MemberController {
 
     @GetMapping
     public ResponseEntity<MemberProfileResponse> getMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo) {
-        final Long memberId = loginInfo.getId();
-
-        final MemberProfileResponse response = memberService.getMemberProfile(memberId);
+        final MemberProfileResponse response = memberService.getMemberProfile(loginInfo.getId());
 
         return ResponseEntity.ok(response);
     }
@@ -49,9 +47,7 @@ public class MemberApiController implements MemberController {
     public ResponseEntity<Void> putMemberProfile(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                  @RequestPart(required = false) final MultipartFile image,
                                                  @RequestPart @Valid final MemberRequest memberRequest) {
-        final Long memberId = loginInfo.getId();
-
-        memberService.modify(memberId, image, memberRequest);
+        memberService.modify(loginInfo.getId(), image, memberRequest);
 
         return ResponseEntity.ok().build();
     }
