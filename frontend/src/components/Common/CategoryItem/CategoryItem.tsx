@@ -1,3 +1,4 @@
+import { Button } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 interface CategoryItemProps {
@@ -7,7 +8,7 @@ interface CategoryItemProps {
 
 const CategoryItem = ({ name, image }: CategoryItemProps) => {
   return (
-    <CategoryItemContainer>
+    <CategoryItemContainer variant="transparent">
       <ImageWrapper>
         <img src={image} width={60} height={60} alt="카테고리" />
       </ImageWrapper>
@@ -18,8 +19,8 @@ const CategoryItem = ({ name, image }: CategoryItemProps) => {
 
 export default CategoryItem;
 
-const CategoryItemContainer = styled.div`
-  width: 70px;
+const CategoryItemContainer = styled(Button)`
+  width: 60px;
   height: 100px;
   text-align: center;
 `;
@@ -28,10 +29,10 @@ const ImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.gray4};
+  background: ${({ theme }) => theme.colors.white};
 
   img {
     width: 100%;
@@ -43,4 +44,5 @@ const ImageWrapper = styled.div`
 const CategoryName = styled.p`
   margin-top: 10px;
   font-weight: 600;
+  font-size: 13px;
 `;
