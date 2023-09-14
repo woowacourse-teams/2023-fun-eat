@@ -3,7 +3,6 @@ package com.funeat.product.domain;
 import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -78,10 +77,6 @@ public class Product {
 
     public void updateImage(final String topFavoriteImage) {
         this.image = topFavoriteImage;
-    }
-
-    public boolean isNotEqualImage(final String anotherImage) {
-        return !Objects.equals(this.image, anotherImage);
     }
 
     public Long getId() {

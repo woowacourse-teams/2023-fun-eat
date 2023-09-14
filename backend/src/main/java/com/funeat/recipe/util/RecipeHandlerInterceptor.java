@@ -12,10 +12,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class RecipeHandlerInterceptor implements HandlerInterceptor {
 
+    private static final String GET = "GET";
+
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
                              final Object handler) {
-        if ("GET".equals(request.getMethod())) {
+        if (GET.equals(request.getMethod())) {
             return true;
         }
 
