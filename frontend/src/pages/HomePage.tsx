@@ -4,8 +4,7 @@ import { Suspense } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryTab, SvgIcon, ScrollButton, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
-import { PBProductList, ProductList } from '@/components/Product';
+import { ScrollButton, Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
@@ -23,37 +22,13 @@ const HomePage = () => {
     <>
       <section>
         <Heading as="h2" size="xl">
-          공통 상품
+          카테고리
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryTab tabVariant="food" />
+          <CategoryList />
         </Suspense>
         <Spacing size={12} />
-        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-          <Suspense fallback={<Loading />}>
-            <ProductList category="food" isHomePage />
-            <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
-              전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
-            </ProductListRouteLink>
-          </Suspense>
-        </ErrorBoundary>
-      </section>
-      <Spacing size={36} />
-      <section>
-        <Heading as="h2" size="xl">
-          편의점 특산품
-        </Heading>
-        <Spacing size={16} />
-        <Suspense fallback={null}>
-          <CategoryTab tabVariant="store" />
-        </Suspense>
-        <Spacing size={16} />
-        <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
-          <Suspense fallback={<Loading />}>
-            <PBProductList isHomePage />
-          </Suspense>
-        </ErrorBoundary>
       </section>
       <Spacing size={40} />
       <section>

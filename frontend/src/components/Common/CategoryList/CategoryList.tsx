@@ -40,6 +40,12 @@ const CategoryListContainer = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
 
+  @media screen and (min-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   &::-webkit-scrollbar {
     display: none;
   }
