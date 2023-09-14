@@ -7,7 +7,7 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useFormData, useImageUploader } from '@/hooks/common';
+import { useImageUploader, useFormData } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest } from '@/types/recipe';
@@ -24,17 +24,17 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   const recipeFormValue = useRecipeFormValueContext();
   const { resetRecipeFormValue } = useRecipeFormActionContext();
 
-  const { mutate } = useRecipeRegisterFormMutation();
-
-  const isValid =
-    recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
-
   const formData = useFormData<RecipeRequest>({
     imageKey: 'images',
     imageFile: imageFile === null ? imageFile : [imageFile],
     formContentKey: 'recipeRequest',
     formContent: recipeFormValue,
   });
+
+  const { mutate } = useRecipeRegisterFormMutation();
+
+  const isValid =
+    recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
 
   const resetAndCloseForm = () => {
     deleteImage();
@@ -109,9 +109,9 @@ const RecipeRegisterFormContainer = styled.div`
 
 const RecipeHeading = styled(Heading)`
   height: 80px;
-  text-align: center;
   font-size: 2.4rem;
   line-height: 80px;
+  text-align: center;
 `;
 
 const CloseButton = styled(Button)`
@@ -121,7 +121,7 @@ const CloseButton = styled(Button)`
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

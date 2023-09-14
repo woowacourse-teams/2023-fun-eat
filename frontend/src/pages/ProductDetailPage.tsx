@@ -151,8 +151,8 @@ export default ProductDetailPage;
 
 const SortButtonWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
   margin: 20px 0;
 `;
 
@@ -175,11 +175,11 @@ const LoginLink = styled(Link)`
 
 const ReviewRegisterButtonWrapper = styled.div`
   position: fixed;
-  bottom: 0;
   left: 50%;
+  bottom: 0;
   width: calc(100% - 40px);
-  max-width: 560px;
   height: 80px;
+  max-width: 560px;
   background: ${({ theme }) => theme.backgroundColors.default};
   transform: translateX(-50%);
 `;

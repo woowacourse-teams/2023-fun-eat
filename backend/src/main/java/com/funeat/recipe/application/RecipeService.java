@@ -5,7 +5,7 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
-import com.funeat.common.ImageService;
+import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.RecipeFavorite;
@@ -60,20 +60,19 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeImageRepository recipeImageRepository;
     private final RecipeFavoriteRepository recipeFavoriteRepository;
-    private final ImageService imageService;
+    private final ImageUploader imageUploader;
 
     public RecipeService(final MemberRepository memberRepository, final ProductRepository productRepository,
                          final ProductRecipeRepository productRecipeRepository, final RecipeRepository recipeRepository,
                          final RecipeImageRepository recipeImageRepository,
-                         final RecipeFavoriteRepository recipeFavoriteRepository,
-                         final ImageService imageService) {
+                         final RecipeFavoriteRepository recipeFavoriteRepository, final ImageUploader imageUploader) {
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.productRecipeRepository = productRecipeRepository;
         this.recipeRepository = recipeRepository;
         this.recipeImageRepository = recipeImageRepository;
         this.recipeFavoriteRepository = recipeFavoriteRepository;
-        this.imageService = imageService;
+        this.imageUploader = imageUploader;
     }
 
     @Transactional
@@ -84,15 +83,14 @@ public class RecipeService {
         final Recipe savedRecipe = recipeRepository.save(new Recipe(request.getTitle(), request.getContent(), member));
         request.getProductIds()
                 .stream()
-                .map(it -> productRepository.findById(it)
-                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, it)))
-                .forEach(it -> productRecipeRepository.save(new ProductRecipe(it, savedRecipe)));
+                .map(productId -> productRepository.findById(productId)
+                        .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId)))
+                .forEach(product -> productRecipeRepository.save(new ProductRecipe(product, savedRecipe)));
 
         if (Objects.nonNull(images)) {
-            images.forEach(it -> {
-                final String newFileName = imageService.getRandomImageName(it);
-                recipeImageRepository.save(new RecipeImage(newFileName, savedRecipe));
-                imageService.upload(it, newFileName);
+            images.forEach(image -> {
+                final String imageUrl = imageUploader.upload(image);
+                recipeImageRepository.save(new RecipeImage(imageUrl, savedRecipe));
             });
         }
 

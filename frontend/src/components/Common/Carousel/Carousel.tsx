@@ -44,8 +44,8 @@ const CarouselContainer = styled.div`
 
 const CarouselWrapper = styled.ul<{ currentIndex: number }>`
   display: flex;
-  transition: ${({ currentIndex }) => (currentIndex === length - 1 ? '' : 'all 0.5s ease-in-out')};
   transform: ${({ currentIndex }) => 'translateX(-' + currentIndex * CAROUSEL_WIDTH + 'px)'};
+  transition: ${({ currentIndex }) => (currentIndex === length - 1 ? '' : 'all 0.5s ease-in-out')};
 `;
 
 const CarouselItem = styled.li`

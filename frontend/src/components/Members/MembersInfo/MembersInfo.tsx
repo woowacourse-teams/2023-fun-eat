@@ -3,9 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH, PATH } from '@/constants/path';
+import { PATH } from '@/constants/path';
 import { useLogoutMutation, useMemberQuery } from '@/hooks/queries/members';
-import { isChangedImage } from '@/utils/image';
 
 const MembersInfo = () => {
   const { data: member } = useMemberQuery();
@@ -24,12 +23,7 @@ const MembersInfo = () => {
   return (
     <MembersInfoContainer>
       <MemberInfoWrapper>
-        <MembersImage
-          src={isChangedImage(profileImage) ? IMAGE_SRC_PATH + profileImage : profileImage}
-          width={45}
-          height={45}
-          alt={`${nickname}의 프로필`}
-        />
+        <MembersImage src={profileImage} width={45} height={45} alt={`${nickname}의 프로필`} />
         <Heading size="xl" weight="bold">
           {nickname} 님
         </Heading>
@@ -48,8 +42,8 @@ export default MembersInfo;
 
 const MembersInfoContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const MemberInfoWrapper = styled.div`
@@ -64,6 +58,6 @@ const MemberModifyLink = styled(Link)`
 
 const MembersImage = styled.img`
   margin-right: 16px;
-  border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
 `;

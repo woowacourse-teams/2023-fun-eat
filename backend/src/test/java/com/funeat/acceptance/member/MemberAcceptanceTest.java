@@ -111,7 +111,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
             final var loginCookie = 로그인_쿠키를_얻는다();
             final var image = 사진_명세_요청();
-            final var request = new MemberRequest(member.getNickname());
+            final var request = new MemberRequest("after");
 
             // when
             final var response = 사용자_정보_수정_요청(loginCookie, image, request);
@@ -123,14 +123,15 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자_이미지를_수정하다() {
             // given
-            final var member = 멤버_멤버1_생성();
+            final var member = new Member("member1", "testImage.png", "1");
             단일_멤버_저장(member);
 
             final var loginCookie = 로그인_쿠키를_얻는다();
-            final var request = new MemberRequest("after");
+            final var image = 사진_명세_요청();
+            final var request = new MemberRequest(member.getNickname());
 
             // when
-            final var response = 사용자_정보_수정_요청(loginCookie, null, request);
+            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);

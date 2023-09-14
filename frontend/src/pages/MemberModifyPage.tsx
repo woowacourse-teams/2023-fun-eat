@@ -5,19 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Input, SectionTitle, SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
+import { IMAGE_MAX_SIZE } from '@/constants';
 import { useFormData, useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
-import { isChangedImage } from '@/utils/image';
 
 const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
-
-  const { previewImage, imageFile, uploadImage } = useImageUploader();
-  const [nickname, setNickname] = useState(member?.nickname ?? '');
   const { mutate } = useMemberModifyMutation();
 
+  const { previewImage, imageFile, uploadImage } = useImageUploader();
+
+  const [nickname, setNickname] = useState(member?.nickname ?? '');
   const navigate = useNavigate();
 
   const formData = useFormData<MemberRequest>({
@@ -33,6 +32,22 @@ const MemberModifyPage = () => {
 
   const modifyNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
     setNickname(event.target.value);
+  };
+
+  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (!event.target.files) {
+      return;
+    }
+
+    const imageFile = event.target.files[0];
+
+    if (imageFile.size > IMAGE_MAX_SIZE) {
+      alert('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
+      event.target.value = '';
+      return;
+    }
+
+    uploadImage(imageFile);
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -61,20 +76,10 @@ const MemberModifyPage = () => {
           <MemberImageUploaderContainer>
             <MemberImageUploaderWrapper>
               <UserProfileImageWrapper>
-                <ProfileImage
-                  src={
-                    previewImage
-                      ? previewImage
-                      : isChangedImage(member.profileImage)
-                      ? IMAGE_SRC_PATH + member.profileImage
-                      : member.profileImage
-                  }
-                  alt="업로드한 사진"
-                  width={80}
-                />
+                <ProfileImage src={previewImage ? previewImage : member.profileImage} alt="업로드한 사진" width={80} />
               </UserProfileImageWrapper>
               <UserImageUploaderLabel>
-                <input type="file" accept="image/*" onChange={uploadImage} />
+                <input type="file" accept="image/*" onChange={handleImageUpload} />
                 <SvgIcon variant="camera" width={20} height={20} />
               </UserImageUploaderLabel>
             </MemberImageUploaderWrapper>
@@ -108,9 +113,9 @@ const MemberImageUploaderWrapper = styled.div`
 const UserProfileImageWrapper = styled.div`
   width: 80px;
   height: 80px;
-  background: ${({ theme }) => theme.backgroundColors.default};
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: 50%;
+  background: ${({ theme }) => theme.backgroundColors.default};
   overflow: hidden;
 `;
 
@@ -126,10 +131,10 @@ const UserImageUploaderLabel = styled.label`
   right: -5px;
   width: 30px;
   height: 30px;
-  background: ${({ theme }) => theme.backgroundColors.default};
+  text-align: center;
   border: 1px solid ${({ theme }) => theme.borderColors.disabled};
   border-radius: 50%;
-  text-align: center;
+  background: ${({ theme }) => theme.backgroundColors.default};
   cursor: pointer;
 
   & > input {
@@ -142,13 +147,13 @@ const UserImageUploaderLabel = styled.label`
 `;
 
 const MemberForm = styled.form`
-  height: 92%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 92%;
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.primary};
 `;

@@ -17,9 +17,6 @@ logging:
   level:
     org.hibernate.type.descriptor.sql: trace
 
-image:
-  path:
-
 kakao:
   rest-api-key: { LOCAL_REST_API_KEY }
   redirect-uri: { LOCAL_REDIRECT_URI }

@@ -59,8 +59,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class RecipeAcceptanceTest extends AcceptanceTest {
@@ -306,7 +304,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var images = 여러_사진_요청(3);
             final var recipeId = 레시피_추가_요청하고_id_반환(createRequest, images, loginCookie);
 
-            final var recipe = recipeRepository.findById(recipeId).get();
+            final var recipe = recipeRepository.findRecipeWithMemberById(recipeId);
             final var findImages = recipeImageRepository.findByRecipe(recipe);
 
             final var expected = RecipeDetailResponse.toResponse(recipe, findImages, products, totalPrice, false);

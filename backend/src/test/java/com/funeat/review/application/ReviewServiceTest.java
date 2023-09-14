@@ -107,7 +107,7 @@ class ReviewServiceTest extends ServiceTest {
 
             final var request = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
-            final var expected = new Review(member, product, null, 4L, "test", true);
+            final var expected = new Review(member, product, "", 4L, "test", true);
 
             // when
             reviewService.create(productId, memberId, null, request);

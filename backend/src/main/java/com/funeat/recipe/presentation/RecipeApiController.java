@@ -7,8 +7,8 @@ import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
-import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.dto.SearchRecipeResultsResponse;
+import com.funeat.recipe.dto.SortingRecipesResponse;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -73,7 +73,7 @@ public class RecipeApiController implements RecipeController {
     @GetMapping("/api/ranks/recipes")
     public ResponseEntity<RankingRecipesResponse> getRankingRecipes() {
         final RankingRecipesResponse response = recipeService.getTop3Recipes();
-  
+
         return ResponseEntity.ok(response);
     }
 

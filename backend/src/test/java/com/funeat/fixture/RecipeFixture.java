@@ -18,7 +18,7 @@ public class RecipeFixture {
     public static Recipe 레시피_생성(final Member member, final Long favoriteCount) {
         return new Recipe("제일로 맛있는 레시피", "밥 추가, 밥 추가, 밥 추가.. 끝!!", member, favoriteCount);
     }
-  
+
     public static RecipeFavorite 레시피_좋아요_생성(final Member member, final Recipe recipe, final Boolean favorite) {
         return new RecipeFavorite(member, recipe, favorite);
     }

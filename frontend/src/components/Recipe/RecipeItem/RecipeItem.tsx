@@ -4,10 +4,8 @@ import styled from 'styled-components';
 
 import PreviewImage from '@/assets/plate.svg';
 import { SvgIcon } from '@/components/Common';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
-import { isChangedImage } from '@/utils/image';
 
 interface RecipeItemProps {
   recipe: Recipe | MemberRecipe;
@@ -24,16 +22,11 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
       {!isMemberPage && (
         <ImageWrapper>
           {image !== null ? (
-            <RecipeImage src={IMAGE_SRC_PATH + image} alt={`조리된 ${title}`} />
+            <RecipeImage src={image} alt={`조리된 ${title}`} />
           ) : (
             <PreviewImage width={160} height={160} />
           )}
-          {author && (
-            <ProfileImage
-              src={isChangedImage(author.profileImage) ? IMAGE_SRC_PATH + author.profileImage : author.profileImage}
-              alt={`${author.nickname}의 프로필`}
-            />
-          )}
+          {author && <ProfileImage src={author.profileImage} alt={`${author.nickname}의 프로필`} />}
         </ImageWrapper>
       )}
       <RecipeInfoWrapper>
@@ -65,9 +58,9 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
 export default RecipeItem;
 
 const ImageWrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
-  position: relative;
   width: 100%;
   height: 160px;
 `;
@@ -81,37 +74,37 @@ const RecipeImage = styled.img`
 
 const ProfileImage = styled.img`
   position: absolute;
-  right: 16px;
   bottom: -20px;
+  right: 16px;
   width: 60px;
   height: 60px;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
   background-color: ${({ theme }) => theme.backgroundColors.default};
-  border: 2px solid ${({ theme }) => theme.colors.primary};
 `;
 
 const RecipeInfoWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
   height: 100px;
   margin-top: 10px;
 `;
 
 const FavoriteWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
   position: absolute;
   top: 50%;
-  right: 0;
   bottom: 50%;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
   transform: translateY(-50%);
 `;
 
 const RecipeProductText = styled(Text)`
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
   overflow: hidden;
 `;

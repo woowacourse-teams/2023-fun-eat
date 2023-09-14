@@ -27,13 +27,14 @@ interface ReviewRegisterFormProps {
 }
 
 const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
+  const { scrollToPosition } = useScroll();
   const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
+
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
 
   const { data: productDetail } = useProductDetailQuery(productId);
   const { mutate } = useReviewRegisterFormMutation(productId);
-  const { scrollToPosition } = useScroll();
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
@@ -127,9 +128,9 @@ const ReviewRegisterFormContainer = styled.div`
 
 const ReviewHeading = styled(Heading)`
   height: 80px;
-  text-align: center;
   font-size: 2.4rem;
   line-height: 80px;
+  text-align: center;
 `;
 
 const CloseButton = styled(Button)`
@@ -153,7 +154,7 @@ const ReviewImageUploaderContainer = styled.div`
 `;
 
 const FormButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   color: ${({ theme, disabled }) => (disabled ? theme.colors.white : theme.colors.black)};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray3 : theme.colors.primary)};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;

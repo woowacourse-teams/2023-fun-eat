@@ -5,7 +5,6 @@ import PreviewImage from '@/assets/characters.svg';
 import PBPreviewImage from '@/assets/samgakgimbab.svg';
 import { SvgIcon, TagList } from '@/components/Common';
 import { CATEGORY_TYPE } from '@/constants';
-import { IMAGE_SRC_PATH } from '@/constants/path';
 import type { ProductDetail } from '@/types/product';
 
 interface ProductDetailItemProps {
@@ -22,7 +21,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
     <ProductDetailContainer>
       <ImageWrapper>
         {image !== null ? (
-          <img src={IMAGE_SRC_PATH + image} width={300} alt={name} />
+          <img src={image} width={300} alt={name} />
         ) : category === CATEGORY_TYPE.FOOD ? (
           <PreviewImage width={300} />
         ) : (
@@ -92,8 +91,8 @@ const ProductContent = styled(Text)`
 const RatingIconWrapper = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 4px;
   margin-left: -4px;
+  column-gap: 4px;
 
   & > svg {
     padding-bottom: 2px;
