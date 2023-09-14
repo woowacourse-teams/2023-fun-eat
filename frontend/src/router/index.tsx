@@ -7,6 +7,7 @@ import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
 import AuthPage from '@/pages/AuthPage';
 import HomePage from '@/pages/HomePage';
+import IntegratedSearchPage from '@/pages/IntegratedSearchPage';
 import LoginPage from '@/pages/LoginPage';
 import MemberModifyPage from '@/pages/MemberModifyPage';
 import MemberPage from '@/pages/MemberPage';
@@ -34,18 +35,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: `${PATH.PRODUCT_LIST}/:category`,
-        element: (
-          <CategoryProvider>
-            <ProductListPage />
-          </CategoryProvider>
-        ),
-      },
-      {
-        path: PATH.RECIPE,
-        element: <RecipePage />,
-      },
-      {
         path: `${PATH.RECIPE}/:recipeId`,
         element: (
           <AuthLayout>
@@ -56,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: `${PATH.SEARCH}/:searchVariant`,
         element: <SearchPage />,
+      },
+      {
+        path: `${PATH.SEARCH}/integrated`,
+        element: <IntegratedSearchPage />,
       },
       {
         path: PATH.MEMBER,
@@ -114,6 +107,25 @@ const router = createBrowserRouter([
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,
         element: <ProductDetailPage />,
+      },
+    ],
+  },
+  {
+    path: '/',
+    element: <App layout="simpleHeader" />,
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: `${PATH.PRODUCT_LIST}/:category`,
+        element: (
+          <CategoryProvider>
+            <ProductListPage />
+          </CategoryProvider>
+        ),
+      },
+      {
+        path: PATH.RECIPE,
+        element: <RecipePage />,
       },
     ],
   },

@@ -53,7 +53,8 @@ export const TAG_TITLE = {
 
 export const MIN_DISPLAYED_TAGS_LENGTH = 3;
 
-export const SEARCH_PAGE_VARIANTS = { products: '상품', recipes: '꿀조합' } as const;
+export const SEARCH_TAB_VARIANTS = ['상품', '꿀조합'];
+export const SEARCH_PAGE_VARIANTS = { products: '상품', recipes: '꿀조합', integrated: '통합' } as const;
 
 export const CATEGORY_TYPE = {
   FOOD: 'food',
