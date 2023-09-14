@@ -10,7 +10,7 @@ const CategoryItem = ({ name, image }: CategoryItemProps) => {
   return (
     <CategoryItemContainer variant="transparent">
       <ImageWrapper>
-        <img src={image} width={60} height={60} alt="카테고리" />
+        <img src={image} width={60} height={60} alt={name} />
       </ImageWrapper>
       <CategoryName>{name}</CategoryName>
     </CategoryItemContainer>
