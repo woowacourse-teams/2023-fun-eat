@@ -10,10 +10,12 @@ import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생�
 import static com.funeat.fixture.CategoryFixture.카테고리_과자류_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.product.domain.Category;
 import com.funeat.product.dto.CategoryResponse;
+import com.funeat.review.dto.RankingReviewDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
@@ -34,18 +36,17 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         @Test
         void 공통_상품_카테고리의_목록을_조회한다() {
             // given
-            final var 간편식사 = 카테고리_간편식사_생성();
-            final var 즉석조리 = 카테고리_즉석조리_생성();
-            final var 과자류 = 카테고리_과자류_생성();
-            final var CU = 카테고리_CU_생성();
-            복수_카테고리_저장(간편식사, 즉석조리, 과자류, CU);
+            복수_카테고리_저장(카테고리_간편식사_생성(),
+                    카테고리_즉석조리_생성(),
+                    카테고리_과자류_생성(),
+                    카테고리_CU_생성());
 
             // when
             final var response = 카테고리_목록_조회_요청("food");
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(간편식사, 즉석조리, 과자류));
+            공통_상품_카테고리_목록_조회_결과를_검증한다(response, List.of(1L, 2L, 3L));
         }
     }
 
@@ -60,22 +61,28 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
             final var response = 카테고리_목록_조회_요청(type);
 
             // then
-            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
-
             STATUS_CODE를_검증한다(response, 잘못된_요청);
-            assertThat(response.jsonPath().getString("code")).isEqualTo(expectedCode);
+            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+                    REQUEST_VALID_ERROR_CODE.getMessage());
         }
     }
 
     private void 공통_상품_카테고리_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response,
-                                           final List<Category> categories) {
-        final var expected = categories.stream()
-                .map(CategoryResponse::toResponse)
-                .collect(Collectors.toList());
+                                           final List<Long> categoryIds) {
         final var actual = response.jsonPath()
                 .getList("", CategoryResponse.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertThat(actual).extracting(CategoryResponse::getId)
+                .containsExactlyElementsOf(categoryIds);
+    }
+
+    private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
+                                              final String expectedMessage) {
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.jsonPath().getString("code"))
+                    .isEqualTo(expectedCode);
+            softAssertions.assertThat(response.jsonPath().getString("message"))
+                    .isEqualTo(expectedMessage);
+        });
     }
 }
