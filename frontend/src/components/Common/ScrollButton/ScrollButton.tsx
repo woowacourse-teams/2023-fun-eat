@@ -8,7 +8,7 @@ import SvgIcon from '../Svg/SvgIcon';
 import { useScroll } from '@/hooks/common';
 
 interface ScrollButtonProps {
-  targetRef?: RefObject<HTMLElement>;
+  targetRef: RefObject<HTMLElement>;
   isRecipePage?: boolean;
 }
 
@@ -21,8 +21,8 @@ const ScrollButton = ({ targetRef, isRecipePage = false }: ScrollButtonProps) =>
   };
 
   useEffect(() => {
-    if (targetRef?.current) {
-      scrollToTop(targetRef.current);
+    if (targetRef) {
+      scrollToTop(targetRef);
       setScrollTop(false);
     }
   }, [scrollTop]);
@@ -43,7 +43,7 @@ const ScrollButton = ({ targetRef, isRecipePage = false }: ScrollButtonProps) =>
 
 export default ScrollButton;
 
-const ScrollButtonWrapper = styled(Button)<ScrollButtonProps>`
+const ScrollButtonWrapper = styled(Button)<Pick<ScrollButtonProps, 'isRecipePage'>>`
   position: fixed;
   bottom: ${({ isRecipePage }) => (isRecipePage ? '210px' : '90px')};
   right: 20px;
