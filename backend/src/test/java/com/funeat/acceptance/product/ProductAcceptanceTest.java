@@ -11,38 +11,26 @@ import static com.funeat.acceptance.product.ProductSteps.상품_레시피_목록
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_자동_완성_검색_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_생성_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점4점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점5점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점1점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점3점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점4점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격4000원_평점2점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점5점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격4000원_평점4점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점3점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000원_평점5점_생성;
-import static com.funeat.fixture.RecipeFixture.레시피_생성;
-import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매X_생성;
+import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
+import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생성;
 import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
@@ -54,21 +42,18 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.common.dto.PageDto;
-import com.funeat.product.domain.Product;
+import com.funeat.product.domain.Category;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.SearchProductDto;
 import com.funeat.product.dto.SearchProductResultDto;
 import com.funeat.recipe.dto.RecipeDto;
-import com.funeat.tag.domain.Tag;
 import com.funeat.tag.dto.TagDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -78,6 +63,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     private static final Long PAGE_SIZE = 10L;
     private static final Long FIRST_PAGE = 0L;
+    private static final Long SECOND_PAGE = 1L;
 
     @Nested
     class getAllProductsInCategory_성공_테스트 {
@@ -89,68 +75,40 @@ class ProductAcceptanceTest extends AcceptanceTest {
             void 상품_가격이_서로_다르면_가격_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격3000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격4000원_평점4점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격4000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격5000원_평점4점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product7 = 상품_삼각김밥_가격4000원_평점2점_생성(category);
-                final var product8 = 상품_삼각김밥_가격5000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격3000원_평점3점_생성(category);
-                final var product10 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product8, product5, product7, product4, product10, product9,
-                        product3, product2, product11, product6);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "price,desc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(3L, 1L, 2L));
             }
 
             @Test
             void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격1000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product7 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product8 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격1000원_평점3점_생성(category);
-                final var product10 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
-                        product5, product4, product3, product2);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "price,desc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -161,68 +119,40 @@ class ProductAcceptanceTest extends AcceptanceTest {
             void 상품_가격이_서로_다르면_가격_기준_오름차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격4000원_평점4점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격4000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격5000원_평점4점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product7 = 상품_삼각김밥_가격4000원_평점2점_생성(category);
-                final var product8 = 상품_삼각김밥_가격5000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격3000원_평점3점_생성(category);
-                final var product10 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product11, product6, product1, product3, product2, product10,
-                        product9, product7, product4, product8);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "price,asc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(1L, 3L, 2L));
             }
 
             @Test
             void 상품_가격이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격1000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product7 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product8 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격1000원_평점3점_생성(category);
-                final var product10 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
-                        product5, product4, product3, product2);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "price", "asc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "price,asc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -233,68 +163,40 @@ class ProductAcceptanceTest extends AcceptanceTest {
             void 상품_평점이_서로_다르면_평점_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격2000원_평점4점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product7 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product8 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격3000원_평점3점_생성(category);
-                final var product10 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product1, product5, product4, product9, product2, product7,
-                        product6, product11, product10, product8);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "averageRating,desc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(2L, 1L, 3L));
             }
 
             @Test
             void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product5 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product7 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product8 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
-                final var product10 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
-                        product5, product4, product3, product2);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "averageRating,desc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -305,68 +207,40 @@ class ProductAcceptanceTest extends AcceptanceTest {
             void 상품_평점이_서로_다르면_평점_기준_오름차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격2000원_평점4점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product7 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-                final var product8 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격3000원_평점3점_생성(category);
-                final var product10 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product11, product10, product8, product3, product7, product6,
-                        product9, product2, product5, product4);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "asc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "averageRating,asc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(1L, 3L, 2L));
             }
 
             @Test
             void 상품_평점이_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product5 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product6 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product7 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product8 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                final var product9 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
-                final var product10 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                final var product11 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                        product10, product11);
-
-                final var pageDto = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product11, product10, product9, product8, product7, product6,
-                        product5, product4, product3, product2);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "averageRating", "asc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "averageRating,asc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -377,73 +251,45 @@ class ProductAcceptanceTest extends AcceptanceTest {
             void 리뷰수가_서로_다르면_리뷰수_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
+                단일_태그_저장(태그_맛있어요_TASTE_생성());
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-                복수_상품_저장(product1, product2, product3);
-
-                final var member1 = 멤버_멤버1_생성();
-                final var member2 = 멤버_멤버2_생성();
-                final var member3 = 멤버_멤버3_생성();
-                복수_멤버_저장(member1, member2, member3);
-
-                final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
-                final var review1_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
-                final var review1_3 = 리뷰_이미지test4_평점4점_재구매O_생성(member3, product1, 0L);
-                final var review2_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product2, 0L);
-                final var review2_2 = 리뷰_이미지test1_평점1점_재구매X_생성(member2, product2, 0L);
-                final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
-                final var review3_2 = 리뷰_이미지test2_평점2점_재구매X_생성(member2, product3, 0L);
-                final var review3_3 = 리뷰_이미지test2_평점2점_재구매X_생성(member3, product3, 0L);
-                복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1, review3_2, review3_3);
+                리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(3L, List.of(1L)));
+                리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 2L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(3L, List.of(1L)));
+                리뷰_작성_요청(로그인_쿠키를_얻는다(2L), 2L, 사진_명세_요청("2"), 리뷰추가요청_재구매O_생성(2L, List.of(1L)));
 
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
-                final var expectedProducts = List.of(product3, product1, product2);
-
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "reviewCount,desc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(2L, 1L, 3L));
             }
 
             @Test
             void 리뷰수가_서로_같으면_ID_기준_내림차순으로_정렬할_수_있다() {
                 // given
                 final var category = 카테고리_간편식사_생성();
-                final var categoryId = 단일_카테고리_저장(category);
+                단일_카테고리_저장(category);
+                단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격5000원_평점3점_생성(category));
+                단일_상품_저장(상품_삼각김밥_가격3000원_평점1점_생성(category));
 
-                final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-                final var product2 = 상품_삼각김밥_가격5000원_평점3점_생성(category);
-                final var product3 = 상품_삼각김밥_가격3000원_평점1점_생성(category);
-                final var product4 = 상품_삼각김밥_가격2000원_평점4점_생성(category);
-                final var product5 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
-                복수_상품_저장(product1, product2, product3, product4, product5);
-
-                final var member1 = 멤버_멤버1_생성();
-                단일_멤버_저장(member1);
-
-                final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
-                final var review2_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product2, 0L);
-                final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
-                복수_리뷰_저장(review1_1, review2_1, review3_1);
-
-                final var pageDto = new PageDto(5L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
-                final var expectedProducts = List.of(product3, product2, product1, product5, product4);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(categoryId, "reviewCount", "desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, "reviewCount,desc", 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
                 페이지를_검증한다(response, pageDto);
-                카테고리별_상품_목록_조회_결과를_검증한다(response, expectedProducts);
+                카테고리별_상품_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
     }
@@ -457,7 +303,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var notExistCategoryId = 99999L;
 
             // when
-            final var response = 카테고리별_상품_목록_조회_요청(notExistCategoryId, "price", "desc", 0);
+            final var response = 카테고리별_상품_목록_조회_요청(notExistCategoryId, "price,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
@@ -473,15 +319,15 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
-            final var productId = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
             복수_태그_저장(태그_맛있어요_TASTE_생성(), 태그_단짠단짠_TASTE_생성(), 태그_간식_ETC_생성());
 
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(4L, List.of(1L, 2L, 3L)));
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(4L, List.of(2L, 3L)));
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), productId, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(1L, List.of(2L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(4L, List.of(1L, 2L, 3L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(4L, List.of(2L, 3L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(1L, List.of(2L)));
 
             // when
-            final var response = 상품_상세_조회_요청(productId);
+            final var response = 상품_상세_조회_요청(1L);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -514,35 +360,26 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점4점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점4점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            단일_태그_저장(태그_맛있어요_TASTE_생성());
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-            final var product2 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product3 = 상품_삼각김밥_가격1000원_평점4점_생성(category);
-            final var product4 = 상품_삼각김밥_가격1000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3, product4);
-
-            final var member1 = 멤버_멤버1_생성();
-            final var member2 = 멤버_멤버2_생성();
-            final var member3 = 멤버_멤버3_생성();
-            복수_멤버_저장(member1, member2, member3);
-
-            final var review1_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
-            final var review1_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
-            final var review1_3 = 리뷰_이미지test4_평점4점_재구매O_생성(member3, product1, 0L);
-            final var review2_1 = 리뷰_이미지test4_평점4점_재구매X_생성(member1, product2, 0L);
-            final var review2_2 = 리뷰_이미지test4_평점4점_재구매X_생성(member2, product2, 0L);
-            final var review3_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
-            final var review3_2 = 리뷰_이미지test5_평점5점_재구매X_생성(member2, product3, 0L);
-            복수_리뷰_저장(review1_1, review1_2, review1_3, review2_1, review2_2, review3_1, review3_2);
-
-            final var expectedProduct = List.of(product2, product1, product3);
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(3L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(2L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(3L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(3L), 1L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(4L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 2L, 사진_명세_요청("4"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(2L), 2L, 사진_명세_요청("5"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 3L, 사진_명세_요청("6"), 리뷰추가요청_재구매X_생성(4L, List.of(1L)));
+            리뷰_작성_요청(로그인_쿠키를_얻는다(2L), 3L, 사진_명세_요청("7"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
 
             // when
             final var response = 상품_랭킹_조회_요청();
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_랭킹_조회_결과를_검증한다(response, expectedProduct);
+            상품_랭킹_조회_결과를_검증한다(response, List.of(2L, 3L, 1L));
         }
     }
 
@@ -554,21 +391,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
-
-            final var product1 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            복수_상품_저장(product1, product2);
+            단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-            final var expectedProducts = List.of(product2, product1);
 
             // when
-            final var response = 상품_자동_완성_검색_요청("망고", 0);
+            final var response = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_자동_완성_검색_결과를_검증한다(response, expectedProducts);
+            상품_자동_완성_검색_결과를_검증한다(response, List.of(2L, 1L));
         }
 
         @Test
@@ -576,21 +410,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
-
-            final var product1 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            복수_상품_저장(product1, product2);
+            단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
 
             final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
-            final var expectedProducts = Collections.emptyList();
 
             // when
-            final var response = 상품_자동_완성_검색_요청("김밥", 0);
+            final var response = 상품_자동_완성_검색_요청("김밥", FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_자동_완성_검색_결과를_검증한다(response, expectedProducts);
+            상품_자동_완성_검색_결과를_검증한다(response, Collections.emptyList());
         }
 
         @Test
@@ -598,26 +429,23 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
+            반복_애플망고_상품_저장(10, category);
 
-            final var product1 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            final var product2 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product4 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product5 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product6 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product7 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product8 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product9 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product10 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product11 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                    product10, product11);
+            final var pageDto1 = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+            final var pageDto2 = new PageDto(11L, 2L, false, true, SECOND_PAGE, PAGE_SIZE);
 
             // when
-            final var response1 = 상품_자동_완성_검색_요청("망고", 0);
-            final var response2 = 상품_자동_완성_검색_요청("망고", 1);
+            final var response1 = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
+            final var response2 = 상품_자동_완성_검색_요청("망고", SECOND_PAGE);
 
             // then
+            STATUS_CODE를_검증한다(response1, 정상_처리);
+            페이지를_검증한다(response1, pageDto1);
+
+            STATUS_CODE를_검증한다(response2, 정상_처리);
+            페이지를_검증한다(response2, pageDto2);
+
             결과값이_이전_요청_결과값에_중복되는지_검증(response1, response2);
         }
 
@@ -626,32 +454,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
-
-            final var product1 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            final var product2 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product4 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product5 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product6 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product7 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product8 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product9 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product10 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product11 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                    product10, product11);
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
+            반복_애플망고_상품_저장(9, category);
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
 
             final var pageDto = new PageDto(11L, 2L, true, false, 0L, PAGE_SIZE);
-            final var expectedProducts = List.of(product11, product1, product10, product9, product8, product7, product6,
-                    product5, product4, product3);
 
             // when
-            final var response = 상품_자동_완성_검색_요청("망고", 0);
+            final var response = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_자동_완성_검색_결과를_검증한다(response, expectedProducts);
+            상품_자동_완성_검색_결과를_검증한다(response, List.of(11L, 1L, 10L, 9L, 8L, 7L, 6L, 5L, 4L, 3L));
         }
     }
 
@@ -663,26 +478,19 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
-
-            final var product1 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            복수_상품_저장(product1, product2);
-            복수_태그_저장(태그_맛있어요_TASTE_생성(), 태그_간식_ETC_생성());
-
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(5L, List.of(1L, 2L)));
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
-            리뷰_작성_요청(로그인_쿠키를_얻는다(1L), 2L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(5L, List.of(1L)));
+            단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
+            단일_태그_저장(태그_맛있어요_TASTE_생성());
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-            final var expectedIds = List.of(1L, 2L);
 
             // when
-            final var response = 상품_검색_결과_조회_요청("망고", 0);
+            final var response = 상품_검색_결과_조회_요청("망고", FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_검색_결과를_검증한다(response, expectedIds);
+            상품_검색_결과를_검증한다(response, List.of(2L, 1L));
         }
 
         @Test
@@ -690,21 +498,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
-
-            final var product1 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            복수_상품_저장(product1, product2);
+            단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
 
             final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
-            final var expected = Collections.emptyList();
 
             // when
-            final var response = 상품_검색_결과_조회_요청("김밥", 0);
+            final var response = 상품_검색_결과_조회_요청("김밥", FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_검색_결과를_검증한다(response, expected);
+            상품_검색_결과를_검증한다(response, Collections.emptyList());
         }
 
         @Test
@@ -712,26 +517,23 @@ class ProductAcceptanceTest extends AcceptanceTest {
             // given
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
+            반복_애플망고_상품_저장(10, category);
 
-            final var product1 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            final var product2 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product4 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product5 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product6 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product7 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product8 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product9 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product10 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product11 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                    product10, product11);
+            final var pageDto1 = new PageDto(11L, 2L, true, false, FIRST_PAGE, PAGE_SIZE);
+            final var pageDto2 = new PageDto(11L, 2L, false, true, SECOND_PAGE, PAGE_SIZE);
 
             // when
-            final var response1 = 상품_검색_결과_조회_요청("망고", 0);
-            final var response2 = 상품_검색_결과_조회_요청("망고", 1);
+            final var response1 = 상품_검색_결과_조회_요청("망고", FIRST_PAGE);
+            final var response2 = 상품_검색_결과_조회_요청("망고", SECOND_PAGE);
 
             // then
+            STATUS_CODE를_검증한다(response1, 정상_처리);
+            페이지를_검증한다(response1, pageDto1);
+
+            STATUS_CODE를_검증한다(response2, 정상_처리);
+            페이지를_검증한다(response2, pageDto2);
+
             결과값이_이전_요청_결과값에_중복되는지_검증(response1, response2);
         }
 
@@ -741,223 +543,118 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
 
-            final var product1 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            final var product2 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product3 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product4 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product5 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product6 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product7 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product8 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product9 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product10 = 상품_애플망고_가격3000원_평점5점_생성(category);
-            final var product11 = 상품_망고빙수_가격5000원_평점4점_생성(category);
-            복수_상품_저장(product1, product2, product3, product4, product5, product6, product7, product8, product9,
-                    product10, product11);
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
+            반복_애플망고_상품_저장(9, category);
+            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
 
             final var pageDto = new PageDto(11L, 2L, true, false, 0L, PAGE_SIZE);
-            final var expectedDto1 = SearchProductResultDto.toDto(product11, 0L);
-            final var expectedDto2 = SearchProductResultDto.toDto(product1, 0L);
-            final var expectedDto3 = SearchProductResultDto.toDto(product10, 0L);
-            final var expectedDto4 = SearchProductResultDto.toDto(product9, 0L);
-            final var expectedDto5 = SearchProductResultDto.toDto(product8, 0L);
-            final var expectedDto6 = SearchProductResultDto.toDto(product7, 0L);
-            final var expectedDto7 = SearchProductResultDto.toDto(product6, 0L);
-            final var expectedDto8 = SearchProductResultDto.toDto(product5, 0L);
-            final var expectedDto9 = SearchProductResultDto.toDto(product4, 0L);
-            final var expectedDto10 = SearchProductResultDto.toDto(product3, 0L);
-            final var expected = List.of(expectedDto1, expectedDto2, expectedDto3, expectedDto4, expectedDto5,
-                    expectedDto6, expectedDto7, expectedDto8, expectedDto9, expectedDto10);
 
             // when
-            final var response = 상품_검색_결과_조회_요청("망고", 0);
+            final var response = 상품_검색_결과_조회_요청("망고", FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
             페이지를_검증한다(response, pageDto);
-            상품_검색_결과를_검증한다(response, expected);
+            상품_검색_결과를_검증한다(response, List.of(11L, 1L, 10L, 9L, 8L, 7L, 6L, 5L, 4L, 3L));
         }
     }
 
-    private void 결과값이_이전_요청_결과값에_중복되는지_검증(final ExtractableResponse<Response> response1,
-                                          final ExtractableResponse<Response> response2) {
-        final var lastResponses = response1.jsonPath()
-                .getList("products", SearchProductResultDto.class);
-        final var currentResponse = response2.jsonPath()
-                .getList("products", SearchProductResultDto.class).get(0);
-
-        assertThat(lastResponses).usingRecursiveFieldByFieldElementComparator()
-                .doesNotContain(currentResponse);
-    }
-
-    /**
-     * AssertJ assertions "allMatch" and "doesNotContains" should also test for emptiness
-     */
     @Nested
     class getProductRecipes_성공_테스트 {
 
         @Test
         void 해당_상품의_꿀조합_목록을_좋아요가_많은_순으로_조회할_수_있다() {
             // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            레시피_좋아요_요청(로그인_쿠키를_얻는다(1L), 1L, 레시피좋아요요청_생성(true));
+            레시피_좋아요_요청(로그인_쿠키를_얻는다(2L), 2L, 레시피좋아요요청_생성(true));
+            레시피_좋아요_요청(로그인_쿠키를_얻는다(3L), 2L, 레시피좋아요요청_생성(true));
 
-            final var recipe1 = 레시피_생성(member, 1L);
-            final var recipe2 = 레시피_생성(member, 3L);
-            final var recipe3 = 레시피_생성(member, 2L);
-            복수_꿀조합_저장(recipe1, recipe2, recipe3);
-
-            final var product_recipe_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1);
-            final var product_recipe_1_2 = 레시피_안에_들어가는_상품_생성(product1, recipe2);
-            final var product_recipe_2_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1);
-            final var product_recipe_3_1 = 레시피_안에_들어가는_상품_생성(product3, recipe1);
-            final var product_recipe_3_2 = 레시피_안에_들어가는_상품_생성(product3, recipe2);
-            복수_꿀조합_상품_저장(product_recipe_1_1, product_recipe_2_1, product_recipe_3_1, product_recipe_1_2,
-                    product_recipe_3_2);
-
-            final var recipeImage1_1 = 레시피이미지_생성(recipe1);
-            final var recipeImage2_1 = 레시피이미지_생성(recipe2);
-            final var recipeImage2_2 = 레시피이미지_생성(recipe2);
-            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
-
-            final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
-            final var sortingRecipes = List.of(
-                    RecipeDto.toDto(recipe2, List.of(recipeImage2_1, recipeImage2_2), List.of(product1, product3)),
-                    RecipeDto.toDto(recipe1, List.of(recipeImage1_1), List.of(product1, product2, product3))
-            );
+            final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 상품_레시피_목록_요청(product1.getId(), "favoriteCount", "desc", 0);
+            final var response = 상품_레시피_목록_요청(1L, "favoriteCount,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_레시피_목록_조회_결과를_검증한다(response, sortingRecipes, pageDto);
+            페이지를_검증한다(response, pageDto);
+            상품_레시피_목록_조회_결과를_검증한다(response, List.of(2L, 1L, 3L));
         }
 
         @Test
         void 해당_상품의_꿀조합_목록을_최신순으로_조회할_수_있다() {
             // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
 
-            final var recipe1 = 레시피_생성(member, 1L);
-            final var recipe2 = 레시피_생성(member, 3L);
-            final var recipe3 = 레시피_생성(member, 2L);
-            복수_꿀조합_저장(recipe1, recipe2, recipe3);
-
-            final var product_recipe_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1);
-            final var product_recipe_1_2 = 레시피_안에_들어가는_상품_생성(product1, recipe2);
-            final var product_recipe_2_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1);
-            final var product_recipe_3_1 = 레시피_안에_들어가는_상품_생성(product3, recipe1);
-            final var product_recipe_3_2 = 레시피_안에_들어가는_상품_생성(product3, recipe2);
-            복수_꿀조합_상품_저장(product_recipe_1_1, product_recipe_2_1, product_recipe_3_1, product_recipe_1_2,
-                    product_recipe_3_2);
-
-            final var recipeImage1_1 = 레시피이미지_생성(recipe1);
-            final var recipeImage2_1 = 레시피이미지_생성(recipe2);
-            final var recipeImage2_2 = 레시피이미지_생성(recipe2);
-            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
-
-            final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
-            final var sortingRecipes = List.of(
-                    RecipeDto.toDto(recipe2, List.of(recipeImage2_1, recipeImage2_2), List.of(product1, product3)),
-                    RecipeDto.toDto(recipe1, List.of(recipeImage1_1), List.of(product1, product2, product3))
-            );
+            final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 상품_레시피_목록_요청(product1.getId(), "createdAt", "desc", 0);
+            final var response = 상품_레시피_목록_요청(1L, "createdAt,desc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_레시피_목록_조회_결과를_검증한다(response, sortingRecipes, pageDto);
+            페이지를_검증한다(response, pageDto);
+            상품_레시피_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
         }
 
         @Test
         void 해당_상품의_꿀조합_목록을_오래된순으로_조회할_수_있다() {
             // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
+            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
+            단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
+            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
 
-            final var recipe1 = 레시피_생성(member, 1L);
-            final var recipe2 = 레시피_생성(member, 3L);
-            final var recipe3 = 레시피_생성(member, 2L);
-            복수_꿀조합_저장(recipe1, recipe2, recipe3);
-
-            final var product_recipe_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1);
-            final var product_recipe_1_2 = 레시피_안에_들어가는_상품_생성(product1, recipe2);
-            final var product_recipe_2_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1);
-            final var product_recipe_3_1 = 레시피_안에_들어가는_상품_생성(product3, recipe1);
-            final var product_recipe_3_2 = 레시피_안에_들어가는_상품_생성(product3, recipe2);
-            복수_꿀조합_상품_저장(product_recipe_1_1, product_recipe_2_1, product_recipe_3_1, product_recipe_1_2,
-                    product_recipe_3_2);
-
-            final var recipeImage1_1 = 레시피이미지_생성(recipe1);
-            final var recipeImage2_1 = 레시피이미지_생성(recipe2);
-            final var recipeImage2_2 = 레시피이미지_생성(recipe2);
-            복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
-
-            final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
-            final var sortingRecipes = List.of(
-                    RecipeDto.toDto(recipe1, List.of(recipeImage1_1), List.of(product1, product2, product3)),
-                    RecipeDto.toDto(recipe2, List.of(recipeImage2_1, recipeImage2_2), List.of(product1, product3))
-            );
+            final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 상품_레시피_목록_요청(product1.getId(), "createdAt", "asc", 0);
+            final var response = 상품_레시피_목록_요청(1L, "createdAt,asc", 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            상품_레시피_목록_조회_결과를_검증한다(response, sortingRecipes, pageDto);
+            페이지를_검증한다(response, pageDto);
+            상품_레시피_목록_조회_결과를_검증한다(response, List.of(1L, 2L, 3L));
         }
-    }
-
-    private List<Long> 태그_아이디_변환(final Tag... tags) {
-        return Arrays.stream(tags)
-                .map(Tag::getId)
-                .collect(Collectors.toList());
     }
 
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
         final var actual = response.jsonPath().getObject("page", PageDto.class);
+        System.out.println(actual.getTotalDataCount());
+        System.out.println(actual.getTotalPages());
+        System.out.println(actual.getRequestPage());
+        System.out.println(actual.getRequestSize());
+        System.out.println(actual.isFirstPage());
+        System.out.println(actual.isLastPage());
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
 
-    private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
-        final var expected = products.stream()
-                .map(product -> ProductInCategoryDto.toDto(product, 0L))
-                .collect(Collectors.toList());
+    private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> productIds) {
         final var actual = response.jsonPath()
                 .getList("products", ProductInCategoryDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("reviewCount")
-                .isEqualTo(expected);
+        assertThat(actual).extracting(ProductInCategoryDto::getId)
+                .containsExactlyElementsOf(productIds);
     }
 
     private void ERROR_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
@@ -987,49 +684,51 @@ class ProductAcceptanceTest extends AcceptanceTest {
         });
     }
 
-    private void 상품_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Product> products) {
-        final var expected = products.stream()
-                .map(RankingProductDto::toDto)
-                .collect(Collectors.toList());
+    private void 상품_랭킹_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> productIds) {
         final var actual = response.jsonPath()
                 .getList("products", RankingProductDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertThat(actual).extracting(RankingProductDto::getId)
+                .isEqualTo(productIds);
     }
 
-    private <T> void 상품_자동_완성_검색_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> products) {
-        final var expected = products.stream()
-                .map(product -> SearchProductDto.toDto((Product) product))
-                .collect(Collectors.toList());
+    private void 상품_자동_완성_검색_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> productIds) {
         final var actual = response.jsonPath()
                 .getList("products", SearchProductDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertThat(actual).extracting(SearchProductDto::getId)
+                .isEqualTo(productIds);
     }
 
-    private <T> void 상품_검색_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> expected) {
+    private void 결과값이_이전_요청_결과값에_중복되는지_검증(final ExtractableResponse<Response> response1,
+                                          final ExtractableResponse<Response> response2) {
+        final var lastResponses = response1.jsonPath()
+                .getList("products", SearchProductResultDto.class);
+        final var currentResponse = response2.jsonPath()
+                .getList("products", SearchProductResultDto.class).get(0);
+
+        assertThat(lastResponses).usingRecursiveFieldByFieldElementComparator()
+                .doesNotContain(currentResponse);
+    }
+
+    private void 상품_검색_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> productIds) {
         final var actual = response.jsonPath()
                 .getList("products", SearchProductResultDto.class);
 
-        SoftAssertions.assertSoftly(soft -> {
-            soft.assertThat(actual).hasSize(2);
-            soft.assertThat(actual).extracting("id").containsAll(expected);
-        });
-
+        assertThat(actual).extracting(SearchProductResultDto::getId)
+                .containsExactlyElementsOf(productIds);
     }
 
-    private void 상품_레시피_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> recipes,
-                                       final PageDto pageDto) {
-        페이지를_검증한다(response, pageDto);
-        상품_레시피_목록을_검증한다(response, recipes);
-    }
-
-    private void 상품_레시피_목록을_검증한다(final ExtractableResponse<Response> response, final List<RecipeDto> expected) {
+    private void 상품_레시피_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> recipeIds) {
         final var actual = response.jsonPath().getList("recipes", RecipeDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertThat(actual).extracting(RecipeDto::getId)
+                .containsExactlyElementsOf(recipeIds);
+    }
+
+    private void 반복_애플망고_상품_저장(final int repeat, final Category category) {
+        for (int i = 0; i < repeat; i++) {
+            단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
+        }
     }
 }
