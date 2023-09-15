@@ -7,7 +7,7 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useImageUploader, useFormData } from '@/hooks/common';
+import { useImageUploader, useFormData, useTimeout } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest } from '@/types/recipe';
@@ -61,6 +61,8 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
     });
   };
 
+  const [debouncedRecipeSubmit] = useTimeout(handleRecipeFormSubmit, 200);
+
   return (
     <RecipeRegisterFormContainer>
       <RecipeHeading tabIndex={0}>나만의 꿀조합 만들기🍯</RecipeHeading>
@@ -69,7 +71,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
       </CloseButton>
       <Divider />
       <Spacing size={36} />
-      <form onSubmit={handleRecipeFormSubmit}>
+      <form onSubmit={debouncedRecipeSubmit}>
         <RecipeNameInput recipeName={recipeFormValue.title} />
         <Spacing size={40} />
         <RecipeUsedProducts />
