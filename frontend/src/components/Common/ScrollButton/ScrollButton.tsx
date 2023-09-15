@@ -8,7 +8,7 @@ import SvgIcon from '../Svg/SvgIcon';
 import { useScroll } from '@/hooks/common';
 
 interface ScrollButtonProps {
-  targetRef?: RefObject<HTMLDivElement>;
+  targetRef?: RefObject<HTMLElement>;
   isRecipePage?: boolean;
 }
 

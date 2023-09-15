@@ -48,6 +48,8 @@ const ProductDetailPage = () => {
 
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
 
+  const productDetailPageRef = useRef<HTMLDivElement>(null);
+
   if (!category) {
     return null;
   }
@@ -74,7 +76,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <>
+    <ProductDetailPageContainer ref={productDetailPageRef}>
       <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
@@ -122,7 +124,7 @@ const ProductDetailPage = () => {
           onClick={handleOpenRegisterReviewSheet}
         />
       </ReviewRegisterButtonWrapper>
-      <ScrollButton />
+      <ScrollButton targetRef={productDetailPageRef} />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
@@ -142,11 +144,20 @@ const ProductDetailPage = () => {
           />
         )}
       </BottomSheet>
-    </>
+    </ProductDetailPageContainer>
   );
 };
 
 export default ProductDetailPage;
+
+const ProductDetailPageContainer = styled.div`
+  height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const SortButtonWrapper = styled.div`
   display: flex;
