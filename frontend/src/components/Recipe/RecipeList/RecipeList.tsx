@@ -1,5 +1,4 @@
 import { Link, Text } from '@fun-eat/design-system';
-import type { RefObject } from 'react';
 import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,11 +10,10 @@ import { useInfiniteRecipesQuery } from '@/hooks/queries/recipe';
 import type { SortOption } from '@/types/common';
 
 interface RecipeListProps {
-  recipeRef: RefObject<HTMLDivElement>;
   selectedOption: SortOption;
 }
 
-const RecipeList = ({ selectedOption, recipeRef }: RecipeListProps) => {
+const RecipeList = ({ selectedOption }: RecipeListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { fetchNextPage, hasNextPage, data } = useInfiniteRecipesQuery(selectedOption.value);
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
@@ -27,8 +25,8 @@ const RecipeList = ({ selectedOption, recipeRef }: RecipeListProps) => {
   }
 
   return (
-    <RecipeListContainer ref={recipeRef}>
-      <RecipeListWrapper>
+    <>
+      <RecipeListContainer>
         {recipes.map((recipe) => (
           <li key={recipe.id}>
             <Link as={RouterLink} to={`${recipe.id}`}>
@@ -36,20 +34,15 @@ const RecipeList = ({ selectedOption, recipeRef }: RecipeListProps) => {
             </Link>
           </li>
         ))}
-      </RecipeListWrapper>
+      </RecipeListContainer>
       <div ref={scrollRef} aria-hidden />
-    </RecipeListContainer>
+    </>
   );
 };
 
 export default RecipeList;
 
-const RecipeListContainer = styled.div`
-  height: calc(100% - 192px);
-  overflow-y: auto;
-`;
-
-const RecipeListWrapper = styled.ul`
+const RecipeListContainer = styled.ul`
   & > li + li {
     margin-top: 40px;
   }

@@ -55,7 +55,9 @@ const RecipePage = () => {
           <SortButtonWrapper>
             <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
           </SortButtonWrapper>
-          <RecipeList recipeRef={recipeRef} selectedOption={selectedOption} />
+          <RecipeListWrapper ref={recipeRef}>
+            <RecipeList selectedOption={selectedOption} />
+          </RecipeListWrapper>
         </Suspense>
       </ErrorBoundary>
       <Spacing size={80} />
@@ -101,6 +103,11 @@ const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin: 20px 0;
+`;
+
+const RecipeListWrapper = styled.div`
+  height: calc(100% - 192px);
+  overflow-y: auto;
 `;
 
 const RecipeRegisterButtonWrapper = styled.div`
