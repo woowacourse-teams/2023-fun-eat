@@ -1,4 +1,6 @@
 import { Button, theme } from '@fun-eat/design-system';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
@@ -12,9 +14,20 @@ interface CategoryMenuProps {
 
 const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
   const { data: categories } = useCategoryQuery(menuVariant);
+
   const { categoryIds } = useCategoryValueContext();
   const { selectCategory } = useCategoryActionContext();
   const currentCategoryId = categoryIds[menuVariant];
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryIdFromURL = queryParams.get('category');
+
+  useEffect(() => {
+    if (categoryIdFromURL) {
+      selectCategory(menuVariant, parseInt(categoryIdFromURL));
+    }
+  }, [location]);
 
   return (
     <CategoryMenuContainer>
