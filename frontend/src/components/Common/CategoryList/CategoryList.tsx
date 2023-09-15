@@ -18,7 +18,7 @@ const CategoryList = ({ menuVariant }: CategoryListProps) => {
     <CategoryListContainer>
       <CategoryListWrapper>
         {categories.map((menu) => (
-          <Link key={menu.id} as={RouterLink} to={`products/${menuVariant}?category=${menu.id}`}>
+          <Link key={menu.id} as={RouterLink} to={`products/${menuVariant.toLowerCase()}?category=${menu.id}`}>
             <CategoryItem name={menu.name} image={menu.image} />
           </Link>
         ))}
