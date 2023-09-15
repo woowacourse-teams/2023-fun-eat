@@ -1,5 +1,4 @@
 import { Link } from '@fun-eat/design-system';
-import type { RefObject } from 'react';
 import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,20 +6,18 @@ import styled from 'styled-components';
 import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
-import { useIntersectionObserver, useScrollRestoration } from '@/hooks/common';
+import { useIntersectionObserver } from '@/hooks/common';
 import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import type { CategoryVariant, SortOption } from '@/types/common';
 
 interface ProductListProps {
-  productListRef: RefObject<HTMLDivElement>;
   category: CategoryVariant;
   selectedOption?: SortOption;
 }
 
-const ProductList = ({ category, selectedOption, productListRef }: ProductListProps) => {
+const ProductList = ({ category, selectedOption }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const { categoryIds } = useCategoryValueContext();
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(
@@ -30,13 +27,11 @@ const ProductList = ({ category, selectedOption, productListRef }: ProductListPr
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  useScrollRestoration(categoryIds[category], productListRef);
-
   const productList = data.pages.flatMap((page) => page.products);
 
   return (
-    <ProductListContainer ref={productListRef}>
-      <ProductListWrapper>
+    <>
+      <ProductListContainer>
         {productList.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
@@ -44,19 +39,15 @@ const ProductList = ({ category, selectedOption, productListRef }: ProductListPr
             </Link>
           </li>
         ))}
-      </ProductListWrapper>
+      </ProductListContainer>
       <div ref={scrollRef} aria-hidden />
-    </ProductListContainer>
+    </>
   );
 };
+
 export default ProductList;
 
-const ProductListContainer = styled.div`
-  height: calc(100% - 150px);
-  overflow-y: auto;
-`;
-
-const ProductListWrapper = styled.ul`
+const ProductListContainer = styled.ul`
   display: flex;
   flex-direction: column;
 
