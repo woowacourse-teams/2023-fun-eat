@@ -46,10 +46,11 @@ const ProductListPage = () => {
           content={PAGE_TITLE[category]}
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
-        <Spacing size={30} />
+        <Spacing size={20} />
         <Suspense fallback={null}>
           <CategoryTab menuVariant={category} />
         </Suspense>
+        <Spacing size={20} />
         <ProductListContainer ref={productListRef}>
           <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
             <Suspense fallback={<Loading />}>
@@ -83,10 +84,9 @@ const ProductListSection = styled.section`
 const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
 `;
 
 const ProductListContainer = styled.div`
-  height: calc(100% - 150px);
+  height: calc(100% - 100px);
   overflow-y: auto;
 `;
