@@ -11,7 +11,7 @@ const MemberRecipePage = () => {
   const memberRecipeRef = useRef<HTMLDivElement>(null);
 
   return (
-    <MebmberRecipePageContainer ref={memberRecipeRef}>
+    <MemberRecipePageContainer ref={memberRecipeRef}>
       <SectionTitle name="내가 작성한 꿀조합" />
       <Spacing size={18} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
@@ -20,13 +20,15 @@ const MemberRecipePage = () => {
         </Suspense>
       </ErrorBoundary>
       <ScrollButton targetRef={memberRecipeRef} />
-    </MebmberRecipePageContainer>
+      <Spacing size={40} />
+    </MemberRecipePageContainer>
   );
 };
 
 export default MemberRecipePage;
 
-const MebmberRecipePageContainer = styled.div`
+const MemberRecipePageContainer = styled.div`
   height: 100%;
+  padding: 20px 20px 0;
   overflow-y: auto;
 `;

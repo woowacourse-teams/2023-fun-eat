@@ -12,6 +12,7 @@ export const isCategoryVariant = (value: string): value is CategoryVariant => {
 export interface Category {
   id: number;
   name: string;
+  image: string;
 }
 
 export interface Tag {

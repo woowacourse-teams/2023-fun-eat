@@ -67,22 +67,3 @@ export const ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod'
 
 export const IMAGE_URL =
   ENVIRONMENT === 'dev' ? process.env.S3_DEV_CLOUDFRONT_PATH : process.env.S3_PROD_CLOUDFRONT_PATH;
-
-export const MENU_NAME = ['간편식사', '과자류', '아이스크림', '식품', '음료'] as const;
-
-export const STORE_NAMES = ['CU', 'GS25', '이마트24', '세븐일레븐'] as const;
-
-export const MENU_IMAGES = [
-  `${IMAGE_URL}food.jpeg`,
-  `${IMAGE_URL}snack.jpeg`,
-  `${IMAGE_URL}icecream.jpeg`,
-  `${IMAGE_URL}ramen.jpeg`,
-  `${IMAGE_URL}tea.jpeg`,
-];
-
-export const STORE_IMAGES = [
-  `${IMAGE_URL}cu.jpg`,
-  `${IMAGE_URL}gs.png`,
-  `${IMAGE_URL}emart24.png`,
-  `${IMAGE_URL}seven.png`,
-];

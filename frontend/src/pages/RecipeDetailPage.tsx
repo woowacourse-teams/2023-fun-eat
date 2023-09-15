@@ -15,7 +15,7 @@ const RecipeDetailPage = () => {
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
-    <>
+    <RecipeDetailPageContainer>
       <SectionTitle name={title} />
       <Spacing size={24} />
       {images.length > 0 ? (
@@ -65,11 +65,16 @@ const RecipeDetailPage = () => {
       <RecipeContent size="lg" lineHeight="lg">
         {content}
       </RecipeContent>
-    </>
+      <Spacing size={40} />
+    </RecipeDetailPageContainer>
   );
 };
 
 export default RecipeDetailPage;
+
+const RecipeDetailPageContainer = styled.div`
+  padding: 20px 20px 0;
+`;
 
 const RecipeImageContainer = styled.ul`
   display: flex;

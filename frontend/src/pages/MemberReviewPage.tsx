@@ -11,7 +11,7 @@ const MemberReviewPage = () => {
   const memberReviewRef = useRef<HTMLDivElement>(null);
 
   return (
-    <MebmberReviewPageContainer ref={memberReviewRef}>
+    <MemberReviewPageContainer ref={memberReviewRef}>
       <SectionTitle name="내가 작성한 리뷰" />
       <Spacing size={18} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
@@ -20,13 +20,15 @@ const MemberReviewPage = () => {
         </Suspense>
       </ErrorBoundary>
       <ScrollButton targetRef={memberReviewRef} />
-    </MebmberReviewPageContainer>
+      <Spacing size={40} />
+    </MemberReviewPageContainer>
   );
 };
 
 export default MemberReviewPage;
 
-const MebmberReviewPageContainer = styled.div`
+const MemberReviewPageContainer = styled.div`
   height: 100%;
+  padding: 20px 20px 0;
   overflow-y: auto;
 `;
