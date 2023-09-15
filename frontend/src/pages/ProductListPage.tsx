@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
-  CategoryMenu,
+  CategoryTab,
   SortButton,
   SortOptionList,
   ScrollButton,
@@ -42,7 +42,7 @@ const ProductListPage = () => {
         />
         <Spacing size={30} />
         <Suspense fallback={null}>
-          <CategoryMenu menuVariant={category} />
+          <CategoryTab menuVariant={category} />
         </Suspense>
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>

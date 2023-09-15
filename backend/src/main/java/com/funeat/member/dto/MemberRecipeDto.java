@@ -1,12 +1,10 @@
 package com.funeat.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.funeat.product.domain.Product;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MemberRecipeDto {
 

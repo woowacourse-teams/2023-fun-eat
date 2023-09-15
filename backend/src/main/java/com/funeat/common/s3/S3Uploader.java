@@ -10,6 +10,7 @@ import com.funeat.common.ImageUploader;
 import com.funeat.common.exception.CommonException.NotAllowedFileExtensionException;
 import com.funeat.common.exception.CommonException.S3UploadFailException;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -20,8 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Profile("!test")
 public class S3Uploader implements ImageUploader {
 
-    public static final String JPEG = "image/jpeg";
-    public static final String PNG = "image/png";
+    private static final List<String> INCLUDE_EXTENSIONS = List.of("image/jpeg", "image/png");
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -55,7 +55,7 @@ public class S3Uploader implements ImageUploader {
 
     private void validateExtension(final MultipartFile image) {
         final String contentType = image.getContentType();
-        if (!contentType.equals(JPEG) && !contentType.equals(PNG)) {
+        if (!INCLUDE_EXTENSIONS.contains(contentType)){
             throw new NotAllowedFileExtensionException(IMAGE_EXTENSION_ERROR_CODE, contentType);
         }
     }

@@ -38,7 +38,9 @@ export default Carousel;
 
 const CarouselContainer = styled.div`
   display: flex;
-  width: ${CAROUSEL_WIDTH}px;
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.gray2};
+  border-radius: 10px;
   overflow: hidden;
 `;
 

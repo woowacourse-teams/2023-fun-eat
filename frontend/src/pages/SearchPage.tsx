@@ -10,9 +10,8 @@ import { SEARCH_PAGE_VARIANTS } from '@/constants';
 import { useDebounce, useRoutePage } from '@/hooks/common';
 import { useSearch } from '@/hooks/search';
 
-const isProductSearchPage = (path: string) => path === 'products';
-const getInputPlaceholder = (path: string) =>
-  isProductSearchPage(path) ? '상품 이름을 검색해보세요.' : '꿀조합에 포함된 상품을 입력해보세요.';
+const PRODUCT_PLACEHOLDER = '상품 이름을 검색해보세요.';
+const RECIPE_PLACEHOLDER = '꿀조합에 포함된 상품을 입력해보세요.';
 
 type SearchPageType = keyof typeof SEARCH_PAGE_VARIANTS;
 
@@ -57,6 +56,10 @@ const SearchPage = () => {
     return null;
   }
 
+  const isProductSearchPage = searchVariant === 'products';
+  const isRecipeSearchPage = searchVariant === 'recipes';
+  const inputPlaceholder = isProductSearchPage ? PRODUCT_PLACEHOLDER : RECIPE_PLACEHOLDER;
+
   return (
     <>
       <SearchSection>
@@ -70,7 +73,7 @@ const SearchPage = () => {
         <form onSubmit={handleSearch}>
           <Input
             customWidth="100%"
-            placeholder={getInputPlaceholder(searchVariant)}
+            placeholder={inputPlaceholder}
             rightIcon={
               <Button customHeight="36px" color="white">
                 <SvgIcon variant="search" />
@@ -102,11 +105,8 @@ const SearchPage = () => {
             <ErrorBoundary fallback={ErrorComponent}>
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
-                {isProductSearchPage(searchVariant) ? (
-                  <ProductSearchResultList searchQuery={debouncedSearchQuery} />
-                ) : (
-                  <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
-                )}
+                {isProductSearchPage && <ProductSearchResultList searchQuery={debouncedSearchQuery} />}
+                {isRecipeSearchPage && <RecipeSearchResultList searchQuery={debouncedSearchQuery} />}
               </Suspense>
             </ErrorBoundary>
           </>

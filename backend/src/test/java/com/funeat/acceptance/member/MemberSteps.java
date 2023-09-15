@@ -6,6 +6,7 @@ import com.funeat.member.dto.MemberRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+import java.util.Objects;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberSteps {
@@ -25,7 +26,7 @@ public class MemberSteps {
         final var requestSpec = given()
                 .cookie("FUNEAT", loginCookie);
 
-        if (image != null) {
+        if (Objects.nonNull(image)) {
             requestSpec.multiPart(image);
         }
 
