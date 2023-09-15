@@ -1,4 +1,5 @@
 import { Link } from '@fun-eat/design-system';
+import type { RefObject } from 'react';
 import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -13,14 +14,14 @@ import type { CategoryVariant, SortOption } from '@/types/common';
 import displaySlice from '@/utils/displaySlice';
 
 interface ProductListProps {
+  productListRef: RefObject<HTMLDivElement>;
   category: CategoryVariant;
   isHomePage?: boolean;
   selectedOption?: SortOption;
 }
 
-const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps) => {
+const ProductList = ({ category, isHomePage, selectedOption, productListRef }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const productListRef = useRef<HTMLDivElement>(null);
 
   const { categoryIds } = useCategoryValueContext();
 

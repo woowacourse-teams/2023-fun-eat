@@ -1,4 +1,5 @@
 import { Button } from '@fun-eat/design-system';
+import type { RefObject } from 'react';
 import { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 
@@ -7,10 +8,11 @@ import SvgIcon from '../Svg/SvgIcon';
 import { useScroll } from '@/hooks/common';
 
 interface ScrollButtonProps {
+  targetRef?: RefObject<HTMLDivElement>;
   isRecipePage?: boolean;
 }
 
-const ScrollButton = ({ isRecipePage = false }: ScrollButtonProps) => {
+const ScrollButton = ({ targetRef, isRecipePage = false }: ScrollButtonProps) => {
   const { scrollToTop } = useScroll();
   const [scrollTop, setScrollTop] = useState(false);
 
@@ -19,9 +21,8 @@ const ScrollButton = ({ isRecipePage = false }: ScrollButtonProps) => {
   };
 
   useEffect(() => {
-    const mainElement = document.getElementById('main');
-    if (mainElement) {
-      scrollToTop(mainElement);
+    if (targetRef?.current) {
+      scrollToTop(targetRef.current);
       setScrollTop(false);
     }
   }, [scrollTop]);

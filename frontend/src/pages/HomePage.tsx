@@ -4,8 +4,8 @@ import { Suspense } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CategoryMenu, SvgIcon, ScrollButton, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
-import { PBProductList, ProductList } from '@/components/Product';
+import { CategoryMenu, SvgIcon, Loading, ErrorBoundary, ErrorComponent } from '@/components/Common';
+import { PBProductList } from '@/components/Product';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { PATH } from '@/constants/path';
 import channelTalk from '@/service/channelTalk';
@@ -32,7 +32,7 @@ const HomePage = () => {
         <Spacing size={12} />
         <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
           <Suspense fallback={<Loading />}>
-            <ProductList category="food" isHomePage />
+            {/* <ProductList category="food" isHomePage /> */}
             <ProductListRouteLink as={RouterLink} to={`${PATH.PRODUCT_LIST}/food`}>
               전체 보기 <SvgIcon variant="arrow" width={12} height={12} />
             </ProductListRouteLink>
@@ -91,7 +91,6 @@ const HomePage = () => {
         </ErrorBoundary>
       </section>
       <Spacing size={36} />
-      <ScrollButton />
     </>
   );
 };

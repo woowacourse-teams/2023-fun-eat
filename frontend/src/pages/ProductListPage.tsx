@@ -1,6 +1,6 @@
 import { BottomSheet, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -23,6 +23,7 @@ const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
 const ProductListPage = () => {
   const { category } = useParams();
+  const productListRef = useRef<HTMLDivElement>(null);
 
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
@@ -48,11 +49,11 @@ const ProductListPage = () => {
             <SortButtonWrapper>
               <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
             </SortButtonWrapper>
-            <ProductList category={category} selectedOption={selectedOption} />
+            <ProductList productListRef={productListRef} category={category} selectedOption={selectedOption} />
           </Suspense>
         </ErrorBoundary>
       </ProductListSection>
-      <ScrollButton />
+      <ScrollButton targetRef={productListRef} />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}

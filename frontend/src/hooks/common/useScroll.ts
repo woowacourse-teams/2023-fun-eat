@@ -1,8 +1,8 @@
 import type { RefObject } from 'react';
 
 const useScroll = () => {
-  const scrollToTop = (mainElement: HTMLElement) => {
-    mainElement.scrollTo(0, 0);
+  const scrollToTop = (targetElement: HTMLElement) => {
+    targetElement.scrollTo(0, 0);
   };
 
   const scrollToPosition = <T extends HTMLElement>(ref?: RefObject<T>) => {
