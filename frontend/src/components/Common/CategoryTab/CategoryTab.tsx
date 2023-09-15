@@ -1,8 +1,10 @@
 import { Button, theme } from '@fun-eat/design-system';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext, useCategoryActionContext } from '@/hooks/context';
 import { useCategoryQuery } from '@/hooks/queries/product';
 import type { CategoryVariant } from '@/types/common';
 
@@ -10,11 +12,22 @@ interface CategoryMenuProps {
   menuVariant: CategoryVariant;
 }
 
-const CategoryMenu = ({ menuVariant }: CategoryMenuProps) => {
+const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
   const { data: categories } = useCategoryQuery(menuVariant);
-  const { categoryIds, selectCategory } = useCategoryContext();
 
+  const { categoryIds } = useCategoryValueContext();
+  const { selectCategory } = useCategoryActionContext();
   const currentCategoryId = categoryIds[menuVariant];
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryIdFromURL = queryParams.get('category');
+
+  useEffect(() => {
+    if (categoryIdFromURL) {
+      selectCategory(menuVariant, parseInt(categoryIdFromURL));
+    }
+  }, [location]);
 
   return (
     <CategoryMenuContainer>
@@ -43,7 +56,7 @@ const CategoryMenu = ({ menuVariant }: CategoryMenuProps) => {
   );
 };
 
-export default CategoryMenu;
+export default CategoryTab;
 
 type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
 

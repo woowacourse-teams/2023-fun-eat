@@ -13,8 +13,8 @@ public class MemberReviewDto {
     private final Long favoriteCount;
 
     private MemberReviewDto(final Long reviewId, final Long productId, final String categoryType,
-                           final String productName, final String content,
-                           final Long rating, final Long favoriteCount) {
+                            final String productName, final String content,
+                            final Long rating, final Long favoriteCount) {
         this.reviewId = reviewId;
         this.productId = productId;
         this.categoryType = categoryType;

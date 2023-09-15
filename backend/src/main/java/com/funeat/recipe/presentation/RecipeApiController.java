@@ -2,6 +2,7 @@ package com.funeat.recipe.presentation;
 
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
+import com.funeat.common.logging.Logging;
 import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
@@ -36,6 +37,7 @@ public class RecipeApiController implements RecipeController {
         this.recipeService = recipeService;
     }
 
+    @Logging
     @PostMapping(value = "/api/recipes", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> writeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
@@ -61,6 +63,7 @@ public class RecipeApiController implements RecipeController {
         return ResponseEntity.ok(response);
     }
 
+    @Logging
     @PatchMapping(value = "/api/recipes/{recipeId}")
     public ResponseEntity<Void> likeRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
                                            @PathVariable final Long recipeId,

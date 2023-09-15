@@ -16,7 +16,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
   return (
     <ProductItemContainer>
       {image !== null ? (
-        <img src={image} width={90} height={90} alt={`${name}사진`} />
+        <ProductImage src={image} width={90} height={90} alt={`${name}사진`} />
       ) : (
         <PreviewImage width={90} height={90} />
       )}
@@ -52,6 +52,10 @@ const ProductItemContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 12px 0;
+`;
+
+const ProductImage = styled.img`
+  object-fit: cover;
 `;
 
 const ProductInfoWrapper = styled.div`

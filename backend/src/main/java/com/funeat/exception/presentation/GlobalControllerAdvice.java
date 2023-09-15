@@ -24,6 +24,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
+    private static final String ERROR_MESSAGE_DELIMITER = ", ";
+    private static final String RESPONSE_DELIMITER = ". ";
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final ObjectMapper objectMapper;
 
@@ -50,9 +53,9 @@ public class GlobalControllerAdvice {
                 .getAllErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(ERROR_MESSAGE_DELIMITER));
 
-        final String responseErrorMessage = errorMessage + ". " + REQUEST_VALID_ERROR_CODE.getMessage();
+        final String responseErrorMessage = errorMessage + RESPONSE_DELIMITER + REQUEST_VALID_ERROR_CODE.getMessage();
 
         final ErrorCode<?> errorCode = new ErrorCode<>(REQUEST_VALID_ERROR_CODE.getCode(), responseErrorMessage);
 
@@ -66,7 +69,7 @@ public class GlobalControllerAdvice {
                 .getFieldErrors()
                 .stream()
                 .map(FieldError::getField)
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(ERROR_MESSAGE_DELIMITER));
 
         return filedErrorMessages + " 요청 실패";
     }

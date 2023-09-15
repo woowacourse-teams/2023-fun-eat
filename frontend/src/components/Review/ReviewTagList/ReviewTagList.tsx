@@ -24,26 +24,24 @@ const ReviewTagList = ({ selectedTags }: ReviewTagListProps) => {
       </Heading>
       <Spacing size={25} />
       <TagListWrapper>
-        {tagsData.map(({ tagType, tags }) => {
-          return (
-            <TagItemWrapper key={tagType}>
-              <TagTitle as="h3" size="md" tabIndex={0}>
-                {TAG_TITLE[tagType]}
-              </TagTitle>
-              <Spacing size={20} />
-              <ul>
-                {tags.slice(0, minDisplayedTags).map(({ id, name }) => (
-                  <>
-                    <li key={id}>
-                      <ReviewTagItem id={id} name={name} variant={tagType} isSelected={selectedTags.includes(id)} />
-                    </li>
-                    <Spacing size={5} />
-                  </>
-                ))}
-              </ul>
-            </TagItemWrapper>
-          );
-        })}
+        {tagsData.map(({ tagType, tags }) => (
+          <TagItemWrapper key={tagType}>
+            <TagTitle as="h3" size="md" tabIndex={0}>
+              {TAG_TITLE[tagType]}
+            </TagTitle>
+            <Spacing size={20} />
+            <ul>
+              {tags.slice(0, minDisplayedTags).map(({ id, name }) => (
+                <>
+                  <li key={id}>
+                    <ReviewTagItem id={id} name={name} variant={tagType} isSelected={selectedTags.includes(id)} />
+                  </li>
+                  <Spacing size={5} />
+                </>
+              ))}
+            </ul>
+          </TagItemWrapper>
+        ))}
       </TagListWrapper>
       <Spacing size={26} />
       {canShowMore && (
@@ -82,14 +80,6 @@ const TagListWrapper = styled.div`
   column-gap: 20px;
   overflow-x: auto;
 
-  @media screen and (min-width: 420px) {
-    justify-content: center;
-
-    & > div {
-      flex-grow: 0;
-    }
-  }
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -97,11 +87,21 @@ const TagListWrapper = styled.div`
   & > div {
     flex-grow: 1;
   }
+
+  @media screen and (min-width: 420px) {
+    justify-content: center;
+
+    & > div {
+      flex-grow: 0;
+    }
+  }
 `;
 
 const TagItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  min-width: 100px;
 `;
 
 const TagTitle = styled(Heading)`
