@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ScrollButton, Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
+import { Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { IMAGE_URL } from '@/constants';
 import channelTalk from '@/service/channelTalk';
@@ -75,7 +75,6 @@ const HomePage = () => {
         </ErrorBoundary>
       </SectionWrapper>
       <Spacing size={36} />
-      <ScrollButton />
     </>
   );
 };

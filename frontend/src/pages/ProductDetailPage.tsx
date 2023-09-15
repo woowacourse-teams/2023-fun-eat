@@ -36,17 +36,18 @@ const ProductDetailPage = () => {
   const { data: productDetail } = useProductDetailQuery(Number(productId));
   const { reset } = useQueryErrorResetBoundary();
 
-  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
   const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
   const tabRef = useRef<HTMLUListElement>(null);
 
-  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
-  const initialSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
-
-  const { selectedOption, selectSortOption } = useSortOption(initialSortOption);
+  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+
+  const productDetailPageRef = useRef<HTMLDivElement>(null);
+
+  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
+  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
+  const currentSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
 
   if (!category) {
     return null;
@@ -64,7 +65,7 @@ const ProductDetailPage = () => {
 
   const handleTabMenuSelect = (index: number) => {
     handleTabMenuClick(index);
-    selectSortOption(initialSortOption);
+    selectSortOption(currentSortOption);
 
     ReactGA.event({
       category: '버튼',
@@ -74,7 +75,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <>
+    <ProductDetailPageContainer ref={productDetailPageRef}>
       <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
@@ -122,7 +123,7 @@ const ProductDetailPage = () => {
           onClick={handleOpenRegisterReviewSheet}
         />
       </ReviewRegisterButtonWrapper>
-      <ScrollButton />
+      <ScrollButton targetRef={productDetailPageRef} />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
@@ -142,11 +143,20 @@ const ProductDetailPage = () => {
           />
         )}
       </BottomSheet>
-    </>
+    </ProductDetailPageContainer>
   );
 };
 
 export default ProductDetailPage;
+
+const ProductDetailPageContainer = styled.div`
+  height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const SortButtonWrapper = styled.div`
   display: flex;

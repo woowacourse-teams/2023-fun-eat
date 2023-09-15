@@ -8,7 +8,7 @@ const initialState = {
   store: 7,
 };
 
-type CategoryIds = {
+export type CategoryIds = {
   [k in CategoryVariant]: number;
 };
 

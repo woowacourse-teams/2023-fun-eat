@@ -1,6 +1,6 @@
 import { BottomSheet, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -30,6 +30,8 @@ const RecipePage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { reset } = useQueryErrorResetBoundary();
 
+  const recipeRef = useRef<HTMLDivElement>(null);
+
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
     handleOpenBottomSheet();
@@ -53,7 +55,9 @@ const RecipePage = () => {
           <SortButtonWrapper>
             <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
           </SortButtonWrapper>
-          <RecipeList selectedOption={selectedOption} />
+          <RecipeListWrapper ref={recipeRef}>
+            <RecipeList selectedOption={selectedOption} />
+          </RecipeListWrapper>
         </Suspense>
       </ErrorBoundary>
       <Spacing size={80} />
@@ -64,7 +68,7 @@ const RecipePage = () => {
           onClick={handleOpenRegisterRecipeSheet}
         />
       </RecipeRegisterButtonWrapper>
-      <ScrollButton isRecipePage />
+      <ScrollButton targetRef={recipeRef} isRecipePage />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         {activeSheet === 'sortOption' ? (
           <SortOptionList
@@ -99,6 +103,11 @@ const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin: 20px 0;
+`;
+
+const RecipeListWrapper = styled.div`
+  height: calc(100% - 192px);
+  overflow-y: auto;
 `;
 
 const RecipeRegisterButtonWrapper = styled.div`
