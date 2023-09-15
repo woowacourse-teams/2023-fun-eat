@@ -16,6 +16,24 @@ import java.util.stream.IntStream;
 @SuppressWarnings("NonAsciiCharacters")
 public class RecipeSteps {
 
+    public static ExtractableResponse<Response> 레시피_생성_요청(final String loginCookie,
+                                                          final List<MultiPartSpecification> images,
+                                                          final RecipeCreateRequest recipeRequest) {
+        final var requestSpec = given()
+                .cookie("FUNEAT", loginCookie);
+
+        if (Objects.nonNull(images) && !images.isEmpty()) {
+            images.forEach(requestSpec::multiPart);
+        }
+
+        return requestSpec
+                .multiPart("recipeRequest", recipeRequest, "application/json")
+                .when()
+                .post("/api/recipes")
+                .then()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 레시피_생성_요청(final RecipeCreateRequest recipeRequest,
                                                           final List<MultiPartSpecification> images,
                                                           final String loginCookie) {
