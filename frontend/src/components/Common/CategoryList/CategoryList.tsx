@@ -1,3 +1,5 @@
+import { Link } from '@fun-eat/design-system';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CategoryItem from '../CategoryItem/CategoryItem';
@@ -22,12 +24,16 @@ const CategoryList = () => {
     <CategoryListContainer>
       <MenuListWrapper>
         {menuList.map((menu, index) => (
-          <CategoryItem key={`menuItem-${index}`} name={menu.name} image={menu.image} />
+          <Link key={`menuItem-${index}`} as={RouterLink} to={`products/food?category=${index + 1}`}>
+            <CategoryItem name={menu.name} image={menu.image} />
+          </Link>
         ))}
       </MenuListWrapper>
       <StoreListWrapper>
         {storeList.map((menu, index) => (
-          <CategoryItem key={`storeItem-${index}`} name={menu.name} image={menu.image} />
+          <Link key={`menuItem-${index}`} as={RouterLink} to={`products/store?category=${index + 6}`}>
+            <CategoryItem key={`storeItem-${index}`} name={menu.name} image={menu.image} />
+          </Link>
         ))}
       </StoreListWrapper>
     </CategoryListContainer>
