@@ -27,7 +27,7 @@ const HomePage = () => {
         </Link>
       </section>
       <Spacing size={40} />
-      <section>
+      <SectionWrapper>
         <Heading as="h2" size="xl">
           카테고리
         </Heading>
@@ -36,9 +36,9 @@ const HomePage = () => {
           <CategoryList />
         </Suspense>
         <Spacing size={15} />
-      </section>
+      </SectionWrapper>
       <Spacing size={40} />
-      <section>
+      <SectionWrapper>
         <Heading as="h2" size="xl">
           🍯 꿀조합 랭킹
         </Heading>
@@ -48,9 +48,9 @@ const HomePage = () => {
             <RecipeRankingList />
           </Suspense>
         </ErrorBoundary>
-      </section>
+      </SectionWrapper>
       <Spacing size={36} />
-      <section>
+      <SectionWrapper>
         <Heading as="h2" size="xl">
           👑 상품 랭킹
         </Heading>
@@ -60,9 +60,9 @@ const HomePage = () => {
             <ProductRankingList isHomePage />
           </Suspense>
         </ErrorBoundary>
-      </section>
+      </SectionWrapper>
       <Spacing size={36} />
-      <section>
+      <SectionWrapper>
         <Heading as="h2" size="xl">
           📝 리뷰 랭킹
         </Heading>
@@ -72,7 +72,7 @@ const HomePage = () => {
             <ReviewRankingList isHomePage />
           </Suspense>
         </ErrorBoundary>
-      </section>
+      </SectionWrapper>
       <Spacing size={36} />
       <ScrollButton />
     </>
@@ -83,4 +83,8 @@ export default HomePage;
 
 const Banner = styled.img`
   width: 100%;
+`;
+
+const SectionWrapper = styled.section`
+  padding: 0 20px;
 `;

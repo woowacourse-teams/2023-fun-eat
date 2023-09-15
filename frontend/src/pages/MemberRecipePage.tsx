@@ -1,6 +1,7 @@
 import { Spacing } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Loading, ScrollButton, SectionTitle } from '@/components/Common';
 import { MemberRecipeList } from '@/components/Members';
@@ -9,7 +10,7 @@ const MemberRecipePage = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
-    <>
+    <MemberRecipePageContainer>
       <SectionTitle name="내가 작성한 꿀조합" />
       <Spacing size={18} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
@@ -18,8 +19,13 @@ const MemberRecipePage = () => {
         </Suspense>
       </ErrorBoundary>
       <ScrollButton />
-    </>
+      <Spacing size={40} />
+    </MemberRecipePageContainer>
   );
 };
 
 export default MemberRecipePage;
+
+const MemberRecipePageContainer = styled.div`
+  padding: 20px 20px 0;
+`;
