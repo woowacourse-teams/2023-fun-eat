@@ -1,7 +1,7 @@
 [
-  { "id": 1, "name": "간편식사" },
-  { "id": 2, "name": "과자류" },
-  { "id": 3, "name": "아이스크림" },
-  { "id": 4, "name": "식품" },
-  { "id": 5, "name": "음료" }
+  { "id": 1, "name": "간편식사", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 2, "name": "과자류", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 3, "name": "아이스크림", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 4, "name": "식품", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 5, "name": "음료", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" }
 ]
