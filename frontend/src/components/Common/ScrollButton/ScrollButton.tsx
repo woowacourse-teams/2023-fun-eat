@@ -33,10 +33,10 @@ const ScrollButton = ({ targetRef, isRecipePage = false }: ScrollButtonProps) =>
       customWidth="45px"
       customHeight="45px"
       variant="filled"
-      color="gray5"
+      color="white"
       onClick={handleScroll}
     >
-      <SvgIcon variant="triangle" color="white" width={16} height={14} />
+      <SvgIcon variant="arrow" color="gray5" width={16} height={14} />
     </ScrollButtonWrapper>
   );
 };
@@ -48,6 +48,7 @@ const ScrollButtonWrapper = styled(Button)<ScrollButtonProps>`
   bottom: ${({ isRecipePage }) => (isRecipePage ? '210px' : '90px')};
   right: 20px;
   border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
 
   @media screen and (min-width: 600px) {
     left: calc(50% + 234px);
@@ -56,5 +57,9 @@ const ScrollButtonWrapper = styled(Button)<ScrollButtonProps>`
   &:hover {
     transform: scale(1.1);
     transition: all 200ms ease-in-out;
+  }
+
+  svg {
+    rotate: 90deg;
   }
 `;
