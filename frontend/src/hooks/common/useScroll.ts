@@ -8,12 +8,12 @@ const useScroll = () => {
   };
 
   const scrollToPosition = <T extends HTMLElement>(ref: RefObject<T>) => {
-    if (ref.current) {
-      const timeout = setTimeout(() => {
-        ref.current?.scrollIntoView({ behavior: 'smooth' });
+    const timeout = setTimeout(() => {
+      if (ref.current) {
+        ref.current.scrollIntoView({ behavior: 'smooth' });
         clearTimeout(timeout);
-      }, 100);
-    }
+      }
+    }, 100);
   };
 
   return { scrollToTop, scrollToPosition };
