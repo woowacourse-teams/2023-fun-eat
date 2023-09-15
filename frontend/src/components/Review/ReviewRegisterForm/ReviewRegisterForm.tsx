@@ -10,7 +10,7 @@ import StarRate from '../StarRate/StarRate';
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
-import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
+import { useFormData, useImageUploader, useScroll, useTimeout } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
@@ -77,6 +77,8 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
     });
   };
 
+  const [debouncedReviewSubmit] = useTimeout(handleSubmit, 200);
+
   return (
     <ReviewRegisterFormContainer>
       <ReviewHeading tabIndex={0}>리뷰 작성</ReviewHeading>
@@ -88,7 +90,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
         <ProductOverviewItem name={productDetail.name} image={productDetail.image} />
       </ProductOverviewItemWrapper>
       <Divider customHeight="4px" variant="disabled" />
-      <RegisterForm onSubmit={handleSubmit}>
+      <RegisterForm onSubmit={debouncedReviewSubmit}>
         <ReviewImageUploaderContainer>
           <Heading as="h2" size="xl" tabIndex={0}>
             구매한 상품 사진이 있다면 올려주세요.
@@ -110,7 +112,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
         <RebuyCheckbox />
         <Spacing size={16} />
         <Text size="sm" color={theme.textColors.disabled}>
-          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.{' '}
+          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.
         </Text>
         <Spacing size={10} />
         <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
