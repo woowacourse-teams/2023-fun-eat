@@ -10,15 +10,13 @@ import { useIntersectionObserver, useScrollRestoration } from '@/hooks/common';
 import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import type { CategoryVariant, SortOption } from '@/types/common';
-import displaySlice from '@/utils/displaySlice';
 
 interface ProductListProps {
   category: CategoryVariant;
-  isHomePage?: boolean;
   selectedOption?: SortOption;
 }
 
-const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps) => {
+const ProductList = ({ category, selectedOption }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const productListRef = useRef<HTMLDivElement>(null);
 
@@ -34,12 +32,11 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
   useScrollRestoration(categoryIds[category], productListRef);
 
   const productList = data.pages.flatMap((page) => page.products);
-  const productsToDisplay = displaySlice(isHomePage, productList);
 
   return (
     <ProductListContainer ref={productListRef}>
       <ProductListWrapper>
-        {productsToDisplay.map((product) => (
+        {productList.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
               <ProductItem product={product} />
