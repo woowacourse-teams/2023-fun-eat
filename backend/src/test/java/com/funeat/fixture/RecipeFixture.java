@@ -12,11 +12,11 @@ import java.util.List;
 public class RecipeFixture {
 
     public static Recipe 레시피_생성(final Member member) {
-        return new Recipe("제일로 맛있는 레시피", "밥 추가, 밥 추가, 밥 추가.. 끝!!", member);
+        return new Recipe("The most delicious recipes", "More rice, more rice, more rice.. Done!!", member);
     }
 
     public static Recipe 레시피_생성(final Member member, final Long favoriteCount) {
-        return new Recipe("제일로 맛있는 레시피", "밥 추가, 밥 추가, 밥 추가.. 끝!!", member, favoriteCount);
+        return new Recipe("The most delicious recipes", "More rice, more rice, more rice.. Done!!", member, favoriteCount);
     }
 
     public static RecipeFavorite 레시피_좋아요_생성(final Member member, final Recipe recipe, final Boolean favorite) {
@@ -24,7 +24,7 @@ public class RecipeFixture {
     }
 
     public static RecipeCreateRequest 레시피추가요청_생성(final List<Long> productIds) {
-        return new RecipeCreateRequest("제일로 맛있는 레시피", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+        return new RecipeCreateRequest("The most delicious recipes", productIds, "More rice, more rice, more rice.. Done!!");
     }
 
     public static RecipeFavoriteRequest 레시피좋아요요청_생성(final Boolean favorite) {
@@ -32,6 +32,6 @@ public class RecipeFixture {
     }
 
     public static RecipeImage 레시피이미지_생성(final Recipe recipe) {
-        return new RecipeImage("제일로 맛없는 사진", recipe);
+        return new RecipeImage("The most delicious image", recipe);
     }
 }

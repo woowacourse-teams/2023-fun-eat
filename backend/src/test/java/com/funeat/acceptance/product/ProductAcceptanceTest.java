@@ -11,7 +11,6 @@ import static com.funeat.acceptance.product.ProductSteps.상품_레시피_목록
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_자동_완성_검색_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
-import static com.funeat.acceptance.recipe.RecipeSteps.레시피_생성_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
@@ -49,6 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.acceptance.recipe.RecipeSteps;
 import com.funeat.common.dto.PageDto;
 import com.funeat.product.domain.Category;
 import com.funeat.product.dto.ProductInCategoryDto;
@@ -573,9 +573,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
             레시피_좋아요_요청(로그인_쿠키를_얻는다(1L), 1L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키를_얻는다(2L), 2L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키를_얻는다(3L), 2L, 레시피좋아요요청_생성(true));
@@ -600,9 +600,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
             단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
@@ -624,9 +624,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
             단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_생성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키를_얻는다(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 

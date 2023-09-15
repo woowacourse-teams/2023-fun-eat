@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 @SuppressWarnings("NonAsciiCharacters")
 public class RecipeSteps {
 
-    public static ExtractableResponse<Response> 레시피_생성_요청(final String loginCookie,
+    public static ExtractableResponse<Response> 레시피_작성_요청(final String loginCookie,
                                                           final List<MultiPartSpecification> images,
                                                           final RecipeCreateRequest recipeRequest) {
         final var requestSpec = given()
@@ -34,31 +34,6 @@ public class RecipeSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 레시피_생성_요청(final RecipeCreateRequest recipeRequest,
-                                                          final List<MultiPartSpecification> images,
-                                                          final String loginCookie) {
-        final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
-
-        if (Objects.nonNull(images) && !images.isEmpty()) {
-            images.forEach(requestSpec::multiPart);
-        }
-
-        return requestSpec
-                .multiPart("recipeRequest", recipeRequest, "application/json")
-                .when()
-                .post("/api/recipes")
-                .then()
-                .extract();
-    }
-
-    public static Long 레시피_추가_요청하고_id_반환(final RecipeCreateRequest recipeRequest,
-                                         final List<MultiPartSpecification> imageList,
-                                         final String loginCookie) {
-        final var response = 레시피_생성_요청(recipeRequest, imageList, loginCookie);
-        return Long.parseLong(response.header("Location").split("/")[3]);
-    }
-
     public static ExtractableResponse<Response> 레시피_상세_정보_요청(final String loginCookie, final Long recipeId) {
         return given()
                 .cookie("FUNEAT", loginCookie)
@@ -68,10 +43,9 @@ public class RecipeSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 레시피_목록_요청(final String sortType, final String sortOrderType,
-                                                          final int page) {
+    public static ExtractableResponse<Response> 레시피_목록_요청(final String sort, final Long page) {
         return given()
-                .queryParam("sort", sortType + "," + sortOrderType)
+                .queryParam("sort", sort)
                 .queryParam("page", page)
                 .when()
                 .get("/api/recipes")
@@ -109,7 +83,7 @@ public class RecipeSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 레시피_검색_결과_조회_요청(final String query, final int page) {
+    public static ExtractableResponse<Response> 레시피_검색_결과_조회_요청(final String query, final Long page) {
         return given()
                 .queryParam("query", query)
                 .queryParam("page", page)
