@@ -34,7 +34,7 @@ const ImageWrapper = styled.div`
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.white};
 
-  img {
+  & > img {
     width: 100%;
     height: auto;
     object-fit: cover;
@@ -44,5 +44,5 @@ const ImageWrapper = styled.div`
 const CategoryName = styled.p`
   margin-top: 10px;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
 `;

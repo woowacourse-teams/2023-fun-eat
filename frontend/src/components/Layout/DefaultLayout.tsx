@@ -25,7 +25,6 @@ const DefaultLayoutContainer = styled.div`
 const MainWrapper = styled.main`
   position: relative;
   height: calc(100% - 120px);
-  padding: 0 20px;
   overflow-x: hidden;
   overflow-y: auto;
 `;

@@ -25,7 +25,7 @@ const SimpleHeaderLayoutContainer = styled.div`
 const MainWrapper = styled.main`
   position: relative;
   height: calc(100% - 120px);
-  padding: 20px;
+  padding: 20px 20px 0;
   overflow-x: hidden;
   overflow-y: auto;
 `;
