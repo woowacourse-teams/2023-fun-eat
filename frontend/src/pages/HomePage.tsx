@@ -1,7 +1,6 @@
 import { Heading, Link, Spacing } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
@@ -21,8 +20,7 @@ const HomePage = () => {
   return (
     <>
       <section>
-        {/* TODO: 추후 이벤트 페이지로 이동 */}
-        <Link as={RouterLink} to={''}>
+        <Link href={'https://www.instagram.com/p/CxNKXhfyZdw/?igshid=MzRlODBiNWFlZA=='} isExternal>
           <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
         </Link>
       </section>
