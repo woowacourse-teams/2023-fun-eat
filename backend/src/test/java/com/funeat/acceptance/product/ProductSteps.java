@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 public class ProductSteps {
 
     public static ExtractableResponse<Response> 카테고리별_상품_목록_조회_요청(final Long categoryId, final String sort,
-                                                                  final int page) {
+                                                                  final Long page) {
         return given()
                 .queryParam("sort", sort)
                 .queryParam("page", page)
@@ -56,7 +56,7 @@ public class ProductSteps {
     }
 
     public static ExtractableResponse<Response> 상품_레시피_목록_요청(final Long productId, final String sort,
-                                                             final int page) {
+                                                             final Long page) {
         return given()
                 .queryParam("sort", sort)
                 .queryParam("page", page)

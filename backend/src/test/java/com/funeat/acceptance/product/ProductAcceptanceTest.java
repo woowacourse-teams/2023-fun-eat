@@ -19,6 +19,9 @@ import static com.funeat.fixture.PageFixture.PAGE_SIZE;
 import static com.funeat.fixture.PageFixture.SECOND_PAGE;
 import static com.funeat.fixture.PageFixture.가격_내림차순;
 import static com.funeat.fixture.PageFixture.가격_오름차순;
+import static com.funeat.fixture.PageFixture.과거순;
+import static com.funeat.fixture.PageFixture.리뷰수_내림차순;
+import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
 import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.PageFixture.평균_평점_내림차순;
 import static com.funeat.fixture.PageFixture.평균_평점_오름차순;
@@ -87,7 +90,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -107,7 +110,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -131,7 +134,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -151,7 +154,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -175,7 +178,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -195,7 +198,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -219,7 +222,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -239,7 +242,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -268,7 +271,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, "reviewCount,desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 리뷰수_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -288,7 +291,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
-                final var response = 카테고리별_상품_목록_조회_요청(1L, "reviewCount,desc", 0);
+                final var response = 카테고리별_상품_목록_조회_요청(1L, 리뷰수_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -303,11 +306,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 상품을_정렬할때_카테고리가_존재하지_않으면_예외가_발생한다() {
-            // given
-            final var notExistCategoryId = 99999L;
-
-            // when
-            final var response = 카테고리별_상품_목록_조회_요청(notExistCategoryId, 가격_내림차순, 0);
+            // given && when
+            final var response = 카테고리별_상품_목록_조회_요청(9999L, 가격_내림차순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 찾을수_없음);
@@ -583,7 +583,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 상품_레시피_목록_요청(1L, "favoriteCount,desc", 0);
+            final var response = 상품_레시피_목록_요청(1L, 좋아요수_내림차순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -607,7 +607,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 상품_레시피_목록_요청(1L, 최신순, 0);
+            final var response = 상품_레시피_목록_요청(1L, 최신순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -631,7 +631,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 상품_레시피_목록_요청(1L, "createdAt,asc", 0);
+            final var response = 상품_레시피_목록_요청(1L, 과거순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -642,12 +642,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
         final var actual = response.jsonPath().getObject("page", PageDto.class);
-        System.out.println(actual.getTotalDataCount());
-        System.out.println(actual.getTotalPages());
-        System.out.println(actual.getRequestPage());
-        System.out.println(actual.getRequestSize());
-        System.out.println(actual.isFirstPage());
-        System.out.println(actual.isLastPage());
 
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);

@@ -62,11 +62,7 @@ public class ReviewFixture {
         return new ReviewCreateRequest(rating, tagIds, "test", false);
     }
 
-    public static ReviewFavoriteRequest 리뷰좋아요요청_true_생성() {
-        return new ReviewFavoriteRequest(true);
-    }
-
-    public static ReviewFavoriteRequest 리뷰좋아요요청_false_생성() {
-        return new ReviewFavoriteRequest(false);
+    public static ReviewFavoriteRequest 리뷰좋아요요청_생성(final Boolean favorite) {
+        return new ReviewFavoriteRequest(favorite);
     }
 }

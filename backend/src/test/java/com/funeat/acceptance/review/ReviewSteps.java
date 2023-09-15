@@ -43,7 +43,7 @@ public class ReviewSteps {
     }
 
     public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie, final Long productId,
-                                                                final String sort, final Integer page) {
+                                                                final String sort, final Long page) {
         return given()
                 .cookie("FUNEAT", loginCookie)
                 .queryParam("sort", sort)

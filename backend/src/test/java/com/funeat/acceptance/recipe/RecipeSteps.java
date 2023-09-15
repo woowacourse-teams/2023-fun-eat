@@ -65,16 +65,6 @@ public class RecipeSteps {
                 .extract();
     }
 
-    public static List<MultiPartSpecification> 여러_사진_요청(final int count) {
-        return IntStream.range(0, count)
-                .mapToObj(i -> new MultiPartSpecBuilder("image".getBytes())
-                        .fileName("testImage.png")
-                        .controlName("images")
-                        .mimeType("image/png")
-                        .build())
-                .collect(Collectors.toList());
-    }
-
     public static ExtractableResponse<Response> 레시피_랭킹_조회_요청() {
         return given()
                 .when()
