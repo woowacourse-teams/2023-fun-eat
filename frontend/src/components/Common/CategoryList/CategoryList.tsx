@@ -4,38 +4,25 @@ import styled from 'styled-components';
 
 import CategoryItem from '../CategoryItem/CategoryItem';
 
-import { MENU_IMAGES, MENU_NAME, STORE_IMAGES, STORE_NAMES } from '@/constants';
+import { CATEGORY_TYPE } from '@/constants';
+import { useCategoryQuery } from '@/hooks/queries/product';
 
-const MENU_LENGTH = 5;
-const STORE_LENGTH = 4;
+interface CategoryListProps {
+  menuVariant: keyof typeof CATEGORY_TYPE;
+}
 
-const menuList = Array.from({ length: MENU_LENGTH }, (_, index) => ({
-  name: MENU_NAME[index],
-  image: MENU_IMAGES[index],
-}));
+const CategoryList = ({ menuVariant }: CategoryListProps) => {
+  const { data: categories } = useCategoryQuery(CATEGORY_TYPE[menuVariant]);
 
-const storeList = Array.from({ length: STORE_LENGTH }, (_, index) => ({
-  name: STORE_NAMES[index],
-  image: STORE_IMAGES[index],
-}));
-
-const CategoryList = () => {
   return (
     <CategoryListContainer>
-      <MenuListWrapper>
-        {menuList.map((menu, index) => (
-          <Link key={`menuItem-${index}`} as={RouterLink} to={`products/food?category=${index + 1}`}>
+      <CategoryListWrapper>
+        {categories.map((menu) => (
+          <Link key={menu.id} as={RouterLink} to={`products/${menuVariant.toLowerCase()}?category=${menu.id}`}>
             <CategoryItem name={menu.name} image={menu.image} />
           </Link>
         ))}
-      </MenuListWrapper>
-      <StoreListWrapper>
-        {storeList.map((menu, index) => (
-          <Link key={`menuItem-${index}`} as={RouterLink} to={`products/store?category=${index + 6}`}>
-            <CategoryItem key={`storeItem-${index}`} name={menu.name} image={menu.image} />
-          </Link>
-        ))}
-      </StoreListWrapper>
+      </CategoryListWrapper>
     </CategoryListContainer>
   );
 };
@@ -57,12 +44,7 @@ const CategoryListContainer = styled.div`
   }
 `;
 
-const MenuListWrapper = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const StoreListWrapper = styled.div`
+const CategoryListWrapper = styled.div`
   display: flex;
   gap: 20px;
 `;
