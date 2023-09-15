@@ -1,28 +1,5 @@
 package com.funeat.recipe.application;
 
-import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
-import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
-import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_오름차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
-import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점4점_생성;
-import static com.funeat.fixture.RecipeFixture.레시피_생성;
-import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
-import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
-import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
 import com.funeat.common.ServiceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -38,12 +15,24 @@ import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+
+import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
+import static com.funeat.fixture.MemberFixture.*;
+import static com.funeat.fixture.PageFixture.*;
+import static com.funeat.fixture.ProductFixture.*;
+import static com.funeat.fixture.RecipeFixture.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -88,7 +77,7 @@ class RecipeServiceTest extends ServiceTest {
     @Test
     void 레시피의_상세_정보를_조회할_수_있다() {
         // given
-        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD));
+        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
         final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
         final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
         final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
