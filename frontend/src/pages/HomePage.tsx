@@ -33,7 +33,8 @@ const HomePage = () => {
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryList />
+          <CategoryList menuVariant="FOOD" />
+          <CategoryList menuVariant="STORE" />
         </Suspense>
         <Spacing size={15} />
       </section>

@@ -7,26 +7,22 @@ import CategoryItem from '../CategoryItem/CategoryItem';
 import { CATEGORY_TYPE } from '@/constants';
 import { useCategoryQuery } from '@/hooks/queries/product';
 
-const CategoryList = () => {
-  const { data: foodCategories } = useCategoryQuery(CATEGORY_TYPE['FOOD']);
-  const { data: storeCategories } = useCategoryQuery(CATEGORY_TYPE['STORE']);
+interface CategoryListProps {
+  menuVariant: keyof typeof CATEGORY_TYPE;
+}
+
+const CategoryList = ({ menuVariant }: CategoryListProps) => {
+  const { data: categories } = useCategoryQuery(CATEGORY_TYPE[menuVariant]);
 
   return (
     <CategoryListContainer>
-      <MenuListWrapper>
-        {foodCategories.map((menu) => (
-          <Link key={`menuItem-${menu.id}`} as={RouterLink} to={`products/food?category=${menu.id}`}>
+      <CategoryListWrapper>
+        {categories.map((menu) => (
+          <Link key={menu.id} as={RouterLink} to={`products/${menuVariant}?category=${menu.id}`}>
             <CategoryItem name={menu.name} image={menu.image} />
           </Link>
         ))}
-      </MenuListWrapper>
-      <StoreListWrapper>
-        {storeCategories.map((menu) => (
-          <Link key={`menuItem-${menu.id}`} as={RouterLink} to={`products/store?category=${menu.id}`}>
-            <CategoryItem name={menu.name} image={menu.image} />
-          </Link>
-        ))}
-      </StoreListWrapper>
+      </CategoryListWrapper>
     </CategoryListContainer>
   );
 };
@@ -48,12 +44,7 @@ const CategoryListContainer = styled.div`
   }
 `;
 
-const MenuListWrapper = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const StoreListWrapper = styled.div`
+const CategoryListWrapper = styled.div`
   display: flex;
   gap: 20px;
 `;
