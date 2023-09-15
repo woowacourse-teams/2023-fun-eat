@@ -1,5 +1,28 @@
 package com.funeat.recipe.application;
 
+import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
+import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.PageFixture.좋아요_내림차순;
+import static com.funeat.fixture.PageFixture.최신순;
+import static com.funeat.fixture.PageFixture.페이지요청_생성;
+import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점4점_생성;
+import static com.funeat.fixture.RecipeFixture.레시피_생성;
+import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
+import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
+import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
 import com.funeat.common.ServiceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -22,17 +45,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
-import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
-import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
-import static com.funeat.fixture.MemberFixture.*;
-import static com.funeat.fixture.PageFixture.*;
-import static com.funeat.fixture.ProductFixture.*;
-import static com.funeat.fixture.RecipeFixture.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -194,7 +206,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.findRecipeByMember(member1.getId(), page);
@@ -220,9 +232,9 @@ class RecipeServiceTest extends ServiceTest {
         void 사용자가_작성한_꿀조합이_없을때_꿀조합은_빈상태로_조회된다() {
             // given
             final var member1 = 멤버_멤버1_생성();
-            복수_멤버_저장(member1);
+            단일_멤버_저장(member1);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.findRecipeByMember(member1.getId(), page);
@@ -242,7 +254,7 @@ class RecipeServiceTest extends ServiceTest {
         void 존재하지_않는_멤버가_해당_멤버의_레시피를_조회하면_예외가_발생한다() {
             // given
             final var notExistMemberId = 99999L;
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when & then
             assertThatThrownBy(() -> recipeService.findRecipeByMember(notExistMemberId, page))
@@ -287,7 +299,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1_1, recipeImage1_2_1);
 
-            final var page = 페이지요청_좋아요_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 좋아요_내림차순);
 
             // when
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
@@ -337,7 +349,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1_1, recipeImage1_2_1);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
@@ -387,7 +399,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1_1, recipeImage1_2_1);
 
-            final var page = 페이지요청_생성_시간_오름차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.getSortingRecipes(page).getRecipes();

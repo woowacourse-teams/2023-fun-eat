@@ -16,6 +16,7 @@ import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
@@ -152,7 +153,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 사용자_리뷰_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
+            final var response = 사용자_리뷰_조회_요청(로그인_쿠키를_얻는다(1L), 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -172,7 +173,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(0L, 0L, true, true, 0L, 10L);
 
             // when
-            final var response = 사용자_리뷰_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
+            final var response = 사용자_리뷰_조회_요청(로그인_쿠키를_얻는다(1L), 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -187,7 +188,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_리뷰_조회_요청(cookie, "createdAt,desc", 0);
+            final var response = 사용자_리뷰_조회_요청(cookie, 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
@@ -212,7 +213,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(2L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 사용자_꿀조합_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
+            final var response = 사용자_꿀조합_조회_요청(로그인_쿠키를_얻는다(1L), 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -231,7 +232,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(0L, 0L, true, true, 0L, 10L);
 
             // when
-            final var response = 사용자_꿀조합_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
+            final var response = 사용자_꿀조합_조회_요청(로그인_쿠키를_얻는다(1L), 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -250,7 +251,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             final var pageDto = new PageDto(1L, 1L, true, true, 0L, 10L);
 
             // when
-            final var response = 사용자_꿀조합_조회_요청(로그인_쿠키를_얻는다(1L), "createdAt,desc", 0);
+            final var response = 사용자_꿀조합_조회_요청(로그인_쿠키를_얻는다(1L), 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -266,7 +267,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인하지_않은_사용자가_작성한_꿀조합을_조회할때_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_꿀조합_조회_요청(cookie, "createdAt,desc", 0);
+            final var response = 사용자_꿀조합_조회_요청(cookie, 최신순, 0);
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);

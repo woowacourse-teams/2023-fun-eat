@@ -17,6 +17,10 @@ import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_�
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.PageFixture.좋아요_내림차순;
+import static com.funeat.fixture.PageFixture.최신순;
+import static com.funeat.fixture.PageFixture.평점_내림차순;
+import static com.funeat.fixture.PageFixture.평점_오름차순;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_false_생성;
@@ -357,7 +361,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // when
-                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, "favoriteCount,desc", 0);
+                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, 좋아요_내림차순, 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -405,7 +409,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // when
-                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, "rating,asc", 0);
+                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, 평점_오름차순, 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -427,7 +431,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // when
-                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, "rating,asc", 0);
+                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, 평점_오름차순, 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -453,7 +457,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // when
-                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, "rating,desc", 0);
+                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, 평점_내림차순, 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -475,7 +479,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // when
-                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, "rating,desc", 0);
+                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, 평점_내림차순, 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
@@ -501,7 +505,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
                 // when
-                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, "createdAt,desc", 0);
+                final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키를_얻는다(1L), 1L, 최신순, 0);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);

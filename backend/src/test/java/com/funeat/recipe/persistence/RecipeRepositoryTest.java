@@ -4,10 +4,10 @@ import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.PageFixture.좋아요_내림차순;
+import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_오름차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
@@ -105,7 +105,7 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
 
-            final var page = 페이지요청_좋아요_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 좋아요_내림차순);
             final var expected = List.of(recipe1_2, recipe1_3, recipe1_1);
 
             // when
@@ -150,7 +150,7 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
             final var expected = List.of(recipe1_3, recipe1_2, recipe1_1);
 
             // when
@@ -195,7 +195,7 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
 
-            final var page = 페이지요청_생성_시간_오름차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
             final var expected = List.of(recipe1_1, recipe1_2, recipe1_3);
 
             // when
@@ -242,7 +242,8 @@ class RecipeRepositoryTest extends RepositoryTest {
             final var recipeImage2_1 = 레시피이미지_생성(recipe2);
             final var recipeImage2_2 = 레시피이미지_생성(recipe2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage2_1, recipeImage2_2);
-            final var page = 페이지요청_좋아요_내림차순_생성(0, 10);
+
+            final var page = 페이지요청_생성(0, 10, 좋아요_내림차순);
             final var expected = List.of(recipe2, recipe1);
 
             // when
