@@ -7,7 +7,7 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useImageUploader, useFormData, useTimeout } from '@/hooks/common';
+import { useImageUploader, useFormData } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest } from '@/types/recipe';
@@ -31,7 +31,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
     formContent: recipeFormValue,
   });
 
-  const { mutate } = useRecipeRegisterFormMutation();
+  const { mutate, isLoading } = useRecipeRegisterFormMutation();
 
   const isValid =
     recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
@@ -61,8 +61,6 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
     });
   };
 
-  const [debouncedRecipeSubmit] = useTimeout(handleRecipeFormSubmit, 200);
-
   return (
     <RecipeRegisterFormContainer>
       <RecipeHeading tabIndex={0}>나만의 꿀조합 만들기🍯</RecipeHeading>
@@ -71,7 +69,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
       </CloseButton>
       <Divider />
       <Spacing size={36} />
-      <form onSubmit={debouncedRecipeSubmit}>
+      <form onSubmit={handleRecipeFormSubmit}>
         <RecipeNameInput recipeName={recipeFormValue.title} />
         <Spacing size={40} />
         <RecipeUsedProducts />
@@ -92,7 +90,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
           [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.
         </Text>
         <Spacing size={10} />
-        <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
+        <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid || isLoading}>
           레시피 등록하기
         </FormButton>
         <Spacing size={50} />
