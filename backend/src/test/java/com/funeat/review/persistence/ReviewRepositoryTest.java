@@ -57,10 +57,10 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var actual2 = reviewRepository.countByProduct(product2);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actual1)
+            assertSoftly(soft -> {
+                soft.assertThat(actual1)
                         .isEqualTo(3);
-                softAssertions.assertThat(actual2)
+                soft.assertThat(actual2)
                         .isEqualTo(1);
             });
         }

@@ -41,10 +41,10 @@ class RecipeFavoriteTest {
             recipeFavorite.updateFavorite(true);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
                         .isOne();
-                softAssertions.assertThat(recipeFavorite.getFavorite())
+                soft.assertThat(recipeFavorite.getFavorite())
                         .isTrue();
             });
         }
@@ -62,10 +62,10 @@ class RecipeFavoriteTest {
             recipeFavorite.updateFavorite(false);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
                         .isZero();
-                softAssertions.assertThat(recipeFavorite.getFavorite())
+                soft.assertThat(recipeFavorite.getFavorite())
                         .isFalse();
             });
         }
@@ -83,10 +83,10 @@ class RecipeFavoriteTest {
             recipeFavorite.updateFavorite(true);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
                         .isOne();
-                softAssertions.assertThat(recipeFavorite.getFavorite())
+                soft.assertThat(recipeFavorite.getFavorite())
                         .isTrue();
             });
         }
@@ -103,10 +103,10 @@ class RecipeFavoriteTest {
             recipeFavorite.updateFavorite(false);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(recipeFavorite.getRecipe().getFavoriteCount())
                         .isZero();
-                softAssertions.assertThat(recipeFavorite.getFavorite())
+                soft.assertThat(recipeFavorite.getFavorite())
                         .isFalse();
             });
         }

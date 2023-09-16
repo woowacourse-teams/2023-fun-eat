@@ -282,7 +282,6 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(response, 인증되지_않음);
             RESPONSE_CODE와_MESSAGE를_검증한다(response, LOGIN_MEMBER_NOT_FOUND.getCode(),
                     LOGIN_MEMBER_NOT_FOUND.getMessage());
-            ;
         }
     }
 
@@ -309,10 +308,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(response.jsonPath().getString("code"))
+        assertSoftly(soft -> {
+            soft.assertThat(response.jsonPath().getString("code"))
                     .isEqualTo(expectedCode);
-            softAssertions.assertThat(response.jsonPath().getString("message"))
+            soft.assertThat(response.jsonPath().getString("message"))
                     .isEqualTo(expectedMessage);
         });
     }
@@ -325,10 +324,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         final var actualNickname = response.jsonPath().getString("nickname");
         final var actualProfileImage = response.jsonPath().getString("profileImage");
 
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actualNickname)
+        assertSoftly(soft -> {
+            soft.assertThat(actualNickname)
                     .isEqualTo(expectedNickname);
-            softAssertions.assertThat(actualProfileImage)
+            soft.assertThat(actualProfileImage)
                     .isEqualTo(expectedProfileImage);
         });
     }

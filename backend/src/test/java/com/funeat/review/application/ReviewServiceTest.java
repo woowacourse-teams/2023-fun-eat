@@ -212,10 +212,10 @@ class ReviewServiceTest extends ServiceTest {
             final var actualReviewFavorite = reviewFavoriteRepository.findAll().get(0);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualReview.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualReview.getFavoriteCount())
                         .isOne();
-                softAssertions.assertThat(actualReviewFavorite.getFavorite())
+                soft.assertThat(actualReviewFavorite.getFavorite())
                         .isTrue();
             });
         }
@@ -255,10 +255,10 @@ class ReviewServiceTest extends ServiceTest {
             final var actualReviewFavorite = reviewFavoriteRepository.findAll().get(0);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualReview.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualReview.getFavoriteCount())
                         .isZero();
-                softAssertions.assertThat(actualReviewFavorite.getFavorite())
+                soft.assertThat(actualReviewFavorite.getFavorite())
                         .isFalse();
             });
         }

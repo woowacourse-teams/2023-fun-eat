@@ -36,10 +36,10 @@ class MemberServiceTest extends ServiceTest {
             final var actual = memberService.findOrCreateMember(userInfoDto);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actual.isSignUp())
+            assertSoftly(soft -> {
+                soft.assertThat(actual.isSignUp())
                         .isFalse();
-                softAssertions.assertThat(expected)
+                soft.assertThat(expected)
                         .containsExactly(actual.getMember());
             });
         }
@@ -58,10 +58,10 @@ class MemberServiceTest extends ServiceTest {
             final var actual = memberService.findOrCreateMember(userInfoDto);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actual.isSignUp())
+            assertSoftly(soft -> {
+                soft.assertThat(actual.isSignUp())
                         .isTrue();
-                softAssertions.assertThat(expected)
+                soft.assertThat(expected)
                         .doesNotContain(actual.getMember());
             });
         }
@@ -140,10 +140,10 @@ class MemberServiceTest extends ServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualNickname)
+            assertSoftly(soft -> {
+                soft.assertThat(actualNickname)
                         .isEqualTo(expectedNickname);
-                softAssertions.assertThat(actualProfileImage)
+                soft.assertThat(actualProfileImage)
                         .isEqualTo(expectedProfileImage);
             });
         }
@@ -170,10 +170,10 @@ class MemberServiceTest extends ServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualNickname)
+            assertSoftly(soft -> {
+                soft.assertThat(actualNickname)
                         .isNotEqualTo(expectedNickname);
-                softAssertions.assertThat(actualProfileImage)
+                soft.assertThat(actualProfileImage)
                         .isEqualTo(expectedProfileImage);
             });
         }
@@ -199,10 +199,10 @@ class MemberServiceTest extends ServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualNickname)
+            assertSoftly(soft -> {
+                soft.assertThat(actualNickname)
                         .isEqualTo(expectedNickname);
-                softAssertions.assertThat(actualProfileImage)
+                soft.assertThat(actualProfileImage)
                         .isNotEqualTo(expectedProfileImage);
             });
         }
@@ -229,10 +229,10 @@ class MemberServiceTest extends ServiceTest {
             final var actualProfileImage = actual.getProfileImage();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualNickname)
+            assertSoftly(soft -> {
+                soft.assertThat(actualNickname)
                         .isNotEqualTo(expectedNickname);
-                softAssertions.assertThat(actualProfileImage)
+                soft.assertThat(actualProfileImage)
                         .isNotEqualTo(expectedProfileImage);
             });
         }

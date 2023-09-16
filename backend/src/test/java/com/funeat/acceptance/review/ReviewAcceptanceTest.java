@@ -582,10 +582,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(response.jsonPath().getString("code"))
+        assertSoftly(soft -> {
+            soft.assertThat(response.jsonPath().getString("code"))
                     .isEqualTo(expectedCode);
-            softAssertions.assertThat(response.jsonPath().getString("message"))
+            soft.assertThat(response.jsonPath().getString("message"))
                     .isEqualTo(expectedMessage);
         });
     }

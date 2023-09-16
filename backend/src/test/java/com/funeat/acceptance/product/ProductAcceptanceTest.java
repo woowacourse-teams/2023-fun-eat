@@ -65,7 +65,6 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Collections;
 import java.util.List;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -657,10 +656,10 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     private void ERROR_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                            final String expectedMessage) {
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(response.jsonPath().getString("code"))
+        assertSoftly(soft -> {
+            soft.assertThat(response.jsonPath().getString("code"))
                     .isEqualTo(expectedCode);
-            softAssertions.assertThat(response.jsonPath().getString("message"))
+            soft.assertThat(response.jsonPath().getString("message"))
                     .isEqualTo(expectedMessage);
         });
     }
@@ -670,7 +669,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         final var actualTags = response.jsonPath()
                 .getList("tags", TagDto.class);
 
-        SoftAssertions.assertSoftly(soft -> {
+        assertSoftly(soft -> {
             soft.assertThat(actual.getId()).isEqualTo(1L);
             soft.assertThat(actual.getName()).isEqualTo("삼각김밥");
             soft.assertThat(actual.getPrice()).isEqualTo(1000L);

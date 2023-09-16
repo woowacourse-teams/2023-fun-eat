@@ -50,7 +50,6 @@ import io.restassured.response.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -532,7 +531,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         final var actualAuthor = response.jsonPath().getObject("author", RecipeAuthorDto.class);
         final var actualProducts = response.jsonPath().getList("products", ProductRecipeDto.class);
 
-        SoftAssertions.assertSoftly(soft -> {
+        assertSoftly(soft -> {
             soft.assertThat(actual.getId()).isEqualTo(1L);
             soft.assertThat(actual.getImages()).hasSize(0);
             soft.assertThat(actual.getTitle()).isEqualTo("The most delicious recipes");
@@ -549,10 +548,10 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(response.jsonPath().getString("code"))
+        assertSoftly(soft -> {
+            soft.assertThat(response.jsonPath().getString("code"))
                     .isEqualTo(expectedCode);
-            softAssertions.assertThat(response.jsonPath().getString("message"))
+            soft.assertThat(response.jsonPath().getString("message"))
                     .isEqualTo(expectedMessage);
         });
     }

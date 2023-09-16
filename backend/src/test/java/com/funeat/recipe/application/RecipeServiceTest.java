@@ -450,10 +450,10 @@ class RecipeServiceTest extends ServiceTest {
             final var actualRecipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, actualRecipe).get();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualRecipe.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualRecipe.getFavoriteCount())
                         .isOne();
-                softAssertions.assertThat(actualRecipeFavorite.getFavorite())
+                soft.assertThat(actualRecipeFavorite.getFavorite())
                         .isTrue();
             });
         }
@@ -491,10 +491,10 @@ class RecipeServiceTest extends ServiceTest {
             final var actualRecipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, actualRecipe).get();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualRecipe.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualRecipe.getFavoriteCount())
                         .isZero();
-                softAssertions.assertThat(actualRecipeFavorite.getFavorite())
+                soft.assertThat(actualRecipeFavorite.getFavorite())
                         .isFalse();
             });
         }
@@ -547,7 +547,7 @@ class RecipeServiceTest extends ServiceTest {
 
     private <T> void 해당멤버의_꿀조합과_페이징_결과를_검증한다(final MemberRecipesResponse actual, final List<T> expectedRecipesDtos,
                                              final PageDto expectedPage) {
-        assertSoftly(softAssertions -> {
+        assertSoftly(soft -> {
             assertThat(actual.getRecipes()).usingRecursiveComparison()
                     .isEqualTo(expectedRecipesDtos);
             assertThat(actual.getPage()).usingRecursiveComparison()
