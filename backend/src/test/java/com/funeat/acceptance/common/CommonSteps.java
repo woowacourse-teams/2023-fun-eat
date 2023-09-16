@@ -2,6 +2,7 @@ package com.funeat.acceptance.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.funeat.common.dto.PageDto;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -65,5 +66,12 @@ public class CommonSteps {
         }
 
         return images;
+    }
+
+    public static void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
+        final var actual = response.jsonPath().getObject("page", PageDto.class);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }

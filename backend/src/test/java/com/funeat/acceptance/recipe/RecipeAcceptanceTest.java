@@ -9,6 +9,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
+import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_검색_결과_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_랭킹_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_목록_요청;
@@ -517,13 +518,6 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
         assertThat(actual).extracting(RecipeDto::getId)
                 .containsExactlyElementsOf(recipeIds);
-    }
-
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
-        final var actual = response.jsonPath().getObject("page", PageDto.class);
-
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
     }
 
     private void 레시피_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response) {

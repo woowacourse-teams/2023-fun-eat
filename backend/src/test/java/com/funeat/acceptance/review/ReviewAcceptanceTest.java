@@ -9,6 +9,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
+import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
@@ -594,13 +595,6 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                                        final PageDto pageDto) {
         페이지를_검증한다(response, pageDto);
         리뷰_목록을_검증한다(response, reviewIds);
-    }
-
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
-        final var actual = response.jsonPath().getObject("page", PageDto.class);
-
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
     }
 
     private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Long> reviewIds) {

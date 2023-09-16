@@ -7,6 +7,7 @@ import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_�
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.member.MemberSteps.사용자_꿀조합_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_리뷰_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
@@ -290,13 +291,6 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         final var actual = response.jsonPath().getList("reviews", MemberReviewDto.class);
 
         assertThat(actual.size()).isEqualTo(expectedReviewSize);
-    }
-
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
-        final var actual = response.jsonPath().getObject("page", PageDto.class);
-
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
     }
 
     private void 사용자_꿀조합_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> recipeIds) {

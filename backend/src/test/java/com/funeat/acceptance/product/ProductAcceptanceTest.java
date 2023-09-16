@@ -6,6 +6,7 @@ import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
+import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.product.ProductSteps.상품_검색_결과_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_랭킹_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_레시피_목록_요청;
@@ -638,13 +639,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
             페이지를_검증한다(response, pageDto);
             상품_레시피_목록_조회_결과를_검증한다(response, List.of(1L, 2L, 3L));
         }
-    }
-
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
-        final var actual = response.jsonPath().getObject("page", PageDto.class);
-
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
     }
 
     private void 카테고리별_상품_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> productIds) {
