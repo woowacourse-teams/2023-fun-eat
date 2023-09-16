@@ -53,10 +53,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 사용자_정보를_확인하다() {
-            // given
-            단일_멤버_저장(멤버_멤버1_생성());
-
-            // when
+            // given && when
             final var response = 사용자_정보_조회_요청(로그인_쿠키_획득(1L));
 
             // then
