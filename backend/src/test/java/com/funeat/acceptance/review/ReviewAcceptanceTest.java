@@ -366,7 +366,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(2L, 3L, 1L), pageDto);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(2L, 3L, 1L));
             }
 
             @Test
@@ -388,7 +389,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L), pageDto);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -414,7 +416,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(1L, 3L, 2L), pageDto);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(1L, 3L, 2L));
             }
 
             @Test
@@ -429,14 +432,15 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(2L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매O_생성(3L, List.of(1L)));
                 리뷰_작성_요청(로그인_쿠키_획득(3L), 1L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(3L, List.of(1L)));
 
-                final var page = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+                final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
                 // when
                 final var response = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(1L), 1L, 평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L), page);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -462,7 +466,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(2L, 3L, 1L), pageDto);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(2L, 3L, 1L));
             }
 
             @Test
@@ -484,7 +489,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L), pageDto);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
 
@@ -510,7 +516,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(response, 정상_처리);
-                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L), pageDto);
+                페이지를_검증한다(response, pageDto);
+                정렬된_리뷰_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
             }
         }
     }
@@ -591,13 +598,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         });
     }
 
-    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> reviewIds,
-                                       final PageDto pageDto) {
-        페이지를_검증한다(response, pageDto);
-        리뷰_목록을_검증한다(response, reviewIds);
-    }
-
-    private void 리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<Long> reviewIds) {
+    private void 정렬된_리뷰_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> reviewIds) {
         final var actual = response.jsonPath().getList("reviews", SortingReviewDto.class);
 
         assertThat(actual).extracting(SortingReviewDto::getId)
