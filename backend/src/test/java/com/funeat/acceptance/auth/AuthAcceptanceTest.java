@@ -2,7 +2,7 @@ package com.funeat.acceptance.auth;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그아웃_요청;
 import static com.funeat.acceptance.auth.LoginSteps.로그인_시도_요청;
-import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.auth.LoginSteps.카카오_로그인_버튼_클릭;
 import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_리다이렉트_주소_추출;
 import static com.funeat.acceptance.common.CommonSteps.REDIRECT_URL을_검증한다;
@@ -61,7 +61,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         @Test
         void 기존_유저라면_메인페이지_경로를_헤더에_담아_응답을_보낸다() {
             // given
-            로그인_쿠키를_얻는다(1L);
+            로그인_쿠키_획득(1L);
 
             // when
             final var response = 로그인_시도_요청(1L);
@@ -78,7 +78,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         @Test
         void 로그아웃을_하다() {
             // given && when
-            final var response = 로그아웃_요청(로그인_쿠키를_얻는다(1L));
+            final var response = 로그아웃_요청(로그인_쿠키_획득(1L));
 
             // then
             STATUS_CODE를_검증한다(response, 리다이렉션_영구_이동);

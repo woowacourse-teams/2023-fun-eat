@@ -36,7 +36,7 @@ public class LoginSteps {
                 .extract();
     }
 
-    public static String 로그인_쿠키를_얻는다(final Long memberId) {
+    public static String 로그인_쿠키_획득(final Long memberId) {
         return RestAssured.given()
                 .queryParam("code", String.valueOf(memberId))
                 .when()
