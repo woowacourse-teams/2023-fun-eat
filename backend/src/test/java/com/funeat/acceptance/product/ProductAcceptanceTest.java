@@ -3,6 +3,7 @@ package com.funeat.acceptance.product;
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
+import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.product.ProductSteps.상품_검색_결과_조회_요청;
@@ -42,7 +43,6 @@ import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생성;
-import static com.funeat.fixture.TagFixture.태그_간식_ETC_생성;
 import static com.funeat.fixture.TagFixture.태그_단짠단짠_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
@@ -323,10 +323,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var category = 카테고리_간편식사_생성();
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(category));
-            복수_태그_저장(태그_맛있어요_TASTE_생성(), 태그_단짠단짠_TASTE_생성(), 태그_간식_ETC_생성());
+            단일_태그_저장(태그_맛있어요_TASTE_생성());
+            단일_태그_저장(태그_단짠단짠_TASTE_생성());
 
-            리뷰_작성_요청(로그인_쿠키_획득(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(4L, List.of(1L, 2L, 3L)));
-            리뷰_작성_요청(로그인_쿠키_획득(1L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(4L, List.of(2L, 3L)));
+            리뷰_작성_요청(로그인_쿠키_획득(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매X_생성(4L, List.of(1L, 2L)));
+            리뷰_작성_요청(로그인_쿠키_획득(1L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매X_생성(4L, List.of(2L)));
             리뷰_작성_요청(로그인_쿠키_획득(1L), 1L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(1L, List.of(2L)));
 
             // when
@@ -572,9 +573,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
             레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키_획득(2L), 2L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키_획득(3L), 2L, 레시피좋아요요청_생성(true));
@@ -599,9 +600,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
             단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
@@ -623,9 +624,9 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(category));
             단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(category));
 
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
-            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
+            RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
@@ -677,7 +678,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             soft.assertThat(actual.getContent()).isEqualTo("맛있는 삼각김밥");
             soft.assertThat(actual.getAverageRating()).isEqualTo(3.0);
             soft.assertThat(actual.getReviewCount()).isEqualTo(3L);
-            soft.assertThat(actualTags).extracting("id").containsExactly(2L, 3L, 1L);
+            soft.assertThat(actualTags).extracting("id").containsExactly(2L, 1L);
         });
     }
 

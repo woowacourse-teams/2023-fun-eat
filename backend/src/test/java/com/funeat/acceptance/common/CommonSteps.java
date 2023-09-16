@@ -6,6 +6,8 @@ import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -48,5 +50,20 @@ public class CommonSteps {
                 .controlName("image")
                 .mimeType("image/png")
                 .build();
+    }
+
+    public static List<MultiPartSpecification> 여러개_사진_명세_요청(final String... names) {
+        final var images = new ArrayList<MultiPartSpecification>();
+
+        for (final String name : names) {
+            images.add(new MultiPartSpecBuilder("image".getBytes())
+                    .fileName(String.format("%s.png", name))
+                    .controlName("image")
+                    .mimeType("image/png")
+                    .build()
+            );
+        }
+
+        return images;
     }
 }

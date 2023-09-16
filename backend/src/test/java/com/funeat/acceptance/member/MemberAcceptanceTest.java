@@ -3,6 +3,7 @@ package com.funeat.acceptance.member;
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
+import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
@@ -143,7 +144,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 사용자가_작성한_리뷰를_조회하다() {
-            // given\
+            // given
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
@@ -212,9 +213,9 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(2L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(2L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -234,7 +235,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(2L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(2L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
 

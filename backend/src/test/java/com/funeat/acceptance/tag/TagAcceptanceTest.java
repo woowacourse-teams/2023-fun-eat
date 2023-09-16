@@ -28,10 +28,10 @@ public class TagAcceptanceTest extends AcceptanceTest {
         @Test
         void 전체_태그_목록을_조회할_수_있다() {
             // given
-            복수_태그_저장(태그_맛있어요_TASTE_생성(),
-                    태그_단짠단짠_TASTE_생성(),
-                    태그_갓성비_PRICE_생성(),
-                    태그_간식_ETC_생성());
+            단일_태그_저장(태그_맛있어요_TASTE_생성());
+            단일_태그_저장(태그_단짠단짠_TASTE_생성());
+            단일_태그_저장(태그_갓성비_PRICE_생성());
+            단일_태그_저장(태그_간식_ETC_생성());
 
             // when
             final var response = 전체_태그_목록_조회_요청();
