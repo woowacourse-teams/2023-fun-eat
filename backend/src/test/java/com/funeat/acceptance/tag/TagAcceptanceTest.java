@@ -10,7 +10,6 @@ import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.product.dto.CategoryResponse;
 import com.funeat.tag.dto.TagDto;
 import com.funeat.tag.dto.TagsResponse;
 import io.restassured.response.ExtractableResponse;

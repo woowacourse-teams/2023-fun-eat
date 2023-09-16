@@ -33,7 +33,6 @@ import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRecipeDto;
-import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
