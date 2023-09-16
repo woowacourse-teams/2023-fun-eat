@@ -2,6 +2,7 @@ package com.funeat.fixture;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class PageFixture {
@@ -28,7 +29,7 @@ public class PageFixture {
     public static PageRequest 페이지요청_생성(final int page, final int size, final String sort) {
         final String[] splitSort = sort.split(",");
         final String order = splitSort[0];
-        final String direction = splitSort[1];
+        final Direction direction = Direction.fromString(splitSort[1]);
 
         return PageRequest.of(page, size, Sort.by(direction, order));
     }
