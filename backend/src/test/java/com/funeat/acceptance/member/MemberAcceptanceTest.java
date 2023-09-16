@@ -16,6 +16,7 @@ import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.MemberFixture.유저닉네임수정요청_생성;
 import static com.funeat.fixture.PageFixture.FIRST_PAGE;
 import static com.funeat.fixture.PageFixture.PAGE_SIZE;
 import static com.funeat.fixture.PageFixture.최신순;
@@ -85,7 +86,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자_정보를_수정하다() {
             // given && when
-            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("1"), new MemberRequest("after"));
+            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("1"), 유저닉네임수정요청_생성("after"));
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -94,7 +95,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자_닉네임을_수정하다() {
             // given && when
-            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("1"), new MemberRequest("member1"));
+            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("1"), 유저닉네임수정요청_생성("member1"));
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -103,7 +104,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자_이미지를_수정하다() {
             // given && when
-            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("2"), new MemberRequest("after"));
+            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("2"), 유저닉네임수정요청_생성("after"));
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
@@ -117,7 +118,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다(final String cookie) {
             // given && when
-            final var response = 사용자_정보_수정_요청(cookie, 사진_명세_요청("1"), new MemberRequest("after"));
+            final var response = 사용자_정보_수정_요청(cookie, 사진_명세_요청("1"), 유저닉네임수정요청_생성("after"));
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
@@ -129,7 +130,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 사용자가_사용자_정보_수정할때_닉네임_미기입시_예외가_발생한다(final String nickname) {
             // given && when
-            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("1"), new MemberRequest(nickname));
+            final var response = 사용자_정보_수정_요청(로그인_쿠키_획득(1L), 사진_명세_요청("1"), 유저닉네임수정요청_생성(nickname));
 
             // then
             STATUS_CODE를_검증한다(response, 잘못된_요청);
@@ -212,9 +213,9 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(2L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(2L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -234,7 +235,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(2L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(2L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -254,7 +255,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), null, 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), null, 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(1L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 

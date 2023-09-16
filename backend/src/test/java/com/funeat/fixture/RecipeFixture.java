@@ -23,6 +23,10 @@ public class RecipeFixture {
         return new RecipeFavorite(member, recipe, favorite);
     }
 
+    public static RecipeCreateRequest 레시피추가요청_생성(final Long... productIds) {
+        return new RecipeCreateRequest("The most delicious recipes", List.of(productIds), "More rice, more rice, more rice.. Done!!");
+    }
+
     public static RecipeCreateRequest 레시피추가요청_생성(final List<Long> productIds) {
         return new RecipeCreateRequest("The most delicious recipes", productIds, "More rice, more rice, more rice.. Done!!");
     }

@@ -71,7 +71,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
@@ -85,7 +85,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), null, 레시피추가요청_생성(List.of(1L)));
+            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), null, 레시피추가요청_생성(1L));
 
             // then
             STATUS_CODE를_검증한다(response, 정상_생성);
@@ -104,7 +104,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
             // when
-            final var response = 레시피_작성_요청(cookie, List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            final var response = 레시피_작성_요청(cookie, List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             // then
             STATUS_CODE를_검증한다(response, 인증되지_않음);
@@ -210,7 +210,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
             단일_상품_저장(상품_삼각김밥_가격3000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L, 2L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L, 2L));
 
             // when
             final var response = 레시피_상세_정보_요청(로그인_쿠키_획득(1L), 1L);
@@ -232,7 +232,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             // when
             final var response = 레시피_상세_정보_요청(cookie, 1L);
@@ -264,7 +264,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             // when
             final var response = 레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
@@ -280,7 +280,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
             레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
 
             // when
@@ -302,7 +302,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             // when
             final var response = 레시피_좋아요_요청(cookie, 1L, 레시피좋아요요청_생성(true));
@@ -320,7 +320,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             // when
             final var response = 레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(null));
@@ -353,9 +353,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
             단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L, 2L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(2L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L, 2L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(2L));
 
             final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -376,7 +376,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
             단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L, 2L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L, 2L));
 
             final var pageDto = new PageDto(1L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -396,7 +396,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -420,9 +420,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
             레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키_획득(1L), 2L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키_획득(2L), 2L, 레시피좋아요요청_생성(true));
@@ -445,9 +445,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
@@ -467,9 +467,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 
@@ -493,10 +493,10 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(category);
             단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(List.of(1L)));
-            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("4")), 레시피추가요청_생성(List.of(1L)));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("1")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("2")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("3")), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(1L), List.of(사진_명세_요청("4")), 레시피추가요청_생성(1L));
             레시피_좋아요_요청(로그인_쿠키_획득(1L), 2L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키_획득(2L), 2L, 레시피좋아요요청_생성(true));
             레시피_좋아요_요청(로그인_쿠키_획득(1L), 3L, 레시피좋아요요청_생성(true));

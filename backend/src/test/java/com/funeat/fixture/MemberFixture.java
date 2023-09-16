@@ -1,6 +1,7 @@
 package com.funeat.fixture;
 
 import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberFixture {
@@ -15,5 +16,9 @@ public class MemberFixture {
 
     public static Member 멤버_멤버3_생성() {
         return new Member("member3", "www.member3.com", "3");
+    }
+
+    public static MemberRequest 유저닉네임수정요청_생성(final String modifyNickname) {
+        return new MemberRequest(modifyNickname);
     }
 }
