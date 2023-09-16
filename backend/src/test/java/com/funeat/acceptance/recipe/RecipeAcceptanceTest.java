@@ -16,6 +16,7 @@ import static com.funeat.acceptance.recipe.RecipeSteps.레시피_목록_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_상세_정보_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_작성_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_좋아요_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.여러명이_레시피_좋아요_요청;
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
@@ -423,9 +424,8 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
             레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
             레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 2L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(2L), 2L, 레시피좋아요요청_생성(true));
+            여러명이_레시피_좋아요_요청(List.of(1L), 1L, true);
+            여러명이_레시피_좋아요_요청(List.of(1L, 2L), 2L, true);
 
             final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -497,12 +497,9 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
             레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
             레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("4"), 레시피추가요청_생성(1L));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 2L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(2L), 2L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 3L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 4L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(2L), 4L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(3L), 4L, 레시피좋아요요청_생성(true));
+            여러명이_레시피_좋아요_요청(List.of(1L, 2L), 2L, true);
+            여러명이_레시피_좋아요_요청(List.of(1L), 3L, true);
+            여러명이_레시피_좋아요_요청(List.of(1L, 2L, 3L), 4L, true);
 
             // when
             final var response = 레시피_랭킹_조회_요청();

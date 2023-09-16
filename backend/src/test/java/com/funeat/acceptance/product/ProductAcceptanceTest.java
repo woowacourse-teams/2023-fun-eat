@@ -13,7 +13,7 @@ import static com.funeat.acceptance.product.ProductSteps.상품_레시피_목록
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.product.ProductSteps.상품_자동_완성_검색_요청;
 import static com.funeat.acceptance.product.ProductSteps.카테고리별_상품_목록_조회_요청;
-import static com.funeat.acceptance.recipe.RecipeSteps.레시피_좋아요_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.여러명이_레시피_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.PageFixture.FIRST_PAGE;
@@ -40,7 +40,6 @@ import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000�
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격4000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격5000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000원_평점5점_생성;
-import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생성;
@@ -577,9 +576,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
             RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
             RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
             RecipeSteps.레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(2L), 2L, 레시피좋아요요청_생성(true));
-            레시피_좋아요_요청(로그인_쿠키_획득(3L), 2L, 레시피좋아요요청_생성(true));
+            여러명이_레시피_좋아요_요청(List.of(1L), 1L, true);
+            여러명이_레시피_좋아요_요청(List.of(2L, 3L), 2L, true);
 
             final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
 

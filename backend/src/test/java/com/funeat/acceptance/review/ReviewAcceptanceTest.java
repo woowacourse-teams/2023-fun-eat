@@ -14,6 +14,7 @@ import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_�
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
+import static com.funeat.acceptance.review.ReviewSteps.여러명이_리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
@@ -355,9 +356,8 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(1L), 1L, 사진_명세_요청("1"), 리뷰추가요청_재구매O_생성(3L, List.of(1L)));
                 리뷰_작성_요청(로그인_쿠키_획득(2L), 1L, 사진_명세_요청("2"), 리뷰추가요청_재구매O_생성(4L, List.of(1L)));
                 리뷰_작성_요청(로그인_쿠키_획득(3L), 1L, 사진_명세_요청("3"), 리뷰추가요청_재구매X_생성(3L, List.of(1L)));
-                리뷰_좋아요_요청(로그인_쿠키_획득(1L), 1L, 3L, 리뷰좋아요요청_생성(true));
-                리뷰_좋아요_요청(로그인_쿠키_획득(2L), 1L, 2L, 리뷰좋아요요청_생성(true));
-                리뷰_좋아요_요청(로그인_쿠키_획득(3L), 1L, 2L, 리뷰좋아요요청_생성(true));
+                여러명이_리뷰_좋아요_요청(List.of(1L), 1L, 3L, true);
+                여러명이_리뷰_좋아요_요청(List.of(2L, 3L), 1L, 2L, true);
 
                 final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
 
@@ -572,12 +572,9 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             리뷰_작성_요청(로그인_쿠키_획득(3L), 1L, 사진_명세_요청("3"), 리뷰추가요청_재구매O_생성(3L, List.of(1L)));
             리뷰_작성_요청(로그인_쿠키_획득(1L), 2L, 사진_명세_요청("4"), 리뷰추가요청_재구매O_생성(5L, List.of(1L)));
             리뷰_작성_요청(로그인_쿠키_획득(2L), 2L, 사진_명세_요청("5"), 리뷰추가요청_재구매O_생성(1L, List.of(1L)));
-            리뷰_좋아요_요청(로그인_쿠키_획득(1L), 1L, 2L, 리뷰좋아요요청_생성(true));
-            리뷰_좋아요_요청(로그인_쿠키_획득(2L), 1L, 2L, 리뷰좋아요요청_생성(true));
-            리뷰_좋아요_요청(로그인_쿠키_획득(3L), 1L, 2L, 리뷰좋아요요청_생성(true));
-            리뷰_좋아요_요청(로그인_쿠키_획득(1L), 1L, 3L, 리뷰좋아요요청_생성(true));
-            리뷰_좋아요_요청(로그인_쿠키_획득(2L), 1L, 3L, 리뷰좋아요요청_생성(true));
-            리뷰_좋아요_요청(로그인_쿠키_획득(1L), 1L, 4L, 리뷰좋아요요청_생성(true));
+            여러명이_리뷰_좋아요_요청(List.of(1L, 2L, 3L), 1L, 2L, true);
+            여러명이_리뷰_좋아요_요청(List.of(1L, 2L), 1L, 3L, true);
+            여러명이_리뷰_좋아요_요청(List.of(1L), 1L, 4L, true);
 
             // when
             final var response = 리뷰_랭킹_조회_요청();

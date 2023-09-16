@@ -1,5 +1,7 @@
 package com.funeat.acceptance.recipe;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
+import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static io.restassured.RestAssured.given;
 
 import com.funeat.recipe.dto.RecipeCreateRequest;
@@ -60,6 +62,15 @@ public class RecipeSteps {
                 .patch("/api/recipes/{recipeId}", recipeId)
                 .then()
                 .extract();
+    }
+
+    public static void 여러명이_레시피_좋아요_요청(final List<Long> memberIds, final Long recipeId,
+                                       final Boolean favorite) {
+        final var request = 레시피좋아요요청_생성(favorite);
+
+        for (final var memberId : memberIds) {
+            레시피_좋아요_요청(로그인_쿠키_획득(memberId), recipeId, request);
+        }
     }
 
     public static ExtractableResponse<Response> 레시피_랭킹_조회_요청() {
