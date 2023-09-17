@@ -4,11 +4,6 @@ import type { NavigationMenu } from '@/types/common';
 
 export const NAVIGATION_MENU: NavigationMenu[] = [
   {
-    variant: 'search',
-    name: '검색',
-    path: PATH.SEARCH,
-  },
-  {
     variant: 'list',
     name: '목록',
     path: `${PATH.PRODUCT_LIST}/food`,
@@ -58,7 +53,8 @@ export const TAG_TITLE = {
 
 export const MIN_DISPLAYED_TAGS_LENGTH = 3;
 
-export const SEARCH_PAGE_TABS = ['상품', '꿀조합'] as const;
+export const SEARCH_TAB_VARIANTS = ['상품', '꿀조합'];
+export const SEARCH_PAGE_VARIANTS = { products: '상품', recipes: '꿀조합', integrated: '통합' } as const;
 
 export const CATEGORY_TYPE = {
   FOOD: 'food',
@@ -66,3 +62,8 @@ export const CATEGORY_TYPE = {
 } as const;
 
 export const IMAGE_MAX_SIZE = 5 * 1024 * 1024;
+
+export const ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod';
+
+export const IMAGE_URL =
+  ENVIRONMENT === 'dev' ? process.env.S3_DEV_CLOUDFRONT_PATH : process.env.S3_PROD_CLOUDFRONT_PATH;

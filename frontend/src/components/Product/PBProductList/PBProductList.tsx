@@ -6,25 +6,19 @@ import PBProductItem from '../PBProductItem/PBProductItem';
 
 import { MoreButton } from '@/components/Common';
 import { PATH } from '@/constants/path';
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
-import displaySlice from '@/utils/displaySlice';
 
-interface PBProductListProps {
-  isHomePage?: boolean;
-}
-
-const PBProductList = ({ isHomePage }: PBProductListProps) => {
-  const { categoryIds } = useCategoryContext();
+const PBProductList = () => {
+  const { categoryIds } = useCategoryValueContext();
 
   const { data: pbProductListResponse } = useInfiniteProductsQuery(categoryIds.store);
   const pbProducts = pbProductListResponse.pages.flatMap((page) => page.products);
-  const pbProductsToDisplay = displaySlice(isHomePage, pbProducts, 10);
 
   return (
     <>
       <PBProductListContainer>
-        {pbProductsToDisplay.map((pbProduct) => (
+        {pbProducts.map((pbProduct) => (
           <li key={pbProduct.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/store/${pbProduct.id}`}>
               <PBProductItem pbProduct={pbProduct} />

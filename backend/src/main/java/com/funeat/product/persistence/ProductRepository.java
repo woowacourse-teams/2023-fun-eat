@@ -13,22 +13,23 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) " +
-            "FROM Product p " +
-            "LEFT JOIN p.reviews r " +
-            "WHERE p.category = :category " +
-            "GROUP BY p ",
+    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) "
+            + "FROM Product p "
+            + "LEFT JOIN p.reviews r "
+            + "WHERE p.category = :category "
+            + "GROUP BY p ",
             countQuery = "SELECT COUNT(p) FROM Product p WHERE p.category = :category")
     Page<ProductInCategoryDto> findAllByCategory(@Param("category") final Category category, final Pageable pageable);
 
-    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) " +
-            "FROM Product p " +
-            "LEFT JOIN p.reviews r " +
-            "WHERE p.category = :category " +
-            "GROUP BY p " +
-            "ORDER BY COUNT(r) DESC, p.id DESC ",
+    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) "
+                    + "FROM Product p "
+                    + "LEFT JOIN p.reviews r "
+                    + "WHERE p.category = :category "
+                    + "GROUP BY p "
+                    + "ORDER BY COUNT(r) DESC, p.id DESC ",
             countQuery = "SELECT COUNT(p) FROM Product p WHERE p.category = :category")
-    Page<ProductInCategoryDto> findAllByCategoryOrderByReviewCountDesc(@Param("category") final Category category, final Pageable pageable);
+    Page<ProductInCategoryDto> findAllByCategoryOrderByReviewCountDesc(@Param("category") final Category category,
+                                                                       final Pageable pageable);
 
     @Query("SELECT new com.funeat.product.dto.ProductReviewCountDto(p, COUNT(r.id)) "
             + "FROM Product p "
@@ -50,5 +51,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "GROUP BY p.id "
             + "ORDER BY "
             + "(CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 ELSE 2 END), p.id DESC")
-    Page<ProductReviewCountDto> findAllWithReviewCountByNameContaining(@Param("name") final String name, final Pageable pageable);
+    Page<ProductReviewCountDto> findAllWithReviewCountByNameContaining(@Param("name") final String name,
+                                                                       final Pageable pageable);
 }

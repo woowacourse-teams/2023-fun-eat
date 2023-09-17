@@ -24,9 +24,10 @@ interface ReviewRegisterFormProps {
   productId: number;
   targetRef: RefObject<HTMLElement>;
   closeReviewDialog: () => void;
+  initTabMenu: () => void;
 }
 
-const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewRegisterFormProps) => {
+const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMenu }: ReviewRegisterFormProps) => {
   const { scrollToPosition } = useScroll();
   const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
 
@@ -34,7 +35,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
   const { resetReviewFormValue } = useReviewFormActionContext();
 
   const { data: productDetail } = useProductDetailQuery(productId);
-  const { mutate } = useReviewRegisterFormMutation(productId);
+  const { mutate, isLoading } = useReviewRegisterFormMutation(productId);
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
@@ -61,6 +62,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
     mutate(formData, {
       onSuccess: () => {
         resetAndCloseForm();
+        initTabMenu();
         scrollToPosition(targetRef);
       },
       onError: (error) => {
@@ -108,10 +110,17 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog }: ReviewR
         <RebuyCheckbox />
         <Spacing size={16} />
         <Text size="sm" color={theme.textColors.disabled}>
-          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.{' '}
+          [작성시 유의사항] 신뢰성 확보에 저해되는 게시물은 삭제하거나 보이지 않게 할 수 있습니다.
         </Text>
         <Spacing size={10} />
-        <FormButton type="submit" customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid}>
+        <FormButton
+          type="submit"
+          customWidth="100%"
+          customHeight="60px"
+          size="xl"
+          weight="bold"
+          disabled={!isValid || isLoading}
+        >
           {isValid ? '리뷰 등록하기' : '꼭 입력해야 하는 항목이 있어요'}
         </FormButton>
       </RegisterForm>

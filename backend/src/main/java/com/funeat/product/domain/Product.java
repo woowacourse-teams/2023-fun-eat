@@ -83,10 +83,6 @@ public class Product {
         this.image = topFavoriteImage;
     }
 
-    public boolean isNotEqualImage(final String anotherImage) {
-        return !Objects.equals(this.image, anotherImage);
-    }
-
     public Long getId() {
         return id;
     }

@@ -29,7 +29,7 @@ public interface AuthController {
             description = "기존 회원이면 홈으로 이동, 신규 회원이면 마이페이지로 이동."
     )
     @GetMapping
-    ResponseEntity<Void> loginAuthorizeUser(@RequestParam("code") String code, HttpServletRequest request);
+    ResponseEntity<Void> loginAuthorizeUser(@RequestParam("code") final String code, final HttpServletRequest request);
 
     @Operation(summary = "로그아웃", description = "로그아웃을 한다")
     @ApiResponse(
@@ -37,6 +37,6 @@ public interface AuthController {
             description = "로그아웃 성공."
     )
     @PostMapping
-    ResponseEntity<Void> logout(@AuthenticationPrincipal LoginInfo loginInfo, HttpServletRequest request,
-                                HttpServletResponse response);
+    ResponseEntity<Void> logout(@AuthenticationPrincipal final LoginInfo loginInfo, final HttpServletRequest request,
+                                final HttpServletResponse response);
 }

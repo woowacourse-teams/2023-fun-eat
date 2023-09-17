@@ -32,6 +32,7 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +47,7 @@ public class ProductService {
     private static final int THREE = 3;
     private static final int TOP = 0;
     public static final String REVIEW_COUNT = "reviewCount";
+    private static final int RANKING_SIZE = 3;
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -82,7 +84,7 @@ public class ProductService {
     }
 
     private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
-        if (pageable.getSort().getOrderFor(REVIEW_COUNT) != null) {
+        if (Objects.nonNull(pageable.getSort().getOrderFor(REVIEW_COUNT))) {
             final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
             return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
         }
@@ -106,7 +108,7 @@ public class ProductService {
 
         final List<RankingProductDto> rankingProductDtos = productsAndReviewCounts.stream()
                 .sorted(rankingScoreComparator)
-                .limit(3)
+                .limit(RANKING_SIZE)
                 .map(it -> RankingProductDto.toDto(it.getProduct()))
                 .collect(Collectors.toList());
 
@@ -125,7 +127,8 @@ public class ProductService {
     }
 
     public SearchProductResultsResponse getSearchResults(final String query, final Pageable pageable) {
-        final Page<ProductReviewCountDto> products = productRepository.findAllWithReviewCountByNameContaining(query, pageable);
+        final Page<ProductReviewCountDto> products = productRepository.findAllWithReviewCountByNameContaining(query,
+                pageable);
 
         final PageDto pageDto = PageDto.toDto(products);
         final List<SearchProductResultDto> resultDtos = products.stream()

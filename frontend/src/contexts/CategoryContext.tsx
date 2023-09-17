@@ -8,33 +8,50 @@ const initialState = {
   store: 7,
 };
 
-type CategoryIds = {
+export type CategoryIds = {
   [k in CategoryVariant]: number;
 };
 
-interface CategoryState {
+interface CategoryValue {
   categoryIds: CategoryIds;
-  selectCategory: (menuVariant: string, categoryId: number) => void;
+  currentTabScroll: { [key: number]: number };
 }
 
-export const CategoryContext = createContext<CategoryState>({
-  categoryIds: initialState,
-  selectCategory: () => {},
-});
+interface CategoryAction {
+  selectCategory: (menuVariant: string, categoryId: number) => void;
+  saveCurrentTabScroll: (categoryId: number, scrollY: number) => void;
+}
+
+export const CategoryValueContext = createContext<CategoryValue | null>(null);
+export const CategoryActionContext = createContext<CategoryAction | null>(null);
 
 const CategoryProvider = ({ children }: PropsWithChildren) => {
   const [categoryIds, setCategoryIds] = useState(initialState);
+  const [currentTabScroll, setCurrentTabScroll] = useState({});
 
   const selectCategory = (menuVariant: string, categoryId: number) => {
     setCategoryIds((prevCategory) => ({ ...prevCategory, [menuVariant]: categoryId }));
   };
 
-  const categoryState: CategoryState = {
-    categoryIds,
-    selectCategory,
+  const saveCurrentTabScroll = (categoryId: number, scrollY: number) => {
+    setCurrentTabScroll((prevState) => ({ ...prevState, [categoryId]: scrollY }));
   };
 
-  return <CategoryContext.Provider value={categoryState}>{children}</CategoryContext.Provider>;
+  const categoryValue = {
+    categoryIds,
+    currentTabScroll,
+  };
+
+  const categoryAction = {
+    selectCategory,
+    saveCurrentTabScroll,
+  };
+
+  return (
+    <CategoryActionContext.Provider value={categoryAction}>
+      <CategoryValueContext.Provider value={categoryValue}>{children}</CategoryValueContext.Provider>
+    </CategoryActionContext.Provider>
+  );
 };
 
 export default CategoryProvider;
