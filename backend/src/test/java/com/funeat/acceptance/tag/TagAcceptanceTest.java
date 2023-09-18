@@ -28,17 +28,17 @@ public class TagAcceptanceTest extends AcceptanceTest {
         @Test
         void 전체_태그_목록을_조회할_수_있다() {
             // given
-            단일_태그_저장(태그_맛있어요_TASTE_생성());
-            단일_태그_저장(태그_단짠단짠_TASTE_생성());
-            단일_태그_저장(태그_갓성비_PRICE_생성());
-            단일_태그_저장(태그_간식_ETC_생성());
+            final var 맛있어요 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            final var 단짠단짠 = 단일_태그_저장(태그_단짠단짠_TASTE_생성());
+            final var 갓성비 = 단일_태그_저장(태그_갓성비_PRICE_생성());
+            final var 간식 = 단일_태그_저장(태그_간식_ETC_생성());
 
             // when
             final var response = 전체_태그_목록_조회_요청();
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            전체_태그_목록_조회_결과를_검증한다(response, List.of(1L, 2L, 3L, 4L));
+            전체_태그_목록_조회_결과를_검증한다(response, List.of(맛있어요, 단짠단짠, 갓성비, 간식));
         }
     }
 
