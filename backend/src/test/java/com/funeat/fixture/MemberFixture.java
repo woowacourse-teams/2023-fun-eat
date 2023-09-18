@@ -6,6 +6,11 @@ import com.funeat.member.dto.MemberRequest;
 @SuppressWarnings("NonAsciiCharacters")
 public class MemberFixture {
 
+    public static final Long 멤버1 = 1L;
+    public static final Long 멤버2 = 2L;
+    public static final Long 멤버3 = 3L;
+
+
     public static Member 멤버_멤버1_생성() {
         return new Member("member1", "www.member1.com", "1");
     }
