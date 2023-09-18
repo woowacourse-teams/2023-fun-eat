@@ -1,5 +1,6 @@
 package com.funeat.fixture;
 
+import com.funeat.common.dto.PageDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,6 +23,11 @@ public class PageFixture {
     public static final Long FIRST_PAGE = 0L;
     public static final Long SECOND_PAGE = 1L;
 
+    public static final boolean 첫페이지O = true;
+    public static final boolean 첫페이지X = false;
+    public static final boolean 마지막페이지O = true;
+    public static final boolean 마지막페이지X = false;
+
     public static PageRequest 페이지요청_기본_생성(final int page, final int size) {
         return PageRequest.of(page, size);
     }
@@ -32,5 +38,18 @@ public class PageFixture {
         final Direction direction = Direction.fromString(splitSort[1]);
 
         return PageRequest.of(page, size, Sort.by(direction, order));
+    }
+
+    public static PageDto 응답_페이지_생성(final Long totalDataCount, final Long totalPages, final boolean firstPage,
+                                    final boolean lastPage, final Long requestPage, final Long requestSize) {
+        return new PageDto(totalDataCount, totalPages, firstPage, lastPage, requestPage, requestSize);
+    }
+
+    public static Long 총_데이터_개수(final Long count) {
+        return count;
+    }
+
+    public static Long 총_페이지(final Long page) {
+        return page;
     }
 }

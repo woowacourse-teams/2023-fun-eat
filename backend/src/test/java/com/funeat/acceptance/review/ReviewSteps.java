@@ -1,6 +1,7 @@
 package com.funeat.acceptance.review;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
+import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_ID_추출;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
 import static io.restassured.RestAssured.given;
 
