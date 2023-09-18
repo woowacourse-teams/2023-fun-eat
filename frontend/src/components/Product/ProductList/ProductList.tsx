@@ -40,7 +40,7 @@ const ProductList = ({ category, selectedOption }: ProductListProps) => {
           </li>
         ))}
       </ProductListContainer>
-      <div ref={scrollRef} aria-hidden />
+      <div ref={scrollRef} aria-hidden style={{ height: '1px' }} />
     </>
   );
 };
