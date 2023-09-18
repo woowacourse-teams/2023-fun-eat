@@ -34,11 +34,11 @@ public class TagAcceptanceTest extends AcceptanceTest {
             final var 간식 = 단일_태그_저장(태그_간식_ETC_생성());
 
             // when
-            final var response = 전체_태그_목록_조회_요청();
+            final var 응답 = 전체_태그_목록_조회_요청();
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            전체_태그_목록_조회_결과를_검증한다(response, List.of(맛있어요, 단짠단짠, 갓성비, 간식));
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            전체_태그_목록_조회_결과를_검증한다(응답, List.of(맛있어요, 단짠단짠, 갓성비, 간식));
         }
     }
 
