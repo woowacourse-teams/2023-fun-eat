@@ -93,6 +93,7 @@ const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 30px;
 `;
 
 const Title = styled(Heading)`
@@ -106,7 +107,7 @@ const SortButtonWrapper = styled.div`
 `;
 
 const RecipeListWrapper = styled.div`
-  height: calc(100% - 192px);
+  height: calc(100% - 190px);
   overflow-y: auto;
 `;
 

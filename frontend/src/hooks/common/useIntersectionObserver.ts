@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 const defaultOptions = {
   root: null,
   rootMargin: '0px',
-  threshold: 1.0,
+  threshold: 0.3,
 };
 
 const useIntersectionObserver = <T extends HTMLElement>(
