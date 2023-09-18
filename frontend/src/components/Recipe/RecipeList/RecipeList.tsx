@@ -35,7 +35,7 @@ const RecipeList = ({ selectedOption }: RecipeListProps) => {
           </li>
         ))}
       </RecipeListContainer>
-      <div ref={scrollRef} aria-hidden />
+      <div ref={scrollRef} aria-hidden style={{ height: '1px' }} />
     </>
   );
 };

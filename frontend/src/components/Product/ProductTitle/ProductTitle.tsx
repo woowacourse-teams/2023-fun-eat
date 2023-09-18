@@ -33,6 +33,7 @@ const ProductTitleContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  height: 30px;
 `;
 
 const ProductTitleLink = styled(Link)`

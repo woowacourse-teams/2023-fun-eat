@@ -3,6 +3,8 @@ package com.funeat.product.domain;
 import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,6 +43,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
+
+    private Long reviewCount = 0L;
 
     protected Product() {
     }
@@ -105,5 +109,13 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
+    }
+
+    public void addReviewCount() {
+        reviewCount++;
     }
 }
