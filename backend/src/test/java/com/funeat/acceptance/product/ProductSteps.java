@@ -2,6 +2,7 @@ package com.funeat.acceptance.product;
 
 import static io.restassured.RestAssured.given;
 
+
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 

@@ -8,7 +8,19 @@ import com.funeat.recipe.domain.Recipe;
 @SuppressWarnings("NonAsciiCharacters")
 public class ProductFixture {
 
-    public static final Long 존재하지_않는_상품_아이디 = 99999L;
+    public static final Long 존재하지_않는_상품 = 99999L;
+    public static final Long 상품 = 1L;
+    public static final Long 상품1 = 1L;
+    public static final Long 상품2 = 2L;
+    public static final Long 상품3 = 3L;
+    public static final Long 상품4 = 4L;
+    public static final Long 상품5 = 5L;
+    public static final Long 상품6 = 6L;
+    public static final Long 상품7 = 7L;
+    public static final Long 상품8 = 8L;
+    public static final Long 상품9 = 9L;
+    public static final Long 상품10 = 10L;
+    public static final Long 상품11 = 11L;
 
     public static Product 상품_삼각김밥_가격1000원_평점1점_생성(final Category category) {
         return new Product("삼각김밥", 1000L, "image.png", "맛있는 삼각김밥", 1.0, category);
