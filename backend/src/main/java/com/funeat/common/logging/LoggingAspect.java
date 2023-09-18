@@ -2,6 +2,7 @@ package com.funeat.common.logging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,7 @@ public class LoggingAspect {
 
     private static final List<String> excludeNames = Arrays.asList("image", "images", "request");
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Pointcut("execution(public * com.funeat.*.presentation.*.*(..))")
