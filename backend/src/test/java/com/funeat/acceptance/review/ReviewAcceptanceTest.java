@@ -40,7 +40,7 @@ import static com.funeat.fixture.PageFixture.평점_내림차순;
 import static com.funeat.fixture.PageFixture.평점_오름차순;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
-import static com.funeat.fixture.ProductFixture.잘못된_상품_아이디;
+import static com.funeat.fixture.ProductFixture.존재하지_않는_상품_아이디;
 import static com.funeat.fixture.ReviewFixture.리뷰;
 import static com.funeat.fixture.ReviewFixture.리뷰1;
 import static com.funeat.fixture.ReviewFixture.리뷰2;
@@ -573,7 +573,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         @Test
         void 존재하지_않는_상품의_리뷰_목록을_조회시_예외가_발생한다() {
             // given && when
-            final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 잘못된_상품_아이디, 좋아요수_내림차순, FIRST_PAGE);
+            final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_상품_아이디, 좋아요수_내림차순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(응답, 찾을수_없음);

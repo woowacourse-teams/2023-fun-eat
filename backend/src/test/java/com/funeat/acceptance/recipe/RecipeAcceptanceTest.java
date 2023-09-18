@@ -20,18 +20,38 @@ import static com.funeat.acceptance.recipe.RecipeSteps.여러명이_레시피_�
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
+import static com.funeat.fixture.ImageFixture.이미지1;
+import static com.funeat.fixture.ImageFixture.이미지2;
+import static com.funeat.fixture.ImageFixture.이미지3;
+import static com.funeat.fixture.ImageFixture.이미지4;
+import static com.funeat.fixture.MemberFixture.멤버1;
+import static com.funeat.fixture.MemberFixture.멤버2;
+import static com.funeat.fixture.MemberFixture.멤버3;
 import static com.funeat.fixture.PageFixture.FIRST_PAGE;
 import static com.funeat.fixture.PageFixture.PAGE_SIZE;
 import static com.funeat.fixture.PageFixture.과거순;
+import static com.funeat.fixture.PageFixture.마지막페이지O;
+import static com.funeat.fixture.PageFixture.응답_페이지_생성;
 import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
+import static com.funeat.fixture.PageFixture.첫페이지O;
+import static com.funeat.fixture.PageFixture.총_데이터_개수;
+import static com.funeat.fixture.PageFixture.총_페이지;
 import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격3000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000원_평점5점_생성;
+import static com.funeat.fixture.RecipeFixture.레시피;
+import static com.funeat.fixture.RecipeFixture.레시피1;
+import static com.funeat.fixture.RecipeFixture.레시피2;
+import static com.funeat.fixture.RecipeFixture.레시피3;
+import static com.funeat.fixture.RecipeFixture.레시피4;
 import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
+import static com.funeat.fixture.RecipeFixture.존재하지_않는_레시피;
+import static com.funeat.fixture.RecipeFixture.좋아요O;
+import static com.funeat.fixture.RecipeFixture.좋아요X;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -67,29 +87,29 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 레시피를_작성한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_생성);
+            STATUS_CODE를_검증한다(응답, 정상_생성);
         }
 
         @Test
         void 이미지가_없어도_레시피를_작성할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), null, 레시피추가요청_생성(1L));
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), null, 레시피추가요청_생성(상품));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_생성);
+            STATUS_CODE를_검증한다(응답, 정상_생성);
         }
     }
 
@@ -100,16 +120,16 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_레시피_작성시_예외가_발생한다(final String cookie) {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
             // when
-            final var response = 레시피_작성_요청(cookie, 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            final var 응답 = 레시피_작성_요청(cookie, 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, LOGIN_MEMBER_NOT_FOUND.getCode(),
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
                     LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
 
@@ -117,18 +137,18 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 사용자가_레시피_작성할때_레시피이름_미기입시_예외가_발생한다(final String title) {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            final var request = new RecipeCreateRequest(title, List.of(1L), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var 요청 = 레시피추가요청_생성(title, List.of(상품), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), request);
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
 
             // then
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
                     "꿀조합 이름을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
 
@@ -136,28 +156,28 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @ParameterizedTest
         void 사용자가_레시피_작성할때_상품들이_NULL일시_예외가_발생한다(final List<Long> productIds) {
             // given
-            final var request = new RecipeCreateRequest("title", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var 요청 = 레시피추가요청_생성("title", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), request);
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
 
             // then
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
                     "상품 ID 목록을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
 
         @Test
         void 사용자가_레시피_작성할때_상품들이_비어있을시_예외가_발생한다() {
             // given
-            final var request = new RecipeCreateRequest("title", Collections.emptyList(), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var 요청 = new RecipeCreateRequest("title", Collections.emptyList(), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), request);
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
 
             // then
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
                     "적어도 1개의 상품 ID가 필요합니다. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
 
@@ -165,37 +185,37 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 사용자가_레시피_작성할때_내용이_비어있을시_예외가_발생한다(final String content) {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            final var request = new RecipeCreateRequest("title", List.of(1L), content);
+            final var 요청 = 레시피추가요청_생성("title", List.of(상품), content);
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), request);
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
 
             // then
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
                     "꿀조합 내용을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
 
         @Test
         void 사용자가_레시피_작성할때_레시피내용이_500자_초과시_예외가_발생한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            final var maxContent = "12345".repeat(100) + "a";
-            final var request = new RecipeCreateRequest("title", List.of(1L), maxContent);
+            final var 레시피내용_501자 = ".".repeat(100) + "a";
+            final var 요청 = 레시피추가요청_생성("title", List.of(상품), 레시피내용_501자);
 
             // when
-            final var response = 레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), request);
+            final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
 
             // then
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
                     "꿀조합 내용은 최대 500자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
     }
@@ -206,19 +226,19 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 레시피의_상세_정보를_조회한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
-            단일_상품_저장(상품_삼각김밥_가격3000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품1 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
+            final var 상품2 = 단일_상품_저장(상품_삼각김밥_가격3000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L, 2L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품1, 상품2));
 
             // when
-            final var response = 레시피_상세_정보_요청(로그인_쿠키_획득(1L), 1L);
+            final var 응답 = 레시피_상세_정보_요청(로그인_쿠키_획득(멤버1), 레시피);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            레시피_상세_정보_조회_결과를_검증한다(response);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            레시피_상세_정보_조회_결과를_검증한다(응답);
         }
     }
 
@@ -229,29 +249,29 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_레시피_상세_조회시_예외가_발생한다(final String cookie) {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
             // when
-            final var response = 레시피_상세_정보_요청(cookie, 1L);
+            final var 응답 = 레시피_상세_정보_요청(cookie, 레시피);
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, LOGIN_MEMBER_NOT_FOUND.getCode(),
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
                     LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
         void 존재하지_않는_레시피_사용자가_레시피_상세_조회시_예외가_발생한다() {
             // given && when
-            final var response = 레시피_상세_정보_요청(로그인_쿠키_획득(1L), 999L);
+            final var 응답 = 레시피_상세_정보_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_레시피);
 
             // then
-            STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
+            STATUS_CODE를_검증한다(응답, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
         }
     }
 
@@ -261,34 +281,34 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 레시피에_좋아요를_할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
             // when
-            final var response = 레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
+            final var 응답 = 레시피_좋아요_요청(로그인_쿠키_획득(멤버1), 레시피, 레시피좋아요요청_생성(좋아요O));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
         }
 
         @Test
         void 레시피에_좋아요를_취소할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
-            레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(true));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+            레시피_좋아요_요청(로그인_쿠키_획득(멤버1), 레시피, 레시피좋아요요청_생성(좋아요O));
 
             // when
-            final var response = 레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(false));
+            final var 응답 = 레시피_좋아요_요청(로그인_쿠키_획득(멤버1), 레시피, 레시피좋아요요청_생성(좋아요X));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리_NO_CONTENT);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
         }
     }
 
@@ -299,47 +319,47 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_레시피에_좋아요를_할때_예외가_발생한다(final String cookie) {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
             // when
-            final var response = 레시피_좋아요_요청(cookie, 1L, 레시피좋아요요청_생성(true));
+            final var 응답 = 레시피_좋아요_요청(cookie, 레시피, 레시피좋아요요청_생성(좋아요O));
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, LOGIN_MEMBER_NOT_FOUND.getCode(),
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
                     LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
 
         @Test
         void 사용자가_레시피에_좋아요를_할때_좋아요_미기입시_예외가_발생한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
             // when
-            final var response = 레시피_좋아요_요청(로그인_쿠키_획득(1L), 1L, 레시피좋아요요청_생성(null));
+            final var 응답 = 레시피_좋아요_요청(로그인_쿠키_획득(멤버1), 레시피, 레시피좋아요요청_생성(null));
 
             // then
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
                     "좋아요를 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
 
         @Test
         void 존재하지_않는_레시피에_사용자가_좋아요를_할때_예외가_발생한다() {
             // given && when
-            final var response = 레시피_좋아요_요청(로그인_쿠키_획득(1L), 999L, 레시피좋아요요청_생성(true));
+            final var 응답 = 레시피_좋아요_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_레시피, 레시피좋아요요청_생성(좋아요O));
 
             // then
-            STATUS_CODE를_검증한다(response, 찾을수_없음);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
+            STATUS_CODE를_검증한다(응답, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, RECIPE_NOT_FOUND.getCode(), RECIPE_NOT_FOUND.getMessage());
         }
     }
 
@@ -349,65 +369,65 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 검색어에_해당하는_상품이_포함된_레시피가_2개면_레시피_2개를_반환한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
-            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품1 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
+            final var 상품2 = 단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L, 2L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(2L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품1));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지2), 레시피추가요청_생성(상품1, 상품2));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지3), 레시피추가요청_생성(상품2));
 
-            final var pageDto = new PageDto(2L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(2L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 레시피_검색_결과_조회_요청("망고", FIRST_PAGE);
+            final var 응답 = 레시피_검색_결과_조회_요청("망고", FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, pageDto);
-            레시피_검색_결과를_검증한다(response, List.of(2L, 3L));
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            레시피_검색_결과를_검증한다(응답, List.of(레시피2, 레시피3));
         }
 
         @Test
         void 검색어에_해당하는_상품이_2개고_상품이_포함된_레시피가_1개면_레시피_1개를_반환한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(category));
-            단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품1 = 단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(카테고리));
+            final var 상품2 = 단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L, 2L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품1, 상품2));
 
-            final var pageDto = new PageDto(1L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(1L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 레시피_검색_결과_조회_요청("망고", FIRST_PAGE);
+            final var 응답 = 레시피_검색_결과_조회_요청("망고", FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, pageDto);
-            레시피_검색_결과를_검증한다(response, List.of(1L));
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            레시피_검색_결과를_검증한다(응답, List.of(레시피));
         }
 
         @Test
         void 검색_결과에_레시피가_없으면_빈_리스트를_반환한다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
-            final var pageDto = new PageDto(0L, 0L, true, true, FIRST_PAGE, PAGE_SIZE);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(0L), 총_페이지(0L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 레시피_검색_결과_조회_요청("참치", FIRST_PAGE);
+            final var 응답 = 레시피_검색_결과_조회_요청("참치", FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, pageDto);
-            레시피_검색_결과를_검증한다(response, Collections.emptyList());
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            레시피_검색_결과를_검증한다(응답, Collections.emptyList());
         }
     }
 
@@ -417,69 +437,69 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 꿀조합을_좋아요가_많은_순으로_정렬할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
-            여러명이_레시피_좋아요_요청(List.of(1L), 1L, true);
-            여러명이_레시피_좋아요_요청(List.of(1L, 2L), 2L, true);
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지2), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지3), 레시피추가요청_생성(상품));
+            여러명이_레시피_좋아요_요청(List.of(멤버1), 레시피1, 좋아요O);
+            여러명이_레시피_좋아요_요청(List.of(멤버1, 멤버2), 레시피2, 좋아요O);
 
-            final var pageDto = new PageDto(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 레시피_목록_요청(좋아요수_내림차순, FIRST_PAGE);
+            final var 응답 = 레시피_목록_요청(좋아요수_내림차순, FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, pageDto);
-            레시피_목록_조회_결과를_검증한다(response, List.of(2L, 1L, 3L));
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            레시피_목록_조회_결과를_검증한다(응답, List.of(레시피2, 레시피1, 레시피3));
         }
 
         @Test
         void 꿀조합을_최신순으로_정렬할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지2), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지3), 레시피추가요청_생성(상품));
 
-            final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 레시피_목록_요청(최신순, FIRST_PAGE);
+            final var 응답 = 레시피_목록_요청(최신순, FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, pageDto);
-            레시피_목록_조회_결과를_검증한다(response, List.of(3L, 2L, 1L));
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            레시피_목록_조회_결과를_검증한다(응답, List.of(레시피3, 레시피2, 레시피1));
         }
 
         @Test
         void 꿀조합을_오래된순으로_정렬할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지2), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지3), 레시피추가요청_생성(상품));
 
-            final var pageDto = new PageDto(3L, 1L, true, true, 0L, 10L);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
             final var response = 레시피_목록_요청(과거순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(response, 정상_처리);
-            페이지를_검증한다(response, pageDto);
-            레시피_목록_조회_결과를_검증한다(response, List.of(1L, 2L, 3L));
+            페이지를_검증한다(response, 예상_응답_페이지);
+            레시피_목록_조회_결과를_검증한다(response, List.of(레시피1, 레시피2, 레시피3));
         }
     }
 
@@ -489,24 +509,24 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 전체_꿀조합들_중에서_랭킹_TOP3를_조회할_수_있다() {
             // given
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-            단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(category));
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("1"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("2"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("3"), 레시피추가요청_생성(1L));
-            레시피_작성_요청(로그인_쿠키_획득(1L), 여러개_사진_명세_요청("4"), 레시피추가요청_생성(1L));
-            여러명이_레시피_좋아요_요청(List.of(1L, 2L), 2L, true);
-            여러명이_레시피_좋아요_요청(List.of(1L), 3L, true);
-            여러명이_레시피_좋아요_요청(List.of(1L, 2L, 3L), 4L, true);
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지2), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지3), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지4), 레시피추가요청_생성(상품));
+            여러명이_레시피_좋아요_요청(List.of(멤버1, 멤버2), 레시피2, 좋아요O);
+            여러명이_레시피_좋아요_요청(List.of(멤버1), 레시피3, 좋아요O);
+            여러명이_레시피_좋아요_요청(List.of(멤버1, 멤버2, 멤버3), 레시피4, 좋아요O);
 
             // when
-            final var response = 레시피_랭킹_조회_요청();
+            final var 응답 = 레시피_랭킹_조회_요청();
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            레시피_랭킹_조회_결과를_검증한다(response, List.of(4L, 2L, 3L));
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            레시피_랭킹_조회_결과를_검증한다(응답, List.of(레시피4, 레시피2, 레시피3));
         }
     }
 
