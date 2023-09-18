@@ -47,6 +47,8 @@ import static com.funeat.fixture.RecipeFixture.레시피1;
 import static com.funeat.fixture.RecipeFixture.레시피2;
 import static com.funeat.fixture.RecipeFixture.레시피3;
 import static com.funeat.fixture.RecipeFixture.레시피4;
+import static com.funeat.fixture.RecipeFixture.레시피_본문;
+import static com.funeat.fixture.RecipeFixture.레시피_제목;
 import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static com.funeat.fixture.RecipeFixture.존재하지_않는_레시피;
@@ -141,7 +143,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(카테고리);
             final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            final var 요청 = 레시피추가요청_생성(title, List.of(상품), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var 요청 = 레시피추가요청_생성(title, List.of(상품), 레시피_본문);
 
             // when
             final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
@@ -156,7 +158,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @ParameterizedTest
         void 사용자가_레시피_작성할때_상품들이_NULL일시_예외가_발생한다(final List<Long> productIds) {
             // given
-            final var 요청 = 레시피추가요청_생성("title", productIds, "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var 요청 = 레시피추가요청_생성(레시피_제목, productIds, 레시피_본문);
 
             // when
             final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
@@ -170,7 +172,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자가_레시피_작성할때_상품들이_비어있을시_예외가_발생한다() {
             // given
-            final var 요청 = new RecipeCreateRequest("title", Collections.emptyList(), "밥 추가, 밥 추가, 밥 추가.. 끝!!");
+            final var 요청 = new RecipeCreateRequest(레시피_제목, Collections.emptyList(), 레시피_본문);
 
             // when
             final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
@@ -189,7 +191,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(카테고리);
             final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            final var 요청 = 레시피추가요청_생성("title", List.of(상품), content);
+            final var 요청 = 레시피추가요청_생성(레시피_제목, List.of(상품), content);
 
             // when
             final var 응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 요청);
@@ -207,7 +209,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(카테고리);
             final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-            final var 레시피내용_501자 = ".".repeat(100) + "a";
+            final var 레시피내용_501자 = ".".repeat(500) + "a";
             final var 요청 = 레시피추가요청_생성("title", List.of(상품), 레시피내용_501자);
 
             // when

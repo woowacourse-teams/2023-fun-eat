@@ -496,7 +496,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             반복_애플망고_상품_저장(9, 카테고리);
             단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(카테고리));
 
-            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(11L), 총_페이지(2L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(11L), 총_페이지(2L), 첫페이지O, 마지막페이지X, FIRST_PAGE, PAGE_SIZE);
 
             // when
             final var 응답 = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
