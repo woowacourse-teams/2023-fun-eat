@@ -44,7 +44,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductBookmark> productBookmarks;
 
-    private AtomicLong reviewCount = new AtomicLong(0);
+    private Long reviewCount = 0L;
 
     protected Product() {
     }
@@ -112,10 +112,10 @@ public class Product {
     }
 
     public Long getReviewCount() {
-        return reviewCount.get();
+        return reviewCount;
     }
 
     public void addReviewCount() {
-        reviewCount.incrementAndGet();
+        reviewCount++;
     }
 }
