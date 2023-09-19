@@ -124,7 +124,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsFirstPageByFavoriteCountDesc(product, page);
+            final var actual = reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
