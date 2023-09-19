@@ -81,6 +81,60 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                                                              @Param("lastReviewId") final Long lastReviewId,
                                                              final Pageable pageable);
 
+    @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
+            + "FROM Review r "
+            + "JOIN r.member m "
+            + "LEFT JOIN r.reviewFavorites rf "
+            + "WHERE r.product = :product")
+    List<SortingReviewDto> findSortingReviewsByRatingFirstPage(@Param("product") final Product product,
+                                                                   final Pageable pageable);
+
+    @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
+            + "FROM Review r "
+            + "JOIN r.member m "
+            + "LEFT JOIN r.reviewFavorites rf "
+            + "WHERE r.product = :product "
+            + "AND ("
+                + "(r.rating = "
+                    + "(SELECT r2.rating "
+                    + "FROM Review r2 "
+                    + "WHERE r2.id = :lastReviewId) "
+                    + "AND r.id > :lastReviewId "
+                + ") "
+                + "OR "
+                + "(r.rating > "
+                    + "(SELECT r2.rating "
+                    + "FROM Review r2 "
+                    + "WHERE r2.id = :lastReviewId)"
+                + ")"
+            + ")")
+    List<SortingReviewDto> findSortingRatingByRatingAsc(@Param("product") final Product product,
+                                                            @Param("lastReviewId") final Long lastReviewId,
+                                                            final Pageable pageable);
+
+    @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
+            + "FROM Review r "
+            + "JOIN r.member m "
+            + "LEFT JOIN r.reviewFavorites rf "
+            + "WHERE r.product = :product "
+            + "AND ("
+                + "(r.rating = "
+                    + "(SELECT r2.rating "
+                    + "FROM Review r2 "
+                    + "WHERE r2.id = :lastReviewId) "
+                + "AND r.id > :lastReviewId "
+                + ") "
+                + "OR "
+                + "(r.rating < "
+                    + "(SELECT r2.rating "
+                    + "FROM Review r2 "
+                    + "WHERE r2.id = :lastReviewId)"
+                + ")"
+            + ")")
+    List<SortingReviewDto> findSortingRatingByRatingDesc(@Param("product") final Product product,
+                                                            @Param("lastReviewId") final Long lastReviewId,
+                                                            final Pageable pageable);
+
     List<Review> findTop3ByOrderByFavoriteCountDesc();
 
     Long countByProduct(final Product product);
