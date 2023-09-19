@@ -23,6 +23,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             + "FROM Review r "
             + "JOIN r.member m "
             + "LEFT JOIN r.reviewFavorites rf "
+            + "WHERE r.product = :product")
+    List<SortingReviewDto> findSortingReviewsFirstPageByFavoriteCountDesc(@Param("product") final Product product,
+                                                                          final Pageable pageable);
+
+    @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
+            + "FROM Review r "
+            + "JOIN r.member m "
+            + "LEFT JOIN r.reviewFavorites rf "
             + "WHERE r.product = :product "
             + "AND ("
                 + "(r.favoriteCount = "

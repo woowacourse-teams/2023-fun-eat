@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.common.RepositoryTest;
+import com.funeat.review.dto.SortingReviewDto;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -99,6 +100,63 @@ class ReviewRepositoryTest extends RepositoryTest {
             assertThat(actual).usingRecursiveComparison()
                     .isEqualTo(expected);
         }
+    }
+
+    @Nested
+    class findSortingReviewsByFavoriteCountDesc_관련_성공_테스트 {
+
+        @Test
+        void 좋아요_기준_내림차순_리뷰_목록의_첫_페이지를_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var lastReviewId = 0L;
+            final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingReviewsFirstPageByFavoriteCountDesc(product, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(3L, 1L);
+        }
+
+        @Test
+        void 좋아요_기준_내림차순_리뷰_목록의_2페이지부터_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var lastReviewId = 1L;
+            final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingReviewsByFavoriteCountDesc(product, lastReviewId, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(2L);
+        }
+
     }
 
     @Nested
