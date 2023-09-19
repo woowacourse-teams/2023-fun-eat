@@ -738,6 +738,35 @@ class ReviewServiceTest extends ServiceTest {
             // then
             assertThat(actual).isEqualTo(expected);
         }
+
+        @Test
+        void 이미지가_존재하지_않는_리뷰들만_있으면_상품_이미지는_바뀌지_않는다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
+            final var firstReviewId = 단일_리뷰_저장(firstReview);
+            reviewService.updateProductImage(firstReviewId);
+
+            final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
+            final var secondReviewId = 단일_리뷰_저장(secondReview);
+
+            final var expected = secondReview.getImage();
+
+            // when
+            reviewService.updateProductImage(secondReviewId);
+            final var actual = product.getImage();
+
+            // then
+            assertThat(actual).isNotEqualTo(expected);
+        }
     }
 
     @Nested
