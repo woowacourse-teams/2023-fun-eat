@@ -4,11 +4,12 @@ import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_가격_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_가격_오름차순_생성;
+import static com.funeat.fixture.PageFixture.가격_내림차순;
+import static com.funeat.fixture.PageFixture.가격_오름차순;
 import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_평균_평점_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_평균_평점_오름차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_생성;
+import static com.funeat.fixture.PageFixture.평균_평점_내림차순;
+import static com.funeat.fixture.PageFixture.평균_평점_오름차순;
 import static com.funeat.fixture.ProductFixture.상품_망고빙수_가격5000원_평점4점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
@@ -57,7 +58,7 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product5 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
             복수_상품_저장(product1, product2, product3, product4, product5);
 
-            final var page = 페이지요청_평균_평점_내림차순_생성(0, 3);
+            final var page = 페이지요청_생성(0, 3, 평균_평점_내림차순);
 
             final var productInCategoryDto1 = ProductInCategoryDto.toDto(product5, 0L);
             final var productInCategoryDto2 = ProductInCategoryDto.toDto(product4, 0L);
@@ -85,7 +86,7 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product5 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
             복수_상품_저장(product1, product2, product3, product4, product5);
 
-            final var page = 페이지요청_평균_평점_오름차순_생성(0, 3);
+            final var page = 페이지요청_생성(0, 3, 평균_평점_오름차순);
 
             final var productInCategoryDto1 = ProductInCategoryDto.toDto(product1, 0L);
             final var productInCategoryDto2 = ProductInCategoryDto.toDto(product2, 0L);
@@ -113,7 +114,7 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product5 = 상품_삼각김밥_가격5000원_평점1점_생성(category);
             복수_상품_저장(product1, product2, product3, product4, product5);
 
-            final var page = 페이지요청_가격_내림차순_생성(0, 3);
+            final var page = 페이지요청_생성(0, 3, 가격_내림차순);
 
             final var productInCategoryDto1 = ProductInCategoryDto.toDto(product5, 0L);
             final var productInCategoryDto2 = ProductInCategoryDto.toDto(product4, 0L);
@@ -141,7 +142,7 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product5 = 상품_삼각김밥_가격5000원_평점1점_생성(category);
             복수_상품_저장(product1, product2, product3, product4, product5);
 
-            final var page = 페이지요청_가격_오름차순_생성(0, 3);
+            final var page = 페이지요청_생성(0, 3, 가격_오름차순);
 
             final var productInCategoryDto1 = ProductInCategoryDto.toDto(product1, 0L);
             final var productInCategoryDto2 = ProductInCategoryDto.toDto(product2, 0L);

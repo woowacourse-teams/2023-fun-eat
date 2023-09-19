@@ -30,10 +30,10 @@ public class MemberTest {
             final var actualProfileImage = member.getProfileImage();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualNickname)
+            assertSoftly(soft -> {
+                soft.assertThat(actualNickname)
                         .isEqualTo(expectedNickname);
-                softAssertions.assertThat(actualProfileImage)
+                soft.assertThat(actualProfileImage)
                         .isEqualTo(expectedProfileImage);
             });
         }

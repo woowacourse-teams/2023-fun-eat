@@ -5,11 +5,12 @@ import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
+import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_생성;
+import static com.funeat.fixture.PageFixture.평점_내림차순;
+import static com.funeat.fixture.PageFixture.평점_오름차순;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
@@ -23,8 +24,7 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지없음_평점1점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_false_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_true_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static com.funeat.fixture.TagFixture.태그_아침식사_ETC_생성;
@@ -203,7 +203,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();
 
-            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+            final var favoriteRequest = 리뷰좋아요요청_생성(true);
 
             // when
             reviewService.likeReview(reviewId, memberId, favoriteRequest);
@@ -212,10 +212,10 @@ class ReviewServiceTest extends ServiceTest {
             final var actualReviewFavorite = reviewFavoriteRepository.findAll().get(0);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualReview.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualReview.getFavoriteCount())
                         .isOne();
-                softAssertions.assertThat(actualReviewFavorite.getFavorite())
+                soft.assertThat(actualReviewFavorite.getFavorite())
                         .isTrue();
             });
         }
@@ -244,21 +244,21 @@ class ReviewServiceTest extends ServiceTest {
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();
 
-            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+            final var favoriteRequest = 리뷰좋아요요청_생성(true);
             reviewService.likeReview(reviewId, memberId, favoriteRequest);
 
             // when
-            final var cancelFavoriteRequest = 리뷰좋아요요청_false_생성();
+            final var cancelFavoriteRequest = 리뷰좋아요요청_생성(false);
             reviewService.likeReview(reviewId, memberId, cancelFavoriteRequest);
 
             final var actualReview = reviewRepository.findAll().get(0);
             final var actualReviewFavorite = reviewFavoriteRepository.findAll().get(0);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualReview.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualReview.getFavoriteCount())
                         .isZero();
-                softAssertions.assertThat(actualReviewFavorite.getFavorite())
+                soft.assertThat(actualReviewFavorite.getFavorite())
                         .isFalse();
             });
         }
@@ -292,7 +292,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review = reviewRepository.findAll().get(0);
             final var reviewId = review.getId();
 
-            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+            final var favoriteRequest = 리뷰좋아요요청_생성(true);
 
             // when
             assertThatThrownBy(() -> reviewService.likeReview(reviewId, wrongMemberId, favoriteRequest))
@@ -324,7 +324,7 @@ class ReviewServiceTest extends ServiceTest {
             final var reviewId = review.getId();
             final var wrongReviewId = reviewId + 1L;
 
-            final var favoriteRequest = 리뷰좋아요요청_true_생성();
+            final var favoriteRequest = 리뷰좋아요요청_생성(true);
 
             // when
             assertThatThrownBy(() -> reviewService.likeReview(wrongReviewId, memberId, favoriteRequest))
@@ -354,7 +354,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
+            final var page = 페이지요청_생성(0, 2, 좋아요수_내림차순);
             final var member1Id = member1.getId();
 
             final var expected = Stream.of(review1, review3)
@@ -388,7 +388,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var page = 페이지요청_평점_오름차순_생성(0, 2);
+            final var page = 페이지요청_생성(0, 2, 평점_오름차순);
             final var member1Id = member1.getId();
 
             final var expected = Stream.of(review1, review3)
@@ -422,7 +422,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var page = 페이지요청_평점_내림차순_생성(0, 2);
+            final var page = 페이지요청_생성(0, 2, 평점_내림차순);
             final var member1Id = member1.getId();
 
             final var expected = Stream.of(review2, review3)
@@ -456,7 +456,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
+            final var page = 페이지요청_생성(0, 2, 최신순);
             final var member1Id = member1.getId();
 
             final var expected = Stream.of(review3, review2)
@@ -558,7 +558,7 @@ class ReviewServiceTest extends ServiceTest {
             복수_리뷰_저장(review1_1, review2_1, review2_2, review3_1, review3_2);
 
             // when
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
             final var member1Id = member1.getId();
             final var result = reviewService.findReviewByMember(member1Id, page);
 
@@ -583,7 +583,7 @@ class ReviewServiceTest extends ServiceTest {
         void 존재하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다() {
             // given
             final var notExistMemberId = 999999L;
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when & then
             assertThatThrownBy(() -> reviewService.findReviewByMember(notExistMemberId, page))
