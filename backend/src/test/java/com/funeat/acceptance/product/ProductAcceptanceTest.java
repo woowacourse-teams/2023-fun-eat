@@ -2,6 +2,7 @@ package com.funeat.acceptance.product;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.다음_페이지_유무를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
@@ -124,14 +125,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품2 = 단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(카테고리));
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격4000원_평점4점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품3, 상품1, 상품2));
             }
 
@@ -144,14 +143,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품2 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 가격_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품3, 상품2, 상품1));
             }
         }
@@ -168,14 +165,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품2 = 단일_상품_저장(상품_삼각김밥_가격4000원_평점4점_생성(카테고리));
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 가격_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품1, 상품3, 상품2));
             }
 
@@ -188,14 +183,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
                 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(3L, 2L, 1L));
             }
         }
@@ -212,14 +205,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점5점_생성(카테고리));
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(2L, 1L, 3L));
             }
 
@@ -232,14 +223,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(3L, 2L, 1L));
             }
         }
@@ -256,14 +245,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(1L, 3L, 2L));
             }
 
@@ -276,14 +263,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(3L, 1L, true, true, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(3L, 2L, 1L));
             }
         }
@@ -305,14 +290,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품2, 사진_명세_요청(이미지2), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품2, 사진_명세_요청(이미지3), 리뷰추가요청_재구매O_생성(점수_2점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 리뷰수_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품2, 상품1, 상품3));
             }
 
@@ -325,14 +308,12 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품2 = 단일_상품_저장(상품_삼각김밥_가격5000원_평점3점_생성(카테고리));
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격3000원_평점1점_생성(카테고리));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
                 final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 리뷰수_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_페이지_유무를_검증한다(응답, false);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품3, 상품2, 상품1));
             }
         }

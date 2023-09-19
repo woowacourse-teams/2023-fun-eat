@@ -74,4 +74,11 @@ public class CommonSteps {
         assertThat(actual).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
+
+    public static void 다음_페이지_유무를_검증한다(final ExtractableResponse<Response> response, final boolean expected) {
+        final var actual = response.jsonPath().getBoolean("hasNext");
+
+        assertThat(actual)
+                .isEqualTo(expected);
+    }
 }
