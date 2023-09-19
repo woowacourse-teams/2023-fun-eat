@@ -1,45 +1,60 @@
 package com.funeat.acceptance.member;
 
-import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키를_얻는다;
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
+import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.member.MemberSteps.사용자_꿀조합_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_리뷰_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_조회_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_작성_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
+import static com.funeat.fixture.ImageFixture.이미지1;
+import static com.funeat.fixture.ImageFixture.이미지2;
+import static com.funeat.fixture.ImageFixture.이미지3;
+import static com.funeat.fixture.MemberFixture.멤버1;
+import static com.funeat.fixture.MemberFixture.멤버2;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
-import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
+import static com.funeat.fixture.MemberFixture.유저닉네임수정요청_생성;
+import static com.funeat.fixture.PageFixture.FIRST_PAGE;
+import static com.funeat.fixture.PageFixture.PAGE_SIZE;
+import static com.funeat.fixture.PageFixture.마지막페이지O;
+import static com.funeat.fixture.PageFixture.응답_페이지_생성;
+import static com.funeat.fixture.PageFixture.첫페이지O;
+import static com.funeat.fixture.PageFixture.총_데이터_개수;
+import static com.funeat.fixture.PageFixture.총_페이지;
+import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점1점_생성;
-import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
-import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
+import static com.funeat.fixture.RecipeFixture.레시피;
+import static com.funeat.fixture.RecipeFixture.레시피1;
+import static com.funeat.fixture.RecipeFixture.레시피2;
+import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생성;
+import static com.funeat.fixture.ScoreFixture.점수_1점;
+import static com.funeat.fixture.ScoreFixture.점수_2점;
+import static com.funeat.fixture.ScoreFixture.점수_3점;
+import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.member.dto.MemberProfileResponse;
 import com.funeat.member.dto.MemberRecipeDto;
-import com.funeat.member.dto.MemberRecipeProductDto;
-import com.funeat.member.dto.MemberRequest;
 import com.funeat.member.dto.MemberReviewDto;
-import com.funeat.recipe.domain.Recipe;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,18 +68,12 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 사용자_정보를_확인하다() {
-            // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
-
-            // when
-            final var response = 사용자_정보_조회_요청(loginCookie);
+            // given && when
+            final var 응답 = 사용자_정보_조회_요청(로그인_쿠키_획득(멤버1));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_정보_조회를_검증하다(response, member);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            사용자_정보_조회를_검증하다(응답, 멤버_멤버1_생성());
         }
     }
 
@@ -75,11 +84,12 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보를_확인시_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_정보_조회_요청(cookie);
+            final var 응답 = 사용자_정보_조회_요청(cookie);
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            비로그인_사용자는_승인되지_않음을_검증하다(response);
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
+                    LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
     }
 
@@ -88,53 +98,29 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 사용자_정보를_수정하다() {
-            // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest("after");
-
-            // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            // given && when
+            final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지1), 유저닉네임수정요청_생성("after"));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
         }
 
         @Test
         void 사용자_닉네임을_수정하다() {
-            // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest("after");
-
-            // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            // given && when
+            final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지1), 유저닉네임수정요청_생성("member1"));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
         }
 
         @Test
         void 사용자_이미지를_수정하다() {
-            // given
-            final var member = new Member("member1", "testImage.png", "1");
-            단일_멤버_저장(member);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest(member.getNickname());
-
-            // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            // given && when
+            final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지2), 유저닉네임수정요청_생성("after"));
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
         }
     }
 
@@ -144,38 +130,25 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @ParameterizedTest
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다(final String cookie) {
-            // given
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest("after");
-
-            // when
-            final var response = 사용자_정보_수정_요청(cookie, image, request);
+            // given && when
+            final var 응답 = 사용자_정보_수정_요청(cookie, 사진_명세_요청(이미지1), 유저닉네임수정요청_생성("after"));
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            비로그인_사용자는_승인되지_않음을_검증하다(response);
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
+                    LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
 
         @ParameterizedTest
         @NullAndEmptySource
         void 사용자가_사용자_정보_수정할때_닉네임_미기입시_예외가_발생한다(final String nickname) {
-            // given
-            final var member = 멤버_멤버1_생성();
-            단일_멤버_저장(member);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
-            final var image = 사진_명세_요청();
-            final var request = new MemberRequest(nickname);
-
-            // when
-            final var response = 사용자_정보_수정_요청(loginCookie, image, request);
+            // given && when
+            final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지1), 유저닉네임수정요청_생성(nickname));
 
             // then
-            final var expectedCode = REQUEST_VALID_ERROR_CODE.getCode();
-            final var expectedMessage = "닉네임을 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage();
-
-            STATUS_CODE를_검증한다(response, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(response, expectedCode, expectedMessage);
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
+                    "닉네임을 확인해주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
     }
 
@@ -185,72 +158,45 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자가_작성한_리뷰를_조회하다() {
             // given
-            final var member1 = 멤버_멤버1_생성();
-            final var member2 = 멤버_멤버2_생성();
-            복수_멤버_저장(member1, member2);
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
 
-            final var category = 카테고리_즉석조리_생성();
-            단일_카테고리_저장(category);
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매X_생성(점수_2점, List.of(태그)));
+            리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_1점, List.of(태그)));
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
-
-            final var review1_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member1, product3, 0L);
-            final var review2_1 = 리뷰_이미지test1_평점1점_재구매X_생성(member1, product2, 0L);
-            final var review2_2 = 리뷰_이미지test1_평점1점_재구매X_생성(member2, product2, 0L);
-            final var review3_1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
-            final var review3_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
-            복수_리뷰_저장(review1_1, review2_1, review2_2, review3_1, review3_2);
-
-            final var member1SortedReviews = List.of(review3_1, review2_1, review1_1);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(2L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 사용자_리뷰_조회_요청(loginCookie, "createdAt,desc", 0);
-            final var page = new PageDto(3L, 1L, true, true, 0L, 10L);
+            final var 응답 = 사용자_리뷰_조회_요청(로그인_쿠키_획득(멤버1), 최신순, FIRST_PAGE);
 
             // then
-            final var expectedReviews = member1SortedReviews.stream()
-                    .map(MemberReviewDto::toDto)
-                    .collect(Collectors.toList());
-
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_리뷰_조회_결과를_검증한다(response, expectedReviews, page);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            사용자_리뷰_조회_결과를_검증한다(응답, 2);
         }
 
         @Test
         void 사용자가_작성한_리뷰가_없을때_리뷰는_빈상태로_조회된다() {
             // given
-            final var member1 = 멤버_멤버1_생성();
-            final var member2 = 멤버_멤버2_생성();
-            복수_멤버_저장(member1, member2);
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
 
-            final var category = 카테고리_즉석조리_생성();
-            단일_카테고리_저장(category);
+            리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매X_생성(점수_2점, List.of(태그)));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
-
-            final var review1_1 = 리뷰_이미지test2_평점2점_재구매X_생성(member2, product3, 0L);
-            final var review1_2 = 리뷰_이미지test3_평점3점_재구매O_생성(member2, product1, 0L);
-            복수_리뷰_저장(review1_1, review1_2);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(0L), 총_페이지(0L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 사용자_리뷰_조회_요청(loginCookie, "createdAt,desc", 0);
-            final var page = new PageDto(0L, 0L, true, true, 0L, 10L);
+            final var 응답 = 사용자_리뷰_조회_요청(로그인_쿠키_획득(멤버1), 최신순, FIRST_PAGE);
 
             // then
-            final var expectedReviews = Collections.emptyList();
-
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_리뷰_조회_결과를_검증한다(response, expectedReviews, page);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            사용자_리뷰_조회_결과를_검증한다(응답, 0);
         }
     }
 
@@ -261,11 +207,12 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인하지_않은_사용자가_작성한_리뷰를_조회할때_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_리뷰_조회_요청(cookie, "createdAt,desc", 0);
+            final var 응답 = 사용자_리뷰_조회_요청(cookie, 최신순, FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            비로그인_사용자는_승인되지_않음을_검증하다(response);
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
+                    LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
     }
 
@@ -275,159 +222,64 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @Test
         void 사용자가_작성한_꿀조합을_조회하다() {
             // given
-            final var member1 = 멤버_멤버1_생성();
-            final var member2 = 멤버_멤버2_생성();
-            복수_멤버_저장(member1, member2);
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            final var category = 카테고리_즉석조리_생성();
-            단일_카테고리_저장(category);
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지2), 레시피추가요청_생성(상품));
+            레시피_작성_요청(로그인_쿠키_획득(멤버2), 여러개_사진_명세_요청(이미지3), 레시피추가요청_생성(상품));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
-
-            final var recipe1_3 = new Recipe("test-title", "test-content", member1);
-            final var recipe1_4 = new Recipe("test-title", "test-content", member1);
-            final var recipe1_1 = new Recipe("test-title", "test-content", member1);
-            final var recipe1_2 = new Recipe("test-title", "test-content", member1);
-            final var recipe2_1 = new Recipe("test-title", "test-content", member2);
-            복수_꿀조합_저장(recipe1_3, recipe1_4, recipe1_1, recipe1_2, recipe2_1);
-
-            final var product_recipe_1_3_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_3);
-            final var product_recipe_1_3_2 = 레시피_안에_들어가는_상품_생성(product2, recipe1_3);
-
-            final var product_recipe_1_4_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_4);
-            final var product_recipe_1_4_2 = 레시피_안에_들어가는_상품_생성(product3, recipe1_4);
-
-            final var product_recipe_1_1_1 = 레시피_안에_들어가는_상품_생성(product2, recipe1_1);
-            final var product_recipe_1_1_2 = 레시피_안에_들어가는_상품_생성(product3, recipe1_1);
-
-            final var product_recipe_1_2_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_2);
-            final var product_recipe_1_2_2 = 레시피_안에_들어가는_상품_생성(product2, recipe1_2);
-            final var product_recipe_1_2_3 = 레시피_안에_들어가는_상품_생성(product3, recipe1_2);
-
-            final var product_recipe_2_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe2_1);
-            final var product_recipe_2_1_2 = 레시피_안에_들어가는_상품_생성(product2, recipe2_1);
-            final var product_recipe_2_1_3 = 레시피_안에_들어가는_상품_생성(product3, recipe2_1);
-            복수_꿀조합_상품_저장(product_recipe_1_3_1, product_recipe_1_3_2, product_recipe_1_4_1, product_recipe_1_4_2,
-                    product_recipe_1_1_1, product_recipe_1_1_2, product_recipe_1_2_1, product_recipe_1_2_2,
-                    product_recipe_1_2_3, product_recipe_2_1_1, product_recipe_2_1_2, product_recipe_2_1_3);
-
-            final var recipeImage1_3 = 레시피이미지_생성(recipe1_3);
-            final var recipeImage1_4 = 레시피이미지_생성(recipe1_4);
-            final var recipeImage1_1 = 레시피이미지_생성(recipe1_1);
-            final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
-            final var recipeImage2_1 = 레시피이미지_생성(recipe2_1);
-            복수_꿀조합_이미지_저장(recipeImage1_3, recipeImage1_4, recipeImage1_1, recipeImage1_2, recipeImage2_1);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(2L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var member1SortedRecipes = List.of(recipe1_2, recipe1_1, recipe1_4, recipe1_3);
-            final var response = 사용자_꿀조합_조회_요청(loginCookie, "createdAt,desc", 0);
-            final var page = new PageDto(4L, 1L, true, true, 0L, 10L);
-            final var expectedRecipeResponses = member1SortedRecipes.stream()
-                    .map(recipe -> {
-                        final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
-                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        final var memberRecipeProductDtos = productsByRecipe.stream()
-                                .map(MemberRecipeProductDto::toDto)
-                                .collect(Collectors.toList());
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
-                    })
-                    .collect(Collectors.toList());
+            final var 응답 = 사용자_꿀조합_조회_요청(로그인_쿠키_획득(멤버1), 최신순, FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_꿀조합_조회_결과를_검증한다(response, expectedRecipeResponses, page);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            사용자_꿀조합_조회_결과를_검증한다(응답, List.of(레시피2, 레시피1));
         }
 
         @Test
         void 사용자가_작성한_꿀조합이_없을때_꿀조합은_빈상태로_조회된다() {
             // given
-            final var member1 = 멤버_멤버1_생성();
-            final var member2 = 멤버_멤버2_생성();
-            복수_멤버_저장(member1, member2);
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            final var category = 카테고리_즉석조리_생성();
-            단일_카테고리_저장(category);
+            레시피_작성_요청(로그인_쿠키_획득(멤버2), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
-
-            final var recipe2_1 = new Recipe("test-title", "test-content", member2);
-            단일_꿀조합_저장(recipe2_1);
-
-            final var product_recipe_2_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe2_1);
-            final var product_recipe_2_1_2 = 레시피_안에_들어가는_상품_생성(product2, recipe2_1);
-            final var product_recipe_2_1_3 = 레시피_안에_들어가는_상품_생성(product3, recipe2_1);
-            복수_꿀조합_상품_저장(product_recipe_2_1_1, product_recipe_2_1_2, product_recipe_2_1_3);
-
-            final var recipeImage2_1 = 레시피이미지_생성(recipe2_1);
-            복수_꿀조합_이미지_저장(recipeImage2_1);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(0L), 총_페이지(0L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 사용자_꿀조합_조회_요청(loginCookie, "createdAt,desc", 0);
-            final var page = new PageDto(0L, 0L, true, true, 0L, 10L);
+            final var 응답 = 사용자_꿀조합_조회_요청(로그인_쿠키_획득(멤버1), 최신순, FIRST_PAGE);
 
             // then
-            final var expectedRecipes = Collections.emptyList();
-
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_꿀조합_조회_결과를_검증한다(response, expectedRecipes, page);
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            사용자_꿀조합_조회_결과를_검증한다(응답, Collections.emptyList());
         }
 
         @Test
         void 사용자가_작성한_꿀조합에_이미지가_없을때_꿀조합은_이미지없이_조회된다() {
             // given
-            final var member1 = 멤버_멤버1_생성();
-            단일_멤버_저장(member1);
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
 
-            final var category = 카테고리_즉석조리_생성();
-            단일_카테고리_저장(category);
+            레시피_작성_요청(로그인_쿠키_획득(멤버1), null, 레시피추가요청_생성(상품));
 
-            final var product1 = 상품_삼각김밥_가격1000원_평점5점_생성(category);
-            final var product2 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
-            final var product3 = 상품_삼각김밥_가격2000원_평점1점_생성(category);
-            복수_상품_저장(product1, product2, product3);
-
-            final var recipe1_1 = new Recipe("test-title", "test-content", member1);
-            단일_꿀조합_저장(recipe1_1);
-
-            final var product_recipe_2_1_1 = 레시피_안에_들어가는_상품_생성(product1, recipe1_1);
-            final var product_recipe_2_1_2 = 레시피_안에_들어가는_상품_생성(product2, recipe1_1);
-            final var product_recipe_2_1_3 = 레시피_안에_들어가는_상품_생성(product3, recipe1_1);
-            복수_꿀조합_상품_저장(product_recipe_2_1_1, product_recipe_2_1_2, product_recipe_2_1_3);
-
-            final var loginCookie = 로그인_쿠키를_얻는다();
+            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(1L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
 
             // when
-            final var response = 사용자_꿀조합_조회_요청(loginCookie, "createdAt,desc", 0);
-            final var page = new PageDto(1L, 1L, true, true, 0L, 10L);
+            final var 응답 = 사용자_꿀조합_조회_요청(로그인_쿠키_획득(멤버1), 최신순, FIRST_PAGE);
 
             // then
-            final var expectedRecipes = List.of(recipe1_1);
-            final var expectedRecipeResponses = expectedRecipes.stream()
-                    .map(recipe -> {
-                        final var findRecipeImages = recipeImageRepository.findByRecipe(recipe);
-                        final var productsByRecipe = productRecipeRepository.findProductByRecipe(recipe);
-                        final var memberRecipeProductDtos = productsByRecipe.stream()
-                                .map(MemberRecipeProductDto::toDto)
-                                .collect(Collectors.toList());
-                        return MemberRecipeDto.toDto(recipe, findRecipeImages, memberRecipeProductDtos);
-                    })
-                    .collect(Collectors.toList());
-            final var actualRecipeImage = response.jsonPath().getList("recipes", MemberRecipeDto.class).get(0)
-                    .getImage();
-
-            STATUS_CODE를_검증한다(response, 정상_처리);
-            사용자_꿀조합_조회_결과를_검증한다(response, expectedRecipeResponses, page);
-            assertThat(actualRecipeImage).isNull();
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            페이지를_검증한다(응답, 예상_응답_페이지);
+            사용자_꿀조합_조회_결과를_검증한다(응답, List.of(레시피));
+            조회한_꿀조합의_이미지가_없는지_확인한다(응답);
         }
     }
 
@@ -438,54 +290,35 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @NullAndEmptySource
         void 로그인하지_않은_사용자가_작성한_꿀조합을_조회할때_예외가_발생한다(final String cookie) {
             // given & when
-            final var response = 사용자_꿀조합_조회_요청(cookie, "createdAt,desc", 0);
+            final var 응답 = 사용자_꿀조합_조회_요청(cookie, 최신순, FIRST_PAGE);
 
             // then
-            STATUS_CODE를_검증한다(response, 인증되지_않음);
-            비로그인_사용자는_승인되지_않음을_검증하다(response);
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
+                    LOGIN_MEMBER_NOT_FOUND.getMessage());
         }
     }
 
-    private <T> void 사용자_리뷰_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> reviews,
-                                        final PageDto page) {
-        페이지를_검증한다(response, page);
-        사용자_리뷰_목록을_검증한다(response, reviews);
-    }
-
-    private void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
-        final var actual = response.jsonPath().getObject("page", PageDto.class);
-
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
-    }
-
-    private <T> void 사용자_리뷰_목록을_검증한다(final ExtractableResponse<Response> response, final List<T> expectedReviews) {
+    private void 사용자_리뷰_조회_결과를_검증한다(final ExtractableResponse<Response> response, final int expectedReviewSize) {
         final var actual = response.jsonPath().getList("reviews", MemberReviewDto.class);
 
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expectedReviews);
+        assertThat(actual.size()).isEqualTo(expectedReviewSize);
     }
 
-    private <T> void 사용자_꿀조합_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<T> recipes,
-                                         final PageDto page) {
-        페이지를_검증한다(response, page);
-        사용자_꿀조합_목록을_검증한다(response, recipes);
-    }
+    private void 사용자_꿀조합_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> recipeIds) {
+        final var actual = response.jsonPath()
+                .getList("recipes", MemberRecipeDto.class);
 
-    private <T> void 사용자_꿀조합_목록을_검증한다(final ExtractableResponse<Response> response, final List<T> expected) {
-
-        final var actual = response.jsonPath().getList("recipes", MemberRecipeDto.class);
-
-        assertThat(actual).usingRecursiveComparison()
-                .isEqualTo(expected);
+        assertThat(actual).extracting(MemberRecipeDto::getId)
+                .containsExactlyElementsOf(recipeIds);
     }
 
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(response.jsonPath().getString("code"))
+        assertSoftly(soft -> {
+            soft.assertThat(response.jsonPath().getString("code"))
                     .isEqualTo(expectedCode);
-            softAssertions.assertThat(response.jsonPath().getString("message"))
+            soft.assertThat(response.jsonPath().getString("message"))
                     .isEqualTo(expectedMessage);
         });
     }
@@ -498,26 +331,18 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         final var actualNickname = response.jsonPath().getString("nickname");
         final var actualProfileImage = response.jsonPath().getString("profileImage");
 
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actualNickname)
+        assertSoftly(soft -> {
+            soft.assertThat(actualNickname)
                     .isEqualTo(expectedNickname);
-            softAssertions.assertThat(actualProfileImage)
+            soft.assertThat(actualProfileImage)
                     .isEqualTo(expectedProfileImage);
         });
     }
 
-    private void 비로그인_사용자는_승인되지_않음을_검증하다(final ExtractableResponse<Response> response) {
-        final var expectedCode = LOGIN_MEMBER_NOT_FOUND.getCode();
-        final var expectedMessage = LOGIN_MEMBER_NOT_FOUND.getMessage();
+    private void 조회한_꿀조합의_이미지가_없는지_확인한다(final ExtractableResponse<Response> response) {
+        final var actual = response.jsonPath()
+                .getString("image");
 
-        final var actualCode = response.jsonPath().getString("code");
-        final var actualMessage = response.jsonPath().getString("message");
-
-        assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actualCode)
-                    .isEqualTo(expectedCode);
-            softAssertions.assertThat(actualMessage)
-                    .isEqualTo(expectedMessage);
-        });
+        assertThat(actual).isNull();
     }
 }

@@ -6,6 +6,10 @@ import com.funeat.product.domain.CategoryType;
 @SuppressWarnings("NonAsciiCharacters")
 public class CategoryFixture {
 
+    public static final String 음식 = "food";
+
+    public static final Long 존재하지_않는_카테고리 = 99999L;
+
     public static Category 카테고리_간편식사_생성() {
         return new Category("간편식사", CategoryType.FOOD, "siksa.jpeg");
     }

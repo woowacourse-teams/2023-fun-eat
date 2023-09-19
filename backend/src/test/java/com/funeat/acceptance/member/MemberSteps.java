@@ -40,7 +40,7 @@ public class MemberSteps {
     }
 
     public static ExtractableResponse<Response> 사용자_리뷰_조회_요청(final String loginCookie, final String sort,
-                                                             final Integer page) {
+                                                             final Long page) {
         return given()
                 .when()
                 .cookie("FUNEAT", loginCookie)
@@ -52,7 +52,7 @@ public class MemberSteps {
     }
 
     public static ExtractableResponse<Response> 사용자_꿀조합_조회_요청(final String loginCookie, final String sort,
-                                                              final Integer page) {
+                                                              final Long page) {
         return given()
                 .when()
                 .cookie("FUNEAT", loginCookie)

@@ -47,7 +47,7 @@ jobs:
         continue-on-error: true
 
       - name: 테스트 결과 PR에 코멘트 등록
-        uses: EnricoMi/publish-unit-test-result-action@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: '**/frontend/test-results/results.xml'
