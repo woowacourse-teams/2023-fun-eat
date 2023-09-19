@@ -5,8 +5,6 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
-import static com.funeat.fixture.PageFixture.페이지요청_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
@@ -157,6 +155,65 @@ class ReviewRepositoryTest extends RepositoryTest {
                     .containsExactly(2L);
         }
 
+    }
+
+    @Nested
+    class findSortingReviewsByCreatedAtDesc_관련_성공_테스트 {
+
+        @Test
+        void 최신순으로_리뷰_목록의_첫_페이지를_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
+            단일_리뷰_저장(review3);
+
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(3L, 2L);
+        }
+
+        @Test
+        void 최신순으로_리뷰_목록의_2페이지부터_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
+            단일_리뷰_저장(review3);
+
+            final var lastReviewId = 2L;
+            final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingReviewsByCreatedAtDesc(product, lastReviewId, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(1L);
+        }
     }
 
     @Nested

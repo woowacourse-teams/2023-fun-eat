@@ -56,7 +56,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             + "LEFT JOIN r.reviewFavorites rf "
             + "WHERE r.product = :product")
     List<SortingReviewDto> findSortingReviewsByCreatedAtDescFirstPage(@Param("product") final Product product,
-                                                                      @Param("lastReviewId") final Long lastReviewId,
                                                                       final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
