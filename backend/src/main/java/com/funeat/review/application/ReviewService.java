@@ -36,8 +36,10 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.swing.text.StyledEditorKit.BoldAction;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +55,7 @@ public class ReviewService {
 
     private static final int TOP = 0;
     private static final int ONE = 1;
+    private static final Long FIRST = 0L;
     private static final String EMPTY_URL = "";
 
     private final ReviewRepository reviewRepository;
@@ -143,20 +146,18 @@ public class ReviewService {
         }
     }
 
-    public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
+    public SortingReviewsResponse sortingReviews(final Long productId, final Long memberId,
+                                                       final SortingReviewRequest request) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
+        final List<SortingReviewDto> sortingReviewsWithoutTags = executeSortingReviews(product, request);
+        final List<SortingReviewDto> sortingReviews = addTagsToSortingReviews(sortingReviewsWithoutTags);
+        final Boolean hasNextReview = hasMoreReview(request.getPageable(), sortingReviews.size());
 
-        final PageDto pageDto = PageDto.toDto(reviewPage);
-        final List<SortingReviewDto> reviewDtos = reviewPage.stream()
-                .map(review -> SortingReviewDto.toDto(review, member))
-                .collect(Collectors.toList());
-
-        return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
+        return SortingReviewsResponse.toResponse(sortingReviews, hasNextReview);
     }
 
     private List<SortingReviewDto> executeSortingReviews(final Product product, final SortingReviewRequest request) {
@@ -166,19 +167,19 @@ public class ReviewService {
         final String sort = request.getSort();
 
         if (sort.equals("favoriteCount,desc")) {
-            if (lastReviewId == 0L) {
+            if (Objects.equals(lastReviewId, FIRST)) {
                 return reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, pageable);
             }
             return reviewRepository.findSortingReviewsByFavoriteCountDesc(product, lastReviewId, pageable);
         }
         if (sort.equals("createdAt,desc")) {
-            if (lastReviewId == 0L) {
+            if (Objects.equals(lastReviewId, FIRST)) {
                 return reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, pageable);
             }
             return reviewRepository.findSortingReviewsByCreatedAtDesc(product, lastReviewId, pageable);
         }
         if (sort.equals("rating,asc") || sort.equals("rating,desc")) {
-            if (lastReviewId == 0L) {
+            if (Objects.equals(lastReviewId, FIRST)) {
                 return reviewRepository.findSortingReviewsByRatingFirstPage(product, pageable);
             }
             if (sort.equals("rating,asc")) {
@@ -189,6 +190,18 @@ public class ReviewService {
             }
         }
         throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, product.getId());
+    }
+
+    private List<SortingReviewDto> addTagsToSortingReviews(final List<SortingReviewDto> sortingReviews) {
+        return sortingReviews.stream()
+                .map(review -> SortingReviewDto.toDto(review, tagRepository.findTagsByReviewId(review.getId())))
+                .collect(Collectors.toList());
+    }
+
+    private Boolean hasMoreReview(final Pageable pageable, final int reviewSize) {
+        final int pageSize = pageable.getPageSize();
+
+        return reviewSize == pageSize + ONE;
     }
 
     public RankingReviewsResponse getTopReviews() {
