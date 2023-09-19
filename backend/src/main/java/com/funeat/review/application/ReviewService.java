@@ -4,6 +4,7 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVOR
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_SORTING_OPTION_NOT_FOUND;
 
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
@@ -26,8 +27,10 @@ import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
+import com.funeat.review.exception.ReviewException.ReviewSortingOptionNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
@@ -39,6 +42,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -142,7 +146,6 @@ public class ReviewService {
     public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
@@ -154,6 +157,38 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
+    }
+
+    private List<SortingReviewDto> executeSortingReviews(final Product product, final SortingReviewRequest request) {
+        final Long lastReviewId = request.getLastReviewId();
+        final Pageable pageable = request.getPageable();
+
+        final String sort = request.getSort();
+
+        if (sort.equals("favoriteCount,desc")) {
+            if (lastReviewId == 0L) {
+                return reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, pageable);
+            }
+            return reviewRepository.findSortingReviewsByFavoriteCountDesc(product, lastReviewId, pageable);
+        }
+        if (sort.equals("createdAt,desc")) {
+            if (lastReviewId == 0L) {
+                return reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, pageable);
+            }
+            return reviewRepository.findSortingReviewsByCreatedAtDesc(product, lastReviewId, pageable);
+        }
+        if (sort.equals("rating,asc") || sort.equals("rating,desc")) {
+            if (lastReviewId == 0L) {
+                return reviewRepository.findSortingReviewsByRatingFirstPage(product, pageable);
+            }
+            if (sort.equals("rating,asc")) {
+                return reviewRepository.findSortingRatingByRatingAsc(product, lastReviewId, pageable);
+            }
+            if (sort.equals("rating,desc")) {
+                return reviewRepository.findSortingRatingByRatingDesc(product, lastReviewId, pageable);
+            }
+        }
+        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, product.getId());
     }
 
     public RankingReviewsResponse getTopReviews() {

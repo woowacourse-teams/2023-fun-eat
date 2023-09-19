@@ -15,4 +15,10 @@ public class ReviewException extends GlobalException {
             super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), reviewId));
         }
     }
+
+    public static class ReviewSortingOptionNotFoundException extends ReviewException {
+        public ReviewSortingOptionNotFoundException(final ReviewErrorCode errorCode, final Long productId) {
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), productId));
+        }
+    }
 }
