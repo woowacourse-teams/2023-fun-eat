@@ -5,11 +5,16 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
@@ -213,6 +218,120 @@ class ReviewRepositoryTest extends RepositoryTest {
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
                     .containsExactly(1L);
+        }
+    }
+
+    @Nested
+    class findSortingReviewsByRating_관련_성공_테스트 {
+
+        @Test
+        void 평점_기준_오름차순_리뷰_목록의_첫_페이지를_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
+            final var review2 = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
+            final var review3 = 리뷰_이미지test2_평점2점_재구매X_생성(member, product, 351L);
+            단일_리뷰_저장(review3);
+
+            final var page = 페이지요청_평점_오름차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingReviewsByRatingFirstPage(product, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(3L, 1L);
+        }
+
+        @Test
+        void 평점_기준_내림차순_리뷰_목록의_첫_페이지를_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
+            final var review2 = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
+            final var review3 = 리뷰_이미지test2_평점2점_재구매X_생성(member, product, 351L);
+            단일_리뷰_저장(review3);
+
+            final var page = 페이지요청_평점_내림차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingReviewsByRatingFirstPage(product, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(2L, 1L);
+        }
+
+        @Test
+        void 평점_기준_오름차순_리뷰_목록의_2페이지부터_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
+            final var review2 = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
+            final var review3 = 리뷰_이미지test2_평점2점_재구매X_생성(member, product, 351L);
+            단일_리뷰_저장(review3);
+
+            final var lastReviewId = 1L;
+            final var page = 페이지요청_평점_오름차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingRatingByRatingAsc(product, lastReviewId, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(2L);
+        }
+
+        @Test
+        void 평점_기준_내림차순_리뷰_목록의_2페이지부터_보여준다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
+            final var review2 = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
+            final var review3 = 리뷰_이미지test2_평점2점_재구매X_생성(member, product, 351L);
+            단일_리뷰_저장(review3);
+
+            final var lastReviewId = 1L;
+            final var page = 페이지요청_평점_내림차순_생성(0, 2);
+
+            // when
+            final var actual = reviewRepository.findSortingRatingByRatingDesc(product, lastReviewId, page);
+
+            // then
+            assertThat(actual).extracting(SortingReviewDto::getId)
+                    .containsExactly(3L);
         }
     }
 
