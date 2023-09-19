@@ -5,8 +5,8 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.PageFixture.페이지요청_최신순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_평점_내림차순_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_평점_오름차순_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
@@ -71,41 +71,6 @@ class ReviewRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class findReviewsByProduct_성공_테스트 {
-
-        @Test
-        void 특정_상품에_대한_좋아요_기준_내림차순으로_정렬한다() {
-            // given
-            final var member1 = 멤버_멤버1_생성();
-            final var member2 = 멤버_멤버2_생성();
-            final var member3 = 멤버_멤버3_생성();
-            복수_멤버_저장(member1, member2, member3);
-
-            final var category = 카테고리_간편식사_생성();
-            단일_카테고리_저장(category);
-
-            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
-            단일_상품_저장(product);
-
-            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
-            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
-            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
-            복수_리뷰_저장(review1, review2, review3);
-
-            final var page = 페이지요청_생성(0, 2, 좋아요수_내림차순);
-
-            final var expected = List.of(review1, review3);
-
-            // when
-            final var actual = reviewRepository.findReviewsByProduct(page, product).getContent();
-
-            // then
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
-        }
-    }
-
-    @Nested
     class findSortingReviewsByFavoriteCountDesc_관련_성공_테스트 {
 
         @Test
@@ -119,11 +84,12 @@ class ReviewRepositoryTest extends RepositoryTest {
             단일_멤버_저장(member);
 
             final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
             final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
-            복수_리뷰_저장(review1, review2, review3);
+            단일_리뷰_저장(review3);
 
-            final var lastReviewId = 0L;
             final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
 
             // when
@@ -145,9 +111,11 @@ class ReviewRepositoryTest extends RepositoryTest {
             단일_멤버_저장(member);
 
             final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 130L);
+            단일_리뷰_저장(review1);
             final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            단일_리뷰_저장(review2);
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
-            복수_리뷰_저장(review1, review2, review3);
+            단일_리뷰_저장(review3);
 
             final var lastReviewId = 1L;
             final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
@@ -182,7 +150,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 351L);
             단일_리뷰_저장(review3);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
+            final var page = 페이지요청_최신순_생성(0, 2);
 
             // when
             final var actual = reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, page);
@@ -210,7 +178,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             단일_리뷰_저장(review3);
 
             final var lastReviewId = 2L;
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 2);
+            final var page = 페이지요청_최신순_생성(0, 2);
 
             // when
             final var actual = reviewRepository.findSortingReviewsByCreatedAtDesc(product, lastReviewId, page);

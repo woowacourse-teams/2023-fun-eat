@@ -2,6 +2,7 @@ package com.funeat.fixture;
 
 import com.funeat.common.dto.PageDto;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
@@ -18,6 +19,7 @@ public class PageFixture {
     public static final String 평점_내림차순 = "rating,desc";
     public static final String 과거순 = "createdAt,asc";
     public static final String 최신순 = "createdAt,desc";
+    public static final String 아이디_내림차순 = "id,desc";
 
     public static final Long PAGE_SIZE = 10L;
     public static final Long FIRST_PAGE = 0L;
@@ -43,6 +45,30 @@ public class PageFixture {
     public static PageDto 응답_페이지_생성(final Long totalDataCount, final Long totalPages, final boolean firstPage,
                                     final boolean lastPage, final Long requestPage, final Long requestSize) {
         return new PageDto(totalDataCount, totalPages, firstPage, lastPage, requestPage, requestSize);
+    }
+
+    public static Pageable 페이지요청_좋아요_내림차순_생성(final int page, final int size) {
+        final var sort = Sort.by(Direction.DESC, "favoriteCount");
+
+        return PageRequest.of(page, size, sort);
+    }
+
+    public static Pageable 페이지요청_최신순_생성(final int page, final int size) {
+        final var sort = Sort.by(Direction.DESC, "createdAt");
+
+        return PageRequest.of(page, size, sort);
+    }
+
+    public static Pageable 페이지요청_평점_오름차순_생성(final int page, final int size) {
+        final var sort = Sort.by(Direction.ASC, "rating");
+
+        return PageRequest.of(page, size, sort);
+    }
+
+    public static Pageable 페이지요청_평점_내림차순_생성(final int page, final int size) {
+        final var sort = Sort.by(Direction.DESC, "rating");
+
+        return PageRequest.of(page, size, sort);
     }
 
     public static Long 총_데이터_개수(final Long count) {
