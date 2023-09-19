@@ -32,11 +32,11 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,20 +75,10 @@ public class ProductService {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, categoryId));
 
-        final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
-
-        final PageDto pageDto = PageDto.toDto(pages);
+        final Slice<ProductInCategoryDto> pages = productRepository.findAllByCategory(category, pageable);
         final List<ProductInCategoryDto> productDtos = pages.getContent();
 
-        return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
-    }
-
-    private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
-        if (Objects.nonNull(pageable.getSort().getOrderFor(REVIEW_COUNT))) {
-            final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-            return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
-        }
-        return productRepository.findAllByCategory(category, pageable);
+        return ProductsInCategoryResponse.toResponse(pages.hasNext(), productDtos);
     }
 
     public ProductResponse findProductDetail(final Long productId) {
