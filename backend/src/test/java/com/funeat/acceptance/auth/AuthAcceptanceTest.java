@@ -33,19 +33,19 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     private AuthService authService;
 
     @Nested
-    class kakaoLogin_성공_테스트 {
+    class login_성공_테스트 {
 
         @Test
-        void 멤버가_카카오_로그인_버튼을_누르면_카카오_로그인_페이지로_리다이렉트할_수_있다() {
+        void 멤버가_로그인_버튼을_누르면_OAUTH_로그인_페이지로_리다이렉트할_수_있다() {
             // given
-            final var 카카오_로그인_페이지 = authService.getLoginRedirectUri();
+            final var OAUTH_로그인_페이지 = authService.getLoginRedirectUri();
 
             // when
             final var 응답 = 카카오_로그인_버튼_클릭();
 
             // then
             STATUS_CODE를_검증한다(응답, 리다이렉션_영구_이동);
-            REDIRECT_URL을_검증한다(응답, 카카오_로그인_페이지);
+            REDIRECT_URL을_검증한다(응답, OAUTH_로그인_페이지);
         }
     }
 
