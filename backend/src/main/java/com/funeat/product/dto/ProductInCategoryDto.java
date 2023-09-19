@@ -21,6 +21,11 @@ public class ProductInCategoryDto {
         this.reviewCount = reviewCount;
     }
 
+    public static ProductInCategoryDto toDto(final Product product) {
+        return new ProductInCategoryDto(product.getId(), product.getName(), product.getPrice(), product.getImage(),
+                product.getAverageRating(), product.getReviewCount());
+    }
+
     public static ProductInCategoryDto toDto(final Product product, final Long reviewCount) {
         return new ProductInCategoryDto(product.getId(), product.getName(), product.getPrice(), product.getImage(),
                 product.getAverageRating(), reviewCount);
@@ -48,5 +53,17 @@ public class ProductInCategoryDto {
 
     public Long getReviewCount() {
         return reviewCount;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductInCategoryDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", image='" + image + '\'' +
+                ", averageRating=" + averageRating +
+                ", reviewCount=" + reviewCount +
+                '}';
     }
 }
