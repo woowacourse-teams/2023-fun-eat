@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 
 public class SortingReviewDto {
 
-    private final Long id;
-    private final String userName;
-    private final String profileImage;
-    private final String image;
-    private final Long rating;
-    private final List<TagDto> tags;
-    private final String content;
-    private final boolean rebuy;
-    private final Long favoriteCount;
-    private final boolean favorite;
-    private final LocalDateTime createdAt;
+    private Long id;
+    private String userName;
+    private String profileImage;
+    private String image;
+    private Long rating;
+    private List<TagDto> tags;
+    private String content;
+    private boolean rebuy;
+    private Long favoriteCount;
+    private boolean favorite;
+    private LocalDateTime createdAt;
 
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
                             final Long rating, final List<TagDto> tags,
@@ -33,6 +33,21 @@ public class SortingReviewDto {
         this.image = image;
         this.rating = rating;
         this.tags = tags;
+        this.content = content;
+        this.rebuy = rebuy;
+        this.favoriteCount = favoriteCount;
+        this.favorite = favorite;
+        this.createdAt = createdAt;
+    }
+
+    public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
+                            final Long rating, final String content, final boolean rebuy, final Long favoriteCount,
+                            final boolean favorite, final LocalDateTime createdAt) {
+        this.id = id;
+        this.userName = userName;
+        this.profileImage = profileImage;
+        this.image = image;
+        this.rating = rating;
         this.content = content;
         this.rebuy = rebuy;
         this.favoriteCount = favoriteCount;
