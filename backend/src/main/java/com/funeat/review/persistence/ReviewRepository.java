@@ -22,15 +22,16 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product")
     List<SortingReviewDto> findSortingReviewsByFavoriteCountDescFirstPage(@Param("product") final Product product,
+                                                                          @Param("loginMember") final Member member,
                                                                           final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product "
             + "AND ("
                 + "(r.favoriteCount = "
@@ -47,21 +48,23 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 + ")"
             + ")")
     List<SortingReviewDto> findSortingReviewsByFavoriteCountDesc(@Param("product") final Product product,
+                                                                 @Param("loginMember") final Member member,
                                                                  @Param("lastReviewId") final Long lastReviewId,
                                                                  final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product")
     List<SortingReviewDto> findSortingReviewsByCreatedAtDescFirstPage(@Param("product") final Product product,
+                                                                      @Param("loginMember") final Member member,
                                                                       final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product "
             + "AND ("
                 + "(r.createdAt = "
@@ -78,21 +81,23 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 + ")"
             + ")")
     List<SortingReviewDto> findSortingReviewsByCreatedAtDesc(@Param("product") final Product product,
+                                                             @Param("loginMember") final Member member,
                                                              @Param("lastReviewId") final Long lastReviewId,
                                                              final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product")
     List<SortingReviewDto> findSortingReviewsByRatingFirstPage(@Param("product") final Product product,
-                                                                   final Pageable pageable);
+                                                               @Param("loginMember") final Member member,
+                                                               final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product "
             + "AND ("
                 + "(r.rating = "
@@ -109,13 +114,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 + ")"
             + ")")
     List<SortingReviewDto> findSortingRatingByRatingAsc(@Param("product") final Product product,
-                                                            @Param("lastReviewId") final Long lastReviewId,
-                                                            final Pageable pageable);
+                                                        @Param("loginMember") final Member member,
+                                                        @Param("lastReviewId") final Long lastReviewId,
+                                                        final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
-            + "LEFT JOIN r.reviewFavorites rf "
+            + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
             + "WHERE r.product = :product "
             + "AND ("
                 + "(r.rating = "
@@ -132,8 +138,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 + ")"
             + ")")
     List<SortingReviewDto> findSortingRatingByRatingDesc(@Param("product") final Product product,
-                                                            @Param("lastReviewId") final Long lastReviewId,
-                                                            final Pageable pageable);
+                                                         @Param("loginMember") final Member member,
+                                                         @Param("lastReviewId") final Long lastReviewId,
+                                                         final Pageable pageable);
 
     List<Review> findTop3ByOrderByFavoriteCountDesc();
 

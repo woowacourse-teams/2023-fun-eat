@@ -154,14 +154,15 @@ public class ReviewService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final List<SortingReviewDto> sortingReviewsWithoutTags = executeSortingReviews(product, request);
+        final List<SortingReviewDto> sortingReviewsWithoutTags = executeSortingReviews(product, member, request);
         final List<SortingReviewDto> sortingReviews = addTagsToSortingReviews(sortingReviewsWithoutTags);
         final Boolean hasNextReview = hasMoreReview(request.getPageable(), sortingReviews.size());
 
         return SortingReviewsResponse.toResponse(sortingReviews, hasNextReview);
     }
 
-    private List<SortingReviewDto> executeSortingReviews(final Product product, final SortingReviewRequest request) {
+    private List<SortingReviewDto> executeSortingReviews(final Product product, final Member member,
+                                                         final SortingReviewRequest request) {
         final Long lastReviewId = request.getLastReviewId();
         final Pageable pageable = request.getPageable();
 
@@ -169,25 +170,25 @@ public class ReviewService {
 
         if (sort.equals("favoriteCount,desc")) {
             if (Objects.equals(lastReviewId, FIRST)) {
-                return reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, pageable);
+                return reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, member, pageable);
             }
-            return reviewRepository.findSortingReviewsByFavoriteCountDesc(product, lastReviewId, pageable);
+            return reviewRepository.findSortingReviewsByFavoriteCountDesc(product, member, lastReviewId, pageable);
         }
         if (sort.equals("createdAt,desc")) {
             if (Objects.equals(lastReviewId, FIRST)) {
-                return reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, pageable);
+                return reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, member, pageable);
             }
-            return reviewRepository.findSortingReviewsByCreatedAtDesc(product, lastReviewId, pageable);
+            return reviewRepository.findSortingReviewsByCreatedAtDesc(product, member, lastReviewId, pageable);
         }
         if (sort.equals("rating,asc") || sort.equals("rating,desc")) {
             if (Objects.equals(lastReviewId, FIRST)) {
-                return reviewRepository.findSortingReviewsByRatingFirstPage(product, pageable);
+                return reviewRepository.findSortingReviewsByRatingFirstPage(product, member, pageable);
             }
             if (sort.equals("rating,asc")) {
-                return reviewRepository.findSortingRatingByRatingAsc(product, lastReviewId, pageable);
+                return reviewRepository.findSortingRatingByRatingAsc(product, member, lastReviewId, pageable);
             }
             if (sort.equals("rating,desc")) {
-                return reviewRepository.findSortingRatingByRatingDesc(product, lastReviewId, pageable);
+                return reviewRepository.findSortingRatingByRatingDesc(product, member, lastReviewId, pageable);
             }
         }
         throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, product.getId());
