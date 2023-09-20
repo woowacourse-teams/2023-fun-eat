@@ -81,6 +81,7 @@ export default HomePage;
 
 const Banner = styled.img`
   width: 100%;
+  height: auto;
 `;
 
 const SectionWrapper = styled.section`
