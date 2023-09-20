@@ -1,9 +1,9 @@
 import { Heading, Text, useTheme } from '@fun-eat/design-system';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/plate.svg';
-import { SvgIcon } from '@/components/Common';
+import { Skeleton, SvgIcon } from '@/components/Common';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -15,6 +15,7 @@ interface RecipeItemProps {
 const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
   const { image, title, createdAt, favoriteCount, products } = recipe;
   const author = 'author' in recipe ? recipe.author : null;
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const theme = useTheme();
 
   return (
@@ -22,7 +23,10 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
       {!isMemberPage && (
         <ImageWrapper>
           {image !== null ? (
-            <RecipeImage src={image} alt={`조리된 ${title}`} />
+            <>
+              <RecipeImage src={image} alt={`조리된 ${title}`} onLoad={() => setIsImageLoading(false)} />
+              {isImageLoading && <Skeleton width={545} height={160} />}
+            </>
           ) : (
             <PreviewImage width={160} height={160} />
           )}

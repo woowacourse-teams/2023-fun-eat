@@ -1,8 +1,9 @@
 import { Text, useTheme } from '@fun-eat/design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
-import { SvgIcon } from '@/components/Common';
+import { Skeleton, SvgIcon } from '@/components/Common';
 import type { Product } from '@/types/product';
 
 interface ProductItemProps {
@@ -12,11 +13,21 @@ interface ProductItemProps {
 const ProductItem = ({ product }: ProductItemProps) => {
   const theme = useTheme();
   const { name, price, image, averageRating, reviewCount } = product;
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   return (
     <ProductItemContainer>
       {image !== null ? (
-        <ProductImage src={image} width={90} height={90} alt={`${name}사진`} />
+        <>
+          <ProductImage
+            src={image}
+            width={90}
+            height={90}
+            alt={`${name}사진`}
+            onLoad={() => setIsImageLoading(false)}
+          />
+          {isImageLoading && <Skeleton width={90} height={90} />}
+        </>
       ) : (
         <PreviewImage width={90} height={90} />
       )}
