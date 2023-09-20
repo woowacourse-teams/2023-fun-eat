@@ -20,3 +20,4 @@ export { default as Carousel } from './Carousel/Carousel';
 export { default as RegisterButton } from './RegisterButton/RegisterButton';
 export { default as CategoryItem } from './CategoryItem/CategoryItem';
 export { default as CategoryList } from './CategoryList/CategoryList';
+export { default as Skeleton } from './Skeleton/Skeleton';
