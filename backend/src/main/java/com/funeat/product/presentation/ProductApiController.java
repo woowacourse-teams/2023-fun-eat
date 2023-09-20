@@ -29,8 +29,9 @@ public class ProductApiController implements ProductController {
 
     @GetMapping("/categories/{categoryId}/products")
     public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(@PathVariable final Long categoryId,
-                                                                               @PageableDefault final Pageable pageable) {
-        final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, pageable);
+                                                                               @RequestParam(name = "id") Long lastId,
+                                                                               @RequestParam(name = "sort") String sort) {
+        final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, lastId, sort);
         return ResponseEntity.ok(response);
     }
 
