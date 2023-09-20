@@ -36,7 +36,7 @@ public class SortingReviewRequest {
         final String order = splitSort[ORDER_INDEX];
         final Direction direction = Direction.fromString(splitSort[DIRECTION_INDEX]);
 
-        return PageRequest.of(START_PAGE, ELEVEN, Sort.by(direction, order).and(Sort.by(Direction.ASC, ID)));
+        return PageRequest.of(START_PAGE, ELEVEN, Sort.by(direction, order).and(Sort.by(Direction.DESC, ID)));
     }
 
     public String getSort() {
