@@ -79,7 +79,7 @@ const IntegratedSearchPage = () => {
         handleTabMenuSelect={handleTabMenuClick}
       />
       <SearchResultSection>
-        {isSubmitted && debouncedSearchQuery ? (
+        {isSubmitted && searchQuery ? (
           <>
             <Heading as="h2" size="lg" weight="regular">
               <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
@@ -88,9 +88,9 @@ const IntegratedSearchPage = () => {
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
                 {isProductSearchTab ? (
-                  <ProductSearchResultList searchQuery={debouncedSearchQuery} />
+                  <ProductSearchResultList searchQuery={searchQuery} />
                 ) : (
-                  <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
+                  <RecipeSearchResultList searchQuery={searchQuery} />
                 )}
               </Suspense>
             </ErrorBoundary>
