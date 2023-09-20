@@ -93,7 +93,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, page);
+            final var actual = reviewRepository.findSortingReviewsByFavoriteCountDescFirstPage(product, member, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -121,7 +121,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsByFavoriteCountDesc(product, lastReviewId, page);
+            final var actual = reviewRepository.findSortingReviewsByFavoriteCountDesc(product, member, lastReviewId, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -153,7 +153,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_최신순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, page);
+            final var actual = reviewRepository.findSortingReviewsByCreatedAtDescFirstPage(product, member, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -181,7 +181,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_최신순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsByCreatedAtDesc(product, lastReviewId, page);
+            final var actual = reviewRepository.findSortingReviewsByCreatedAtDesc(product, member, lastReviewId, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -212,7 +212,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_평점_오름차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsByRatingFirstPage(product, page);
+            final var actual = reviewRepository.findSortingReviewsByRatingFirstPage(product, member, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -239,7 +239,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_평점_내림차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingReviewsByRatingFirstPage(product, page);
+            final var actual = reviewRepository.findSortingReviewsByRatingFirstPage(product, member, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -267,7 +267,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_평점_오름차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingRatingByRatingAsc(product, lastReviewId, page);
+            final var actual = reviewRepository.findSortingRatingByRatingAsc(product, member, lastReviewId, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)
@@ -295,7 +295,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var page = 페이지요청_평점_내림차순_생성(0, 2);
 
             // when
-            final var actual = reviewRepository.findSortingRatingByRatingDesc(product, lastReviewId, page);
+            final var actual = reviewRepository.findSortingRatingByRatingDesc(product, member, lastReviewId, page);
 
             // then
             assertThat(actual).extracting(SortingReviewDto::getId)

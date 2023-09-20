@@ -27,6 +27,10 @@ public class ReviewFixture {
     public static final boolean 재구매O = true;
     public static final boolean 재구매X = false;
 
+    public static final Long 첫_목록을_가져옴 = 0L;
+    public static final boolean 다음_데이터_존재O = true;
+    public static final boolean 다음_데이터_존재X = false;
+
     public static Review 리뷰_이미지test1_평점1점_재구매O_생성(final Member member, final Product product, final Long count) {
         return new Review(member, product, "test1", 1L, "test", true, count);
     }
