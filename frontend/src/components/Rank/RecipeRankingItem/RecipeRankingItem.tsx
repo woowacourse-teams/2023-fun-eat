@@ -85,6 +85,7 @@ const RankingRecipeWrapper = styled.div`
 
 const RecipeImage = styled.img`
   border-radius: 5px;
+  object-fit: cover;
 `;
 
 const TitleFavoriteWrapper = styled.div`
@@ -111,4 +112,5 @@ const AuthorWrapper = styled.div`
 const AuthorImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
+  object-fit: cover;
 `;
