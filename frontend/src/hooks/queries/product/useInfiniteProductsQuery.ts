@@ -6,7 +6,7 @@ import type { CategoryProductResponse } from '@/types/response';
 const fetchProducts = async (pageParam: number, categoryId: number, sort = 'reviewCount,desc') => {
   const res = await categoryApi.get({
     params: `/${categoryId}/products`,
-    queries: `?page=${pageParam}&sort=${sort}`,
+    queries: `?id=${pageParam}&sort=${sort}`,
   });
 
   const data: CategoryProductResponse = await res.json();
@@ -19,9 +19,8 @@ const useInfiniteProductsQuery = (categoryId: number, sort = 'reviewCount,desc')
     ({ pageParam = 0 }) => fetchProducts(pageParam, categoryId, sort),
     {
       getNextPageParam: (prevResponse: CategoryProductResponse) => {
-        const isLast = prevResponse.page.lastPage;
-        const nextPage = prevResponse.page.requestPage + 1;
-        return isLast ? undefined : nextPage;
+        const lastCursor = prevResponse.products[prevResponse.products.length - 1].id;
+        return prevResponse.hasNext ? lastCursor : undefined;
       },
     }
   );

@@ -14,7 +14,7 @@ export interface Page {
 }
 
 export interface CategoryProductResponse {
-  page: Page;
+  hasNext: true;
   products: Product[];
 }
 export interface ProductReviewResponse {
