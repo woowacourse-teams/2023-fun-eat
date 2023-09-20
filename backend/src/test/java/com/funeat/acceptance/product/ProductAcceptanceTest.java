@@ -126,7 +126,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격4000원_평점4점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 가격_내림차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -144,7 +144,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 가격_내림차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 가격_내림차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -166,7 +166,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 가격_오름차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 가격_오름차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -184,7 +184,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격1000원_평점1점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 가격_오름차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -206,7 +206,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -224,7 +224,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_내림차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -246,7 +246,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점3점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -264,7 +264,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 단일_상품_저장(상품_삼각김밥_가격2000원_평점1점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(1L, 평균_평점_오름차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -291,7 +291,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품2, 사진_명세_요청(이미지3), 리뷰추가요청_재구매O_생성(점수_2점, List.of(태그)));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 리뷰수_내림차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 리뷰수_내림차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -309,7 +309,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 final var 상품3 = 단일_상품_저장(상품_삼각김밥_가격3000원_평점1점_생성(카테고리));
 
                 // when
-                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 리뷰수_내림차순, FIRST_PAGE);
+                final var 응답 = 카테고리별_상품_목록_조회_요청(카테고리_아이디, 리뷰수_내림차순, 0L);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -325,7 +325,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
         @Test
         void 상품을_정렬할때_카테고리가_존재하지_않으면_예외가_발생한다() {
             // given && when
-            final var 응답 = 카테고리별_상품_목록_조회_요청(존재하지_않는_카테고리, 가격_내림차순, FIRST_PAGE);
+            final var 응답 = 카테고리별_상품_목록_조회_요청(존재하지_않는_카테고리, 가격_내림차순, 0L);
 
             // then
             STATUS_CODE를_검증한다(응답, 찾을수_없음);
