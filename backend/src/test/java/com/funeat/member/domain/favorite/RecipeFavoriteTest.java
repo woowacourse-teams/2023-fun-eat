@@ -11,23 +11,6 @@ import org.junit.jupiter.api.Test;
 class RecipeFavoriteTest {
 
     @Nested
-    class create_성공_테스트 {
-
-        @Test
-        void create를_통한_생성시_favorite은_false로_초기화된다() {
-            // given
-            final var member = 멤버_멤버1_생성();
-            final var recipe = 레시피_생성(member);
-
-            // when
-            final var actual = RecipeFavorite.create(member, recipe);
-
-            // then
-            assertThat(actual.getFavorite()).isFalse();
-        }
-    }
-
-    @Nested
     class updateFavorite_성공_테스트 {
 
         @Test
@@ -35,7 +18,7 @@ class RecipeFavoriteTest {
             // given
             final var member = 멤버_멤버1_생성();
             final var recipe = 레시피_생성(member);
-            final var recipeFavorite = RecipeFavorite.create(member, recipe);
+            final var recipeFavorite = RecipeFavorite.create(member, recipe, false);
 
             // when
             recipeFavorite.updateFavorite(true);
@@ -55,8 +38,7 @@ class RecipeFavoriteTest {
             final var member = 멤버_멤버1_생성();
             final var recipe = 레시피_생성(member);
 
-            final var recipeFavorite = RecipeFavorite.create(member, recipe);
-            recipeFavorite.updateFavorite(true);
+            final var recipeFavorite = RecipeFavorite.create(member, recipe, true);
 
             // when
             recipeFavorite.updateFavorite(false);
@@ -76,8 +58,7 @@ class RecipeFavoriteTest {
             final var member = 멤버_멤버1_생성();
             final var recipe = 레시피_생성(member);
 
-            final var recipeFavorite = RecipeFavorite.create(member, recipe);
-            recipeFavorite.updateFavorite(true);
+            final var recipeFavorite = RecipeFavorite.create(member, recipe, true);
 
             // when
             recipeFavorite.updateFavorite(true);
@@ -97,7 +78,7 @@ class RecipeFavoriteTest {
             final var member = 멤버_멤버1_생성();
             final var recipe = 레시피_생성(member);
 
-            final var recipeFavorite = RecipeFavorite.create(member, recipe);
+            final var recipeFavorite = RecipeFavorite.create(member, recipe, false);
 
             // when
             recipeFavorite.updateFavorite(false);
