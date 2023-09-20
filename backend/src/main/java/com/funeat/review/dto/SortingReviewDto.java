@@ -1,5 +1,6 @@
 package com.funeat.review.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.review.domain.Review;
@@ -24,6 +25,7 @@ public class SortingReviewDto {
     private boolean favorite;
     private LocalDateTime createdAt;
 
+    @JsonCreator
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
                             final Long rating, final List<TagDto> tags,
                             final String content, final boolean rebuy, final Long favoriteCount, final boolean favorite,
