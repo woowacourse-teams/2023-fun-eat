@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
-  CategoryTab,
+  CategoryFoodTab,
+  CategoryStoreTab,
   SortButton,
   SortOptionList,
   ScrollButton,
@@ -47,9 +48,7 @@ const ProductListPage = () => {
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={20} />
-        <Suspense fallback={null}>
-          <CategoryTab menuVariant={category} />
-        </Suspense>
+        <Suspense fallback={null}>{category === 'food' ? <CategoryFoodTab /> : <CategoryStoreTab />}</Suspense>
         <Spacing size={20} />
         <ProductListContainer ref={productListRef}>
           <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
