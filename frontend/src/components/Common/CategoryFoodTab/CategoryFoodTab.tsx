@@ -4,20 +4,20 @@ import { useLocation } from 'react-router-dom';
 import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
-import { useCategoryValueContext, useCategoryActionContext } from '@/hooks/context';
-import { useCategoryQuery } from '@/hooks/queries/product';
-import type { CategoryVariant } from '@/types/common';
+import { useCategoryActionContext, useCategoryValueContext } from '@/hooks/context';
+import { useCategoryFoodQuery } from '@/hooks/queries/product/useCategoryQuery';
+import type { Food } from '@/types/common';
 
-interface CategoryMenuProps {
-  menuVariant: CategoryVariant;
+interface CategoryFoodTabProps {
+  category: Food;
 }
 
-const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
-  const { data: categories } = useCategoryQuery(menuVariant);
+const CategoryFoodTab = ({ category }: CategoryFoodTabProps) => {
+  const { data: categories } = useCategoryFoodQuery(category);
 
   const { categoryIds } = useCategoryValueContext();
   const { selectCategory } = useCategoryActionContext();
-  const currentCategoryId = categoryIds[menuVariant];
+  const currentCategoryId = categoryIds[category];
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -25,7 +25,7 @@ const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
 
   useEffect(() => {
     if (categoryIdFromURL) {
-      selectCategory(menuVariant, parseInt(categoryIdFromURL));
+      selectCategory(category, parseInt(categoryIdFromURL));
     }
   }, [location]);
 
@@ -43,8 +43,8 @@ const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
               isSelected={isSelected}
-              menuVariant={menuVariant}
-              onClick={() => selectCategory(menuVariant, menu.id)}
+              category={category}
+              onClick={() => selectCategory(category, menu.id)}
               aria-pressed={isSelected}
             >
               {menu.name}
@@ -56,9 +56,9 @@ const CategoryTab = ({ menuVariant }: CategoryMenuProps) => {
   );
 };
 
-export default CategoryTab;
+export default CategoryFoodTab;
 
-type CategoryMenuStyleProps = Pick<CategoryMenuProps, 'menuVariant'>;
+type CategoryMenuStyleProps = Pick<CategoryFoodTabProps, 'category'>;
 
 const CategoryMenuContainer = styled.ul`
   display: flex;
@@ -73,16 +73,12 @@ const CategoryMenuContainer = styled.ul`
 
 const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryMenuStyleProps>`
   padding: 6px 12px;
-  ${({ isSelected, menuVariant }) => (isSelected ? selectedCategoryMenuStyles[menuVariant] : '')}
+  ${({ isSelected, category }) => (isSelected ? selectedCategoryMenuStyles[category] : '')}
 `;
 
-const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['menuVariant'], CSSProp> = {
+const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['category'], CSSProp> = {
   food: `
     background: ${theme.colors.gray5};
     color: ${theme.textColors.white};
-  `,
-  store: `
-    background: ${theme.colors.primary};
-    color: ${theme.textColors.default};
   `,
 };
