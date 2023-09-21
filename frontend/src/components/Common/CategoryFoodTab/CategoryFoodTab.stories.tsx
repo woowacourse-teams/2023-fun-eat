@@ -7,9 +7,6 @@ import CategoryProvider from '@/contexts/CategoryContext';
 const meta: Meta<typeof CategoryFoodTab> = {
   title: 'common/CategoryFoodTab',
   component: CategoryFoodTab,
-  args: {
-    category: 'food',
-  },
   decorators: [
     (Story) => (
       <CategoryProvider>
