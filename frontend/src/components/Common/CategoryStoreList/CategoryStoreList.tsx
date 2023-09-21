@@ -13,7 +13,7 @@ const CategoryStoreList = () => {
   const { data: categories } = useCategoryStoreQuery(category);
 
   return (
-    <CategoryStoreListContainer>
+    <div>
       <CategoryStoreListWrapper>
         {categories.map((menu) => (
           <Link key={menu.id} as={RouterLink} to={`products/store?category=${menu.id}`}>
@@ -21,28 +21,13 @@ const CategoryStoreList = () => {
           </Link>
         ))}
       </CategoryStoreListWrapper>
-    </CategoryStoreListContainer>
+    </div>
   );
 };
 
 export default CategoryStoreList;
 
-const CategoryStoreListContainer = styled.div`
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  @media screen and (min-width: 500px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
 const CategoryStoreListWrapper = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
 `;

@@ -31,8 +31,10 @@ const HomePage = () => {
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryFoodList />
-          <CategoryStoreList />
+          <CategoryListWrapper>
+            <CategoryFoodList />
+            <CategoryStoreList />
+          </CategoryListWrapper>
         </Suspense>
         <Spacing size={15} />
       </SectionWrapper>
@@ -85,4 +87,19 @@ const Banner = styled.img`
 
 const SectionWrapper = styled.section`
   padding: 0 20px;
+`;
+
+const CategoryListWrapper = styled.div`
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  @media screen and (min-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
