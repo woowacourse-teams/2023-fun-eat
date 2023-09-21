@@ -1,11 +1,12 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].[chunkhash].js',
     clean: true,
     publicPath: '/',
   },
@@ -37,5 +38,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [new Dotenv()],
+  plugins: [new Dotenv(), new BundleAnalyzerPlugin()],
 };

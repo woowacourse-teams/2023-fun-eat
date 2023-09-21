@@ -15,7 +15,7 @@ const RECIPE_PLACEHOLDER = '꿀조합에 포함된 상품을 입력해보세요.
 
 type SearchPageType = keyof typeof SEARCH_PAGE_VARIANTS;
 
-const SearchPage = () => {
+export const SearchPage = () => {
   const {
     inputRef,
     searchQuery,
@@ -117,8 +117,6 @@ const SearchPage = () => {
     </>
   );
 };
-
-export default SearchPage;
 
 const SearchSection = styled.section`
   position: relative;

@@ -12,7 +12,7 @@ import { useSearch } from '@/hooks/search';
 const PRODUCT_PLACEHOLDER = '상품 이름을 검색해보세요.';
 const RECIPE_PLACEHOLDER = '꿀조합에 포함된 상품을 입력해보세요.';
 
-const IntegratedSearchPage = () => {
+export const IntegratedSearchPage = () => {
   const {
     inputRef,
     searchQuery,
@@ -102,8 +102,6 @@ const IntegratedSearchPage = () => {
     </>
   );
 };
-
-export default IntegratedSearchPage;
 
 const SearchSection = styled.section`
   position: relative;

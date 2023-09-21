@@ -11,7 +11,7 @@ import { useFormData, useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 
-const MemberModifyPage = () => {
+export const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
   const { mutate } = useMemberModifyMutation();
 
@@ -95,8 +95,6 @@ const MemberModifyPage = () => {
     </>
   );
 };
-
-export default MemberModifyPage;
 
 const MemberImageUploaderContainer = styled.div`
   display: flex;

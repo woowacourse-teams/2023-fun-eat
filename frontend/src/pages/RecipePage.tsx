@@ -24,7 +24,7 @@ const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
 const REGISTER_RECIPE_AFTER_LOGIN = '로그인 후 꿀조합을 작성할 수 있어요';
 
-const RecipePage = () => {
+export const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
@@ -86,8 +86,6 @@ const RecipePage = () => {
     </>
   );
 };
-
-export default RecipePage;
 
 const TitleWrapper = styled.div`
   display: flex;
