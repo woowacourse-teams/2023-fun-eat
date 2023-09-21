@@ -20,9 +20,9 @@ const ProductOverviewItem = ({ name, image, rank }: ProductOverviewItemProps) =>
       ) : (
         <ProductPreviewImage width={45} height={45} />
       )}
-      <Text size="lg" weight="bold" align="center" aria-label={name}>
+      <ProductOverviewText size="lg" weight="bold" align="center" aria-label={name}>
         {name}
-      </Text>
+      </ProductOverviewText>
     </ProductOverviewContainer>
   );
 };
@@ -34,7 +34,7 @@ const ProductOverviewContainer = styled.div<Pick<ProductOverviewItemProps, 'rank
   gap: 15px;
   align-items: center;
   height: 50px;
-  padding-left: 15px;
+  padding: 0 15px;
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   background: ${({ theme, rank }) => (rank ? theme.colors.gray1 : theme.colors.white)};
 `;
@@ -50,4 +50,11 @@ const ProductPreviewImage = styled(PreviewImage)`
   height: 45px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.white};
+`;
+
+const ProductOverviewText = styled(Text)`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  overflow: hidden;
 `;
