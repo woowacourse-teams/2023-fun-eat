@@ -25,7 +25,7 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
           {image !== null ? (
             <>
               <RecipeImage src={image} alt={`조리된 ${title}`} loading="lazy" onLoad={() => setIsImageLoading(false)} />
-              {isImageLoading && <Skeleton width={545} height={160} />}
+              {isImageLoading && <Skeleton width="100%" height={160} />}
             </>
           ) : (
             <PreviewImage width={160} height={160} />
