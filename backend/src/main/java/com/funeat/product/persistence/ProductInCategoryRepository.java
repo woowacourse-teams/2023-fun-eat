@@ -166,7 +166,7 @@ public class ProductInCategoryRepository {
                         + "  (p.reviewCount = p2.reviewCount AND p.id<:lastProductId)"
                         + "or p.reviewCount < p2.reviewCount "
                         + ") "
-                        + "ORDER BY p.averageRating desc, p.id DESC ";
+                        + "ORDER BY p.reviewCount desc, p.id DESC ";
 
         return entityManager.createQuery(jpqlQuery, ProductInCategoryDto.class)
                 .setParameter("lastProductId", lastProductId)
