@@ -1,4 +1,5 @@
 import { Spacing, Text, theme } from '@fun-eat/design-system';
+import { memo } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
@@ -38,7 +39,7 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
   );
 };
 
-export default ReviewRankingItem;
+export default memo(ReviewRankingItem);
 
 const ReviewRankingItemContainer = styled.div`
   display: flex;

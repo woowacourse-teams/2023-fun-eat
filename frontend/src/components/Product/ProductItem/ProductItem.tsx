@@ -1,5 +1,5 @@
 import { Text, useTheme } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
@@ -58,7 +58,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
   );
 };
 
-export default ProductItem;
+export default memo(ProductItem);
 
 const ProductItemContainer = styled.div`
   position: relative;
