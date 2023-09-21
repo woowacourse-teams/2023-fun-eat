@@ -17,8 +17,8 @@ public class ReviewException extends GlobalException {
     }
 
     public static class ReviewSortingOptionNotFoundException extends ReviewException {
-        public ReviewSortingOptionNotFoundException(final ReviewErrorCode errorCode, final Long productId) {
-            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), productId));
+        public ReviewSortingOptionNotFoundException(final ReviewErrorCode errorCode) {
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage()));
         }
     }
 }

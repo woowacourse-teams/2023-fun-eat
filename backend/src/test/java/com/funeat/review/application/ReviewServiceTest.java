@@ -358,9 +358,9 @@ class ReviewServiceTest extends ServiceTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var request = 리뷰정렬요청_좋아요수_내림차순_생성(1L);
+            final var request = 리뷰정렬요청_좋아요수_내림차순_생성(0L);
 
-            final var expected = List.of(review3.getId(), review2.getId());
+            final var expected = List.of(review1.getId(), review3.getId(), review2.getId());
 
             // when
             final var actual = reviewService.sortingReviews(productId, memberId, request).getReviews();
@@ -416,9 +416,9 @@ class ReviewServiceTest extends ServiceTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var request = 리뷰정렬요청_평점_오름차순_생성(1L);
+            final var request = 리뷰정렬요청_평점_오름차순_생성(0L);
 
-            final var expected = List.of(review3.getId(), review2.getId());
+            final var expected = List.of(review1.getId(), review3.getId(), review2.getId());
 
             // when
             final var actual = reviewService.sortingReviews(productId, memberId, request).getReviews();
@@ -440,14 +440,14 @@ class ReviewServiceTest extends ServiceTest {
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
 
-            final var review1 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 351L);
+            final var review1 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 5L);
             final var review2 = 리뷰_이미지test2_평점2점_재구매O_생성(member, product, 24L);
-            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 130L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 13L);
             복수_리뷰_저장(review1, review2, review3);
 
             final var request = 리뷰정렬요청_평점_내림차순_생성(1L);
 
-            final var expected = List.of(review3.getId(), review2.getId());
+            final var expected = List.of(review1.getId(), review3.getId(), review2.getId());
 
             // when
             final var actual = reviewService.sortingReviews(productId, memberId, request).getReviews();
