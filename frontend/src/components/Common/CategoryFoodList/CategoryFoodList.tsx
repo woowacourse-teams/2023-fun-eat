@@ -5,31 +5,29 @@ import styled from 'styled-components';
 import CategoryItem from '../CategoryItem/CategoryItem';
 
 import { CATEGORY_TYPE } from '@/constants';
-import { useCategoryQuery } from '@/hooks/queries/product';
+import { useCategoryFoodQuery } from '@/hooks/queries/product';
 
-interface CategoryListProps {
-  menuVariant: keyof typeof CATEGORY_TYPE;
-}
+const category = CATEGORY_TYPE.FOOD;
 
-const CategoryList = ({ menuVariant }: CategoryListProps) => {
-  const { data: categories } = useCategoryQuery(CATEGORY_TYPE[menuVariant]);
+const CategoryFoodList = () => {
+  const { data: categories } = useCategoryFoodQuery(category);
 
   return (
-    <CategoryListContainer>
-      <CategoryListWrapper>
+    <CategoryFoodListContainer>
+      <CategoryFoodListWrapper>
         {categories.map((menu) => (
-          <Link key={menu.id} as={RouterLink} to={`products/${menuVariant.toLowerCase()}?category=${menu.id}`}>
+          <Link key={menu.id} as={RouterLink} to={`products/food?category=${menu.id}`}>
             <CategoryItem name={menu.name} image={menu.image} />
           </Link>
         ))}
-      </CategoryListWrapper>
-    </CategoryListContainer>
+      </CategoryFoodListWrapper>
+    </CategoryFoodListContainer>
   );
 };
 
-export default CategoryList;
+export default CategoryFoodList;
 
-const CategoryListContainer = styled.div`
+const CategoryFoodListContainer = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
 
@@ -44,7 +42,7 @@ const CategoryListContainer = styled.div`
   }
 `;
 
-const CategoryListWrapper = styled.div`
+const CategoryFoodListWrapper = styled.div`
   display: flex;
   gap: 20px;
 `;

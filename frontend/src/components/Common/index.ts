@@ -1,4 +1,5 @@
-export { default as CategoryTab } from './CategoryTab/CategoryTab';
+export { default as CategoryFoodTab } from './CategoryFoodTab/CategoryFoodTab';
+export { default as CategoryStoreTab } from './CategoryStoreTab/CategoryStoreTab';
 export { default as Header } from './Header/Header';
 export { default as NavigationBar } from './NavigationBar/NavigationBar';
 export { default as SortButton } from './SortButton/SortButton';
@@ -20,4 +21,5 @@ export { default as NavigableSectionTitle } from './NavigableSectionTitle/Naviga
 export { default as Carousel } from './Carousel/Carousel';
 export { default as RegisterButton } from './RegisterButton/RegisterButton';
 export { default as CategoryItem } from './CategoryItem/CategoryItem';
-export { default as CategoryList } from './CategoryList/CategoryList';
+export { default as CategoryFoodList } from './CategoryFoodList/CategoryFoodList';
+export { default as CategoryStoreList } from './CategoryStoreList/CategoryStoreList';
