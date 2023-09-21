@@ -60,4 +60,5 @@ const MembersImage = styled.img`
   margin-right: 16px;
   border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
+  object-fit: cover;
 `;

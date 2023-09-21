@@ -24,7 +24,7 @@ import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
-const ProductListPage = () => {
+export const ProductListPage = () => {
   const { category } = useParams();
   const productListRef = useRef<HTMLDivElement>(null);
 
@@ -73,8 +73,6 @@ const ProductListPage = () => {
     </>
   );
 };
-
-export default ProductListPage;
 
 const ProductListSection = styled.section`
   height: 100%;

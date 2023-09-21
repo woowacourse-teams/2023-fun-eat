@@ -24,7 +24,7 @@ const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
 const REGISTER_RECIPE_AFTER_LOGIN = '로그인 후 꿀조합을 작성할 수 있어요';
 
-const RecipePage = () => {
+export const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
@@ -50,17 +50,17 @@ const RecipePage = () => {
           <SvgIcon variant="search" />
         </Link>
       </TitleWrapper>
+      <Spacing size={12} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <SortButtonWrapper>
-            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-          </SortButtonWrapper>
           <RecipeListWrapper ref={recipeRef}>
+            <SortButtonWrapper>
+              <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+            </SortButtonWrapper>
             <RecipeList selectedOption={selectedOption} />
           </RecipeListWrapper>
         </Suspense>
       </ErrorBoundary>
-      <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
         <RegisterButton
           activeLabel={REGISTER_RECIPE}
@@ -87,8 +87,6 @@ const RecipePage = () => {
   );
 };
 
-export default RecipePage;
-
 const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -103,11 +101,10 @@ const Title = styled(Heading)`
 const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 20px 0;
 `;
 
 const RecipeListWrapper = styled.div`
-  height: calc(100% - 190px);
+  height: calc(100% - 130px);
   overflow-y: auto;
 `;
 
