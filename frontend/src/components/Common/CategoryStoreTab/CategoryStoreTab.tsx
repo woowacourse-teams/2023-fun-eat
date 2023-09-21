@@ -1,18 +1,15 @@
 import { Button, theme } from '@fun-eat/design-system';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import type { CSSProp } from 'styled-components';
 import styled from 'styled-components';
 
+import { CATEGORY_TYPE } from '@/constants';
 import { useCategoryActionContext, useCategoryValueContext } from '@/hooks/context';
 import { useCategoryStoreQuery } from '@/hooks/queries/product/useCategoryQuery';
-import type { Store } from '@/types/common';
 
-interface CategoryStoreTabProps {
-  category: Store;
-}
+const category = CATEGORY_TYPE.STORE;
 
-const CategoryStoreTab = ({ category }: CategoryStoreTabProps) => {
+const CategoryStoreTab = () => {
   const { data: categories } = useCategoryStoreQuery(category);
 
   const { categoryIds } = useCategoryValueContext();
@@ -27,7 +24,7 @@ const CategoryStoreTab = ({ category }: CategoryStoreTabProps) => {
     if (categoryIdFromURL) {
       selectCategory(category, parseInt(categoryIdFromURL));
     }
-  }, [location]);
+  }, [category]);
 
   return (
     <CategoryMenuContainer>
@@ -43,7 +40,6 @@ const CategoryStoreTab = ({ category }: CategoryStoreTabProps) => {
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
               isSelected={isSelected}
-              category={category}
               onClick={() => selectCategory(category, menu.id)}
               aria-pressed={isSelected}
             >
@@ -58,8 +54,6 @@ const CategoryStoreTab = ({ category }: CategoryStoreTabProps) => {
 
 export default CategoryStoreTab;
 
-type CategoryMenuStyleProps = Pick<CategoryStoreTabProps, 'category'>;
-
 const CategoryMenuContainer = styled.ul`
   display: flex;
   gap: 8px;
@@ -71,14 +65,13 @@ const CategoryMenuContainer = styled.ul`
   }
 `;
 
-const CategoryButton = styled(Button)<{ isSelected: boolean } & CategoryMenuStyleProps>`
+const CategoryButton = styled(Button)<{ isSelected: boolean }>`
   padding: 6px 12px;
-  ${({ isSelected, category }) => (isSelected ? selectedCategoryMenuStyles[category] : '')}
+  ${({ isSelected }) =>
+    isSelected
+      ? `
+        background: ${theme.colors.primary};
+        color: ${theme.textColors.default};
+      `
+      : ''}
 `;
-
-const selectedCategoryMenuStyles: Record<CategoryMenuStyleProps['category'], CSSProp> = {
-  store: `
-    background: ${theme.colors.primary};
-    color: ${theme.textColors.default};
-  `,
-};
