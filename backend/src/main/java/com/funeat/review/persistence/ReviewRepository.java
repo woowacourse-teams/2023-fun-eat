@@ -37,17 +37,18 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<SortingReviewDto> sortingReviewsByFavoriteCountDescEquals(@Param("product") final Product product,
                                                                    @Param("loginMember") final Member member,
                                                                    @Param("lastFavoriteCount") final Long lastReviewFavoriteCount,
-                                                                   @Param("lastReviewId") final Long lastReviewId);
+                                                                   @Param("lastReviewId") final Long lastReviewId,
+                                                                   final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
             + "JOIN r.member m "
             + "LEFT JOIN r.reviewFavorites rf ON r.id = rf.review.id AND rf.member = :loginMember "
-            + "WHERE r.product = :product AND r.id > :lastReviewId "
+            + "WHERE r.product = :product AND r.favoriteCount < :lastFavoriteCount "
             + "ORDER BY r.favoriteCount DESC, r.id DESC")
     List<SortingReviewDto> sortingReviewByFavoriteCountDescCondition(@Param("product") final Product product,
                                                                      @Param("loginMember") final Member member,
-                                                                     @Param("lastReviewId") final Long lastReviewId,
+                                                                     @Param("lastFavoriteCount") final Long lastFavoriteCount,
                                                                      final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
@@ -69,7 +70,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<SortingReviewDto> sortingReviewsByCreatedAtDescEquals(@Param("product") final Product product,
                                                                @Param("loginMember") final Member member,
                                                                @Param("lastReviewCreatedAt") final LocalDateTime createdAt,
-                                                               @Param("lastReviewId") final Long lastReviewId);
+                                                               @Param("lastReviewId") final Long lastReviewId,
+                                                               final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
@@ -101,7 +103,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<SortingReviewDto> sortingReviewsByRatingAscEquals(@Param("product") final Product product,
                                                            @Param("loginMember") final Member member,
                                                            @Param("lastReviewRating") final Long lastReviewRating,
-                                                           @Param("lastReviewId") final Long lastReviewId);
+                                                           @Param("lastReviewId") final Long lastReviewId,
+                                                           final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "
@@ -133,7 +136,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<SortingReviewDto> sortingReviewsByRatingDescEquals(@Param("product") final Product product,
                                                             @Param("loginMember") final Member member,
                                                             @Param("lastReviewRating") final Long lastReviewRating,
-                                                            @Param("lastReviewId") final Long lastReviewId);
+                                                            @Param("lastReviewId") final Long lastReviewId,
+                                                            final Pageable pageable);
 
     @Query("SELECT new com.funeat.review.dto.SortingReviewDto(r.id, m.nickname, m.profileImage, r.image, r.rating, r.content, r.reBuy, r.favoriteCount, COALESCE(rf.favorite, false), r.createdAt)  "
             + "FROM Review r "

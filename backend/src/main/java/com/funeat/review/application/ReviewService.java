@@ -52,6 +52,10 @@ public class ReviewService {
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
     private static final int ELEVEN = 11;
+    private static final int START = 0;
+    private static final int END = 10;
+    private static final boolean EXIST_NEXT_DATA = true;
+    private static final boolean NOT_EXIST_NEXT_DATA = false;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -154,14 +158,13 @@ public class ReviewService {
         final Long lastReviewId = request.getLastReviewId();
         final String sort = request.getSort();
 
-        final List<SortingReviewDto> sortingReviews = sortReviewService.execute(product, member, lastReviewId, sort);
-        final Boolean hasNextReview = hasMoreReview(sortingReviews);
+        final List<SortingReviewDto> sortingReviewsAll = sortReviewService.execute(product, member, lastReviewId, sort);
 
-        return SortingReviewsResponse.toResponse(sortingReviews, hasNextReview);
-    }
-
-    private Boolean hasMoreReview(final List<SortingReviewDto> reviews) {
-        return reviews.size() == ELEVEN;
+        if (sortingReviewsAll.size() == ELEVEN) {
+            final List<SortingReviewDto> sortingReviews = sortingReviewsAll.subList(START, END);
+            return SortingReviewsResponse.toResponse(sortingReviews, EXIST_NEXT_DATA);
+        }
+        return SortingReviewsResponse.toResponse(sortingReviewsAll, NOT_EXIST_NEXT_DATA);
     }
 
     public RankingReviewsResponse getTopReviews() {

@@ -91,21 +91,23 @@ public class SortReviewService {
         final Long lastReviewId = lastReview.getId();
         if (FAVORITE_COUNT_DESC.equals(sort)) {
             final Long lastReviewFavoriteCount = lastReview.getFavoriteCount();
-            return reviewRepository.sortingReviewsByFavoriteCountDescEquals(product, member, lastReviewFavoriteCount,
-                    lastReviewId);
+            return reviewRepository
+                    .sortingReviewsByFavoriteCountDescEquals(product, member, lastReviewFavoriteCount, lastReviewId, PAGE);
         }
         if (CREATED_AT_DESC.equals(sort)) {
             final LocalDateTime lastReviewCreatedAt = lastReview.getCreatedAt();
-            return reviewRepository.sortingReviewsByCreatedAtDescEquals(product, member, lastReviewCreatedAt,
-                    lastReviewId);
+            return reviewRepository
+                    .sortingReviewsByCreatedAtDescEquals(product, member, lastReviewCreatedAt, lastReviewId, PAGE);
         }
         if (RATING_ASC.equals(sort)) {
             final Long lastReviewRating = lastReview.getRating();
-            return reviewRepository.sortingReviewsByRatingAscEquals(product, member, lastReviewRating, lastReviewId);
+            return reviewRepository
+                    .sortingReviewsByRatingAscEquals(product, member, lastReviewRating, lastReviewId, PAGE);
         }
         if (RATING_DESC.equals(sort)) {
             final Long lastReviewRating = lastReview.getRating();
-            return reviewRepository.sortingReviewsByRatingDescEquals(product, member, lastReviewRating, lastReviewId);
+            return reviewRepository
+                    .sortingReviewsByRatingDescEquals(product, member, lastReviewRating, lastReviewId, PAGE);
         }
         throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND);
     }
