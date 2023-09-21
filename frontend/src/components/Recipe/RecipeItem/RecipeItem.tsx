@@ -1,5 +1,5 @@
 import { Heading, Text, useTheme } from '@fun-eat/design-system';
-import { Fragment, useState } from 'react';
+import { Fragment, memo, useState } from 'react';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/plate.svg';
@@ -59,7 +59,7 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
   );
 };
 
-export default RecipeItem;
+export default memo(RecipeItem);
 
 const ImageWrapper = styled.div`
   position: relative;
