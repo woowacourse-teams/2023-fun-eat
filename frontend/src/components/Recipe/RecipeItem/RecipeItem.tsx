@@ -24,7 +24,7 @@ const RecipeItem = ({ recipe, isMemberPage = false }: RecipeItemProps) => {
         <ImageWrapper>
           {image !== null ? (
             <>
-              <RecipeImage src={image} alt={`조리된 ${title}`} onLoad={() => setIsImageLoading(false)} />
+              <RecipeImage src={image} alt={`조리된 ${title}`} loading="lazy" onLoad={() => setIsImageLoading(false)} />
               {isImageLoading && <Skeleton width={545} height={160} />}
             </>
           ) : (
