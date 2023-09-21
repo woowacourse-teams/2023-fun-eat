@@ -50,17 +50,17 @@ const RecipePage = () => {
           <SvgIcon variant="search" />
         </Link>
       </TitleWrapper>
+      <Spacing size={12} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <SortButtonWrapper>
-            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-          </SortButtonWrapper>
           <RecipeListWrapper ref={recipeRef}>
+            <SortButtonWrapper>
+              <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+            </SortButtonWrapper>
             <RecipeList selectedOption={selectedOption} />
           </RecipeListWrapper>
         </Suspense>
       </ErrorBoundary>
-      <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
         <RegisterButton
           activeLabel={REGISTER_RECIPE}
@@ -103,11 +103,10 @@ const Title = styled(Heading)`
 const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 20px 0;
 `;
 
 const RecipeListWrapper = styled.div`
-  height: calc(100% - 190px);
+  height: calc(100% - 130px);
   overflow-y: auto;
 `;
 
