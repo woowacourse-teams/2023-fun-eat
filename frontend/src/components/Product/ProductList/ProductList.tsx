@@ -48,6 +48,7 @@ const ProductList = ({ category, selectedOption }: ProductListProps) => {
 export default ProductList;
 
 const ProductListContainer = styled.ul`
+  position: relative;
   display: flex;
   flex-direction: column;
 
