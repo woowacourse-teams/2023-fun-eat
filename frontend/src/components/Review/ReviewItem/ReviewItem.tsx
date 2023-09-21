@@ -118,6 +118,7 @@ const RebuyBadge = styled(Badge)`
 const ReviewerImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const RatingIconWrapper = styled.div`

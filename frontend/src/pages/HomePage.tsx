@@ -21,7 +21,7 @@ export const HomePage = () => {
     <>
       <section>
         <Link href={'https://www.instagram.com/p/CxNKXhfyZdw/?igshid=MzRlODBiNWFlZA=='} isExternal>
-          <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
+          <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
         </Link>
       </section>
       <Spacing size={40} />
@@ -79,6 +79,7 @@ export const HomePage = () => {
 
 const Banner = styled.img`
   width: 100%;
+  height: auto;
 `;
 
 const SectionWrapper = styled.section`
