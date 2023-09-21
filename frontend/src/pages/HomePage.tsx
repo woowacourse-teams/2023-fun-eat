@@ -3,7 +3,7 @@ import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import styled from 'styled-components';
 
-import { Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
+import { Loading, ErrorBoundary, ErrorComponent, CategoryFoodList, CategoryStoreList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { IMAGE_URL } from '@/constants';
 import channelTalk from '@/service/channelTalk';
@@ -31,8 +31,10 @@ export const HomePage = () => {
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryList menuVariant="FOOD" />
-          <CategoryList menuVariant="STORE" />
+          <CategoryListWrapper>
+            <CategoryFoodList />
+            <CategoryStoreList />
+          </CategoryListWrapper>
         </Suspense>
         <Spacing size={15} />
       </SectionWrapper>
@@ -84,4 +86,19 @@ const Banner = styled.img`
 
 const SectionWrapper = styled.section`
   padding: 0 20px;
+`;
+
+const CategoryListWrapper = styled.div`
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  @media screen and (min-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
