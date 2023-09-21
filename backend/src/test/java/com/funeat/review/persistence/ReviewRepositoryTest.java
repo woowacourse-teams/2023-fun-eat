@@ -92,7 +92,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var expected = List.of(review1_2, review2_2, review1_3);
 
             // when
-            final var actual = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+            final var actual = reviewRepository.findTop3ByOrderByFavoriteCountDescIdDesc();
 
             // then
             assertThat(actual).usingRecursiveComparison()

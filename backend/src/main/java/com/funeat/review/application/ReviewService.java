@@ -168,7 +168,7 @@ public class ReviewService {
     }
 
     public RankingReviewsResponse getTopReviews() {
-        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDescIdDesc();
 
         final List<RankingReviewDto> dtos = rankingReviews.stream()
                 .map(RankingReviewDto::toDto)

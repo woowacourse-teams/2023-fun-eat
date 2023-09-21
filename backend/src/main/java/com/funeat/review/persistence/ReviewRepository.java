@@ -150,7 +150,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                                                               @Param("lastReviewRating") final Long lastReviewRating,
                                                               final Pageable pageable);
 
-    List<Review> findTop3ByOrderByFavoriteCountDesc();
+    List<Review> findTop3ByOrderByFavoriteCountDescIdDesc();
 
     Long countByProduct(final Product product);
 
