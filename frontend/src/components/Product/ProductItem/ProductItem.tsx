@@ -24,6 +24,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
             width={90}
             height={90}
             alt={`${name}사진`}
+            loading="lazy"
             onLoad={() => setIsImageLoading(false)}
           />
           {isImageLoading && <Skeleton width={90} height={90} />}
