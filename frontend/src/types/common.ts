@@ -1,10 +1,19 @@
 import type { ReactNode } from 'react';
 
 import type { SvgIconVariant } from '@/components/Common/Svg/SvgIcon';
-import type { TAG_TITLE, PRODUCT_SORT_OPTIONS, REVIEW_SORT_OPTIONS, RECIPE_SORT_OPTIONS } from '@/constants';
+import type {
+  TAG_TITLE,
+  PRODUCT_SORT_OPTIONS,
+  REVIEW_SORT_OPTIONS,
+  RECIPE_SORT_OPTIONS,
+  CATEGORY_TYPE,
+} from '@/constants';
 import type { PATH } from '@/constants/path';
 
 export type CategoryVariant = 'food' | 'store';
+
+export type Food = (typeof CATEGORY_TYPE)['FOOD'];
+export type Store = (typeof CATEGORY_TYPE)['STORE'];
 
 export const isCategoryVariant = (value: string): value is CategoryVariant => {
   return value === 'store' || value === 'food';
