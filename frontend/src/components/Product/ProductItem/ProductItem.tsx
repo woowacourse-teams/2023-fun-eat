@@ -61,6 +61,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
 export default ProductItem;
 
 const ProductItemContainer = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   padding: 12px 0;
