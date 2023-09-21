@@ -21,10 +21,8 @@ server:
   tomcat:
     threads:
       max: { MAX_THREADS }
-      min-spare: { MIN_SPARE }
     max-connections: { MAX_CONNECTIONS }
     accept-count: { ACCEPT_COUNT }
-    connection-timeout: { CONNECTION_TIMEOUT }
   servlet:
     session:
       cookie:
