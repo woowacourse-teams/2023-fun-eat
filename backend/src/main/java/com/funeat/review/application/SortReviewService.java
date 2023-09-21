@@ -51,12 +51,10 @@ public class SortReviewService {
     private List<SortingReviewDto> getSortingReviews(final Product product, final Member member,
                                                      final Long lastReviewId,
                                                      final String sort) {
-        // 첫페이지 - 데이터 11개
         if (Objects.equals(lastReviewId, FIRST)) {
             return getSortingReviewsFirstPage(product, member, sort);
         }
 
-        // 첫페이지 이후 - 같은값, 이후값
         final Review lastReview = reviewRepository.findById(lastReviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
 
