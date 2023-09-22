@@ -1,8 +1,9 @@
 import { Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
-import { SvgIcon } from '@/components/Common';
+import { Skeleton, SvgIcon } from '@/components/Common';
 import type { RecipeRanking } from '@/types/ranking';
 
 interface RecipeRankingItemProps {
@@ -18,6 +19,7 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
     author: { nickname, profileImage },
     favoriteCount,
   } = recipe;
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   return (
     <RecipeRankingItemContainer>
@@ -26,7 +28,16 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
         <RankingRecipeWrapper>
           <Spacing direction="horizontal" size={12} />
           {image !== null ? (
-            <RecipeImage src={image} alt={`${rank}위 꿀조합`} width={60} height={60} />
+            <>
+              <RecipeImage
+                src={image}
+                alt={`${rank}위 꿀조합`}
+                width={60}
+                height={60}
+                onLoad={() => setIsImageLoading(false)}
+              />
+              {isImageLoading && <Skeleton width={60} height={60} />}
+            </>
           ) : (
             <RecipePreviewImage width={60} height={60} />
           )}
@@ -74,6 +85,7 @@ const RankingRecipeWrapper = styled.div`
 
 const RecipeImage = styled.img`
   border-radius: 5px;
+  object-fit: cover;
 `;
 
 const TitleFavoriteWrapper = styled.div`
@@ -100,4 +112,5 @@ const AuthorWrapper = styled.div`
 const AuthorImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
+  object-fit: cover;
 `;

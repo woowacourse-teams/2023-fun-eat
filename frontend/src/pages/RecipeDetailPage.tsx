@@ -8,7 +8,7 @@ import { RecipeFavorite } from '@/components/Recipe';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
-const RecipeDetailPage = () => {
+export const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
@@ -69,8 +69,6 @@ const RecipeDetailPage = () => {
     </RecipeDetailPageContainer>
   );
 };
-
-export default RecipeDetailPage;
 
 const RecipeDetailPageContainer = styled.div`
   padding: 20px 20px 0;

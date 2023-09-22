@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
-  CategoryTab,
+  CategoryFoodTab,
+  CategoryStoreTab,
   SortButton,
   SortOptionList,
   ScrollButton,
@@ -23,7 +24,7 @@ import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
-const ProductListPage = () => {
+export const ProductListPage = () => {
   const { category } = useParams();
   const productListRef = useRef<HTMLDivElement>(null);
 
@@ -47,9 +48,7 @@ const ProductListPage = () => {
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={20} />
-        <Suspense fallback={null}>
-          <CategoryTab menuVariant={category} />
-        </Suspense>
+        <Suspense fallback={null}>{category === 'food' ? <CategoryFoodTab /> : <CategoryStoreTab />}</Suspense>
         <Spacing size={20} />
         <ProductListContainer ref={productListRef}>
           <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
@@ -74,8 +73,6 @@ const ProductListPage = () => {
     </>
   );
 };
-
-export default ProductListPage;
 
 const ProductListSection = styled.section`
   height: 100%;

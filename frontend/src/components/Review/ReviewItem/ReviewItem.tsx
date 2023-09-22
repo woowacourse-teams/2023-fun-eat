@@ -1,5 +1,5 @@
 import { Badge, Button, Text, useTheme } from '@fun-eat/design-system';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
@@ -91,7 +91,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
   );
 };
 
-export default ReviewItem;
+export default memo(ReviewItem);
 
 const ReviewItemContainer = styled.div`
   display: flex;
@@ -118,6 +118,7 @@ const RebuyBadge = styled(Badge)`
 const ReviewerImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const RatingIconWrapper = styled.div`

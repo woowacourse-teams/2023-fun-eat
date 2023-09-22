@@ -5,7 +5,7 @@ import { loginApi } from '@/apis';
 import { PATH } from '@/constants/path';
 import { useMemberQuery } from '@/hooks/queries/members';
 
-const AuthPage = () => {
+export const AuthPage = () => {
   const { authProvider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
@@ -57,5 +57,3 @@ const AuthPage = () => {
 
   return <></>;
 };
-
-export default AuthPage;

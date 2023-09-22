@@ -3,12 +3,12 @@ import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import styled from 'styled-components';
 
-import { Loading, ErrorBoundary, ErrorComponent, CategoryList } from '@/components/Common';
+import { Loading, ErrorBoundary, ErrorComponent, CategoryFoodList, CategoryStoreList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { IMAGE_URL } from '@/constants';
 import channelTalk from '@/service/channelTalk';
 
-const HomePage = () => {
+export const HomePage = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   channelTalk.loadScript();
@@ -21,7 +21,7 @@ const HomePage = () => {
     <>
       <section>
         <Link href={'https://www.instagram.com/p/CxNKXhfyZdw/?igshid=MzRlODBiNWFlZA=='} isExternal>
-          <Banner src={`${IMAGE_URL}banner.png`} width={600} alt="이벤트 배너" />
+          <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
         </Link>
       </section>
       <Spacing size={40} />
@@ -31,8 +31,10 @@ const HomePage = () => {
         </Heading>
         <Spacing size={16} />
         <Suspense fallback={null}>
-          <CategoryList menuVariant="FOOD" />
-          <CategoryList menuVariant="STORE" />
+          <CategoryListWrapper>
+            <CategoryFoodList />
+            <CategoryStoreList />
+          </CategoryListWrapper>
         </Suspense>
         <Spacing size={15} />
       </SectionWrapper>
@@ -77,12 +79,26 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
-
 const Banner = styled.img`
   width: 100%;
+  height: auto;
 `;
 
 const SectionWrapper = styled.section`
   padding: 0 20px;
+`;
+
+const CategoryListWrapper = styled.div`
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  @media screen and (min-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
