@@ -20,7 +20,7 @@ export const HomePage = () => {
   return (
     <>
       <section>
-        <Link href={'https://www.instagram.com/p/CxNKXhfyZdw/?igshid=MzRlODBiNWFlZA=='} isExternal>
+        <Link href="https://www.instagram.com/p/CxmlqAQSK-w/?igshid=MzRlODBiNWFlZA==" isExternal>
           <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
         </Link>
       </section>
