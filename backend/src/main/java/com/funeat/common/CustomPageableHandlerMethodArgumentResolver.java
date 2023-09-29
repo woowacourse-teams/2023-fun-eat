@@ -14,8 +14,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class CustomPageableHandlerMethodArgumentResolver extends PageableHandlerMethodArgumentResolver {
 
     @Override
-    public Pageable resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer,
-                                    NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Pageable resolveArgument(final MethodParameter methodParameter, final ModelAndViewContainer mavContainer,
+                                    final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         final Pageable pageable = super.resolveArgument(methodParameter, mavContainer, webRequest, binderFactory);
 
         final Sort lastPrioritySort = Sort.by("id").descending();

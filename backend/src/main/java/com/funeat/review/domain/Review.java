@@ -88,10 +88,6 @@ public class Review {
         this.favoriteCount--;
     }
 
-    public boolean isEqualFavoriteCount(final Long anotherFavoriteCount) {
-        return Objects.equals(this.favoriteCount, anotherFavoriteCount);
-    }
-
     public Long getId() {
         return id;
     }

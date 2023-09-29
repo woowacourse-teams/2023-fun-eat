@@ -11,7 +11,8 @@ public class TestPlatformUserProvider implements PlatformUserProvider {
 
     @Override
     public UserInfoDto getPlatformUser(final String code) {
-        return new UserInfoDto(1L, code, String.format("www.%s.com", code));
+        return new UserInfoDto(Long.valueOf(code), String.format("member%s", code),
+                String.format("www.member%s.com", code));
     }
 
     @Override

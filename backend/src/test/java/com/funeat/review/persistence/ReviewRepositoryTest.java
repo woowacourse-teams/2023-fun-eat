@@ -5,7 +5,8 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
+import static com.funeat.fixture.PageFixture.페이지요청_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
@@ -56,10 +57,10 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var actual2 = reviewRepository.countByProduct(product2);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actual1)
+            assertSoftly(soft -> {
+                soft.assertThat(actual1)
                         .isEqualTo(3);
-                softAssertions.assertThat(actual2)
+                soft.assertThat(actual2)
                         .isEqualTo(1);
             });
         }
@@ -87,7 +88,7 @@ class ReviewRepositoryTest extends RepositoryTest {
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 
-            final var page = 페이지요청_좋아요_내림차순_생성(0, 2);
+            final var page = 페이지요청_생성(0, 2, 좋아요수_내림차순);
 
             final var expected = List.of(review1, review3);
 

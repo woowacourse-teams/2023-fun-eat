@@ -18,6 +18,11 @@ logging:
     path: { LOG_DIR }
 
 server:
+  tomcat:
+    threads:
+      max: { MAX_THREADS }
+    max-connections: { MAX_CONNECTIONS }
+    accept-count: { ACCEPT_COUNT }
   servlet:
     session:
       cookie:

@@ -1,10 +1,13 @@
-import type { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { PATH } from '@/constants/path';
 import { useMemberQuery } from '@/hooks/queries/members';
 
-const AuthLayout = ({ children }: PropsWithChildren) => {
+interface AuthLayoutProps {
+  children: JSX.Element;
+}
+
+const AuthLayout = ({ children }: AuthLayoutProps) => {
   const { data: member } = useMemberQuery();
 
   if (!member) {

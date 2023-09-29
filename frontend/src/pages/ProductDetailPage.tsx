@@ -1,6 +1,5 @@
 import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import type { MouseEventHandler } from 'react';
 import { useState, useRef, Suspense } from 'react';
 import ReactGA from 'react-ga4';
 import { useParams, Link as RouterLink } from 'react-router-dom';
@@ -22,7 +21,7 @@ import { ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
-import { useSortOption } from '@/hooks/common';
+import { useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
@@ -31,24 +30,24 @@ const LOGIN_ERROR_MESSAGE_REVIEW =
 const LOGIN_ERROR_MESSAGE_RECIPE =
   '로그인 후 상품 꿀조합을 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 꿀조합을 확인해보세요 😊';
 
-const ProductDetailPage = () => {
+export const ProductDetailPage = () => {
   const { category, productId } = useParams();
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
   const { reset } = useQueryErrorResetBoundary();
 
-  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
-  const [selectedTabMenu, setSelectedTabMenu] = useState(tabMenus[0]);
+  const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
   const tabRef = useRef<HTMLUListElement>(null);
 
-  const isReviewTab = selectedTabMenu === tabMenus[0];
-  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
-  const initialSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
-
-  const { selectedOption, selectSortOption } = useSortOption(initialSortOption);
+  const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
-
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+
+  const productDetailPageRef = useRef<HTMLDivElement>(null);
+
+  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
+  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
+  const currentSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
 
   if (!category) {
     return null;
@@ -64,9 +63,9 @@ const ProductDetailPage = () => {
     handleOpenBottomSheet();
   };
 
-  const handleTabMenuSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
-    setSelectedTabMenu(event.currentTarget.value);
-    selectSortOption(initialSortOption);
+  const handleTabMenuSelect = (index: number) => {
+    handleTabMenuClick(index);
+    selectSortOption(currentSortOption);
 
     ReactGA.event({
       category: '버튼',
@@ -76,7 +75,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <>
+    <ProductDetailPageContainer ref={productDetailPageRef}>
       <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
@@ -124,7 +123,7 @@ const ProductDetailPage = () => {
           onClick={handleOpenRegisterReviewSheet}
         />
       </ReviewRegisterButtonWrapper>
-      <ScrollButton />
+      <ScrollButton targetRef={productDetailPageRef} />
       <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
@@ -132,6 +131,7 @@ const ProductDetailPage = () => {
               targetRef={tabRef}
               productId={Number(productId)}
               closeReviewDialog={handleCloseBottomSheet}
+              initTabMenu={initTabMenu}
             />
           </ReviewFormProvider>
         ) : (
@@ -143,11 +143,18 @@ const ProductDetailPage = () => {
           />
         )}
       </BottomSheet>
-    </>
+    </ProductDetailPageContainer>
   );
 };
 
-export default ProductDetailPage;
+const ProductDetailPageContainer = styled.div`
+  height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const SortButtonWrapper = styled.div`
   display: flex;

@@ -1,16 +1,17 @@
-import { Button, Heading, Spacing } from '@fun-eat/design-system';
+import { Button, Spacing } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Input, SectionTitle, SvgIcon } from '@/components/Common';
+import { SectionTitle, SvgIcon } from '@/components/Common';
+import { MemberModifyInput } from '@/components/Members';
 import { IMAGE_MAX_SIZE } from '@/constants';
 import { useFormData, useImageUploader } from '@/hooks/common';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 
-const MemberModifyPage = () => {
+export const MemberModifyPage = () => {
   const { data: member } = useMemberQuery();
   const { mutate } = useMemberModifyMutation();
 
@@ -85,11 +86,7 @@ const MemberModifyPage = () => {
             </MemberImageUploaderWrapper>
           </MemberImageUploaderContainer>
           <Spacing size={44} />
-          <Heading as="h2" size="xl" tabIndex={0}>
-            닉네임
-          </Heading>
-          <Spacing size={12} />
-          <Input value={nickname} customWidth="100%" onChange={modifyNickname} />
+          <MemberModifyInput nickname={nickname} modifyNickname={modifyNickname} />
         </div>
         <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold">
           수정하기
@@ -98,8 +95,6 @@ const MemberModifyPage = () => {
     </>
   );
 };
-
-export default MemberModifyPage;
 
 const MemberImageUploaderContainer = styled.div`
   display: flex;

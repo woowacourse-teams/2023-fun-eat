@@ -48,6 +48,7 @@ public class ReviewService {
 
     private static final int TOP = 0;
     private static final int ONE = 1;
+    private static final String EMPTY_URL = "";
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -80,7 +81,7 @@ public class ReviewService {
 
         final String imageUrl = Optional.ofNullable(image)
                 .map(imageUploader::upload)
-                .orElse("");
+                .orElse(EMPTY_URL);
         final Review savedReview = reviewRepository.save(
                 new Review(findMember, findProduct, imageUrl, reviewRequest.getRating(), reviewRequest.getContent(),
                         reviewRequest.getRebuy()));
@@ -94,6 +95,7 @@ public class ReviewService {
         final Long countByProduct = reviewRepository.countByProduct(findProduct);
 
         findProduct.updateAverageRating(savedReview.getRating(), countByProduct);
+        findProduct.addReviewCount();
         reviewTagRepository.saveAll(reviewTags);
     }
 

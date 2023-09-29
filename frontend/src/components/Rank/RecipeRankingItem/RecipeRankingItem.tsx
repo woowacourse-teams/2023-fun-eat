@@ -1,8 +1,9 @@
 import { Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
-import { SvgIcon } from '@/components/Common';
+import { Skeleton, SvgIcon } from '@/components/Common';
 import type { RecipeRanking } from '@/types/ranking';
 
 interface RecipeRankingItemProps {
@@ -18,20 +19,29 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
     author: { nickname, profileImage },
     favoriteCount,
   } = recipe;
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   return (
     <RecipeRankingItemContainer>
       <Spacing direction="horizontal" size={12} />
       <RecipeRankingWrapper>
         <RankingRecipeWrapper>
-          <Text weight="bold">{rank}</Text>
           <Spacing direction="horizontal" size={12} />
           {image !== null ? (
-            <RecipeImage src={image} alt={`${rank}위 꿀조합`} width={60} height={60} />
+            <>
+              <RecipeImage
+                src={image}
+                alt={`${rank}위 꿀조합`}
+                width={60}
+                height={60}
+                onLoad={() => setIsImageLoading(false)}
+              />
+              {isImageLoading && <Skeleton width={60} height={60} />}
+            </>
           ) : (
             <RecipePreviewImage width={60} height={60} />
           )}
-          <Spacing direction="horizontal" size={12} />
+          <Spacing direction="horizontal" size={20} />
           <TitleFavoriteWrapper>
             <Text weight="bold">{title}</Text>
             <FavoriteWrapper>
@@ -57,16 +67,15 @@ export default RecipeRankingItem;
 
 const RecipeRankingItemContainer = styled.div`
   width: calc(100% - 50px);
-  height: 72px;
   max-width: 560px;
   margin: 12px 0;
-  padding: 0 24px;
+  padding: 0 5px;
 `;
 
 const RecipeRankingWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 95%;
 `;
 
 const RankingRecipeWrapper = styled.div`
@@ -76,6 +85,7 @@ const RankingRecipeWrapper = styled.div`
 
 const RecipeImage = styled.img`
   border-radius: 5px;
+  object-fit: cover;
 `;
 
 const TitleFavoriteWrapper = styled.div`
@@ -102,4 +112,5 @@ const AuthorWrapper = styled.div`
 const AuthorImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
+  object-fit: cover;
 `;

@@ -1,16 +1,17 @@
 import { Spacing } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import styled from 'styled-components';
 
 import { ErrorBoundary, ErrorComponent, Loading, NavigableSectionTitle } from '@/components/Common';
 import { MembersInfo, MemberReviewList, MemberRecipeList } from '@/components/Members';
 import { PATH } from '@/constants/path';
 
-const MemberPage = () => {
+export const MemberPage = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
-    <>
+    <MemberPageContainer>
       <Suspense fallback={<Loading />}>
         <MembersInfo />
       </Suspense>
@@ -30,8 +31,10 @@ const MemberPage = () => {
         </Suspense>
       </ErrorBoundary>
       <Spacing size={40} />
-    </>
+    </MemberPageContainer>
   );
 };
 
-export default MemberPage;
+const MemberPageContainer = styled.div`
+  padding: 20px 20px 0;
+`;

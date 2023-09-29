@@ -1,5 +1,6 @@
 [
-  { "id": 7, "name": "CU" },
-  { "id": 8, "name": "GS25" },
-  { "id": 9, "name": "이마트24" }
+  { "id": 6, "name": "CU", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 7, "name": "GS25", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 8, "name": "이마트24", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" },
+  { "id": 9, "name": "세븐일레븐", "image": "https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771029052.jpg" }
 ]

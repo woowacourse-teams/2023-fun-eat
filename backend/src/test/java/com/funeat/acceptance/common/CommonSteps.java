@@ -2,10 +2,13 @@ package com.funeat.acceptance.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.funeat.common.dto.PageDto;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -42,19 +45,33 @@ public class CommonSteps {
         assertThat(actual).isEqualTo(expected);
     }
 
-    public static MultiPartSpecification 사진_명세_요청() {
-        return new MultiPartSpecBuilder("image".getBytes())
-                .fileName("testImage.png")
-                .controlName("image")
-                .mimeType("image/png")
-                .build();
-    }
-
     public static MultiPartSpecification 사진_명세_요청(final String name) {
         return new MultiPartSpecBuilder("image".getBytes())
                 .fileName(String.format("%s.png", name))
                 .controlName("image")
                 .mimeType("image/png")
                 .build();
+    }
+
+    public static List<MultiPartSpecification> 여러개_사진_명세_요청(final String... names) {
+        final var images = new ArrayList<MultiPartSpecification>();
+
+        for (final String name : names) {
+            images.add(new MultiPartSpecBuilder("image".getBytes())
+                    .fileName(String.format("%s.png", name))
+                    .controlName("image")
+                    .mimeType("image/png")
+                    .build()
+            );
+        }
+
+        return images;
+    }
+
+    public static void 페이지를_검증한다(final ExtractableResponse<Response> response, final PageDto expected) {
+        final var actual = response.jsonPath().getObject("page", PageDto.class);
+
+        assertThat(actual).usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 }

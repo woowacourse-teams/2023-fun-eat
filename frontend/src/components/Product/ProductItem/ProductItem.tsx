@@ -1,8 +1,9 @@
 import { Text, useTheme } from '@fun-eat/design-system';
+import { memo, useState } from 'react';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
-import { SvgIcon } from '@/components/Common';
+import { Skeleton, SvgIcon } from '@/components/Common';
 import type { Product } from '@/types/product';
 
 interface ProductItemProps {
@@ -12,11 +13,22 @@ interface ProductItemProps {
 const ProductItem = ({ product }: ProductItemProps) => {
   const theme = useTheme();
   const { name, price, image, averageRating, reviewCount } = product;
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   return (
     <ProductItemContainer>
       {image !== null ? (
-        <img src={image} width={90} height={90} alt={`${name}사진`} />
+        <>
+          <ProductImage
+            src={image}
+            width={90}
+            height={90}
+            alt={`${name}사진`}
+            loading="lazy"
+            onLoad={() => setIsImageLoading(false)}
+          />
+          {isImageLoading && <Skeleton width={90} height={90} />}
+        </>
       ) : (
         <PreviewImage width={90} height={90} />
       )}
@@ -46,12 +58,17 @@ const ProductItem = ({ product }: ProductItemProps) => {
   );
 };
 
-export default ProductItem;
+export default memo(ProductItem);
 
 const ProductItemContainer = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   padding: 12px 0;
+`;
+
+const ProductImage = styled.img`
+  object-fit: cover;
 `;
 
 const ProductInfoWrapper = styled.div`

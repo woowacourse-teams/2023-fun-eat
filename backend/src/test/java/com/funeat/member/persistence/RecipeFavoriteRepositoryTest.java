@@ -67,10 +67,10 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
             final var fakeMemberActual = recipeFavoriteRepository.findByMemberAndRecipe(fakeMember, recipe);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(realMemberActual)
+            assertSoftly(soft -> {
+                soft.assertThat(realMemberActual)
                         .isNotEmpty();
-                softAssertions.assertThat(fakeMemberActual)
+                soft.assertThat(fakeMemberActual)
                         .isEmpty();
             });
         }
@@ -115,10 +115,10 @@ class RecipeFavoriteRepositoryTest extends RepositoryTest {
                     recipe);
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(realMemberActual)
+            assertSoftly(soft -> {
+                soft.assertThat(realMemberActual)
                         .isTrue();
-                softAssertions.assertThat(fakeMemberActual)
+                soft.assertThat(fakeMemberActual)
                         .isFalse();
             });
         }

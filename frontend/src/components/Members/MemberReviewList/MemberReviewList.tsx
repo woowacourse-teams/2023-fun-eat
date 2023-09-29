@@ -48,7 +48,13 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
       <MemberReviewListWrapper>
         {reviewsToDisplay.map((reviewRanking) => (
           <li key={reviewRanking.reviewId}>
-            <ReviewRankingItem reviewRanking={reviewRanking} />
+            <Link
+              as={RouterLink}
+              to={`${PATH.PRODUCT_LIST}/${reviewRanking.categoryType}/${reviewRanking.productId}`}
+              block
+            >
+              <ReviewRankingItem reviewRanking={reviewRanking} />
+            </Link>
           </li>
         ))}
       </MemberReviewListWrapper>

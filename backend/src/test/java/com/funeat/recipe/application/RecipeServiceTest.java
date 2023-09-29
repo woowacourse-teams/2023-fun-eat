@@ -6,9 +6,10 @@ import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_내림차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_생성_시간_오름차순_생성;
-import static com.funeat.fixture.PageFixture.페이지요청_좋아요_내림차순_생성;
+import static com.funeat.fixture.PageFixture.과거순;
+import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
+import static com.funeat.fixture.PageFixture.최신순;
+import static com.funeat.fixture.PageFixture.페이지요청_생성;
 import static com.funeat.fixture.ProductFixture.레시피_안에_들어가는_상품_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
@@ -38,12 +39,13 @@ import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -88,7 +90,7 @@ class RecipeServiceTest extends ServiceTest {
     @Test
     void 레시피의_상세_정보를_조회할_수_있다() {
         // given
-        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD));
+        final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
         final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
         final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
         final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
@@ -205,7 +207,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1, recipeImage1_2);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.findRecipeByMember(member1.getId(), page);
@@ -231,9 +233,9 @@ class RecipeServiceTest extends ServiceTest {
         void 사용자가_작성한_꿀조합이_없을때_꿀조합은_빈상태로_조회된다() {
             // given
             final var member1 = 멤버_멤버1_생성();
-            복수_멤버_저장(member1);
+            단일_멤버_저장(member1);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.findRecipeByMember(member1.getId(), page);
@@ -253,7 +255,7 @@ class RecipeServiceTest extends ServiceTest {
         void 존재하지_않는_멤버가_해당_멤버의_레시피를_조회하면_예외가_발생한다() {
             // given
             final var notExistMemberId = 99999L;
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when & then
             assertThatThrownBy(() -> recipeService.findRecipeByMember(notExistMemberId, page))
@@ -298,7 +300,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1_1, recipeImage1_2_1);
 
-            final var page = 페이지요청_좋아요_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 좋아요수_내림차순);
 
             // when
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
@@ -348,7 +350,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1_1, recipeImage1_2_1);
 
-            final var page = 페이지요청_생성_시간_내림차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 최신순);
 
             // when
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
@@ -398,7 +400,7 @@ class RecipeServiceTest extends ServiceTest {
             final var recipeImage1_2_2 = 레시피이미지_생성(recipe1_2);
             복수_꿀조합_이미지_저장(recipeImage1_1_1, recipeImage1_2_1);
 
-            final var page = 페이지요청_생성_시간_오름차순_생성(0, 10);
+            final var page = 페이지요청_생성(0, 10, 과거순);
 
             // when
             final var actual = recipeService.getSortingRecipes(page).getRecipes();
@@ -448,10 +450,10 @@ class RecipeServiceTest extends ServiceTest {
             final var actualRecipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, actualRecipe).get();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualRecipe.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualRecipe.getFavoriteCount())
                         .isOne();
-                softAssertions.assertThat(actualRecipeFavorite.getFavorite())
+                soft.assertThat(actualRecipeFavorite.getFavorite())
                         .isTrue();
             });
         }
@@ -489,10 +491,10 @@ class RecipeServiceTest extends ServiceTest {
             final var actualRecipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, actualRecipe).get();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actualRecipe.getFavoriteCount())
+            assertSoftly(soft -> {
+                soft.assertThat(actualRecipe.getFavoriteCount())
                         .isZero();
-                softAssertions.assertThat(actualRecipeFavorite.getFavorite())
+                soft.assertThat(actualRecipeFavorite.getFavorite())
                         .isFalse();
             });
         }
@@ -545,7 +547,7 @@ class RecipeServiceTest extends ServiceTest {
 
     private <T> void 해당멤버의_꿀조합과_페이징_결과를_검증한다(final MemberRecipesResponse actual, final List<T> expectedRecipesDtos,
                                              final PageDto expectedPage) {
-        assertSoftly(softAssertions -> {
+        assertSoftly(soft -> {
             assertThat(actual.getRecipes()).usingRecursiveComparison()
                     .isEqualTo(expectedRecipesDtos);
             assertThat(actual.getPage()).usingRecursiveComparison()

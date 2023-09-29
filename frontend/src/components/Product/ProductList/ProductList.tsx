@@ -7,35 +7,32 @@ import ProductItem from '../ProductItem/ProductItem';
 
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
-import { useCategoryContext } from '@/hooks/context';
+import { useCategoryValueContext } from '@/hooks/context';
 import { useInfiniteProductsQuery } from '@/hooks/queries/product';
 import type { CategoryVariant, SortOption } from '@/types/common';
-import displaySlice from '@/utils/displaySlice';
 
 interface ProductListProps {
   category: CategoryVariant;
-  isHomePage?: boolean;
   selectedOption?: SortOption;
 }
 
-const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps) => {
+const ProductList = ({ category, selectedOption }: ProductListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const { categoryIds } = useCategoryContext();
+  const { categoryIds } = useCategoryValueContext();
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteProductsQuery(
     categoryIds[category],
     selectedOption?.value ?? 'reviewCount,desc'
   );
-  const productList = data.pages.flatMap((page) => page.products);
-  const productsToDisplay = displaySlice(isHomePage, productList);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+
+  const productList = data.pages.flatMap((page) => page.products);
 
   return (
     <>
       <ProductListContainer>
-        {productsToDisplay.map((product) => (
+        {productList.map((product) => (
           <li key={product.id}>
             <Link as={RouterLink} to={`${PATH.PRODUCT_LIST}/${category}/${product.id}`}>
               <ProductItem product={product} />
@@ -43,10 +40,11 @@ const ProductList = ({ category, isHomePage, selectedOption }: ProductListProps)
           </li>
         ))}
       </ProductListContainer>
-      <div ref={scrollRef} aria-hidden />
+      <div ref={scrollRef} aria-hidden style={{ height: '1px' }} />
     </>
   );
 };
+
 export default ProductList;
 
 const ProductListContainer = styled.ul`

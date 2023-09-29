@@ -1,5 +1,8 @@
 package com.funeat.acceptance.review;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
+import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_ID_추출;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
 import static io.restassured.RestAssured.given;
 
 import com.funeat.review.dto.ReviewCreateRequest;
@@ -7,16 +10,19 @@ import com.funeat.review.dto.ReviewFavoriteRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReviewSteps {
 
-    public static ExtractableResponse<Response> 단일_리뷰_요청(final Long productId, final MultiPartSpecification image,
-                                                         final ReviewCreateRequest request, final String loginCookie) {
+    public static ExtractableResponse<Response> 리뷰_작성_요청(final String loginCookie, final Long productId,
+                                                         final MultiPartSpecification image,
+                                                         final ReviewCreateRequest request) {
         final var requestSpec = given()
                 .cookie("FUNEAT", loginCookie);
 
-        if (image != null) {
+        if (Objects.nonNull(image)) {
             requestSpec.multiPart(image);
         }
 
@@ -28,9 +34,8 @@ public class ReviewSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 리뷰_좋아요_요청(final Long productId, final Long reviewId,
-                                                          final ReviewFavoriteRequest request,
-                                                          final String loginCookie) {
+    public static ExtractableResponse<Response> 리뷰_좋아요_요청(final String loginCookie, final Long productId,
+                                                          final Long reviewId, final ReviewFavoriteRequest request) {
         return given()
                 .cookie("FUNEAT", loginCookie)
                 .contentType("application/json")
@@ -41,8 +46,17 @@ public class ReviewSteps {
                 .extract();
     }
 
+    public static void 여러명이_리뷰_좋아요_요청(final List<Long> memberIds, final Long productId, final Long reviewId,
+                                      final Boolean favorite) {
+        final var request = 리뷰좋아요요청_생성(favorite);
+
+        for (final var memberId : memberIds) {
+            리뷰_좋아요_요청(로그인_쿠키_획득(memberId), productId, reviewId, request);
+        }
+    }
+
     public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie, final Long productId,
-                                                                final String sort, final Integer page) {
+                                                                final String sort, final Long page) {
         return given()
                 .cookie("FUNEAT", loginCookie)
                 .queryParam("sort", sort)

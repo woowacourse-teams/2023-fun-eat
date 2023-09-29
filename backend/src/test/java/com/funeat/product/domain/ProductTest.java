@@ -48,10 +48,10 @@ class ProductTest {
             final var actual2 = product.getAverageRating();
 
             // then
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThat(actual1)
+            assertSoftly(soft -> {
+                soft.assertThat(actual1)
                         .isEqualTo(4.0);
-                softAssertions.assertThat(actual2)
+                soft.assertThat(actual2)
                         .isEqualTo(3.0);
             });
         }

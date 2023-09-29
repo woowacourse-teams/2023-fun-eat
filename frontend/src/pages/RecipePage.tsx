@@ -1,6 +1,6 @@
 import { BottomSheet, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -16,6 +16,7 @@ import {
 } from '@/components/Common';
 import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
+import { PATH } from '@/constants/path';
 import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useSortOption } from '@/hooks/common';
 
@@ -23,11 +24,13 @@ const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
 const REGISTER_RECIPE_AFTER_LOGIN = '로그인 후 꿀조합을 작성할 수 있어요';
 
-const RecipePage = () => {
+export const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { reset } = useQueryErrorResetBoundary();
+
+  const recipeRef = useRef<HTMLDivElement>(null);
 
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
@@ -41,21 +44,23 @@ const RecipePage = () => {
 
   return (
     <>
-      <Title size="xl" weight="bold">
-        {RECIPE_PAGE_TITLE}
-      </Title>
-      <SearchPageLink as={RouterLink} to="/search">
-        <SvgIcon variant="search" />
-      </SearchPageLink>
+      <TitleWrapper>
+        <Title>{RECIPE_PAGE_TITLE}</Title>
+        <Link as={RouterLink} to={`${PATH.SEARCH}/recipes`}>
+          <SvgIcon variant="search" />
+        </Link>
+      </TitleWrapper>
+      <Spacing size={12} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <SortButtonWrapper>
-            <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
-          </SortButtonWrapper>
-          <RecipeList selectedOption={selectedOption} />
+          <RecipeListWrapper ref={recipeRef}>
+            <SortButtonWrapper>
+              <SortButton option={selectedOption} onClick={handleOpenSortOptionSheet} />
+            </SortButtonWrapper>
+            <RecipeList selectedOption={selectedOption} />
+          </RecipeListWrapper>
         </Suspense>
       </ErrorBoundary>
-      <Spacing size={80} />
       <RecipeRegisterButtonWrapper>
         <RegisterButton
           activeLabel={REGISTER_RECIPE}
@@ -63,7 +68,7 @@ const RecipePage = () => {
           onClick={handleOpenRegisterRecipeSheet}
         />
       </RecipeRegisterButtonWrapper>
-      <ScrollButton isRecipePage />
+      <ScrollButton targetRef={recipeRef} isRecipePage />
       <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         {activeSheet === 'sortOption' ? (
           <SortOptionList
@@ -82,22 +87,25 @@ const RecipePage = () => {
   );
 };
 
-export default RecipePage;
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+`;
 
 const Title = styled(Heading)`
   font-size: 24px;
 `;
 
-const SearchPageLink = styled(Link)`
-  position: absolute;
-  top: 24px;
-  right: 20px;
-`;
-
 const SortButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 20px 0;
+`;
+
+const RecipeListWrapper = styled.div`
+  height: calc(100% - 130px);
+  overflow-y: auto;
 `;
 
 const RecipeRegisterButtonWrapper = styled.div`
