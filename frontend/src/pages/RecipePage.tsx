@@ -18,7 +18,7 @@ import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
 import { RECIPE_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import RecipeFormProvider from '@/contexts/RecipeFormContext';
-import { useSortOption } from '@/hooks/common';
+import { useGA, useSortOption } from '@/hooks/common';
 
 const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
@@ -29,17 +29,20 @@ export const RecipePage = () => {
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { reset } = useQueryErrorResetBoundary();
+  const { gaEvent } = useGA();
 
   const recipeRef = useRef<HTMLDivElement>(null);
 
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
     handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '꿀조합 작성 버튼 클릭', label: '꿀조합 작성' });
   };
 
   const handleOpenSortOptionSheet = () => {
     setActiveSheet('sortOption');
     handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '꿀조합 정렬 버튼 클릭', label: '꿀조합 정렬' });
   };
 
   return (
