@@ -7,7 +7,7 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useImageUploader, useFormData } from '@/hooks/common';
+import { useImageUploader, useFormData, useGA } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest } from '@/types/recipe';
@@ -32,6 +32,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   });
 
   const { mutate, isLoading } = useRecipeRegisterFormMutation();
+  const { gaEvent } = useGA();
 
   const isValid =
     recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
@@ -44,6 +45,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
 
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+    gaEvent({ category: 'submit', action: '꿀조합 등록하기 버튼 클릭', label: '꿀조합 등록' });
 
     mutate(formData, {
       onSuccess: () => {
@@ -91,7 +93,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
         </Text>
         <Spacing size={10} />
         <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid || isLoading}>
-          레시피 등록하기
+          꿀조합 등록하기
         </FormButton>
         <Spacing size={50} />
       </form>

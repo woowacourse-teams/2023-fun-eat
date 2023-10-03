@@ -36,7 +36,7 @@ export const RecipePage = () => {
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
     handleOpenBottomSheet();
-    gaEvent({ category: 'button', action: '꿀조합 작성 버튼 클릭', label: '꿀조합 작성' });
+    gaEvent({ category: 'button', action: '꿀조합 작성하기 버튼 클릭', label: '꿀조합 작성' });
   };
 
   const handleOpenSortOptionSheet = () => {
