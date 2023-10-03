@@ -20,16 +20,16 @@ export const Default: Story = {
     const { isOpen, showToast } = useToast();
 
     const handleClick = () => {
-      showToast();
+      showToast('토스트메세지');
     };
 
     return (
-      <>
-        <div style={{ width: '375px' }}>
+      <div style={{ width: '375px' }}>
+        <>
           <button onClick={handleClick}>토스트 테스트</button>
           {isOpen && <Toast message="토스트 메세지" />}
-        </div>
-      </>
+        </>
+      </div>
     );
   },
 };
@@ -39,7 +39,7 @@ export const Error: Story = {
     const { isOpen, showToast } = useToast();
 
     const handleClick = () => {
-      showToast();
+      showToast('토스트메세지');
     };
 
     return (

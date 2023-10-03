@@ -1,6 +1,6 @@
 import { Text, useTheme } from '@fun-eat/design-system';
 import { createPortal } from 'react-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { useToast } from '@/hooks/common';
 import { fadeOut, slideIn } from '@/styles/animations';
@@ -10,7 +10,7 @@ interface ToastProps {
   message: string;
 }
 
-const Toast = ({ isError, message }: ToastProps) => {
+const Toast = ({ isError = false, message }: ToastProps) => {
   const theme = useTheme();
   const { isAnimating } = useToast();
 
@@ -24,19 +24,16 @@ const Toast = ({ isError, message }: ToastProps) => {
 
 export default Toast;
 
-type ToastStyleProps = Pick<ToastProps, 'isError'>;
+type ToastStyleProps = Pick<ToastProps, 'isError'> & { isAnimating?: boolean };
 
-const ToastContainer = styled.div<ToastStyleProps & { isAnimating?: boolean }>`
+const ToastContainer = styled.div<ToastStyleProps>`
   position: fixed;
   width: calc(100% - 40px);
-  max-width: 560px;
   height: 55px;
+  max-width: 560px;
   border-radius: 10px;
   background: ${({ isError, theme }) => (isError ? theme.colors.error : theme.colors.black)};
-  animation: ${({ isAnimating }) =>
-    css`
-      ${isAnimating ? slideIn : fadeOut} .3s ease-in-out forwards;
-    `};
+  animation: ${({ isAnimating }) => (isAnimating ? slideIn : fadeOut)} 0.3s ease-in-out forwards;
 `;
 
 const MessageWrapper = styled(Text)`
