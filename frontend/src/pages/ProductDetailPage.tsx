@@ -58,7 +58,7 @@ export const ProductDetailPage = () => {
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
     handleOpenBottomSheet();
-    gaEvent({ category: 'button', action: '상품 리뷰 작성 버튼 클릭', label: '상품 리뷰 작성' });
+    gaEvent({ category: 'button', action: '상품 리뷰 작성하기 버튼 클릭', label: '상품 리뷰 작성' });
   };
 
   const handleOpenSortOptionSheet = () => {
