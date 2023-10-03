@@ -59,7 +59,7 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    gaEvent({ category: 'submit', action: '상품 리뷰 등록하기 버튼 클릭', label: '상품 리뷰 등록' });
+    gaEvent({ category: 'submit', action: '상품 리뷰 등록', label: '상품 리뷰 등록' });
 
     mutate(formData, {
       onSuccess: () => {

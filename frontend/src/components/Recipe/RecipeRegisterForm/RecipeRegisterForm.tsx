@@ -45,7 +45,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
 
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    gaEvent({ category: 'submit', action: '꿀조합 등록하기 버튼 클릭', label: '꿀조합 등록' });
+    gaEvent({ category: 'submit', action: '꿀조합 등록', label: '꿀조합 등록' });
 
     mutate(formData, {
       onSuccess: () => {
