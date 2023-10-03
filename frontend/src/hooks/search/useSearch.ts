@@ -2,6 +2,8 @@ import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 're
 import { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { useGA } from '../common';
+
 const useSearch = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -11,6 +13,8 @@ const useSearch = () => {
   const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
   const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
   const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(searchQuery.length > 0);
+
+  const { gaEvent } = useGA();
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -26,6 +30,7 @@ const useSearch = () => {
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    gaEvent({ category: 'submit', action: '검색 페이지에서 검색', label: '검색' });
 
     const trimmedSearchQuery = searchQuery.trim();
 
