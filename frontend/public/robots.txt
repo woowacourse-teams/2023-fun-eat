@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /404
+Allow: /
+
+# Host
+Host: https://funeat.site/
+
+# Sitemaps
+Sitemap: https://funeat.site/sitemap.xml
