@@ -7,7 +7,7 @@ import RecipeNameInput from '../RecipeNameInput/RecipeNameInput';
 import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
-import { useImageUploader, useFormData, useGA } from '@/hooks/common';
+import { useImageUploader, useFormData } from '@/hooks/common';
 import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest } from '@/types/recipe';
@@ -32,7 +32,6 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
   });
 
   const { mutate, isLoading } = useRecipeRegisterFormMutation();
-  const { gaEvent } = useGA();
 
   const isValid =
     recipeFormValue.title.length > 0 && recipeFormValue.content.length > 0 && recipeFormValue.productIds.length > 0;
@@ -45,7 +44,6 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
 
   const handleRecipeFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    gaEvent({ category: 'submit', action: '꿀조합 등록', label: '꿀조합 등록' });
 
     mutate(formData, {
       onSuccess: () => {

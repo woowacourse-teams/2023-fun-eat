@@ -10,7 +10,7 @@ import StarRate from '../StarRate/StarRate';
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
-import { useFormData, useGA, useImageUploader, useScroll } from '@/hooks/common';
+import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
 import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
@@ -36,7 +36,6 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
 
   const { data: productDetail } = useProductDetailQuery(productId);
   const { mutate, isLoading } = useReviewRegisterFormMutation(productId);
-  const { gaEvent } = useGA();
 
   const isValid =
     reviewFormValue.rating > MIN_RATING_SCORE &&
@@ -59,7 +58,6 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    gaEvent({ category: 'submit', action: '상품 리뷰 등록', label: '상품 리뷰 등록' });
 
     mutate(formData, {
       onSuccess: () => {
