@@ -6,10 +6,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class ReviewSearchCondition {
 
     private final Long productId;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime from;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime to;
+
     private final Long id;
     private final Long totalElements;
     private final Long prePage;
