@@ -34,12 +34,7 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
   };
 
   const deleteToast = (id: number) => {
-    const toastId = toasts.findIndex((e) => e.id === id);
-    if (toastId === -1) return;
-
-    const newToastItems = [...toasts];
-    newToastItems.splice(toastId, 1);
-    setToasts(newToastItems);
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
   };
 
   const toast = {
@@ -67,7 +62,7 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
               <Toast key={toast.id} id={toast.id} message={toast.message} isError={toast.isError} />
             ))}
           </ToastContainer>,
-          document.body
+          document.getElementById('toast-container') as HTMLElement
         )}
       </ToastValueContext.Provider>
     </ToastActionContext.Provider>
@@ -78,6 +73,7 @@ export default ToastProvider;
 
 const ToastContainer = styled.div`
   position: fixed;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
