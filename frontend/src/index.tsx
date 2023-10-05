@@ -8,6 +8,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { SvgSprite } from './components/Common';
 import { ENVIRONMENT } from './constants';
+import ToastProvider from './contexts/ToastContext';
 import router from './router';
 import GlobalStyle from './styles/globalStyle';
 
@@ -42,7 +43,9 @@ root.render(
       <FunEatProvider>
         <SvgSprite />
         <GlobalStyle />
-        <RouterProvider router={router} fallbackElement={<p>...loading</p>} />
+        <ToastProvider>
+          <RouterProvider router={router} fallbackElement={<p>...loading</p>} />
+        </ToastProvider>
       </FunEatProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

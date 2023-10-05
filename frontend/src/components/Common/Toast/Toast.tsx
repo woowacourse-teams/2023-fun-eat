@@ -1,24 +1,32 @@
 import { Text, useTheme } from '@fun-eat/design-system';
-import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { useToast } from '@/hooks/common';
+import useToastContext from '@/hooks/context/useToastContext';
 import { fadeOut, slideIn } from '@/styles/animations';
 
 interface ToastProps {
   isError?: boolean;
+  id: number;
   message: string;
 }
 
-const Toast = ({ isError = false, message }: ToastProps) => {
+const Toast = ({ id, isError = false, message }: ToastProps) => {
   const theme = useTheme();
-  const { isAnimating } = useToast();
+  const { deleteToast } = useToastContext();
+  const [isShown, setIsShown] = useState(true);
 
-  return createPortal(
-    <ToastContainer isError={isError} isAnimating={isAnimating}>
+  useEffect(() => {
+    setTimeout(() => setIsShown(false), 2000);
+    if (!isShown) {
+      setTimeout(() => deleteToast(id), 500);
+    }
+  }, [isShown]);
+
+  return (
+    <ToastWrapper isError={isError} isAnimating={isShown}>
       <MessageWrapper color={theme.colors.white}>{message}</MessageWrapper>
-    </ToastContainer>,
-    document.body
+    </ToastWrapper>
   );
 };
 
@@ -26,9 +34,9 @@ export default Toast;
 
 type ToastStyleProps = Pick<ToastProps, 'isError'> & { isAnimating?: boolean };
 
-const ToastContainer = styled.div<ToastStyleProps>`
-  position: fixed;
-  width: calc(100% - 40px);
+const ToastWrapper = styled.div<ToastStyleProps>`
+  position: relative;
+  width: 100%;
   height: 55px;
   max-width: 560px;
   border-radius: 10px;
