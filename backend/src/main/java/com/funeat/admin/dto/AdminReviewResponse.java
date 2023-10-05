@@ -8,22 +8,24 @@ public class AdminReviewResponse {
     private final Long id;
     private final String userName;
     private final String content;
+    private final String image;
     private final String productName;
     private final LocalDateTime createdAt;
 
     private AdminReviewResponse(final Long id, final String userName, final String content,
-                                final String productName,
+                                final String image, final String productName,
                                 final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
         this.content = content;
+        this.image = image;
         this.productName = productName;
         this.createdAt = createdAt;
     }
 
     public static AdminReviewResponse toResponse(final Review review) {
         return new AdminReviewResponse(review.getId(), review.getMember().getNickname(), review.getContent(),
-                review.getProduct().getName(), review.getCreatedAt());
+                review.getImage(), review.getProduct().getName(), review.getCreatedAt());
     }
 
     public Long getId() {
@@ -36,6 +38,10 @@ public class AdminReviewResponse {
 
     public String getContent() {
         return content;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String getProductName() {
