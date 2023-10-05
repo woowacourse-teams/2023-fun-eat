@@ -4,6 +4,7 @@ import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.common.logging.Logging;
 import com.funeat.review.application.ReviewService;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
@@ -67,6 +68,13 @@ public class ReviewApiController implements ReviewController {
     @GetMapping("/api/ranks/reviews")
     public ResponseEntity<RankingReviewsResponse> getRankingReviews() {
         final RankingReviewsResponse response = reviewService.getTopReviews();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/ranks/products/{productId}/reviews")
+    public ResponseEntity<MostFavoriteReviewResponse> getMostFavoriteReview(@PathVariable final Long productId) {
+        final MostFavoriteReviewResponse response = reviewService.getMostFavoriteReview(productId);
 
         return ResponseEntity.ok(response);
     }
