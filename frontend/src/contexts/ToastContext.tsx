@@ -1,5 +1,9 @@
 import type { PropsWithChildren, SetStateAction } from 'react';
 import { createContext, useState } from 'react';
+import { createPortal } from 'react-dom';
+import styled from 'styled-components';
+
+import { Toast } from '@/components/Common';
 
 interface ToastState {
   id: number;
@@ -55,9 +59,28 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <ToastActionContext.Provider value={toastAction}>
-      <ToastValueContext.Provider value={toastValue}>{children}</ToastValueContext.Provider>
+      <ToastValueContext.Provider value={toastValue}>
+        {children}
+        {createPortal(
+          <ToastContainer>
+            {toasts.map((toast) => (
+              <Toast key={toast.id} id={toast.id} message={toast.message} isError={toast.isError} />
+            ))}
+          </ToastContainer>,
+          document.body
+        )}
+      </ToastValueContext.Provider>
     </ToastActionContext.Provider>
   );
 };
 
 export default ToastProvider;
+
+const ToastContainer = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% - 20px);
+  transform: translate(0, -10px);
+`;
