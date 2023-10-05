@@ -16,6 +16,7 @@ import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.여러명이_리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
+import static com.funeat.acceptance.review.ReviewSteps.좋아요를_제일_많이_받은_리뷰_조회_요청;
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
@@ -38,6 +39,7 @@ import static com.funeat.fixture.PageFixture.총_페이지;
 import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.PageFixture.평점_내림차순;
 import static com.funeat.fixture.PageFixture.평점_오름차순;
+import static com.funeat.fixture.ProductFixture.상품1;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.존재하지_않는_상품;
@@ -66,6 +68,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewDto;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.SortingReviewDto;
@@ -611,6 +614,30 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    class getMostFavoriteReview_성공_테스트 {
+
+        @Test
+        void 특정_상품에서_좋아요를_가장_많이_받은_리뷰를_조회하다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_3점, List.of(태그)));
+            리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+            리뷰_좋아요_요청(로그인_쿠키_획득(멤버1), 상품, 리뷰2, 리뷰좋아요요청_생성(좋아요O));
+
+            // when
+            final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(상품);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            좋아요를_제일_많이_받은_리뷰_결과를_검증한다(응답, 2L);
+        }
+    }
+
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
         assertSoftly(soft -> {
@@ -634,6 +661,13 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         assertThat(actual).extracting(RankingReviewDto::getReviewId)
                 .containsExactlyElementsOf(reviewIds);
+    }
+
+    public void 좋아요를_제일_많이_받은_리뷰_결과를_검증한다(final ExtractableResponse<Response> response, final Long reviewId) {
+        final var actual = response.jsonPath()
+                .getLong("id");
+
+        assertThat(actual).isEqualTo(reviewId);
     }
 
     private void 상품_사진을_검증한다(final ExtractableResponse<Response> response, final String expected) {
