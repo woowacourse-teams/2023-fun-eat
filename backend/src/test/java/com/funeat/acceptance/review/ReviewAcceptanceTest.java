@@ -627,14 +627,43 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
             리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_3점, List.of(태그)));
             리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
-            리뷰_좋아요_요청(로그인_쿠키_획득(멤버1), 상품, 리뷰2, 리뷰좋아요요청_생성(좋아요O));
+            여러명이_리뷰_좋아요_요청(List.of(멤버1, 멤버2, 멤버3), 상품1, 리뷰2, 좋아요O);
 
             // when
             final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(상품);
 
             // then
             STATUS_CODE를_검증한다(응답, 정상_처리);
-            좋아요를_제일_많이_받은_리뷰_결과를_검증한다(응답, 2L);
+            좋아요를_제일_많이_받은_리뷰_결과를_검증한다(응답, 리뷰2);
+        }
+
+        @Test
+        void 특정_상품에서_리뷰가_없다면_빈_응답을_반환하다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+
+            // when
+            final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(상품);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            좋아요를_제일_많이_받은_리뷰_결과가_빈_응답인지_검증한다(응답);
+        }
+    }
+
+    @Nested
+    class getMostFavoriteReview_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_상품의_좋아요를_가장_많이_받은_리뷰_조회시_예외가_발생한다() {
+            // given && when
+            final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(존재하지_않는_상품);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
         }
     }
 
@@ -663,11 +692,18 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .containsExactlyElementsOf(reviewIds);
     }
 
-    public void 좋아요를_제일_많이_받은_리뷰_결과를_검증한다(final ExtractableResponse<Response> response, final Long reviewId) {
+    private void 좋아요를_제일_많이_받은_리뷰_결과를_검증한다(final ExtractableResponse<Response> response, final Long reviewId) {
         final var actual = response.jsonPath()
                 .getLong("id");
 
         assertThat(actual).isEqualTo(reviewId);
+    }
+
+    private void 좋아요를_제일_많이_받은_리뷰_결과가_빈_응답인지_검증한다(final ExtractableResponse<Response> response) {
+        final var actual = response.jsonPath()
+                .get("id");
+
+        assertThat(actual).isNull();
     }
 
     private void 상품_사진을_검증한다(final ExtractableResponse<Response> response, final String expected) {
