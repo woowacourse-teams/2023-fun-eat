@@ -1,11 +1,13 @@
 package com.funeat.admin.presentation;
 
 import com.funeat.admin.application.AdminService;
-import com.funeat.admin.dto.AdminCategoryResponse;
 import com.funeat.admin.dto.AdminProductSearchResponse;
+import com.funeat.admin.dto.AdminReviewSearchResponse;
 import com.funeat.admin.dto.ProductCreateRequest;
 import com.funeat.admin.dto.ProductSearchCondition;
 import com.funeat.admin.dto.ProductUpdateRequest;
+import com.funeat.admin.dto.ReviewSearchCondition;
+import com.funeat.product.dto.CategoryResponse;
 import java.net.URI;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -53,8 +55,16 @@ public class AdminController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<AdminCategoryResponse>> getAllCategories() {
-        final List<AdminCategoryResponse> responses = adminService.getAllCategories();
+    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+        final List<CategoryResponse> responses = adminService.getAllCategories();
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity<AdminReviewSearchResponse> getSearchReviews(
+            @ModelAttribute final ReviewSearchCondition condition,
+            @PageableDefault final Pageable pageable) {
+        final AdminReviewSearchResponse responses = adminService.getSearchReviews(condition, pageable);
         return ResponseEntity.ok(responses);
     }
 }
