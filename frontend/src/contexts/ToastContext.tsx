@@ -1,38 +1,41 @@
 import type { PropsWithChildren, SetStateAction } from 'react';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useState } from 'react';
 
-export interface ToastState {
+interface ToastState {
   id: number;
   message: string;
   isError?: boolean;
 }
 
-interface ToastContextProps {
+interface ToastValue {
+  toasts: ToastState[];
+}
+interface ToastAction {
   toast: {
     success: (message: string) => void;
     error: (message: string) => void;
   };
-  toastProps: ToastState[];
-  setToastProps: React.Dispatch<SetStateAction<ToastState[]>>;
+  setToasts: React.Dispatch<SetStateAction<ToastState[]>>;
   deleteToast: (id: number) => void;
 }
 
-export const ToastContext = createContext<ToastContextProps | null>(null);
+export const ToastValueContext = createContext<ToastValue | null>(null);
+export const ToastActionContext = createContext<ToastAction | null>(null);
 
 const ToastProvider = ({ children }: PropsWithChildren) => {
-  const [toastProps, setToastProps] = useState<ToastState[]>([]);
+  const [toasts, setToasts] = useState<ToastState[]>([]);
 
   const showToast = (id: number, message: string, isError?: boolean) => {
-    setToastProps([...toastProps, { id, message, isError }]);
+    setToasts([...toasts, { id, message, isError }]);
   };
 
   const deleteToast = (id: number) => {
-    const toastId = toastProps.findIndex((e) => e.id === id);
+    const toastId = toasts.findIndex((e) => e.id === id);
     if (toastId === -1) return;
 
-    const newToastItems = [...toastProps];
+    const newToastItems = [...toasts];
     newToastItems.splice(toastId, 1);
-    setToastProps(newToastItems);
+    setToasts(newToastItems);
   };
 
   const toast = {
@@ -40,14 +43,21 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
     error: (message: string) => showToast(Number(Date.now()), message, true),
   };
 
-  const contextValue = {
+  const toastValue = {
+    toasts,
+  };
+
+  const toastAction = {
     toast,
-    toastProps,
-    setToastProps,
+    setToasts,
     deleteToast,
   };
 
-  return <ToastContext.Provider value={contextValue}>{children}</ToastContext.Provider>;
+  return (
+    <ToastActionContext.Provider value={toastAction}>
+      <ToastValueContext.Provider value={toastValue}>{children}</ToastValueContext.Provider>
+    </ToastActionContext.Provider>
+  );
 };
 
 export default ToastProvider;

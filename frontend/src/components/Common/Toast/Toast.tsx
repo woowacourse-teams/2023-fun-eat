@@ -2,18 +2,18 @@ import { Text, useTheme } from '@fun-eat/design-system';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import useToastContext from '@/hooks/context/useToastContext';
+import { useToastActionContext } from '@/hooks/context';
 import { fadeOut, slideIn } from '@/styles/animations';
 
 interface ToastProps {
-  isError?: boolean;
   id: number;
   message: string;
+  isError?: boolean;
 }
 
-const Toast = ({ id, isError = false, message }: ToastProps) => {
+const Toast = ({ id, message, isError = false }: ToastProps) => {
   const theme = useTheme();
-  const { deleteToast } = useToastContext();
+  const { deleteToast } = useToastActionContext();
   const [isShown, setIsShown] = useState(true);
 
   useEffect(() => {

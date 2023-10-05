@@ -3,14 +3,14 @@ import styled from 'styled-components';
 
 import Toast from './Toast';
 
-import useToastContext from '@/hooks/context/useToastContext';
+import { useToastValueContext } from '@/hooks/context';
 
 const RenderToast = () => {
-  const { toastProps } = useToastContext();
+  const { toasts } = useToastValueContext();
 
   return createPortal(
     <ToastContainer>
-      {toastProps.map((toast) => (
+      {toasts.map((toast) => (
         <Toast key={toast.id} id={toast.id} message={toast.message} isError={toast.isError} />
       ))}
     </ToastContainer>,
