@@ -2,14 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Toast from './Toast';
 
-import { useToast } from '@/hooks/common';
+import ToastProvider from '@/contexts/ToastContext';
+import { useToastActionContext } from '@/hooks/context';
 
 const meta: Meta<typeof Toast> = {
   title: 'common/Toast',
   component: Toast,
-  args: {
-    message: '꿀조합 작성하러 가기 🍯',
-  },
+  decorators: [
+    (Story) => (
+      <ToastProvider>
+        <Story />
+      </ToastProvider>
+    ),
+  ],
 };
 
 export default meta;
@@ -17,17 +22,14 @@ type Story = StoryObj<typeof Toast>;
 
 export const Default: Story = {
   render: () => {
-    const { isOpen, showToast } = useToast();
-
+    const { toast } = useToastActionContext();
     const handleClick = () => {
-      showToast('토스트메세지');
+      toast.success('성공');
     };
-
     return (
       <div style={{ width: '375px' }}>
         <>
-          <button onClick={handleClick}>토스트 테스트</button>
-          {isOpen && <Toast message="토스트 메세지" />}
+          <button onClick={handleClick}>토스트 성공</button>
         </>
       </div>
     );
@@ -36,19 +38,16 @@ export const Default: Story = {
 
 export const Error: Story = {
   render: () => {
-    const { isOpen, showToast } = useToast();
-
+    const { toast } = useToastActionContext();
     const handleClick = () => {
-      showToast('토스트메세지');
+      toast.error('실패');
     };
-
     return (
-      <>
-        <div style={{ width: '375px' }}>
-          <button onClick={handleClick}>토스트 테스트</button>
-          {isOpen && <Toast isError message="토스트 메세지" />}
-        </div>
-      </>
+      <div style={{ width: '375px' }}>
+        <>
+          <button onClick={handleClick}>토스트 에러</button>
+        </>
+      </div>
     );
   },
 };
