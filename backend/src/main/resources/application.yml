@@ -6,6 +6,10 @@ spring:
       enabled: true
       maxFileSize: 10MB
       maxRequestSize: 15MB
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: never
 
 springdoc:
   swagger-ui:
