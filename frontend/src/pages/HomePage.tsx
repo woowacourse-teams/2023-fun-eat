@@ -6,10 +6,12 @@ import styled from 'styled-components';
 import { Loading, ErrorBoundary, ErrorComponent, CategoryFoodList, CategoryStoreList } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
 import { IMAGE_URL } from '@/constants';
+import { useGA } from '@/hooks/common';
 import channelTalk from '@/service/channelTalk';
 
 export const HomePage = () => {
   const { reset } = useQueryErrorResetBoundary();
+  const { gaEvent } = useGA();
 
   channelTalk.loadScript();
 
@@ -17,10 +19,18 @@ export const HomePage = () => {
     pluginKey: process.env.CHANNEL_TALK_KEY ?? '',
   });
 
+  const handleBannerClick = () => {
+    gaEvent({ category: 'link', action: '이벤트 배너 클릭', label: '배너' });
+  };
+
   return (
     <>
       <section>
-        <Link href="https://www.instagram.com/p/CxmlqAQSK-w/?igshid=MzRlODBiNWFlZA==" isExternal>
+        <Link
+          href="https://www.instagram.com/p/CxmlqAQSK-w/?igshid=MzRlODBiNWFlZA=="
+          onClick={handleBannerClick}
+          isExternal
+        >
           <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
         </Link>
       </section>
