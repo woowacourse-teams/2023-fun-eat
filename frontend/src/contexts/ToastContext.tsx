@@ -1,4 +1,4 @@
-import type { PropsWithChildren, SetStateAction } from 'react';
+import type { PropsWithChildren } from 'react';
 import { createContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
@@ -19,7 +19,6 @@ interface ToastAction {
     success: (message: string) => void;
     error: (message: string) => void;
   };
-  setToasts: React.Dispatch<SetStateAction<ToastState[]>>;
   deleteToast: (id: number) => void;
 }
 
@@ -48,7 +47,6 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
 
   const toastAction = {
     toast,
-    setToasts,
     deleteToast,
   };
 
