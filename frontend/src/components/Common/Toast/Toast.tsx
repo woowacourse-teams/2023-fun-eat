@@ -25,7 +25,7 @@ const Toast = ({ id, message, isError = false }: ToastProps) => {
 
   return (
     <ToastWrapper isError={isError} isAnimating={isShown}>
-      <MessageWrapper color={theme.colors.white}>{message}</MessageWrapper>
+      <Message color={theme.colors.white}>{message}</Message>
     </ToastWrapper>
   );
 };
@@ -44,7 +44,7 @@ const ToastWrapper = styled.div<ToastStyleProps>`
   animation: ${({ isAnimating }) => (isAnimating ? slideIn : fadeOut)} 0.3s ease-in-out forwards;
 `;
 
-const MessageWrapper = styled(Text)`
+const Message = styled(Text)`
   margin-left: 20px;
   line-height: 55px;
 `;
