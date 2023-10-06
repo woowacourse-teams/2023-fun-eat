@@ -21,9 +21,6 @@ public class MostFavoriteReviewResponse {
     private Boolean favorite;
     private LocalDateTime createdAt;
 
-    public MostFavoriteReviewResponse() {
-    }
-
     public MostFavoriteReviewResponse(final Long id, final String userName, final String profileImage,
                                       final String image, final Long rating, final List<TagDto> tags,
                                       final String content, final boolean rebuy, final Long favoriteCount,
@@ -39,10 +36,6 @@ public class MostFavoriteReviewResponse {
         this.favoriteCount = favoriteCount;
         this.favorite = favorite;
         this.createdAt = createdAt;
-    }
-
-    public static MostFavoriteReviewResponse toEmptyResponse() {
-        return new MostFavoriteReviewResponse();
     }
 
     public static MostFavoriteReviewResponse toResponse(final Review review) {

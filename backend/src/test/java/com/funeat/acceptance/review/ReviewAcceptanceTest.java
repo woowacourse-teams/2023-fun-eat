@@ -68,7 +68,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewDto;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.SortingReviewDto;
@@ -700,10 +699,10 @@ class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     private void 좋아요를_제일_많이_받은_리뷰_결과가_빈_응답인지_검증한다(final ExtractableResponse<Response> response) {
-        final var actual = response.jsonPath()
-                .get("id");
+        final var actual = response.body()
+                .asString();
 
-        assertThat(actual).isNull();
+        assertThat(actual).isEmpty();
     }
 
     private void 상품_사진을_검증한다(final ExtractableResponse<Response> response, final String expected) {

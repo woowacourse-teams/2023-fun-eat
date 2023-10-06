@@ -187,6 +187,6 @@ public class ReviewService {
         final Optional<Review> review = reviewRepository.findTopByProductOrderByFavoriteCountDescIdDesc(findProduct);
 
         return review.map(MostFavoriteReviewResponse::toResponse)
-                .orElseGet(MostFavoriteReviewResponse::toEmptyResponse);
+                .orElse(null);
     }
 }

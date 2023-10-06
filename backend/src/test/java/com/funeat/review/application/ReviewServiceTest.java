@@ -850,7 +850,7 @@ class ReviewServiceTest extends ServiceTest {
         }
 
         @Test
-        void 리뷰가_존재하지_않으면_빈_응답을_반환한다() {
+        void 리뷰가_존재하지_않으면_NULL을_반환한다() {
             // given
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -861,14 +861,11 @@ class ReviewServiceTest extends ServiceTest {
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
 
-            final var expected = MostFavoriteReviewResponse.toEmptyResponse();
-
             // when
             final var actual = reviewService.getMostFavoriteReview(productId);
 
             // then
-            assertThat(actual).usingRecursiveComparison()
-                    .isEqualTo(expected);
+            assertThat(actual).isNull();
         }
     }
 

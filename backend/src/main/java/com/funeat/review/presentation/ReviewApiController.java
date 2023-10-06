@@ -10,6 +10,7 @@ import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import java.net.URI;
+import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -76,6 +77,9 @@ public class ReviewApiController implements ReviewController {
     public ResponseEntity<MostFavoriteReviewResponse> getMostFavoriteReview(@PathVariable final Long productId) {
         final MostFavoriteReviewResponse response = reviewService.getMostFavoriteReview(productId);
 
+        if (Objects.isNull(response)) {
+            return ResponseEntity.ok().build();
+        }
         return ResponseEntity.ok(response);
     }
 }
