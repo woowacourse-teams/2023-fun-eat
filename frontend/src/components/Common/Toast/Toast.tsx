@@ -1,8 +1,7 @@
 import { Text, useTheme } from '@fun-eat/design-system';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { useToastActionContext } from '@/hooks/context';
+import { useToast } from '@/hooks/common';
 import { fadeOut, slideIn } from '@/styles/animations';
 
 interface ToastProps {
@@ -13,15 +12,7 @@ interface ToastProps {
 
 const Toast = ({ id, message, isError = false }: ToastProps) => {
   const theme = useTheme();
-  const { deleteToast } = useToastActionContext();
-  const [isShown, setIsShown] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setIsShown(false), 2000);
-    if (!isShown) {
-      setTimeout(() => deleteToast(id), 500);
-    }
-  }, [isShown]);
+  const isShown = useToast(id);
 
   return (
     <ToastWrapper isError={isError} isAnimating={isShown}>
