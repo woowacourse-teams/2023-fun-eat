@@ -77,9 +77,6 @@ public class ReviewApiController implements ReviewController {
     public ResponseEntity<MostFavoriteReviewResponse> getMostFavoriteReview(@PathVariable final Long productId) {
         final MostFavoriteReviewResponse response = reviewService.getMostFavoriteReview(productId);
 
-        if (Objects.isNull(response)) {
-            return ResponseEntity.ok().build();
-        }
         return ResponseEntity.ok(response);
     }
 }

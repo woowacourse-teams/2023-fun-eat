@@ -79,7 +79,7 @@ public class ReviewSteps {
         return given()
                 .when()
                 .get("/api/ranks/products/{product_id}/reviews", productId)
-                .then().log().all()
+                .then()
                 .extract();
     }
 }

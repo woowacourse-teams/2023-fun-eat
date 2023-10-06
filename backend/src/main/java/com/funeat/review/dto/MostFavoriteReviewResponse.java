@@ -9,22 +9,21 @@ import java.util.stream.Collectors;
 
 public class MostFavoriteReviewResponse {
 
-    private Long id;
-    private String userName;
-    private String profileImage;
-    private String image;
-    private Long rating;
-    private List<TagDto> tags;
-    private String content;
-    private Boolean rebuy;
-    private Long favoriteCount;
-    private Boolean favorite;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final String userName;
+    private final String profileImage;
+    private final String image;
+    private final Long rating;
+    private final List<TagDto> tags;
+    private final String content;
+    private final Boolean rebuy;
+    private final Long favoriteCount;
+    private final LocalDateTime createdAt;
 
     public MostFavoriteReviewResponse(final Long id, final String userName, final String profileImage,
                                       final String image, final Long rating, final List<TagDto> tags,
                                       final String content, final boolean rebuy, final Long favoriteCount,
-                                      final boolean favorite, final LocalDateTime createdAt) {
+                                      final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -34,7 +33,6 @@ public class MostFavoriteReviewResponse {
         this.content = content;
         this.rebuy = rebuy;
         this.favoriteCount = favoriteCount;
-        this.favorite = favorite;
         this.createdAt = createdAt;
     }
 
@@ -49,7 +47,6 @@ public class MostFavoriteReviewResponse {
                 review.getContent(),
                 review.getReBuy(),
                 review.getFavoriteCount(),
-                false,
                 review.getCreatedAt()
         );
     }
@@ -95,10 +92,6 @@ public class MostFavoriteReviewResponse {
 
     public Long getFavoriteCount() {
         return favoriteCount;
-    }
-
-    public Boolean isFavorite() {
-        return favorite;
     }
 
     public LocalDateTime getCreatedAt() {
