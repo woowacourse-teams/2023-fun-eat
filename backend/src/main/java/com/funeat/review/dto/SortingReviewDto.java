@@ -22,11 +22,12 @@ public class SortingReviewDto {
     private final Long favoriteCount;
     private final boolean favorite;
     private final LocalDateTime createdAt;
+    private final boolean author;
 
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
-                            final Long rating, final List<TagDto> tags,
-                            final String content, final boolean rebuy, final Long favoriteCount, final boolean favorite,
-                            final LocalDateTime createdAt) {
+                            final Long rating, final List<TagDto> tags, final String content, final boolean rebuy,
+                            final Long favoriteCount, final boolean favorite, final LocalDateTime createdAt,
+                            final boolean author) {
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -38,6 +39,7 @@ public class SortingReviewDto {
         this.favoriteCount = favoriteCount;
         this.favorite = favorite;
         this.createdAt = createdAt;
+        this.author = author;
     }
 
     public static SortingReviewDto toDto(final Review review, final Member member) {
@@ -52,7 +54,8 @@ public class SortingReviewDto {
                 review.getReBuy(),
                 review.getFavoriteCount(),
                 findReviewFavoriteChecked(review, member),
-                review.getCreatedAt()
+                review.getCreatedAt(),
+                findAuthorChecked(review, member)
         );
     }
 
@@ -71,6 +74,13 @@ public class SortingReviewDto {
                 .findFirst()
                 .map(ReviewFavorite::getFavorite)
                 .orElse(false);
+    }
+
+    private static boolean findAuthorChecked(final Review review, final Member member) {
+        final Long reviewMemberId = review.getMember().getId();
+        final Long loginMemberId = member.getId();
+
+        return reviewMemberId.equals(loginMemberId);
     }
 
     public Long getId() {
@@ -115,5 +125,9 @@ public class SortingReviewDto {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public boolean isAuthor() {
+        return author;
     }
 }
