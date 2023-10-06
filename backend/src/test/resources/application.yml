@@ -33,3 +33,7 @@ cloud:
       bucket: testBucket
       folder: testFolder
       cloudfrontPath: testCloudfrontPath
+
+back-office:
+  id: test
+  key: test

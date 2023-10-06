@@ -27,3 +27,7 @@ server:
     session:
       cookie:
         name: FUNEAT
+
+back-office:
+  id: { BACK_OFFICE_ID }
+  key: { BACK_OFFICE_KEY }
