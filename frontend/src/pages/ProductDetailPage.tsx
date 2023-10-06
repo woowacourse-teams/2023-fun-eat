@@ -17,13 +17,14 @@ import {
   SectionTitle,
 } from '@/components/Common';
 import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
-import { ReviewList, ReviewRegisterForm } from '@/components/Review';
+import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
+import { useBestReviewQuery } from '@/hooks/queries/rank';
 
 const LOGIN_ERROR_MESSAGE_REVIEW =
   '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 리뷰를 확인해보세요 😊';
@@ -34,6 +35,8 @@ export const ProductDetailPage = () => {
   const { category, productId } = useParams();
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
+  const { data: bestReview } = useBestReviewQuery(Number(productId));
+
   const { reset } = useQueryErrorResetBoundary();
 
   const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
@@ -79,6 +82,14 @@ export const ProductDetailPage = () => {
       <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
+      <Spacing size={10} />
+      {Object.keys(bestReview).length !== 0 && (
+        <>
+          <Text weight="bold">베스트 리뷰</Text>
+          <Spacing size={10} />
+          <BestReviewItem review={bestReview} />
+        </>
+      )}
       <Spacing size={36} />
       <TabMenu
         ref={tabRef}
