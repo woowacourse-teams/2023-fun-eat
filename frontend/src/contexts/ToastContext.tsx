@@ -58,8 +58,8 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
         {children}
         {createPortal(
           <ToastContainer>
-            {toasts.map((toast) => (
-              <Toast key={toast.id} id={toast.id} message={toast.message} isError={toast.isError} />
+            {toasts.map(({ id, message, isError }) => (
+              <Toast key={id} id={id} message={message} isError={isError} />
             ))}
           </ToastContainer>,
           document.getElementById('toast-container') as HTMLElement
