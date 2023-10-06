@@ -28,9 +28,7 @@ export const Default: Story = {
     };
     return (
       <div style={{ width: '375px' }}>
-        <>
-          <button onClick={handleClick}>토스트 성공</button>
-        </>
+        <button onClick={handleClick}>토스트 성공</button>
       </div>
     );
   },
@@ -44,9 +42,7 @@ export const Error: Story = {
     };
     return (
       <div style={{ width: '375px' }}>
-        <>
-          <button onClick={handleClick}>토스트 에러</button>
-        </>
+        <button onClick={handleClick}>토스트 에러</button>
       </div>
     );
   },
