@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Profile("!test")
 public class S3Uploader implements ImageUploader {
 
-    private static final List<String> INCLUDE_EXTENSIONS = List.of("image/jpeg", "image/png");
+    private static final List<String> INCLUDE_EXTENSIONS = List.of("image/jpeg", "image/png", "image/webp");
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -55,7 +55,7 @@ public class S3Uploader implements ImageUploader {
 
     private void validateExtension(final MultipartFile image) {
         final String contentType = image.getContentType();
-        if (!INCLUDE_EXTENSIONS.contains(contentType)){
+        if (!INCLUDE_EXTENSIONS.contains(contentType)) {
             throw new NotAllowedFileExtensionException(IMAGE_EXTENSION_ERROR_CODE, contentType);
         }
     }
