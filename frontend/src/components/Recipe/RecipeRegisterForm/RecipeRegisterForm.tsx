@@ -91,7 +91,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
         </Text>
         <Spacing size={10} />
         <FormButton customWidth="100%" customHeight="60px" size="xl" weight="bold" disabled={!isValid || isLoading}>
-          레시피 등록하기
+          꿀조합 등록하기
         </FormButton>
         <Spacing size={50} />
       </form>

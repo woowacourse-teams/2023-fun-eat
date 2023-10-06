@@ -4,8 +4,10 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CATEGORY_TYPE } from '@/constants';
+import { useGA } from '@/hooks/common';
 import { useCategoryActionContext, useCategoryValueContext } from '@/hooks/context';
 import { useCategoryStoreQuery } from '@/hooks/queries/product/useCategoryQuery';
+import { getTargetCategoryName } from '@/utils/category';
 
 const category = CATEGORY_TYPE.STORE;
 
@@ -20,11 +22,22 @@ const CategoryStoreTab = () => {
   const queryParams = new URLSearchParams(location.search);
   const categoryIdFromURL = queryParams.get('category');
 
+  const { gaEvent } = useGA();
+
   useEffect(() => {
     if (categoryIdFromURL) {
       selectCategory(category, parseInt(categoryIdFromURL));
     }
   }, [category]);
+
+  const handleCategoryButtonClick = (menuId: number) => {
+    selectCategory(category, menuId);
+    gaEvent({
+      category: 'button',
+      action: `${getTargetCategoryName(categories, menuId)} 카테고리 버튼 클릭`,
+      label: '카테고리',
+    });
+  };
 
   return (
     <CategoryMenuContainer>
@@ -40,7 +53,7 @@ const CategoryStoreTab = () => {
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
               isSelected={isSelected}
-              onClick={() => selectCategory(category, menu.id)}
+              onClick={() => handleCategoryButtonClick(menu.id)}
               aria-pressed={isSelected}
             >
               {menu.name}
