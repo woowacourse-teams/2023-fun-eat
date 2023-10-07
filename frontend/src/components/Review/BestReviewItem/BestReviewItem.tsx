@@ -2,48 +2,58 @@ import { Spacing, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import type { Review } from '@/types/review';
+import { useBestReviewQuery } from '@/hooks/queries/rank';
 
 interface BestReviewItemProps {
-  review: Review;
+  productId: number;
 }
 
-const BestReviewItem = ({ review }: BestReviewItemProps) => {
-  const { userName, profileImage, rating, content, favoriteCount } = review;
+const BestReviewItem = ({ productId }: BestReviewItemProps) => {
+  const { data: bestReview } = useBestReviewQuery(productId);
+  const { profileImage, userName, rating, favoriteCount, content } = bestReview;
+
   const theme = useTheme();
 
   return (
-    <BestReviewItemContainer>
-      <ReviewRateFavoriteWrapper>
-        <ReviewerInfoWrapper>
-          <ReviewerImage src={profileImage} width={32} height={32} alt={`${userName}의 프로필`} />
-          <div>
-            <Text size="sm" weight="bold">
-              {userName} 님
-            </Text>
-            {Array.from({ length: 5 }, (_, index) => (
-              <SvgIcon
-                key={`rating-${index}`}
-                variant="star"
-                color={index < rating ? theme.colors.secondary : theme.colors.gray2}
-                width={16}
-                height={16}
-              />
-            ))}
-          </div>
-        </ReviewerInfoWrapper>
-        <FavoriteWrapper>
-          <SvgIcon variant="favoriteFilled" color="red" width={13} height={13} />
-          <Text size="xs" color={theme.textColors.default} weight="bold">
-            {favoriteCount}
-          </Text>
-        </FavoriteWrapper>
-      </ReviewRateFavoriteWrapper>
-      <Spacing size={12} />
-      <ReviewText size="sm" color={theme.textColors.info}>
-        {content}
-      </ReviewText>
-    </BestReviewItemContainer>
+    <>
+      <Text weight="bold" align="center">
+        ⭐️ 베스트 리뷰 ⭐️
+      </Text>
+      <Spacing size={10} />
+      {Object.keys(bestReview).length !== 0 && (
+        <BestReviewItemContainer>
+          <ReviewRateFavoriteWrapper>
+            <ReviewerInfoWrapper>
+              <ReviewerImage src={profileImage} width={32} height={32} alt={`${userName}의 프로필`} />
+              <div>
+                <Text size="sm" weight="bold">
+                  {userName} 님
+                </Text>
+                {Array.from({ length: 5 }, (_, index) => (
+                  <SvgIcon
+                    key={`rating-${index}`}
+                    variant="star"
+                    color={index < rating ? theme.colors.secondary : theme.colors.gray2}
+                    width={16}
+                    height={16}
+                  />
+                ))}
+              </div>
+            </ReviewerInfoWrapper>
+            <FavoriteWrapper>
+              <SvgIcon variant="favoriteFilled" color="red" width={13} height={13} />
+              <Text size="xs" color={theme.textColors.default} weight="bold">
+                {favoriteCount}
+              </Text>
+            </FavoriteWrapper>
+          </ReviewRateFavoriteWrapper>
+          <Spacing size={12} />
+          <ReviewText size="sm" color={theme.textColors.info}>
+            {content}
+          </ReviewText>
+        </BestReviewItemContainer>
+      )}
+    </>
   );
 };
 
