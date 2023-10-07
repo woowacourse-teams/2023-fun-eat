@@ -13,15 +13,13 @@ const CategoryFoodList = () => {
   const { data: categories } = useCategoryFoodQuery(category);
 
   return (
-    <div>
-      <CategoryFoodListWrapper>
-        {categories.map((menu) => (
-          <Link key={menu.id} as={RouterLink} to={`products/food?category=${menu.id}`}>
-            <CategoryItem name={menu.name} image={menu.image} />
-          </Link>
-        ))}
-      </CategoryFoodListWrapper>
-    </div>
+    <CategoryFoodListWrapper>
+      {categories.map((menu) => (
+        <Link key={menu.id} as={RouterLink} to={`products/food?category=${menu.id}`}>
+          <CategoryItem name={menu.name} image={menu.image} />
+        </Link>
+      ))}
+    </CategoryFoodListWrapper>
   );
 };
 

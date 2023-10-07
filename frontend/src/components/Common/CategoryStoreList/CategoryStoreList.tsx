@@ -13,15 +13,13 @@ const CategoryStoreList = () => {
   const { data: categories } = useCategoryStoreQuery(category);
 
   return (
-    <div>
-      <CategoryStoreListWrapper>
-        {categories.map((menu) => (
-          <Link key={menu.id} as={RouterLink} to={`products/store?category=${menu.id}`}>
-            <CategoryItem name={menu.name} image={menu.image} />
-          </Link>
-        ))}
-      </CategoryStoreListWrapper>
-    </div>
+    <CategoryStoreListWrapper>
+      {categories.map((menu) => (
+        <Link key={menu.id} as={RouterLink} to={`products/store?category=${menu.id}`}>
+          <CategoryItem name={menu.name} image={menu.image} />
+        </Link>
+      ))}
+    </CategoryStoreListWrapper>
   );
 };
 

@@ -68,10 +68,9 @@ const CategoryMenuContainer = styled.ul`
 const CategoryButton = styled(Button)<{ isSelected: boolean }>`
   padding: 6px 12px;
   ${({ isSelected }) =>
-    isSelected
-      ? `
+    isSelected &&
+    `
       background: ${theme.colors.gray5};
       color: ${theme.textColors.white};
-      `
-      : ''}
+      `}
 `;
