@@ -18,7 +18,7 @@ import { ProductTitle, ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import type { CategoryIds } from '@/contexts/CategoryContext';
-import { useScrollRestoration, useSortOption } from '@/hooks/common';
+import { useGA, useScrollRestoration, useSortOption } from '@/hooks/common';
 import { useCategoryValueContext } from '@/hooks/context';
 import { isCategoryVariant } from '@/types/common';
 
@@ -31,6 +31,7 @@ export const ProductListPage = () => {
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
   const { reset } = useQueryErrorResetBoundary();
+  const { gaEvent } = useGA();
 
   const { categoryIds } = useCategoryValueContext();
 
@@ -39,6 +40,11 @@ export const ProductListPage = () => {
   if (!category || !isCategoryVariant(category)) {
     return null;
   }
+
+  const handleSortButtonClick = () => {
+    handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '상품 정렬 버튼 클릭', label: '상품 정렬' });
+  };
 
   return (
     <>
@@ -54,7 +60,7 @@ export const ProductListPage = () => {
           <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
             <Suspense fallback={<Loading />}>
               <SortButtonWrapper>
-                <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
+                <SortButton option={selectedOption} onClick={handleSortButtonClick} />
               </SortButtonWrapper>
               <ProductList category={category} selectedOption={selectedOption} />
             </Suspense>

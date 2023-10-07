@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CategoryItem from '../CategoryItem/CategoryItem';
 
 import { CATEGORY_TYPE } from '@/constants';
+import { useGA } from '@/hooks/common';
 import { useCategoryStoreQuery } from '@/hooks/queries/product';
 
 const categoryType = CATEGORY_TYPE.STORE;

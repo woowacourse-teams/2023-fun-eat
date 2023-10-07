@@ -2,8 +2,10 @@ import { Button, theme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { CATEGORY_TYPE } from '@/constants';
+import { useGA } from '@/hooks/common';
 import { useCategoryActionContext, useCategoryValueContext } from '@/hooks/context';
 import { useCategoryStoreQuery } from '@/hooks/queries/product/useCategoryQuery';
+import { getTargetCategoryName } from '@/utils/category';
 
 const categoryType = CATEGORY_TYPE.STORE;
 
@@ -13,6 +15,17 @@ const CategoryStoreTab = () => {
   const { categoryIds } = useCategoryValueContext();
   const { selectCategory } = useCategoryActionContext();
   const currentCategoryId = categoryIds[categoryType];
+
+  const { gaEvent } = useGA();
+
+  const handleCategoryButtonClick = (menuId: number) => {
+    selectCategory(categoryType, menuId);
+    gaEvent({
+      category: 'button',
+      action: `${getTargetCategoryName(categories, menuId)} 카테고리 버튼 클릭`,
+      label: '카테고리',
+    });
+  };
 
   return (
     <CategoryMenuContainer>
@@ -28,7 +41,7 @@ const CategoryStoreTab = () => {
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
               isSelected={isSelected}
-              onClick={() => selectCategory(categoryType, id)}
+              onClick={() => handleCategoryButtonClick(id)}
               aria-pressed={isSelected}
             >
               {name}
