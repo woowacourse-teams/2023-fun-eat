@@ -1,37 +1,25 @@
 import { Button, theme } from '@fun-eat/design-system';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CATEGORY_TYPE } from '@/constants';
 import { useCategoryActionContext, useCategoryValueContext } from '@/hooks/context';
 import { useCategoryStoreQuery } from '@/hooks/queries/product/useCategoryQuery';
 
-const category = CATEGORY_TYPE.STORE;
+const categoryType = CATEGORY_TYPE.STORE;
 
 const CategoryStoreTab = () => {
-  const { data: categories } = useCategoryStoreQuery(category);
+  const { data: categories } = useCategoryStoreQuery(categoryType);
 
   const { categoryIds } = useCategoryValueContext();
   const { selectCategory } = useCategoryActionContext();
-  const currentCategoryId = categoryIds[category];
-
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const categoryIdFromURL = queryParams.get('category');
-
-  useEffect(() => {
-    if (categoryIdFromURL) {
-      selectCategory(category, parseInt(categoryIdFromURL));
-    }
-  }, [category]);
+  const currentCategoryId = categoryIds[categoryType];
 
   return (
     <CategoryMenuContainer>
-      {categories.map((menu) => {
-        const isSelected = menu.id === currentCategoryId;
+      {categories.map(({ id, name }) => {
+        const isSelected = id === currentCategoryId;
         return (
-          <li key={menu.id}>
+          <li key={id}>
             <CategoryButton
               type="button"
               customHeight="30px"
@@ -40,10 +28,10 @@ const CategoryStoreTab = () => {
               weight="bold"
               variant={isSelected ? 'filled' : 'outlined'}
               isSelected={isSelected}
-              onClick={() => selectCategory(category, menu.id)}
+              onClick={() => selectCategory(categoryType, id)}
               aria-pressed={isSelected}
             >
-              {menu.name}
+              {name}
             </CategoryButton>
           </li>
         );
