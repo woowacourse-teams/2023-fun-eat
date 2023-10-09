@@ -39,6 +39,7 @@ import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
 import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
@@ -790,6 +791,90 @@ class ReviewServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> reviewService.updateProductImage(wrongReviewId))
                     .isInstanceOf(ReviewNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class deleteReview_성공_테스트 {
+
+        @Test
+        void 자신이_작성한_리뷰를_삭제할_수_있다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var member = 멤버_멤버2_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var favoriteRequest = 리뷰좋아요요청_생성(true);
+            reviewService.likeReview(reviewId, authorId, favoriteRequest);
+            reviewService.likeReview(reviewId, memberId, favoriteRequest);
+
+            // when
+            reviewService.deleteReview(reviewId, authorId);
+
+            // then
+            final var tags = reviewTagRepository.findAll();
+            final var favorites = reviewFavoriteRepository.findAll();
+            final var findReview = reviewRepository.findById(reviewId);
+
+            assertSoftly(soft -> {
+                soft.assertThat(tags).isEmpty();
+                soft.assertThat(favorites).isEmpty();
+                soft.assertThat(findReview).isEmpty();
+            });
+        }
+    }
+
+    @Nested
+    class deleteReview_실패_테스트 {
+
+        @Test
+        void 자신이_작성하지_않은_리뷰를_삭제하려하면_에러가_발생한다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var member = 멤버_멤버2_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.deleteReview(reviewId, memberId))
+                    .isInstanceOf(NotAuthorOfReviewException.class);
         }
     }
 

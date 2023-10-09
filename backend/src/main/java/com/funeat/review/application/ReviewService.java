@@ -3,6 +3,7 @@ package com.funeat.review.application;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.NOT_AUTHOR_OF_REVIEW;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 import com.funeat.common.ImageUploader;
@@ -26,6 +27,7 @@ import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.dto.SortingReviewsResponse;
+import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
@@ -177,5 +179,40 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return MemberReviewsResponse.toResponse(pageDto, dtos);
+    }
+
+    @Transactional
+    public void deleteReview(final Long reviewId, final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+        final Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+        final Product product = review.getProduct();
+
+        if (review.checkAuthor(member)) {
+            deleteThingsRelatedToReview(reviewId, review);
+            updateProductImage(product);
+            // TODO : s3에 있는 image삭제
+        } else {
+            throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId); // TODO : memberId만 info로 넘겨도 괜찮은가?
+        }
+    }
+
+    private void deleteThingsRelatedToReview(final Long reviewId, final Review review) {
+        reviewTagRepository.deleteByReview(review);
+        reviewFavoriteRepository.deleteByReview(review);
+        reviewRepository.deleteById(reviewId);
+    }
+
+    // TODO : 또다른 updateProductImage 메소드에 대해 질문
+    private void updateProductImage(final Product product) {
+        final Long productId = product.getId();
+        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
+
+        final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
+        if (!topFavoriteReview.isEmpty()) {
+            final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
+            product.updateImage(topFavoriteReviewImage);
+        }
     }
 }

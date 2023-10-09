@@ -88,6 +88,10 @@ public class Review {
         this.favoriteCount--;
     }
 
+    public boolean checkAuthor(Member member) {
+        return this.member == member;
+    }
+
     public Long getId() {
         return id;
     }

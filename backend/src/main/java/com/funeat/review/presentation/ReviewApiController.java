@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,15 @@ public class ReviewApiController implements ReviewController {
         reviewService.updateProductImage(reviewId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Logging
+    @DeleteMapping("/api/products/{productId}/reviews/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable final Long reviewId,
+                                                 @AuthenticationPrincipal final LoginInfo loginInfo) {
+        reviewService.deleteReview(reviewId, loginInfo.getId());
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/api/products/{productId}/reviews")
