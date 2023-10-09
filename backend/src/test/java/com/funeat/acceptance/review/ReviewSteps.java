@@ -74,4 +74,14 @@ public class ReviewSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 리뷰_삭제_요청(final String loginCookie,
+                                                         final Long productId, final Long reviewId) {
+        return given()
+                .cookie("FUNEAT", loginCookie)
+                .when()
+                .delete("/api/products/{productId}/reviews/{reviewId}", productId, reviewId)
+                .then()
+                .extract();
+    }
 }

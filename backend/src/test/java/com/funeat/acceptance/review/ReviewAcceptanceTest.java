@@ -12,6 +12,7 @@ import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_삭제_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.여러명이_리뷰_좋아요_요청;
@@ -608,6 +609,46 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             // then
             STATUS_CODE를_검증한다(응답, 정상_처리);
             리뷰_랭킹_조회_결과를_검증한다(응답, List.of(리뷰2, 리뷰3, 리뷰4));
+        }
+    }
+
+    @Nested
+    class deleteReview_성공_테스트 {
+
+        @Test
+        void 자신이_작성한_리뷰를_삭제한다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+
+            // when
+            final var 응답 = 리뷰_삭제_요청(로그인_쿠키_획득(멤버1), 상품, 리뷰1);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+        }
+    }
+
+    @Nested
+    class deleteReview_실패_테스트 {
+
+        @Test
+        void 자신이_작성하지_않은_리뷰는_삭제할_수_없다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+
+            // when
+            final var 응답 = 리뷰_삭제_요청(로그인_쿠키_획득(멤버2), 상품, 리뷰1);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
         }
     }
 
