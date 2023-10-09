@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReviewFavoriteRepository extends JpaRepository<ReviewFavorite, Long> {
 
     Optional<ReviewFavorite> findByMemberAndReview(final Member member, final Review review);
+
+    void deleteByReview(Review review);
 }
