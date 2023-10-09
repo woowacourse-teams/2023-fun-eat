@@ -29,6 +29,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
         )}
       </ImageWrapper>
       <DetailInfoWrapper>
+        <TagList tags={tags} />
         <DescriptionWrapper>
           <Text weight="bold">가격</Text>
           <Text>{price.toLocaleString('ko-KR')}원</Text>
@@ -45,7 +46,6 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
           </RatingIconWrapper>
         </DescriptionWrapper>
       </DetailInfoWrapper>
-      <TagList tags={tags} />
     </ProductDetailContainer>
   );
 };

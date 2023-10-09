@@ -16,7 +16,7 @@ import {
   SectionTitle,
 } from '@/components/Common';
 import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
-import { ReviewList, ReviewRegisterForm } from '@/components/Review';
+import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
@@ -33,6 +33,7 @@ export const ProductDetailPage = () => {
   const { category, productId } = useParams();
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
+
   const { reset } = useQueryErrorResetBoundary();
 
   const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
@@ -77,6 +78,8 @@ export const ProductDetailPage = () => {
       <SectionTitle name={name} bookmark={bookmark} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
+      <Spacing size={30} />
+      <BestReviewItem productId={Number(productId)} />
       <Spacing size={36} />
       <TabMenu
         ref={tabRef}
