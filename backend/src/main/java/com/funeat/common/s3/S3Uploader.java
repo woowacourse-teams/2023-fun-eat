@@ -3,11 +3,13 @@ package com.funeat.common.s3;
 import static com.funeat.exception.CommonErrorCode.IMAGE_EXTENSION_ERROR_CODE;
 import static com.funeat.exception.CommonErrorCode.UNKNOWN_SERVER_ERROR_CODE;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.funeat.common.ImageUploader;
 import com.funeat.common.exception.CommonException.NotAllowedFileExtensionException;
+import com.funeat.common.exception.CommonException.S3DeleteFailException;
 import com.funeat.common.exception.CommonException.S3UploadFailException;
 import java.io.IOException;
 import java.util.List;
@@ -50,6 +52,17 @@ public class S3Uploader implements ImageUploader {
             return getCloudfrontImagePath(randomImageName);
         } catch (IOException e) {
             throw new S3UploadFailException(UNKNOWN_SERVER_ERROR_CODE);
+        }
+    }
+
+    @Override
+    public void delete(final String fileName) {
+        // TODO : DB 저장 값에서 cloudfront 주소 빼기
+        try {
+            final String key = folder + fileName;
+            amazonS3.deleteObject(bucket, key);
+        } catch (AmazonServiceException e) {
+            throw new S3DeleteFailException(UNKNOWN_SERVER_ERROR_CODE);
         }
     }
 

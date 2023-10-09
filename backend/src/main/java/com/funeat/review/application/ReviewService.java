@@ -188,13 +188,14 @@ public class ReviewService {
         final Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
         final Product product = review.getProduct();
+        final String image = review.getImage();
 
         if (review.checkAuthor(member)) {
             deleteThingsRelatedToReview(reviewId, review);
             updateProductImage(product);
-            // TODO : s3에 있는 image삭제
+            imageUploader.delete(image);
         } else {
-            throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId); // TODO : memberId만 info로 넘겨도 괜찮은가?
+            throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
         }
     }
 
@@ -203,8 +204,7 @@ public class ReviewService {
         reviewFavoriteRepository.deleteByReview(review);
         reviewRepository.deleteById(reviewId);
     }
-
-    // TODO : 또다른 updateProductImage 메소드에 대해 질문
+    
     private void updateProductImage(final Product product) {
         final Long productId = product.getId();
         final PageRequest pageRequest = PageRequest.of(TOP, ONE);
