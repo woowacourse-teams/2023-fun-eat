@@ -19,4 +19,6 @@ public interface ReviewTagRepository extends JpaRepository<ReviewTag, Long> {
     List<Tag> findTop3TagsByReviewIn(final Long productId, final Pageable pageable);
 
     void deleteByReview(final Review review);
+
+    List<ReviewTag> findByReviewId(Long reviewId);
 }

@@ -191,7 +191,7 @@ public class ReviewService {
         final String image = review.getImage();
 
         if (review.checkAuthor(member)) {
-            deleteThingsRelatedToReview(reviewId, review);
+            deleteThingsRelatedToReview(reviewId);
             updateProductImage(product);
             imageUploader.delete(image);
             return;
@@ -199,12 +199,28 @@ public class ReviewService {
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
     }
 
-    private void deleteThingsRelatedToReview(final Long reviewId, final Review review) {
-        reviewTagRepository.deleteByReview(review);
-        reviewFavoriteRepository.deleteByReview(review);
+    private void deleteThingsRelatedToReview(final Long reviewId) {
+        deleteReviewTags(reviewId);
+        deleteReviewFavorites(reviewId);
         reviewRepository.deleteById(reviewId);
     }
-    
+
+    private void deleteReviewTags(final Long reviewId) {
+        List<ReviewTag> reviewTags = reviewTagRepository.findByReviewId(reviewId);
+        List<Long> ids = reviewTags.stream()
+                .map(ReviewTag::getId)
+                .collect(Collectors.toList());
+        reviewTagRepository.deleteAllByIdInBatch(ids);
+    }
+
+    private void deleteReviewFavorites(final Long reviewId) {
+        List<ReviewFavorite> reviewFavorites = reviewFavoriteRepository.findByReviewId(reviewId);
+        List<Long> ids = reviewFavorites.stream()
+                .map(ReviewFavorite::getId)
+                .collect(Collectors.toList());
+        reviewFavoriteRepository.deleteAllByIdInBatch(ids);
+    }
+
     private void updateProductImage(final Product product) {
         final Long productId = product.getId();
         final PageRequest pageRequest = PageRequest.of(TOP, ONE);
