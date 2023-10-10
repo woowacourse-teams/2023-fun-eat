@@ -55,7 +55,7 @@ public class SortingReviewDto {
                 review.getFavoriteCount(),
                 findReviewFavoriteChecked(review, member),
                 review.getCreatedAt(),
-                findAuthorChecked(review, member)
+                review.checkAuthor(member)
         );
     }
 
@@ -74,13 +74,6 @@ public class SortingReviewDto {
                 .findFirst()
                 .map(ReviewFavorite::getFavorite)
                 .orElse(false);
-    }
-
-    private static boolean findAuthorChecked(final Review review, final Member member) {
-        final Long reviewMemberId = review.getMember().getId();
-        final Long loginMemberId = member.getId();
-
-        return reviewMemberId.equals(loginMemberId);
     }
 
     public Long getId() {
