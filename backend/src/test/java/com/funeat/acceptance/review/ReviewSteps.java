@@ -74,4 +74,12 @@ public class ReviewSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 좋아요를_제일_많이_받은_리뷰_조회_요청(final Long productId) {
+        return given()
+                .when()
+                .get("/api/ranks/products/{product_id}/reviews", productId)
+                .then().log().all()
+                .extract();
+    }
 }

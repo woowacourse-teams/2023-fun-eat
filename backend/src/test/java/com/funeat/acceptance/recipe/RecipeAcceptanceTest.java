@@ -268,7 +268,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 존재하지_않는_레시피_사용자가_레시피_상세_조회시_예외가_발생한다() {
-            // given && when
+            // given & when
             final var 응답 = 레시피_상세_정보_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_레시피);
 
             // then
@@ -356,7 +356,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 존재하지_않는_레시피에_사용자가_좋아요를_할때_예외가_발생한다() {
-            // given && when
+            // given & when
             final var 응답 = 레시피_좋아요_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_레시피, 레시피좋아요요청_생성(좋아요O));
 
             // then
