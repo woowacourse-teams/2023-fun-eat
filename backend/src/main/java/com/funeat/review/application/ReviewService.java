@@ -1,10 +1,5 @@
 package com.funeat.review.application;
 
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
-import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
-
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -20,20 +15,12 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
-import com.funeat.review.dto.RankingReviewDto;
-import com.funeat.review.dto.RankingReviewsResponse;
-import com.funeat.review.dto.ReviewCreateRequest;
-import com.funeat.review.dto.ReviewFavoriteRequest;
-import com.funeat.review.dto.SortingReviewDto;
-import com.funeat.review.dto.SortingReviewsResponse;
+import com.funeat.review.dto.*;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +29,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
+
 @Service
 @Transactional(readOnly = true)
 public class ReviewService {
@@ -49,6 +46,7 @@ public class ReviewService {
     private static final int TOP = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
+    private static final int RANKING_SIZE = 3;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -156,9 +154,10 @@ public class ReviewService {
     }
 
     public RankingReviewsResponse getTopReviews() {
-        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
-
-        final List<RankingReviewDto> dtos = rankingReviews.stream()
+        final List<Review> reviews = reviewRepository.findAll();
+        final List<RankingReviewDto> dtos = reviews.stream()
+                .sorted(Comparator.comparing(Review::calculateRankingScore).reversed())
+                .limit(RANKING_SIZE)
                 .map(RankingReviewDto::toDto)
                 .collect(Collectors.toList());
 
