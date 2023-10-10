@@ -75,6 +75,18 @@ public class Review {
         this.favoriteCount = favoriteCount;
     }
 
+    public Review(final Member member, final Product findProduct, final String image, final Long rating,
+                  final String content, final Boolean reBuy, final Long favoriteCount, final LocalDateTime createdAt) {
+        this.member = member;
+        this.product = findProduct;
+        this.image = image;
+        this.rating = rating;
+        this.content = content;
+        this.reBuy = reBuy;
+        this.favoriteCount = favoriteCount;
+        this.createdAt = createdAt;
+    }
+
     public void addFavoriteCount() {
         this.favoriteCount++;
     }

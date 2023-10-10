@@ -5,6 +5,8 @@ import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -63,6 +65,11 @@ public class ReviewFixture {
 
     public static Review 리뷰_이미지test5_평점5점_재구매X_생성(final Member member, final Product product, final Long count) {
         return new Review(member, product, "test5", 5L, "test", false, count);
+    }
+
+    public static Review 리뷰_이미지test5_평점5점_재구매X_생성(final Member member, final Product product, final Long count,
+                                                  final LocalDateTime createdAt) {
+        return new Review(member, product, "test5", 5L, "test", false, count, createdAt);
     }
 
     public static ReviewCreateRequest 리뷰추가요청_생성(final Long rating, final List<Long> tagIds, final String content,
