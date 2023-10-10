@@ -647,7 +647,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(상품);
 
             // then
-            STATUS_CODE를_검증한다(응답, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
             좋아요를_제일_많이_받은_리뷰_결과가_빈_응답인지_검증한다(응답);
         }
     }

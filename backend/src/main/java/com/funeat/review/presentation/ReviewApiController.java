@@ -79,7 +79,7 @@ public class ReviewApiController implements ReviewController {
         final Optional<MostFavoriteReviewResponse> response = reviewService.getMostFavoriteReview(productId);
 
         if (response.isEmpty()) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(response);
     }
