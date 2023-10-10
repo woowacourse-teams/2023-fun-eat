@@ -574,7 +574,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 존재하지_않는_상품의_리뷰_목록을_조회시_예외가_발생한다() {
-            // given && when
+            // given & when
             final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_상품, 좋아요수_내림차순, FIRST_PAGE);
 
             // then
