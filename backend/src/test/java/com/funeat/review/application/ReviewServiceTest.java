@@ -847,6 +847,65 @@ class ReviewServiceTest extends ServiceTest {
     class deleteReview_실패_테스트 {
 
         @Test
+        void 존재하지_않는_사용자가_리뷰를_삭제하려하면_에러가_발생한다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var wrongMemberId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.deleteReview(reviewId, wrongMemberId))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+
+        @Test
+        void 존재하지_않는_리뷰를_삭제하려하면_에러가_발생한다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var wrongReviewId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.deleteReview(wrongReviewId, authorId))
+                    .isInstanceOf(ReviewNotFoundException.class);
+        }
+
+        @Test
         void 자신이_작성하지_않은_리뷰를_삭제하려하면_에러가_발생한다() {
             // given
             final var author = 멤버_멤버1_생성();
