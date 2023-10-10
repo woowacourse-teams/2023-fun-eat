@@ -194,9 +194,9 @@ public class ReviewService {
             deleteThingsRelatedToReview(reviewId, review);
             updateProductImage(product);
             imageUploader.delete(image);
-        } else {
-            throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
+            return;
         }
+        throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
     }
 
     private void deleteThingsRelatedToReview(final Long reviewId, final Review review) {

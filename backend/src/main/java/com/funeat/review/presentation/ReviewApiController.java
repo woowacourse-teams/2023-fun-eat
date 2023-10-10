@@ -59,7 +59,7 @@ public class ReviewApiController implements ReviewController {
     @Logging
     @DeleteMapping("/api/products/{productId}/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable final Long reviewId,
-                                                 @AuthenticationPrincipal final LoginInfo loginInfo) {
+                                             @AuthenticationPrincipal final LoginInfo loginInfo) {
         reviewService.deleteReview(reviewId, loginInfo.getId());
 
         return ResponseEntity.ok().build();
