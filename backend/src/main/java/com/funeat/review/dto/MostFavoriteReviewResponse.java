@@ -5,6 +5,7 @@ import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.dto.TagDto;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MostFavoriteReviewResponse {
@@ -36,8 +37,13 @@ public class MostFavoriteReviewResponse {
         this.createdAt = createdAt;
     }
 
-    public static MostFavoriteReviewResponse toResponse(final Review review) {
-        return new MostFavoriteReviewResponse(
+    public static Optional<MostFavoriteReviewResponse> toResponse(final Optional<Review> nullableReview) {
+        if (nullableReview.isEmpty()) {
+            return Optional.empty();
+        }
+
+        final Review review = nullableReview.get();
+        return Optional.of(new MostFavoriteReviewResponse(
                 review.getId(),
                 review.getMember().getNickname(),
                 review.getMember().getProfileImage(),
@@ -48,7 +54,7 @@ public class MostFavoriteReviewResponse {
                 review.getReBuy(),
                 review.getFavoriteCount(),
                 review.getCreatedAt()
-        );
+        ));
     }
 
     private static List<TagDto> findTagDtos(final Review review) {

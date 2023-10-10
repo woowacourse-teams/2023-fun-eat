@@ -43,6 +43,7 @@ import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
@@ -813,7 +814,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
             복수_리뷰_저장(review1, review2);
 
-            final var expected = MostFavoriteReviewResponse.toResponse(review1);
+            final var expected = MostFavoriteReviewResponse.toResponse(Optional.of(review1));
 
             // when
             final var actual = reviewService.getMostFavoriteReview(productId);
@@ -839,7 +840,7 @@ class ReviewServiceTest extends ServiceTest {
             final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 351L);
             복수_리뷰_저장(review1, review2);
 
-            final var expected = MostFavoriteReviewResponse.toResponse(review2);
+            final var expected = MostFavoriteReviewResponse.toResponse(Optional.of(review2));
 
             // when
             final var actual = reviewService.getMostFavoriteReview(productId);
@@ -850,7 +851,7 @@ class ReviewServiceTest extends ServiceTest {
         }
 
         @Test
-        void 리뷰가_존재하지_않으면_NULL을_반환한다() {
+        void 리뷰가_존재하지_않으면_Optional_empty를_반환한다() {
             // given
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -861,11 +862,13 @@ class ReviewServiceTest extends ServiceTest {
             final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
             final var productId = 단일_상품_저장(product);
 
+            final var expected = Optional.empty();
+
             // when
             final var actual = reviewService.getMostFavoriteReview(productId);
 
             // then
-            assertThat(actual).isNull();
+            assertThat(actual).isEqualTo(expected);
         }
     }
 

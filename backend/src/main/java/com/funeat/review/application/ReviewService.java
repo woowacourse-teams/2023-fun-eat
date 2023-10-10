@@ -180,13 +180,12 @@ public class ReviewService {
         return MemberReviewsResponse.toResponse(pageDto, dtos);
     }
 
-    public MostFavoriteReviewResponse getMostFavoriteReview(final Long productId) {
+    public Optional<MostFavoriteReviewResponse> getMostFavoriteReview(final Long productId) {
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
         final Optional<Review> review = reviewRepository.findTopByProductOrderByFavoriteCountDescIdDesc(findProduct);
 
-        return review.map(MostFavoriteReviewResponse::toResponse)
-                .orElse(null);
+        return MostFavoriteReviewResponse.toResponse(review);
     }
 }

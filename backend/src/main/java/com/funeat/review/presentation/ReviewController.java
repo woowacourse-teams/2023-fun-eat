@@ -10,6 +10,7 @@ import com.funeat.review.dto.SortingReviewsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +70,5 @@ public interface ReviewController {
             description = "좋아요를 제일 많이 받은 리뷰 조회 성공."
     )
     @GetMapping
-    ResponseEntity<MostFavoriteReviewResponse> getMostFavoriteReview(@PathVariable final Long productId);
+    ResponseEntity<Optional<MostFavoriteReviewResponse>> getMostFavoriteReview(@PathVariable final Long productId);
 }
