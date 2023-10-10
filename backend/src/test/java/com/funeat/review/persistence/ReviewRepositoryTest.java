@@ -138,7 +138,7 @@ class ReviewRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class findTopByProductOrderByFavoriteCountDesc_성공_테스트 {
+    class findPopularReviewWithImage_성공_테스트 {
 
         @Test
         void 리뷰가_존재하지_않으면_빈_값을_반환하다() {
