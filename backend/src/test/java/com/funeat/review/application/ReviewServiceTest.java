@@ -613,7 +613,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = review.getImage();
 
             // when
-            reviewService.updateProductImage(reviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -642,7 +642,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = secondReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -671,7 +671,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = firstReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -700,7 +700,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = secondReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -721,11 +721,11 @@ class ReviewServiceTest extends ServiceTest {
 
             final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
             final var firstReviewId = 단일_리뷰_저장(firstReview);
-            reviewService.updateProductImage(firstReviewId);
+            reviewService.updateProductImage(product.getId());
 
             final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
             final var secondReviewId = 단일_리뷰_저장(secondReview);
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
 
             final var thirdReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
             final var thirdReviewId = 단일_리뷰_저장(thirdReview);
@@ -733,7 +733,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = thirdReview.getImage();
 
             // when
-            reviewService.updateProductImage(thirdReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -754,7 +754,7 @@ class ReviewServiceTest extends ServiceTest {
 
             final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
             final var firstReviewId = 단일_리뷰_저장(firstReview);
-            reviewService.updateProductImage(firstReviewId);
+            reviewService.updateProductImage(product.getId());
 
             final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
             final var secondReviewId = 단일_리뷰_저장(secondReview);
@@ -762,7 +762,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = secondReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -774,7 +774,7 @@ class ReviewServiceTest extends ServiceTest {
     class updateProductImage_실패_테스트 {
 
         @Test
-        void 존재하지_않는_리뷰로_상품_업데이트를_시도하면_예외가_발생한다() {
+        void 존재하지_않는_상품으로_상품_업데이트를_시도하면_예외가_발생한다() {
             // given
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -785,12 +785,11 @@ class ReviewServiceTest extends ServiceTest {
             final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
             단일_상품_저장(product);
 
-            final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
-            final var wrongReviewId = 단일_리뷰_저장(review) + 1L;
+            final var wrongProductId = 999L;
 
             // when & then
-            assertThatThrownBy(() -> reviewService.updateProductImage(wrongReviewId))
-                    .isInstanceOf(ReviewNotFoundException.class);
+            assertThatThrownBy(() -> reviewService.updateProductImage(wrongProductId))
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 

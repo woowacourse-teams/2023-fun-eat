@@ -125,14 +125,11 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateProductImage(final Long reviewId) {
-        final Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+    public void updateProductImage(final Long productId) {
+        final Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Product product = review.getProduct();
-        final Long productId = product.getId();
         final PageRequest pageRequest = PageRequest.of(TOP, ONE);
-
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
             final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
@@ -192,7 +189,7 @@ public class ReviewService {
 
         if (review.checkAuthor(member)) {
             deleteThingsRelatedToReview(reviewId);
-            updateProductImage(product);
+            updateProductImage(product.getId());
             imageUploader.delete(image);
             return;
         }
@@ -219,16 +216,5 @@ public class ReviewService {
                 .map(ReviewFavorite::getId)
                 .collect(Collectors.toList());
         reviewFavoriteRepository.deleteAllByIdInBatch(ids);
-    }
-
-    private void updateProductImage(final Product product) {
-        final Long productId = product.getId();
-        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
-
-        final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
-        if (!topFavoriteReview.isEmpty()) {
-            final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
-            product.updateImage(topFavoriteReviewImage);
-        }
     }
 }

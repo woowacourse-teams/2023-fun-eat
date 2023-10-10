@@ -41,7 +41,8 @@ public interface ReviewController {
             description = "리뷰 좋아요(취소) 성공."
     )
     @PatchMapping
-    ResponseEntity<Void> toggleLikeReview(@PathVariable final Long reviewId,
+    ResponseEntity<Void> toggleLikeReview(@PathVariable final Long productId,
+                                          @PathVariable final Long reviewId,
                                           @AuthenticationPrincipal final LoginInfo loginInfo,
                                           @RequestBody final ReviewFavoriteRequest request);
 
