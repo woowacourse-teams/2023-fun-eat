@@ -657,7 +657,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 존재하지_않는_상품의_좋아요를_가장_많이_받은_리뷰_조회시_예외가_발생한다() {
-            // given && when
+            // given & when
             final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(존재하지_않는_상품);
 
             // then

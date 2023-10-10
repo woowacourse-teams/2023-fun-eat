@@ -874,7 +874,7 @@ class ReviewServiceTest extends ServiceTest {
 
         @Test
         void 존재하지_않는_상품에_가장_많은_좋아요를_받은_리뷰를_찾으면_예외가_발생한다() {
-            // Given
+            // given
             final var category = 카테고리_즉석조리_생성();
             단일_카테고리_저장(category);
 
