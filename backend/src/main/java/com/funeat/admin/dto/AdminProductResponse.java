@@ -1,7 +1,6 @@
 package com.funeat.admin.dto;
 
 import com.funeat.product.domain.Product;
-import com.funeat.product.dto.CategoryResponse;
 
 public class AdminProductResponse {
 
@@ -9,10 +8,10 @@ public class AdminProductResponse {
     private final String name;
     private final String content;
     private final Long price;
-    private final CategoryResponse categoryResponse;
+    private final AdminCategoryResponse categoryResponse;
 
     private AdminProductResponse(final Long id, final String name, final String content,
-                                 final Long price, final CategoryResponse categoryResponse) {
+                                 final Long price, final AdminCategoryResponse categoryResponse) {
         this.id = id;
         this.name = name;
         this.content = content;
@@ -21,7 +20,7 @@ public class AdminProductResponse {
     }
 
     public static AdminProductResponse toResponse(final Product product) {
-        final CategoryResponse categoryResponse = CategoryResponse.toResponse(product.getCategory());
+        final AdminCategoryResponse categoryResponse = AdminCategoryResponse.toResponse(product.getCategory());
 
         return new AdminProductResponse(product.getId(), product.getName(), product.getContent(), product.getPrice(),
                 categoryResponse);
@@ -43,7 +42,7 @@ public class AdminProductResponse {
         return price;
     }
 
-    public CategoryResponse getCategoryResponse() {
+    public AdminCategoryResponse getCategoryResponse() {
         return categoryResponse;
     }
 }
