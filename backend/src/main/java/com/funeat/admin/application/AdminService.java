@@ -53,7 +53,7 @@ public class AdminService {
     @Transactional
     public Long addProduct(final ProductCreateRequest request) {
         final Category findCategory = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("카테고리를 확인해주세요"));
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, request.getCategoryId()));
 
         final Product product = Product.create(request.getName(), request.getPrice(), request.getContent(),
                 findCategory);
