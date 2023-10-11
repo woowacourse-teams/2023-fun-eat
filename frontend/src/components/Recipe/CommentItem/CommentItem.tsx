@@ -1,4 +1,4 @@
-import { Divider, Text, useTheme } from '@fun-eat/design-system';
+import { Divider, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import type { Comment } from '@/types/recipe';
@@ -27,6 +27,7 @@ const CommentItem = ({ comment }: CommentItemProps) => {
       </AuthorWrapper>
       <CommentContent size="sm">{content}</CommentContent>
       <Divider variant="disabled" />
+      <Spacing size={16} />
     </>
   );
 };

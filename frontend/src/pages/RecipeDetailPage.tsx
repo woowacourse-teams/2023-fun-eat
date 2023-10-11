@@ -1,17 +1,18 @@
-import { Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
 import { SectionTitle } from '@/components/Common';
-import { RecipeFavorite } from '@/components/Recipe';
-import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
+import { CommentItem, RecipeFavorite } from '@/components/Recipe';
+import { useRecipeCommentQuery, useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
 export const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
+  const { data: recipeComments } = useRecipeCommentQuery(Number(recipeId));
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
@@ -65,7 +66,16 @@ export const RecipeDetailPage = () => {
       <RecipeContent size="lg" lineHeight="lg">
         {content}
       </RecipeContent>
-      <Spacing size={40} />
+      <Spacing size={16} />
+      <Divider variant="disabled" />
+      <Spacing size={16} />
+      <Heading as="h3" size="lg">
+        댓글 ({recipeComments.length}개)
+      </Heading>
+      <Spacing size={12} />
+      {recipeComments.map((comment) => (
+        <CommentItem key={comment.id} comment={comment} />
+      ))}
     </RecipeDetailPageContainer>
   );
 };
