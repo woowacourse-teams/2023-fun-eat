@@ -628,7 +628,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             final var 응답 = 리뷰_삭제_요청(로그인_쿠키_획득(멤버1), 상품, 리뷰1);
 
             // then
-            STATUS_CODE를_검증한다(응답, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
         }
     }
 
