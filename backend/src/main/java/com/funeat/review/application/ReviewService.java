@@ -36,6 +36,7 @@ import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,11 +60,13 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
     private final ImageUploader imageUploader;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
-                         final ReviewFavoriteRepository reviewFavoriteRepository, final ImageUploader imageUploader) {
+                         final ReviewFavoriteRepository reviewFavoriteRepository,
+                         final ImageUploader imageUploader, final ApplicationEventPublisher eventPublisher) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -71,6 +74,7 @@ public class ReviewService {
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
         this.imageUploader = imageUploader;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -190,7 +194,7 @@ public class ReviewService {
         if (review.checkAuthor(member)) {
             deleteThingsRelatedToReview(reviewId);
             updateProductImage(product.getId());
-            deleteS3Image(image);
+            deleteReviewImage(image);
             return;
         }
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
@@ -218,9 +222,9 @@ public class ReviewService {
         reviewFavoriteRepository.deleteAllByIdInBatch(ids);
     }
 
-    private void deleteS3Image(final String image) {
+    private void deleteReviewImage(final String image) {
         if (image != null) {
-            imageUploader.delete(image);
+            eventPublisher.publishEvent(new ReviewDeleteEvent(image));
         }
     }
 }
