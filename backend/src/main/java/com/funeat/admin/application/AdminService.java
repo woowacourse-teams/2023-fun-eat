@@ -35,14 +35,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AdminService {
 
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
     private final ProductRepository productRepository;
     private final AdminProductRepository adminProductRepository;
     private final CategoryRepository categoryRepository;
     private final AdminReviewRepository adminReviewRepository;
 
     public AdminService(final ProductRepository productRepository, final AdminProductRepository adminProductRepository,
-                        final CategoryRepository categoryRepository,
-                        final AdminReviewRepository adminReviewRepository) {
+                        final CategoryRepository categoryRepository, final AdminReviewRepository adminReviewRepository) {
         this.productRepository = productRepository;
         this.adminProductRepository = adminProductRepository;
         this.categoryRepository = categoryRepository;
@@ -85,7 +86,7 @@ public class AdminService {
     }
 
     private <T> boolean isLastPage(final Page<T> findProducts, Long prePage) {
-        return prePage * 10 + findProducts.getContent().size() == findProducts.getTotalElements();
+        return prePage * DEFAULT_PAGE_SIZE + findProducts.getContent().size() == findProducts.getTotalElements();
     }
 
     @Transactional
