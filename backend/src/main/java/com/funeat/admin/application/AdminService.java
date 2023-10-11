@@ -1,6 +1,5 @@
 package com.funeat.admin.application;
 
-import static com.funeat.admin.specification.AdminReviewSpecification.searchBy;
 import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 
@@ -15,6 +14,7 @@ import com.funeat.admin.dto.ReviewSearchCondition;
 import com.funeat.admin.repository.AdminProductRepository;
 import com.funeat.admin.repository.AdminReviewRepository;
 import com.funeat.admin.specification.AdminProductSpecification;
+import com.funeat.admin.specification.AdminReviewSpecification;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.CategoryResponse;
@@ -101,7 +101,7 @@ public class AdminService {
     }
 
     public AdminReviewSearchResponse getSearchReviews(final ReviewSearchCondition condition, final Pageable pageable) {
-        final Specification<Review> specification = searchBy(condition);
+        final Specification<Review> specification = AdminReviewSpecification.searchBy(condition);
 
         final Page<Review> findReviews = adminReviewRepository.findAllForPagination(specification, pageable,
                 condition.getTotalElements());
