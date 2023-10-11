@@ -18,7 +18,6 @@ public class AdminChecker {
 
     public boolean check(final AdminAuthInfo adminAuthInfo) {
         if (!id.equals(adminAuthInfo.getId())) {
-//            throw new MemberNotFoundException("관리자 아이디를 확인해주세요.");
             throw new NotLoggedInException(AuthErrorCode.LOGIN_ADMIN_NOT_FOUND);
         }
 

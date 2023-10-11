@@ -1,34 +1,31 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:13306/funeat
-    username: root
-    password: admin
+    url:
+    username:
+    password:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
         show_sql: true
-
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
 
 kakao:
-  rest-api-key: 1234
-  redirect-uri: 1234
-  admin-key: 1234
+  rest-api-key: { LOCAL_REST_API_KEY }
+  redirect-uri: { LOCAL_REDIRECT_URI }
+  admin-key: { LOCAL_ADMIN_KEY }
 
 cloud:
   aws:
     region:
-      static: testRegion
+      static: { S3_REGION }
     s3:
-      bucket: testBucket
-      folder: testFolder
-      cloudfrontPath: 11
-      expiration:
-        time: 1111
+      bucket: { S3_BUCKET }
+      folder: { S3_DEV_FOLDER }
+      cloudfrontPath: { S3_DEV_CLOUDFRONT_PATH }
