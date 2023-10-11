@@ -14,8 +14,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
-    @Query(value =
-            "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) "
+    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) "
                     + "FROM Product p "
                     + "LEFT JOIN p.reviews r "
                     + "WHERE p.category = :category "
@@ -23,8 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             countQuery = "SELECT COUNT(p) FROM Product p WHERE p.category = :category")
     Page<ProductInCategoryDto> findAllByCategory(@Param("category") final Category category, final Pageable pageable);
 
-    @Query(value =
-            "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) "
+    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, COUNT(r)) "
                     + "FROM Product p "
                     + "LEFT JOIN p.reviews r "
                     + "WHERE p.category = :category "
