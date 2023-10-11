@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Profile("!test")
 public class S3Uploader implements ImageUploader {
 
+    private static final int BEGIN_INDEX = 31;
     private static final List<String> INCLUDE_EXTENSIONS = List.of("image/jpeg", "image/png", "image/webp");
 
     @Value("${cloud.aws.s3.bucket}")
@@ -56,10 +57,10 @@ public class S3Uploader implements ImageUploader {
     }
 
     @Override
-    public void delete(final String fileName) {
-        // TODO : DB 저장 값에서 cloudfront 주소 빼기
+    public void delete(final String image) {
+        String imageName = image.substring(BEGIN_INDEX);
         try {
-            final String key = folder + fileName;
+            final String key = folder + imageName;
             amazonS3.deleteObject(bucket, key);
         } catch (AmazonServiceException e) {
             throw new S3DeleteFailException(UNKNOWN_SERVER_ERROR_CODE);
