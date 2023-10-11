@@ -51,7 +51,7 @@ public class AdminController {
     public ResponseEntity<Void> updateProduct(@PathVariable final Long productId,
                                               @RequestBody final ProductUpdateRequest request) {
         adminService.updateProduct(productId, request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/categories")

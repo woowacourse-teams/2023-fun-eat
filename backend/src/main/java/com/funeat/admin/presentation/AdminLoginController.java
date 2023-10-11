@@ -26,7 +26,7 @@ public class AdminLoginController {
 
         request.getSession().setAttribute("authInfo", adminAuthInfo);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/logged-check")
