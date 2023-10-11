@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
@@ -169,6 +170,64 @@ class ReviewRepositoryTest extends RepositoryTest {
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(review2);
+        }
+    }
+
+
+    @Nested
+    class findReviewsByFavoriteCountGreaterThanEqual_성공_테스트 {
+
+        @Test
+        void 특정_좋아요_수_이상인_모든_리뷰들을_조회한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
+            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 100L);
+            복수_리뷰_저장(review1, review2, review3);
+
+            final var expected = List.of(review1, review3);
+
+            // when
+            final var actual = reviewRepository.findReviewsByFavoriteCountGreaterThanEqual(1L);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
+
+        @Test
+        void 특정_좋아요_수_이상인_리뷰가_없으면_빈_리스트를_반환한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 0L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
+            복수_리뷰_저장(review1, review2);
+
+            final var expected = Collections.emptyList();
+
+            // when
+            final var actual = reviewRepository.findReviewsByFavoriteCountGreaterThanEqual(1L);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
         }
     }
 }
