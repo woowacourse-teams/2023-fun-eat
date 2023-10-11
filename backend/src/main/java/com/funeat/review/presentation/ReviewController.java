@@ -48,7 +48,7 @@ public interface ReviewController {
 
     @Operation(summary = "리뷰 삭제", description = "자신이 작성한 리뷰를 삭제한다.")
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "204",
             description = "리뷰 삭제 성공."
     )
     @DeleteMapping("/api/products/{productId}/reviews/{reviewId}")

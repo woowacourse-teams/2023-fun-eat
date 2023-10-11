@@ -63,7 +63,7 @@ public class ReviewApiController implements ReviewController {
                                              @AuthenticationPrincipal final LoginInfo loginInfo) {
         reviewService.deleteReview(reviewId, loginInfo.getId());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/api/products/{productId}/reviews")
