@@ -85,6 +85,13 @@ public class Product {
         this.image = topFavoriteImage;
     }
 
+    public void update(final String name, final String content, final Long price, final Category category) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.category = category;
+    }
+
     public Long getId() {
         return id;
     }
@@ -119,12 +126,5 @@ public class Product {
 
     public void addReviewCount() {
         reviewCount++;
-    }
-
-    public void update(final String name, final String content, final Long price, final Category category) {
-        this.name = name;
-        this.content = content;
-        this.price = price;
-        this.category = category;
     }
 }
