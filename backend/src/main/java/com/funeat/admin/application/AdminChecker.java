@@ -15,7 +15,6 @@ public class AdminChecker {
     @Value("${back-office.key}")
     private String key;
 
-
     public boolean check(final AdminAuthInfo adminAuthInfo) {
         if (!id.equals(adminAuthInfo.getId())) {
             throw new NotLoggedInException(AuthErrorCode.LOGIN_ADMIN_NOT_FOUND);

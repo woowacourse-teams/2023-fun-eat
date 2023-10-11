@@ -19,11 +19,6 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
     }
 
     @Override
-    public Page<T> findAllForPagination(final Pageable pageable, final Long totalElements) {
-        return findAllForPagination(null, pageable, totalElements);
-    }
-
-    @Override
     public Page<T> findAllForPagination(final Specification<T> spec, final Pageable pageable,
                                         final Long totalElements) {
         final TypedQuery<T> query = getQuery(spec, pageable.getSort());
