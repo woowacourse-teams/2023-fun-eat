@@ -26,18 +26,6 @@ public class AdminProductSpecification {
         };
     }
 
-    private static Specification<Product> lessThan(final Long productId) {
-        return (root, query, criteriaBuilder) -> {
-            if (Objects.isNull(productId)) {
-                return null;
-            }
-
-            final Path<Long> productIdPath = root.get("id");
-
-            return criteriaBuilder.lessThan(productIdPath, productId);
-        };
-    }
-
     private static Specification<Product> like(final String productName) {
         return (root, query, criteriaBuilder) -> {
             if (Objects.isNull(productName)) {
@@ -47,6 +35,18 @@ public class AdminProductSpecification {
             final Path<String> namePath = root.get("name");
 
             return criteriaBuilder.like(namePath, "%" + productName + "%");
+        };
+    }
+
+    private static Specification<Product> lessThan(final Long productId) {
+        return (root, query, criteriaBuilder) -> {
+            if (Objects.isNull(productId)) {
+                return null;
+            }
+
+            final Path<Long> productIdPath = root.get("id");
+
+            return criteriaBuilder.lessThan(productIdPath, productId);
         };
     }
 
