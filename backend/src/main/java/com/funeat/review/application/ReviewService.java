@@ -52,6 +52,7 @@ public class ReviewService {
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
     private static final int RANKING_SIZE = 3;
+    private static final long RANKING_MINIMUM_FAVORITE_COUNT = 1L;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -159,7 +160,7 @@ public class ReviewService {
     }
 
     public RankingReviewsResponse getTopReviews() {
-        final List<Review> reviews = reviewRepository.findAll();
+        final List<Review> reviews = reviewRepository.findReviewsByFavoriteCountGreaterThanEqual(RANKING_MINIMUM_FAVORITE_COUNT);
         final List<RankingReviewDto> dtos = reviews.stream()
                 .sorted(Comparator.comparing(Review::calculateRankingScore).reversed())
                 .limit(RANKING_SIZE)

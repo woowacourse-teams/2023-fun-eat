@@ -1,18 +1,19 @@
 package com.funeat.review.persistence;
 
-import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
-
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
+
+import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
@@ -34,4 +35,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             + "WHERE p.id = :id AND r.image != '' "
             + "ORDER BY r.favoriteCount DESC, r.id DESC")
     List<Review> findPopularReviewWithImage(@Param("id") final Long productId, final Pageable pageable);
+
+    List<Review> findReviewsByFavoriteCountGreaterThanEqual(final Long favoriteCount);
 }
