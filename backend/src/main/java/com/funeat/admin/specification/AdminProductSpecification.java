@@ -3,6 +3,7 @@ package com.funeat.admin.specification;
 import com.funeat.admin.dto.ProductSearchCondition;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
@@ -10,9 +11,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class AdminProductSpecification {
 
+    private static final List<Class<Long>> COUNT_RESULT_TYPES = List.of(Long.class, long.class);
+
     public static Specification<Product> searchBy(final ProductSearchCondition condition) {
         return (root, query, criteriaBuilder) -> {
-            if (query.getResultType() != Long.class && query.getResultType() != long.class) {
+            if (!COUNT_RESULT_TYPES.contains(query.getResultType())) {
                 root.fetch("category", JoinType.LEFT);
             }
 
