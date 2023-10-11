@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
 import { isRecipeSortOption, isSortOrder } from './utils';
+import comments from '../data/comments.json';
 import recipeDetail from '../data/recipeDetail.json';
 import mockRecipes from '../data/recipes.json';
 
@@ -87,5 +88,9 @@ export const recipeHandlers = [
       ctx.status(200),
       ctx.json({ ...sortedRecipes, recipes: sortedRecipes.recipes.slice(page * 5, (page + 1) * 5) })
     );
+  }),
+
+  rest.get('/api/recipes/:recipeId/comments', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(comments));
   }),
 ];
