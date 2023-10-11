@@ -35,7 +35,7 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
         }
 
         if (pageSize < 1) {
-            throw new IllegalArgumentException("페이지는 1미만이 될 수 없어요");
+            throw new IllegalArgumentException("페이지는 1미만이 될 수 없습니다.");
         }
 
         query.setMaxResults(pageable.getPageSize());
