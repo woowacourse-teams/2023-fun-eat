@@ -190,7 +190,7 @@ public class ReviewService {
         if (review.checkAuthor(member)) {
             deleteThingsRelatedToReview(reviewId);
             updateProductImage(product.getId());
-            imageUploader.delete(image);
+            deleteS3Image(image);
             return;
         }
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
@@ -216,5 +216,11 @@ public class ReviewService {
                 .map(ReviewFavorite::getId)
                 .collect(Collectors.toList());
         reviewFavoriteRepository.deleteAllByIdInBatch(ids);
+    }
+
+    private void deleteS3Image(final String image) {
+        if (image != null) {
+            imageUploader.delete(image);
+        }
     }
 }
