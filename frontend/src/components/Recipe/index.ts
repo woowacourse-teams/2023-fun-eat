@@ -6,3 +6,4 @@ export { default as RecipeList } from './RecipeList/RecipeList';
 export { default as RecipeRegisterForm } from './RecipeRegisterForm/RecipeRegisterForm';
 export { default as RecipeFavorite } from './RecipeFavorite/RecipeFavorite';
 export { default as CommentItem } from './CommentItem/CommentItem';
+export { default as CommentInput } from './CommentInput/CommentInput';
