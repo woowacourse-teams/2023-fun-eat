@@ -11,6 +11,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_검색_결과_조회_요청;
+import static com.funeat.acceptance.recipe.RecipeSteps.레시피_댓글_작성_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_랭킹_조회_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_목록_요청;
 import static com.funeat.acceptance.recipe.RecipeSteps.레시피_상세_정보_요청;
@@ -59,12 +60,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.dto.ProductRecipeDto;
 import com.funeat.recipe.dto.RankingRecipeDto;
 import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
@@ -532,6 +533,103 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    class writeRecipeComment_성공_테스트 {
+
+        @Test
+        void 꿀조합에_댓글을_작성할_수_있다() {
+            // given
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
+            final var 꿀조합_작성_응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+
+            // when
+            final var 작성된_꿀조합_아이디 = 작성된_꿀조합_아이디_추출(꿀조합_작성_응답);
+            final var 댓글작성자_로그인_쿠키_획득 = 로그인_쿠키_획득(멤버2);
+            final var 꿀조합_댓글 = new RecipeCommentCreateRequest("테스트 코멘트 1");
+
+            final var 응답 = 레시피_댓글_작성_요청(댓글작성자_로그인_쿠키_획득, 작성된_꿀조합_아이디, 꿀조합_댓글);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_생성);
+            꿀조합_댓글_작성_결과를_검증한다(응답, 멤버2, 꿀조합_댓글);
+        }
+    }
+
+    @Nested
+    class writeRecipeComment_실패_테스트 {
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 꿀조합에_댓글을_작성할때_댓글이_비어있을시_예외가_발생한다(final String comment) {
+            // given
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
+            final var 꿀조합_작성_응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+
+            // when
+            final var 작성된_꿀조합_아이디 = 작성된_꿀조합_아이디_추출(꿀조합_작성_응답);
+            final var 댓글작성자_로그인_쿠키_획득 = 로그인_쿠키_획득(멤버2);
+            final var 꿀조합_댓글 = new RecipeCommentCreateRequest(comment);
+
+            final var 응답 = 레시피_댓글_작성_요청(댓글작성자_로그인_쿠키_획득, 작성된_꿀조합_아이디, 꿀조합_댓글);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
+                    "꿀조합 댓글을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
+        }
+
+        @Test
+        void 꿀조합에_댓글을_작성할때_댓글이_200자_초과시_예외가_발생한다() {
+            // given
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
+            final var 꿀조합_작성_응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+
+            // when
+            final var 작성된_꿀조합_아이디 = 작성된_꿀조합_아이디_추출(꿀조합_작성_응답);
+            final var 댓글작성자_로그인_쿠키_획득 = 로그인_쿠키_획득(멤버2);
+            final var 꿀조합_댓글 = new RecipeCommentCreateRequest("1" +
+                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다" +
+                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다" +
+                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다" +
+                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다"
+            );
+
+            final var 응답 = 레시피_댓글_작성_요청(댓글작성자_로그인_쿠키_획득, 작성된_꿀조합_아이디, 꿀조합_댓글);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
+                    "꿀조합 댓글은 최대 200자까지 입력 가능합니다. " + REQUEST_VALID_ERROR_CODE.getMessage());
+        }
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인_하지않은_사용자가_꿀조합_댓글_작성시_예외가_발생한다(final String cookie) {
+            // given
+            final var 카테고리 = 카테고리_간편식사_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점5점_생성(카테고리));
+            final var 꿀조합_작성_응답 = 레시피_작성_요청(로그인_쿠키_획득(멤버1), 여러개_사진_명세_요청(이미지1), 레시피추가요청_생성(상품));
+
+            // when
+            final var 작성된_꿀조합_아이디 = 작성된_꿀조합_아이디_추출(꿀조합_작성_응답);
+            final var 꿀조합_댓글 = new RecipeCommentCreateRequest("테스트 코멘트 1");
+
+            final var 응답 = 레시피_댓글_작성_요청(cookie, 작성된_꿀조합_아이디, 꿀조합_댓글);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
+                    LOGIN_MEMBER_NOT_FOUND.getMessage());
+        }
+    }
+
     private void 레시피_목록_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Long> recipeIds) {
         final var actual = response.jsonPath().getList("recipes", RecipeDto.class);
 
@@ -589,5 +687,22 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
         assertThat(actual).extracting(SearchRecipeResultDto::getId)
                 .containsExactlyElementsOf(recipeIds);
+    }
+
+    private Long 작성된_꿀조합_아이디_추출(final ExtractableResponse<Response> response) {
+        return Long.parseLong(response.header("Location").split("/")[3]);
+    }
+
+    private void 꿀조합_댓글_작성_결과를_검증한다(final ExtractableResponse<Response> response, final Long memberId,
+                                    final RecipeCommentCreateRequest request) {
+        final var savedCommentId = Long.parseLong(response.header("Location").split("/")[4]);
+
+        final var findComments = commentRepository.findAll();
+
+        assertSoftly(soft -> {
+            soft.assertThat(savedCommentId).isEqualTo(findComments.get(0).getId());
+            soft.assertThat(memberId).isEqualTo(findComments.get(0).getMember().getId());
+            soft.assertThat(request.getComment()).isEqualTo(findComments.get(0).getComment());
+        });
     }
 }

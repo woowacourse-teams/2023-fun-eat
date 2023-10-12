@@ -3,6 +3,7 @@ package com.funeat.recipe.presentation;
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
@@ -80,4 +81,14 @@ public interface RecipeController {
     @GetMapping
     ResponseEntity<SearchRecipeResultsResponse> getSearchResults(@RequestParam final String query,
                                                                  @PageableDefault final Pageable pageable);
+
+    @Operation(summary = "꿀조합 댓글 작성", description = "꿀조합 상세에서 댓글을 작성한다.")
+    @ApiResponse(
+            responseCode = "201",
+            description = "꿀조합 댓글 작성 성공."
+    )
+    @PostMapping("/api/recipes/{recipeId}/comments")
+    ResponseEntity<Void> writeComment(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                      @PathVariable final Long recipeId,
+                                      @RequestBody final RecipeCommentCreateRequest request);
 }

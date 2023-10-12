@@ -4,6 +4,7 @@ import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.fixture.RecipeFixture.레시피좋아요요청_생성;
 import static io.restassured.RestAssured.given;
 
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
 import io.restassured.response.ExtractableResponse;
@@ -87,6 +88,19 @@ public class RecipeSteps {
                 .queryParam("page", page)
                 .when()
                 .get("/api/search/recipes/results")
+                .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 레시피_댓글_작성_요청(final String loginCookie,
+                                                             final Long recipeId,
+                                                             final RecipeCommentCreateRequest request) {
+        return given()
+                .cookie("FUNEAT", loginCookie)
+                .contentType("application/json")
+                .body(request)
+                .when()
+                .post("/api/recipes/" + recipeId + "/comments")
                 .then()
                 .extract();
     }

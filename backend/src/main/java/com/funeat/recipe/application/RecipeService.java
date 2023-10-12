@@ -5,6 +5,8 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
+import com.funeat.comment.domain.Comment;
+import com.funeat.comment.persistence.CommentRepository;
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -26,6 +28,7 @@ import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RankingRecipeDto;
 import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
@@ -60,18 +63,21 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeImageRepository recipeImageRepository;
     private final RecipeFavoriteRepository recipeFavoriteRepository;
+    private final CommentRepository commentRepository;
     private final ImageUploader imageUploader;
 
     public RecipeService(final MemberRepository memberRepository, final ProductRepository productRepository,
                          final ProductRecipeRepository productRecipeRepository, final RecipeRepository recipeRepository,
                          final RecipeImageRepository recipeImageRepository,
-                         final RecipeFavoriteRepository recipeFavoriteRepository, final ImageUploader imageUploader) {
+                         final RecipeFavoriteRepository recipeFavoriteRepository,
+                         final CommentRepository commentRepository, final ImageUploader imageUploader) {
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.productRecipeRepository = productRecipeRepository;
         this.recipeRepository = recipeRepository;
         this.recipeImageRepository = recipeImageRepository;
         this.recipeFavoriteRepository = recipeFavoriteRepository;
+        this.commentRepository = commentRepository;
         this.imageUploader = imageUploader;
     }
 
@@ -166,7 +172,8 @@ public class RecipeService {
         recipeFavorite.updateFavorite(request.getFavorite());
     }
 
-    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe, final Boolean favorite) {
+    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe,
+                                                       final Boolean favorite) {
         try {
             final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe, favorite);
             return recipeFavoriteRepository.save(recipeFavorite);
@@ -200,5 +207,20 @@ public class RecipeService {
                 })
                 .collect(Collectors.toList());
         return RankingRecipesResponse.toResponse(dtos);
+    }
+
+    @Transactional
+    public Long writeCommentOfRecipe(final Long memberId, final Long recipeId,
+                                     final RecipeCommentCreateRequest request) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+
+        final Recipe findRecipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
+
+        final Comment comment = new Comment(findRecipe, findMember, request.getComment());
+
+        final Comment savedComment = commentRepository.save(comment);
+        return savedComment.getId();
     }
 }

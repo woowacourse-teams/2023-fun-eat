@@ -5,6 +5,7 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.common.logging.Logging;
 import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
@@ -87,5 +88,14 @@ public class RecipeApiController implements RecipeController {
         final SearchRecipeResultsResponse response = recipeService.getSearchResults(query, pageRequest);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/recipes/{recipeId}/comments")
+    public ResponseEntity<Void> writeComment(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                             @PathVariable final Long recipeId,
+                                             @RequestBody @Valid final RecipeCommentCreateRequest request) {
+        final Long savedCommentId = recipeService.writeCommentOfRecipe(loginInfo.getId(), recipeId, request);
+
+        return ResponseEntity.created(URI.create("/api/recipes/" + recipeId + "/" + savedCommentId)).build();
     }
 }

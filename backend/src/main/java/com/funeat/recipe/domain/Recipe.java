@@ -1,7 +1,10 @@
 package com.funeat.recipe.domain;
 
+import com.funeat.comment.domain.Comment;
 import com.funeat.member.domain.Member;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Recipe {
@@ -30,6 +34,9 @@ public class Recipe {
     private Member member;
 
     private Long favoriteCount = 0L;
+
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
     protected Recipe() {
     }
@@ -78,5 +85,9 @@ public class Recipe {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 }
