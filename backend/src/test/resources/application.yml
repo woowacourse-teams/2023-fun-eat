@@ -15,15 +15,12 @@ spring:
         format_sql: true
         show_sql: true
 
+  session:
+    store-type: none
+
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
-
-server:
-  servlet:
-    session:
-      cookie:
-        name: FUNEAT
 
 cloud:
   aws:
