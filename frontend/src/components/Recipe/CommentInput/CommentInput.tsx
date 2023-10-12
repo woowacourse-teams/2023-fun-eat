@@ -1,4 +1,4 @@
-import { Button } from '@fun-eat/design-system';
+import { Button, Text, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -11,10 +11,13 @@ interface CommentInputProps {
   recipeId: number;
 }
 
+const MAX_COMMENT_LENGTH = 200;
+
 const CommentInput = ({ recipeId }: CommentInputProps) => {
   const [commentValue, setCommentValue] = useState('');
   const { mutate } = useRecipeCommentMutation(recipeId);
 
+  const theme = useTheme();
   const { toast } = useToastActionContext();
 
   const handleCommentInput: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -44,17 +47,22 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
   };
 
   return (
-    <CommentInputForm onSubmit={handleSubmitComment}>
-      <Input
-        placeholder="댓글을 입력하세요. (200자)"
-        minWidth="90%"
-        value={commentValue}
-        onChange={handleCommentInput}
-      />
-      <SubmitButton size="xs" customWidth="40px" disabled={commentValue.length === 0}>
-        등록
-      </SubmitButton>
-    </CommentInputForm>
+    <>
+      <CommentInputForm onSubmit={handleSubmitComment}>
+        <Input
+          placeholder="댓글을 입력하세요. (200자)"
+          minWidth="90%"
+          value={commentValue}
+          onChange={handleCommentInput}
+        />
+        <SubmitButton size="xs" customWidth="40px" disabled={commentValue.length === 0}>
+          등록
+        </SubmitButton>
+      </CommentInputForm>
+      <Text size="xs" color={theme.textColors.info} align="right">
+        {commentValue.length} / {MAX_COMMENT_LENGTH}
+      </Text>
+    </>
   );
 };
 
