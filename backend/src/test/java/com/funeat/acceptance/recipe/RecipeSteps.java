@@ -19,7 +19,7 @@ public class RecipeSteps {
                                                           final List<MultiPartSpecification> images,
                                                           final RecipeCreateRequest recipeRequest) {
         final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
+                .cookie("JSESSIONID", loginCookie);
 
         if (Objects.nonNull(images) && !images.isEmpty()) {
             images.forEach(requestSpec::multiPart);
@@ -35,7 +35,7 @@ public class RecipeSteps {
 
     public static ExtractableResponse<Response> 레시피_상세_정보_요청(final String loginCookie, final Long recipeId) {
         return given()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .when()
                 .get("/api/recipes/{recipeId}", recipeId)
                 .then()
@@ -55,7 +55,7 @@ public class RecipeSteps {
     public static ExtractableResponse<Response> 레시피_좋아요_요청(final String loginCookie, final Long recipeId,
                                                            final RecipeFavoriteRequest request) {
         return given()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .contentType("application/json")
                 .body(request)
                 .when()
