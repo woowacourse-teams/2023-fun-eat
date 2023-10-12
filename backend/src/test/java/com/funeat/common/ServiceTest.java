@@ -5,8 +5,6 @@ import com.funeat.member.application.TestMemberService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
-import com.funeat.member.persistence.ProductBookmarkRepository;
-import com.funeat.member.persistence.RecipeBookMarkRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.application.CategoryService;
@@ -47,12 +45,6 @@ public abstract class ServiceTest {
 
     @Autowired
     protected MemberRepository memberRepository;
-
-    @Autowired
-    protected ProductBookmarkRepository productBookmarkRepository;
-
-    @Autowired
-    protected RecipeBookMarkRepository recipeBookMarkRepository;
 
     @Autowired
     protected RecipeFavoriteRepository recipeFavoriteRepository;
