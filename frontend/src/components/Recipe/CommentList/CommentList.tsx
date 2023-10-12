@@ -1,15 +1,22 @@
 import { Heading, Spacing } from '@fun-eat/design-system';
+import { useRef } from 'react';
 
 import CommentItem from '../CommentItem/CommentItem';
 
-import { useRecipeCommentQuery } from '@/hooks/queries/recipe';
+import { useIntersectionObserver } from '@/hooks/common';
+import { useInfiniteRecipeCommentQuery } from '@/hooks/queries/recipe';
 
 interface CommentListProps {
   recipeId: number;
 }
 
 const CommentList = ({ recipeId }: CommentListProps) => {
-  const { data: comments } = useRecipeCommentQuery(Number(recipeId));
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { fetchNextPage, hasNextPage, data } = useInfiniteRecipeCommentQuery(Number(recipeId));
+  useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
+
+  const comments = data.pages.flatMap((page) => page.comments);
 
   return (
     <>
@@ -20,6 +27,7 @@ const CommentList = ({ recipeId }: CommentListProps) => {
       {comments.map((comment) => (
         <CommentItem key={comment.id} recipeComment={comment} />
       ))}
+      <div ref={scrollRef} style={{ height: '1px' }} aria-hidden />
     </>
   );
 };
