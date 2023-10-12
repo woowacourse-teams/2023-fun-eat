@@ -21,10 +21,12 @@ public class AdminLoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody final AdminAuthInfo adminAuthInfo, final HttpServletRequest request) {
+    public ResponseEntity<Void> login(@RequestBody final AdminAuthInfo adminAuthInfo,
+                                      final HttpServletRequest request) {
         adminChecker.check(adminAuthInfo);
 
-        request.getSession().setAttribute("authInfo", adminAuthInfo);
+        request.getSession().setAttribute("authId", adminAuthInfo.getId());
+        request.getSession().setAttribute("authKey", adminAuthInfo.getKey());
 
         return ResponseEntity.noContent().build();
     }

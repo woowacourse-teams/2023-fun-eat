@@ -30,12 +30,13 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
             throw new NotLoggedInException(LOGIN_ADMIN_NOT_FOUND);
         }
 
-        final AdminAuthInfo adminAuthInfo = (AdminAuthInfo) session.getAttribute("authInfo");
+        final String authId = String.valueOf(session.getAttribute("authId"));
+        final String authKey = String.valueOf(session.getAttribute("authKey"));
 
-        if (Objects.isNull(adminAuthInfo)) {
+        if (Objects.isNull(authId) || Objects.isNull(authKey)) {
             throw new NotLoggedInException(LOGIN_ADMIN_NOT_FOUND);
         }
 
-        return adminChecker.check(adminAuthInfo);
+        return adminChecker.check(new AdminAuthInfo(authId, authKey));
     }
 }
