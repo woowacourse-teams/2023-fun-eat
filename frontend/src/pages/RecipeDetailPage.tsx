@@ -20,7 +20,7 @@ export const RecipeDetailPage = () => {
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
-    <RecipeDetailPageContainer>
+    <>
       <SectionTitle name={title} />
       <Spacing size={24} />
       {images.length > 0 ? (
@@ -80,13 +80,9 @@ export const RecipeDetailPage = () => {
       </ErrorBoundary>
       <CommentForm recipeId={Number(recipeId)} />
       <Spacing size={12} />
-    </RecipeDetailPageContainer>
+    </>
   );
 };
-
-const RecipeDetailPageContainer = styled.div`
-  padding: 20px 20px 0;
-`;
 
 const RecipeImageContainer = styled.ul`
   display: flex;

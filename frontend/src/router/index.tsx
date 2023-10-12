@@ -18,15 +18,6 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: `${PATH.RECIPE}/:recipeId`,
-        async lazy() {
-          const { RecipeDetailPage } = await import(
-            /* webpackChunkName: "RecipeDetailPage" */ '@/pages/RecipeDetailPage'
-          );
-          return { Component: RecipeDetailPage };
-        },
-      },
-      {
         path: PATH.MEMBER,
         async lazy() {
           const { MemberPage } = await import(/* webpackChunkName: "MemberPage" */ '@/pages/MemberPage');
@@ -117,6 +108,15 @@ const router = createBrowserRouter([
             /* webpackChunkName: "ProductDetailPage" */ '@/pages/ProductDetailPage'
           );
           return { Component: ProductDetailPage };
+        },
+      },
+      {
+        path: `${PATH.RECIPE}/:recipeId`,
+        async lazy() {
+          const { RecipeDetailPage } = await import(
+            /* webpackChunkName: "RecipeDetailPage" */ '@/pages/RecipeDetailPage'
+          );
+          return { Component: RecipeDetailPage };
         },
       },
     ],

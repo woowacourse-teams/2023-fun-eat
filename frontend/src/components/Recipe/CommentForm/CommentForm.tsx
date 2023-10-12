@@ -3,6 +3,7 @@ import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { SvgIcon } from '@/components/Common';
 import { useToastActionContext } from '@/hooks/context';
 import useRecipeCommentMutation from '@/hooks/queries/recipe/useRecipeCommentMutation';
 
@@ -46,7 +47,7 @@ const CommentForm = ({ recipeId }: CommentFormProps) => {
   };
 
   return (
-    <>
+    <CommentFormContainer>
       <Form onSubmit={handleSubmitComment}>
         <CommentTextarea
           placeholder="댓글을 입력하세요. (200자)"
@@ -54,33 +55,47 @@ const CommentForm = ({ recipeId }: CommentFormProps) => {
           onChange={handleCommentInput}
           maxLength={MAX_COMMENT_LENGTH}
         />
-        <SubmitButton size="xs" customWidth="40px" customHeight="auto" disabled={commentValue.length === 0}>
-          등록
+        <SubmitButton variant="transparent" disabled={commentValue.length === 0}>
+          <SvgIcon
+            variant="plane"
+            width={30}
+            height={30}
+            color={commentValue.length === 0 ? theme.colors.gray2 : theme.colors.gray4}
+          />
         </SubmitButton>
       </Form>
       <Spacing size={8} />
       <Text size="xs" color={theme.textColors.info} align="right">
         {commentValue.length}자 / {MAX_COMMENT_LENGTH}자
       </Text>
-    </>
+    </CommentFormContainer>
   );
 };
 
 export default CommentForm;
 
+const CommentFormContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 40px);
+  max-width: 540px;
+  padding: 16px 0;
+  background: ${({ theme }) => theme.backgroundColors.default};
+`;
+
 const Form = styled.form`
   display: flex;
   gap: 4px;
   justify-content: space-around;
+  align-items: center;
 `;
 
 const CommentTextarea = styled(Textarea)`
-  width: calc(100% - 50px);
+  height: 50px;
   padding: 8px;
   font-size: 1.4rem;
 `;
 
 const SubmitButton = styled(Button)`
-  background: ${({ theme, disabled }) => (disabled ? theme.colors.gray2 : theme.colors.primary)};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
