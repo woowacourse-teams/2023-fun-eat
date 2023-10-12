@@ -1,4 +1,4 @@
-import { Button, Text, Textarea, useTheme } from '@fun-eat/design-system';
+import { Button, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -48,11 +48,17 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
   return (
     <>
       <CommentForm onSubmit={handleSubmitComment}>
-        <CommentTextarea placeholder="댓글을 입력하세요. (200자)" value={commentValue} onChange={handleCommentInput} />
+        <CommentTextarea
+          placeholder="댓글을 입력하세요. (200자)"
+          value={commentValue}
+          onChange={handleCommentInput}
+          maxLength={MAX_COMMENT_LENGTH}
+        />
         <SubmitButton size="xs" customWidth="40px" customHeight="auto" disabled={commentValue.length === 0}>
           등록
         </SubmitButton>
       </CommentForm>
+      <Spacing size={8} />
       <Text size="xs" color={theme.textColors.info} align="right">
         {commentValue.length}자 / {MAX_COMMENT_LENGTH}자
       </Text>
@@ -69,6 +75,7 @@ const CommentForm = styled.form`
 `;
 
 const CommentTextarea = styled(Textarea)`
+  width: calc(100% - 50px);
   padding: 8px;
   font-size: 1.4rem;
 `;

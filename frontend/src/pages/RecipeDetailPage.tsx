@@ -70,9 +70,9 @@ export const RecipeDetailPage = () => {
       <RecipeContent size="lg" lineHeight="lg">
         {content}
       </RecipeContent>
-      <Spacing size={16} />
-      <Divider variant="disabled" />
-      <Spacing size={16} />
+      <Spacing size={24} />
+      <Divider variant="disabled" customHeight="2px" />
+      <Spacing size={24} />
       <Heading as="h3" size="lg">
         댓글 ({recipeComments.length}개)
       </Heading>
