@@ -19,7 +19,7 @@ const CommentList = ({ recipeId }: CommentListProps) => {
   const comments = data.pages.flatMap((page) => page.comments);
 
   return (
-    <>
+    <section>
       <Heading as="h3" size="lg">
         댓글 ({comments.length}개)
       </Heading>
@@ -28,7 +28,7 @@ const CommentList = ({ recipeId }: CommentListProps) => {
         <CommentItem key={comment.id} recipeComment={comment} />
       ))}
       <div ref={scrollRef} style={{ height: '1px' }} aria-hidden />
-    </>
+    </section>
   );
 };
 

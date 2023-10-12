@@ -78,6 +78,7 @@ export const RecipeDetailPage = () => {
           <CommentList recipeId={Number(recipeId)} />
         </Suspense>
       </ErrorBoundary>
+      <Spacing size={108} />
       <CommentForm recipeId={Number(recipeId)} />
       <Spacing size={12} />
     </>
