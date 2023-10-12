@@ -1,7 +1,7 @@
-import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet, Text, Button } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { useState, useRef, Suspense } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -17,10 +17,10 @@ import {
 } from '@/components/Common';
 import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
 import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Review';
-import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
+import { PRODUCT_PATH_LOCAL_STORAGE_KEY, RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
-import { useGA, useSortOption, useTabMenu } from '@/hooks/common';
+import { useGA, useLocalStorage, useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
@@ -31,6 +31,9 @@ const LOGIN_ERROR_MESSAGE_RECIPE =
 
 export const ProductDetailPage = () => {
   const { category, productId } = useParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
 
@@ -46,7 +49,9 @@ export const ProductDetailPage = () => {
 
   const productDetailPageRef = useRef<HTMLDivElement>(null);
 
-  if (!category) {
+  const { setLocalStorage } = useLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
+
+  if (!category || !productId) {
     return null;
   }
 
@@ -71,6 +76,11 @@ export const ProductDetailPage = () => {
   const handleTabMenuSelect = (index: number) => {
     handleTabMenuClick(index);
     selectSortOption(currentSortOption);
+  };
+
+  const handleLoginButtonClick = () => {
+    setLocalStorage(pathname);
+    navigate(PATH.LOGIN);
   };
 
   return (
@@ -107,9 +117,15 @@ export const ProductDetailPage = () => {
           <ErrorDescription align="center" weight="bold" size="lg">
             {isReviewTab ? LOGIN_ERROR_MESSAGE_REVIEW : LOGIN_ERROR_MESSAGE_RECIPE}
           </ErrorDescription>
-          <LoginLink as={RouterLink} to={PATH.LOGIN} block>
+          <LoginButton
+            type="button"
+            customWidth="150px"
+            customHeight="60px"
+            onClick={handleLoginButtonClick}
+            color="white"
+          >
             로그인하러 가기
-          </LoginLink>
+          </LoginButton>
         </ErrorContainer>
       )}
       <Spacing size={100} />
@@ -171,10 +187,8 @@ const ErrorDescription = styled(Text)`
   white-space: pre-wrap;
 `;
 
-const LoginLink = styled(Link)`
-  padding: 16px 24px;
+const LoginButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.gray4};
-  border-radius: 8px;
 `;
 
 const ReviewRegisterButtonWrapper = styled.div`

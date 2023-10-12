@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { loginApi } from '@/apis';
+import { PRODUCT_PATH_LOCAL_STORAGE_KEY } from '@/constants';
 import { PATH } from '@/constants/path';
+import { useLocalStorage } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 
 export const AuthPage = () => {
@@ -14,9 +16,7 @@ export const AuthPage = () => {
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
 
-  if (member) {
-    return <Navigate to={PATH.HOME} replace />;
-  }
+  const { getLocalStorage, removeLocalStorage } = useLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
 
   const getSessionId = async () => {
     const response = await loginApi.get({
@@ -51,9 +51,17 @@ export const AuthPage = () => {
       return;
     }
 
+    const productPath = getLocalStorage();
+    const redirectLocation = productPath ? productPath : location;
+
+    navigate(redirectLocation, { replace: true });
+    removeLocalStorage();
     refetchMember();
-    navigate(location, { replace: true });
   }, [location]);
+
+  if (member) {
+    return <Navigate to={PATH.HOME} replace />;
+  }
 
   return <></>;
 };

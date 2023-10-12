@@ -12,4 +12,4 @@ export { default as useTabMenu } from './useTabMenu';
 export { default as useScrollRestoration } from './useScrollRestoration';
 export { default as useToast } from './useToast';
 export { default as useGA } from './useGA';
-
+export { default as useLocalStorage } from './useLocalStorage';
