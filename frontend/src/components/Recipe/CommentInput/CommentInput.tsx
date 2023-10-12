@@ -1,9 +1,8 @@
-import { Button, Text, useTheme } from '@fun-eat/design-system';
+import { Button, Text, Textarea, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { Input } from '@/components/Common';
 import { useToastActionContext } from '@/hooks/context';
 import useRecipeCommentMutation from '@/hooks/queries/recipe/useRecipeCommentMutation';
 
@@ -20,11 +19,11 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
   const theme = useTheme();
   const { toast } = useToastActionContext();
 
-  const handleCommentInput: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleCommentInput: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setCommentValue(e.target.value);
   };
 
-  const handleSubmitComment: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmitComment: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
     mutate(
@@ -36,7 +35,7 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
         },
         onError: (error) => {
           if (error instanceof Error) {
-            alert(error.message);
+            toast.error(error.message);
             return;
           }
 
@@ -48,19 +47,14 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
 
   return (
     <>
-      <CommentInputForm onSubmit={handleSubmitComment}>
-        <Input
-          placeholder="댓글을 입력하세요. (200자)"
-          minWidth="90%"
-          value={commentValue}
-          onChange={handleCommentInput}
-        />
-        <SubmitButton size="xs" customWidth="40px" disabled={commentValue.length === 0}>
+      <CommentForm onSubmit={handleSubmitComment}>
+        <CommentTextarea placeholder="댓글을 입력하세요. (200자)" value={commentValue} onChange={handleCommentInput} />
+        <SubmitButton size="xs" customWidth="40px" customHeight="auto" disabled={commentValue.length === 0}>
           등록
         </SubmitButton>
-      </CommentInputForm>
+      </CommentForm>
       <Text size="xs" color={theme.textColors.info} align="right">
-        {commentValue.length} / {MAX_COMMENT_LENGTH}
+        {commentValue.length}자 / {MAX_COMMENT_LENGTH}자
       </Text>
     </>
   );
@@ -68,10 +62,14 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
 
 export default CommentInput;
 
-const CommentInputForm = styled.form`
+const CommentForm = styled.form`
   display: flex;
   gap: 4px;
   justify-content: space-around;
+`;
+
+const CommentTextarea = styled(Textarea)`
+  padding: 8px;
 `;
 
 const SubmitButton = styled(Button)`
