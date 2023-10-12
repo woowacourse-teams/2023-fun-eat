@@ -27,7 +27,7 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
     e.preventDefault();
 
     mutate(
-      { content: commentValue },
+      { comment: commentValue },
       {
         onSuccess: () => {
           setCommentValue('');

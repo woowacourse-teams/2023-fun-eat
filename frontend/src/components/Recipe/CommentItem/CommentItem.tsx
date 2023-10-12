@@ -5,12 +5,12 @@ import type { Comment } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 
 interface CommentItemProps {
-  comment: Comment;
+  recipeComment: Comment;
 }
 
-const CommentItem = ({ comment }: CommentItemProps) => {
+const CommentItem = ({ recipeComment }: CommentItemProps) => {
   const theme = useTheme();
-  const { author, content, createdAt } = comment;
+  const { author, comment, createdAt } = recipeComment;
 
   return (
     <>
@@ -25,7 +25,7 @@ const CommentItem = ({ comment }: CommentItemProps) => {
           </Text>
         </div>
       </AuthorWrapper>
-      <CommentContent size="sm">{content}</CommentContent>
+      <CommentContent size="sm">{comment}</CommentContent>
       <Divider variant="disabled" />
       <Spacing size={16} />
     </>

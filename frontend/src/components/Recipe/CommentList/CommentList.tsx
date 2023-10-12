@@ -10,7 +10,7 @@ const CommentList = ({ comments }: CommentListProps) => {
   return (
     <>
       {comments.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} />
+        <CommentItem key={comment.id} recipeComment={comment} />
       ))}
     </>
   );

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { recipeApi } from '@/apis';
 
 interface RecipeCommentRequestBody {
-  content: string;
+  comment: string;
 }
 
 const headers = { 'Content-Type': 'application/json' };

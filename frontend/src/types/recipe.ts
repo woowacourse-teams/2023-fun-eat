@@ -43,6 +43,6 @@ export type RecipeProduct = Omit<RecipeProductWithPrice, 'price'>;
 export interface Comment {
   id: number;
   author: Member;
-  content: string;
+  comment: string;
   createdAt: string;
 }

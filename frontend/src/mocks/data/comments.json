@@ -4,7 +4,7 @@
       "nickname": "펀잇",
       "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34"
     },
-    "content": "저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. ",
+    "comment": "저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. 저도 먹어봤는데 맛있었어요. ",
     "createdAt": "2023-08-09T10:10:10",
     "id": 1
   },
@@ -13,7 +13,7 @@
       "nickname": "펀잇",
       "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34"
     },
-    "content": "string",
+    "comment": "string",
     "createdAt": "2023-08-09T10:10:10",
     "id": 1
   },
@@ -22,7 +22,7 @@
       "nickname": "펀잇",
       "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34"
     },
-    "content": "string",
+    "comment": "string",
     "createdAt": "2023-08-09T10:10:10",
     "id": 1
   }

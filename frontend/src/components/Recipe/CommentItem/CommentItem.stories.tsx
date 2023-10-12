@@ -8,7 +8,7 @@ const meta: Meta<typeof CommentItem> = {
   title: 'recipe/CommentItem',
   component: CommentItem,
   args: {
-    comment: comments[0],
+    recipeComment: comments[0],
   },
 };
 
