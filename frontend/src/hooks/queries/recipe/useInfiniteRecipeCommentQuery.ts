@@ -21,7 +21,7 @@ const fetchRecipeComments = async (pageParam: PageParam, recipeId: number) => {
 const useInfiniteRecipeCommentQuery = (recipeId: number) => {
   return useSuspendedInfiniteQuery(
     ['recipeComment', recipeId],
-    ({ pageParam }) => fetchRecipeComments(pageParam, recipeId),
+    ({ pageParam = { lastId: 0, totalElements: null } }) => fetchRecipeComments(pageParam, recipeId),
     {
       getNextPageParam: (prevResponse: CommentResponse) => {
         const lastId = prevResponse.comments[prevResponse.comments.length - 1].id;
