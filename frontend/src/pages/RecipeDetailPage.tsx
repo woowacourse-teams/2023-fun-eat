@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
 import { ErrorBoundary, ErrorComponent, Loading, SectionTitle } from '@/components/Common';
-import { CommentInput, CommentList, RecipeFavorite } from '@/components/Recipe';
+import { CommentForm, CommentList, RecipeFavorite } from '@/components/Recipe';
 import { useRecipeCommentQuery, useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -82,7 +82,7 @@ export const RecipeDetailPage = () => {
           <CommentList comments={recipeComments} />
         </Suspense>
       </ErrorBoundary>
-      <CommentInput recipeId={Number(recipeId)} />
+      <CommentForm recipeId={Number(recipeId)} />
       <Spacing size={12} />
     </RecipeDetailPageContainer>
   );

@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import { useToastActionContext } from '@/hooks/context';
 import useRecipeCommentMutation from '@/hooks/queries/recipe/useRecipeCommentMutation';
 
-interface CommentInputProps {
+interface CommentFormProps {
   recipeId: number;
 }
 
 const MAX_COMMENT_LENGTH = 200;
 
-const CommentInput = ({ recipeId }: CommentInputProps) => {
+const CommentForm = ({ recipeId }: CommentFormProps) => {
   const [commentValue, setCommentValue] = useState('');
   const { mutate } = useRecipeCommentMutation(recipeId);
 
@@ -47,7 +47,7 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
 
   return (
     <>
-      <CommentForm onSubmit={handleSubmitComment}>
+      <Form onSubmit={handleSubmitComment}>
         <CommentTextarea
           placeholder="댓글을 입력하세요. (200자)"
           value={commentValue}
@@ -57,7 +57,7 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
         <SubmitButton size="xs" customWidth="40px" customHeight="auto" disabled={commentValue.length === 0}>
           등록
         </SubmitButton>
-      </CommentForm>
+      </Form>
       <Spacing size={8} />
       <Text size="xs" color={theme.textColors.info} align="right">
         {commentValue.length}자 / {MAX_COMMENT_LENGTH}자
@@ -66,9 +66,9 @@ const CommentInput = ({ recipeId }: CommentInputProps) => {
   );
 };
 
-export default CommentInput;
+export default CommentForm;
 
-const CommentForm = styled.form`
+const Form = styled.form`
   display: flex;
   gap: 4px;
   justify-content: space-around;

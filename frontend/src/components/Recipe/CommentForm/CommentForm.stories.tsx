@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import CommentInput from './CommentInput';
+import CommentForm from './CommentForm';
 
-const meta: Meta<typeof CommentInput> = {
-  title: 'recipe/CommentInput',
-  component: CommentInput,
+const meta: Meta<typeof CommentForm> = {
+  title: 'recipe/CommentForm',
+  component: CommentForm,
 };
 
 export default meta;
