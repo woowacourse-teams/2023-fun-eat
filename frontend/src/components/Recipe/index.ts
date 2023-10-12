@@ -7,3 +7,4 @@ export { default as RecipeRegisterForm } from './RecipeRegisterForm/RecipeRegist
 export { default as RecipeFavorite } from './RecipeFavorite/RecipeFavorite';
 export { default as CommentItem } from './CommentItem/CommentItem';
 export { default as CommentInput } from './CommentInput/CommentInput';
+export { default as CommentList } from './CommentList/CommentList';

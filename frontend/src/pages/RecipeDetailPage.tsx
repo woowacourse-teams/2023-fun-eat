@@ -1,10 +1,12 @@
 import { Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
-import { SectionTitle } from '@/components/Common';
-import { CommentInput, CommentItem, RecipeFavorite } from '@/components/Recipe';
+import { ErrorBoundary, ErrorComponent, Loading, SectionTitle } from '@/components/Common';
+import { CommentInput, CommentList, RecipeFavorite } from '@/components/Recipe';
 import { useRecipeCommentQuery, useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -13,6 +15,8 @@ export const RecipeDetailPage = () => {
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
   const { data: recipeComments } = useRecipeCommentQuery(Number(recipeId));
+  const { reset } = useQueryErrorResetBoundary();
+
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
@@ -73,9 +77,11 @@ export const RecipeDetailPage = () => {
         댓글 ({recipeComments.length}개)
       </Heading>
       <Spacing size={12} />
-      {recipeComments.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} />
-      ))}
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <CommentList comments={recipeComments} />
+        </Suspense>
+      </ErrorBoundary>
       <CommentInput recipeId={Number(recipeId)} />
       <Spacing size={12} />
     </RecipeDetailPageContainer>
