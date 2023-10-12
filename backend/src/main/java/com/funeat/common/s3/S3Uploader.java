@@ -14,6 +14,8 @@ import com.funeat.common.exception.CommonException.S3UploadFailException;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,8 @@ public class S3Uploader implements ImageUploader {
 
     private static final int BEGIN_INDEX = 31;
     private static final List<String> INCLUDE_EXTENSIONS = List.of("image/jpeg", "image/png", "image/webp");
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -63,6 +67,7 @@ public class S3Uploader implements ImageUploader {
             final String key = folder + imageName;
             amazonS3.deleteObject(bucket, key);
         } catch (AmazonServiceException e) {
+            log.error("S3 이미지 삭제가 실패했습니다. 이미지 경로 : {}", image);
             throw new S3DeleteFailException(UNKNOWN_SERVER_ERROR_CODE);
         }
     }

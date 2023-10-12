@@ -192,9 +192,9 @@ public class ReviewService {
         final String image = review.getImage();
 
         if (review.checkAuthor(member)) {
+            eventPublisher.publishEvent(new ReviewDeleteEvent(image));
             deleteThingsRelatedToReview(reviewId);
             updateProductImage(product.getId());
-            deleteReviewImage(image);
             return;
         }
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
@@ -220,11 +220,5 @@ public class ReviewService {
                 .map(ReviewFavorite::getId)
                 .collect(Collectors.toList());
         reviewFavoriteRepository.deleteAllByIdInBatch(ids);
-    }
-
-    private void deleteReviewImage(final String image) {
-        if (image != null) {
-            eventPublisher.publishEvent(new ReviewDeleteEvent(image));
-        }
     }
 }
