@@ -93,4 +93,8 @@ export const recipeHandlers = [
   rest.get('/api/recipes/:recipeId/comments', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(comments));
   }),
+
+  rest.post('/api/recipes/:recipeId/comments', (req, res, ctx) => {
+    return res(ctx.status(201));
+  }),
 ];

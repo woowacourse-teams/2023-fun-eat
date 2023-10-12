@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
 import { SectionTitle } from '@/components/Common';
-import { CommentItem, RecipeFavorite } from '@/components/Recipe';
+import { CommentInput, CommentItem, RecipeFavorite } from '@/components/Recipe';
 import { useRecipeCommentQuery, useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -76,6 +76,8 @@ export const RecipeDetailPage = () => {
       {recipeComments.map((comment) => (
         <CommentItem key={comment.id} comment={comment} />
       ))}
+      <CommentInput recipeId={Number(recipeId)} />
+      <Spacing size={12} />
     </RecipeDetailPageContainer>
   );
 };
