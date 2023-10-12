@@ -3,10 +3,7 @@ package com.funeat.review.domain;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Review {
@@ -78,6 +78,18 @@ public class Review {
         this.content = content;
         this.reBuy = reBuy;
         this.favoriteCount = favoriteCount;
+    }
+
+    public Review(final Member member, final Product findProduct, final String image, final Long rating,
+                  final String content, final Boolean reBuy, final Long favoriteCount, final LocalDateTime createdAt) {
+        this.member = member;
+        this.product = findProduct;
+        this.image = image;
+        this.rating = rating;
+        this.content = content;
+        this.reBuy = reBuy;
+        this.favoriteCount = favoriteCount;
+        this.createdAt = createdAt;
     }
 
     public void addFavoriteCount() {
