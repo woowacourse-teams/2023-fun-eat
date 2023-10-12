@@ -66,5 +66,6 @@ export interface MemberRecipeResponse {
 
 export interface CommentResponse {
   hasNext: boolean;
+  totalElements: number | null;
   comments: Comment[];
 }
