@@ -7,14 +7,14 @@ import styled from 'styled-components';
 import RecipePreviewImage from '@/assets/plate.svg';
 import { ErrorBoundary, ErrorComponent, Loading, SectionTitle } from '@/components/Common';
 import { CommentForm, CommentList, RecipeFavorite } from '@/components/Recipe';
-import { useRecipeCommentQuery, useRecipeDetailQuery } from '@/hooks/queries/recipe';
+import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
 export const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
-  const { data: recipeComments } = useRecipeCommentQuery(Number(recipeId));
+
   const { reset } = useQueryErrorResetBoundary();
 
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
@@ -73,13 +73,9 @@ export const RecipeDetailPage = () => {
       <Spacing size={24} />
       <Divider variant="disabled" customHeight="2px" />
       <Spacing size={24} />
-      <Heading as="h3" size="lg">
-        댓글 ({recipeComments.length}개)
-      </Heading>
-      <Spacing size={12} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <CommentList comments={recipeComments} />
+          <CommentList recipeId={Number(recipeId)} />
         </Suspense>
       </ErrorBoundary>
       <CommentForm recipeId={Number(recipeId)} />
