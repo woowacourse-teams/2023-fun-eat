@@ -1,10 +1,5 @@
 package com.funeat.recipe.application;
 
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
-import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
-
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -36,23 +31,29 @@ import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
+
 @Service
 @Transactional(readOnly = true)
 public class RecipeService {
 
-    private static final int THREE = 3;
-    private static final int TOP = 0;
+    private static final long RANKING_MINIMUM_FAVORITE_COUNT = 1L;
+    private static final int RANKING_SIZE = 3;
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -190,9 +191,11 @@ public class RecipeService {
     }
 
     public RankingRecipesResponse getTop3Recipes() {
-        final List<Recipe> recipes = recipeRepository.findRecipesByOrderByFavoriteCountDesc(PageRequest.of(TOP, THREE));
+        final List<Recipe> recipes = recipeRepository.findRecipesByFavoriteCountGreaterThanEqual(RANKING_MINIMUM_FAVORITE_COUNT);
 
         final List<RankingRecipeDto> dtos = recipes.stream()
+                .sorted(Comparator.comparing(Recipe::calculateRankingScore).reversed())
+                .limit(RANKING_SIZE)
                 .map(recipe -> {
                     final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
                     final RecipeAuthorDto author = RecipeAuthorDto.toDto(recipe.getMember());
