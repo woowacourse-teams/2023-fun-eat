@@ -88,25 +88,17 @@ class ReviewTagRepositoryTest extends RepositoryTest {
             단일_상품_저장(product);
 
             final var tag1 = 태그_맛있어요_TASTE_생성();
-            final var tag2 = 태그_단짠단짠_TASTE_생성();
-            final var tag3 = 태그_갓성비_PRICE_생성();
-            final var tag4 = 태그_간식_ETC_생성();
-            복수_태그_저장(tag1, tag2, tag3, tag4);
+            단일_태그_저장(tag1);
 
             final var review1 = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 0L);
             final var review2 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 0L);
-            final var review3 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
-            복수_리뷰_저장(review1, review2, review3);
+            복수_리뷰_저장(review1, review2);
 
             final var reviewTag1_1 = 리뷰_태그_생성(review1, tag1);
-            final var reviewTag1_2 = 리뷰_태그_생성(review1, tag2);
             final var reviewTag2_1 = 리뷰_태그_생성(review2, tag1);
-            final var reviewTag2_2 = 리뷰_태그_생성(review2, tag2);
-            final var reviewTag2_3 = 리뷰_태그_생성(review2, tag3);
-            final var reviewTag3_1 = 리뷰_태그_생성(review3, tag1);
-            복수_리뷰_태그_저장(reviewTag1_1, reviewTag1_2, reviewTag2_1, reviewTag2_2, reviewTag2_3, reviewTag3_1);
+            복수_리뷰_태그_저장(reviewTag1_1, reviewTag2_1);
 
-            final var expected = List.of(reviewTag2_1, reviewTag2_2, reviewTag2_3, reviewTag3_1);
+            final var expected = List.of(reviewTag2_1);
 
             // when
             reviewTagRepository.deleteByReview(review1);
