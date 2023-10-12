@@ -6,6 +6,8 @@ import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -31,6 +33,11 @@ public class RecipeFixture {
 
     public static Recipe 레시피_생성(final Member member, final Long favoriteCount) {
         return new Recipe("The most delicious recipes", "More rice, more rice, more rice.. Done!!", member, favoriteCount);
+    }
+
+    public static Recipe 레시피_생성(final Member member, final Long favoriteCount, final LocalDateTime createdAt) {
+        return new Recipe("The most delicious recipes", "More rice, more rice, more rice.. Done!!",
+                member, favoriteCount, createdAt);
     }
 
     public static RecipeFavorite 레시피_좋아요_생성(final Member member, final Recipe recipe, final Boolean favorite) {

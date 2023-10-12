@@ -1,5 +1,32 @@
 package com.funeat.recipe.application;
 
+import com.funeat.common.ServiceTest;
+import com.funeat.common.dto.PageDto;
+import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
+import com.funeat.member.dto.MemberRecipesResponse;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
+import com.funeat.product.domain.Category;
+import com.funeat.product.domain.CategoryType;
+import com.funeat.product.domain.Product;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.recipe.dto.RankingRecipeDto;
+import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCreateRequest;
+import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.RecipeDto;
+import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
@@ -23,29 +50,6 @@ import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
-import com.funeat.common.ServiceTest;
-import com.funeat.common.dto.PageDto;
-import com.funeat.member.domain.Member;
-import com.funeat.member.dto.MemberRecipeDto;
-import com.funeat.member.dto.MemberRecipeProductDto;
-import com.funeat.member.dto.MemberRecipesResponse;
-import com.funeat.member.exception.MemberException.MemberNotFoundException;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.CategoryType;
-import com.funeat.product.domain.Product;
-import com.funeat.product.exception.ProductException.ProductNotFoundException;
-import com.funeat.recipe.dto.RecipeCreateRequest;
-import com.funeat.recipe.dto.RecipeDetailResponse;
-import com.funeat.recipe.dto.RecipeDto;
-import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -542,6 +546,135 @@ class RecipeServiceTest extends ServiceTest {
             final var favoriteRequest = 레시피좋아요요청_생성(true);
             assertThatThrownBy(() -> recipeService.likeRecipe(memberId, wrongRecipeId, favoriteRequest))
                     .isInstanceOf(RecipeNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class getTop3Recipes_성공_테스트 {
+
+        @Nested
+        class 꿀조합_개수에_대한_테스트 {
+
+            @Test
+            void 전체_꿀조합이_하나도_없어도_반환값은_있어야한다() {
+                // given
+                final var expected = RankingRecipesResponse.toResponse(Collections.emptyList());
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 전체_꿀조합이_1개_이상_3개_미만이라도_꿀조합이_나와야한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 2L, now.minusDays(1L));
+                final var recipe2 = 레시피_생성(member, 2L, now);
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 전체_꿀조합_중_랭킹이_높은_상위_3개_꿀조합을_구할_수_있다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 4L, now.minusDays(10L));
+                final var recipe2 = 레시피_생성(member, 6L, now.minusDays(10L));
+                final var recipe3 = 레시피_생성(member, 5L, now);
+                final var recipe4 = 레시피_생성(member, 6L, now);
+                복수_꿀조합_저장(recipe1, recipe2, recipe3, recipe4);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipeDto3 = RankingRecipeDto.toDto(recipe3, Collections.emptyList(), author);
+                final var rankingRecipeDto4 = RankingRecipeDto.toDto(recipe4, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto4, rankingRecipeDto3, rankingRecipeDto2);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+        }
+
+        @Nested
+        class 꿀조합_랭킹_점수에_대한_테스트 {
+
+            @Test
+            void 꿀조합_좋아요_수가_같으면_최근_생성된_꿀조합의_랭킹을_더_높게_반환한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 10L, now.minusDays(9L));
+                final var recipe2 = 레시피_생성(member, 10L, now.minusDays(4L));
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 꿀조합_생성_일자가_같으면_좋아요_수가_많은_꿀조합의_랭킹을_더_높게_반환한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 2L, now.minusDays(1L));
+                final var recipe2 = 레시피_생성(member, 4L, now.minusDays(1L));
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
         }
     }
 

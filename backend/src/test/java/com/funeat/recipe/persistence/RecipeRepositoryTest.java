@@ -1,5 +1,12 @@
 package com.funeat.recipe.persistence;
 
+import com.funeat.common.RepositoryTest;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
+
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
@@ -19,11 +26,6 @@ import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000�
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
 import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import com.funeat.common.RepositoryTest;
-import java.util.List;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeRepositoryTest extends RepositoryTest {
@@ -257,25 +259,44 @@ class RecipeRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class findRecipesByOrderByFavoriteCountDesc_성공_테스트 {
+    class findRecipesByFavoriteCountGreaterThanEqual_성공_테스트 {
 
         @Test
-        void 좋아요순으로_상위_3개의_레시피들을_조회한다() {
+        void 특정_좋아요_수_이상인_모든_꿀조합들을_조회한다() {
             // given
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
 
-            final var recipe1 = 레시피_생성(member, 1L);
-            final var recipe2 = 레시피_생성(member, 2L);
-            final var recipe3 = 레시피_생성(member, 3L);
-            final var recipe4 = 레시피_생성(member, 4L);
+            final var recipe1 = 레시피_생성(member, 0L);
+            final var recipe2 = 레시피_생성(member, 1L);
+            final var recipe3 = 레시피_생성(member, 10L);
+            final var recipe4 = 레시피_생성(member, 100L);
             복수_꿀조합_저장(recipe1, recipe2, recipe3, recipe4);
 
-            final var page = 페이지요청_기본_생성(0, 3);
-            final var expected = List.of(recipe4, recipe3, recipe2);
+            final var expected = List.of(recipe2, recipe3, recipe4);
 
             // when
-            final var actual = recipeRepository.findRecipesByOrderByFavoriteCountDesc(page);
+            final var actual = recipeRepository.findRecipesByFavoriteCountGreaterThanEqual(1L);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
+
+        @Test
+        void 특정_좋아요_수_이상인_꿀조합이_없으면_빈_리스트를_반환한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var recipe1 = 레시피_생성(member, 0L);
+            final var recipe2 = 레시피_생성(member, 0L);
+            복수_꿀조합_저장(recipe1, recipe2);
+
+            final var expected = Collections.emptyList();
+
+            // when
+            final var actual = recipeRepository.findRecipesByFavoriteCountGreaterThanEqual(1L);
 
             // then
             assertThat(actual).usingRecursiveComparison()
