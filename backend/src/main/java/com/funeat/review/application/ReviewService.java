@@ -28,9 +28,11 @@ import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
+import com.funeat.review.dto.TestSortingReviewDto;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
+import com.funeat.review.specification.SortingReviewSpecification;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
@@ -40,6 +42,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,9 +54,8 @@ public class ReviewService {
     private static final int TOP = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
-    private static final int ELEVEN = 11;
+    private static final int PAGE_SIZE = 10;
     private static final int START = 0;
-    private static final int END = 10;
     private static final boolean EXIST_NEXT_DATA = true;
     private static final boolean NOT_EXIST_NEXT_DATA = false;
 
@@ -124,8 +126,7 @@ public class ReviewService {
 
     private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
         try {
-            final ReviewFavorite reviewFavorite = ReviewFavorite.create(member, review,
-                    favorite);
+            final ReviewFavorite reviewFavorite = ReviewFavorite.create(member, review, favorite);
             return reviewFavoriteRepository.save(reviewFavorite);
         } catch (final DataIntegrityViolationException e) {
             throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
@@ -155,16 +156,37 @@ public class ReviewService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Long lastReviewId = request.getLastReviewId();
-        final String sort = request.getSort();
-
-        final List<SortingReviewDto> sortingReviewsAll = sortReviewService.execute(product, member, lastReviewId, sort);
-
-        if (sortingReviewsAll.size() == ELEVEN) {
-            final List<SortingReviewDto> sortingReviews = sortingReviewsAll.subList(START, END);
-            return SortingReviewsResponse.toResponse(sortingReviews, EXIST_NEXT_DATA);
+        final List<SortingReviewDto> sortingReviews = getSortingReviews(member, product, request);
+        if (sortingReviews.size() > PAGE_SIZE) {
+            final List<SortingReviewDto> resizeSortingReviews = sortingReviews.subList(START, PAGE_SIZE);
+            return SortingReviewsResponse.toResponse(resizeSortingReviews, EXIST_NEXT_DATA);
         }
-        return SortingReviewsResponse.toResponse(sortingReviewsAll, NOT_EXIST_NEXT_DATA);
+        return SortingReviewsResponse.toResponse(sortingReviews, NOT_EXIST_NEXT_DATA);
+    }
+
+    private List<SortingReviewDto> getSortingReviews(final Member member, final Product product,
+                                                     final SortingReviewRequest request) {
+        final Long lastReviewId = request.getLastReviewId();
+        final String sortOption = request.getSort();
+
+        if (lastReviewId == TOP) {
+            final Specification<Review> specification = SortingReviewSpecification.sortingFirstPageBy(product);
+            final List<TestSortingReviewDto> sortingReviewsTest = reviewRepository.getSortingReview(member,
+                    specification, sortOption);
+            return sortingReviewsTest.stream()
+                    .map(SortingReviewDto::toDto)
+                    .collect(Collectors.toList());
+        }
+
+        final Review lastReview = reviewRepository.findById(lastReviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
+        final Specification<Review> specification = SortingReviewSpecification.sortingBy(product, sortOption,
+                lastReview);
+        final List<TestSortingReviewDto> sortingReviewsTest = reviewRepository.getSortingReview(member, specification,
+                sortOption);
+        return sortingReviewsTest.stream()
+                .map(SortingReviewDto::toDto)
+                .collect(Collectors.toList());
     }
 
     public RankingReviewsResponse getTopReviews() {

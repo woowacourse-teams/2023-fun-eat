@@ -8,7 +8,9 @@ import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.dto.TagDto;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SortingReviewDto {
@@ -58,20 +60,30 @@ public class SortingReviewDto {
         this.createdAt = createdAt;
     }
 
-    public static SortingReviewDto toDto(final Review review, final Member member) {
+    public static SortingReviewDto toDto(final TestSortingReviewDto dto) {
+        final Boolean isFavorite = checkingFavorite(dto.getFavorite());
+
         return new SortingReviewDto(
-                review.getId(),
-                review.getMember().getNickname(),
-                review.getMember().getProfileImage(),
-                review.getImage(),
-                review.getRating(),
-                findTagDtos(review),
-                review.getContent(),
-                review.getReBuy(),
-                review.getFavoriteCount(),
-                findReviewFavoriteChecked(review, member),
-                review.getCreatedAt()
+                dto.getId(),
+                dto.getUserName(),
+                dto.getProfileImage(),
+                dto.getImage(),
+                dto.getRating(),
+                Collections.emptyList(),
+                dto.getContent(),
+                dto.getRebuy(),
+                dto.getFavoriteCount(),
+                isFavorite,
+                dto.getCreatedAt()
         );
+    }
+
+    private static Boolean checkingFavorite(final Boolean favorite) {
+        final Optional<Boolean> isFavorite = Optional.ofNullable(favorite);
+        if (isFavorite.isEmpty()) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
     public static SortingReviewDto toDto(final SortingReviewDto sortingReviewDto, final List<Tag> tags) {
