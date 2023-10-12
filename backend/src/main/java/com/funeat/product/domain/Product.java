@@ -3,8 +3,6 @@ package com.funeat.product.domain;
 import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -68,6 +66,10 @@ public class Product {
         this.category = category;
     }
 
+    public static Product create(final String name, final Long price, final String content, final Category category) {
+        return new Product(name, price, null, content, category);
+    }
+
     public void updateAverageRating(final Long rating, final Long count) {
         final double calculatedRating = ((count - 1) * averageRating + rating) / count;
         this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
@@ -81,6 +83,13 @@ public class Product {
 
     public void updateImage(final String topFavoriteImage) {
         this.image = topFavoriteImage;
+    }
+
+    public void update(final String name, final String content, final Long price, final Category category) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.category = category;
     }
 
     public Long getId() {

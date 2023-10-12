@@ -1,5 +1,6 @@
 package com.funeat.common;
 
+import com.funeat.admin.util.AdminCheckInterceptor;
 import com.funeat.auth.util.AuthArgumentResolver;
 import com.funeat.auth.util.AuthHandlerInterceptor;
 import com.funeat.recipe.util.RecipeDetailHandlerInterceptor;
@@ -20,16 +21,20 @@ public class WebConfig implements WebMvcConfigurer {
     private final RecipeHandlerInterceptor recipeHandlerInterceptor;
     private final RecipeDetailHandlerInterceptor recipeDetailHandlerInterceptor;
 
+    private final AdminCheckInterceptor adminCheckInterceptor;
+
     public WebConfig(final CustomPageableHandlerMethodArgumentResolver customPageableHandlerMethodArgumentResolver,
                      final AuthArgumentResolver authArgumentResolver,
                      final AuthHandlerInterceptor authHandlerInterceptor,
                      final RecipeHandlerInterceptor recipeHandlerInterceptor,
-                     final RecipeDetailHandlerInterceptor recipeDetailHandlerInterceptor) {
+                     final RecipeDetailHandlerInterceptor recipeDetailHandlerInterceptor,
+                     final AdminCheckInterceptor adminCheckInterceptor) {
         this.customPageableHandlerMethodArgumentResolver = customPageableHandlerMethodArgumentResolver;
         this.authArgumentResolver = authArgumentResolver;
         this.authHandlerInterceptor = authHandlerInterceptor;
         this.recipeHandlerInterceptor = recipeHandlerInterceptor;
         this.recipeDetailHandlerInterceptor = recipeDetailHandlerInterceptor;
+        this.adminCheckInterceptor = adminCheckInterceptor;
     }
 
     @Override
@@ -43,6 +48,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(recipeDetailHandlerInterceptor)
                 .addPathPatterns("/api/recipes/**")
                 .excludePathPatterns("/api/recipes");
+        registry.addInterceptor(adminCheckInterceptor)
+                .excludePathPatterns("/api/admin/login")
+                .addPathPatterns("/api/admin/**");
     }
 
     @Override

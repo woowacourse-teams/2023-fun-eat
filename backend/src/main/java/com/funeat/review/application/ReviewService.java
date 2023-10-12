@@ -20,6 +20,7 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewDto;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
@@ -177,5 +178,14 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return MemberReviewsResponse.toResponse(pageDto, dtos);
+    }
+
+    public Optional<MostFavoriteReviewResponse> getMostFavoriteReview(final Long productId) {
+        final Product findProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
+
+        final Optional<Review> review = reviewRepository.findTopByProductOrderByFavoriteCountDescIdDesc(findProduct);
+
+        return MostFavoriteReviewResponse.toResponse(review);
     }
 }

@@ -161,14 +161,14 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
 
         final RecipeFavorite recipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
-                .orElseGet(() -> createAndSaveRecipeFavorite(member, recipe));
+                .orElseGet(() -> createAndSaveRecipeFavorite(member, recipe, request.getFavorite()));
 
         recipeFavorite.updateFavorite(request.getFavorite());
     }
 
-    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
+    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe, final Boolean favorite) {
         try {
-            final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
+            final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe, favorite);
             return recipeFavoriteRepository.save(recipeFavorite);
         } catch (final DataIntegrityViolationException e) {
             throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());

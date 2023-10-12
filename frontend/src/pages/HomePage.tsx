@@ -1,4 +1,4 @@
-import { Heading, Link, Spacing } from '@fun-eat/design-system';
+import { Heading, Spacing } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import styled from 'styled-components';
@@ -20,9 +20,7 @@ export const HomePage = () => {
   return (
     <>
       <section>
-        <Link href="https://www.instagram.com/p/CxmlqAQSK-w/?igshid=MzRlODBiNWFlZA==" isExternal>
-          <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
-        </Link>
+        <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
       </section>
       <Spacing size={40} />
       <SectionWrapper>

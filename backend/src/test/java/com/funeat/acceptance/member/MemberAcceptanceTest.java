@@ -7,6 +7,7 @@ import static com.funeat.acceptance.common.CommonSteps.여러개_사진_명세_�
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
+import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.member.MemberSteps.사용자_꿀조합_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_리뷰_조회_요청;
@@ -68,7 +69,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 사용자_정보를_확인하다() {
-            // given && when
+            // given & when
             final var 응답 = 사용자_정보_조회_요청(로그인_쿠키_획득(멤버1));
 
             // then
@@ -98,29 +99,29 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 사용자_정보를_수정하다() {
-            // given && when
+            // given & when
             final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지1), 유저닉네임수정요청_생성("after"));
 
             // then
-            STATUS_CODE를_검증한다(응답, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
         }
 
         @Test
         void 사용자_닉네임을_수정하다() {
-            // given && when
+            // given & when
             final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지1), 유저닉네임수정요청_생성("member1"));
 
             // then
-            STATUS_CODE를_검증한다(응답, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
         }
 
         @Test
         void 사용자_이미지를_수정하다() {
-            // given && when
+            // given & when
             final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지2), 유저닉네임수정요청_생성("after"));
 
             // then
-            STATUS_CODE를_검증한다(응답, 정상_처리);
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
         }
     }
 
@@ -130,7 +131,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @ParameterizedTest
         @NullAndEmptySource
         void 로그인_하지않은_사용자가_사용자_정보_수정시_예외가_발생한다(final String cookie) {
-            // given && when
+            // given & when
             final var 응답 = 사용자_정보_수정_요청(cookie, 사진_명세_요청(이미지1), 유저닉네임수정요청_생성("after"));
 
             // then
@@ -142,7 +143,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         @ParameterizedTest
         @NullAndEmptySource
         void 사용자가_사용자_정보_수정할때_닉네임_미기입시_예외가_발생한다(final String nickname) {
-            // given && when
+            // given & when
             final var 응답 = 사용자_정보_수정_요청(로그인_쿠키_획득(멤버1), 사진_명세_요청(이미지1), 유저닉네임수정요청_생성(nickname));
 
             // then

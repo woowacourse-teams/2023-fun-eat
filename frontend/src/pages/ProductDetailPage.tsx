@@ -1,7 +1,6 @@
 import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { useState, useRef, Suspense } from 'react';
-import ReactGA from 'react-ga4';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -17,11 +16,11 @@ import {
   SectionTitle,
 } from '@/components/Common';
 import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
-import { ReviewList, ReviewRegisterForm } from '@/components/Review';
+import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Review';
 import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
-import { useSortOption, useTabMenu } from '@/hooks/common';
+import { useGA, useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 
@@ -34,6 +33,7 @@ export const ProductDetailPage = () => {
   const { category, productId } = useParams();
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
+
   const { reset } = useQueryErrorResetBoundary();
 
   const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
@@ -42,43 +42,44 @@ export const ProductDetailPage = () => {
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+  const { gaEvent } = useGA();
 
   const productDetailPageRef = useRef<HTMLDivElement>(null);
-
-  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
-  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
-  const currentSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
 
   if (!category) {
     return null;
   }
 
+  const { name, bookmark, reviewCount } = productDetail;
+
+  const tabMenus = [`리뷰 ${reviewCount}`, '꿀조합'];
+  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
+  const currentSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
+
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
     handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '상품 리뷰 작성하기 버튼 클릭', label: '상품 리뷰 작성' });
   };
 
   const handleOpenSortOptionSheet = () => {
     setActiveSheet('sortOption');
     handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '상품 리뷰 정렬 버튼 클릭', label: '상품 리뷰 정렬' });
   };
 
   const handleTabMenuSelect = (index: number) => {
     handleTabMenuClick(index);
     selectSortOption(currentSortOption);
-
-    ReactGA.event({
-      category: '버튼',
-      action: '카테고리 이동 클릭 액션',
-      label: 'category',
-    });
   };
 
   return (
     <ProductDetailPageContainer ref={productDetailPageRef}>
-      <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
+      <SectionTitle name={name} bookmark={bookmark} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
+      <Spacing size={30} />
+      <BestReviewItem productId={Number(productId)} />
       <Spacing size={36} />
       <TabMenu
         ref={tabRef}
@@ -96,11 +97,7 @@ export const ProductDetailPage = () => {
               {isReviewTab ? (
                 <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
               ) : (
-                <ProductRecipeList
-                  productId={Number(productId)}
-                  productName={productDetail.name}
-                  selectedOption={selectedOption}
-                />
+                <ProductRecipeList productId={Number(productId)} productName={name} selectedOption={selectedOption} />
               )}
             </section>
           </Suspense>
