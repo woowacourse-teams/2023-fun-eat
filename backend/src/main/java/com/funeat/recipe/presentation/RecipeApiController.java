@@ -5,7 +5,9 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.common.logging.Logging;
 import com.funeat.recipe.application.RecipeService;
 import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeCommentCondition;
 import com.funeat.recipe.dto.RecipeCommentCreateRequest;
+import com.funeat.recipe.dto.RecipeCommentsResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
@@ -20,6 +22,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,5 +100,14 @@ public class RecipeApiController implements RecipeController {
         final Long savedCommentId = recipeService.writeCommentOfRecipe(loginInfo.getId(), recipeId, request);
 
         return ResponseEntity.created(URI.create("/api/recipes/" + recipeId + "/" + savedCommentId)).build();
+    }
+
+    @GetMapping("/api/recipes/{recipeId}/comments")
+    public ResponseEntity<RecipeCommentsResponse> getCommentsOfRecipe(
+            @AuthenticationPrincipal final LoginInfo loginInfo, @PathVariable final Long recipeId,
+            @ModelAttribute final RecipeCommentCondition condition) {
+        final RecipeCommentsResponse response = recipeService.getCommentsOfRecipe(recipeId, condition);
+
+        return ResponseEntity.ok(response);
     }
 }

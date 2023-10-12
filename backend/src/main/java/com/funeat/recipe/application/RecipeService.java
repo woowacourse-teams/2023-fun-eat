@@ -7,6 +7,7 @@ import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
 import com.funeat.comment.domain.Comment;
 import com.funeat.comment.persistence.CommentRepository;
+import com.funeat.comment.specification.CommentSpecification;
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -28,7 +29,10 @@ import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RankingRecipeDto;
 import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCommentCondition;
 import com.funeat.recipe.dto.RecipeCommentCreateRequest;
+import com.funeat.recipe.dto.RecipeCommentResponse;
+import com.funeat.recipe.dto.RecipeCommentsResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
@@ -39,6 +43,7 @@ import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -46,6 +51,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,6 +63,7 @@ public class RecipeService {
 
     private static final int THREE = 3;
     private static final int TOP = 0;
+    private static final int RECIPE_COMMENT_PAGE_SIZE = 10;
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -222,5 +230,46 @@ public class RecipeService {
 
         final Comment savedComment = commentRepository.save(comment);
         return savedComment.getId();
+    }
+
+    public RecipeCommentsResponse getCommentsOfRecipe(final Long recipeId, final RecipeCommentCondition condition) {
+        final Recipe findRecipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
+
+        final Specification<Comment> spec = CommentSpecification.findAllByRecipe(findRecipe, condition.getLastId());
+
+        final PageRequest pageable = PageRequest.of(0, 11, Sort.by("id").descending());
+
+        final Page<Comment> commentPaginationResult = commentRepository.findAllForPagination(spec, pageable,
+                condition.getTotalElements());
+
+        final List<RecipeCommentResponse> recipeCommentResponses = getRecipeCommentResponses(
+                commentPaginationResult.getContent());
+
+        final Boolean hasNext = hasNextPage(commentPaginationResult);
+
+        return new RecipeCommentsResponse(recipeCommentResponses, hasNext, commentPaginationResult.getTotalElements());
+    }
+
+    private List<RecipeCommentResponse> getRecipeCommentResponses(final List<Comment> findComments) {
+        final List<RecipeCommentResponse> recipeCommentResponses = new ArrayList<>();
+        final int resultSize = getResultSize(findComments);
+
+        for (int i = 0; i < resultSize; i++) {
+            final RecipeCommentResponse recipeCommentResponse = RecipeCommentResponse.toResponse(findComments.get(i));
+            recipeCommentResponses.add(recipeCommentResponse);
+        }
+        return recipeCommentResponses;
+    }
+
+    private int getResultSize(final List<Comment> findComments) {
+        if (findComments.size() < 11) {
+            return findComments.size();
+        }
+        return RECIPE_COMMENT_PAGE_SIZE;
+    }
+
+    private Boolean hasNextPage(final Page<Comment> findComments) {
+        return findComments.getContent().size() > RECIPE_COMMENT_PAGE_SIZE;
     }
 }

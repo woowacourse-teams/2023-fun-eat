@@ -3,7 +3,9 @@ package com.funeat.recipe.presentation;
 import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeCommentCondition;
 import com.funeat.recipe.dto.RecipeCommentCreateRequest;
+import com.funeat.recipe.dto.RecipeCommentsResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,4 +94,14 @@ public interface RecipeController {
     ResponseEntity<Void> writeComment(@AuthenticationPrincipal final LoginInfo loginInfo,
                                       @PathVariable final Long recipeId,
                                       @RequestBody final RecipeCommentCreateRequest request);
+
+    @Operation(summary = "꿀조합 댓글 조회", description = "꿀조합 상세에서 댓글을 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "꿀조합 댓글 조회 성공."
+    )
+    @GetMapping("/api/recipes/{recipeId}/comments")
+    ResponseEntity<RecipeCommentsResponse> getCommentsOfRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
+                                                               @PathVariable final Long recipeId,
+                                                               @ModelAttribute final RecipeCommentCondition condition);
 }
