@@ -4,13 +4,15 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductReviewCountDto;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
@@ -36,8 +38,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             + "FROM Product p "
             + "LEFT JOIN Review r ON r.product.id = p.id "
             + "WHERE p.averageRating > 3.0 "
+            + "AND r.createdAt BETWEEN :startDateTime AND :endDateTime "
             + "GROUP BY p.id")
-    List<ProductReviewCountDto> findAllByAverageRatingGreaterThan3();
+    List<ProductReviewCountDto> findAllByAverageRatingGreaterThan3(final LocalDateTime startDateTime,
+                                                                   final LocalDateTime endDateTime);
 
     @Query("SELECT p FROM Product p "
             + "WHERE p.name LIKE CONCAT('%', :name, '%') "
