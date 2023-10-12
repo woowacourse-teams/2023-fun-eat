@@ -39,7 +39,6 @@ public class Comment {
         this.recipe = recipe;
         this.member = member;
         this.comment = comment;
-        recipe.getComments().add(this);
     }
 
     public Long getId() {
