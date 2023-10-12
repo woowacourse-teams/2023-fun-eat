@@ -76,4 +76,7 @@ public class AdminReviewSpecification {
             return criteriaBuilder.lessThan(reviewIdPath, reviewId);
         };
     }
+
+    private AdminReviewSpecification() {
+    }
 }

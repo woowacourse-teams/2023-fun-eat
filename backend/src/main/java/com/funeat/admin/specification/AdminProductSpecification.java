@@ -64,4 +64,7 @@ public class AdminProductSpecification {
             return criteriaBuilder.equal(categoryPath, categoryId);
         };
     }
+
+    private AdminProductSpecification() {
+    }
 }

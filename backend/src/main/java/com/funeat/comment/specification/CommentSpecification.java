@@ -50,4 +50,7 @@ public class CommentSpecification {
             return criteriaBuilder.lessThan(commentIdPath, commentId);
         };
     }
+
+    private CommentSpecification() {
+    }
 }
