@@ -20,9 +20,10 @@ import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Rev
 import { PRODUCT_PATH_LOCAL_STORAGE_KEY, RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
-import { useGA, useLocalStorage, useSortOption, useTabMenu } from '@/hooks/common';
+import { useGA, useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
+import { setLocalStorage } from '@/utils/localstorage';
 
 const LOGIN_ERROR_MESSAGE_REVIEW =
   '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 리뷰를 확인해보세요 😊';
@@ -48,8 +49,6 @@ export const ProductDetailPage = () => {
   const { gaEvent } = useGA();
 
   const productDetailPageRef = useRef<HTMLDivElement>(null);
-
-  const { setLocalStorage } = useLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
 
   if (!category || !productId) {
     return null;
@@ -79,7 +78,7 @@ export const ProductDetailPage = () => {
   };
 
   const handleLoginButtonClick = () => {
-    setLocalStorage(pathname);
+    setLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY, pathname);
     navigate(PATH.LOGIN);
   };
 

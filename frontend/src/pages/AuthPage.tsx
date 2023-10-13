@@ -4,8 +4,8 @@ import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-
 import { loginApi } from '@/apis';
 import { PRODUCT_PATH_LOCAL_STORAGE_KEY } from '@/constants';
 import { PATH } from '@/constants/path';
-import { useLocalStorage } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
+import { getLocalStorage, removeLocalStorage } from '@/utils/localstorage';
 
 export const AuthPage = () => {
   const { authProvider } = useParams();
@@ -15,8 +15,6 @@ export const AuthPage = () => {
   const { data: member, refetch: refetchMember } = useMemberQuery();
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
-
-  const { getLocalStorage, removeLocalStorage } = useLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
 
   const getSessionId = async () => {
     const response = await loginApi.get({
@@ -51,11 +49,11 @@ export const AuthPage = () => {
       return;
     }
 
-    const productPath = getLocalStorage();
+    const productPath = getLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
     const redirectLocation = productPath ? productPath : location;
 
     navigate(redirectLocation, { replace: true });
-    removeLocalStorage();
+    removeLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
     refetchMember();
   }, [location]);
 
