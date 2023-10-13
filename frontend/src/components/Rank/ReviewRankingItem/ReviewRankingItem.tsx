@@ -48,7 +48,7 @@ const ReviewRankingItemContainer = styled.div<{ isMemberPage: boolean }>`
   gap: 4px;
   padding: 12px;
   border: ${({ isMemberPage, theme }) => (isMemberPage ? 'none' : `1px solid ${theme.borderColors.disabled}`)};
-  border-bottom: ${({ isMemberPage, theme }) => (isMemberPage ? `1px solid ${theme.borderColors.disabled}` : 'none')};
+  border-bottom: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
   border-radius: ${({ isMemberPage, theme }) => (isMemberPage ? 0 : theme.borderRadius.sm)};
 `;
 
