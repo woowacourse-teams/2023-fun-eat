@@ -19,12 +19,6 @@ logging:
   level:
     org.hibernate.type.descriptor.sql: trace
 
-server:
-  servlet:
-    session:
-      cookie:
-        name: FUNEAT
-
 cloud:
   aws:
     region:

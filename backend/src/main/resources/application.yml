@@ -28,7 +28,3 @@ server:
       max: { MAX_THREADS }
     max-connections: { MAX_CONNECTIONS }
     accept-count: { ACCEPT_COUNT }
-  servlet:
-    session:
-      cookie:
-        name: FUNEAT
