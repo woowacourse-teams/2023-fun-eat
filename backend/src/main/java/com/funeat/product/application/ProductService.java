@@ -1,8 +1,5 @@
 package com.funeat.product.application;
 
-import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
-
 import com.funeat.common.dto.PageDto;
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
@@ -30,15 +27,19 @@ import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,6 +49,7 @@ public class ProductService {
     private static final int TOP = 0;
     public static final String REVIEW_COUNT = "reviewCount";
     private static final int RANKING_SIZE = 3;
+    private static final int PAGE_SIZE = 10;
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -115,15 +117,23 @@ public class ProductService {
         return RankingProductsResponse.toResponse(rankingProductDtos);
     }
 
-    public SearchProductsResponse searchProducts(final String query, final Pageable pageable) {
-        final Page<Product> products = productRepository.findAllByNameContaining(query, pageable);
+    public SearchProductsResponse searchProducts(final String query, final Long lastId) {
+        final List<Product> products = findAllByNameContaining(query, lastId);
 
-        final PageDto pageDto = PageDto.toDto(products);
+        final boolean hasNext = products.size() > PAGE_SIZE;
         final List<SearchProductDto> productDtos = products.stream()
                 .map(SearchProductDto::toDto)
                 .collect(Collectors.toList());
 
-        return SearchProductsResponse.toResponse(pageDto, productDtos);
+        return SearchProductsResponse.toResponse(hasNext, productDtos);
+    }
+
+    private List<Product> findAllByNameContaining(final String query, final Long lastId) {
+        final PageRequest size = PageRequest.of(0, PAGE_SIZE);
+        if (lastId == 0) {
+            return productRepository.findAllByNameContainingFirst(query, size);
+        }
+        return productRepository.findAllByNameContaining(query, lastId, size);
     }
 
     public SearchProductResultsResponse getSearchResults(final String query, final Pageable pageable) {

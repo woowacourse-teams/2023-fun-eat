@@ -52,7 +52,7 @@ public interface ProductController {
     )
     @GetMapping
     ResponseEntity<SearchProductsResponse> searchProducts(@RequestParam final String query,
-                                                          @PageableDefault final Pageable pageable);
+                                                          @RequestParam final Long lastId);
 
     @Operation(summary = "상품 검색 결과 조회", description = "문자열을 받아 상품을 검색하고 검색 결과들을 조회한다.")
     @ApiResponse(
