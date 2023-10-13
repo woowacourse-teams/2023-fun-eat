@@ -64,6 +64,7 @@ public class RecipeService {
     private static final int THREE = 3;
     private static final int TOP = 0;
     private static final int RECIPE_COMMENT_PAGE_SIZE = 10;
+    private static final int DEFAULT_CURSOR_PAGINATION_SIZE = 11;
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -239,7 +240,7 @@ public class RecipeService {
         final Specification<Comment> specification = CommentSpecification.findAllByRecipe(findRecipe,
                 condition.getLastId());
 
-        final PageRequest pageable = PageRequest.of(0, 11, Sort.by("id").descending());
+        final PageRequest pageable = PageRequest.of(0, DEFAULT_CURSOR_PAGINATION_SIZE, Sort.by("id").descending());
 
         final Page<Comment> commentPaginationResult = commentRepository.findAllForPagination(specification, pageable,
                 condition.getTotalElements());
@@ -255,16 +256,17 @@ public class RecipeService {
     private List<RecipeCommentResponse> getRecipeCommentResponses(final List<Comment> findComments) {
         final List<RecipeCommentResponse> recipeCommentResponses = new ArrayList<>();
         final int resultSize = getResultSize(findComments);
+        final List<Comment> comments = findComments.subList(0, resultSize);
 
-        for (int i = 0; i < resultSize; i++) {
-            final RecipeCommentResponse recipeCommentResponse = RecipeCommentResponse.toResponse(findComments.get(i));
+        for (final Comment comment : comments) {
+            final RecipeCommentResponse recipeCommentResponse = RecipeCommentResponse.toResponse(comment);
             recipeCommentResponses.add(recipeCommentResponse);
         }
         return recipeCommentResponses;
     }
 
     private int getResultSize(final List<Comment> findComments) {
-        if (findComments.size() < 11) {
+        if (findComments.size() < DEFAULT_CURSOR_PAGINATION_SIZE) {
             return findComments.size();
         }
         return RECIPE_COMMENT_PAGE_SIZE;
