@@ -23,7 +23,7 @@ import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useGA, useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
-import { setLocalStorage } from '@/utils/localstorage';
+import { setLocalStorage } from '@/utils/localStorage';
 
 const LOGIN_ERROR_MESSAGE_REVIEW =
   '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 리뷰를 확인해보세요 😊';
