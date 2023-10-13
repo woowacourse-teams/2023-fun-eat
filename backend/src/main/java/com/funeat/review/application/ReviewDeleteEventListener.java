@@ -1,6 +1,7 @@
 package com.funeat.review.application;
 
 import com.funeat.common.ImageUploader;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -19,7 +20,7 @@ public class ReviewDeleteEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void deleteReviewImageInS3(final ReviewDeleteEvent event) {
         final String image = event.getImage();
-        if (image != null) {
+        if (StringUtils.isBlank(image)) {
             imageUploader.delete(image);
         }
     }

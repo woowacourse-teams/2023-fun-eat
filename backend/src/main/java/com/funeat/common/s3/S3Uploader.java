@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Profile("!test")
 public class S3Uploader implements ImageUploader {
 
-    private static final int BEGIN_INDEX = 31;
+    private static final int BEGIN_FILE_NAME_INDEX_WITHOUT_CLOUDFRONT_PATH = 31;
     private static final List<String> INCLUDE_EXTENSIONS = List.of("image/jpeg", "image/png", "image/webp");
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -62,7 +62,7 @@ public class S3Uploader implements ImageUploader {
 
     @Override
     public void delete(final String image) {
-        final String imageName = image.substring(BEGIN_INDEX);
+        final String imageName = image.substring(BEGIN_FILE_NAME_INDEX_WITHOUT_CLOUDFRONT_PATH);
         try {
             final String key = folder + imageName;
             amazonS3.deleteObject(bucket, key);
