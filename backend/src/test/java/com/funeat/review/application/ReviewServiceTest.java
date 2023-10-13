@@ -1,5 +1,24 @@
 package com.funeat.review.application;
 
+import com.funeat.common.ServiceTest;
+import com.funeat.common.dto.PageDto;
+import com.funeat.member.dto.MemberReviewDto;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.review.domain.Review;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
+import com.funeat.review.dto.ReviewDetailResponse;
+import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
+import com.funeat.tag.domain.Tag;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
@@ -31,23 +50,6 @@ import static com.funeat.fixture.TagFixture.태그_아침식사_ETC_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
-import com.funeat.common.ServiceTest;
-import com.funeat.common.dto.PageDto;
-import com.funeat.member.dto.MemberReviewDto;
-import com.funeat.member.exception.MemberException.MemberNotFoundException;
-import com.funeat.product.exception.ProductException.ProductNotFoundException;
-import com.funeat.review.domain.Review;
-import com.funeat.review.dto.MostFavoriteReviewResponse;
-import com.funeat.review.dto.SortingReviewDto;
-import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
-import com.funeat.tag.domain.Tag;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewServiceTest extends ServiceTest {
@@ -887,6 +889,49 @@ class ReviewServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> reviewService.getMostFavoriteReview(wrongProductId))
                     .isInstanceOf(ProductNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class getReviewDetail_성공_테스트 {
+
+        @Test
+        void 리뷰_상세_정보를_조회한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점5점_생성(category);
+            단일_상품_저장(product);
+
+            final var review = 리뷰_이미지test2_평점2점_재구매X_생성(member, product, 0L);
+            단일_리뷰_저장(review);
+
+            // when
+            final var actual = reviewService.getReviewDetail(review.getId());
+
+            // then
+            final var expected = ReviewDetailResponse.toResponse(review);
+
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class getReviewDetail_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_리뷰를_조회할때_예외가_발생한다() {
+            // given
+            final var notExistReviewId = 999999L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.getReviewDetail(notExistReviewId))
+                    .isInstanceOf(ReviewNotFoundException.class);
         }
     }
 

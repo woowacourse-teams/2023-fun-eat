@@ -1,17 +1,17 @@
 package com.funeat.acceptance.review;
 
-import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
-import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_ID_추출;
-import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
-import static io.restassured.RestAssured.given;
-
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
+
 import java.util.List;
 import java.util.Objects;
+
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
+import static io.restassured.RestAssured.given;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReviewSteps {
@@ -80,6 +80,14 @@ public class ReviewSteps {
                 .when()
                 .get("/api/ranks/products/{product_id}/reviews", productId)
                 .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 리뷰_상세_조회_요청(final Long reviewId) {
+        return given()
+                .when()
+                .get("/api/reviews/{reviewId}", reviewId)
+                .then()
                 .extract();
     }
 }
