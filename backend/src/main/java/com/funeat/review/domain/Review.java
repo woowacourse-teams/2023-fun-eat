@@ -89,7 +89,7 @@ public class Review {
     }
 
     public boolean checkAuthor(Member member) {
-        return this.member == member;
+        return Objects.equals(this.member, member);
     }
 
     public Long getId() {
