@@ -203,7 +203,7 @@ public class ReviewService {
     private void deleteThingsRelatedToReview(final Review review) {
         deleteReviewTags(review);
         deleteReviewFavorites(review);
-        reviewRepository.deleteById(review.getId());
+        reviewRepository.delete(review);
     }
 
     private void deleteReviewTags(final Review review) {
