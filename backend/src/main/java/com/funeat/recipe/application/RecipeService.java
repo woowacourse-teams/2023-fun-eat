@@ -236,11 +236,12 @@ public class RecipeService {
         final Recipe findRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
 
-        final Specification<Comment> spec = CommentSpecification.findAllByRecipe(findRecipe, condition.getLastId());
+        final Specification<Comment> specification = CommentSpecification.findAllByRecipe(findRecipe,
+                condition.getLastId());
 
         final PageRequest pageable = PageRequest.of(0, 11, Sort.by("id").descending());
 
-        final Page<Comment> commentPaginationResult = commentRepository.findAllForPagination(spec, pageable,
+        final Page<Comment> commentPaginationResult = commentRepository.findAllForPagination(specification, pageable,
                 condition.getTotalElements());
 
         final List<RecipeCommentResponse> recipeCommentResponses = getRecipeCommentResponses(
