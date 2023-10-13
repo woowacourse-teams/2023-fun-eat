@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
         <App />
       </AuthLayout>
     ),
-    errorElement: <NotFoundPage />,
+    errorElement: <Navigate to={PATH.LOGIN} replace />,
     children: [
       {
         path: PATH.MEMBER,
