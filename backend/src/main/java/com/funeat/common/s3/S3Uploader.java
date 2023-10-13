@@ -62,11 +62,11 @@ public class S3Uploader implements ImageUploader {
 
     @Override
     public void delete(final String image) {
-        String imageName = image.substring(BEGIN_INDEX);
+        final String imageName = image.substring(BEGIN_INDEX);
         try {
             final String key = folder + imageName;
             amazonS3.deleteObject(bucket, key);
-        } catch (AmazonServiceException e) {
+        } catch (final AmazonServiceException e) {
             log.error("S3 이미지 삭제가 실패했습니다. 이미지 경로 : {}", image);
             throw new S3DeleteFailException(UNKNOWN_SERVER_ERROR_CODE);
         }

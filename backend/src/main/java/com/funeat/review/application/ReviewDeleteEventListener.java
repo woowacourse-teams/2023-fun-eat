@@ -17,8 +17,8 @@ public class ReviewDeleteEventListener {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void deleteReviewImageInS3(ReviewDeleteEvent event) {
-        String image = event.getImage();
+    public void deleteReviewImageInS3(final ReviewDeleteEvent event) {
+        final String image = event.getImage();
         if (image != null) {
             imageUploader.delete(image);
         }

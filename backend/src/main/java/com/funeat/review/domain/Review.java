@@ -88,7 +88,7 @@ public class Review {
         this.favoriteCount--;
     }
 
-    public boolean checkAuthor(Member member) {
+    public boolean checkAuthor(final Member member) {
         return Objects.equals(this.member, member);
     }
 

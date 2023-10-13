@@ -16,7 +16,6 @@ import static org.mockito.Mockito.verify;
 
 import com.funeat.common.EventTest;
 import com.funeat.common.ImageUploader;
-import com.funeat.common.exception.CommonException;
 import com.funeat.common.exception.CommonException.S3DeleteFailException;
 import com.funeat.exception.CommonErrorCode;
 import com.funeat.tag.domain.Tag;
@@ -30,7 +29,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 class ReviewDeleteEventListenerTest extends EventTest {
 
     @MockBean
-    ImageUploader uploader;
+    private ImageUploader uploader;
 
     @Nested
     class 리뷰_삭제_이벤트_발행 {

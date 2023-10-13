@@ -207,16 +207,16 @@ public class ReviewService {
     }
 
     private void deleteReviewTags(final Long reviewId) {
-        List<ReviewTag> reviewTags = reviewTagRepository.findByReviewId(reviewId);
-        List<Long> ids = reviewTags.stream()
+        final List<ReviewTag> reviewTags = reviewTagRepository.findByReviewId(reviewId);
+        final List<Long> ids = reviewTags.stream()
                 .map(ReviewTag::getId)
                 .collect(Collectors.toList());
         reviewTagRepository.deleteAllByIdInBatch(ids);
     }
 
     private void deleteReviewFavorites(final Long reviewId) {
-        List<ReviewFavorite> reviewFavorites = reviewFavoriteRepository.findByReviewId(reviewId);
-        List<Long> ids = reviewFavorites.stream()
+        final List<ReviewFavorite> reviewFavorites = reviewFavoriteRepository.findByReviewId(reviewId);
+        final List<Long> ids = reviewFavorites.stream()
                 .map(ReviewFavorite::getId)
                 .collect(Collectors.toList());
         reviewFavoriteRepository.deleteAllByIdInBatch(ids);
