@@ -14,6 +14,12 @@ export interface Review {
   favorite: boolean;
 }
 
+export interface ReviewDetail extends Review {
+  categoryType: string;
+  productId: number;
+  productName: string;
+}
+
 export interface ReviewTag {
   tagType: TagVariants;
   tags: Tag[];

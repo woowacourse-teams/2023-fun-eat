@@ -28,7 +28,7 @@ const ReviewRankingList = ({ isHomePage = false }: ReviewRankingListProps) => {
         <li key={reviewRanking.reviewId}>
           <Link
             as={RouterLink}
-            to={`${PATH.PRODUCT_LIST}/${reviewRanking.categoryType}/${reviewRanking.productId}`}
+            to={`${PATH.REVIEW}/${reviewRanking.reviewId}`}
             onClick={handleReviewRankingLinkClick}
             block
           >
