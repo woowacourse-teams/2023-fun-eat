@@ -148,4 +148,37 @@ class ReviewFavoriteRepositoryTest extends RepositoryTest {
                     .isEqualTo(expected);
         }
     }
+
+    @Nested
+    class findByReview_성공_테스트 {
+
+        @Test
+        void 리뷰로_해당_리뷰에_달린_좋아요를_조회할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            단일_상품_저장(product);
+
+            final var review = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L);
+            단일_리뷰_저장(review);
+
+            final var reviewFavorite = ReviewFavorite.create(member, review, true);
+            단일_리뷰_좋아요_저장(reviewFavorite);
+
+            final var expected = List.of(reviewFavorite);
+
+            // when
+            final var actual = reviewFavoriteRepository.findByReview(review);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .ignoringExpectedNullFields()
+                    .isEqualTo(expected);
+        }
+    }
 }

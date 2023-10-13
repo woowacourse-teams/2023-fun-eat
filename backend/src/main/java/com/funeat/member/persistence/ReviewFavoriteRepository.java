@@ -13,5 +13,5 @@ public interface ReviewFavoriteRepository extends JpaRepository<ReviewFavorite, 
 
     void deleteByReview(final Review review);
 
-    List<ReviewFavorite> findByReviewId(final Long reviewId);
+    List<ReviewFavorite> findByReview(final Review review);
 }

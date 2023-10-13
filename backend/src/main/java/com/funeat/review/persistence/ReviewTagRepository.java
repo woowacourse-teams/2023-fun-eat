@@ -20,5 +20,5 @@ public interface ReviewTagRepository extends JpaRepository<ReviewTag, Long> {
 
     void deleteByReview(final Review review);
 
-    List<ReviewTag> findByReviewId(final Long reviewId);
+    List<ReviewTag> findByReview(final Review review);
 }

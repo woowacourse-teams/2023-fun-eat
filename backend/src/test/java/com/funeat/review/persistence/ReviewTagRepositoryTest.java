@@ -110,6 +110,42 @@ class ReviewTagRepositoryTest extends RepositoryTest {
         }
     }
 
+    @Nested
+    class findByReview_성공_테스트 {
+
+        @Test
+        void 해당_리뷰에_달린_태그를_확인할_수_있다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격3000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            단일_태그_저장(tag1);
+
+            final var review = 리뷰_이미지test5_평점5점_재구매O_생성(member, product, 0L);
+            단일_리뷰_저장(review);
+
+            final var reviewTag = 리뷰_태그_생성(review, tag1);
+            단일_리뷰_태그_저장(reviewTag);
+
+            final var expected = List.of(reviewTag);
+
+            // when
+            final var actual = reviewTagRepository.findByReview(review);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .ignoringExpectedNullFields()
+                    .isEqualTo(expected);
+        }
+    }
+
     private ReviewTag 리뷰_태그_생성(final Review review, final Tag tag) {
         return ReviewTag.createReviewTag(review, tag);
     }

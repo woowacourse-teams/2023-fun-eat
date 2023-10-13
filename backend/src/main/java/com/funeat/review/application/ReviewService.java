@@ -193,29 +193,29 @@ public class ReviewService {
 
         if (review.checkAuthor(member)) {
             eventPublisher.publishEvent(new ReviewDeleteEvent(image));
-            deleteThingsRelatedToReview(reviewId);
+            deleteThingsRelatedToReview(review);
             updateProductImage(product.getId());
             return;
         }
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
     }
 
-    private void deleteThingsRelatedToReview(final Long reviewId) {
-        deleteReviewTags(reviewId);
-        deleteReviewFavorites(reviewId);
-        reviewRepository.deleteById(reviewId);
+    private void deleteThingsRelatedToReview(final Review review) {
+        deleteReviewTags(review);
+        deleteReviewFavorites(review);
+        reviewRepository.deleteById(review.getId());
     }
 
-    private void deleteReviewTags(final Long reviewId) {
-        final List<ReviewTag> reviewTags = reviewTagRepository.findByReviewId(reviewId);
+    private void deleteReviewTags(final Review review) {
+        final List<ReviewTag> reviewTags = reviewTagRepository.findByReview(review);
         final List<Long> ids = reviewTags.stream()
                 .map(ReviewTag::getId)
                 .collect(Collectors.toList());
         reviewTagRepository.deleteAllByIdInBatch(ids);
     }
 
-    private void deleteReviewFavorites(final Long reviewId) {
-        final List<ReviewFavorite> reviewFavorites = reviewFavoriteRepository.findByReviewId(reviewId);
+    private void deleteReviewFavorites(final Review review) {
+        final List<ReviewFavorite> reviewFavorites = reviewFavoriteRepository.findByReview(review);
         final List<Long> ids = reviewFavorites.stream()
                 .map(ReviewFavorite::getId)
                 .collect(Collectors.toList());
