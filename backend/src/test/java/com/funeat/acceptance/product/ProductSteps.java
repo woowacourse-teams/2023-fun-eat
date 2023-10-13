@@ -1,10 +1,9 @@
 package com.funeat.acceptance.product;
 
-import static io.restassured.RestAssured.given;
-
-
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ProductSteps {
@@ -36,10 +35,10 @@ public class ProductSteps {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 상품_자동_완성_검색_요청(final String query, final Long page) {
+    public static ExtractableResponse<Response> 상품_자동_완성_검색_요청(final String query, final Long lastId) {
         return given()
                 .queryParam("query", query)
-                .queryParam("page", page)
+                .queryParam("lastId", lastId)
                 .when()
                 .get("/api/search/products")
                 .then()

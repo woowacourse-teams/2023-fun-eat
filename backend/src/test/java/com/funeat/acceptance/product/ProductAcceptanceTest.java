@@ -1,5 +1,23 @@
 package com.funeat.acceptance.product;
 
+import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.product.domain.Category;
+import com.funeat.product.dto.ProductInCategoryDto;
+import com.funeat.product.dto.ProductResponse;
+import com.funeat.product.dto.RankingProductDto;
+import com.funeat.product.dto.SearchProductDto;
+import com.funeat.product.dto.SearchProductResultDto;
+import com.funeat.product.dto.SearchProductsResponse;
+import com.funeat.recipe.dto.RecipeDto;
+import com.funeat.tag.dto.TagDto;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
+
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
@@ -89,22 +107,6 @@ import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
-import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.product.domain.Category;
-import com.funeat.product.dto.ProductInCategoryDto;
-import com.funeat.product.dto.ProductResponse;
-import com.funeat.product.dto.RankingProductDto;
-import com.funeat.product.dto.SearchProductDto;
-import com.funeat.product.dto.SearchProductResultDto;
-import com.funeat.recipe.dto.RecipeDto;
-import com.funeat.tag.dto.TagDto;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import java.util.Collections;
-import java.util.List;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ProductAcceptanceTest extends AcceptanceTest {
@@ -433,14 +435,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var 상품1 = 단일_상품_저장(상품_애플망고_가격3000원_평점5점_생성(카테고리));
             final var 상품2 = 단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(카테고리));
 
-            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(2L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
             // when
-            final var 응답 = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
+            final var 응답 = 상품_자동_완성_검색_요청("망고", 0L);
 
             // then
             STATUS_CODE를_검증한다(응답, 정상_처리);
-            페이지를_검증한다(응답, 예상_응답_페이지);
             상품_자동_완성_검색_결과를_검증한다(응답, List.of(상품2, 상품1));
         }
 
@@ -451,14 +450,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
             단일_카테고리_저장(카테고리);
             반복_애플망고_상품_저장(2, 카테고리);
 
-            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(0L), 총_페이지(0L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
             // when
-            final var 응답 = 상품_자동_완성_검색_요청("김밥", FIRST_PAGE);
+            final var 응답 = 상품_자동_완성_검색_요청("김밥", 0L);
 
             // then
             STATUS_CODE를_검증한다(응답, 정상_처리);
-            페이지를_검증한다(응답, 예상_응답_페이지);
             상품_자동_완성_검색_결과를_검증한다(응답, Collections.emptyList());
         }
 
@@ -468,21 +464,18 @@ class ProductAcceptanceTest extends AcceptanceTest {
             final var 카테고리 = 카테고리_간편식사_생성();
             단일_카테고리_저장(카테고리);
             단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(카테고리));
-            반복_애플망고_상품_저장(10, 카테고리);
-
-            final var 예상_응답_페이지1 = 응답_페이지_생성(총_데이터_개수(11L), 총_페이지(2L), 첫페이지O, 마지막페이지X, FIRST_PAGE, PAGE_SIZE);
-            final var 예상_응답_페이지2 = 응답_페이지_생성(총_데이터_개수(11L), 총_페이지(2L), 첫페이지X, 마지막페이지O, SECOND_PAGE, PAGE_SIZE);
+            반복_애플망고_상품_저장(15, 카테고리);
 
             // when
-            final var 응답1 = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
-            final var 응답2 = 상품_자동_완성_검색_요청("망고", SECOND_PAGE);
+            final var 응답1 = 상품_자동_완성_검색_요청("망고", 0L);
+
+            final var result = 응답1.as(SearchProductsResponse.class).getProducts();
+            final var lastId = result.get(result.size() - 1).getId();
+            final var 응답2 = 상품_자동_완성_검색_요청("망고", lastId);
 
             // then
             STATUS_CODE를_검증한다(응답1, 정상_처리);
-            페이지를_검증한다(응답1, 예상_응답_페이지1);
-
             STATUS_CODE를_검증한다(응답2, 정상_처리);
-            페이지를_검증한다(응답2, 예상_응답_페이지2);
 
             결과값이_이전_요청_결과값에_중복되는지_검증(응답1, 응답2);
         }
@@ -496,14 +489,11 @@ class ProductAcceptanceTest extends AcceptanceTest {
             반복_애플망고_상품_저장(9, 카테고리);
             단일_상품_저장(상품_망고빙수_가격5000원_평점4점_생성(카테고리));
 
-            final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(11L), 총_페이지(2L), 첫페이지O, 마지막페이지X, FIRST_PAGE, PAGE_SIZE);
-
             // when
-            final var 응답 = 상품_자동_완성_검색_요청("망고", FIRST_PAGE);
+            final var 응답 = 상품_자동_완성_검색_요청("망고", 0L);
 
             // then
             STATUS_CODE를_검증한다(응답, 정상_처리);
-            페이지를_검증한다(응답, 예상_응답_페이지);
             상품_자동_완성_검색_결과를_검증한다(응답, List.of(상품11, 상품1, 상품10, 상품9, 상품8, 상품7, 상품6, 상품5, 상품4, 상품3));
         }
     }
