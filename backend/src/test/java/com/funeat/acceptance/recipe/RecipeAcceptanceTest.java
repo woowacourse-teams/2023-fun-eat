@@ -73,7 +73,6 @@ import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.dto.SearchRecipeResultDto;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Collections;
@@ -597,12 +596,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             // when
             final var 작성된_꿀조합_아이디 = 작성된_꿀조합_아이디_추출(꿀조합_작성_응답);
             final var 댓글작성자_로그인_쿠키_획득 = 로그인_쿠키_획득(멤버2);
-            final var 꿀조합_댓글 = new RecipeCommentCreateRequest("1" +
-                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다" +
-                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다" +
-                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다" +
-                    "댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다"
-            );
+            final var 꿀조합_댓글 = new RecipeCommentCreateRequest("1" + "댓글입니다".repeat(40));
 
             final var 응답 = 레시피_댓글_작성_요청(댓글작성자_로그인_쿠키_획득, 작성된_꿀조합_아이디, 꿀조합_댓글);
 
@@ -803,9 +797,6 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
     private void 레시피_댓글_조회_결과를_검증한다(final ExtractableResponse<Response> response, final int expectedSize,
                                     final boolean expectedHasNext) {
-        final JsonPath jsonPath = response.jsonPath();
-        final String prettify = jsonPath.prettify();
-        System.out.println("prettify = " + prettify);
         final var actualComments = response.jsonPath().getList("comments", RecipeCommentResponse.class);
         final var actualHasNext = response.jsonPath().getBoolean("hasNext");
 
