@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { useToastActionContext } from '@/hooks/context';
-import useRecipeCommentMutation from '@/hooks/queries/recipe/useRecipeCommentMutation';
+import { useRecipeCommentMutation } from '@/hooks/queries/recipe';
 
 interface CommentFormProps {
   recipeId: number;
