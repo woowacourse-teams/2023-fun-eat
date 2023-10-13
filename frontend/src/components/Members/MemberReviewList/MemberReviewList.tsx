@@ -53,7 +53,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
               to={`${PATH.PRODUCT_LIST}/${reviewRanking.categoryType}/${reviewRanking.productId}`}
               block
             >
-              <ReviewRankingItem reviewRanking={reviewRanking} />
+              <ReviewRankingItem reviewRanking={reviewRanking} isMemberPage />
             </Link>
           </li>
         ))}
