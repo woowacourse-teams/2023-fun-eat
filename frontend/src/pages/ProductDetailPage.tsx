@@ -50,7 +50,7 @@ export const ProductDetailPage = () => {
     return null;
   }
 
-  const { name, bookmark, reviewCount } = productDetail;
+  const { name, reviewCount } = productDetail;
 
   const tabMenus = [`리뷰 ${reviewCount}`, '꿀조합'];
   const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
@@ -75,7 +75,7 @@ export const ProductDetailPage = () => {
 
   return (
     <ProductDetailPageContainer ref={productDetailPageRef}>
-      <SectionTitle name={name} bookmark={bookmark} />
+      <SectionTitle name={name} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
       <Spacing size={30} />
