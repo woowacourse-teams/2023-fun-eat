@@ -39,13 +39,4 @@ public class RecipeCommentResponse {
     public RecipeCommentMemberResponse getAuthor() {
         return author;
     }
-
-    @Override
-    public String toString() {
-        return "RecipeCommentResponse{" +
-                "id=" + id +
-                ", comment='" + comment + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
