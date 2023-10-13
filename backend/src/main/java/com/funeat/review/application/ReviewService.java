@@ -1,10 +1,5 @@
 package com.funeat.review.application;
 
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
-import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
-import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
-import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
-
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -24,6 +19,7 @@ import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewDto;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.dto.SortingReviewsResponse;
@@ -32,9 +28,6 @@ import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +35,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
+import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -187,5 +189,11 @@ public class ReviewService {
         final Optional<Review> review = reviewRepository.findTopByProductOrderByFavoriteCountDescIdDesc(findProduct);
 
         return MostFavoriteReviewResponse.toResponse(review);
+    }
+
+    public ReviewDetailResponse getReviewDetail(final Long reviewId) {
+        final Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+        return ReviewDetailResponse.toResponse(review);
     }
 }

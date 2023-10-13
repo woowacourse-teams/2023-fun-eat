@@ -7,12 +7,9 @@ import com.funeat.review.application.ReviewService;
 import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
-import java.net.URI;
-import java.util.Objects;
-import java.util.Optional;
-import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -25,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 public class ReviewApiController implements ReviewController {
@@ -81,6 +82,13 @@ public class ReviewApiController implements ReviewController {
         if (response.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/reviews/{reviewId}")
+    public ResponseEntity<ReviewDetailResponse> getReviewDetail(@PathVariable final Long reviewId) {
+        final ReviewDetailResponse response = reviewService.getReviewDetail(reviewId);
+
         return ResponseEntity.ok(response);
     }
 }
