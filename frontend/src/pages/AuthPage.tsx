@@ -5,7 +5,7 @@ import { loginApi } from '@/apis';
 import { PRODUCT_PATH_LOCAL_STORAGE_KEY } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useMemberQuery } from '@/hooks/queries/members';
-import { getLocalStorage, removeLocalStorage } from '@/utils/localstorage';
+import { getLocalStorage, removeLocalStorage } from '@/utils/localStorage';
 
 export const AuthPage = () => {
   const { authProvider } = useParams();
