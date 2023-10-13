@@ -67,7 +67,7 @@ public class S3Uploader implements ImageUploader {
             final String key = folder + imageName;
             amazonS3.deleteObject(bucket, key);
         } catch (final AmazonServiceException e) {
-            log.error("S3 이미지 삭제가 실패했습니다. 이미지 경로 : {}", image);
+            log.error("S3 이미지 삭제에 실패했습니다. 이미지 경로 : {}", image);
             throw new S3DeleteFailException(UNKNOWN_SERVER_ERROR_CODE);
         }
     }
