@@ -46,15 +46,6 @@ public interface ReviewController {
                                           @AuthenticationPrincipal final LoginInfo loginInfo,
                                           @RequestBody final ReviewFavoriteRequest request);
 
-    @Operation(summary = "리뷰 삭제", description = "자신이 작성한 리뷰를 삭제한다.")
-    @ApiResponse(
-            responseCode = "204",
-            description = "리뷰 삭제 성공."
-    )
-    @DeleteMapping("/api/products/{productId}/reviews/{reviewId}")
-    ResponseEntity<Void> deleteReview(@PathVariable final Long reviewId,
-                                      @AuthenticationPrincipal final LoginInfo loginInfo);
-
     @Operation(summary = "리뷰를 정렬후 조회", description = "리뷰를 정렬후 조회한다.")
     @ApiResponse(
             responseCode = "200",

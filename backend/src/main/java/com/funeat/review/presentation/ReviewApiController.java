@@ -57,15 +57,6 @@ public class ReviewApiController implements ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-    @Logging
-    @DeleteMapping("/api/products/{productId}/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable final Long reviewId,
-                                             @AuthenticationPrincipal final LoginInfo loginInfo) {
-        reviewService.deleteReview(reviewId, loginInfo.getId());
-
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/api/products/{productId}/reviews")
     public ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                                     @PathVariable final Long productId,
