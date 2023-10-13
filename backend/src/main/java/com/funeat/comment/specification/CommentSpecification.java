@@ -10,6 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class CommentSpecification {
 
+    private CommentSpecification() {
+    }
+
     private static final List<Class<Long>> COUNT_RESULT_TYPES = List.of(Long.class, long.class);
 
     public static Specification<Comment> findAllByRecipe(final Recipe recipe, final Long lastCommentId) {
@@ -49,8 +52,5 @@ public class CommentSpecification {
 
             return criteriaBuilder.lessThan(commentIdPath, commentId);
         };
-    }
-
-    private CommentSpecification() {
     }
 }

@@ -13,6 +13,9 @@ public class AdminProductSpecification {
 
     private static final List<Class<Long>> COUNT_RESULT_TYPES = List.of(Long.class, long.class);
 
+    private AdminProductSpecification() {
+    }
+
     public static Specification<Product> searchBy(final ProductSearchCondition condition) {
         return (root, query, criteriaBuilder) -> {
             if (!COUNT_RESULT_TYPES.contains(query.getResultType())) {
@@ -63,8 +66,5 @@ public class AdminProductSpecification {
 
             return criteriaBuilder.equal(categoryPath, categoryId);
         };
-    }
-
-    private AdminProductSpecification() {
     }
 }

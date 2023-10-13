@@ -11,6 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class AdminReviewSpecification {
 
+    private AdminReviewSpecification() {
+    }
+
     public static Specification<Review> searchBy(final ReviewSearchCondition condition) {
         return (root, query, criteriaBuilder) -> {
             if (query.getResultType() != Long.class && query.getResultType() != long.class) {
@@ -75,8 +78,5 @@ public class AdminReviewSpecification {
 
             return criteriaBuilder.lessThan(reviewIdPath, reviewId);
         };
-    }
-
-    private AdminReviewSpecification() {
     }
 }
