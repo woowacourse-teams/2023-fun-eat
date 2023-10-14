@@ -30,18 +30,6 @@ public class CommentSpecification {
         };
     }
 
-    private static Specification<Comment> equalToRecipe(final Recipe recipe) {
-        return (root, query, criteriaBuilder) -> {
-            if (Objects.isNull(recipe)) {
-                return null;
-            }
-
-            final Path<Recipe> recipePath = root.get("recipe");
-
-            return criteriaBuilder.equal(recipePath, recipe);
-        };
-    }
-
     private static Specification<Comment> lessThan(final Long commentId) {
         return (root, query, criteriaBuilder) -> {
             if (Objects.isNull(commentId)) {
@@ -51,6 +39,18 @@ public class CommentSpecification {
             final Path<Long> commentIdPath = root.get("id");
 
             return criteriaBuilder.lessThan(commentIdPath, commentId);
+        };
+    }
+
+    private static Specification<Comment> equalToRecipe(final Recipe recipe) {
+        return (root, query, criteriaBuilder) -> {
+            if (Objects.isNull(recipe)) {
+                return null;
+            }
+
+            final Path<Recipe> recipePath = root.get("recipe");
+
+            return criteriaBuilder.equal(recipePath, recipe);
         };
     }
 }
