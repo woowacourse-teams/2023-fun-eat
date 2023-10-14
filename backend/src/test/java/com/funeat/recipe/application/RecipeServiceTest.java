@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.funeat.comment.domain.Comment;
 import com.funeat.common.ServiceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -35,17 +36,20 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.recipe.dto.RecipeCommentCondition;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
+import com.funeat.recipe.dto.RecipeCommentResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -542,6 +546,188 @@ class RecipeServiceTest extends ServiceTest {
             final var favoriteRequest = 레시피좋아요요청_생성(true);
             assertThatThrownBy(() -> recipeService.likeRecipe(memberId, wrongRecipeId, favoriteRequest))
                     .isInstanceOf(RecipeNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class writeCommentOfRecipe_성공_테스트 {
+
+        @Test
+        void 꿀조합에_댓글을_작성할_수_있다() {
+            // given
+            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
+            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
+            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
+            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = 멤버_멤버1_생성();
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var savedMemberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+
+            // when
+            final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요");
+            final var savedCommentId = recipeService.writeCommentOfRecipe(savedMemberId, savedRecipeId, request);
+
+            // then
+            final var result = commentRepository.findById(savedCommentId).get();
+            final var savedRecipe = recipeRepository.findById(savedRecipeId).get();
+            final var savedMember = memberRepository.findById(savedMemberId).get();
+
+            assertThat(result).usingRecursiveComparison()
+                    .ignoringFields("id", "createdAt")
+                    .isEqualTo(new Comment(savedRecipe, savedMember, request.getComment()));
+        }
+    }
+
+    @Nested
+    class writeCommentOfRecipe_실패_테스트 {
+
+        @Test
+        void 존재하지_않은_멤버가_꿀조합에_댓글을_작성하면_예외가_발생한다() {
+            // given
+            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
+            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
+            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
+            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = new Member("author", "image.png", "1");
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var notExistMemberId = 999999999L;
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+            final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요");
+
+            // when then
+            assertThatThrownBy(() -> recipeService.writeCommentOfRecipe(notExistMemberId, savedRecipeId, request))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+
+        @Test
+        void 존재하지_않은_꿀조합에_댓글을_작성하면_예외가_발생한다() {
+            // given
+            final var memberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요");
+            final var notExistRecipeId = 999999999L;
+
+            // when then
+            assertThatThrownBy(() -> recipeService.writeCommentOfRecipe(memberId, notExistRecipeId, request))
+                    .isInstanceOf(RecipeNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class getCommentsOfRecipe_성공_테스트 {
+
+        @Test
+        void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_첫페이지_댓글_10개조회() {
+            // given
+            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
+            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
+            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
+            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = 멤버_멤버1_생성();
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var savedMemberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+
+            for (int i = 1; i <= 15; i++) {
+                final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요" + i);
+                recipeService.writeCommentOfRecipe(savedMemberId, savedRecipeId, request);
+            }
+
+            // when
+            final var result = recipeService.getCommentsOfRecipe(savedRecipeId,
+                    new RecipeCommentCondition(null, null));
+
+            //
+            final var savedRecipe = recipeRepository.findById(savedRecipeId).get();
+            final var savedMember = memberRepository.findById(savedMemberId).get();
+
+            final var expectedCommentResponses = new ArrayList<>();
+            for (int i = 0; i < result.getComments().size(); i++) {
+                expectedCommentResponses.add(RecipeCommentResponse.toResponse(
+                        new Comment(savedRecipe, savedMember, "꿀조합 댓글이에요" + (15 - i))));
+            }
+
+            assertThat(result.getHasNext()).isTrue();
+            assertThat(result.getTotalElements()).isEqualTo(15);
+            assertThat(result.getComments()).hasSize(10);
+            assertThat(result.getComments()).usingRecursiveComparison()
+                    .ignoringFields("id", "createdAt")
+                    .isEqualTo(expectedCommentResponses);
+        }
+
+        @Test
+        void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_마지막페이지_댓글_5개조회() {
+            // given
+            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
+            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
+            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
+            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = 멤버_멤버1_생성();
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var savedMemberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+
+            for (int i = 1; i <= 15; i++) {
+                final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요" + i);
+                recipeService.writeCommentOfRecipe(savedMemberId, savedRecipeId, request);
+            }
+
+            // when
+            final var result = recipeService.getCommentsOfRecipe(savedRecipeId,
+                    new RecipeCommentCondition(6L, 15L));
+
+            //
+            final var savedRecipe = recipeRepository.findById(savedRecipeId).get();
+            final var savedMember = memberRepository.findById(savedMemberId).get();
+
+            final var expectedCommentResponses = new ArrayList<>();
+            for (int i = 0; i < result.getComments().size(); i++) {
+                expectedCommentResponses.add(RecipeCommentResponse.toResponse(
+                        new Comment(savedRecipe, savedMember, "꿀조합 댓글이에요" + (5 - i))));
+            }
+
+            assertThat(result.getHasNext()).isFalse();
+            assertThat(result.getTotalElements()).isEqualTo(15);
+            assertThat(result.getComments()).hasSize(5);
+            assertThat(result.getComments()).usingRecursiveComparison()
+                    .ignoringFields("id", "createdAt")
+                    .isEqualTo(expectedCommentResponses);
         }
     }
 

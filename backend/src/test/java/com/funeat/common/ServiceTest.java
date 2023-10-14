@@ -1,6 +1,7 @@
 package com.funeat.common;
 
 import com.funeat.auth.application.AuthService;
+import com.funeat.comment.persistence.CommentRepository;
 import com.funeat.member.application.TestMemberService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
@@ -75,6 +76,9 @@ public abstract class ServiceTest {
 
     @Autowired
     protected TagRepository tagRepository;
+
+    @Autowired
+    protected CommentRepository commentRepository;
 
     @Autowired
     protected AuthService authService;
