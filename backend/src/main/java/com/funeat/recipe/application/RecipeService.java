@@ -250,7 +250,8 @@ public class RecipeService {
 
         final Boolean hasNext = hasNextPage(commentPaginationResult);
 
-        return new RecipeCommentsResponse(recipeCommentResponses, hasNext, commentPaginationResult.getTotalElements());
+        return RecipeCommentsResponse.toResponse(recipeCommentResponses, hasNext,
+                commentPaginationResult.getTotalElements());
     }
 
     private List<RecipeCommentResponse> getRecipeCommentResponses(final List<Comment> findComments) {
