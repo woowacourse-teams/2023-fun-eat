@@ -577,11 +577,11 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
             final var 댓글작성자_로그인_쿠키_획득 = 로그인_쿠키_획득(멤버2);
             final var 꿀조합_댓글 = new RecipeCommentCreateRequest(comment);
 
-            final var 응답 = 레시피_댓글_작성_요청(댓글작성자_로그인_쿠키_획득, 작성된_꿀조합_아이디, 꿀조합_댓글);
+            final var 레시피_댓글_작성_요청 = 레시피_댓글_작성_요청(댓글작성자_로그인_쿠키_획득, 작성된_꿀조합_아이디, 꿀조합_댓글);
 
             // then
-            STATUS_CODE를_검증한다(응답, 잘못된_요청);
-            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REQUEST_VALID_ERROR_CODE.getCode(),
+            STATUS_CODE를_검증한다(레시피_댓글_작성_요청, 잘못된_요청);
+            RESPONSE_CODE와_MESSAGE를_검증한다(레시피_댓글_작성_요청, REQUEST_VALID_ERROR_CODE.getCode(),
                     "꿀조합 댓글을 확인해 주세요. " + REQUEST_VALID_ERROR_CODE.getMessage());
         }
 
