@@ -43,7 +43,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
           <RatingIconWrapper>
             <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
             <Text as="span" size="sm" css="line-height: 24px;" aria-label={`${averageRating}점`}>
-              {averageRating}
+              {averageRating.toFixed(1)}
             </Text>
           </RatingIconWrapper>
           <ReviewIconWrapper>
