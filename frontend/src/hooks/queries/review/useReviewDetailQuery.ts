@@ -10,7 +10,7 @@ const fetchReviewDetail = async (reviewId: number) => {
 };
 
 const useReviewDetailQuery = (reviewId: number) => {
-  return useSuspendedQuery(['review'], () => fetchReviewDetail(reviewId));
+  return useSuspendedQuery(['review', reviewId, 'detail'], () => fetchReviewDetail(reviewId));
 };
 
 export default useReviewDetailQuery;
