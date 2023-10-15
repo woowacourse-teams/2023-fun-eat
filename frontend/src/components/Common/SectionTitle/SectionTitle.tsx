@@ -21,14 +21,10 @@ const SectionTitle = ({ name, link }: SectionTitleProps) => {
         </Button>
         {link ? (
           <Link as={RouterLink} to={link} block>
-            <ProductName size="xl" css={{ marginLeft: '20px' }}>
-              {name}
-            </ProductName>
+            <ProductName size="xl">{name}</ProductName>
           </Link>
         ) : (
-          <ProductName size="xl" css={{ marginLeft: '20px' }}>
-            {name}
-          </ProductName>
+          <ProductName size="xl">{name}</ProductName>
         )}
         {link && <SvgIcon variant="link" width={20} height={20} />}
       </SectionTitleWrapper>
