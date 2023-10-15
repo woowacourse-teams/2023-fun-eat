@@ -4,26 +4,28 @@ import static com.funeat.product.exception.ProductErrorCode.NOT_SUPPORTED_PRODUC
 
 import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
+import com.funeat.product.dto.ProductSortCondition;
 import com.funeat.product.exception.ProductException.NotSupportedProductSortingConditionException;
 import java.util.Objects;
 import javax.persistence.criteria.Path;
 import org.springframework.data.jpa.domain.Specification;
 
-public class ProductSpecifications {
+public class ProductSpecification {
+
+    private static final String DESC = "desc";
 
     public static Specification<Product> searchBy(final Category category, final Product lastProduct,
-                                                  final String sortBy, final String sortOrder) {
+                                                  final ProductSortCondition sortCondition) {
         return (root, query, builder) -> {
-
-            if ("desc".equals(sortOrder)) {
-                query.orderBy(builder.desc(root.get(sortBy)), builder.desc(root.get("id")));
+            if (DESC.equals(sortCondition.getOrder())) {
+                query.orderBy(builder.desc(root.get(sortCondition.getBy())), builder.desc(root.get("id")));
             } else {
-                query.orderBy(builder.asc(root.get(sortBy)), builder.desc(root.get("id")));
+                query.orderBy(builder.asc(root.get(sortCondition.getBy())), builder.desc(root.get("id")));
             }
 
             return Specification
                     .where(sameCategory(category))
-                    .and(findNext(lastProduct, sortBy, sortOrder))
+                    .and(findNext(lastProduct, sortCondition))
                     .toPredicate(root, query, builder);
         };
     }
@@ -36,8 +38,10 @@ public class ProductSpecifications {
         };
     }
 
-    private static Specification<Product> findNext(final Product lastProduct, final String sortBy,
-                                                   final String sortOrder) {
+    private static Specification<Product> findNext(final Product lastProduct, final ProductSortCondition sortCondition) {
+        final String sortBy = sortCondition.getBy();
+        final String sortOrder = sortCondition.getOrder();
+
         return (root, query, builder) -> {
             if (Objects.isNull(lastProduct)) {
                 return null;
@@ -75,7 +79,7 @@ public class ProductSpecifications {
     private static Specification<Product> notSameValue(final String sortBy, final String sortOrder,
                                                        final Comparable comparisonValue) {
         return (root, query, builder) -> {
-            if (sortOrder.equals("desc")) {
+            if (DESC.equals(sortOrder)) {
                 return builder.lessThan(root.get(sortBy), comparisonValue);
             } else {
                 return builder.greaterThan(root.get(sortBy), comparisonValue);

@@ -9,6 +9,7 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductReviewCountDto;
+import com.funeat.product.dto.ProductSortCondition;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
@@ -21,7 +22,7 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
-import com.funeat.product.persistence.ProductSpecifications;
+import com.funeat.product.persistence.ProductSpecification;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeDto;
@@ -74,21 +75,16 @@ public class ProductService {
     }
 
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId, final Long lastProductId,
-                                                               final String sort) {
+                                                               final ProductSortCondition sortCondition) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, categoryId));
         final Product lastProduct = productRepository.findById(lastProductId).orElse(null);
 
-        final String[] split = sort.split(",");
-        final String sortBy = split[0];
-        final String sortOrder = split[1];
-
-        final Specification<Product> specification = ProductSpecifications.searchBy(category, lastProduct, sortBy,
-                sortOrder);
+        final Specification<Product> specification = ProductSpecification.searchBy(category, lastProduct, sortCondition);
         final List<Product> findResults = productRepository.findAllWithSpecification(specification, DEFAULT_CURSOR_PAGINATION_SIZE);
 
         final List<ProductInCategoryDto> productDtos = getProductInCategoryDtos(findResults);
-        final Boolean hasNext = hasNextPage(findResults);
+        final boolean hasNext = hasNextPage(findResults);
 
         return ProductsInCategoryResponse.toResponse(hasNext, productDtos);
     }
@@ -109,7 +105,7 @@ public class ProductService {
         return DEFAULT_PAGE_SIZE;
     }
 
-    private Boolean hasNextPage(final List<Product> findProducts) {
+    private boolean hasNextPage(final List<Product> findProducts) {
         return findProducts.size() > DEFAULT_PAGE_SIZE;
     }
 
