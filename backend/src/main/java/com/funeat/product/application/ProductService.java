@@ -19,9 +19,9 @@ import com.funeat.product.dto.SearchProductsResponse;
 import com.funeat.product.exception.CategoryException.CategoryNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
-import com.funeat.product.persistence.ProductInCategoryRepository;
 import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.product.persistence.ProductSpecifications;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeDto;
@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +48,8 @@ public class ProductService {
     private static final int THREE = 3;
     private static final int TOP = 0;
     private static final int RANKING_SIZE = 3;
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int DEFAULT_CURSOR_PAGINATION_SIZE = 11;
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -55,14 +58,12 @@ public class ProductService {
     private final ProductRecipeRepository productRecipeRepository;
     private final RecipeImageRepository recipeImageRepository;
     private final RecipeRepository recipeRepository;
-    private final ProductInCategoryRepository productInCategoryRepository;
 
     public ProductService(final CategoryRepository categoryRepository, final ProductRepository productRepository,
                           final ReviewTagRepository reviewTagRepository, final ReviewRepository reviewRepository,
                           final ProductRecipeRepository productRecipeRepository,
                           final RecipeImageRepository recipeImageRepository,
-                          final RecipeRepository recipeRepository,
-                          final ProductInCategoryRepository productInCategoryRepository) {
+                          final RecipeRepository recipeRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -70,55 +71,49 @@ public class ProductService {
         this.productRecipeRepository = productRecipeRepository;
         this.recipeImageRepository = recipeImageRepository;
         this.recipeRepository = recipeRepository;
-        this.productInCategoryRepository = productInCategoryRepository;
     }
 
     public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId, final Long lastProductId,
                                                                final String sort) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, categoryId));
+        final Product lastProduct = productRepository.findById(lastProductId).orElse(null);
 
-        List<ProductInCategoryDto> productDtos;
-        if (lastProductId == 0) {
-            productDtos = findFirstPage(sort, category);
-        } else {
-            productDtos = findPage(sort, category, lastProductId);
-        }
+        final String[] split = sort.split(",");
+        final String sortBy = split[0];
+        final String sortOrder = split[1];
 
-        boolean hasNext = productDtos.size() == 11;
+        final Specification<Product> specification = ProductSpecifications.searchBy(category, lastProduct, sortBy,
+                sortOrder);
+
+        final PageRequest pageable = PageRequest.of(0, DEFAULT_CURSOR_PAGINATION_SIZE);
+        final Page<Product> paginationResult = productRepository.findAll(specification, pageable);
+
+        final List<ProductInCategoryDto> productDtos = getProductInCategoryDtos(paginationResult);
+        final Boolean hasNext = hasNextPage(paginationResult);
+
         return ProductsInCategoryResponse.toResponse(hasNext, productDtos);
     }
 
-    private List<ProductInCategoryDto> findFirstPage(final String sort, final Category category) {
-        if ("price,asc".equals(sort)) {
-            return productInCategoryRepository.findProductByPriceAscFirst(category);
-        } else if ("price,desc".equals(sort)) {
-            return productInCategoryRepository.findProductByPriceDescFirst(category);
-        } else if ("averageRating,asc".equals(sort)) {
-            return productInCategoryRepository.findProductByAverageRatingAscFirst(category);
-        } else if ("averageRating,desc".equals(sort)) {
-            return productInCategoryRepository.findProductByAverageRatingDescFirst(category);
-        } else if ("reviewCount,desc".equals(sort)) {
-            return productInCategoryRepository.findProductByReviewCountDescFirst(category);
-        } else {
-            throw new IllegalArgumentException("정렬 조건을 확인해주세요.");
-        }
+    private List<ProductInCategoryDto> getProductInCategoryDtos(final Page<Product> paginationResult) {
+        final List<Product> findProducts = paginationResult.getContent();
+        final int resultSize = getResultSize(findProducts);
+        final List<Product> products = findProducts.subList(0, resultSize);
+
+        return products.stream()
+                .map(ProductInCategoryDto::toDto)
+                .collect(Collectors.toList());
     }
 
-    private List<ProductInCategoryDto> findPage(final String sort, final Category category, final Long lastProductId) {
-        if ("price,asc".equals(sort)) {
-            return productInCategoryRepository.findProductByPriceAsc(category, lastProductId);
-        } else if ("price,desc".equals(sort)) {
-            return productInCategoryRepository.findProductByPriceDesc(category, lastProductId);
-        } else if ("averageRating,asc".equals(sort)) {
-            return productInCategoryRepository.findProductByAverageRatingAsc(category, lastProductId);
-        } else if ("averageRating,desc".equals(sort)) {
-            return productInCategoryRepository.findProductByAverageRatingDesc(category, lastProductId);
-        } else if ("reviewCount,desc".equals(sort)) {
-            return productInCategoryRepository.findProductByReviewCountDesc(category, lastProductId);
-        } else {
-            throw new IllegalArgumentException("정렬 조건을 확인해주세요.");
+    private int getResultSize(final List<Product> findProducts) {
+        if (findProducts.size() < DEFAULT_CURSOR_PAGINATION_SIZE) {
+            return findProducts.size();
         }
+        return DEFAULT_PAGE_SIZE;
+    }
+
+    private Boolean hasNextPage(final Page<Product> paginationResult) {
+        return paginationResult.getContent().size() > DEFAULT_PAGE_SIZE;
     }
 
     public ProductResponse findProductDetail(final Long productId) {
