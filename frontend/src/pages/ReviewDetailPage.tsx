@@ -1,4 +1,5 @@
 import { Badge, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SectionTitle, SvgIcon, TagList } from '@/components/Common';
@@ -7,7 +8,9 @@ import { useReviewDetailQuery } from '@/hooks/queries/review';
 import { getRelativeDate } from '@/utils/date';
 
 export const ReviewDetailPage = () => {
-  const { data: reviewDetail } = useReviewDetailQuery();
+  const { reviewId } = useParams();
+  const { data: reviewDetail } = useReviewDetailQuery(Number(reviewId));
+
   const {
     productName,
     categoryType,
