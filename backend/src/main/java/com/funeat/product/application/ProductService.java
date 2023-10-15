@@ -85,18 +85,15 @@ public class ProductService {
 
         final Specification<Product> specification = ProductSpecifications.searchBy(category, lastProduct, sortBy,
                 sortOrder);
+        final List<Product> findResults = productRepository.findAllWithSpecification(specification, DEFAULT_CURSOR_PAGINATION_SIZE);
 
-        final PageRequest pageable = PageRequest.of(0, DEFAULT_CURSOR_PAGINATION_SIZE);
-        final Page<Product> paginationResult = productRepository.findAll(specification, pageable);
-
-        final List<ProductInCategoryDto> productDtos = getProductInCategoryDtos(paginationResult);
-        final Boolean hasNext = hasNextPage(paginationResult);
+        final List<ProductInCategoryDto> productDtos = getProductInCategoryDtos(findResults);
+        final Boolean hasNext = hasNextPage(findResults);
 
         return ProductsInCategoryResponse.toResponse(hasNext, productDtos);
     }
 
-    private List<ProductInCategoryDto> getProductInCategoryDtos(final Page<Product> paginationResult) {
-        final List<Product> findProducts = paginationResult.getContent();
+    private List<ProductInCategoryDto> getProductInCategoryDtos(final List<Product> findProducts) {
         final int resultSize = getResultSize(findProducts);
         final List<Product> products = findProducts.subList(0, resultSize);
 
@@ -112,8 +109,8 @@ public class ProductService {
         return DEFAULT_PAGE_SIZE;
     }
 
-    private Boolean hasNextPage(final Page<Product> paginationResult) {
-        return paginationResult.getContent().size() > DEFAULT_PAGE_SIZE;
+    private Boolean hasNextPage(final List<Product> findProducts) {
+        return findProducts.size() > DEFAULT_PAGE_SIZE;
     }
 
     public ProductResponse findProductDetail(final Long productId) {
