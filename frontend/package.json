@@ -13,7 +13,7 @@
     "test:coverage": "jest --watchAll --coverage"
   },
   "dependencies": {
-    "@fun-eat/design-system": "^0.3.13",
+    "@fun-eat/design-system": "^0.3.15",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",
     "dayjs": "^1.11.9",
@@ -46,6 +46,7 @@
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "babel-plugin-styled-components": "^2.1.4",
+    "browser-image-compression": "^2.0.2",
     "copy-webpack-plugin": "^11.0.0",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.44.0",
