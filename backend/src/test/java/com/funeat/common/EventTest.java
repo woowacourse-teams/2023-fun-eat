@@ -50,9 +50,11 @@ public class EventTest {
     protected Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
     }
+
     protected Long 단일_카테고리_저장(final Category category) {
         return categoryRepository.save(category).getId();
     }
+
     protected void 복수_태그_저장(final Tag... tagsToSave) {
         final var tags = List.of(tagsToSave);
         tagRepository.saveAll(tags);
