@@ -59,10 +59,10 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
         return query.getResultList();
     }
 
-    private static CompoundSelection<TestSortingReviewDto> getConstruct(final Root<Review> root,
-                                                                        final CriteriaBuilder cb,
-                                                                        final Join<Review, Member> joinMember,
-                                                                        final Join<Review, ReviewFavorite> leftJoinReviewFavorite) {
+    private CompoundSelection<TestSortingReviewDto> getConstruct(final Root<Review> root,
+                                                                 final CriteriaBuilder cb,
+                                                                 final Join<Review, Member> joinMember,
+                                                                 final Join<Review, ReviewFavorite> leftJoinReviewFavorite) {
 
         return cb.construct(TestSortingReviewDto.class,
                 root.get("id"),
@@ -77,10 +77,10 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
                 root.get("createdAt"));
     }
 
-    private static List<Order> getOrderBy(final Root<Review> root,
-                                          final CriteriaBuilder cb,
-                                          final String fieldName,
-                                          final String sortOption) {
+    private List<Order> getOrderBy(final Root<Review> root,
+                                   final CriteriaBuilder cb,
+                                   final String fieldName,
+                                   final String sortOption) {
         if ("ASC".equalsIgnoreCase(sortOption)) {
             final Order order = cb.asc(root.get(fieldName));
             return List.of(order, cb.desc(root.get("id")));
