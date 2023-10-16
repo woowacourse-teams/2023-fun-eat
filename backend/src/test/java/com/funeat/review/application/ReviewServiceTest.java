@@ -440,7 +440,7 @@ class ReviewServiceTest extends ServiceTest {
         }
 
         @Test
-        void 최신순으로_정렬을_할_수_있다() {
+        void 최신순으로_정렬을_할_수_있다() throws InterruptedException {
             // given
             final var member1 = 멤버_멤버1_생성();
             final var member2 = 멤버_멤버2_생성();
@@ -454,7 +454,9 @@ class ReviewServiceTest extends ServiceTest {
             final var productId = 단일_상품_저장(product);
 
             final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product, 351L);
+            Thread.sleep(1000);
             final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member2, product, 24L);
+            Thread.sleep(1000);
             final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member3, product, 130L);
             복수_리뷰_저장(review1, review2, review3);
 

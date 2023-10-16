@@ -321,7 +321,7 @@ class RecipeServiceTest extends ServiceTest {
         }
 
         @Test
-        void 꿀조합을_최신순으로_정렬할_수_있다() {
+        void 꿀조합을_최신순으로_정렬할_수_있다() throws InterruptedException {
             // given
             final var member1 = 멤버_멤버1_생성();
             final var member2 = 멤버_멤버2_생성();
@@ -337,7 +337,9 @@ class RecipeServiceTest extends ServiceTest {
             복수_상품_저장(product1, product2, product3);
 
             final var recipe1_1 = 레시피_생성(member1, 1L);
+            Thread.sleep(1000);
             final var recipe1_2 = 레시피_생성(member1, 3L);
+            Thread.sleep(1000);
             final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 
@@ -638,6 +640,7 @@ class RecipeServiceTest extends ServiceTest {
         void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_첫페이지_댓글_10개조회() {
             // given
             final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
             final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
             final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
             final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
@@ -686,6 +689,7 @@ class RecipeServiceTest extends ServiceTest {
         void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_마지막페이지_댓글_5개조회() {
             // given
             final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
             final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
             final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
             final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
