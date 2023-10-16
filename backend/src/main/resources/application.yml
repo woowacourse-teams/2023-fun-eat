@@ -6,6 +6,11 @@ spring:
       enabled: true
       maxFileSize: 10MB
       maxRequestSize: 15MB
+  task:
+    execution:
+      pool:
+        core-size: { THREAD_CORE_SIZE }
+        max-size: { THREAD_MAX_SIZE }
   session:
     store-type: jdbc
     jdbc:

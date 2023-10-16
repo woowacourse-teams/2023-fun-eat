@@ -15,4 +15,10 @@ public class ReviewException extends GlobalException {
             super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), reviewId));
         }
     }
+
+    public static class NotAuthorOfReviewException extends ReviewException {
+        public NotAuthorOfReviewException(final ReviewErrorCode errorCode, final Long memberId) {
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), memberId));
+        }
+    }
 }

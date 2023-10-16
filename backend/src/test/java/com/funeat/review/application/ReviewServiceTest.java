@@ -40,6 +40,7 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
 import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
@@ -614,7 +615,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = review.getImage();
 
             // when
-            reviewService.updateProductImage(reviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -643,7 +644,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = secondReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -672,7 +673,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = firstReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -701,7 +702,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = secondReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -722,11 +723,11 @@ class ReviewServiceTest extends ServiceTest {
 
             final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
             final var firstReviewId = 단일_리뷰_저장(firstReview);
-            reviewService.updateProductImage(firstReviewId);
+            reviewService.updateProductImage(product.getId());
 
             final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
             final var secondReviewId = 단일_리뷰_저장(secondReview);
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
 
             final var thirdReview = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
             final var thirdReviewId = 단일_리뷰_저장(thirdReview);
@@ -734,7 +735,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = thirdReview.getImage();
 
             // when
-            reviewService.updateProductImage(thirdReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -755,7 +756,7 @@ class ReviewServiceTest extends ServiceTest {
 
             final var firstReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 3L);
             final var firstReviewId = 단일_리뷰_저장(firstReview);
-            reviewService.updateProductImage(firstReviewId);
+            reviewService.updateProductImage(product.getId());
 
             final var secondReview = 리뷰_이미지없음_평점1점_재구매O_생성(member, product, 2L);
             final var secondReviewId = 단일_리뷰_저장(secondReview);
@@ -763,7 +764,7 @@ class ReviewServiceTest extends ServiceTest {
             final var expected = secondReview.getImage();
 
             // when
-            reviewService.updateProductImage(secondReviewId);
+            reviewService.updateProductImage(product.getId());
             final var actual = product.getImage();
 
             // then
@@ -775,7 +776,7 @@ class ReviewServiceTest extends ServiceTest {
     class updateProductImage_실패_테스트 {
 
         @Test
-        void 존재하지_않는_리뷰로_상품_업데이트를_시도하면_예외가_발생한다() {
+        void 존재하지_않는_상품으로_상품_업데이트를_시도하면_예외가_발생한다() {
             // given
             final var member = 멤버_멤버1_생성();
             단일_멤버_저장(member);
@@ -786,12 +787,154 @@ class ReviewServiceTest extends ServiceTest {
             final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
             단일_상품_저장(product);
 
-            final var review = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
-            final var wrongReviewId = 단일_리뷰_저장(review) + 1L;
+            final var wrongProductId = 999L;
 
             // when & then
-            assertThatThrownBy(() -> reviewService.updateProductImage(wrongReviewId))
+            assertThatThrownBy(() -> reviewService.updateProductImage(wrongProductId))
+                    .isInstanceOf(ProductNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class deleteReview_성공_테스트 {
+
+        @Test
+        void 자신이_작성한_리뷰를_삭제할_수_있다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var member = 멤버_멤버2_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var favoriteRequest = 리뷰좋아요요청_생성(true);
+            reviewService.likeReview(reviewId, authorId, favoriteRequest);
+            reviewService.likeReview(reviewId, memberId, favoriteRequest);
+
+            // when
+            reviewService.deleteReview(reviewId, authorId);
+
+            // then
+            final var tags = reviewTagRepository.findAll();
+            final var favorites = reviewFavoriteRepository.findAll();
+            final var findReview = reviewRepository.findById(reviewId);
+
+            assertSoftly(soft -> {
+                soft.assertThat(tags).isEmpty();
+                soft.assertThat(favorites).isEmpty();
+                soft.assertThat(findReview).isEmpty();
+            });
+        }
+    }
+
+    @Nested
+    class deleteReview_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_사용자가_리뷰를_삭제하려하면_에러가_발생한다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            final var wrongMemberId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.deleteReview(reviewId, wrongMemberId))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+
+        @Test
+        void 존재하지_않는_리뷰를_삭제하려하면_에러가_발생한다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var wrongReviewId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.deleteReview(wrongReviewId, authorId))
                     .isInstanceOf(ReviewNotFoundException.class);
+        }
+
+        @Test
+        void 자신이_작성하지_않은_리뷰를_삭제하려하면_에러가_발생한다() {
+            // given
+            final var author = 멤버_멤버1_생성();
+            final var authorId = 단일_멤버_저장(author);
+            final var member = 멤버_멤버2_생성();
+            final var memberId = 단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var tag1 = 태그_맛있어요_TASTE_생성();
+            final var tag2 = 태그_아침식사_ETC_생성();
+            복수_태그_저장(tag1, tag2);
+
+            final var tagIds = 태그_아이디_변환(tag1, tag2);
+            final var image = 이미지_생성();
+            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
+            reviewService.create(productId, authorId, image, reviewCreateRequest);
+
+            final var review = reviewRepository.findAll().get(0);
+            final var reviewId = review.getId();
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.deleteReview(reviewId, memberId))
+                    .isInstanceOf(NotAuthorOfReviewException.class);
         }
     }
 

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,11 +50,12 @@ public class ReviewApiController implements ReviewController {
 
     @Logging
     @PatchMapping("/api/products/{productId}/reviews/{reviewId}")
-    public ResponseEntity<Void> toggleLikeReview(@PathVariable final Long reviewId,
+    public ResponseEntity<Void> toggleLikeReview(@PathVariable final Long productId,
+                                                 @PathVariable final Long reviewId,
                                                  @AuthenticationPrincipal final LoginInfo loginInfo,
                                                  @RequestBody @Valid final ReviewFavoriteRequest request) {
         reviewService.likeReview(reviewId, loginInfo.getId(), request);
-        reviewService.updateProductImage(reviewId);
+        reviewService.updateProductImage(productId);
 
         return ResponseEntity.noContent().build();
     }
