@@ -1,6 +1,5 @@
 package com.funeat.product.domain;
 
-import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
 import javax.persistence.Entity;
@@ -38,9 +37,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
-
-    @OneToMany(mappedBy = "product")
-    private List<ProductBookmark> productBookmarks;
 
     private Long reviewCount = 0L;
 
