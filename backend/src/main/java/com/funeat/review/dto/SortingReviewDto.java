@@ -22,15 +22,15 @@ public class SortingReviewDto {
     private final Long rating;
     private final List<TagDto> tags;
     private final String content;
-    private final Boolean rebuy;
+    private final boolean rebuy;
     private final Long favoriteCount;
-    private final Boolean favorite;
+    private final boolean favorite;
     private final LocalDateTime createdAt;
 
     @JsonCreator
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
                             final Long rating, final List<TagDto> tags,
-                            final String content, final Boolean rebuy, final Long favoriteCount, final Boolean favorite,
+                            final String content, final boolean rebuy, final Long favoriteCount, final boolean favorite,
                             final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
@@ -49,7 +49,7 @@ public class SortingReviewDto {
         final List<TagDto> tagDtos = tags.stream()
                 .map(TagDto::toDto)
                 .collect(Collectors.toList());
-        final Boolean isFavorite = checkingFavorite(sortingReviewDto.getFavorite());
+        final Boolean isFavorite = checkingFavorite(sortingReviewDto.isFavorite());
 
         return new SortingReviewDto(
                 sortingReviewDto.getId(),
@@ -59,7 +59,7 @@ public class SortingReviewDto {
                 sortingReviewDto.getRating(),
                 tagDtos,
                 sortingReviewDto.getContent(),
-                sortingReviewDto.getRebuy(),
+                sortingReviewDto.isRebuy(),
                 sortingReviewDto.getFavoriteCount(),
                 isFavorite,
                 sortingReviewDto.getCreatedAt());
@@ -100,7 +100,7 @@ public class SortingReviewDto {
         return content;
     }
 
-    public Boolean isRebuy() {
+    public boolean isRebuy() {
         return rebuy;
     }
 

@@ -1,25 +1,28 @@
 package com.funeat.review.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class SortingReviewDtoWithoutTag {
 
-    private Long id;
+    private final Long id;
     private final String userName;
     private final String profileImage;
     private final String image;
     private final Long rating;
     private final String content;
-    private final Boolean rebuy;
+    private final boolean rebuy;
     private final Long favoriteCount;
-    private final Boolean favorite;
+    private final boolean favorite;
     private final LocalDateTime createdAt;
 
     public SortingReviewDtoWithoutTag(final Long id, final String userName, final String profileImage,
                                       final String image, final Long rating,
-                                      final String content, final Boolean rebuy, final Long favoriteCount,
+                                      final String content, final boolean rebuy, final Long favoriteCount,
                                       final Boolean favorite,
                                       final LocalDateTime createdAt) {
+        final Boolean isFavorite = checkingFavorite(favorite);
+
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -28,8 +31,15 @@ public class SortingReviewDtoWithoutTag {
         this.content = content;
         this.rebuy = rebuy;
         this.favoriteCount = favoriteCount;
-        this.favorite = favorite;
+        this.favorite = isFavorite;
         this.createdAt = createdAt;
+    }
+
+    private static Boolean checkingFavorite(final Boolean favorite) {
+        if (Objects.isNull(favorite)) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
     public Long getId() {
@@ -56,7 +66,7 @@ public class SortingReviewDtoWithoutTag {
         return content;
     }
 
-    public Boolean getRebuy() {
+    public boolean isRebuy() {
         return rebuy;
     }
 
@@ -64,7 +74,7 @@ public class SortingReviewDtoWithoutTag {
         return favoriteCount;
     }
 
-    public Boolean getFavorite() {
+    public boolean isFavorite() {
         return favorite;
     }
 

@@ -40,9 +40,8 @@ public class SortingReviewService {
         final Specification<Review> specification = getSortingSpecification(product, sortOption, lastReviewId);
         final List<SortingReviewDtoWithoutTag> sortingReviewDtoWithoutTags = reviewRepository.getSortingReview(member,
                 specification, sortOption);
-        final List<SortingReviewDto> sortingReviewDtos = addTagsToSortingReviews(sortingReviewDtoWithoutTags);
 
-        return sortingReviewDtos;
+        return addTagsToSortingReviews(sortingReviewDtoWithoutTags);
     }
 
     private List<SortingReviewDto> addTagsToSortingReviews(

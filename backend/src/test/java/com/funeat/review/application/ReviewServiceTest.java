@@ -344,59 +344,6 @@ class ReviewServiceTest extends ServiceTest {
     class sortingReviews_성공_테스트 {
 
         @Test
-        void TEST_좋아요_기준으로_내림차순_정렬을_할_수_있다() {
-            // given
-            final var member = 멤버_멤버1_생성();
-            final var memberId = 단일_멤버_저장(member);
-
-            final var category = 카테고리_즉석조리_생성();
-            단일_카테고리_저장(category);
-            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
-            final var productId = 단일_상품_저장(product);
-
-            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 1L);
-            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 2L);
-            final var review3 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 3L);
-            final var review4 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 4L);
-            final var review5 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 5L);
-            final var review6 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 6L);
-            final var review7 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 7L);
-            final var review8 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 8L);
-            final var review9 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 9L);
-            final var review10 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 10L);
-            final var review11 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 11L);
-            final var review12 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 12L);
-            final var review13 = 리뷰_이미지test3_평점3점_재구매X_생성(member, product, 13L);
-            복수_리뷰_저장(review1, review2, review3, review4, review5, review6, review7, review8, review9, review10, review11, review12, review13);
-
-            reviewService.likeReview(1L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(2L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(3L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(4L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(5L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(6L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(7L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(8L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(9L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(10L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(11L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(12L, memberId, 리뷰좋아요요청_생성(true));
-            reviewService.likeReview(13L, memberId, 리뷰좋아요요청_생성(true));
-
-
-            final var request = 리뷰정렬요청_좋아요수_내림차순_생성(4L);
-
-            final var expected = List.of(review3.getId(), review2.getId(), review1.getId());
-
-            // when
-            final var actual = reviewService.sortingReviews(productId, memberId, request).getReviews();
-
-            // then
-            assertThat(actual).extracting(SortingReviewDto::getId)
-                    .containsExactlyElementsOf(expected);
-        }
-
-        @Test
         void 좋아요_기준으로_내림차순_정렬을_할_수_있다() {
             // given
             final var member = 멤버_멤버1_생성();
