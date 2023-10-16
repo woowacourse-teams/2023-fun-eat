@@ -1,6 +1,6 @@
 import { Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,8 +13,9 @@ import { getFormattedDate } from '@/utils/date';
 export const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
-  const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
+  const scrollTargetRef = useRef<HTMLElement>(null);
 
+  const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
   const { reset } = useQueryErrorResetBoundary();
 
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
@@ -75,11 +76,13 @@ export const RecipeDetailPage = () => {
       <Spacing size={24} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <CommentList recipeId={Number(recipeId)} />
+          <section ref={scrollTargetRef}>
+            <CommentList recipeId={Number(recipeId)} />
+          </section>
         </Suspense>
       </ErrorBoundary>
       <Spacing size={108} />
-      <CommentForm recipeId={Number(recipeId)} />
+      <CommentForm recipeId={Number(recipeId)} scrollTargetRef={scrollTargetRef} />
       <Spacing size={12} />
     </>
   );
