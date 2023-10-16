@@ -86,6 +86,9 @@ const SvgSprite = () => {
       <symbol id="info" viewBox="0 0 16 16">
         <path d="M8 7a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 7zm0-.75a.749.749 0 1 0 0-1.5.749.749 0 0 0 0 1.498zM2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8zm6-5a5 5 0 1 0 0 10A5 5 0 0 0 8 3z" />
       </symbol>
+      <symbol id="trashcan" viewBox="0 0 24 24">
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+      </symbol>
     </svg>
   );
 };
