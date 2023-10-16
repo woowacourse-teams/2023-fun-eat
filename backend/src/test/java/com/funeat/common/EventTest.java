@@ -20,7 +20,7 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 @SpringBootTest
 @RecordApplicationEvents
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, DataClearExtension.class})
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class EventTest {
 
