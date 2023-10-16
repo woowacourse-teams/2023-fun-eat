@@ -27,7 +27,7 @@ const useInfiniteRecipeCommentQuery = (recipeId: number) => {
     ({ pageParam = { lastId: 0, totalElements: null } }) => fetchRecipeComments(pageParam, recipeId),
     {
       getNextPageParam: (prevResponse: CommentResponse) => {
-        const lastId = prevResponse.comments[prevResponse.comments.length - 1].id;
+        const lastId = prevResponse.comments.length ? prevResponse.comments[prevResponse.comments.length - 1].id : 0;
         const totalElements = prevResponse.totalElements;
         const lastCursor = { lastId: lastId, totalElements: totalElements };
         return prevResponse.hasNext ? lastCursor : undefined;
