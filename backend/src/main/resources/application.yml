@@ -11,6 +11,10 @@ spring:
       pool:
         core-size: { THREAD_CORE_SIZE }
         max-size: { THREAD_MAX_SIZE }
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: never
 
 springdoc:
   swagger-ui:
@@ -28,3 +32,7 @@ server:
       max: { MAX_THREADS }
     max-connections: { MAX_CONNECTIONS }
     accept-count: { ACCEPT_COUNT }
+
+back-office:
+  id: { BACK_OFFICE_ID }
+  key: { BACK_OFFICE_KEY }

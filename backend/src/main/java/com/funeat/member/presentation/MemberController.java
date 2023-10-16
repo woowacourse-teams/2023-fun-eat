@@ -32,7 +32,7 @@ public interface MemberController {
 
     @Operation(summary = "사용자 정보 수정", description = "사용자 닉네임과 프로필 사진을 수정한다.")
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "204",
             description = "사용자 정보 수정 성공."
     )
     @PutMapping

@@ -38,11 +38,13 @@ import com.funeat.member.dto.MemberReviewDto;
 import com.funeat.member.exception.MemberException.MemberNotFoundException;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.review.domain.Review;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
@@ -933,6 +935,101 @@ class ReviewServiceTest extends ServiceTest {
             // when & then
             assertThatThrownBy(() -> reviewService.deleteReview(reviewId, memberId))
                     .isInstanceOf(NotAuthorOfReviewException.class);
+        }
+    }
+
+    @Nested
+    class getMostFavoriteReview_성공_테스트 {
+
+        @Test
+        void 리뷰가_여러개_존재하면_좋아요를_가장_많이_받은_리뷰를_반환한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 24L);
+            복수_리뷰_저장(review1, review2);
+
+            final var expected = MostFavoriteReviewResponse.toResponse(Optional.of(review1));
+
+            // when
+            final var actual = reviewService.getMostFavoriteReview(productId);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
+
+        @Test
+        void 좋아요_수가_같은_리뷰가_여러개_존재하면_가장_최근_작성된_리뷰를_반환한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var review1 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 351L);
+            final var review2 = 리뷰_이미지test4_평점4점_재구매O_생성(member, product, 351L);
+            복수_리뷰_저장(review1, review2);
+
+            final var expected = MostFavoriteReviewResponse.toResponse(Optional.of(review2));
+
+            // when
+            final var actual = reviewService.getMostFavoriteReview(productId);
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
+
+        @Test
+        void 리뷰가_존재하지_않으면_Optional_empty를_반환한다() {
+            // given
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점3점_생성(category);
+            final var productId = 단일_상품_저장(product);
+
+            final var expected = Optional.empty();
+
+            // when
+            final var actual = reviewService.getMostFavoriteReview(productId);
+
+            // then
+            assertThat(actual).isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class getMostFavoriteReview_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_상품에_가장_많은_좋아요를_받은_리뷰를_찾으면_예외가_발생한다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var wrongProductId = 단일_상품_저장(product) + 1L;
+
+            // when & then
+            assertThatThrownBy(() -> reviewService.getMostFavoriteReview(wrongProductId))
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 

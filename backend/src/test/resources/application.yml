@@ -15,6 +15,9 @@ spring:
         format_sql: true
         show_sql: true
 
+  session:
+    store-type: none
+
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
@@ -27,3 +30,7 @@ cloud:
       bucket: testBucket
       folder: testFolder
       cloudfrontPath: testCloudfrontPath
+
+back-office:
+  id: test
+  key: test

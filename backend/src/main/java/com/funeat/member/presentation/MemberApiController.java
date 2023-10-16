@@ -53,7 +53,7 @@ public class MemberApiController implements MemberController {
                                                  @RequestPart @Valid final MemberRequest memberRequest) {
         memberService.modify(loginInfo.getId(), image, memberRequest);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/reviews")

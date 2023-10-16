@@ -4,11 +4,14 @@ import com.funeat.auth.dto.LoginInfo;
 import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.common.logging.Logging;
 import com.funeat.review.application.ReviewService;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import java.net.URI;
+import java.util.Objects;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -70,6 +73,16 @@ public class ReviewApiController implements ReviewController {
     public ResponseEntity<RankingReviewsResponse> getRankingReviews() {
         final RankingReviewsResponse response = reviewService.getTopReviews();
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/ranks/products/{productId}/reviews")
+    public ResponseEntity<Optional<MostFavoriteReviewResponse>> getMostFavoriteReview(@PathVariable final Long productId) {
+        final Optional<MostFavoriteReviewResponse> response = reviewService.getMostFavoriteReview(productId);
+
+        if (response.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(response);
     }
 }
