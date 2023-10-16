@@ -47,6 +47,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
             // then
             final var count = events.stream(ReviewDeleteEvent.class).count();
             assertThat(count).isEqualTo(1);
+            events.clear();
         }
 
         @Test
@@ -69,6 +70,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
             // then
             final var count = events.stream(ReviewDeleteEvent.class).count();
             assertThat(count).isEqualTo(0);
+            events.clear();
         }
     }
 
@@ -90,6 +92,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
 
             // then
             verify(uploader, timeout(1000).times(1)).delete(any());
+            events.clear();
         }
 
         @Test
@@ -107,6 +110,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
 
             // then
             verify(uploader, timeout(1000).times(0)).delete(any());
+            events.clear();
         }
 
         @Test
@@ -128,6 +132,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
 
             // then
             assertThat(reviewRepository.findById(review.getId())).isEmpty();
+            events.clear();
         }
     }
 }
