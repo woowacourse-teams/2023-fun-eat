@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+@SuppressWarnings("NonAsciiCharacters")
 class ReviewDeleteEventListenerTest extends EventTest {
 
     @MockBean

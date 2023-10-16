@@ -21,8 +21,9 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 @SpringBootTest
 @RecordApplicationEvents
-@ExtendWith({MockitoExtension.class, DataClearExtension.class})
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
+@ExtendWith({MockitoExtension.class, DataClearExtension.class})
 public class EventTest {
 
     @Autowired
