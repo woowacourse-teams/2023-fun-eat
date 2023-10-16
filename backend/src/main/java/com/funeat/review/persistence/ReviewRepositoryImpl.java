@@ -3,7 +3,7 @@ package com.funeat.review.persistence;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.review.domain.Review;
-import com.funeat.review.dto.TestSortingReviewDto;
+import com.funeat.review.dto.SortingReviewDtoWithoutTag;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,11 +26,11 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
     private EntityManager em;
 
     @Override
-    public List<TestSortingReviewDto> getSortingReview(final Member loginMember,
-                                                       final Specification<Review> specification,
-                                                       final String sortOption) {
+    public List<SortingReviewDtoWithoutTag> getSortingReview(final Member loginMember,
+                                                             final Specification<Review> specification,
+                                                             final String sortOption) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
-        final CriteriaQuery<TestSortingReviewDto> cq = cb.createQuery(TestSortingReviewDto.class);
+        final CriteriaQuery<SortingReviewDtoWithoutTag> cq = cb.createQuery(SortingReviewDtoWithoutTag.class);
         final Root<Review> root = cq.from(Review.class);
 
         // sortField, sortOrder
@@ -52,19 +52,19 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
                 .orderBy(getOrderBy(root, cb, sortField, sortOrder));
 
         // limit
-        final TypedQuery<TestSortingReviewDto> query = em.createQuery(cq);
+        final TypedQuery<SortingReviewDtoWithoutTag> query = em.createQuery(cq);
         query.setMaxResults(11);
 
         // result
         return query.getResultList();
     }
 
-    private CompoundSelection<TestSortingReviewDto> getConstruct(final Root<Review> root,
-                                                                 final CriteriaBuilder cb,
-                                                                 final Join<Review, Member> joinMember,
-                                                                 final Join<Review, ReviewFavorite> leftJoinReviewFavorite) {
+    private CompoundSelection<SortingReviewDtoWithoutTag> getConstruct(final Root<Review> root,
+                                                                       final CriteriaBuilder cb,
+                                                                       final Join<Review, Member> joinMember,
+                                                                       final Join<Review, ReviewFavorite> leftJoinReviewFavorite) {
 
-        return cb.construct(TestSortingReviewDto.class,
+        return cb.construct(SortingReviewDtoWithoutTag.class,
                 root.get("id"),
                 joinMember.get("nickname"),
                 joinMember.get("profileImage"),

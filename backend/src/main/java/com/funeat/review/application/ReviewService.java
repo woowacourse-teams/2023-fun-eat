@@ -28,11 +28,9 @@ import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
-import com.funeat.review.dto.TestSortingReviewDto;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
-import com.funeat.review.specification.SortingReviewSpecification;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
@@ -42,7 +40,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,9 +51,7 @@ public class ReviewService {
     private static final int START = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
-    private static final int PAGE_SIZE = 10;
-    private static final boolean EXIST_NEXT_DATA = true;
-    private static final boolean NOT_EXIST_NEXT_DATA = false;
+    private static final int REVIEW_PAGE_SIZE = 10;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -65,12 +60,13 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
     private final ImageUploader imageUploader;
+    private final SortingReviewService sortingReviewService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
                          final ReviewFavoriteRepository reviewFavoriteRepository,
-                         final ImageUploader imageUploader) {
+                         final ImageUploader imageUploader, final SortingReviewService sortingReviewService) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -78,6 +74,7 @@ public class ReviewService {
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
         this.imageUploader = imageUploader;
+        this.sortingReviewService = sortingReviewService;
     }
 
     @Transactional
@@ -148,40 +145,29 @@ public class ReviewService {
 
     public SortingReviewsResponse sortingReviews(final Long productId, final Long memberId,
                                                  final SortingReviewRequest request) {
-        final Member member = memberRepository.findById(memberId)
+        final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-        final Product product = productRepository.findById(productId)
+        final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final List<SortingReviewDto> sortingReviews = getSortingReviews(member, product, request);
-        if (sortingReviews.size() > PAGE_SIZE) {
-            final List<SortingReviewDto> resizeSortingReviews = sortingReviews.subList(START, PAGE_SIZE);
-            return SortingReviewsResponse.toResponse(resizeSortingReviews, EXIST_NEXT_DATA);
-        }
-        return SortingReviewsResponse.toResponse(sortingReviews, NOT_EXIST_NEXT_DATA);
+        final List<SortingReviewDto> sortingReviews = sortingReviewService.getSortingReviews(findMember, findProduct, request);
+        final int resultSize = getResultSize(sortingReviews);
+
+        final List<SortingReviewDto> resizeSortingReviews = sortingReviews.subList(START, resultSize);
+        final Boolean hasNext = hasNextPage(sortingReviews);
+
+        return SortingReviewsResponse.toResponse(resizeSortingReviews, hasNext);
     }
 
-    private List<SortingReviewDto> getSortingReviews(final Member member, final Product product,
-                                                     final SortingReviewRequest request) {
-        final Long lastReviewId = request.getLastReviewId();
-        final String sortOption = request.getSort();
-
-        final Specification<Review> specification = getSortingSpecification(product, sortOption, lastReviewId);
-        final List<TestSortingReviewDto> sortingReviewsTest = reviewRepository.getSortingReview(member, specification,
-                sortOption);
-        return sortingReviewsTest.stream()
-                .map(SortingReviewDto::toDto)
-                .collect(Collectors.toList());
+    private int getResultSize(final List<SortingReviewDto> sortingReviews) {
+        if (sortingReviews.size() <= REVIEW_PAGE_SIZE) {
+            return sortingReviews.size();
+        }
+        return REVIEW_PAGE_SIZE;
     }
 
-    private Specification<Review> getSortingSpecification(final Product product, final String sortOption,
-                                                          final Long lastReviewId) {
-        if (lastReviewId == START) {
-            return SortingReviewSpecification.sortingFirstPageBy(product);
-        }
-        final Review lastReview = reviewRepository.findById(lastReviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
-        return SortingReviewSpecification.sortingBy(product, sortOption, lastReview);
+    private Boolean hasNextPage(final List<SortingReviewDto> sortingReviews) {
+        return sortingReviews.size() > REVIEW_PAGE_SIZE;
     }
 
     public RankingReviewsResponse getTopReviews() {

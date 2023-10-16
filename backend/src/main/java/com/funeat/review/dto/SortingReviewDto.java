@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SortingReviewDto {
@@ -46,22 +45,24 @@ public class SortingReviewDto {
         this.createdAt = createdAt;
     }
 
-    public static SortingReviewDto toDto(final TestSortingReviewDto dto) {
-        final Boolean isFavorite = checkingFavorite(dto.getFavorite());
+    public static SortingReviewDto toDto(final SortingReviewDtoWithoutTag sortingReviewDto, final List<Tag> tags) {
+        final List<TagDto> tagDtos = tags.stream()
+                .map(TagDto::toDto)
+                .collect(Collectors.toList());
+        final Boolean isFavorite = checkingFavorite(sortingReviewDto.getFavorite());
 
         return new SortingReviewDto(
-                dto.getId(),
-                dto.getUserName(),
-                dto.getProfileImage(),
-                dto.getImage(),
-                dto.getRating(),
-                Collections.emptyList(),
-                dto.getContent(),
-                dto.getRebuy(),
-                dto.getFavoriteCount(),
+                sortingReviewDto.getId(),
+                sortingReviewDto.getUserName(),
+                sortingReviewDto.getProfileImage(),
+                sortingReviewDto.getImage(),
+                sortingReviewDto.getRating(),
+                tagDtos,
+                sortingReviewDto.getContent(),
+                sortingReviewDto.getRebuy(),
+                sortingReviewDto.getFavoriteCount(),
                 isFavorite,
-                dto.getCreatedAt()
-        );
+                sortingReviewDto.getCreatedAt());
     }
 
     private static Boolean checkingFavorite(final Boolean favorite) {
@@ -69,34 +70,6 @@ public class SortingReviewDto {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
-    }
-
-    public static SortingReviewDto toDto(final SortingReviewDto sortingReviewDto, final List<Tag> tags) {
-        final List<TagDto> tagDtos = tags.stream()
-                .map(TagDto::toDto)
-                .collect(Collectors.toList());
-
-        return new SortingReviewDto(sortingReviewDto.getId(), sortingReviewDto.getUserName(),
-                sortingReviewDto.getProfileImage(), sortingReviewDto.getImage(), sortingReviewDto.getRating(), tagDtos,
-                sortingReviewDto.getContent(), sortingReviewDto.isRebuy(), sortingReviewDto.getFavoriteCount(),
-                sortingReviewDto.isFavorite(), sortingReviewDto.getCreatedAt());
-    }
-
-    private static List<TagDto> findTagDtos(final Review review) {
-        return review.getReviewTags().stream()
-                .map(ReviewTag::getTag)
-                .map(TagDto::toDto)
-                .collect(Collectors.toList());
-    }
-
-    private static boolean findReviewFavoriteChecked(final Review review, final Member member) {
-        return review.getReviewFavorites()
-                .stream()
-                .filter(reviewFavorite -> reviewFavorite.getReview().equals(review))
-                .filter(reviewFavorite -> reviewFavorite.getMember().equals(member))
-                .findFirst()
-                .map(ReviewFavorite::getFavorite)
-                .orElse(false);
     }
 
     public Long getId() {

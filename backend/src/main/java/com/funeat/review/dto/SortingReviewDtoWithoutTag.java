@@ -2,23 +2,24 @@ package com.funeat.review.dto;
 
 import java.time.LocalDateTime;
 
-public class TestSortingReviewDto {
+public class SortingReviewDtoWithoutTag {
 
     private Long id;
-    private String userName;
-    private String profileImage;
-    private String image;
-    private Long rating;
-    private String content;
-    private Boolean rebuy;
-    private Long favoriteCount;
-    private Boolean favorite;
-    private LocalDateTime createdAt;
+    private final String userName;
+    private final String profileImage;
+    private final String image;
+    private final Long rating;
+    private final String content;
+    private final Boolean rebuy;
+    private final Long favoriteCount;
+    private final Boolean favorite;
+    private final LocalDateTime createdAt;
 
-    public TestSortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
-                                final Long rating, final String content,
-                                final Boolean rebuy, final Long favoriteCount, final Boolean favorite,
-                                final LocalDateTime createdAt) {
+    public SortingReviewDtoWithoutTag(final Long id, final String userName, final String profileImage,
+                                      final String image, final Long rating,
+                                      final String content, final Boolean rebuy, final Long favoriteCount,
+                                      final Boolean favorite,
+                                      final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
