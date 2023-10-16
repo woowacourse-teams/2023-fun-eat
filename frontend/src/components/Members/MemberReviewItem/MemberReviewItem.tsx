@@ -1,18 +1,17 @@
-import { Spacing, Text, useTheme } from '@fun-eat/design-system';
-import { memo } from 'react';
+import { useTheme, Spacing, Text } from '@fun-eat/design-system';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import type { ReviewRanking } from '@/types/ranking';
+import type { MemberReview } from '@/types/review';
 
-interface ReviewRankingItemProps {
-  reviewRanking: ReviewRanking;
+interface MemberReviewItemProps {
+  review: MemberReview;
 }
 
-const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
+const MemberReviewItem = ({ review }: MemberReviewItemProps) => {
   const theme = useTheme();
 
-  const { productName, content, rating, favoriteCount } = reviewRanking;
+  const { productName, content, rating, favoriteCount } = review;
 
   return (
     <ReviewRankingItemContainer>
@@ -41,15 +40,14 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
   );
 };
 
-export default memo(ReviewRankingItem);
+export default MemberReviewItem;
 
 const ReviewRankingItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px;
-  border: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  padding: 12px 0;
+  border-bottom: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
 `;
 
 const ReviewText = styled(Text)`

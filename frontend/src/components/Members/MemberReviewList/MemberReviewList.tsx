@@ -3,7 +3,8 @@ import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReviewRankingItem } from '@/components/Rank';
+import MemberReviewItem from '../MemberReviewItem/MemberReviewItem';
+
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
 import { useInfiniteMemberReviewQuery } from '@/hooks/queries/members';
@@ -46,10 +47,10 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
       )}
       <Spacing size={20} />
       <MemberReviewListWrapper>
-        {reviewsToDisplay.map((reviewRanking) => (
-          <li key={reviewRanking.reviewId}>
-            <Link as={RouterLink} to={`${PATH.REVIEW}/${reviewRanking.reviewId}`} block>
-              <ReviewRankingItem reviewRanking={reviewRanking} isMemberPage />
+        {reviewsToDisplay.map((review) => (
+          <li key={review.reviewId}>
+            <Link as={RouterLink} to={`${PATH.REVIEW}/${review.reviewId}`} block>
+              <MemberReviewItem review={review} />
             </Link>
           </li>
         ))}

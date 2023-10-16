@@ -20,6 +20,16 @@ export interface ReviewDetail extends Review {
   productName: string;
 }
 
+export interface MemberReview {
+  reviewId: number;
+  productId: number;
+  productName: string;
+  content: string;
+  rating: number;
+  favoriteCount: number;
+  categoryType: CategoryVariant;
+}
+
 export interface ReviewTag {
   tagType: TagVariants;
   tags: Tag[];
