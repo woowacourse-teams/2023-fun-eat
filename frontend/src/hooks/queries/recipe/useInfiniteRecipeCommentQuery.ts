@@ -10,7 +10,7 @@ interface PageParam {
 
 const fetchRecipeComments = async (pageParam: PageParam, recipeId: number) => {
   const { lastId, totalElements } = pageParam;
-  const queries = `?lastId=${lastId}${totalElements !== null ? `&totalElements=${totalElements}` : ''}`;
+  const queries = totalElements === null ? '' : `?lastId=${lastId}&totalElements=${totalElements}`;
 
   const response = await recipeApi.get({
     params: `/${recipeId}/comments`,
