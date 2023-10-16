@@ -1,19 +1,18 @@
 package com.funeat.recipe.persistence;
 
+import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
+
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
 import com.funeat.recipe.domain.Recipe;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
-
-import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 

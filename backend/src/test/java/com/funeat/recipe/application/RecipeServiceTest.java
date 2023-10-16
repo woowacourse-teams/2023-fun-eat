@@ -1,32 +1,5 @@
 package com.funeat.recipe.application;
 
-import com.funeat.common.ServiceTest;
-import com.funeat.common.dto.PageDto;
-import com.funeat.member.domain.Member;
-import com.funeat.member.dto.MemberRecipeDto;
-import com.funeat.member.dto.MemberRecipeProductDto;
-import com.funeat.member.dto.MemberRecipesResponse;
-import com.funeat.member.exception.MemberException.MemberNotFoundException;
-import com.funeat.product.domain.Category;
-import com.funeat.product.domain.CategoryType;
-import com.funeat.product.domain.Product;
-import com.funeat.product.exception.ProductException.ProductNotFoundException;
-import com.funeat.recipe.dto.RankingRecipeDto;
-import com.funeat.recipe.dto.RankingRecipesResponse;
-import com.funeat.recipe.dto.RecipeAuthorDto;
-import com.funeat.recipe.dto.RecipeCreateRequest;
-import com.funeat.recipe.dto.RecipeDetailResponse;
-import com.funeat.recipe.dto.RecipeDto;
-import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.ImageFixture.여러_이미지_생성;
@@ -50,6 +23,32 @@ import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
+import com.funeat.common.ServiceTest;
+import com.funeat.common.dto.PageDto;
+import com.funeat.member.domain.Member;
+import com.funeat.member.dto.MemberRecipeDto;
+import com.funeat.member.dto.MemberRecipeProductDto;
+import com.funeat.member.dto.MemberRecipesResponse;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
+import com.funeat.product.domain.Category;
+import com.funeat.product.domain.CategoryType;
+import com.funeat.product.domain.Product;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.recipe.dto.RankingRecipeDto;
+import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCreateRequest;
+import com.funeat.recipe.dto.RecipeDetailResponse;
+import com.funeat.recipe.dto.RecipeDto;
+import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {

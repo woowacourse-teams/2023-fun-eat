@@ -1,12 +1,5 @@
 package com.funeat.recipe.persistence;
 
-import com.funeat.common.RepositoryTest;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.List;
-
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
@@ -26,6 +19,12 @@ import static com.funeat.fixture.ProductFixture.상품_애플망고_가격3000�
 import static com.funeat.fixture.RecipeFixture.레시피_생성;
 import static com.funeat.fixture.RecipeFixture.레시피이미지_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.funeat.common.RepositoryTest;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeRepositoryTest extends RepositoryTest {

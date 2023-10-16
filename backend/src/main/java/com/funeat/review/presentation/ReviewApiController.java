@@ -10,7 +10,6 @@ import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import java.net.URI;
-import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;

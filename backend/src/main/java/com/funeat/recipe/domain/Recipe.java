@@ -1,7 +1,8 @@
 package com.funeat.recipe.domain;
 
 import com.funeat.member.domain.Member;
-
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Recipe {
