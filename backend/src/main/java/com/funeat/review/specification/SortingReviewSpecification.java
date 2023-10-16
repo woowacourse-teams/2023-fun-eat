@@ -91,7 +91,7 @@ public final class SortingReviewSpecification {
         }
         if (LONG_TYPE_INCLUDE.contains(fieldName)) {
             final Path<Long> reviewPath = root.get(fieldName);
-            final Long lastReviewField = LongTypeSortSpec.find(fieldName, lastReview);
+            final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.equal(reviewPath, lastReviewField);
         }
         throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
@@ -124,7 +124,7 @@ public final class SortingReviewSpecification {
         }
         if (LONG_TYPE_INCLUDE.contains(fieldName)) {
             final Path<Long> reviewPath = root.get(fieldName);
-            final Long lastReviewField = LongTypeSortSpec.find(fieldName, lastReview);
+            final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.greaterThan(reviewPath, lastReviewField);
         }
         throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
@@ -153,7 +153,7 @@ public final class SortingReviewSpecification {
         }
         if (LONG_TYPE_INCLUDE.contains(fieldName)) {
             final Path<Long> reviewPath = root.get(fieldName);
-            final Long lastReviewField = LongTypeSortSpec.find(fieldName, lastReview);
+            final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.lessThan(reviewPath, lastReviewField);
         }
         throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);

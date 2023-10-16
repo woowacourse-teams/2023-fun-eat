@@ -166,24 +166,22 @@ public class ReviewService {
         final Long lastReviewId = request.getLastReviewId();
         final String sortOption = request.getSort();
 
-        if (lastReviewId == START) {
-            final Specification<Review> specification = SortingReviewSpecification.sortingFirstPageBy(product);
-            final List<TestSortingReviewDto> sortingReviewsTest = reviewRepository.getSortingReview(member,
-                    specification, sortOption);
-            return sortingReviewsTest.stream()
-                    .map(SortingReviewDto::toDto)
-                    .collect(Collectors.toList());
-        }
-
-        final Review lastReview = reviewRepository.findById(lastReviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
-        final Specification<Review> specification = SortingReviewSpecification.sortingBy(product, sortOption,
-                lastReview);
+        final Specification<Review> specification = getSortingSpecification(product, sortOption, lastReviewId);
         final List<TestSortingReviewDto> sortingReviewsTest = reviewRepository.getSortingReview(member, specification,
                 sortOption);
         return sortingReviewsTest.stream()
                 .map(SortingReviewDto::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private Specification<Review> getSortingSpecification(final Product product, final String sortOption,
+                                                          final Long lastReviewId) {
+        if (lastReviewId == START) {
+            return SortingReviewSpecification.sortingFirstPageBy(product);
+        }
+        final Review lastReview = reviewRepository.findById(lastReviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
+        return SortingReviewSpecification.sortingBy(product, sortOption, lastReview);
     }
 
     public RankingReviewsResponse getTopReviews() {
