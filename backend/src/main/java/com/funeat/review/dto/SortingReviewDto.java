@@ -49,7 +49,6 @@ public class SortingReviewDto {
         final List<TagDto> tagDtos = tags.stream()
                 .map(TagDto::toDto)
                 .collect(Collectors.toList());
-        final Boolean isFavorite = checkingFavorite(sortingReviewDto.isFavorite());
 
         return new SortingReviewDto(
                 sortingReviewDto.getId(),
@@ -59,17 +58,10 @@ public class SortingReviewDto {
                 sortingReviewDto.getRating(),
                 tagDtos,
                 sortingReviewDto.getContent(),
-                sortingReviewDto.isRebuy(),
+                sortingReviewDto.getRebuy(),
                 sortingReviewDto.getFavoriteCount(),
-                isFavorite,
+                sortingReviewDto.getFavorite(),
                 sortingReviewDto.getCreatedAt());
-    }
-
-    private static Boolean checkingFavorite(final Boolean favorite) {
-        if (Objects.isNull(favorite)) {
-            return Boolean.FALSE;
-        }
-        return Boolean.TRUE;
     }
 
     public Long getId() {
@@ -100,7 +92,7 @@ public class SortingReviewDto {
         return content;
     }
 
-    public boolean isRebuy() {
+    public boolean getRebuy() {
         return rebuy;
     }
 
@@ -108,7 +100,7 @@ public class SortingReviewDto {
         return favoriteCount;
     }
 
-    public Boolean isFavorite() {
+    public boolean getFavorite() {
         return favorite;
     }
 

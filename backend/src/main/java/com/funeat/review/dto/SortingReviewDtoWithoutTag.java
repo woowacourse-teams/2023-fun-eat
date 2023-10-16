@@ -66,7 +66,7 @@ public class SortingReviewDtoWithoutTag {
         return content;
     }
 
-    public boolean isRebuy() {
+    public boolean getRebuy() {
         return rebuy;
     }
 
@@ -74,7 +74,7 @@ public class SortingReviewDtoWithoutTag {
         return favoriteCount;
     }
 
-    public boolean isFavorite() {
+    public boolean getFavorite() {
         return favorite;
     }
 

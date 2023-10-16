@@ -4,13 +4,8 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
-import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
 import static com.funeat.fixture.PageFixture.최신순;
-import static com.funeat.fixture.PageFixture.페이지요청_기본_생성;
 import static com.funeat.fixture.PageFixture.페이지요청_생성;
-import static com.funeat.fixture.PageFixture.평점_내림차순;
-import static com.funeat.fixture.PageFixture.평점_오름차순;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
@@ -24,7 +19,6 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매X_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지없음_평점1점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰정렬요청_존재하지않는정렬_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰정렬요청_좋아요수_내림차순_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰정렬요청_최신순_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰정렬요청_평점_내림차순_생성;
