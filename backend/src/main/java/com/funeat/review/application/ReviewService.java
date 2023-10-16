@@ -51,11 +51,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private static final int TOP = 0;
+    private static final int START = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
     private static final int PAGE_SIZE = 10;
-    private static final int START = 0;
     private static final boolean EXIST_NEXT_DATA = true;
     private static final boolean NOT_EXIST_NEXT_DATA = false;
 
@@ -66,13 +65,12 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
     private final ImageUploader imageUploader;
-    private final SortReviewService sortReviewService;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
                          final ReviewFavoriteRepository reviewFavoriteRepository,
-                         final ImageUploader imageUploader, final SortReviewService sortReviewService) {
+                         final ImageUploader imageUploader) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -80,7 +78,6 @@ public class ReviewService {
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
         this.imageUploader = imageUploader;
-        this.sortReviewService = sortReviewService;
     }
 
     @Transactional
@@ -140,11 +137,11 @@ public class ReviewService {
 
         final Product product = review.getProduct();
         final Long productId = product.getId();
-        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
+        final PageRequest pageRequest = PageRequest.of(START, ONE);
 
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
-            final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
+            final String topFavoriteReviewImage = topFavoriteReview.get(START).getImage();
             product.updateImage(topFavoriteReviewImage);
         }
     }
@@ -169,7 +166,7 @@ public class ReviewService {
         final Long lastReviewId = request.getLastReviewId();
         final String sortOption = request.getSort();
 
-        if (lastReviewId == TOP) {
+        if (lastReviewId == START) {
             final Specification<Review> specification = SortingReviewSpecification.sortingFirstPageBy(product);
             final List<TestSortingReviewDto> sortingReviewsTest = reviewRepository.getSortingReview(member,
                     specification, sortOption);
