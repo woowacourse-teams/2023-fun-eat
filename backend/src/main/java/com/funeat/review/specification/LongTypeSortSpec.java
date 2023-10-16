@@ -4,7 +4,7 @@ import com.funeat.review.domain.Review;
 import java.util.Arrays;
 import java.util.function.Function;
 
-public enum ReviewSortSpec {
+public enum LongTypeSortSpec {
 
     FAVORITE_COUNT("favoriteCount", Review::getFavoriteCount),
     RATING("rating", Review::getRating);
@@ -12,13 +12,13 @@ public enum ReviewSortSpec {
     private final String fieldName;
     private final Function<Review, Long> function;
 
-    ReviewSortSpec(final String fieldName, final Function<Review, Long> function) {
+    LongTypeSortSpec(final String fieldName, final Function<Review, Long> function) {
         this.fieldName = fieldName;
         this.function = function;
     }
 
     public static Long find(final String fieldName, final Review lastReview) {
-        return Arrays.stream(ReviewSortSpec.values())
+        return Arrays.stream(LongTypeSortSpec.values())
                 .filter(reviewSortSpec -> reviewSortSpec.fieldName.equals(fieldName))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new)

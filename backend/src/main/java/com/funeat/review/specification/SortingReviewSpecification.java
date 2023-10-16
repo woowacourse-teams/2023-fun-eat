@@ -1,8 +1,12 @@
 package com.funeat.review.specification;
 
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_SORTING_OPTION_NOT_FOUND;
+
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
+import com.funeat.review.exception.ReviewException.ReviewSortingOptionNotFoundException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -11,6 +15,13 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 public final class SortingReviewSpecification {
+
+    private static final List<String> LOCALDATETIME_TYPE_INCLUDE = List.of("createdAt");
+    private static final List<String> LONG_TYPE_INCLUDE = List.of("favoriteCount", "rating");
+    private static final String DELIMITER = ",";
+    private static final String PRODUCT = "product";
+    private static final String ID = "id";
+    private static final String ASC = "ASC";
 
     private SortingReviewSpecification() {
     }
@@ -24,7 +35,7 @@ public final class SortingReviewSpecification {
     public static Specification<Review> sortingBy(final Product product, final String sortOption,
                                                   final Review lastReview) {
         return (root, query, criteriaBuilder) -> {
-            final String[] sortFieldSplit = sortOption.split(",");
+            final String[] sortFieldSplit = sortOption.split(DELIMITER);
             final String field = sortFieldSplit[0];
             final String sort = sortFieldSplit[1];
 
@@ -41,7 +52,7 @@ public final class SortingReviewSpecification {
                 return null;
             }
 
-            final Path<Product> productPath = root.get("product");
+            final Path<Product> productPath = root.get(PRODUCT);
 
             return criteriaBuilder.equal(productPath, product);
         };
@@ -53,7 +64,7 @@ public final class SortingReviewSpecification {
                 return null;
             }
 
-            final Path<Long> reviewPath = root.get("id");
+            final Path<Long> reviewPath = root.get(ID);
 
             return criteriaBuilder.lessThan(reviewPath, lastReview.getId());
         };
@@ -73,19 +84,22 @@ public final class SortingReviewSpecification {
                                          final Review lastReview,
                                          final Root<Review> root,
                                          final CriteriaBuilder criteriaBuilder) {
-        if ("createdAt".equalsIgnoreCase(fieldName)) {
+        if (LOCALDATETIME_TYPE_INCLUDE.contains(fieldName)) {
             final Path<LocalDateTime> createdAtPath = root.get(fieldName);
             final LocalDateTime lastReviewCreatedAt = lastReview.getCreatedAt();
             return criteriaBuilder.equal(createdAtPath, lastReviewCreatedAt);
         }
-        final Path<Long> reviewPath = root.get(fieldName);
-        final Long lastReviewField = ReviewSortSpec.find(fieldName, lastReview);
-        return criteriaBuilder.equal(reviewPath, lastReviewField);
+        if (LONG_TYPE_INCLUDE.contains(fieldName)) {
+            final Path<Long> reviewPath = root.get(fieldName);
+            final Long lastReviewField = LongTypeSortSpec.find(fieldName, lastReview);
+            return criteriaBuilder.equal(reviewPath, lastReviewField);
+        }
+        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
     }
 
     private static Specification<Review> lessOrGreaterThan(final String field, final String sort,
                                                            final Review lastReview) {
-        if ("ASC".equalsIgnoreCase(sort)) {
+        if (ASC.equalsIgnoreCase(sort)) {
             return greaterThan(field, lastReview);
         }
         return lessThan(field, lastReview);
@@ -103,14 +117,17 @@ public final class SortingReviewSpecification {
 
     private static Predicate checkGreaterThan(final String fieldName, final Review lastReview, final Root<Review> root,
                                               final CriteriaBuilder criteriaBuilder) {
-        if ("createdAt".equalsIgnoreCase(fieldName)) {
+        if (LOCALDATETIME_TYPE_INCLUDE.contains(fieldName)) {
             final Path<LocalDateTime> createdAtPath = root.get(fieldName);
             final LocalDateTime lastReviewCreatedAt = lastReview.getCreatedAt();
             return criteriaBuilder.greaterThan(createdAtPath, lastReviewCreatedAt);
         }
-        final Path<Long> reviewPath = root.get(fieldName);
-        final Long lastReviewField = ReviewSortSpec.find(fieldName, lastReview);
-        return criteriaBuilder.greaterThan(reviewPath, lastReviewField);
+        if (LONG_TYPE_INCLUDE.contains(fieldName)) {
+            final Path<Long> reviewPath = root.get(fieldName);
+            final Long lastReviewField = LongTypeSortSpec.find(fieldName, lastReview);
+            return criteriaBuilder.greaterThan(reviewPath, lastReviewField);
+        }
+        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
     }
 
     private static Specification<Review> lessThan(final String fieldName, final Review lastReview) {
@@ -129,13 +146,16 @@ public final class SortingReviewSpecification {
 
     private static Predicate checkLessThan(final String fieldName, final Review lastReview, final Root<Review> root,
                                            final CriteriaBuilder criteriaBuilder) {
-        if ("createdAt".equalsIgnoreCase(fieldName)) {
+        if (LOCALDATETIME_TYPE_INCLUDE.contains(fieldName)) {
             final Path<LocalDateTime> createdAtPath = root.get(fieldName);
             final LocalDateTime lastReviewCreatedAt = lastReview.getCreatedAt();
             return criteriaBuilder.lessThan(createdAtPath, lastReviewCreatedAt);
         }
-        final Path<Long> reviewPath = root.get(fieldName);
-        final Long lastReviewField = ReviewSortSpec.find(fieldName, lastReview);
-        return criteriaBuilder.lessThan(reviewPath, lastReviewField);
+        if (LONG_TYPE_INCLUDE.contains(fieldName)) {
+            final Path<Long> reviewPath = root.get(fieldName);
+            final Long lastReviewField = LongTypeSortSpec.find(fieldName, lastReview);
+            return criteriaBuilder.lessThan(reviewPath, lastReviewField);
+        }
+        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
     }
 }
