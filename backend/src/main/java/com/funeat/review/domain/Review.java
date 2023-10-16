@@ -5,6 +5,7 @@ import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
