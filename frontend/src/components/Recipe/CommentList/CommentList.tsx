@@ -1,4 +1,4 @@
-import { Heading, Spacing } from '@fun-eat/design-system';
+import { Heading, Spacing, Text, theme } from '@fun-eat/design-system';
 import { useRef } from 'react';
 
 import CommentItem from '../CommentItem/CommentItem';
@@ -24,6 +24,7 @@ const CommentList = ({ recipeId }: CommentListProps) => {
         댓글 ({comments.length}개)
       </Heading>
       <Spacing size={12} />
+      {comments.length === 0 && <Text color={theme.textColors.info}>꿀조합의 첫번째 댓글을 달아보세요!</Text>}
       {comments.map((comment) => (
         <CommentItem key={comment.id} recipeComment={comment} />
       ))}
