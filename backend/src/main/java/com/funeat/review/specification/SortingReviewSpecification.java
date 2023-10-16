@@ -76,7 +76,7 @@ public class SortingReviewSpecification {
             return criteriaBuilder.equal(createdAtPath, lastReviewCreatedAt);
         }
         final Path<Long> reviewPath = root.get(fieldName);
-        final Long lastReviewField = SortSpec.find(fieldName, lastReview);
+        final Long lastReviewField = ReviewSortSpec.find(fieldName, lastReview);
         return criteriaBuilder.equal(reviewPath, lastReviewField);
     }
 
@@ -106,7 +106,7 @@ public class SortingReviewSpecification {
             return criteriaBuilder.greaterThan(createdAtPath, lastReviewCreatedAt);
         }
         final Path<Long> reviewPath = root.get(fieldName);
-        final Long lastReviewField = SortSpec.find(fieldName, lastReview);
+        final Long lastReviewField = ReviewSortSpec.find(fieldName, lastReview);
         return criteriaBuilder.greaterThan(reviewPath, lastReviewField);
     }
 
@@ -132,7 +132,7 @@ public class SortingReviewSpecification {
             return criteriaBuilder.lessThan(createdAtPath, lastReviewCreatedAt);
         }
         final Path<Long> reviewPath = root.get(fieldName);
-        final Long lastReviewField = SortSpec.find(fieldName, lastReview);
+        final Long lastReviewField = ReviewSortSpec.find(fieldName, lastReview);
         return criteriaBuilder.lessThan(reviewPath, lastReviewField);
     }
 }
