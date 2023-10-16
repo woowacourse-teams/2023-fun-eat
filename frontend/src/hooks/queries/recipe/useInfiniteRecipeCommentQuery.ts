@@ -13,6 +13,7 @@ const fetchRecipeComments = async (pageParam: PageParam, recipeId: number) => {
   const response = await recipeApi.get({
     params: `/${recipeId}/comments`,
     queries: `?lastId=${lastId}&totalElements=${totalElements}`,
+    credentials: true,
   });
   const data: CommentResponse = await response.json();
   return data;
