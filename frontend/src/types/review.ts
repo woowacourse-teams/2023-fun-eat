@@ -1,4 +1,4 @@
-import type { Tag, TagVariants } from './common';
+import type { CategoryVariant, Tag, TagVariants } from './common';
 
 export interface Review {
   id: number;
@@ -12,6 +12,12 @@ export interface Review {
   rebuy: boolean;
   favoriteCount: number;
   favorite: boolean;
+}
+
+export interface ReviewDetail extends Review {
+  categoryType: CategoryVariant;
+  productId: number;
+  productName: string;
 }
 
 export interface ReviewTag {

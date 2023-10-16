@@ -1,3 +1,4 @@
+import type { CategoryVariant } from './common';
 import type { Member } from './member';
 import type { Product } from './product';
 
@@ -10,7 +11,7 @@ export interface ReviewRanking {
   content: string;
   rating: number;
   favoriteCount: number;
-  categoryType: string;
+  categoryType: CategoryVariant;
 }
 
 export interface RecipeRanking {

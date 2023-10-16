@@ -3,6 +3,7 @@ package com.funeat.review.application;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_DUPLICATE_FAVORITE;
 import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.NOT_AUTHOR_OF_REVIEW;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 import com.funeat.common.ImageUploader;
@@ -28,6 +29,7 @@ import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
+import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
@@ -36,6 +38,7 @@ import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,12 +64,14 @@ public class ReviewService {
     private final ReviewFavoriteRepository reviewFavoriteRepository;
     private final ImageUploader imageUploader;
     private final SortingReviewService sortingReviewService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
                          final ReviewFavoriteRepository reviewFavoriteRepository,
-                         final ImageUploader imageUploader, final SortingReviewService sortingReviewService) {
+                         final ImageUploader imageUploader, final SortingReviewService sortingReviewService,
+                         final ApplicationEventPublisher eventPublisher) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -75,6 +80,7 @@ public class ReviewService {
         this.reviewFavoriteRepository = reviewFavoriteRepository;
         this.imageUploader = imageUploader;
         this.sortingReviewService = sortingReviewService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -128,13 +134,11 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateProductImage(final Long reviewId) {
-        final Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+    public void updateProductImage(final Long productId) {
+        final Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Product product = review.getProduct();
-        final Long productId = product.getId();
-        final PageRequest pageRequest = PageRequest.of(START, ONE);
+        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
 
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
@@ -192,6 +196,46 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return MemberReviewsResponse.toResponse(pageDto, dtos);
+    }
+
+    @Transactional
+    public void deleteReview(final Long reviewId, final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+        final Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+        final Product product = review.getProduct();
+        final String image = review.getImage();
+
+        if (review.checkAuthor(member)) {
+            eventPublisher.publishEvent(new ReviewDeleteEvent(image));
+            deleteThingsRelatedToReview(review);
+            updateProductImage(product.getId());
+            return;
+        }
+        throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
+    }
+
+    private void deleteThingsRelatedToReview(final Review review) {
+        deleteReviewTags(review);
+        deleteReviewFavorites(review);
+        reviewRepository.delete(review);
+    }
+
+    private void deleteReviewTags(final Review review) {
+        final List<ReviewTag> reviewTags = reviewTagRepository.findByReview(review);
+        final List<Long> ids = reviewTags.stream()
+                .map(ReviewTag::getId)
+                .collect(Collectors.toList());
+        reviewTagRepository.deleteAllByIdInBatch(ids);
+    }
+
+    private void deleteReviewFavorites(final Review review) {
+        final List<ReviewFavorite> reviewFavorites = reviewFavoriteRepository.findByReview(review);
+        final List<Long> ids = reviewFavorites.stream()
+                .map(ReviewFavorite::getId)
+                .collect(Collectors.toList());
+        reviewFavoriteRepository.deleteAllByIdInBatch(ids);
     }
 
     public Optional<MostFavoriteReviewResponse> getMostFavoriteReview(final Long productId) {
