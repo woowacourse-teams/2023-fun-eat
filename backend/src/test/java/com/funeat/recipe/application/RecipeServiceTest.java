@@ -568,7 +568,30 @@ class RecipeServiceTest extends ServiceTest {
             }
 
             @Test
-            void 전체_꿀조합이_1개_이상_3개_미만이라도_꿀조합이_나와야한다() {
+            void 랭킹_조건에_부합하는_꿀조합이_1개면_꿀조합이_1개_반환된다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe = 레시피_생성(member, 2L, now);
+                단일_꿀조합_저장(recipe);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto = RankingRecipeDto.toDto(recipe, Collections.emptyList(), author);
+                final var rankingRecipesDtos = Collections.singletonList(rankingRecipeDto);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 랭킹_조건에_부합하는_꿀조합이_2개면_꿀조합이_2개_반환된다() {
                 // given
                 final var member = 멤버_멤버1_생성();
                 단일_멤버_저장(member);
