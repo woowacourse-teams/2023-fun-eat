@@ -555,10 +555,10 @@ class RecipeServiceTest extends ServiceTest {
         @Test
         void 꿀조합에_댓글을_작성할_수_있다() {
             // given
-            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
-            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
-            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
-            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            final var category = 카테고리_간편식사_생성();
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
             복수_상품_저장(product1, product2, product3);
             final var author = 멤버_멤버1_생성();
             단일_멤버_저장(author);
@@ -594,10 +594,10 @@ class RecipeServiceTest extends ServiceTest {
         @Test
         void 존재하지_않은_멤버가_꿀조합에_댓글을_작성하면_예외가_발생한다() {
             // given
-            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
-            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
-            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
-            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            final var category = 카테고리_간편식사_생성();
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
             복수_상품_저장(product1, product2, product3);
             final var author = new Member("author", "image.png", "1");
             단일_멤버_저장(author);
@@ -637,10 +637,10 @@ class RecipeServiceTest extends ServiceTest {
         @Test
         void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_첫페이지_댓글_10개조회() {
             // given
-            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
-            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
-            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
-            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            final var category = 카테고리_간편식사_생성();
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
             복수_상품_저장(product1, product2, product3);
             final var author = 멤버_멤버1_생성();
             단일_멤버_저장(author);
@@ -685,10 +685,10 @@ class RecipeServiceTest extends ServiceTest {
         @Test
         void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_마지막페이지_댓글_5개조회() {
             // given
-            final var category = 카테고리_추가_요청(new Category("간편식사", CategoryType.FOOD, "siksa.jpeg"));
-            final var product1 = new Product("불닭볶음면", 1000L, "image.png", "엄청 매운 불닭", category);
-            final var product2 = new Product("참치 삼김", 2000L, "image.png", "담백한 참치마요 삼김", category);
-            final var product3 = new Product("스트링 치즈", 1500L, "image.png", "고소한 치즈", category);
+            final var category = 카테고리_간편식사_생성();
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
             복수_상품_저장(product1, product2, product3);
             final var author = 멤버_멤버1_생성();
             단일_멤버_저장(author);
