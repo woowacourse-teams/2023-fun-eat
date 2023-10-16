@@ -425,7 +425,7 @@ class ReviewServiceTest extends ServiceTest {
         }
 
         @Test
-        void 최신순으로_정렬을_할_수_있다() {
+        void 최신순으로_정렬을_할_수_있다() throws InterruptedException {
             // given
             final var member = 멤버_멤버1_생성();
             final var memberId = 단일_멤버_저장(member);

@@ -138,7 +138,7 @@ public class ReviewService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
+        final PageRequest pageRequest = PageRequest.of(START, ONE);
 
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
