@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 
 public class SortingReviewDto {
 
-    private Long id;
-    private String userName;
-    private String profileImage;
-    private String image;
-    private Long rating;
-    private List<TagDto> tags;
-    private String content;
-    private Boolean rebuy;
-    private Long favoriteCount;
-    private Boolean favorite;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final String userName;
+    private final String profileImage;
+    private final String image;
+    private final Long rating;
+    private final List<TagDto> tags;
+    private final String content;
+    private final Boolean rebuy;
+    private final Long favoriteCount;
+    private final Boolean favorite;
+    private final LocalDateTime createdAt;
 
     @JsonCreator
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
@@ -39,21 +39,6 @@ public class SortingReviewDto {
         this.image = image;
         this.rating = rating;
         this.tags = tags;
-        this.content = content;
-        this.rebuy = rebuy;
-        this.favoriteCount = favoriteCount;
-        this.favorite = favorite;
-        this.createdAt = createdAt;
-    }
-
-    public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
-                            final Long rating, final String content, final Boolean rebuy, final Long favoriteCount,
-                            final Boolean favorite, final LocalDateTime createdAt) {
-        this.id = id;
-        this.userName = userName;
-        this.profileImage = profileImage;
-        this.image = image;
-        this.rating = rating;
         this.content = content;
         this.rebuy = rebuy;
         this.favoriteCount = favoriteCount;
