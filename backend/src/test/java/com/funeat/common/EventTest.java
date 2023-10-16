@@ -8,9 +8,7 @@ import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.persistence.ReviewRepository;
-import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +28,9 @@ public class EventTest {
     protected ApplicationEvents events;
 
     @Autowired
+    protected ReviewService reviewService;
+
+    @Autowired
     protected ProductRepository productRepository;
 
     @Autowired
@@ -44,23 +45,15 @@ public class EventTest {
     @Autowired
     protected ReviewRepository reviewRepository;
 
-    @Autowired
-    protected ReviewService reviewService;
-
-    protected Long 단일_상품_저장(final Product product) {
-        return productRepository.save(product).getId();
+    protected Product 단일_상품_저장(final Product product) {
+        return productRepository.save(product);
     }
 
-    protected Long 단일_카테고리_저장(final Category category) {
-        return categoryRepository.save(category).getId();
+    protected Category 단일_카테고리_저장(final Category category) {
+        return categoryRepository.save(category);
     }
 
-    protected void 복수_태그_저장(final Tag... tagsToSave) {
-        final var tags = List.of(tagsToSave);
-        tagRepository.saveAll(tags);
-    }
-
-    protected Long 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member).getId();
+    protected Member 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member);
     }
 }
