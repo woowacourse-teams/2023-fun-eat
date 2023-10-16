@@ -8,6 +8,7 @@ import { SectionTitle, SvgIcon } from '@/components/Common';
 import { MemberModifyInput } from '@/components/Members';
 import { IMAGE_MAX_SIZE } from '@/constants';
 import { useFormData, useImageUploader } from '@/hooks/common';
+import { useToastActionContext } from '@/hooks/context';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 
@@ -16,6 +17,7 @@ export const MemberModifyPage = () => {
   const { mutate } = useMemberModifyMutation();
 
   const { previewImage, imageFile, uploadImage } = useImageUploader();
+  const { toast } = useToastActionContext();
 
   const [nickname, setNickname] = useState(member?.nickname ?? '');
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ export const MemberModifyPage = () => {
     const imageFile = event.target.files[0];
 
     if (imageFile.size > IMAGE_MAX_SIZE) {
-      alert('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
+      toast.error('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
       event.target.value = '';
       return;
     }
