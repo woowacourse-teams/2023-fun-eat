@@ -10,6 +10,7 @@ import com.funeat.tag.dto.TagDto;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,15 +23,15 @@ public class SortingReviewDto {
     private Long rating;
     private List<TagDto> tags;
     private String content;
-    private boolean rebuy;
+    private Boolean rebuy;
     private Long favoriteCount;
-    private boolean favorite;
+    private Boolean favorite;
     private LocalDateTime createdAt;
 
     @JsonCreator
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
                             final Long rating, final List<TagDto> tags,
-                            final String content, final boolean rebuy, final Long favoriteCount, final boolean favorite,
+                            final String content, final Boolean rebuy, final Long favoriteCount, final Boolean favorite,
                             final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
@@ -46,8 +47,8 @@ public class SortingReviewDto {
     }
 
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
-                            final Long rating, final String content, final boolean rebuy, final Long favoriteCount,
-                            final boolean favorite, final LocalDateTime createdAt) {
+                            final Long rating, final String content, final Boolean rebuy, final Long favoriteCount,
+                            final Boolean favorite, final LocalDateTime createdAt) {
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -79,8 +80,7 @@ public class SortingReviewDto {
     }
 
     private static Boolean checkingFavorite(final Boolean favorite) {
-        final Optional<Boolean> isFavorite = Optional.ofNullable(favorite);
-        if (isFavorite.isEmpty()) {
+        if (Objects.isNull(favorite)) {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
@@ -142,7 +142,7 @@ public class SortingReviewDto {
         return content;
     }
 
-    public boolean isRebuy() {
+    public Boolean isRebuy() {
         return rebuy;
     }
 
@@ -150,7 +150,7 @@ public class SortingReviewDto {
         return favoriteCount;
     }
 
-    public boolean isFavorite() {
+    public Boolean isFavorite() {
         return favorite;
     }
 
