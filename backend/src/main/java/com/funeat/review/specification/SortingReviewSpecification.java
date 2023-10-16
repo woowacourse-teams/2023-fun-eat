@@ -4,7 +4,7 @@ import static com.funeat.review.exception.ReviewErrorCode.NOT_SUPPORTED_REVIEW_S
 
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
-import com.funeat.review.exception.ReviewException.ReviewSortingOptionNotFoundException;
+import com.funeat.review.exception.ReviewException.NotSupportedReviewSortingConditionException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -94,7 +94,7 @@ public final class SortingReviewSpecification {
             final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.equal(reviewPath, lastReviewField);
         }
-        throw new ReviewSortingOptionNotFoundException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
+        throw new NotSupportedReviewSortingConditionException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
     }
 
     private static Specification<Review> lessOrGreaterThan(final String field, final String sort,
@@ -127,7 +127,7 @@ public final class SortingReviewSpecification {
             final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.greaterThan(reviewPath, lastReviewField);
         }
-        throw new ReviewSortingOptionNotFoundException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
+        throw new NotSupportedReviewSortingConditionException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
     }
 
     private static Specification<Review> lessThan(final String fieldName, final Review lastReview) {
@@ -156,6 +156,6 @@ public final class SortingReviewSpecification {
             final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.lessThan(reviewPath, lastReviewField);
         }
-        throw new ReviewSortingOptionNotFoundException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
+        throw new NotSupportedReviewSortingConditionException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
     }
 }

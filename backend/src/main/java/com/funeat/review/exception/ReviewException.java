@@ -16,8 +16,8 @@ public class ReviewException extends GlobalException {
         }
     }
 
-    public static class ReviewSortingOptionNotFoundException extends ReviewException {
-        public ReviewSortingOptionNotFoundException(final ReviewErrorCode errorCode, final String sortFieldName) {
+    public static class NotSupportedReviewSortingConditionException extends ReviewException {
+        public NotSupportedReviewSortingConditionException(final ReviewErrorCode errorCode, final String sortFieldName) {
             super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), sortFieldName));
         }
     }
