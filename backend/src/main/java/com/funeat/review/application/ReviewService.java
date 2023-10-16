@@ -27,12 +27,14 @@ import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.dto.SortingReviewDtoWithoutTag;
 import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
+import com.funeat.review.specification.SortingReviewSpecification;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
@@ -43,6 +45,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,7 +54,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private static final int START = 0;
+    private static final int FIRST_PAGE = 0;
+    private static final int START_INDEX = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
     private static final int REVIEW_PAGE_SIZE = 10;
@@ -63,15 +67,13 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewFavoriteRepository reviewFavoriteRepository;
     private final ImageUploader imageUploader;
-    private final SortingReviewService sortingReviewService;
     private final ApplicationEventPublisher eventPublisher;
 
     public ReviewService(final ReviewRepository reviewRepository, final TagRepository tagRepository,
                          final ReviewTagRepository reviewTagRepository, final MemberRepository memberRepository,
                          final ProductRepository productRepository,
                          final ReviewFavoriteRepository reviewFavoriteRepository,
-                         final ImageUploader imageUploader, final SortingReviewService sortingReviewService,
-                         final ApplicationEventPublisher eventPublisher) {
+                         final ImageUploader imageUploader, final ApplicationEventPublisher eventPublisher) {
         this.reviewRepository = reviewRepository;
         this.tagRepository = tagRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -79,7 +81,6 @@ public class ReviewService {
         this.productRepository = productRepository;
         this.reviewFavoriteRepository = reviewFavoriteRepository;
         this.imageUploader = imageUploader;
-        this.sortingReviewService = sortingReviewService;
         this.eventPublisher = eventPublisher;
     }
 
@@ -138,11 +139,11 @@ public class ReviewService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final PageRequest pageRequest = PageRequest.of(START, ONE);
+        final PageRequest pageRequest = PageRequest.of(FIRST_PAGE, ONE);
 
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
-            final String topFavoriteReviewImage = topFavoriteReview.get(START).getImage();
+            final String topFavoriteReviewImage = topFavoriteReview.get(START_INDEX).getImage();
             product.updateImage(topFavoriteReviewImage);
         }
     }
@@ -154,13 +155,45 @@ public class ReviewService {
         final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final List<SortingReviewDto> sortingReviews = sortingReviewService.getSortingReviews(findMember, findProduct, request);
+        final List<SortingReviewDto> sortingReviews = getSortingReviews(findMember, findProduct, request);
         final int resultSize = getResultSize(sortingReviews);
 
-        final List<SortingReviewDto> resizeSortingReviews = sortingReviews.subList(START, resultSize);
+        final List<SortingReviewDto> resizeSortingReviews = sortingReviews.subList(START_INDEX, resultSize);
         final Boolean hasNext = hasNextPage(sortingReviews);
 
         return SortingReviewsResponse.toResponse(resizeSortingReviews, hasNext);
+    }
+
+    private List<SortingReviewDto> getSortingReviews(final Member member, final Product product,
+                                                    final SortingReviewRequest request) {
+        final Long lastReviewId = request.getLastReviewId();
+        final String sortOption = request.getSort();
+
+        final Specification<Review> specification = getSortingSpecification(product, sortOption, lastReviewId);
+        final List<SortingReviewDtoWithoutTag> sortingReviewDtoWithoutTags = reviewRepository.getSortingReview(member,
+                specification, sortOption);
+
+        return addTagsToSortingReviews(sortingReviewDtoWithoutTags);
+    }
+
+    private List<SortingReviewDto> addTagsToSortingReviews(
+            final List<SortingReviewDtoWithoutTag> sortingReviewDtoWithoutTags) {
+        return sortingReviewDtoWithoutTags.stream()
+                .map(reviewDto -> SortingReviewDto.toDto(reviewDto,
+                        tagRepository.findTagsByReviewId(reviewDto.getId())))
+                .collect(Collectors.toList());
+    }
+
+    private Specification<Review> getSortingSpecification(final Product product, final String sortOption,
+                                                          final Long lastReviewId) {
+        if (lastReviewId == FIRST_PAGE) {
+            return SortingReviewSpecification.sortingFirstPageBy(product);
+        }
+
+        final Review lastReview = reviewRepository.findById(lastReviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
+
+        return SortingReviewSpecification.sortingBy(product, sortOption, lastReview);
     }
 
     private int getResultSize(final List<SortingReviewDto> sortingReviews) {
