@@ -5,7 +5,10 @@ import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test1_평점1점_재구매O_생성;
-import static com.funeat.fixture.ReviewFixture.리뷰_이미지없음_평점5점_재구매X_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test2_평점2점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰_이미지없음_평점1점_재구매X_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -55,7 +58,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
             final var category = 단일_카테고리_저장(카테고리_즉석조리_생성());
             final var product = 단일_상품_저장(상품_삼각김밥_가격1000원_평점2점_생성(category));
 
-            final var review = reviewRepository.save(리뷰_이미지test1_평점1점_재구매O_생성(author, product, 0L));
+            final var review = reviewRepository.save(리뷰_이미지test2_평점2점_재구매O_생성(author, product, 0L));
 
             // when
             try {
@@ -80,7 +83,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
             final var category = 단일_카테고리_저장(카테고리_즉석조리_생성());
             final var product = 단일_상품_저장(상품_삼각김밥_가격1000원_평점2점_생성(category));
 
-            final var review = reviewRepository.save(리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L));
+            final var review = reviewRepository.save(리뷰_이미지test3_평점3점_재구매O_생성(member, product, 0L));
 
             // when
             reviewService.deleteReview(review.getId(), member.getId());
@@ -97,7 +100,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
             final var category = 단일_카테고리_저장(카테고리_즉석조리_생성());
             final var product = 단일_상품_저장(상품_삼각김밥_가격1000원_평점2점_생성(category));
 
-            final var review = reviewRepository.save(리뷰_이미지없음_평점5점_재구매X_생성(member, product, 0L));
+            final var review = reviewRepository.save(리뷰_이미지없음_평점1점_재구매X_생성(member, product, 0L));
 
             // when
             reviewService.deleteReview(review.getId(), member.getId());
@@ -114,7 +117,7 @@ class ReviewDeleteEventListenerTest extends EventTest {
             final var category = 단일_카테고리_저장(카테고리_즉석조리_생성());
             final var product = 단일_상품_저장(상품_삼각김밥_가격1000원_평점2점_생성(category));
 
-            final var review = reviewRepository.save(리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L));
+            final var review = reviewRepository.save(리뷰_이미지test4_평점4점_재구매O_생성(member, product, 0L));
 
             doThrow(new S3DeleteFailException(CommonErrorCode.UNKNOWN_SERVER_ERROR_CODE))
                     .when(uploader)
