@@ -10,7 +10,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
-public class SortingReviewSpecification {
+public final class SortingReviewSpecification {
+
+    private SortingReviewSpecification() {
+    }
 
     public static Specification<Review> sortingFirstPageBy(final Product product) {
         return (root, query, criteriaBuilder) -> Specification
