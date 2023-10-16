@@ -1,6 +1,6 @@
 package com.funeat.review.specification;
 
-import static com.funeat.review.exception.ReviewErrorCode.REVIEW_SORTING_OPTION_NOT_FOUND;
+import static com.funeat.review.exception.ReviewErrorCode.NOT_SUPPORTED_REVIEW_SORTING_CONDITION;
 
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
@@ -94,7 +94,7 @@ public final class SortingReviewSpecification {
             final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.equal(reviewPath, lastReviewField);
         }
-        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
+        throw new ReviewSortingOptionNotFoundException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
     }
 
     private static Specification<Review> lessOrGreaterThan(final String field, final String sort,
@@ -127,7 +127,7 @@ public final class SortingReviewSpecification {
             final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.greaterThan(reviewPath, lastReviewField);
         }
-        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
+        throw new ReviewSortingOptionNotFoundException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
     }
 
     private static Specification<Review> lessThan(final String fieldName, final Review lastReview) {
@@ -156,6 +156,6 @@ public final class SortingReviewSpecification {
             final Long lastReviewField = LongTypeReviewSortSpec.find(fieldName, lastReview);
             return criteriaBuilder.lessThan(reviewPath, lastReviewField);
         }
-        throw new ReviewSortingOptionNotFoundException(REVIEW_SORTING_OPTION_NOT_FOUND, fieldName);
+        throw new ReviewSortingOptionNotFoundException(NOT_SUPPORTED_REVIEW_SORTING_CONDITION, fieldName);
     }
 }
