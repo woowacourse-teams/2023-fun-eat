@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
-  CategoryTab,
+  CategoryFoodTab,
+  CategoryStoreTab,
   SortButton,
   SortOptionList,
   ScrollButton,
@@ -17,19 +18,20 @@ import { ProductTitle, ProductList } from '@/components/Product';
 import { PRODUCT_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import type { CategoryIds } from '@/contexts/CategoryContext';
-import { useScrollRestoration, useSortOption } from '@/hooks/common';
+import { useGA, useScrollRestoration, useSortOption } from '@/hooks/common';
 import { useCategoryValueContext } from '@/hooks/context';
 import { isCategoryVariant } from '@/types/common';
 
 const PAGE_TITLE = { food: '공통 상품', store: 'PB 상품' };
 
-const ProductListPage = () => {
+export const ProductListPage = () => {
   const { category } = useParams();
   const productListRef = useRef<HTMLDivElement>(null);
 
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
   const { reset } = useQueryErrorResetBoundary();
+  const { gaEvent } = useGA();
 
   const { categoryIds } = useCategoryValueContext();
 
@@ -39,6 +41,11 @@ const ProductListPage = () => {
     return null;
   }
 
+  const handleSortButtonClick = () => {
+    handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '상품 정렬 버튼 클릭', label: '상품 정렬' });
+  };
+
   return (
     <>
       <ProductListSection>
@@ -47,15 +54,13 @@ const ProductListPage = () => {
           routeDestination={PATH.PRODUCT_LIST + '/' + (category === 'store' ? 'food' : 'store')}
         />
         <Spacing size={20} />
-        <Suspense fallback={null}>
-          <CategoryTab menuVariant={category} />
-        </Suspense>
+        <Suspense fallback={null}>{category === 'food' ? <CategoryFoodTab /> : <CategoryStoreTab />}</Suspense>
         <Spacing size={20} />
         <ProductListContainer ref={productListRef}>
           <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
             <Suspense fallback={<Loading />}>
               <SortButtonWrapper>
-                <SortButton option={selectedOption} onClick={handleOpenBottomSheet} />
+                <SortButton option={selectedOption} onClick={handleSortButtonClick} />
               </SortButtonWrapper>
               <ProductList category={category} selectedOption={selectedOption} />
             </Suspense>
@@ -74,8 +79,6 @@ const ProductListPage = () => {
     </>
   );
 };
-
-export default ProductListPage;
 
 const ProductListSection = styled.section`
   height: 100%;

@@ -12,7 +12,7 @@ import { useSearch } from '@/hooks/search';
 const PRODUCT_PLACEHOLDER = '상품 이름을 검색해보세요.';
 const RECIPE_PLACEHOLDER = '꿀조합에 포함된 상품을 입력해보세요.';
 
-const IntegratedSearchPage = () => {
+export const IntegratedSearchPage = () => {
   const {
     inputRef,
     searchQuery,
@@ -79,7 +79,7 @@ const IntegratedSearchPage = () => {
         handleTabMenuSelect={handleTabMenuClick}
       />
       <SearchResultSection>
-        {isSubmitted && debouncedSearchQuery ? (
+        {isSubmitted && searchQuery ? (
           <>
             <Heading as="h2" size="lg" weight="regular">
               <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
@@ -88,9 +88,9 @@ const IntegratedSearchPage = () => {
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
                 {isProductSearchTab ? (
-                  <ProductSearchResultList searchQuery={debouncedSearchQuery} />
+                  <ProductSearchResultList searchQuery={searchQuery} />
                 ) : (
-                  <RecipeSearchResultList searchQuery={debouncedSearchQuery} />
+                  <RecipeSearchResultList searchQuery={searchQuery} />
                 )}
               </Suspense>
             </ErrorBoundary>
@@ -102,8 +102,6 @@ const IntegratedSearchPage = () => {
     </>
   );
 };
-
-export default IntegratedSearchPage;
 
 const SearchSection = styled.section`
   position: relative;

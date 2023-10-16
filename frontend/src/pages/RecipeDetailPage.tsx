@@ -1,21 +1,26 @@
-import { Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
-import { SectionTitle } from '@/components/Common';
-import { RecipeFavorite } from '@/components/Recipe';
+import { ErrorBoundary, ErrorComponent, Loading, SectionTitle } from '@/components/Common';
+import { CommentForm, CommentList, RecipeFavorite } from '@/components/Recipe';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
-const RecipeDetailPage = () => {
+export const RecipeDetailPage = () => {
   const { recipeId } = useParams();
 
   const { data: recipeDetail } = useRecipeDetailQuery(Number(recipeId));
+
+  const { reset } = useQueryErrorResetBoundary();
+
   const { id, images, title, content, author, products, totalPrice, favoriteCount, favorite, createdAt } = recipeDetail;
 
   return (
-    <RecipeDetailPageContainer>
+    <>
       <SectionTitle name={title} />
       <Spacing size={24} />
       {images.length > 0 ? (
@@ -65,16 +70,20 @@ const RecipeDetailPage = () => {
       <RecipeContent size="lg" lineHeight="lg">
         {content}
       </RecipeContent>
-      <Spacing size={40} />
-    </RecipeDetailPageContainer>
+      <Spacing size={24} />
+      <Divider variant="disabled" customHeight="2px" />
+      <Spacing size={24} />
+      <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
+        <Suspense fallback={<Loading />}>
+          <CommentList recipeId={Number(recipeId)} />
+        </Suspense>
+      </ErrorBoundary>
+      <Spacing size={108} />
+      <CommentForm recipeId={Number(recipeId)} />
+      <Spacing size={12} />
+    </>
   );
 };
-
-export default RecipeDetailPage;
-
-const RecipeDetailPageContainer = styled.div`
-  padding: 20px 20px 0;
-`;
 
 const RecipeImageContainer = styled.ul`
   display: flex;

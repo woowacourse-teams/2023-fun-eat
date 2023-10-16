@@ -34,4 +34,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             + "WHERE p.id = :id AND r.image != '' "
             + "ORDER BY r.favoriteCount DESC, r.id DESC")
     List<Review> findPopularReviewWithImage(@Param("id") final Long productId, final Pageable pageable);
+
+    Optional<Review> findTopByProductOrderByFavoriteCountDescIdDesc(final Product product);
 }

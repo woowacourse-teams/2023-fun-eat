@@ -20,7 +20,7 @@ public class ReviewSteps {
                                                          final MultiPartSpecification image,
                                                          final ReviewCreateRequest request) {
         final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
+                .cookie("JSESSIONID", loginCookie);
 
         if (Objects.nonNull(image)) {
             requestSpec.multiPart(image);
@@ -37,7 +37,7 @@ public class ReviewSteps {
     public static ExtractableResponse<Response> 리뷰_좋아요_요청(final String loginCookie, final Long productId,
                                                           final Long reviewId, final ReviewFavoriteRequest request) {
         return given()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .contentType("application/json")
                 .body(request)
                 .when()
@@ -58,7 +58,7 @@ public class ReviewSteps {
     public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie, final Long productId,
                                                                 final String sort, final Long page) {
         return given()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .when()
@@ -72,6 +72,14 @@ public class ReviewSteps {
                 .when()
                 .get("/api/ranks/reviews")
                 .then()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 좋아요를_제일_많이_받은_리뷰_조회_요청(final Long productId) {
+        return given()
+                .when()
+                .get("/api/ranks/products/{product_id}/reviews", productId)
+                .then().log().all()
                 .extract();
     }
 }

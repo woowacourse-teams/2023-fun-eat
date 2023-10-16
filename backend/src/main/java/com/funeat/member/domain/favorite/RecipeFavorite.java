@@ -28,14 +28,9 @@ public class RecipeFavorite {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    private Boolean favorite = false;
+    private Boolean favorite;
 
     protected RecipeFavorite() {
-    }
-
-    public RecipeFavorite(final Member member, final Recipe recipe) {
-        this.member = member;
-        this.recipe = recipe;
     }
 
     public RecipeFavorite(final Member member, final Recipe recipe, final Boolean favorite) {
@@ -44,8 +39,11 @@ public class RecipeFavorite {
         this.favorite = favorite;
     }
 
-    public static RecipeFavorite create(final Member member, final Recipe recipe) {
-        return new RecipeFavorite(member, recipe);
+    public static RecipeFavorite create(final Member member, final Recipe recipe, final Boolean favorite) {
+        if (favorite == true) {
+            recipe.addFavoriteCount();
+        }
+        return new RecipeFavorite(member, recipe, favorite);
     }
 
     public void updateFavorite(final Boolean favorite) {

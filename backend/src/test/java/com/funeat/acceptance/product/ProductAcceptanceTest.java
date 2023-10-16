@@ -324,8 +324,8 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 상품을_정렬할때_카테고리가_존재하지_않으면_예외가_발생한다() {
-            // given && when
-            final var 응답 = 카테고리별_상품_목록_조회_요청(존재하지_않는_카테고리, 가격_내림차순, 0L);
+            // given & when
+            final var 응답 = 카테고리별_상품_목록_조회_요청(존재하지_않는_카테고리, 가격_내림차순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(응답, 찾을수_없음);
@@ -363,7 +363,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 존재하지_않는_상품_상세_정보를_조회할때_예외가_발생한다() {
-            // given && when
+            // given & when
             final var 응답 = 상품_상세_조회_요청(존재하지_않는_상품);
 
             // then

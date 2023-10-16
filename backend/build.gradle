@@ -31,6 +31,8 @@ dependencies {
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.547'
+
+    implementation 'org.springframework.session:spring-session-jdbc'
 }
 
 tasks.named('test') {

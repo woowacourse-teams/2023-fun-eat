@@ -1,26 +1,67 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
 import { AuthLayout } from '@/components/Layout';
 import { PATH } from '@/constants/path';
 import CategoryProvider from '@/contexts/CategoryContext';
-import AuthPage from '@/pages/AuthPage';
-import HomePage from '@/pages/HomePage';
-import IntegratedSearchPage from '@/pages/IntegratedSearchPage';
-import LoginPage from '@/pages/LoginPage';
-import MemberModifyPage from '@/pages/MemberModifyPage';
-import MemberPage from '@/pages/MemberPage';
-import MemberRecipePage from '@/pages/MemberRecipePage';
-import MemberReviewPage from '@/pages/MemberReviewPage';
 import NotFoundPage from '@/pages/NotFoundPage';
-import ProductDetailPage from '@/pages/ProductDetailPage';
-import ProductListPage from '@/pages/ProductListPage';
-import RecipeDetailPage from '@/pages/RecipeDetailPage';
-import RecipePage from '@/pages/RecipePage';
-import SearchPage from '@/pages/SearchPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <AuthLayout>
+        <App />
+      </AuthLayout>
+    ),
+    errorElement: <Navigate to={PATH.LOGIN} replace />,
+    children: [
+      {
+        path: PATH.MEMBER,
+        async lazy() {
+          const { MemberPage } = await import(/* webpackChunkName: "MemberPage" */ '@/pages/MemberPage');
+          return { Component: MemberPage };
+        },
+      },
+      {
+        path: `${PATH.MEMBER}/modify`,
+        async lazy() {
+          const { MemberModifyPage } = await import(
+            /* webpackChunkName: "MemberModifyPage" */ '@/pages/MemberModifyPage'
+          );
+          return { Component: MemberModifyPage };
+        },
+      },
+      {
+        path: `${PATH.MEMBER}/review`,
+        async lazy() {
+          const { MemberReviewPage } = await import(
+            /* webpackChunkName: "MemberReviewPage" */ '@/pages/MemberReviewPage'
+          );
+          return { Component: MemberReviewPage };
+        },
+      },
+      {
+        path: `${PATH.MEMBER}/recipe`,
+        async lazy() {
+          const { MemberRecipePage } = await import(
+            /* webpackChunkName: "MemberRecipePage" */ '@/pages/MemberRecipePage'
+          );
+          return { Component: MemberRecipePage };
+        },
+      },
+      {
+        path: `${PATH.REVIEW}/:reviewId`,
+        async lazy() {
+          const { ReviewDetailPage } = await import(
+            /* webpackChunkName: "ReviewDetailPage" */ '@/pages/ReviewDetailPage'
+          );
+          return { Component: ReviewDetailPage };
+        },
+      },
+    ],
+  },
   {
     path: '/',
     element: (
@@ -32,47 +73,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
-      },
-      {
-        path: `${PATH.RECIPE}/:recipeId`,
-        element: (
-          <AuthLayout>
-            <RecipeDetailPage />
-          </AuthLayout>
-        ),
-      },
-      {
-        path: PATH.MEMBER,
-        element: (
-          <AuthLayout>
-            <MemberPage />
-          </AuthLayout>
-        ),
-      },
-      {
-        path: `${PATH.MEMBER}/modify`,
-        element: (
-          <AuthLayout>
-            <MemberModifyPage />
-          </AuthLayout>
-        ),
-      },
-      {
-        path: `${PATH.MEMBER}/review`,
-        element: (
-          <AuthLayout>
-            <MemberReviewPage />
-          </AuthLayout>
-        ),
-      },
-      {
-        path: `${PATH.MEMBER}/recipe`,
-        element: (
-          <AuthLayout>
-            <MemberRecipePage />
-          </AuthLayout>
-        ),
+        async lazy() {
+          const { HomePage } = await import(/* webpackChunkName: "HomePage" */ '@/pages/HomePage');
+          return { Component: HomePage };
+        },
       },
     ],
   },
@@ -83,11 +87,17 @@ const router = createBrowserRouter([
     children: [
       {
         path: PATH.LOGIN,
-        element: <LoginPage />,
+        async lazy() {
+          const { LoginPage } = await import(/* webpackChunkName: "LoginPage" */ '@/pages/LoginPage');
+          return { Component: LoginPage };
+        },
       },
       {
         path: `${PATH.LOGIN}/:authProvider`,
-        element: <AuthPage />,
+        async lazy() {
+          const { AuthPage } = await import(/* webpackChunkName: "AuthPage" */ '@/pages/AuthPage');
+          return { Component: AuthPage };
+        },
       },
     ],
   },
@@ -102,7 +112,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category/:productId`,
-        element: <ProductDetailPage />,
+        async lazy() {
+          const { ProductDetailPage } = await import(
+            /* webpackChunkName: "ProductDetailPage" */ '@/pages/ProductDetailPage'
+          );
+          return { Component: ProductDetailPage };
+        },
+      },
+      {
+        path: `${PATH.RECIPE}/:recipeId`,
+        async lazy() {
+          const { RecipeDetailPage } = await import(
+            /* webpackChunkName: "RecipeDetailPage" */ '@/pages/RecipeDetailPage'
+          );
+          return { Component: RecipeDetailPage };
+        },
       },
     ],
   },
@@ -117,19 +141,33 @@ const router = createBrowserRouter([
     children: [
       {
         path: `${PATH.PRODUCT_LIST}/:category`,
-        element: <ProductListPage />,
+        async lazy() {
+          const { ProductListPage } = await import(/* webpackChunkName: "ProductListPage" */ '@/pages/ProductListPage');
+          return { Component: ProductListPage };
+        },
       },
       {
         path: PATH.RECIPE,
-        element: <RecipePage />,
+        async lazy() {
+          const { RecipePage } = await import(/* webpackChunkName: "RecipePage" */ '@/pages/RecipePage');
+          return { Component: RecipePage };
+        },
       },
       {
         path: `${PATH.SEARCH}/integrated`,
-        element: <IntegratedSearchPage />,
+        async lazy() {
+          const { IntegratedSearchPage } = await import(
+            /* webpackChunkName: "IntegratedSearchPage" */ '@/pages/IntegratedSearchPage'
+          );
+          return { Component: IntegratedSearchPage };
+        },
       },
       {
         path: `${PATH.SEARCH}/:searchVariant`,
-        element: <SearchPage />,
+        async lazy() {
+          const { SearchPage } = await import(/* webpackChunkName: "SearchPage" */ '@/pages/SearchPage');
+          return { Component: SearchPage };
+        },
       },
     ],
   },

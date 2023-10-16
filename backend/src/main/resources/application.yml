@@ -6,6 +6,10 @@ spring:
       enabled: true
       maxFileSize: 10MB
       maxRequestSize: 15MB
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: never
 
 springdoc:
   swagger-ui:
@@ -18,7 +22,12 @@ logging:
     path: { LOG_DIR }
 
 server:
-  servlet:
-    session:
-      cookie:
-        name: FUNEAT
+  tomcat:
+    threads:
+      max: { MAX_THREADS }
+    max-connections: { MAX_CONNECTIONS }
+    accept-count: { ACCEPT_COUNT }
+
+back-office:
+  id: { BACK_OFFICE_ID }
+  key: { BACK_OFFICE_KEY }

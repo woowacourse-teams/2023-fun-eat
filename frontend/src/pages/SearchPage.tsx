@@ -15,7 +15,7 @@ const RECIPE_PLACEHOLDER = '꿀조합에 포함된 상품을 입력해보세요.
 
 type SearchPageType = keyof typeof SEARCH_PAGE_VARIANTS;
 
-const SearchPage = () => {
+export const SearchPage = () => {
   const {
     inputRef,
     searchQuery,
@@ -97,7 +97,7 @@ const SearchPage = () => {
         )}
       </SearchSection>
       <SearchResultSection>
-        {isSubmitted && debouncedSearchQuery ? (
+        {isSubmitted && searchQuery ? (
           <>
             <Heading as="h2" size="lg" weight="regular">
               <Mark>&apos;{searchQuery}&apos;</Mark>에 대한 검색결과입니다.
@@ -105,8 +105,8 @@ const SearchPage = () => {
             <ErrorBoundary fallback={ErrorComponent}>
               <Suspense fallback={<Loading />}>
                 <Spacing size={20} />
-                {isProductSearchPage && <ProductSearchResultList searchQuery={debouncedSearchQuery} />}
-                {isRecipeSearchPage && <RecipeSearchResultList searchQuery={debouncedSearchQuery} />}
+                {isProductSearchPage && <ProductSearchResultList searchQuery={searchQuery} />}
+                {isRecipeSearchPage && <RecipeSearchResultList searchQuery={searchQuery} />}
               </Suspense>
             </ErrorBoundary>
           </>
@@ -117,8 +117,6 @@ const SearchPage = () => {
     </>
   );
 };
-
-export default SearchPage;
 
 const SearchSection = styled.section`
   position: relative;

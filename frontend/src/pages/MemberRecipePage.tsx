@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { ErrorBoundary, ErrorComponent, Loading, ScrollButton, SectionTitle } from '@/components/Common';
 import { MemberRecipeList } from '@/components/Members';
 
-const MemberRecipePage = () => {
+export const MemberRecipePage = () => {
   const { reset } = useQueryErrorResetBoundary();
   const memberRecipeRef = useRef<HTMLDivElement>(null);
 
@@ -24,8 +24,6 @@ const MemberRecipePage = () => {
     </MemberRecipePageContainer>
   );
 };
-
-export default MemberRecipePage;
 
 const MemberRecipePageContainer = styled.div`
   height: 100%;

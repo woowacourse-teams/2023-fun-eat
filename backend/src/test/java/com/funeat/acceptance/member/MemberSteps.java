@@ -13,7 +13,7 @@ public class MemberSteps {
 
     public static ExtractableResponse<Response> 사용자_정보_조회_요청(final String loginCookie) {
         return given()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .when()
                 .get("/api/members")
                 .then()
@@ -24,7 +24,7 @@ public class MemberSteps {
                                                              final MultiPartSpecification image,
                                                              final MemberRequest request) {
         final var requestSpec = given()
-                .cookie("FUNEAT", loginCookie);
+                .cookie("JSESSIONID", loginCookie);
 
         if (Objects.nonNull(image)) {
             requestSpec.multiPart(image);
@@ -43,7 +43,7 @@ public class MemberSteps {
                                                              final Long page) {
         return given()
                 .when()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .get("/api/members/reviews")
@@ -55,7 +55,7 @@ public class MemberSteps {
                                                               final Long page) {
         return given()
                 .when()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .get("/api/members/recipes")

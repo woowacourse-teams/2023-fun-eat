@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { loginApi } from '@/apis';
+import { PRODUCT_PATH_LOCAL_STORAGE_KEY } from '@/constants';
 import { PATH } from '@/constants/path';
 import { useMemberQuery } from '@/hooks/queries/members';
+import { getLocalStorage, removeLocalStorage } from '@/utils/localStorage';
 
-const AuthPage = () => {
+export const AuthPage = () => {
   const { authProvider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
@@ -13,10 +15,6 @@ const AuthPage = () => {
   const { data: member, refetch: refetchMember } = useMemberQuery();
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
-
-  if (member) {
-    return <Navigate to={PATH.HOME} replace />;
-  }
 
   const getSessionId = async () => {
     const response = await loginApi.get({
@@ -51,11 +49,17 @@ const AuthPage = () => {
       return;
     }
 
+    const productPath = getLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
+    const redirectLocation = productPath ? productPath : location;
+
+    navigate(redirectLocation, { replace: true });
+    removeLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY);
     refetchMember();
-    navigate(location, { replace: true });
   }, [location]);
+
+  if (member) {
+    return <Navigate to={PATH.HOME} replace />;
+  }
 
   return <></>;
 };
-
-export default AuthPage;

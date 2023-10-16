@@ -7,7 +7,7 @@ import { ErrorBoundary, ErrorComponent, Loading, NavigableSectionTitle } from '@
 import { MembersInfo, MemberReviewList, MemberRecipeList } from '@/components/Members';
 import { PATH } from '@/constants/path';
 
-const MemberPage = () => {
+export const MemberPage = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -34,8 +34,6 @@ const MemberPage = () => {
     </MemberPageContainer>
   );
 };
-
-export default MemberPage;
 
 const MemberPageContainer = styled.div`
   padding: 20px 20px 0;

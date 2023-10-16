@@ -1,29 +1,46 @@
 import { Button } from '@fun-eat/design-system';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { PATH } from '@/constants/path';
+import { useGA } from '@/hooks/common';
+import { useCategoryActionContext } from '@/hooks/context';
+
 interface CategoryItemProps {
+  categoryId: number;
   name: string;
   image: string;
+  categoryType: 'food' | 'store';
 }
 
-const CategoryItem = ({ name, image }: CategoryItemProps) => {
+const CategoryItem = ({ categoryId, name, image, categoryType }: CategoryItemProps) => {
+  const navigate = useNavigate();
+  const { selectCategory } = useCategoryActionContext();
+
+  const { gaEvent } = useGA();
+
+  const handleCategoryItemClick = (categoryId: number) => {
+    selectCategory(categoryType, categoryId);
+    navigate(PATH.PRODUCT_LIST + '/' + categoryType);
+
+    gaEvent({
+      category: 'button',
+      action: `${name} 카테고리 링크 클릭`,
+      label: '카테고리',
+    });
+  };
+
   return (
-    <CategoryItemContainer variant="transparent">
+    <Button type="button" variant="transparent" customHeight="auto" onClick={() => handleCategoryItemClick(categoryId)}>
       <ImageWrapper>
         <img src={image} width={60} height={60} alt={name} />
       </ImageWrapper>
       <CategoryName>{name}</CategoryName>
-    </CategoryItemContainer>
+    </Button>
   );
 };
 
 export default CategoryItem;
-
-const CategoryItemContainer = styled(Button)`
-  width: 60px;
-  height: 100px;
-  text-align: center;
-`;
 
 const ImageWrapper = styled.div`
   display: flex;

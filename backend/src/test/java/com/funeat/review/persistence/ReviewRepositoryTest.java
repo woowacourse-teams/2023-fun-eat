@@ -138,7 +138,7 @@ class ReviewRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class findTopByProductOrderByFavoriteCountDesc_성공_테스트 {
+    class findPopularReviewWithImage_성공_테스트 {
 
         @Test
         void 리뷰가_존재하지_않으면_빈_값을_반환하다() {
@@ -206,6 +206,33 @@ class ReviewRepositoryTest extends RepositoryTest {
 
             // then
             assertThat(actual).usingRecursiveComparison().isEqualTo(review2);
+        }
+    }
+
+    @Nested
+    class findTopByProductOrderByFavoriteCountDescIdDesc_성공_테스트 {
+
+        @Test
+        void 좋아요가_가장_많은_리뷰를_반환하다() {
+            // given
+            final var category = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(category);
+
+            final var product = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            단일_상품_저장(product);
+
+            final var member = 멤버_멤버1_생성();
+            단일_멤버_저장(member);
+
+            final var review1 = 리뷰_이미지test1_평점1점_재구매O_생성(member, product, 0L);
+            final var review2 = 리뷰_이미지test3_평점3점_재구매O_생성(member, product, 4L);
+            복수_리뷰_저장(review1, review2);
+
+            // when
+            final var actual = reviewRepository.findTopByProductOrderByFavoriteCountDescIdDesc(product);
+
+            // then
+            assertThat(actual.get()).isEqualTo(review2);
         }
     }
 }
