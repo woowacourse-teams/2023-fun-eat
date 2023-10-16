@@ -9,6 +9,7 @@ import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.tag.persistence.TagRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +45,11 @@ public class EventTest {
 
     @Autowired
     protected ReviewRepository reviewRepository;
+
+    @AfterEach
+    void tearDown() {
+        events.clear();
+    }
 
     protected Product 단일_상품_저장(final Product product) {
         return productRepository.save(product);
