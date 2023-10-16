@@ -337,9 +337,9 @@ class RecipeServiceTest extends ServiceTest {
             복수_상품_저장(product1, product2, product3);
 
             final var recipe1_1 = 레시피_생성(member1, 1L);
-            Thread.sleep(1000);
+            Thread.sleep(100);
             final var recipe1_2 = 레시피_생성(member1, 3L);
-            Thread.sleep(1000);
+            Thread.sleep(100);
             final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 

@@ -27,11 +27,14 @@ import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.dto.SortingReviewDtoWithoutTag;
+import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import com.funeat.review.exception.ReviewException.NotAuthorOfReviewException;
 import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
+import com.funeat.review.specification.SortingReviewSpecification;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
 import java.util.List;
@@ -42,6 +45,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,9 +54,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private static final int TOP = 0;
+    private static final int FIRST_PAGE = 0;
+    private static final int START_INDEX = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
+    private static final int REVIEW_PAGE_SIZE = 10;
 
     private final ReviewRepository reviewRepository;
     private final TagRepository tagRepository;
@@ -121,8 +127,7 @@ public class ReviewService {
 
     private ReviewFavorite saveReviewFavorite(final Member member, final Review review, final Boolean favorite) {
         try {
-            final ReviewFavorite reviewFavorite = ReviewFavorite.create(member, review,
-                    favorite);
+            final ReviewFavorite reviewFavorite = ReviewFavorite.create(member, review, favorite);
             return reviewFavoriteRepository.save(reviewFavorite);
         } catch (final DataIntegrityViolationException e) {
             throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
@@ -134,33 +139,76 @@ public class ReviewService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final PageRequest pageRequest = PageRequest.of(TOP, ONE);
+        final PageRequest pageRequest = PageRequest.of(FIRST_PAGE, ONE);
+
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
         if (!topFavoriteReview.isEmpty()) {
-            final String topFavoriteReviewImage = topFavoriteReview.get(TOP).getImage();
+            final String topFavoriteReviewImage = topFavoriteReview.get(START_INDEX).getImage();
             product.updateImage(topFavoriteReviewImage);
         }
     }
 
-    public SortingReviewsResponse sortingReviews(final Long productId, final Pageable pageable, final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+    public SortingReviewsResponse sortingReviews(final Long productId, final Long memberId,
+                                                 final SortingReviewRequest request) {
+        final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
-
-        final Product product = productRepository.findById(productId)
+        final Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
 
-        final Page<Review> reviewPage = reviewRepository.findReviewsByProduct(pageable, product);
+        final List<SortingReviewDto> sortingReviews = getSortingReviews(findMember, findProduct, request);
+        final int resultSize = getResultSize(sortingReviews);
 
-        final PageDto pageDto = PageDto.toDto(reviewPage);
-        final List<SortingReviewDto> reviewDtos = reviewPage.stream()
-                .map(review -> SortingReviewDto.toDto(review, member))
+        final List<SortingReviewDto> resizeSortingReviews = sortingReviews.subList(START_INDEX, resultSize);
+        final Boolean hasNext = hasNextPage(sortingReviews);
+
+        return SortingReviewsResponse.toResponse(resizeSortingReviews, hasNext);
+    }
+
+    private List<SortingReviewDto> getSortingReviews(final Member member, final Product product,
+                                                    final SortingReviewRequest request) {
+        final Long lastReviewId = request.getLastReviewId();
+        final String sortOption = request.getSort();
+
+        final Specification<Review> specification = getSortingSpecification(product, sortOption, lastReviewId);
+        final List<SortingReviewDtoWithoutTag> sortingReviewDtoWithoutTags = reviewRepository.getSortingReview(member,
+                specification, sortOption);
+
+        return addTagsToSortingReviews(sortingReviewDtoWithoutTags);
+    }
+
+    private List<SortingReviewDto> addTagsToSortingReviews(
+            final List<SortingReviewDtoWithoutTag> sortingReviewDtoWithoutTags) {
+        return sortingReviewDtoWithoutTags.stream()
+                .map(reviewDto -> SortingReviewDto.toDto(reviewDto,
+                        tagRepository.findTagsByReviewId(reviewDto.getId())))
                 .collect(Collectors.toList());
+    }
 
-        return SortingReviewsResponse.toResponse(pageDto, reviewDtos);
+    private Specification<Review> getSortingSpecification(final Product product, final String sortOption,
+                                                          final Long lastReviewId) {
+        if (lastReviewId == FIRST_PAGE) {
+            return SortingReviewSpecification.sortingFirstPageBy(product);
+        }
+
+        final Review lastReview = reviewRepository.findById(lastReviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, lastReviewId));
+
+        return SortingReviewSpecification.sortingBy(product, sortOption, lastReview);
+    }
+
+    private int getResultSize(final List<SortingReviewDto> sortingReviews) {
+        if (sortingReviews.size() <= REVIEW_PAGE_SIZE) {
+            return sortingReviews.size();
+        }
+        return REVIEW_PAGE_SIZE;
+    }
+
+    private Boolean hasNextPage(final List<SortingReviewDto> sortingReviews) {
+        return sortingReviews.size() > REVIEW_PAGE_SIZE;
     }
 
     public RankingReviewsResponse getTopReviews() {
-        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDesc();
+        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDescIdDesc();
 
         final List<RankingReviewDto> dtos = rankingReviews.stream()
                 .map(RankingReviewDto::toDto)

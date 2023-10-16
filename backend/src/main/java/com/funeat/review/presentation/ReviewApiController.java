@@ -8,6 +8,7 @@ import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
+import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
 import java.net.URI;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,8 +65,8 @@ public class ReviewApiController implements ReviewController {
     @GetMapping("/api/products/{productId}/reviews")
     public ResponseEntity<SortingReviewsResponse> getSortingReviews(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                                     @PathVariable final Long productId,
-                                                                    @PageableDefault final Pageable pageable) {
-        final SortingReviewsResponse response = reviewService.sortingReviews(productId, pageable, loginInfo.getId());
+                                                                    @ModelAttribute final SortingReviewRequest request) {
+        final SortingReviewsResponse response = reviewService.sortingReviews(productId, loginInfo.getId(), request);
 
         return ResponseEntity.ok(response);
     }

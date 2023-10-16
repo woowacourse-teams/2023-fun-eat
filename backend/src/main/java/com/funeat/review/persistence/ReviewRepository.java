@@ -5,6 +5,8 @@ import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 import com.funeat.member.domain.Member;
 import com.funeat.product.domain.Product;
 import com.funeat.review.domain.Review;
+import com.funeat.review.dto.SortingReviewDto;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -14,11 +16,9 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewCustomRepository {
 
-    Page<Review> findReviewsByProduct(final Pageable pageable, final Product product);
-
-    List<Review> findTop3ByOrderByFavoriteCountDesc();
+    List<Review> findTop3ByOrderByFavoriteCountDescIdDesc();
 
     Long countByProduct(final Product product);
 
