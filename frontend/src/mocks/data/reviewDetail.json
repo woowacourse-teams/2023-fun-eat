@@ -1,0 +1,29 @@
+{
+  "reviews": {
+    "id": 1,
+    "userName": "펀잇",
+    "profileImage": "https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/1f0fd418-131c-4cf8-b540-112d762b7c34",
+    "image": "https://i.namu.wiki/i/9wnvUaEa1EkDqG-M0Pbwfdf19FJQQXV_-bnlU2SYaNcG05y2wbabiIrfrGES1M4xSgDjY39RwOvLNggDd3Huuw.webp",
+    "rating": 4.5,
+    "tags": [
+      {
+        "id": 5,
+        "name": "단짠단짠",
+        "tagType": "TASTE"
+      },
+      {
+        "id": 1,
+        "name": "망고망고",
+        "tagType": "TASTE"
+      }
+    ],
+    "content": "맛있어용~!~!",
+    "rebuy": true,
+    "favoriteCount": 1320,
+    "favorite": true,
+    "createdAt": "2023-10-13T00:00:00",
+    "categoryType": "food",
+    "productId": 1,
+    "productName": "칠성 사이다"
+  }
+}
