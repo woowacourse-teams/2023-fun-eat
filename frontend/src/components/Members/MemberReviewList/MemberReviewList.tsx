@@ -50,7 +50,7 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
         {reviewsToDisplay.map((review) => (
           <li key={review.reviewId}>
             <Link as={RouterLink} to={`${PATH.REVIEW}/${review.reviewId}`} block>
-              <MemberReviewItem review={review} />
+              <MemberReviewItem review={review} isMemberPage={isMemberPage} />
             </Link>
           </li>
         ))}

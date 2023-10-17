@@ -1,23 +1,61 @@
-import { useTheme, Spacing, Text } from '@fun-eat/design-system';
+import { useTheme, Spacing, Text, Button } from '@fun-eat/design-system';
+import type { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
+import { useToastActionContext } from '@/hooks/context';
+import { useDeleteReview } from '@/hooks/queries/members';
 import type { MemberReview } from '@/types/review';
 
 interface MemberReviewItemProps {
   review: MemberReview;
+  isMemberPage: boolean;
 }
 
-const MemberReviewItem = ({ review }: MemberReviewItemProps) => {
+const MemberReviewItem = ({ review, isMemberPage }: MemberReviewItemProps) => {
   const theme = useTheme();
 
-  const { productName, content, rating, favoriteCount } = review;
+  const { mutate } = useDeleteReview();
+
+  const { toast } = useToastActionContext();
+
+  const { reviewId, productName, content, rating, favoriteCount } = review;
+
+  const handleReviewDelete: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+
+    const result = window.confirm('리뷰를 삭제하시겠습니까?');
+    if (!result) {
+      return;
+    }
+
+    mutate(reviewId, {
+      onSuccess: () => {
+        toast.success('리뷰를 삭제했습니다.');
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          return;
+        }
+
+        toast.error('리뷰 좋아요를 다시 시도해주세요.');
+      },
+    });
+  };
 
   return (
     <ReviewRankingItemContainer>
-      <Text size="sm" weight="bold">
-        {productName}
-      </Text>
+      <ProductNameIconWrapper>
+        <Text size="sm" weight="bold">
+          {productName}
+        </Text>
+        {!isMemberPage && (
+          <Button variant="transparent" customHeight="auto" onClick={handleReviewDelete}>
+            <SvgIcon variant="trashcan" width={20} height={20} />
+          </Button>
+        )}
+      </ProductNameIconWrapper>
       <ReviewText size="sm" color={theme.textColors.info}>
         {content}
       </ReviewText>
@@ -48,6 +86,11 @@ const ReviewRankingItemContainer = styled.div`
   gap: 4px;
   padding: 12px 0;
   border-bottom: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
+`;
+
+const ProductNameIconWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ReviewText = styled(Text)`
