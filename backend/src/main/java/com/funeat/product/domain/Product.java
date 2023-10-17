@@ -62,6 +62,16 @@ public class Product {
         this.category = category;
     }
 
+    public Product(final String name, final Long price, final String image, final String content,
+                   final Category category, final Long reviewCount) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.content = content;
+        this.category = category;
+        this.reviewCount = reviewCount;
+    }
+  
     public static Product create(final String name, final Long price, final String content, final Category category) {
         return new Product(name, price, null, content, category);
     }

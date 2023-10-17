@@ -21,6 +21,11 @@ public class ProductInCategoryDto {
         this.reviewCount = reviewCount;
     }
 
+    public static ProductInCategoryDto toDto(final Product product) {
+        return new ProductInCategoryDto(product.getId(), product.getName(), product.getPrice(), product.getImage(),
+                product.getAverageRating(), product.getReviewCount());
+    }
+
     public static ProductInCategoryDto toDto(final Product product, final Long reviewCount) {
         return new ProductInCategoryDto(product.getId(), product.getName(), product.getPrice(), product.getImage(),
                 product.getAverageRating(), reviewCount);
