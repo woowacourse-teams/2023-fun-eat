@@ -1,24 +1,28 @@
 import { Button, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
-import type { ChangeEventHandler, FormEventHandler } from 'react';
+import type { ChangeEventHandler, FormEventHandler, RefObject } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
+import { useScroll } from '@/hooks/common';
 import { useToastActionContext } from '@/hooks/context';
 import { useRecipeCommentMutation } from '@/hooks/queries/recipe';
 
 interface CommentFormProps {
   recipeId: number;
+  scrollTargetRef: RefObject<HTMLElement>;
 }
 
 const MAX_COMMENT_LENGTH = 200;
 
-const CommentForm = ({ recipeId }: CommentFormProps) => {
+const CommentForm = ({ recipeId, scrollTargetRef }: CommentFormProps) => {
   const [commentValue, setCommentValue] = useState('');
   const { mutate } = useRecipeCommentMutation(recipeId);
 
   const theme = useTheme();
   const { toast } = useToastActionContext();
+
+  const { scrollToPosition } = useScroll();
 
   const handleCommentInput: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setCommentValue(e.target.value);
@@ -32,6 +36,7 @@ const CommentForm = ({ recipeId }: CommentFormProps) => {
       {
         onSuccess: () => {
           setCommentValue('');
+          scrollToPosition(scrollTargetRef);
           toast.success('댓글이 등록되었습니다.');
         },
         onError: (error) => {
