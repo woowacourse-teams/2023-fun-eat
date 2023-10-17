@@ -10,15 +10,15 @@ import { useInfiniteMemberRecipeQuery } from '@/hooks/queries/members';
 import useDisplaySlice from '@/utils/displaySlice';
 
 interface MemberRecipeListProps {
-  isMemberPage?: boolean;
+  isPreview?: boolean;
 }
 
-const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
+const MemberRecipeList = ({ isPreview = false }: MemberRecipeListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteMemberRecipeQuery();
   const memberRecipes = data?.pages.flatMap((page) => page.recipes);
-  const recipeToDisplay = useDisplaySlice(isMemberPage, memberRecipes);
+  const recipeToDisplay = useDisplaySlice(isPreview, memberRecipes);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
@@ -40,7 +40,7 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
 
   return (
     <MemberRecipeListContainer>
-      {!isMemberPage && (
+      {!isPreview && (
         <TotalRecipeCount color={theme.colors.gray4}>
           총 <strong>{totalRecipeCount}</strong>개의 꿀조합을 남겼어요!
         </TotalRecipeCount>
@@ -50,7 +50,7 @@ const MemberRecipeList = ({ isMemberPage = false }: MemberRecipeListProps) => {
         {recipeToDisplay?.map((recipe) => (
           <li key={recipe.id}>
             <Link as={RouterLink} to={`${PATH.RECIPE}/${recipe.id}`}>
-              <RecipeItem recipe={recipe} isMemberPage={isMemberPage} />
+              <RecipeItem recipe={recipe} isMemberPage={isPreview} />
             </Link>
           </li>
         ))}

@@ -20,14 +20,14 @@ export const MemberPage = () => {
       <Spacing size={5} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <MemberReviewList isMemberPage />
+          <MemberReviewList isPreview />
         </Suspense>
       </ErrorBoundary>
       <Spacing size={45} />
       <NavigableSectionTitle title="내가 작성한 꿀조합" routeDestination={`${PATH.MEMBER}/recipe`} />
       <ErrorBoundary fallback={ErrorComponent} handleReset={reset}>
         <Suspense fallback={<Loading />}>
-          <MemberRecipeList isMemberPage />
+          <MemberRecipeList isPreview />
         </Suspense>
       </ErrorBoundary>
       <Spacing size={40} />

@@ -9,10 +9,10 @@ import type { MemberReview } from '@/types/review';
 
 interface MemberReviewItemProps {
   review: MemberReview;
-  isMemberPage: boolean;
+  isPreview: boolean;
 }
 
-const MemberReviewItem = ({ review, isMemberPage }: MemberReviewItemProps) => {
+const MemberReviewItem = ({ review, isPreview }: MemberReviewItemProps) => {
   const theme = useTheme();
 
   const { mutate } = useDeleteReview();
@@ -50,7 +50,7 @@ const MemberReviewItem = ({ review, isMemberPage }: MemberReviewItemProps) => {
         <Text size="sm" weight="bold">
           {productName}
         </Text>
-        {!isMemberPage && (
+        {!isPreview && (
           <Button variant="transparent" customHeight="auto" onClick={handleReviewDelete}>
             <SvgIcon variant="trashcan" width={20} height={20} />
           </Button>
