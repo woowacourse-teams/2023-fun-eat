@@ -52,15 +52,15 @@ public class EventTest {
         events.clear();
     }
 
-    protected Product 단일_상품_저장(final Product product) {
-        return productRepository.save(product);
+    protected Long 단일_상품_저장(final Product product) {
+        return productRepository.save(product).getId();
     }
 
-    protected Category 단일_카테고리_저장(final Category category) {
-        return categoryRepository.save(category);
+    protected Long 단일_카테고리_저장(final Category category) {
+        return categoryRepository.save(category).getId();
     }
 
-    protected Member 단일_멤버_저장(final Member member) {
-        return memberRepository.save(member);
+    protected Long 단일_멤버_저장(final Member member) {
+        return memberRepository.save(member).getId();
     }
 }
