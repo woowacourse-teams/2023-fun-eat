@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,4 +57,13 @@ public interface MemberController {
     @GetMapping
     ResponseEntity<MemberRecipesResponse> getMemberRecipe(@AuthenticationPrincipal final LoginInfo loginInfo,
                                                           @PageableDefault final Pageable pageable);
+
+    @Operation(summary = "리뷰 삭제", description = "자신이 작성한 리뷰를 삭제한다.")
+    @ApiResponse(
+            responseCode = "204",
+            description = "리뷰 삭제 성공."
+    )
+    @DeleteMapping
+    ResponseEntity<Void> deleteReview(@PathVariable final Long reviewId,
+                                      @AuthenticationPrincipal final LoginInfo loginInfo);
 }

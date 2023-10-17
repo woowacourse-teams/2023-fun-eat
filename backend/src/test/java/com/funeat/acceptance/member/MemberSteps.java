@@ -62,4 +62,13 @@ public class MemberSteps {
                 .then()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 리뷰_삭제_요청(final String loginCookie, final Long reviewId) {
+        return given()
+                .cookie("JSESSIONID", loginCookie)
+                .when()
+                .delete("/api/members/reviews/{reviewId}", reviewId)
+                .then()
+                .extract();
+    }
 }
