@@ -1,6 +1,8 @@
-import type { ChangeEventHandler, FormEventHandler, MouseEventHandler, RefObject } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 'react';
+import { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+
+import { useGA } from '../common';
 
 const useSearch = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -12,12 +14,10 @@ const useSearch = () => {
   const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
   const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(searchQuery.length > 0);
 
-  useEffect(() => {
-    setIsAutocompleteOpen(searchQuery.length > 0);
-  }, [searchQuery]);
+  const { gaEvent } = useGA();
 
   const focusInput = () => {
-    if (inputRef?.current) {
+    if (inputRef.current) {
       inputRef.current.focus();
     }
   };
@@ -25,17 +25,19 @@ const useSearch = () => {
   const handleSearchQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
     setIsSubmitted(false);
     setSearchQuery(event.currentTarget.value);
+    setIsAutocompleteOpen(event.currentTarget.value.length > 0);
   };
 
   const handleSearch: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    gaEvent({ category: 'submit', action: '검색 페이지에서 검색', label: '검색' });
 
     const trimmedSearchQuery = searchQuery.trim();
 
     if (!trimmedSearchQuery) {
       alert('검색어를 입력해주세요');
       focusInput();
-      setSearchQuery('');
+      resetSearchQuery();
       return;
     }
 

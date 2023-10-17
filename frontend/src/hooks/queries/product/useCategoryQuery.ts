@@ -1,16 +1,22 @@
 import { useSuspendedQuery } from '..';
 
 import { categoryApi } from '@/apis';
-import type { Category } from '@/types/common';
+import type { Category, CategoryVariant, Food, Store } from '@/types/common';
 
-const fetchCategories = async (type: string) => {
+const fetchCategories = async (type: CategoryVariant) => {
   const response = await categoryApi.get({ queries: `?type=${type}` });
   const data: Category[] = await response.json();
   return data;
 };
 
-const useCategoryQuery = (type: string) => {
-  return useSuspendedQuery(['categories', type], () => fetchCategories(type));
+export const useCategoryFoodQuery = (type: Food) => {
+  return useSuspendedQuery(['categories', type], () => fetchCategories(type), {
+    staleTime: Infinity,
+  });
 };
 
-export default useCategoryQuery;
+export const useCategoryStoreQuery = (type: Store) => {
+  return useSuspendedQuery(['categories', type], () => fetchCategories(type), {
+    staleTime: Infinity,
+  });
+};

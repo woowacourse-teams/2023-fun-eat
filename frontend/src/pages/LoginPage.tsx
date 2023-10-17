@@ -13,7 +13,7 @@ const KAKAO_LOGIN = '카카오 로그인';
 
 const loginLink = process.env.NODE_ENV === 'development' ? '/login/kakao?code=qwe' : '/api/auth/kakao';
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const { routeBack } = useRoutePage();
   const { data: member } = useMemberQuery();
 
@@ -46,8 +46,6 @@ const LoginPage = () => {
     </LoginPageContainer>
   );
 };
-
-export default LoginPage;
 
 const LoginPageContainer = styled.div`
   display: flex;

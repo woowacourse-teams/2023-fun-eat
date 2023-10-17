@@ -1,5 +1,6 @@
 package com.funeat.acceptance.common;
 
+import com.funeat.comment.persistence.CommentRepository;
 import com.funeat.common.DataClearExtension;
 import com.funeat.member.domain.Member;
 import com.funeat.member.persistence.MemberRepository;
@@ -67,6 +68,9 @@ public abstract class AcceptanceTest {
 
     @Autowired
     public RecipeFavoriteRepository recipeFavoriteRepository;
+
+    @Autowired
+    protected CommentRepository commentRepository;
 
     @BeforeEach
     void setUp() {

@@ -54,7 +54,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 신규_유저라면_마이페이지_경로를_헤더에_담아_응답을_보낸다() {
-            // given && when
+            // given & when
             final var 응답 = 로그인_시도_요청(멤버1);
 
             // then
@@ -81,7 +81,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         @Test
         void 로그아웃을_하다() {
-            // given && when
+            // given & when
             final var 응답 = 로그아웃_요청(로그인_쿠키_획득(멤버1));
 
             // then

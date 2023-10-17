@@ -1,8 +1,7 @@
-import { BottomSheet, Spacing, useBottomSheet, Text, Link } from '@fun-eat/design-system';
+import { BottomSheet, Spacing, useBottomSheet, Text, Button } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { useState, useRef, Suspense } from 'react';
-import ReactGA from 'react-ga4';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -17,23 +16,28 @@ import {
   SectionTitle,
 } from '@/components/Common';
 import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
-import { ReviewList, ReviewRegisterForm } from '@/components/Review';
-import { RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
+import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Review';
+import { PRODUCT_PATH_LOCAL_STORAGE_KEY, RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
-import { useSortOption, useTabMenu } from '@/hooks/common';
+import { useGA, useSortOption, useTabMenu } from '@/hooks/common';
 import { useMemberQuery } from '@/hooks/queries/members';
 import { useProductDetailQuery } from '@/hooks/queries/product';
+import { setLocalStorage } from '@/utils/localStorage';
 
 const LOGIN_ERROR_MESSAGE_REVIEW =
   '로그인 후 상품 리뷰를 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 리뷰를 확인해보세요 😊';
 const LOGIN_ERROR_MESSAGE_RECIPE =
   '로그인 후 상품 꿀조합을 볼 수 있어요.\n펀잇에 가입하고 편의점 상품 꿀조합을 확인해보세요 😊';
 
-const ProductDetailPage = () => {
+export const ProductDetailPage = () => {
   const { category, productId } = useParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   const { data: member } = useMemberQuery();
   const { data: productDetail } = useProductDetailQuery(Number(productId));
+
   const { reset } = useQueryErrorResetBoundary();
 
   const { selectedTabMenu, isFirstTabMenu: isReviewTab, handleTabMenuClick, initTabMenu } = useTabMenu();
@@ -42,43 +46,49 @@ const ProductDetailPage = () => {
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
   const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
+  const { gaEvent } = useGA();
 
   const productDetailPageRef = useRef<HTMLDivElement>(null);
 
-  const tabMenus = [`리뷰 ${productDetail.reviewCount}`, '꿀조합'];
-  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
-  const currentSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
-
-  if (!category) {
+  if (!category || !productId) {
     return null;
   }
+
+  const { name, reviewCount } = productDetail;
+
+  const tabMenus = [`리뷰 ${reviewCount}`, '꿀조합'];
+  const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
+  const currentSortOption = isReviewTab ? REVIEW_SORT_OPTIONS[0] : RECIPE_SORT_OPTIONS[0];
 
   const handleOpenRegisterReviewSheet = () => {
     setActiveSheet('registerReview');
     handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '상품 리뷰 작성하기 버튼 클릭', label: '상품 리뷰 작성' });
   };
 
   const handleOpenSortOptionSheet = () => {
     setActiveSheet('sortOption');
     handleOpenBottomSheet();
+    gaEvent({ category: 'button', action: '상품 리뷰 정렬 버튼 클릭', label: '상품 리뷰 정렬' });
   };
 
   const handleTabMenuSelect = (index: number) => {
     handleTabMenuClick(index);
     selectSortOption(currentSortOption);
+  };
 
-    ReactGA.event({
-      category: '버튼',
-      action: '카테고리 이동 클릭 액션',
-      label: 'category',
-    });
+  const handleLoginButtonClick = () => {
+    setLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY, pathname);
+    navigate(PATH.LOGIN);
   };
 
   return (
     <ProductDetailPageContainer ref={productDetailPageRef}>
-      <SectionTitle name={productDetail.name} bookmark={productDetail.bookmark} />
+      <SectionTitle name={name} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
+      <Spacing size={30} />
+      <BestReviewItem productId={Number(productId)} />
       <Spacing size={36} />
       <TabMenu
         ref={tabRef}
@@ -96,11 +106,7 @@ const ProductDetailPage = () => {
               {isReviewTab ? (
                 <ReviewList productId={Number(productId)} selectedOption={selectedOption} />
               ) : (
-                <ProductRecipeList
-                  productId={Number(productId)}
-                  productName={productDetail.name}
-                  selectedOption={selectedOption}
-                />
+                <ProductRecipeList productId={Number(productId)} productName={name} selectedOption={selectedOption} />
               )}
             </section>
           </Suspense>
@@ -110,9 +116,15 @@ const ProductDetailPage = () => {
           <ErrorDescription align="center" weight="bold" size="lg">
             {isReviewTab ? LOGIN_ERROR_MESSAGE_REVIEW : LOGIN_ERROR_MESSAGE_RECIPE}
           </ErrorDescription>
-          <LoginLink as={RouterLink} to={PATH.LOGIN} block>
+          <LoginButton
+            type="button"
+            customWidth="150px"
+            customHeight="60px"
+            onClick={handleLoginButtonClick}
+            color="white"
+          >
             로그인하러 가기
-          </LoginLink>
+          </LoginButton>
         </ErrorContainer>
       )}
       <Spacing size={100} />
@@ -147,8 +159,6 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage;
-
 const ProductDetailPageContainer = styled.div`
   height: 100%;
   overflow-y: auto;
@@ -176,10 +186,8 @@ const ErrorDescription = styled(Text)`
   white-space: pre-wrap;
 `;
 
-const LoginLink = styled(Link)`
-  padding: 16px 24px;
+const LoginButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.gray4};
-  border-radius: 8px;
 `;
 
 const ReviewRegisterButtonWrapper = styled.div`

@@ -1,27 +1,26 @@
 package com.funeat.review.dto;
 
-import com.funeat.common.dto.PageDto;
 import java.util.List;
 
 public class SortingReviewsResponse {
 
-    private final PageDto page;
     private final List<SortingReviewDto> reviews;
+    private final Boolean hasNext;
 
-    public SortingReviewsResponse(final PageDto page, final List<SortingReviewDto> reviews) {
-        this.page = page;
+    public SortingReviewsResponse(final List<SortingReviewDto> reviews, final Boolean hasNext) {
         this.reviews = reviews;
+        this.hasNext = hasNext;
     }
 
-    public static SortingReviewsResponse toResponse(final PageDto page, final List<SortingReviewDto> reviews) {
-        return new SortingReviewsResponse(page, reviews);
-    }
-
-    public PageDto getPage() {
-        return page;
+    public static SortingReviewsResponse toResponse(final List<SortingReviewDto> reviews, final Boolean hasNextReview) {
+        return new SortingReviewsResponse(reviews, hasNextReview);
     }
 
     public List<SortingReviewDto> getReviews() {
         return reviews;
+    }
+
+    public Boolean getHasNext() {
+        return hasNext;
     }
 }

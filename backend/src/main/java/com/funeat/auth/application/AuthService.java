@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AuthService {
 
-    private static final String COOKIE_NAME = "FUNEAT";
+    private static final String COOKIE_NAME = "SESSION";
 
     private final MemberService memberService;
     private final PlatformUserProvider platformUserProvider;

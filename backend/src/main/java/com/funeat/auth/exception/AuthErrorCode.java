@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum AuthErrorCode {
 
     LOGIN_MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "로그인 하지 않은 회원입니다. 로그인을 해주세요.", "6001"),
+    LOGIN_ADMIN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "로그인 하지 않은 관리자입니다. 로그인을 해주세요.", "6002"),
     ;
 
     private final HttpStatus status;

@@ -19,7 +19,14 @@ module.exports = merge(common, {
       patterns: [
         { from: 'public/assets', to: 'assets' },
         { from: 'public/manifest.json', to: 'manifest.json' },
+        { from: 'public/robots.txt', to: 'robots.txt' },
+        { from: 'public/sitemap.xml', to: 'sitemap.xml' },
       ],
     }),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
 });
