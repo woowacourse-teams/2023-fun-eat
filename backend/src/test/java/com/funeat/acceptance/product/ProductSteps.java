@@ -10,10 +10,10 @@ import io.restassured.response.Response;
 public class ProductSteps {
 
     public static ExtractableResponse<Response> 카테고리별_상품_목록_조회_요청(final Long categoryId, final String sort,
-                                                                  final Long lastId) {
+                                                                  final Long lastProductId) {
         return given()
                 .queryParam("sort", sort)
-                .queryParam("id", lastId)
+                .queryParam("lastProductId", lastProductId)
                 .when()
                 .get("/api/categories/{category_id}/products", categoryId)
                 .then()

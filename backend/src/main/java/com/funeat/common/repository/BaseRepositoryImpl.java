@@ -42,9 +42,9 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
     }
 
     @Override
-    public List<T> findAllWithSpecification(final Specification spec, final int size) {
+    public List<T> findAllWithSpecification(final Specification<T> spec, final int pageSize) {
         final TypedQuery<T> query = getQuery(spec, Sort.unsorted());
-        query.setMaxResults(size);
+        query.setMaxResults(pageSize);
 
         return query.getResultList();
     }

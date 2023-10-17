@@ -27,8 +27,8 @@ public interface ProductController {
     @GetMapping
     ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(
             @PathVariable final Long categoryId,
-            @RequestParam(name = "id") Long lastId,
-            @RequestParam(name = "sort") String sort
+            @RequestParam final Long lastProductId,
+            @RequestParam final String sort
     );
 
     @Operation(summary = "해당 상품 상세 조회", description = "해당 상품 상세정보를 조회한다.")

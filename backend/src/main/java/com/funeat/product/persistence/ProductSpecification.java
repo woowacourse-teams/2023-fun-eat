@@ -15,7 +15,15 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecification {
 
+    private ProductSpecification() {
+    }
+
     private static final String DESC = "desc";
+    private static final String CATEGORY = "category";
+    private static final String ID = "id";
+    private static final String REVIEW_COUNT = "reviewCount";
+    private static final String AVERAGE_RATING = "averageRating";
+    private static final String PRICE = "price";
 
     public static Specification<Product> searchBy(final Category category, final Product lastProduct,
                                                   final ProductSortCondition sortCondition) {
@@ -35,15 +43,15 @@ public class ProductSpecification {
         final String sortOrder = sortCondition.getOrder();
 
         if (DESC.equals(sortOrder)) {
-            query.orderBy(builder.desc(root.get(sortBy)), builder.desc(root.get("id")));
+            query.orderBy(builder.desc(root.get(sortBy)), builder.desc(root.get(ID)));
         } else {
-            query.orderBy(builder.asc(root.get(sortBy)), builder.desc(root.get("id")));
+            query.orderBy(builder.asc(root.get(sortBy)), builder.desc(root.get(ID)));
         }
     }
 
     private static Specification<Product> sameCategory(final Category category) {
         return (root, query, builder) -> {
-            final Path<Object> categoryPath = root.get("category");
+            final Path<Object> categoryPath = root.get(CATEGORY);
 
             return builder.equal(categoryPath, category);
         };
@@ -68,13 +76,13 @@ public class ProductSpecification {
     }
 
     private static Object getComparisonValue(final Product lastProduct, final String sortBy) {
-        if ("price".equals(sortBy)) {
+        if (PRICE.equals(sortBy)) {
             return lastProduct.getPrice();
         }
-        if ("averageRating".equals(sortBy)) {
+        if (AVERAGE_RATING.equals(sortBy)) {
             return lastProduct.getAverageRating();
         }
-        if ("reviewCount".equals(sortBy)) {
+        if (REVIEW_COUNT.equals(sortBy)) {
             return lastProduct.getReviewCount();
         }
         throw new NotSupportedProductSortingConditionException(NOT_SUPPORTED_PRODUCT_SORTING_CONDITION, sortBy);
@@ -84,7 +92,7 @@ public class ProductSpecification {
                                                                 final Comparable comparisonValue) {
         return (root, query, builder) -> builder.and(
                 builder.equal(root.get(sortBy), comparisonValue),
-                builder.lessThan(root.get("id"), lastProductId));
+                builder.lessThan(root.get(ID), lastProductId));
     }
 
     private static Specification<Product> nextValue(final String sortBy, final String sortOrder,

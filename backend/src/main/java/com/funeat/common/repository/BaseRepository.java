@@ -13,5 +13,5 @@ public interface BaseRepository<T, ID extends Serializable> extends JpaRepositor
 
     Page<T> findAllForPagination(final Specification<T> spec, final Pageable pageable, final Long totalElements);
 
-    List<T> findAllWithSpecification(final Specification spec, final int size);
+    List<T> findAllWithSpecification(final Specification<T> spec, final int pageSize);
 }

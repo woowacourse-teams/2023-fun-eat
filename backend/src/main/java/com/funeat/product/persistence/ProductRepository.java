@@ -1,23 +1,15 @@
 package com.funeat.product.persistence;
 
 import com.funeat.common.repository.BaseRepository;
-import com.funeat.product.domain.Category;
 import com.funeat.product.domain.Product;
-import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductReviewCountDto;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends BaseRepository<Product, Long> {
-
-    @Query(value = "SELECT new com.funeat.product.dto.ProductInCategoryDto(p.id, p.name, p.price, p.image, p.averageRating, p.reviewCount) "
-            + "FROM Product p "
-            + "WHERE p.category = :category ")
-    Slice<ProductInCategoryDto> findAllByCategory(@Param("category") final Category category, final Pageable pageable);
 
     @Query("SELECT new com.funeat.product.dto.ProductReviewCountDto(p, COUNT(r.id)) "
             + "FROM Product p "

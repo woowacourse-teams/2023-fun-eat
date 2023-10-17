@@ -130,7 +130,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품3, 상품1, 상품2));
             }
 
@@ -148,7 +148,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품3, 상품2, 상품1));
             }
         }
@@ -170,7 +170,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품1, 상품3, 상품2));
             }
 
@@ -188,7 +188,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(3L, 2L, 1L));
             }
         }
@@ -210,7 +210,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(2L, 1L, 3L));
             }
 
@@ -228,7 +228,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(3L, 2L, 1L));
             }
         }
@@ -250,7 +250,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(1L, 3L, 2L));
             }
 
@@ -268,7 +268,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(3L, 2L, 1L));
             }
         }
@@ -295,7 +295,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품2, 상품1, 상품3));
             }
 
@@ -313,7 +313,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                다음_페이지_유무를_검증한다(응답, false);
+                다음_페이지_유무를_검증한다(응답, 마지막페이지X);
                 카테고리별_상품_목록_조회_결과를_검증한다(응답, List.of(상품3, 상품2, 상품1));
             }
         }

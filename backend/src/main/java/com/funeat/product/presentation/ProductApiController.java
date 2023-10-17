@@ -1,8 +1,8 @@
 package com.funeat.product.presentation;
 
 import com.funeat.product.application.ProductService;
-import com.funeat.product.dto.ProductSortCondition;
 import com.funeat.product.dto.ProductResponse;
+import com.funeat.product.dto.ProductSortCondition;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductsResponse;
 import com.funeat.product.dto.SearchProductResultsResponse;
@@ -30,10 +30,10 @@ public class ProductApiController implements ProductController {
 
     @GetMapping("/categories/{categoryId}/products")
     public ResponseEntity<ProductsInCategoryResponse> getAllProductsInCategory(@PathVariable final Long categoryId,
-                                                                               @RequestParam(name = "id") Long lastId,
-                                                                               @RequestParam(name = "sort") String sort) {
+                                                                               @RequestParam final Long lastProductId,
+                                                                               @RequestParam final String sort) {
         final ProductSortCondition sortCondition = ProductSortCondition.toDto(sort);
-        final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, lastId, sortCondition);
+        final ProductsInCategoryResponse response = productService.getAllProductsInCategory(categoryId, lastProductId, sortCondition);
         return ResponseEntity.ok(response);
     }
 
