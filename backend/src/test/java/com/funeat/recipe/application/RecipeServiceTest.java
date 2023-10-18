@@ -36,6 +36,9 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.recipe.dto.RankingRecipeDto;
+import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeAuthorDto;
 import com.funeat.recipe.dto.RecipeCommentCondition;
 import com.funeat.recipe.dto.RecipeCommentCreateRequest;
 import com.funeat.recipe.dto.RecipeCommentResponse;
@@ -43,6 +46,7 @@ import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -551,6 +555,158 @@ class RecipeServiceTest extends ServiceTest {
         }
     }
 
+    @Nested
+    class getTop3Recipes_성공_테스트 {
+
+        @Nested
+        class 꿀조합_개수에_대한_테스트 {
+
+            @Test
+            void 전체_꿀조합이_하나도_없어도_반환값은_있어야한다() {
+                // given
+                final var expected = RankingRecipesResponse.toResponse(Collections.emptyList());
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 랭킹_조건에_부합하는_꿀조합이_1개면_꿀조합이_1개_반환된다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe = 레시피_생성(member, 2L, now);
+                단일_꿀조합_저장(recipe);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto = RankingRecipeDto.toDto(recipe, Collections.emptyList(), author);
+                final var rankingRecipesDtos = Collections.singletonList(rankingRecipeDto);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 랭킹_조건에_부합하는_꿀조합이_2개면_꿀조합이_2개_반환된다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 2L, now.minusDays(1L));
+                final var recipe2 = 레시피_생성(member, 2L, now);
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 전체_꿀조합_중_랭킹이_높은_상위_3개_꿀조합을_구할_수_있다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 4L, now.minusDays(10L));
+                final var recipe2 = 레시피_생성(member, 6L, now.minusDays(10L));
+                final var recipe3 = 레시피_생성(member, 5L, now);
+                final var recipe4 = 레시피_생성(member, 6L, now);
+                복수_꿀조합_저장(recipe1, recipe2, recipe3, recipe4);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipeDto3 = RankingRecipeDto.toDto(recipe3, Collections.emptyList(), author);
+                final var rankingRecipeDto4 = RankingRecipeDto.toDto(recipe4, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto4, rankingRecipeDto3, rankingRecipeDto2);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+        }
+
+        @Nested
+        class 꿀조합_랭킹_점수에_대한_테스트 {
+
+            @Test
+            void 꿀조합_좋아요_수가_같으면_최근_생성된_꿀조합의_랭킹을_더_높게_반환한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 10L, now.minusDays(9L));
+                final var recipe2 = 레시피_생성(member, 10L, now.minusDays(4L));
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 꿀조합_생성_일자가_같으면_좋아요_수가_많은_꿀조합의_랭킹을_더_높게_반환한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 2L, now.minusDays(1L));
+                final var recipe2 = 레시피_생성(member, 4L, now.minusDays(1L));
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+        }
+    }
+  
     @Nested
     class writeCommentOfRecipe_성공_테스트 {
 
