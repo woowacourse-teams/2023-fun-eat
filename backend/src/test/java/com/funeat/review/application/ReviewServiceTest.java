@@ -1,24 +1,5 @@
 package com.funeat.review.application;
 
-import com.funeat.common.ServiceTest;
-import com.funeat.common.dto.PageDto;
-import com.funeat.member.dto.MemberReviewDto;
-import com.funeat.member.exception.MemberException.MemberNotFoundException;
-import com.funeat.product.exception.ProductException.ProductNotFoundException;
-import com.funeat.review.domain.Review;
-import com.funeat.review.dto.MostFavoriteReviewResponse;
-import com.funeat.review.dto.ReviewDetailResponse;
-import com.funeat.review.dto.SortingReviewDto;
-import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
-import com.funeat.tag.domain.Tag;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.ImageFixture.이미지_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
@@ -50,6 +31,24 @@ import static com.funeat.fixture.TagFixture.태그_아침식사_ETC_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
+import com.funeat.common.ServiceTest;
+import com.funeat.common.dto.PageDto;
+import com.funeat.member.dto.MemberReviewDto;
+import com.funeat.member.exception.MemberException.MemberNotFoundException;
+import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.review.domain.Review;
+import com.funeat.review.dto.MostFavoriteReviewResponse;
+import com.funeat.review.dto.ReviewDetailResponse;
+import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.review.exception.ReviewException.ReviewNotFoundException;
+import com.funeat.tag.domain.Tag;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewServiceTest extends ServiceTest {

@@ -1,17 +1,16 @@
 package com.funeat.acceptance.review;
 
+import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
+import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
+import static io.restassured.RestAssured.given;
+
 import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.MultiPartSpecification;
-
 import java.util.List;
 import java.util.Objects;
-
-import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
-import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
-import static io.restassured.RestAssured.given;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReviewSteps {

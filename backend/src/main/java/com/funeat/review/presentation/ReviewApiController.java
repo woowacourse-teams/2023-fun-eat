@@ -10,6 +10,9 @@ import com.funeat.review.dto.ReviewCreateRequest;
 import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
+import java.net.URI;
+import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
@@ -22,10 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.Optional;
 
 @RestController
 public class ReviewApiController implements ReviewController {

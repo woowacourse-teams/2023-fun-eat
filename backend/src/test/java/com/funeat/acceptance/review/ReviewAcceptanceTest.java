@@ -1,21 +1,5 @@
 package com.funeat.acceptance.review;
 
-import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.review.dto.RankingReviewDto;
-import com.funeat.review.dto.ReviewCreateRequest;
-import com.funeat.review.dto.ReviewDetailResponse;
-import com.funeat.review.dto.SortingReviewDto;
-import com.funeat.tag.dto.TagDto;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-import java.util.Collections;
-import java.util.List;
-
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
@@ -83,6 +67,21 @@ import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
+import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.review.dto.RankingReviewDto;
+import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
+import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.tag.dto.TagDto;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewAcceptanceTest extends AcceptanceTest {
