@@ -83,4 +83,12 @@ public class ReviewSteps {
                 .then().log().all()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 리뷰_상세_조회_요청(final Long reviewId) {
+        return given()
+                .when()
+                .get("/api/reviews/{reviewId}", reviewId)
+                .then()
+                .extract();
+    }
 }

@@ -12,6 +12,7 @@ import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
+import static com.funeat.acceptance.review.ReviewSteps.리뷰_상세_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.여러명이_리뷰_좋아요_요청;
@@ -66,7 +67,9 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import com.funeat.acceptance.common.AcceptanceTest;
 import com.funeat.review.dto.RankingReviewDto;
 import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.SortingReviewDto;
+import com.funeat.tag.dto.TagDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Collections;
@@ -648,6 +651,43 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    class getReviewDetail_성공_테스트 {
+
+        @Test
+        void 리뷰_상세_정보를_조회한다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+
+            final var 요청 = 리뷰추가요청_재구매O_생성(점수_3점, List.of(태그));
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 요청);
+
+            // when
+            final var 응답 = 리뷰_상세_조회_요청(리뷰);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            리뷰_상세_정보_조회_결과를_검증한다(응답, 요청);
+        }
+    }
+
+    @Nested
+    class getReviewDetail_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_리뷰_조회시_예외가_발생한다() {
+            // given & when
+            final var 응답 = 리뷰_상세_조회_요청(존재하지_않는_리뷰);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REVIEW_NOT_FOUND.getCode(), REVIEW_NOT_FOUND.getMessage());
+        }
+    }
+
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
         assertSoftly(soft -> {
@@ -692,5 +732,21 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 .getString("image");
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    private void 리뷰_상세_정보_조회_결과를_검증한다(final ExtractableResponse<Response> response, final ReviewCreateRequest request) {
+        final var actual = response.as(ReviewDetailResponse.class);
+        final var actualTags = response.jsonPath().getList("tags", TagDto.class);
+
+        assertSoftly(soft -> {
+            soft.assertThat(actual.getId()).isEqualTo(리뷰);
+            soft.assertThat(actual.getImage()).isEqualTo("1.png");
+            soft.assertThat(actual.getRating()).isEqualTo(request.getRating());
+            soft.assertThat(actual.getContent()).isEqualTo(request.getContent());
+            soft.assertThat(actual.isRebuy()).isEqualTo(request.getRebuy());
+            soft.assertThat(actual.getFavoriteCount()).isEqualTo(0L);
+            soft.assertThat(actualTags).extracting(TagDto::getId)
+                    .containsExactlyElementsOf(request.getTagIds());
+        });
     }
 }

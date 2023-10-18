@@ -5,6 +5,7 @@ import com.funeat.auth.util.AuthenticationPrincipal;
 import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
@@ -12,10 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -75,4 +73,12 @@ public interface ReviewController {
     )
     @GetMapping
     ResponseEntity<Optional<MostFavoriteReviewResponse>> getMostFavoriteReview(@PathVariable final Long productId);
+
+    @Operation(summary = "리뷰 상세 조회", description = "리뷰의 상세 정보를 조회한다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "리뷰 상세 조회 성공."
+    )
+    @GetMapping
+    ResponseEntity<ReviewDetailResponse> getReviewDetail(@PathVariable final Long reviewId);
 }

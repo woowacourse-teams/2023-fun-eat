@@ -7,6 +7,7 @@ import com.funeat.review.application.ReviewService;
 import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewRequest;
 import com.funeat.review.dto.SortingReviewsResponse;
@@ -81,6 +82,13 @@ public class ReviewApiController implements ReviewController {
         if (response.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/reviews/{reviewId}")
+    public ResponseEntity<ReviewDetailResponse> getReviewDetail(@PathVariable final Long reviewId) {
+        final ReviewDetailResponse response = reviewService.getReviewDetail(reviewId);
+
         return ResponseEntity.ok(response);
     }
 }

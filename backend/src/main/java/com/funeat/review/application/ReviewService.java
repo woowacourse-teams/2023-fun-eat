@@ -25,6 +25,7 @@ import com.funeat.review.dto.MostFavoriteReviewResponse;
 import com.funeat.review.dto.RankingReviewDto;
 import com.funeat.review.dto.RankingReviewsResponse;
 import com.funeat.review.dto.ReviewCreateRequest;
+import com.funeat.review.dto.ReviewDetailResponse;
 import com.funeat.review.dto.ReviewFavoriteRequest;
 import com.funeat.review.dto.SortingReviewDto;
 import com.funeat.review.dto.SortingReviewDtoWithoutTag;
@@ -282,5 +283,11 @@ public class ReviewService {
         final Optional<Review> review = reviewRepository.findTopByProductOrderByFavoriteCountDescIdDesc(findProduct);
 
         return MostFavoriteReviewResponse.toResponse(review);
+    }
+
+    public ReviewDetailResponse getReviewDetail(final Long reviewId) {
+        final Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND, reviewId));
+        return ReviewDetailResponse.toResponse(review);
     }
 }
