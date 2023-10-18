@@ -7,11 +7,11 @@ import io.restassured.response.Response;
 @SuppressWarnings("NonAsciiCharacters")
 public class BannerSteps {
 
-    public static ExtractableResponse<Response> 배너_조회_요청() {
+    public static ExtractableResponse<Response> 배너_목록_조회_요청() {
         return RestAssured.given()
-                .when()
-                .get("/api/banners")
-                .then()
-                .extract();
+            .when()
+            .get("/api/banners")
+            .then()
+            .extract();
     }
 }

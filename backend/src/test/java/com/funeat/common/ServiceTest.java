@@ -206,7 +206,6 @@ public abstract class ServiceTest {
         productRecipeRepository.saveAll(productRecipes);
     }
 
-
     protected void 복수_배너_저장(final Banner... bannerToSave) {
         final List<Banner> banners = List.of(bannerToSave);
 

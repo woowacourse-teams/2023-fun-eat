@@ -1,6 +1,6 @@
 package com.funeat.acceptance.banner;
 
-import static com.funeat.acceptance.banner.BannerSteps.배너_조회_요청;
+import static com.funeat.acceptance.banner.BannerSteps.배너_목록_조회_요청;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.fixture.BannerFixture.배너1_생성;
@@ -36,10 +36,10 @@ public class BannerAcceptanceTest extends AcceptanceTest {
             final var 배너4 = 배너4_생성();
             final var 배너5 = 배너5_생성();
             final var 생성할_배너_리스트 = Arrays.asList(배너1, 배너2, 배너3, 배너4, 배너5);
-            bannerRepository.saveAllAndFlush(생성할_배너_리스트);
+            bannerRepository.saveAll(생성할_배너_리스트);
 
             // when
-            final var 응답 = 배너_조회_요청();
+            final var 응답 = 배너_목록_조회_요청();
 
             // then
             STATUS_CODE를_검증한다(응답, 정상_처리);
@@ -47,7 +47,8 @@ public class BannerAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    private void 배너_조회_결과를_검증한다(final ExtractableResponse<Response> response, final List<Banner> expected) {
+    private void 배너_조회_결과를_검증한다(final ExtractableResponse<Response> response,
+        final List<Banner> expected) {
         List<BannerResponse> expectedResponse = new ArrayList<>();
         for (int i = expected.size() - 1; i >= 0; i--) {
             expectedResponse.add(BannerResponse.toResponse(expected.get(i)));
@@ -55,7 +56,7 @@ public class BannerAcceptanceTest extends AcceptanceTest {
 
         final List<BannerResponse> result = response.jsonPath().getList("$", BannerResponse.class);
         assertThat(result).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(expectedResponse);
+            .ignoringFields("id")
+            .isEqualTo(expectedResponse);
     }
 }
