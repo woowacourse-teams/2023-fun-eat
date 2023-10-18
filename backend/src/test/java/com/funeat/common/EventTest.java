@@ -8,9 +8,8 @@ import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRepository;
 import com.funeat.review.application.ReviewService;
 import com.funeat.review.persistence.ReviewRepository;
-import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
-import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,12 +21,16 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 @SpringBootTest
 @RecordApplicationEvents
-@ExtendWith(MockitoExtension.class)
+@SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
+@ExtendWith({MockitoExtension.class, DataClearExtension.class})
 public class EventTest {
 
     @Autowired
     protected ApplicationEvents events;
+
+    @Autowired
+    protected ReviewService reviewService;
 
     @Autowired
     protected ProductRepository productRepository;
@@ -44,8 +47,10 @@ public class EventTest {
     @Autowired
     protected ReviewRepository reviewRepository;
 
-    @Autowired
-    protected ReviewService reviewService;
+    @AfterEach
+    void tearDown() {
+        events.clear();
+    }
 
     protected Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
@@ -53,11 +58,6 @@ public class EventTest {
 
     protected Long 단일_카테고리_저장(final Category category) {
         return categoryRepository.save(category).getId();
-    }
-
-    protected void 복수_태그_저장(final Tag... tagsToSave) {
-        final var tags = List.of(tagsToSave);
-        tagRepository.saveAll(tags);
     }
 
     protected Long 단일_멤버_저장(final Member member) {

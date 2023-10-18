@@ -20,7 +20,7 @@ public class ReviewDeleteEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void deleteReviewImageInS3(final ReviewDeleteEvent event) {
         final String image = event.getImage();
-        if (StringUtils.isBlank(image)) {
+        if (!StringUtils.isBlank(image)) {
             imageUploader.delete(image);
         }
     }

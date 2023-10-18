@@ -75,6 +75,10 @@ public class ReviewFixture {
         return new Review(member, product, "test5", 5L, "test", false, count);
     }
 
+    public static Review 리뷰_이미지없음_평점1점_재구매X_생성(final Member member, final Product product, final Long count) {
+        return new Review(member, product, "", 1L, "test", false, count);
+    }
+
     public static ReviewCreateRequest 리뷰추가요청_생성(final Long rating, final List<Long> tagIds, final String content,
                                                 final Boolean rebuy) {
         return new ReviewCreateRequest(rating, tagIds, content, rebuy);
