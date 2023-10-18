@@ -8,7 +8,9 @@ import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
+import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
 import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
+import static com.funeat.acceptance.member.MemberSteps.리뷰_삭제_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_꿀조합_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_리뷰_조회_요청;
 import static com.funeat.acceptance.member.MemberSteps.사용자_정보_수정_요청;
@@ -33,17 +35,22 @@ import static com.funeat.fixture.PageFixture.첫페이지O;
 import static com.funeat.fixture.PageFixture.총_데이터_개수;
 import static com.funeat.fixture.PageFixture.총_페이지;
 import static com.funeat.fixture.PageFixture.최신순;
+import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점5점_생성;
 import static com.funeat.fixture.RecipeFixture.레시피;
 import static com.funeat.fixture.RecipeFixture.레시피1;
 import static com.funeat.fixture.RecipeFixture.레시피2;
 import static com.funeat.fixture.RecipeFixture.레시피추가요청_생성;
+import static com.funeat.fixture.ReviewFixture.리뷰1;
+import static com.funeat.fixture.ReviewFixture.리뷰2;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰추가요청_재구매X_생성;
 import static com.funeat.fixture.ScoreFixture.점수_1점;
 import static com.funeat.fixture.ScoreFixture.점수_2점;
 import static com.funeat.fixture.ScoreFixture.점수_3점;
+import static com.funeat.fixture.ScoreFixture.점수_4점;
 import static com.funeat.fixture.TagFixture.태그_맛있어요_TASTE_생성;
+import static com.funeat.review.exception.ReviewErrorCode.REVIEW_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -297,6 +304,81 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             STATUS_CODE를_검증한다(응답, 인증되지_않음);
             RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(),
                     LOGIN_MEMBER_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    class deleteReview_성공_테스트 {
+
+        @Test
+        void 자신이_작성한_리뷰를_삭제할_수_있다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+
+            // when
+            final var 응답 = 리뷰_삭제_요청(로그인_쿠키_획득(멤버1), 리뷰1);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
+        }
+    }
+
+    @Nested
+    class deleteReview_실패_테스트 {
+
+        @ParameterizedTest
+        @NullAndEmptySource
+        void 로그인하지_않는_사용자가_리뷰_삭제시_예외가_발생한다(final String cookie) {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+
+            // when
+            final var 응답 = 리뷰_삭제_요청(cookie, 리뷰1);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 인증되지_않음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, LOGIN_MEMBER_NOT_FOUND.getCode(), LOGIN_MEMBER_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 존재하지_않는_리뷰를_삭제할_수_없다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+
+            // when
+            final var 응답 = 리뷰_삭제_요청(로그인_쿠키_획득(멤버1), 리뷰2);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, REVIEW_NOT_FOUND.getCode(), REVIEW_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 자신이_작성하지_않은_리뷰는_삭제할_수_없다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+
+            // when
+            final var 응답 = 리뷰_삭제_요청(로그인_쿠키_획득(멤버2), 리뷰1);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 잘못된_요청);
         }
     }
 

@@ -13,13 +13,11 @@ type Story = StoryObj<typeof SectionTitle>;
 export const Default: Story = {
   args: {
     name: '사이다',
-    bookmark: false,
   },
 };
 
 export const Bookmarked: Story = {
   args: {
     name: '사이다',
-    bookmark: true,
   },
 };

@@ -75,6 +75,6 @@ const ToastContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(100% - 20px);
+  width: 100%;
   transform: translate(0, -10px);
 `;

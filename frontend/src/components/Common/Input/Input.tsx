@@ -9,6 +9,10 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
    */
   customWidth?: string;
   /**
+   * Input 컴포넌트의 최소 너비값입니다.
+   */
+  minWidth?: string;
+  /**
    * Input value에 에러가 있는지 여부입니다.
    */
   isError?: boolean;
@@ -24,12 +28,12 @@ interface InputProps extends ComponentPropsWithRef<'input'> {
 
 const Input = forwardRef(
   (
-    { customWidth = '300px', isError = false, rightIcon, errorMessage, ...props }: InputProps,
+    { customWidth = '300px', minWidth, isError = false, rightIcon, errorMessage, ...props }: InputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     return (
       <>
-        <InputContainer customWidth={customWidth}>
+        <InputContainer customWidth={customWidth} minWidth={minWidth}>
           <CustomInput ref={ref} isError={isError} {...props} />
           {rightIcon && <IconWrapper>{rightIcon}</IconWrapper>}
         </InputContainer>
@@ -43,11 +47,12 @@ Input.displayName = 'Input';
 
 export default Input;
 
-type InputContainerStyleProps = Pick<InputProps, 'customWidth'>;
+type InputContainerStyleProps = Pick<InputProps, 'customWidth' | 'minWidth'>;
 type CustomInputStyleProps = Pick<InputProps, 'isError'>;
 
 const InputContainer = styled.div<InputContainerStyleProps>`
   position: relative;
+  min-width: ${({ minWidth }) => minWidth ?? 0};
   max-width: ${({ customWidth }) => customWidth};
   text-align: center;
 `;

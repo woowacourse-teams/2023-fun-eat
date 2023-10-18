@@ -1,12 +1,16 @@
 package com.funeat.review.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
+import com.funeat.tag.domain.Tag;
 import com.funeat.tag.dto.TagDto;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SortingReviewDto {
@@ -23,6 +27,7 @@ public class SortingReviewDto {
     private final boolean favorite;
     private final LocalDateTime createdAt;
 
+    @JsonCreator
     public SortingReviewDto(final Long id, final String userName, final String profileImage, final String image,
                             final Long rating, final List<TagDto> tags,
                             final String content, final boolean rebuy, final Long favoriteCount, final boolean favorite,
@@ -40,37 +45,23 @@ public class SortingReviewDto {
         this.createdAt = createdAt;
     }
 
-    public static SortingReviewDto toDto(final Review review, final Member member) {
-        return new SortingReviewDto(
-                review.getId(),
-                review.getMember().getNickname(),
-                review.getMember().getProfileImage(),
-                review.getImage(),
-                review.getRating(),
-                findTagDtos(review),
-                review.getContent(),
-                review.getReBuy(),
-                review.getFavoriteCount(),
-                findReviewFavoriteChecked(review, member),
-                review.getCreatedAt()
-        );
-    }
-
-    private static List<TagDto> findTagDtos(final Review review) {
-        return review.getReviewTags().stream()
-                .map(ReviewTag::getTag)
+    public static SortingReviewDto toDto(final SortingReviewDtoWithoutTag sortingReviewDto, final List<Tag> tags) {
+        final List<TagDto> tagDtos = tags.stream()
                 .map(TagDto::toDto)
                 .collect(Collectors.toList());
-    }
 
-    private static boolean findReviewFavoriteChecked(final Review review, final Member member) {
-        return review.getReviewFavorites()
-                .stream()
-                .filter(reviewFavorite -> reviewFavorite.getReview().equals(review))
-                .filter(reviewFavorite -> reviewFavorite.getMember().equals(member))
-                .findFirst()
-                .map(ReviewFavorite::getFavorite)
-                .orElse(false);
+        return new SortingReviewDto(
+                sortingReviewDto.getId(),
+                sortingReviewDto.getUserName(),
+                sortingReviewDto.getProfileImage(),
+                sortingReviewDto.getImage(),
+                sortingReviewDto.getRating(),
+                tagDtos,
+                sortingReviewDto.getContent(),
+                sortingReviewDto.getRebuy(),
+                sortingReviewDto.getFavoriteCount(),
+                sortingReviewDto.getFavorite(),
+                sortingReviewDto.getCreatedAt());
     }
 
     public Long getId() {
@@ -101,7 +92,7 @@ public class SortingReviewDto {
         return content;
     }
 
-    public boolean isRebuy() {
+    public boolean getRebuy() {
         return rebuy;
     }
 
@@ -109,7 +100,7 @@ public class SortingReviewDto {
         return favoriteCount;
     }
 
-    public boolean isFavorite() {
+    public boolean getFavorite() {
         return favorite;
     }
 
