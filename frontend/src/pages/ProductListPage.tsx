@@ -28,7 +28,7 @@ export const ProductListPage = () => {
   const { category } = useParams();
   const productListRef = useRef<HTMLDivElement>(null);
 
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { isOpen, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
   const { reset } = useQueryErrorResetBoundary();
   const { gaEvent } = useGA();
@@ -68,7 +68,7 @@ export const ProductListPage = () => {
         </ProductListContainer>
       </ProductListSection>
       <ScrollButton targetRef={productListRef} />
-      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet isOpen={isOpen} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
           selectedOption={selectedOption}

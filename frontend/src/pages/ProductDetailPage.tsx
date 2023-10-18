@@ -44,7 +44,7 @@ export const ProductDetailPage = () => {
   const tabRef = useRef<HTMLUListElement>(null);
 
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { isOpen, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
   const { gaEvent } = useGA();
 
@@ -136,7 +136,7 @@ export const ProductDetailPage = () => {
         />
       </ReviewRegisterButtonWrapper>
       <ScrollButton targetRef={productDetailPageRef} />
-      <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
+      <BottomSheet maxWidth="600px" isOpen={isOpen} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
             <ReviewRegisterForm
