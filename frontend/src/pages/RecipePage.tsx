@@ -27,7 +27,7 @@ const REGISTER_RECIPE_AFTER_LOGIN = '로그인 후 꿀조합을 작성할 수 �
 export const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { isOpen, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { reset } = useQueryErrorResetBoundary();
   const { gaEvent } = useGA();
 
@@ -72,7 +72,7 @@ export const RecipePage = () => {
         />
       </RecipeRegisterButtonWrapper>
       <ScrollButton targetRef={recipeRef} isRecipePage />
-      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet isOpen={isOpen} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         {activeSheet === 'sortOption' ? (
           <SortOptionList
             options={RECIPE_SORT_OPTIONS}

@@ -44,7 +44,7 @@ export const ProductDetailPage = () => {
   const tabRef = useRef<HTMLUListElement>(null);
 
   const { selectedOption, selectSortOption } = useSortOption(REVIEW_SORT_OPTIONS[0]);
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { isOpen, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const [activeSheet, setActiveSheet] = useState<'registerReview' | 'sortOption'>('sortOption');
   const { gaEvent } = useGA();
 
@@ -54,7 +54,7 @@ export const ProductDetailPage = () => {
     return null;
   }
 
-  const { name, bookmark, reviewCount } = productDetail;
+  const { name, reviewCount } = productDetail;
 
   const tabMenus = [`리뷰 ${reviewCount}`, '꿀조합'];
   const sortOptions = isReviewTab ? REVIEW_SORT_OPTIONS : RECIPE_SORT_OPTIONS;
@@ -84,7 +84,7 @@ export const ProductDetailPage = () => {
 
   return (
     <ProductDetailPageContainer ref={productDetailPageRef}>
-      <SectionTitle name={name} bookmark={bookmark} />
+      <SectionTitle name={name} />
       <Spacing size={36} />
       <ProductDetailItem category={category} productDetail={productDetail} />
       <Spacing size={30} />
@@ -136,7 +136,7 @@ export const ProductDetailPage = () => {
         />
       </ReviewRegisterButtonWrapper>
       <ScrollButton targetRef={productDetailPageRef} />
-      <BottomSheet maxWidth="600px" ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
+      <BottomSheet maxWidth="600px" isOpen={isOpen} isClosing={isClosing} close={handleCloseBottomSheet}>
         {activeSheet === 'registerReview' ? (
           <ReviewFormProvider>
             <ReviewRegisterForm

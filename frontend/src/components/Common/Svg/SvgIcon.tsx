@@ -21,7 +21,10 @@ export const SVG_ICON_VARIANTS = [
   'plus',
   'pencil',
   'camera',
+  'link',
   'plane',
+  'info',
+  'trashcan',
 ] as const;
 export type SvgIconVariant = (typeof SVG_ICON_VARIANTS)[number];
 

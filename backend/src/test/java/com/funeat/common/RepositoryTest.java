@@ -6,8 +6,6 @@ import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
-import com.funeat.member.persistence.ProductBookmarkRepository;
-import com.funeat.member.persistence.RecipeBookMarkRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
@@ -43,12 +41,6 @@ public abstract class RepositoryTest {
 
     @Autowired
     protected MemberRepository memberRepository;
-
-    @Autowired
-    protected ProductBookmarkRepository productBookmarkRepository;
-
-    @Autowired
-    protected RecipeBookMarkRepository recipeBookMarkRepository;
 
     @Autowired
     protected RecipeFavoriteRepository recipeFavoriteRepository;

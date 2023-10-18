@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useGA } from '../common';
+import { useToastActionContext } from '../context';
 
 const useSearch = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -13,6 +14,8 @@ const useSearch = () => {
   const [searchQuery, setSearchQuery] = useState(currentSearchQuery || '');
   const [isSubmitted, setIsSubmitted] = useState(!!currentSearchQuery);
   const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(searchQuery.length > 0);
+
+  const { toast } = useToastActionContext();
 
   const { gaEvent } = useGA();
 
@@ -35,7 +38,7 @@ const useSearch = () => {
     const trimmedSearchQuery = searchQuery.trim();
 
     if (!trimmedSearchQuery) {
-      alert('검색어를 입력해주세요');
+      toast.error('검색어를 입력해주세요');
       focusInput();
       resetSearchQuery();
       return;

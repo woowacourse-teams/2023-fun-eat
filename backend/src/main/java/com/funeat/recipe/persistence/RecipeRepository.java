@@ -32,9 +32,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query("SELECT r FROM Recipe r LEFT JOIN ProductRecipe pr ON pr.product = :product WHERE pr.recipe.id = r.id")
     Page<Recipe> findRecipesByProduct(final Product product, final Pageable pageable);
 
-    List<Recipe> findRecipesByOrderByFavoriteCountDesc(final Pageable pageable);
-
     @Lock(PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Recipe r WHERE r.id=:id")
     Optional<Recipe> findByIdForUpdate(final Long id);
+
+    List<Recipe> findRecipesByFavoriteCountGreaterThanEqual(final Long favoriteCount);
 }
