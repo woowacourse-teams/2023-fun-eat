@@ -1,15 +1,5 @@
 package com.funeat.product.persistence;
 
-import com.funeat.common.RepositoryTest;
-import com.funeat.product.dto.ProductInCategoryDto;
-import com.funeat.product.dto.ProductReviewCountDto;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
@@ -41,6 +31,15 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매X_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.funeat.common.RepositoryTest;
+import com.funeat.product.dto.ProductInCategoryDto;
+import com.funeat.product.dto.ProductReviewCountDto;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ProductRepositoryTest extends RepositoryTest {

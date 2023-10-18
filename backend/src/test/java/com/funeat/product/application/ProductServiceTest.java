@@ -1,14 +1,5 @@
 package com.funeat.product.application;
 
-import com.funeat.common.ServiceTest;
-import com.funeat.product.dto.RankingProductDto;
-import com.funeat.product.dto.RankingProductsResponse;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.List;
-
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
@@ -30,6 +21,14 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매O_생성;
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test5_평점5점_재구매X_생성;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.funeat.common.ServiceTest;
+import com.funeat.product.dto.RankingProductDto;
+import com.funeat.product.dto.RankingProductsResponse;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ProductServiceTest extends ServiceTest {
