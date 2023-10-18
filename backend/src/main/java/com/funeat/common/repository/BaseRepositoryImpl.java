@@ -1,12 +1,15 @@
 package com.funeat.common.repository;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -36,5 +39,13 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
         query.setMaxResults(pageable.getPageSize());
 
         return new PageImpl<>(query.getResultList(), PageRequest.of(0, pageSize), totalElements);
+    }
+
+    @Override
+    public List<T> findAllWithSpecification(final Specification<T> spec, final int pageSize) {
+        final TypedQuery<T> query = getQuery(spec, Sort.unsorted());
+        query.setMaxResults(pageSize);
+
+        return query.getResultList();
     }
 }

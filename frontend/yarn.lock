@@ -1375,10 +1375,10 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.1.6.tgz#22958c042e10b67463997bd6ea7115fe28cbcaf9"
   integrity sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==
 
-"@fun-eat/design-system@^0.3.13":
-  version "0.3.13"
-  resolved "https://registry.yarnpkg.com/@fun-eat/design-system/-/design-system-0.3.13.tgz#fbb48efff05c95883889dff280e118204de6d459"
-  integrity sha512-+wlTfWAJ3Z0ZmnJ2GyxX+HSQB8eB3g9PY8Blemv8nAk5ppuWbB9UKjnhebNgdtbtq+AN4HezKmbNl1Y+prxcWA==
+"@fun-eat/design-system@^0.3.15":
+  version "0.3.15"
+  resolved "https://registry.yarnpkg.com/@fun-eat/design-system/-/design-system-0.3.15.tgz#61a9a01a82f84fa5627c49bd646cb72ca9e648c8"
+  integrity sha512-uhn5UZWfvQhNz/2sOoMwDr7Hj7SSx94bN35jifuYpm7ju0A8LHfivmu0mAbrMojuQ6XKYf0ZUME8FMMHwpw9Fg==
 
 "@humanwhocodes/config-array@^0.11.11":
   version "0.11.11"
@@ -4496,6 +4496,13 @@ browser-assert@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/browser-assert/-/browser-assert-1.2.1.tgz#9aaa5a2a8c74685c2ae05bfe46efd606f068c200"
   integrity sha512-nfulgvOR6S4gt9UKCeGJOuSGBPGiFT6oQ/2UBnvTY/5aQ1PnksW72fhZkM30DzoRRv2WpwZf1vHHEr3mtuXIWQ==
+
+browser-image-compression@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/browser-image-compression/-/browser-image-compression-2.0.2.tgz#4d5ef8882e9e471d6d923715ceb9034499d14eaa"
+  integrity sha512-pBLlQyUf6yB8SmmngrcOw3EoS4RpQ1BcylI3T9Yqn7+4nrQTXJD4sJDe5ODnJdrvNMaio5OicFo75rDyJD2Ucw==
+  dependencies:
+    uzip "0.20201231.0"
 
 browserify-zlib@^0.1.4:
   version "0.1.4"
@@ -11067,6 +11074,11 @@ uuid@^9.0.0:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
   integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
+
+uzip@0.20201231.0:
+  version "0.20201231.0"
+  resolved "https://registry.yarnpkg.com/uzip/-/uzip-0.20201231.0.tgz#9e64b065b9a8ebf26eb7583fe8e77e1d9a15ed14"
+  integrity sha512-OZeJfZP+R0z9D6TmBgLq2LHzSSptGMGDGigGiEe0pr8UBe/7fdflgHlHBNDASTXB5jnFuxHpNaJywSg8YFeGng==
 
 v8-to-istanbul@^9.0.0, v8-to-istanbul@^9.0.1:
   version "9.1.2"

@@ -15,4 +15,10 @@ public class ProductException extends GlobalException {
             super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), productId));
         }
     }
+
+    public static class NotSupportedProductSortingConditionException extends ProductException {
+        public NotSupportedProductSortingConditionException(final ProductErrorCode errorCode, final String sortBy) {
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage(), sortBy));
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.funeat.acceptance.review;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
-import static com.funeat.acceptance.common.CommonSteps.LOCATION_헤더에서_ID_추출;
 import static com.funeat.fixture.ReviewFixture.리뷰좋아요요청_생성;
 import static io.restassured.RestAssured.given;
 
@@ -56,14 +55,16 @@ public class ReviewSteps {
     }
 
     public static ExtractableResponse<Response> 정렬된_리뷰_목록_조회_요청(final String loginCookie, final Long productId,
+                                                                final Long lastReviewId,
                                                                 final String sort, final Long page) {
         return given()
                 .cookie("JSESSIONID", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
+                .queryParam("lastReviewId", lastReviewId).log().all()
                 .when()
                 .get("/api/products/{product_id}/reviews", productId)
-                .then()
+                .then().log().all()
                 .extract();
     }
 

@@ -1,12 +1,11 @@
 package com.funeat.common;
 
 import com.funeat.auth.application.AuthService;
+import com.funeat.comment.persistence.CommentRepository;
 import com.funeat.member.application.TestMemberService;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
-import com.funeat.member.persistence.ProductBookmarkRepository;
-import com.funeat.member.persistence.RecipeBookMarkRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.application.CategoryService;
@@ -49,12 +48,6 @@ public abstract class ServiceTest {
     protected MemberRepository memberRepository;
 
     @Autowired
-    protected ProductBookmarkRepository productBookmarkRepository;
-
-    @Autowired
-    protected RecipeBookMarkRepository recipeBookMarkRepository;
-
-    @Autowired
     protected RecipeFavoriteRepository recipeFavoriteRepository;
 
     @Autowired
@@ -83,6 +76,9 @@ public abstract class ServiceTest {
 
     @Autowired
     protected TagRepository tagRepository;
+
+    @Autowired
+    protected CommentRepository commentRepository;
 
     @Autowired
     protected AuthService authService;

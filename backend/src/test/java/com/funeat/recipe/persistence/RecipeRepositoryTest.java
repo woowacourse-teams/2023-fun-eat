@@ -120,7 +120,7 @@ class RecipeRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 꿀조합을_최신순으로_정렬한다() {
+        void 꿀조합을_최신순으로_정렬한다() throws InterruptedException {
             // given
             final var member1 = 멤버_멤버1_생성();
             final var member2 = 멤버_멤버2_생성();
@@ -136,7 +136,9 @@ class RecipeRepositoryTest extends RepositoryTest {
             복수_상품_저장(product1, product2, product3);
 
             final var recipe1_1 = 레시피_생성(member1, 1L);
+            Thread.sleep(100);
             final var recipe1_2 = 레시피_생성(member1, 3L);
+            Thread.sleep(100);
             final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 

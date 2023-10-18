@@ -1,5 +1,6 @@
 package com.funeat.review.persistence;
 
+import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.domain.Tag;
 import java.util.List;
@@ -16,4 +17,8 @@ public interface ReviewTagRepository extends JpaRepository<ReviewTag, Long> {
             + "GROUP BY rt.tag "
             + "ORDER BY cnt DESC")
     List<Tag> findTop3TagsByReviewIn(final Long productId, final Pageable pageable);
+
+    void deleteByReview(final Review review);
+
+    List<ReviewTag> findByReview(final Review review);
 }
