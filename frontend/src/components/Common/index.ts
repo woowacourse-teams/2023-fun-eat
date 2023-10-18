@@ -24,3 +24,4 @@ export { default as CategoryItem } from './CategoryItem/CategoryItem';
 export { default as CategoryFoodList } from './CategoryFoodList/CategoryFoodList';
 export { default as CategoryStoreList } from './CategoryStoreList/CategoryStoreList';
 export { default as Skeleton } from './Skeleton/Skeleton';
+export { default as Banner } from './Banner/Banner';
