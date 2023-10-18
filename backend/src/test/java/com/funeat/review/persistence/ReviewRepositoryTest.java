@@ -1,13 +1,5 @@
 package com.funeat.review.persistence;
 
-import com.funeat.common.RepositoryTest;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
-
-import java.util.Collections;
-import java.util.List;
-
 import static com.funeat.fixture.CategoryFixture.카테고리_간편식사_생성;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
@@ -24,6 +16,13 @@ import static com.funeat.fixture.ReviewFixture.리뷰_이미지test3_평점3점_
 import static com.funeat.fixture.ReviewFixture.리뷰_이미지test4_평점4점_재구매O_생성;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
+import com.funeat.common.RepositoryTest;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewRepositoryTest extends RepositoryTest {
