@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { logoutApi } from '@/apis';
 import { PATH } from '@/constants/path';
+import { useToastActionContext } from '@/hooks/context';
 
 const useLogoutMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { toast } = useToastActionContext();
 
   return useMutation({
     mutationFn: () => logoutApi.post({ credentials: true }),
@@ -16,10 +19,10 @@ const useLogoutMutation = () => {
     },
     onError: (error) => {
       if (error instanceof Error) {
-        alert(error.message);
+        toast.error(error.message);
         return;
       }
-      alert('로그아웃을 다시 시도해주세요.');
+      toast.error('로그아웃을 다시 시도해주세요.');
     },
   });
 };

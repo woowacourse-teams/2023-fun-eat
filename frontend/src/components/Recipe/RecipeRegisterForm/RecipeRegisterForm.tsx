@@ -8,7 +8,7 @@ import RecipeUsedProducts from '../RecipeUsedProducts/RecipeUsedProducts';
 
 import { ImageUploader, SvgIcon } from '@/components/Common';
 import { useImageUploader, useFormData } from '@/hooks/common';
-import { useRecipeFormValueContext, useRecipeFormActionContext } from '@/hooks/context';
+import { useRecipeFormValueContext, useRecipeFormActionContext, useToastActionContext } from '@/hooks/context';
 import { useRecipeRegisterFormMutation } from '@/hooks/queries/recipe';
 import type { RecipeRequest } from '@/types/recipe';
 
@@ -23,6 +23,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
 
   const recipeFormValue = useRecipeFormValueContext();
   const { resetRecipeFormValue } = useRecipeFormActionContext();
+  const { toast } = useToastActionContext();
 
   const formData = useFormData<RecipeRequest>({
     imageKey: 'images',
@@ -52,11 +53,11 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
       onError: (error) => {
         resetAndCloseForm();
         if (error instanceof Error) {
-          alert(error.message);
+          toast.error(error.message);
           return;
         }
 
-        alert('꿀조합 등록을 다시 시도해주세요');
+        toast.error('꿀조합 등록을 다시 시도해주세요');
       },
     });
   };

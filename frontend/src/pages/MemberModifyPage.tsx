@@ -62,11 +62,11 @@ export const MemberModifyPage = () => {
       },
       onError: (error) => {
         if (error instanceof Error) {
-          alert(error.message);
+          toast.error(error.message);
           return;
         }
 
-        alert('회원정보 수정을 다시 시도해주세요.');
+        toast.error('회원정보 수정을 다시 시도해주세요.');
       },
     });
   };
