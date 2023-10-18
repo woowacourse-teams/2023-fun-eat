@@ -3,7 +3,6 @@ package com.funeat.review.dto;
 import com.funeat.review.domain.Review;
 import com.funeat.review.domain.ReviewTag;
 import com.funeat.tag.dto.TagDto;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,10 +19,14 @@ public class ReviewDetailResponse {
     private final boolean rebuy;
     private final Long favoriteCount;
     private final LocalDateTime createdAt;
+    private final String categoryType;
+    private final Long productId;
+    private final String productName;
 
     public ReviewDetailResponse(final Long id, final String userName, final String profileImage, final String image,
                                 final Long rating, final List<TagDto> tags, final String content, final boolean rebuy,
-                                final Long favoriteCount, final LocalDateTime createdAt) {
+                                final Long favoriteCount, final LocalDateTime createdAt, final String categoryType,
+                                final Long productId, final String productName) {
         this.id = id;
         this.userName = userName;
         this.profileImage = profileImage;
@@ -34,6 +37,9 @@ public class ReviewDetailResponse {
         this.rebuy = rebuy;
         this.favoriteCount = favoriteCount;
         this.createdAt = createdAt;
+        this.categoryType = categoryType;
+        this.productId = productId;
+        this.productName = productName;
     }
 
     public static ReviewDetailResponse toResponse(final Review review) {
@@ -47,7 +53,10 @@ public class ReviewDetailResponse {
                 review.getContent(),
                 review.getReBuy(),
                 review.getFavoriteCount(),
-                review.getCreatedAt()
+                review.getCreatedAt(),
+                review.getProduct().getCategory().getType().getName(),
+                review.getProduct().getId(),
+                review.getProduct().getName()
         );
     }
 
@@ -96,5 +105,17 @@ public class ReviewDetailResponse {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public String getProductName() {
+        return productName;
     }
 }
