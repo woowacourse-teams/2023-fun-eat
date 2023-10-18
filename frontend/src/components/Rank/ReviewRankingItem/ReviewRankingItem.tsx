@@ -1,4 +1,4 @@
-import { Spacing, Text, theme } from '@fun-eat/design-system';
+import { Spacing, Text, useTheme } from '@fun-eat/design-system';
 import { memo } from 'react';
 import styled from 'styled-components';
 
@@ -7,14 +7,15 @@ import type { ReviewRanking } from '@/types/ranking';
 
 interface ReviewRankingItemProps {
   reviewRanking: ReviewRanking;
-  isMemberPage?: boolean;
 }
 
-const ReviewRankingItem = ({ reviewRanking, isMemberPage = false }: ReviewRankingItemProps) => {
+const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
+  const theme = useTheme();
+
   const { productName, content, rating, favoriteCount } = reviewRanking;
 
   return (
-    <ReviewRankingItemContainer isMemberPage={isMemberPage}>
+    <ReviewRankingItemContainer>
       <Text size="sm" weight="bold">
         {productName}
       </Text>
@@ -42,14 +43,13 @@ const ReviewRankingItem = ({ reviewRanking, isMemberPage = false }: ReviewRankin
 
 export default memo(ReviewRankingItem);
 
-const ReviewRankingItemContainer = styled.div<{ isMemberPage: boolean }>`
+const ReviewRankingItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  border: ${({ isMemberPage, theme }) => (isMemberPage ? 'none' : `1px solid ${theme.borderColors.disabled}`)};
-  border-bottom: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
-  border-radius: ${({ isMemberPage, theme }) => (isMemberPage ? 0 : theme.borderRadius.sm)};
+  border: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
 `;
 
 const ReviewText = styled(Text)`
