@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
@@ -15,17 +15,8 @@ const router = createBrowserRouter([
         <App />
       </AuthLayout>
     ),
-    errorElement: <NotFoundPage />,
+    errorElement: <Navigate to={PATH.LOGIN} replace />,
     children: [
-      {
-        path: `${PATH.RECIPE}/:recipeId`,
-        async lazy() {
-          const { RecipeDetailPage } = await import(
-            /* webpackChunkName: "RecipeDetailPage" */ '@/pages/RecipeDetailPage'
-          );
-          return { Component: RecipeDetailPage };
-        },
-      },
       {
         path: PATH.MEMBER,
         async lazy() {
@@ -58,6 +49,15 @@ const router = createBrowserRouter([
             /* webpackChunkName: "MemberRecipePage" */ '@/pages/MemberRecipePage'
           );
           return { Component: MemberRecipePage };
+        },
+      },
+      {
+        path: `${PATH.REVIEW}/:reviewId`,
+        async lazy() {
+          const { ReviewDetailPage } = await import(
+            /* webpackChunkName: "ReviewDetailPage" */ '@/pages/ReviewDetailPage'
+          );
+          return { Component: ReviewDetailPage };
         },
       },
     ],
@@ -117,6 +117,15 @@ const router = createBrowserRouter([
             /* webpackChunkName: "ProductDetailPage" */ '@/pages/ProductDetailPage'
           );
           return { Component: ProductDetailPage };
+        },
+      },
+      {
+        path: `${PATH.RECIPE}/:recipeId`,
+        async lazy() {
+          const { RecipeDetailPage } = await import(
+            /* webpackChunkName: "RecipeDetailPage" */ '@/pages/RecipeDetailPage'
+          );
+          return { Component: RecipeDetailPage };
         },
       },
     ],

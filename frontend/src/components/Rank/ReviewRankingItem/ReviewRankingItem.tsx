@@ -1,4 +1,4 @@
-import { Spacing, Text, theme } from '@fun-eat/design-system';
+import { Spacing, Text, useTheme } from '@fun-eat/design-system';
 import { memo } from 'react';
 import styled from 'styled-components';
 
@@ -10,6 +10,8 @@ interface ReviewRankingItemProps {
 }
 
 const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
+  const theme = useTheme();
+
   const { productName, content, rating, favoriteCount } = reviewRanking;
 
   return (
@@ -46,7 +48,7 @@ const ReviewRankingItemContainer = styled.div`
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  border: 1px solid ${({ theme }) => theme.borderColors.disabled};
+  border: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
 `;
 
