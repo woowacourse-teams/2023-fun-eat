@@ -1,12 +1,5 @@
 {
-  "page": {
-    "totalDataCount": 99,
-    "totalPages": 10,
-    "firstPage": true,
-    "lastPage": false,
-    "requestPage": 1,
-    "requestSize": 10
-  },
+  "hasNext": false,
   "reviews": [
     {
       "id": 1,

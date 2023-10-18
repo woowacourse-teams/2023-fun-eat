@@ -42,7 +42,7 @@ export const reviewHandlers = [
 
     return res(
       ctx.status(200),
-      ctx.json({ page: sortedReviews.page, reviews: sortedReviews.reviews }),
+      ctx.json({ hasNext: sortedReviews.hasNext, reviews: sortedReviews.reviews }),
       ctx.delay(1000)
     );
   }),

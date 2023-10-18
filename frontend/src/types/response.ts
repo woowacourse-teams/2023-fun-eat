@@ -14,11 +14,11 @@ export interface Page {
 }
 
 export interface CategoryProductResponse {
-  page: Page;
+  hasNext: boolean;
   products: Product[];
 }
 export interface ProductReviewResponse {
-  page: Page;
+  hasNext: boolean;
   reviews: Review[];
 }
 

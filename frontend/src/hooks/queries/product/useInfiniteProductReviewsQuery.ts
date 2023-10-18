@@ -6,7 +6,7 @@ import type { ProductReviewResponse } from '@/types/response';
 const fetchProductReviews = async (pageParam: number, productId: number, sort: string) => {
   const res = await productApi.get({
     params: `/${productId}/reviews`,
-    queries: `?sort=${sort}&page=${pageParam}`,
+    queries: `?sort=${sort}&lastReviewId=${pageParam}`,
     credentials: true,
   });
 
@@ -20,9 +20,8 @@ const useInfiniteProductReviewsQuery = (productId: number, sort: string) => {
     ({ pageParam = 0 }) => fetchProductReviews(pageParam, productId, sort),
     {
       getNextPageParam: (prevResponse: ProductReviewResponse) => {
-        const isLast = prevResponse.page.lastPage;
-        const nextPage = prevResponse.page.requestPage + 1;
-        return isLast ? undefined : nextPage;
+        const lastCursor = prevResponse.reviews.length ? prevResponse.reviews[prevResponse.reviews.length - 1].id : 0;
+        return prevResponse.hasNext ? lastCursor : undefined;
       },
     }
   );
