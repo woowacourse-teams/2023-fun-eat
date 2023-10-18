@@ -22,4 +22,10 @@ public class CommonException extends GlobalException {
             super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage()));
         }
     }
+
+    public static class S3DeleteFailException extends CommonException {
+        public S3DeleteFailException(final CommonErrorCode errorCode) {
+            super(errorCode.getStatus(), new ErrorCode<>(errorCode.getCode(), errorCode.getMessage()));
+        }
+    }
 }

@@ -108,6 +108,10 @@ public class Review {
         return favoriteCount / denominator;
     }
 
+    public boolean checkAuthor(final Member member) {
+        return Objects.equals(this.member, member);
+    }
+
     public Long getId() {
         return id;
     }

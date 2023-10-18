@@ -27,7 +27,7 @@ type ToastStyleProps = Pick<ToastProps, 'isError'> & { isAnimating?: boolean };
 
 const ToastWrapper = styled.div<ToastStyleProps>`
   position: relative;
-  width: 100%;
+  width: calc(100% - 20px);
   height: 55px;
   max-width: 560px;
   border-radius: 10px;

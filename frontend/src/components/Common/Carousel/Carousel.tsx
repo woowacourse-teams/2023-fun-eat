@@ -31,8 +31,11 @@ const Carousel = ({ carouselList }: CarouselProps) => {
           transition: currentIndex === length - 1 ? '' : 'all 0.5s ease-in-out',
         }}
       >
-        {extendedCarouselList.map(({ id, children }) => (
-          <CarouselItem key={id} style={{ width: `${CAROUSEL_WIDTH}px` }}>
+        {extendedCarouselList.map(({ id, children }, index) => (
+          <CarouselItem
+            key={index === extendedCarouselList.length - 1 ? `${id}-last` : id}
+            style={{ width: `${CAROUSEL_WIDTH}px` }}
+          >
             {children}
           </CarouselItem>
         ))}

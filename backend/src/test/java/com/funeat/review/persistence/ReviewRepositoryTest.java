@@ -5,8 +5,6 @@ import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생�
 import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버2_생성;
 import static com.funeat.fixture.MemberFixture.멤버_멤버3_생성;
-import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
-import static com.funeat.fixture.PageFixture.페이지요청_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점1점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점2점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
@@ -171,7 +169,6 @@ class ReviewRepositoryTest extends RepositoryTest {
             assertThat(actual).usingRecursiveComparison().isEqualTo(review2);
         }
     }
-
 
     @Nested
     class findReviewsByFavoriteCountGreaterThanEqual_성공_테스트 {

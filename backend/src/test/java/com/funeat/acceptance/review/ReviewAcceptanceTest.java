@@ -2,6 +2,7 @@ package com.funeat.acceptance.review;
 
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
+import static com.funeat.acceptance.common.CommonSteps.다음_데이터가_있는지_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
 import static com.funeat.acceptance.common.CommonSteps.인증되지_않음;
 import static com.funeat.acceptance.common.CommonSteps.잘못된_요청;
@@ -9,13 +10,13 @@ import static com.funeat.acceptance.common.CommonSteps.정상_생성;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리;
 import static com.funeat.acceptance.common.CommonSteps.정상_처리_NO_CONTENT;
 import static com.funeat.acceptance.common.CommonSteps.찾을수_없음;
-import static com.funeat.acceptance.common.CommonSteps.페이지를_검증한다;
 import static com.funeat.acceptance.product.ProductSteps.상품_상세_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_랭킹_조회_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_작성_요청;
 import static com.funeat.acceptance.review.ReviewSteps.리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.여러명이_리뷰_좋아요_요청;
 import static com.funeat.acceptance.review.ReviewSteps.정렬된_리뷰_목록_조회_요청;
+import static com.funeat.acceptance.review.ReviewSteps.좋아요를_제일_많이_받은_리뷰_조회_요청;
 import static com.funeat.auth.exception.AuthErrorCode.LOGIN_MEMBER_NOT_FOUND;
 import static com.funeat.exception.CommonErrorCode.REQUEST_VALID_ERROR_CODE;
 import static com.funeat.fixture.CategoryFixture.카테고리_즉석조리_생성;
@@ -28,19 +29,15 @@ import static com.funeat.fixture.MemberFixture.멤버1;
 import static com.funeat.fixture.MemberFixture.멤버2;
 import static com.funeat.fixture.MemberFixture.멤버3;
 import static com.funeat.fixture.PageFixture.FIRST_PAGE;
-import static com.funeat.fixture.PageFixture.PAGE_SIZE;
-import static com.funeat.fixture.PageFixture.마지막페이지O;
-import static com.funeat.fixture.PageFixture.응답_페이지_생성;
 import static com.funeat.fixture.PageFixture.좋아요수_내림차순;
-import static com.funeat.fixture.PageFixture.첫페이지O;
-import static com.funeat.fixture.PageFixture.총_데이터_개수;
-import static com.funeat.fixture.PageFixture.총_페이지;
 import static com.funeat.fixture.PageFixture.최신순;
 import static com.funeat.fixture.PageFixture.평점_내림차순;
 import static com.funeat.fixture.PageFixture.평점_오름차순;
+import static com.funeat.fixture.ProductFixture.상품1;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격1000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.상품_삼각김밥_가격2000원_평점3점_생성;
 import static com.funeat.fixture.ProductFixture.존재하지_않는_상품;
+import static com.funeat.fixture.ReviewFixture.다음_데이터_존재X;
 import static com.funeat.fixture.ReviewFixture.리뷰;
 import static com.funeat.fixture.ReviewFixture.리뷰1;
 import static com.funeat.fixture.ReviewFixture.리뷰2;
@@ -54,6 +51,7 @@ import static com.funeat.fixture.ReviewFixture.재구매O;
 import static com.funeat.fixture.ReviewFixture.존재하지_않는_리뷰;
 import static com.funeat.fixture.ReviewFixture.좋아요O;
 import static com.funeat.fixture.ReviewFixture.좋아요X;
+import static com.funeat.fixture.ReviewFixture.첫_목록을_가져옴;
 import static com.funeat.fixture.ScoreFixture.점수_1점;
 import static com.funeat.fixture.ScoreFixture.점수_2점;
 import static com.funeat.fixture.ScoreFixture.점수_3점;
@@ -384,14 +382,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 여러명이_리뷰_좋아요_요청(List.of(멤버1), 상품, 리뷰3, 좋아요O);
                 여러명이_리뷰_좋아요_요청(List.of(멤버2, 멤버3), 상품, 리뷰2, 좋아요O);
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 좋아요수_내림차순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 좋아요수_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰2, 리뷰3, 리뷰1));
             }
 
@@ -407,14 +403,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버3), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 좋아요수_내림차순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 좋아요수_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰3, 리뷰2, 리뷰1));
             }
         }
@@ -434,14 +428,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버3), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 평점_오름차순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰1, 리뷰3, 리뷰2));
             }
 
@@ -457,14 +449,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_3점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버3), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 평점_오름차순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 평점_오름차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰3, 리뷰2, 리뷰1));
             }
         }
@@ -484,14 +474,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버3), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 평점_내림차순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 평점_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰2, 리뷰3, 리뷰1));
             }
 
@@ -507,14 +495,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_3점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버3), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 평점_내림차순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 평점_내림차순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰3, 리뷰2, 리뷰1));
             }
         }
@@ -534,14 +520,12 @@ class ReviewAcceptanceTest extends AcceptanceTest {
                 리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
                 리뷰_작성_요청(로그인_쿠키_획득(멤버3), 상품, 사진_명세_요청(이미지3), 리뷰추가요청_재구매X_생성(점수_3점, List.of(태그)));
 
-                final var 예상_응답_페이지 = 응답_페이지_생성(총_데이터_개수(3L), 총_페이지(1L), 첫페이지O, 마지막페이지O, FIRST_PAGE, PAGE_SIZE);
-
                 // when
-                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 최신순, FIRST_PAGE);
+                final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 상품, 첫_목록을_가져옴, 최신순, FIRST_PAGE);
 
                 // then
                 STATUS_CODE를_검증한다(응답, 정상_처리);
-                페이지를_검증한다(응답, 예상_응답_페이지);
+                다음_데이터가_있는지_검증한다(응답, 다음_데이터_존재X);
                 정렬된_리뷰_목록_조회_결과를_검증한다(응답, List.of(리뷰3, 리뷰2, 리뷰1));
             }
         }
@@ -562,7 +546,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
             리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_2점, List.of(태그)));
 
             // when
-            final var 응답 = 정렬된_리뷰_목록_조회_요청(cookie, 상품, 좋아요수_내림차순, FIRST_PAGE);
+            final var 응답 = 정렬된_리뷰_목록_조회_요청(cookie, 상품, 첫_목록을_가져옴, 좋아요수_내림차순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(응답, 인증되지_않음);
@@ -573,7 +557,7 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         @Test
         void 존재하지_않는_상품의_리뷰_목록을_조회시_예외가_발생한다() {
             // given && when
-            final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_상품, 좋아요수_내림차순, FIRST_PAGE);
+            final var 응답 = 정렬된_리뷰_목록_조회_요청(로그인_쿠키_획득(멤버1), 존재하지_않는_상품, 첫_목록을_가져옴, 좋아요수_내림차순, FIRST_PAGE);
 
             // then
             STATUS_CODE를_검증한다(응답, 찾을수_없음);
@@ -611,6 +595,59 @@ class ReviewAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    class getMostFavoriteReview_성공_테스트 {
+
+        @Test
+        void 특정_상품에서_좋아요를_가장_많이_받은_리뷰를_조회하다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+            final var 태그 = 단일_태그_저장(태그_맛있어요_TASTE_생성());
+
+            리뷰_작성_요청(로그인_쿠키_획득(멤버1), 상품, 사진_명세_요청(이미지1), 리뷰추가요청_재구매O_생성(점수_3점, List.of(태그)));
+            리뷰_작성_요청(로그인_쿠키_획득(멤버2), 상품, 사진_명세_요청(이미지2), 리뷰추가요청_재구매O_생성(점수_4점, List.of(태그)));
+            여러명이_리뷰_좋아요_요청(List.of(멤버1, 멤버2, 멤버3), 상품1, 리뷰2, 좋아요O);
+
+            // when
+            final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(상품);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리);
+            좋아요를_제일_많이_받은_리뷰_결과를_검증한다(응답, 리뷰2);
+        }
+
+        @Test
+        void 특정_상품에서_리뷰가_없다면_빈_응답을_반환하다() {
+            // given
+            final var 카테고리 = 카테고리_즉석조리_생성();
+            단일_카테고리_저장(카테고리);
+            final var 상품 = 단일_상품_저장(상품_삼각김밥_가격1000원_평점3점_생성(카테고리));
+
+            // when
+            final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(상품);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 정상_처리_NO_CONTENT);
+            좋아요를_제일_많이_받은_리뷰_결과가_빈_응답인지_검증한다(응답);
+        }
+    }
+
+    @Nested
+    class getMostFavoriteReview_실패_테스트 {
+
+        @Test
+        void 존재하지_않는_상품의_좋아요를_가장_많이_받은_리뷰_조회시_예외가_발생한다() {
+            // given & when
+            final var 응답 = 좋아요를_제일_많이_받은_리뷰_조회_요청(존재하지_않는_상품);
+
+            // then
+            STATUS_CODE를_검증한다(응답, 찾을수_없음);
+            RESPONSE_CODE와_MESSAGE를_검증한다(응답, PRODUCT_NOT_FOUND.getCode(), PRODUCT_NOT_FOUND.getMessage());
+        }
+    }
+
     private void RESPONSE_CODE와_MESSAGE를_검증한다(final ExtractableResponse<Response> response, final String expectedCode,
                                               final String expectedMessage) {
         assertSoftly(soft -> {
@@ -634,6 +671,20 @@ class ReviewAcceptanceTest extends AcceptanceTest {
 
         assertThat(actual).extracting(RankingReviewDto::getReviewId)
                 .containsExactlyElementsOf(reviewIds);
+    }
+
+    private void 좋아요를_제일_많이_받은_리뷰_결과를_검증한다(final ExtractableResponse<Response> response, final Long reviewId) {
+        final var actual = response.jsonPath()
+                .getLong("id");
+
+        assertThat(actual).isEqualTo(reviewId);
+    }
+
+    private void 좋아요를_제일_많이_받은_리뷰_결과가_빈_응답인지_검증한다(final ExtractableResponse<Response> response) {
+        final var actual = response.body()
+                .asString();
+
+        assertThat(actual).isEmpty();
     }
 
     private void 상품_사진을_검증한다(final ExtractableResponse<Response> response, final String expected) {

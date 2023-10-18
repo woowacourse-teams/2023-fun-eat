@@ -10,6 +10,11 @@ interface BestReviewItemProps {
 
 const BestReviewItem = ({ productId }: BestReviewItemProps) => {
   const { data: bestReview } = useBestReviewQuery(productId);
+
+  if (!bestReview) {
+    return null;
+  }
+
   const { profileImage, userName, rating, favoriteCount, content } = bestReview;
 
   const theme = useTheme();
