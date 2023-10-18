@@ -1,15 +1,14 @@
 package com.funeat.recipe.domain;
 
+import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
+import static com.funeat.fixture.RecipeFixture.레시피_생성;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
-import static com.funeat.fixture.MemberFixture.멤버_멤버1_생성;
-import static com.funeat.fixture.RecipeFixture.레시피_생성;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)

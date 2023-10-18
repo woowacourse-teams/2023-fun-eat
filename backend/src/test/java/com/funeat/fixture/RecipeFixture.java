@@ -6,7 +6,6 @@ import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeFavoriteRequest;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
