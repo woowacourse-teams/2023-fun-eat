@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
-    const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+    const { isOpen, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
     const { selectedOption, selectSortOption } = useSortOption(PRODUCT_SORT_OPTIONS[0]);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export const Default: Story = {
     }, []);
 
     return (
-      <BottomSheet ref={ref} isClosing={isClosing} close={handleCloseBottomSheet}>
+      <BottomSheet isOpen={isOpen} isClosing={isClosing} close={handleCloseBottomSheet}>
         <SortOptionList
           options={PRODUCT_SORT_OPTIONS}
           selectedOption={selectedOption}
