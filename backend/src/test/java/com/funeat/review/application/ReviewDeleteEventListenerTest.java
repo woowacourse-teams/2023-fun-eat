@@ -97,8 +97,8 @@ class ReviewDeleteEventListenerTest extends EventTest {
             final var review = reviewRepository.save(리뷰_이미지test4_평점4점_재구매O_생성(author, product, 0L));
 
             doThrow(new S3DeleteFailException(CommonErrorCode.UNKNOWN_SERVER_ERROR_CODE))
-                    .when(uploader)
-                    .delete(any());
+                .when(uploader)
+                .delete(any());
 
             // when
             reviewService.deleteReview(review.getId(), authorId);

@@ -1,5 +1,7 @@
 package com.funeat.common;
 
+import com.funeat.banner.domain.Banner;
+import com.funeat.banner.persistence.BannerRepository;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
@@ -69,6 +71,9 @@ public abstract class RepositoryTest {
 
     @Autowired
     protected TagRepository tagRepository;
+
+    @Autowired
+    protected BannerRepository bannerRepository;
 
     protected Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
@@ -186,5 +191,11 @@ public abstract class RepositoryTest {
 
     protected void 레시피_좋아요_저장(final RecipeFavorite recipeFavorite) {
         recipeFavoriteRepository.save(recipeFavorite);
+    }
+
+    protected void 복수_배너_저장(final Banner... bannerToSave) {
+        final List<Banner> banners = List.of(bannerToSave);
+
+        bannerRepository.saveAll(banners);
     }
 }

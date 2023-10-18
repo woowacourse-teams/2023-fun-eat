@@ -1,6 +1,9 @@
 package com.funeat.common;
 
 import com.funeat.auth.application.AuthService;
+import com.funeat.banner.application.BannerService;
+import com.funeat.banner.domain.Banner;
+import com.funeat.banner.persistence.BannerRepository;
 import com.funeat.comment.persistence.CommentRepository;
 import com.funeat.member.application.TestMemberService;
 import com.funeat.member.domain.Member;
@@ -78,6 +81,9 @@ public abstract class ServiceTest {
     protected TagRepository tagRepository;
 
     @Autowired
+    protected BannerRepository bannerRepository;
+
+    @Autowired
     protected CommentRepository commentRepository;
 
     @Autowired
@@ -100,6 +106,9 @@ public abstract class ServiceTest {
 
     @Autowired
     protected TagService tagService;
+
+    @Autowired
+    protected BannerService bannerService;
 
     protected Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
@@ -195,5 +204,11 @@ public abstract class ServiceTest {
         final var productRecipes = List.of(productRecipeImageToSave);
 
         productRecipeRepository.saveAll(productRecipes);
+    }
+
+    protected void 복수_배너_저장(final Banner... bannerToSave) {
+        final List<Banner> banners = List.of(bannerToSave);
+
+        bannerRepository.saveAll(banners);
     }
 }
