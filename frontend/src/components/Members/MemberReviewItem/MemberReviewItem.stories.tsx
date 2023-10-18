@@ -25,7 +25,7 @@ const meta: Meta<typeof MemberReviewItem> = {
       favoriteCount: 1256,
       categoryType: 'food',
     },
-    isMemberPage: true,
+    isPreview: true,
   },
 };
 
