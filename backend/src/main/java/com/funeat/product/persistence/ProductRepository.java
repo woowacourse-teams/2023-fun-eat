@@ -3,6 +3,7 @@ package com.funeat.product.persistence;
 import com.funeat.common.repository.BaseRepository;
 import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductReviewCountDto;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +16,10 @@ public interface ProductRepository extends BaseRepository<Product, Long> {
             + "FROM Product p "
             + "LEFT JOIN Review r ON r.product.id = p.id "
             + "WHERE p.averageRating > 3.0 "
+            + "AND r.createdAt BETWEEN :startDateTime AND :endDateTime "
             + "GROUP BY p.id")
-    List<ProductReviewCountDto> findAllByAverageRatingGreaterThan3();
+    List<ProductReviewCountDto> findAllByAverageRatingGreaterThan3(final LocalDateTime startDateTime,
+                                                                   final LocalDateTime endDateTime);
 
     @Query("SELECT p FROM Product p "
             + "WHERE p.name LIKE CONCAT('%', :name, '%') "
