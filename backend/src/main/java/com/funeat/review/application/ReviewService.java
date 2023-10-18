@@ -37,6 +37,7 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.specification.SortingReviewSpecification;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,6 +59,8 @@ public class ReviewService {
     private static final int START_INDEX = 0;
     private static final int ONE = 1;
     private static final String EMPTY_URL = "";
+    private static final int RANKING_SIZE = 3;
+    private static final long RANKING_MINIMUM_FAVORITE_COUNT = 1L;
     private static final int REVIEW_PAGE_SIZE = 10;
 
     private final ReviewRepository reviewRepository;
@@ -208,9 +211,10 @@ public class ReviewService {
     }
 
     public RankingReviewsResponse getTopReviews() {
-        final List<Review> rankingReviews = reviewRepository.findTop3ByOrderByFavoriteCountDescIdDesc();
-
-        final List<RankingReviewDto> dtos = rankingReviews.stream()
+        final List<Review> reviews = reviewRepository.findReviewsByFavoriteCountGreaterThanEqual(RANKING_MINIMUM_FAVORITE_COUNT);
+        final List<RankingReviewDto> dtos = reviews.stream()
+                .sorted(Comparator.comparing(Review::calculateRankingScore).reversed())
+                .limit(RANKING_SIZE)
                 .map(RankingReviewDto::toDto)
                 .collect(Collectors.toList());
 
