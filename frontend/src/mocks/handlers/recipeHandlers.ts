@@ -7,6 +7,12 @@ import mockRecipes from '../data/recipes.json';
 
 export const recipeHandlers = [
   rest.get('/api/recipes/:recipeId', (req, res, ctx) => {
+    const { mockSessionId } = req.cookies;
+
+    if (!mockSessionId) {
+      return res(ctx.status(401));
+    }
+
     return res(ctx.status(200), ctx.json(recipeDetail), ctx.delay(1000));
   }),
 
