@@ -10,10 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 public class Product {
+
+    public static final String BASIC_IMAGE = null;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +41,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
-
-    @Value("${cloud.aws.image.food}")
-    private String basicFoodImage;
-
-    @Value("${cloud.aws.image.store}")
-    private String basicStoreImage;
 
     protected Product() {
     }
@@ -115,11 +110,7 @@ public class Product {
     }
 
     public void updateBasicImage() {
-        if (category.isFood()) {
-            this.image = basicFoodImage;
-            return;
-        }
-        this.image = basicStoreImage;
+        this.image = BASIC_IMAGE;
     }
 
     public void updateFavoriteImage(final String topFavoriteImage) {
