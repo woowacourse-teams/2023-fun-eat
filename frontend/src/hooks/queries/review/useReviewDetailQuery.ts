@@ -1,11 +1,11 @@
 import { useSuspendedQuery } from '../useSuspendedQuery';
 
 import { reviewApi } from '@/apis';
-import type { ReviewDetailResponse } from '@/types/response';
+import type { ReviewDetail } from '@/types/review';
 
 const fetchReviewDetail = async (reviewId: number) => {
   const response = await reviewApi.get({ params: `/${reviewId}` });
-  const data: ReviewDetailResponse = await response.json();
+  const data: ReviewDetail = await response.json();
   return data;
 };
 

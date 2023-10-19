@@ -63,9 +63,7 @@ export interface MemberRecipeResponse {
   page: Page;
   recipes: MemberRecipe[];
 }
-export interface ReviewDetailResponse {
-  reviews: ReviewDetail;
-}
+
 export interface CommentResponse {
   hasNext: boolean;
   totalElements: number | null;
