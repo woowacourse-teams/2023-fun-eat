@@ -93,9 +93,16 @@ const RecipeImageContainer = styled.ul`
   flex-direction: column;
   gap: 20px;
   align-items: center;
+
+  & > li {
+    width: 312px;
+    margin: 0 auto;
+  }
 `;
 
 const RecipeImage = styled.img`
+  width: 100%;
+  height: auto;
   border-radius: 10px;
   object-fit: cover;
 `;
