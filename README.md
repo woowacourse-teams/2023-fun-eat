@@ -2,9 +2,8 @@
 
 <br>
 
-<img src="https://github.com/woowacourse-teams/2023-fun-eat/assets/78616893/d80cb490-8edb-4d0d-9e14-d57c8e2d1eab" width="420px" />
+<img src="https://github.com/woowacourse-teams/2023-fun-eat/assets/80464961/85396306-1d3e-4d8e-8763-0e28e2a8be04" width="520px" />
 
-<br>
 <br>
 <br>
 
@@ -15,7 +14,7 @@
 
 [![Application](http://img.shields.io/badge/funeat.site-D8EAFF?style=for-the-badge&logo=aHR0cHM6Ly9naXRodWIuY29tL3dvb3dhY291cnNlLXRlYW1zLzIwMjMtZnVuLWVhdC9hc3NldHMvODA0NjQ5NjEvOWI1OWY3NzktY2M5MS00MTJhLWE3NDUtZGQ3M2IzY2UxZGNk&logoColor=black&link=https://funeat.site/)](https://funeat.site/)
 [![WIKI](http://img.shields.io/badge/-GitHub%20WiKi-FFEC99?style=for-the-badge&logoColor=black&link=https://github.com/woowacourse-teams/2023-fun-eat/wiki)](https://github.com/woowacourse-teams/2023-fun-eat/wiki)
-[![Release](https://img.shields.io/github/v/release/woowacourse-teams/2023-fun-eat?style=for-the-badge&color=FFCFCF)](https://github.com/woowacourse-teams/2023-fun-eat/releases/tag/v1.2.0)
+[![Release](https://img.shields.io/github/v/release/woowacourse-teams/2023-fun-eat?style=for-the-badge&color=FFCFCF)](https://github.com/woowacourse-teams/2023-fun-eat/releases/tag/v1.3.0)
 
 </div>
 
