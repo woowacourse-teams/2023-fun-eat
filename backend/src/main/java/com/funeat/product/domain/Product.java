@@ -10,10 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 public class Product {
+
+    public static final String BASIC_IMAGE = null;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -109,7 +110,7 @@ public class Product {
     }
 
     public void updateBasicImage() {
-        this.image = null;
+        this.image = BASIC_IMAGE;
     }
 
     public void updateFavoriteImage(final String topFavoriteImage) {
