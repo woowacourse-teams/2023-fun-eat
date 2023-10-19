@@ -39,7 +39,7 @@ public class SortingReviewDtoWithoutTag {
         if (Objects.isNull(favorite)) {
             return Boolean.FALSE;
         }
-        return Boolean.TRUE;
+        return favorite;
     }
 
     public Long getId() {
