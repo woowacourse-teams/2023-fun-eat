@@ -14,7 +14,7 @@
 <br>
 
 [![Application](http://img.shields.io/badge/Application-D8EAFF?style=flat&logo=github&logoColor=black&link=https://funeat.site/)](https://funeat.site/)
-[![WIKI](http://img.shields.io/badge/-GitHub%20WiKi-FFEC99?style=flat&logo=dev.to&logoColor=black&link=https://github.com/woowacourse-teams/2023-fun-eat/wiki)](https://github.com/woowacourse-teams/2023-fun-eat/wiki)
+[![WIKI](http://img.shields.io/badge/-GitHub%20WiKi-FFEC99?style=flat&logoColor=black&link=https://github.com/woowacourse-teams/2023-fun-eat/wiki)](https://github.com/woowacourse-teams/2023-fun-eat/wiki)
 [![Release](https://img.shields.io/github/v/release/woowacourse-teams/2023-fun-eat?color=FFCFCF)](https://github.com/woowacourse-teams/2023-fun-eat/releases/tag/v1.2.0)
 
 </div>
