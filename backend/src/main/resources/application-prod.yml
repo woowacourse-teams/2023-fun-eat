@@ -45,3 +45,6 @@ cloud:
       bucket: { S3_BUCKET }
       folder: { S3_PROD_FOLDER }
       cloudfrontPath: { S3_PROD_CLOUDFRONT_PATH }
+    image:
+      food: { PROD_BASIC_FOOD_IMAGE }
+      store: { PROD_BASIC_STORE_IMAGE }
