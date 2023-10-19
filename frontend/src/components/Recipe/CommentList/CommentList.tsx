@@ -16,7 +16,8 @@ const CommentList = ({ recipeId }: CommentListProps) => {
   const { fetchNextPage, hasNextPage, data } = useInfiniteRecipeCommentQuery(Number(recipeId));
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
-  const [{ totalElements, comments }] = data.pages.flatMap((page) => page);
+  const [{ totalElements }] = data.pages.flatMap((page) => page);
+  const comments = data.pages.flatMap((page) => page.comments);
 
   return (
     <>
