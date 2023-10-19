@@ -247,17 +247,11 @@ public class ReviewService {
 
         if (review.checkAuthor(member)) {
             eventPublisher.publishEvent(new ReviewDeleteEvent(image));
-            updateProduct(product, review.getRating());
             deleteThingsRelatedToReview(review);
+            updateProduct(product, review.getRating());
             return;
         }
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
-    }
-
-    private void updateProduct(final Product product, final Long deletedRating) {
-        updateProductImage(product.getId());
-        product.updateAverageRatingForDelete(deletedRating);
-        product.minusReviewCount();
     }
 
     private void deleteThingsRelatedToReview(final Review review) {
@@ -280,6 +274,12 @@ public class ReviewService {
                 .map(ReviewFavorite::getId)
                 .collect(Collectors.toList());
         reviewFavoriteRepository.deleteAllByIdInBatch(ids);
+    }
+
+    private void updateProduct(final Product product, final Long deletedRating) {
+        product.updateAverageRatingForDelete(deletedRating);
+        product.minusReviewCount();
+        updateProductImage(product.getId());
     }
 
     public Optional<MostFavoriteReviewResponse> getMostFavoriteReview(final Long productId) {
