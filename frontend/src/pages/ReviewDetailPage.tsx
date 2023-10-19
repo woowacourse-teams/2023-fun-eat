@@ -24,7 +24,7 @@ export const ReviewDetailPage = () => {
     tags,
     content,
     favoriteCount,
-  } = reviewDetail.reviews;
+  } = reviewDetail;
 
   const theme = useTheme();
 
