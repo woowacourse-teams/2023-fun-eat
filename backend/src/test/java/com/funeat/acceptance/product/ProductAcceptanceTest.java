@@ -1,23 +1,5 @@
 package com.funeat.acceptance.product;
 
-import com.funeat.acceptance.common.AcceptanceTest;
-import com.funeat.product.domain.Category;
-import com.funeat.product.dto.ProductInCategoryDto;
-import com.funeat.product.dto.ProductResponse;
-import com.funeat.product.dto.RankingProductDto;
-import com.funeat.product.dto.SearchProductDto;
-import com.funeat.product.dto.SearchProductResultDto;
-import com.funeat.product.dto.SearchProductsResponse;
-import com.funeat.recipe.dto.RecipeDto;
-import com.funeat.tag.dto.TagDto;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.List;
-
 import static com.funeat.acceptance.auth.LoginSteps.로그인_쿠키_획득;
 import static com.funeat.acceptance.common.CommonSteps.STATUS_CODE를_검증한다;
 import static com.funeat.acceptance.common.CommonSteps.사진_명세_요청;
@@ -107,6 +89,23 @@ import static com.funeat.product.exception.CategoryErrorCode.CATEGORY_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
+import com.funeat.acceptance.common.AcceptanceTest;
+import com.funeat.product.domain.Category;
+import com.funeat.product.dto.ProductInCategoryDto;
+import com.funeat.product.dto.ProductResponse;
+import com.funeat.product.dto.RankingProductDto;
+import com.funeat.product.dto.SearchProductDto;
+import com.funeat.product.dto.SearchProductResultDto;
+import com.funeat.product.dto.SearchProductsResponse;
+import com.funeat.recipe.dto.RecipeDto;
+import com.funeat.tag.dto.TagDto;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ProductAcceptanceTest extends AcceptanceTest {
