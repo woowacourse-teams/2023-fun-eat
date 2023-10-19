@@ -12,6 +12,7 @@ export interface ReviewRanking {
   rating: number;
   favoriteCount: number;
   categoryType: CategoryVariant;
+  createdAt: string;
 }
 
 export interface RecipeRanking {
@@ -20,4 +21,5 @@ export interface RecipeRanking {
   title: string;
   author: Member;
   favoriteCount: number;
+  createdAt: string;
 }
