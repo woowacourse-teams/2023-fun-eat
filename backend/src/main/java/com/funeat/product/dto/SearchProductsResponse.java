@@ -7,7 +7,7 @@ public class SearchProductsResponse {
     private final boolean hasNext;
     private final List<SearchProductDto> products;
 
-    public SearchProductsResponse(final boolean hasNext, final List<SearchProductDto> products) {
+    private SearchProductsResponse(final boolean hasNext, final List<SearchProductDto> products) {
         this.hasNext = hasNext;
         this.products = products;
     }
