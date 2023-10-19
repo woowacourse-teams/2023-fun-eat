@@ -20,7 +20,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
   return (
     <ProductDetailContainer>
       <ImageWrapper>
-        {image !== null ? (
+        {image ? (
           <img src={image} width={300} alt={name} />
         ) : category === CATEGORY_TYPE.FOOD ? (
           <PreviewImage width={300} />
