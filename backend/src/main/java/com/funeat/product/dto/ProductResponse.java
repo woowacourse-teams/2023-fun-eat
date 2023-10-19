@@ -29,13 +29,13 @@ public class ProductResponse {
         this.tags = tags;
     }
 
-    public static ProductResponse toResponse(final Product product, final Long reviewCount, final List<Tag> tags) {
+    public static ProductResponse toResponse(final Product product, final List<Tag> tags) {
         List<TagDto> tagDtos = new ArrayList<>();
         for (Tag tag : tags) {
             tagDtos.add(TagDto.toDto(tag));
         }
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(), product.getImage(),
-                product.getContent(), product.getAverageRating(), reviewCount, tagDtos);
+                product.getContent(), product.getAverageRating(), product.getReviewCount(), tagDtos);
     }
 
     public Long getId() {

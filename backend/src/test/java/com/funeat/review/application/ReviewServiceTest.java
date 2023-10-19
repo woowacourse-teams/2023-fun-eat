@@ -800,28 +800,37 @@ class ReviewServiceTest extends ServiceTest {
 
             final var tagIds = 태그_아이디_변환(tag1, tag2);
             final var image = 이미지_생성();
-            final var reviewCreateRequest = 리뷰추가요청_재구매O_생성(4L, tagIds);
-            reviewService.create(productId, authorId, image, reviewCreateRequest);
+            final var reviewCreateRequest1 = 리뷰추가요청_재구매O_생성(2L, tagIds);
+            final var reviewCreateRequest2 = 리뷰추가요청_재구매O_생성(4L, tagIds);
 
-            final var review = reviewRepository.findAll().get(0);
-            final var reviewId = review.getId();
+            reviewService.create(productId, authorId, image, reviewCreateRequest1);
+            reviewService.create(productId, authorId, image, reviewCreateRequest2);
+
+            final var reviews = reviewRepository.findAll();
+            final var rating2_review = reviews.stream()
+                    .filter(it -> it.getRating() == 2L)
+                    .findFirst()
+                    .get();
 
             final var favoriteRequest = 리뷰좋아요요청_생성(true);
-            reviewService.likeReview(reviewId, authorId, favoriteRequest);
-            reviewService.likeReview(reviewId, memberId, favoriteRequest);
+            reviewService.likeReview(rating2_review.getId(), authorId, favoriteRequest);
+            reviewService.likeReview(rating2_review.getId(), memberId, favoriteRequest);
 
             // when
-            reviewService.deleteReview(reviewId, authorId);
+            reviewService.deleteReview(rating2_review.getId(), authorId);
 
             // then
-            final var tags = reviewTagRepository.findAll();
-            final var favorites = reviewFavoriteRepository.findAll();
-            final var findReview = reviewRepository.findById(reviewId);
+            final var tags = reviewTagRepository.findByReview(rating2_review);
+            final var favorites = reviewFavoriteRepository.findByReview(rating2_review);
+            final var findReview = reviewRepository.findById(rating2_review.getId());
+            final var findProduct = productRepository.findById(productId).get();
 
             assertSoftly(soft -> {
                 soft.assertThat(tags).isEmpty();
                 soft.assertThat(favorites).isEmpty();
                 soft.assertThat(findReview).isEmpty();
+                soft.assertThat(findProduct.getAverageRating()).isEqualTo(4.0);
+                soft.assertThat(findProduct.getReviewCount()).isEqualTo(1);
             });
         }
     }

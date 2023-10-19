@@ -113,10 +113,9 @@ public class ProductService {
     public ProductResponse findProductDetail(final Long productId) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
-        final Long reviewCount = reviewRepository.countByProduct(product);
         final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
 
-        return ProductResponse.toResponse(product, reviewCount, tags);
+        return ProductResponse.toResponse(product, tags);
     }
 
     public RankingProductsResponse getTop3Products() {

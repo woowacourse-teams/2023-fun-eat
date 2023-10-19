@@ -71,13 +71,33 @@ public class Product {
         this.category = category;
         this.reviewCount = reviewCount;
     }
-  
+
+    public Product(final String name, final Long price, final String image, final String content,
+                   final Double averageRating, final Category category, final Long reviewCount) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.content = content;
+        this.averageRating = averageRating;
+        this.category = category;
+        this.reviewCount = reviewCount;
+    }
+
     public static Product create(final String name, final Long price, final String content, final Category category) {
         return new Product(name, price, null, content, category);
     }
 
-    public void updateAverageRating(final Long rating, final Long count) {
+    public void updateAverageRatingForInsert(final Long count, final Long rating) {
         final double calculatedRating = ((count - 1) * averageRating + rating) / count;
+        this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
+    }
+
+    public void updateAverageRatingForDelete(final Long deletedRating) {
+        if (reviewCount == 1) {
+            this.averageRating = 0.0;
+            return;
+        }
+        final double calculatedRating = (reviewCount * averageRating - deletedRating) / (reviewCount - 1);
         this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
     }
 
@@ -132,5 +152,9 @@ public class Product {
 
     public void addReviewCount() {
         reviewCount++;
+    }
+
+    public void minusReviewCount() {
+        reviewCount--;
     }
 }
