@@ -146,10 +146,12 @@ public class ReviewService {
         final PageRequest pageRequest = PageRequest.of(FIRST_PAGE, ONE);
 
         final List<Review> topFavoriteReview = reviewRepository.findPopularReviewWithImage(productId, pageRequest);
-        if (!topFavoriteReview.isEmpty()) {
-            final String topFavoriteReviewImage = topFavoriteReview.get(START_INDEX).getImage();
-            product.updateImage(topFavoriteReviewImage);
+        if (topFavoriteReview.isEmpty()) {
+            product.updateBasicImage();
+            return;
         }
+        final String topFavoriteReviewImage = topFavoriteReview.get(START_INDEX).getImage();
+        product.updateFavoriteImage(topFavoriteReviewImage);
     }
 
     public SortingReviewsResponse sortingReviews(final Long productId, final Long memberId,
