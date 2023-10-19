@@ -6,3 +6,4 @@ export * from './memberHandlers';
 export * from './recipeHandlers';
 export * from './searchHandlers';
 export * from './logoutHandlers';
+export * from './bannerHandlers';

@@ -10,9 +10,9 @@ import {
   CategoryFoodList,
   CategoryStoreList,
   SvgIcon,
+  Banner,
 } from '@/components/Common';
 import { ProductRankingList, ReviewRankingList, RecipeRankingList } from '@/components/Rank';
-import { IMAGE_URL } from '@/constants';
 import channelTalk from '@/service/channelTalk';
 
 export const HomePage = () => {
@@ -28,7 +28,7 @@ export const HomePage = () => {
   return (
     <>
       <section>
-        <Banner src={`${IMAGE_URL}banner.png`} width={600} height={360} alt="이벤트 배너" />
+        <Banner />
       </section>
       <Spacing size={40} />
       <SectionWrapper>
@@ -99,11 +99,6 @@ export const HomePage = () => {
     </>
   );
 };
-
-const Banner = styled.img`
-  width: 100%;
-  height: auto;
-`;
 
 const SectionWrapper = styled.section`
   padding: 0 20px;
