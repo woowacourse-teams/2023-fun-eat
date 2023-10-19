@@ -27,7 +27,6 @@ const RecipeFavorite = ({ recipeId, favorite, favoriteCount }: RecipeFavoritePro
         onSuccess: () => {
           setIsFavorite((prev) => !prev);
           setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
-          toast.success('🍯 꿀조합이 등록 됐어요');
         },
         onError: () => {
           toast.error('꿀조합 좋아요를 다시 시도해주세요.');
