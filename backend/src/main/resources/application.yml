@@ -15,6 +15,10 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: never
+  datasource:
+    hikari:
+      connection-timeout: { CONNECTION_TIMEOUT }
+      maximum-pool-size: { MAXIMUM_POOL_SIZE }
 
 springdoc:
   swagger-ui:
