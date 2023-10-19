@@ -128,7 +128,7 @@ public class ProductService {
     }
 
     private List<Product> findAllByNameContaining(final String query, final Long lastId) {
-        final PageRequest size = PageRequest.of(0, PAGE_SIZE);
+        final PageRequest size = PageRequest.ofSize(PAGE_SIZE);
         if (lastId == 0) {
             return productRepository.findAllByNameContainingFirst(query, size);
         }
