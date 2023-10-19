@@ -39,3 +39,10 @@ export interface RecipeFavoriteRequestBody {
 
 type RecipeProductWithPrice = Pick<Product, 'id' | 'name' | 'price'>;
 export type RecipeProduct = Omit<RecipeProductWithPrice, 'price'>;
+
+export interface Comment {
+  id: number;
+  author: Member;
+  comment: string;
+  createdAt: string;
+}

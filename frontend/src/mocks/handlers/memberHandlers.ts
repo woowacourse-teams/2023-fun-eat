@@ -55,4 +55,8 @@ export const memberHandlers = [
 
     return res(ctx.status(200), ctx.json(mockMemberRecipes));
   }),
+
+  rest.delete('/api/members/reviews/:reviewId', (req, res, ctx) => {
+    return res(ctx.status(204));
+  }),
 ];

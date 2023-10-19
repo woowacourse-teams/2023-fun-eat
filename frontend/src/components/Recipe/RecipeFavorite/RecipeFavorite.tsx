@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { useTimeout } from '@/hooks/common';
+import { useToastActionContext } from '@/hooks/context';
 import { useRecipeFavoriteMutation } from '@/hooks/queries/recipe';
 
 interface RecipeFavoriteProps {
@@ -15,6 +16,8 @@ interface RecipeFavoriteProps {
 const RecipeFavorite = ({ recipeId, favorite, favoriteCount }: RecipeFavoriteProps) => {
   const [isFavorite, setIsFavorite] = useState(favorite);
   const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
+  const { toast } = useToastActionContext();
+
   const { mutate } = useRecipeFavoriteMutation(Number(recipeId));
 
   const handleToggleFavorite = async () => {
@@ -26,7 +29,7 @@ const RecipeFavorite = ({ recipeId, favorite, favoriteCount }: RecipeFavoritePro
           setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
         },
         onError: () => {
-          alert('꿀조합 좋아요를 다시 시도해주세요.');
+          toast.error('꿀조합 좋아요를 다시 시도해주세요.');
         },
       }
     );

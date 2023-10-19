@@ -5,6 +5,9 @@ import static com.funeat.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 import static com.funeat.product.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
 import static com.funeat.recipe.exception.RecipeErrorCode.RECIPE_NOT_FOUND;
 
+import com.funeat.comment.domain.Comment;
+import com.funeat.comment.persistence.CommentRepository;
+import com.funeat.comment.specification.CommentSpecification;
 import com.funeat.common.ImageUploader;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -26,6 +29,10 @@ import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RankingRecipeDto;
 import com.funeat.recipe.dto.RankingRecipesResponse;
 import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCommentCondition;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
+import com.funeat.recipe.dto.RecipeCommentResponse;
+import com.funeat.recipe.dto.RecipeCommentsResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
@@ -36,6 +43,8 @@ import com.funeat.recipe.dto.SortingRecipesResponse;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
 import com.funeat.recipe.persistence.RecipeImageRepository;
 import com.funeat.recipe.persistence.RecipeRepository;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,6 +52,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,8 +62,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class RecipeService {
 
-    private static final int THREE = 3;
-    private static final int TOP = 0;
+    private static final long RANKING_MINIMUM_FAVORITE_COUNT = 1L;
+    private static final int RANKING_SIZE = 3;
+    private static final int RECIPE_COMMENT_PAGE_SIZE = 10;
+    private static final int DEFAULT_CURSOR_PAGINATION_SIZE = 11;
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -60,18 +73,21 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeImageRepository recipeImageRepository;
     private final RecipeFavoriteRepository recipeFavoriteRepository;
+    private final CommentRepository commentRepository;
     private final ImageUploader imageUploader;
 
     public RecipeService(final MemberRepository memberRepository, final ProductRepository productRepository,
                          final ProductRecipeRepository productRecipeRepository, final RecipeRepository recipeRepository,
                          final RecipeImageRepository recipeImageRepository,
-                         final RecipeFavoriteRepository recipeFavoriteRepository, final ImageUploader imageUploader) {
+                         final RecipeFavoriteRepository recipeFavoriteRepository,
+                         final CommentRepository commentRepository, final ImageUploader imageUploader) {
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.productRecipeRepository = productRecipeRepository;
         this.recipeRepository = recipeRepository;
         this.recipeImageRepository = recipeImageRepository;
         this.recipeFavoriteRepository = recipeFavoriteRepository;
+        this.commentRepository = commentRepository;
         this.imageUploader = imageUploader;
     }
 
@@ -161,14 +177,15 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
 
         final RecipeFavorite recipeFavorite = recipeFavoriteRepository.findByMemberAndRecipe(member, recipe)
-                .orElseGet(() -> createAndSaveRecipeFavorite(member, recipe));
+                .orElseGet(() -> createAndSaveRecipeFavorite(member, recipe, request.getFavorite()));
 
         recipeFavorite.updateFavorite(request.getFavorite());
     }
 
-    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe) {
+    private RecipeFavorite createAndSaveRecipeFavorite(final Member member, final Recipe recipe,
+                                                       final Boolean favorite) {
         try {
-            final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe);
+            final RecipeFavorite recipeFavorite = RecipeFavorite.create(member, recipe, favorite);
             return recipeFavoriteRepository.save(recipeFavorite);
         } catch (final DataIntegrityViolationException e) {
             throw new MemberDuplicateFavoriteException(MEMBER_DUPLICATE_FAVORITE, member.getId());
@@ -190,9 +207,11 @@ public class RecipeService {
     }
 
     public RankingRecipesResponse getTop3Recipes() {
-        final List<Recipe> recipes = recipeRepository.findRecipesByOrderByFavoriteCountDesc(PageRequest.of(TOP, THREE));
+        final List<Recipe> recipes = recipeRepository.findRecipesByFavoriteCountGreaterThanEqual(RANKING_MINIMUM_FAVORITE_COUNT);
 
         final List<RankingRecipeDto> dtos = recipes.stream()
+                .sorted(Comparator.comparing(Recipe::calculateRankingScore).reversed())
+                .limit(RANKING_SIZE)
                 .map(recipe -> {
                     final List<RecipeImage> findRecipeImages = recipeImageRepository.findByRecipe(recipe);
                     final RecipeAuthorDto author = RecipeAuthorDto.toDto(recipe.getMember());
@@ -200,5 +219,64 @@ public class RecipeService {
                 })
                 .collect(Collectors.toList());
         return RankingRecipesResponse.toResponse(dtos);
+    }
+
+    @Transactional
+    public Long writeCommentOfRecipe(final Long memberId, final Long recipeId,
+                                     final RecipeCommentCreateRequest request) {
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND, memberId));
+
+        final Recipe findRecipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
+
+        final Comment comment = new Comment(findRecipe, findMember, request.getComment());
+
+        final Comment savedComment = commentRepository.save(comment);
+        return savedComment.getId();
+    }
+
+    public RecipeCommentsResponse getCommentsOfRecipe(final Long recipeId, final RecipeCommentCondition condition) {
+        final Recipe findRecipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException(RECIPE_NOT_FOUND, recipeId));
+
+        final Specification<Comment> specification = CommentSpecification.findAllByRecipe(findRecipe,
+                condition.getLastId());
+
+        final PageRequest pageable = PageRequest.of(0, DEFAULT_CURSOR_PAGINATION_SIZE, Sort.by("id").descending());
+
+        final Page<Comment> commentPaginationResult = commentRepository.findAllForPagination(specification, pageable,
+                condition.getTotalElements());
+
+        final List<RecipeCommentResponse> recipeCommentResponses = getRecipeCommentResponses(
+                commentPaginationResult.getContent());
+
+        final Boolean hasNext = hasNextPage(commentPaginationResult);
+
+        return RecipeCommentsResponse.toResponse(recipeCommentResponses, hasNext,
+                commentPaginationResult.getTotalElements());
+    }
+
+    private List<RecipeCommentResponse> getRecipeCommentResponses(final List<Comment> findComments) {
+        final List<RecipeCommentResponse> recipeCommentResponses = new ArrayList<>();
+        final int resultSize = getResultSize(findComments);
+        final List<Comment> comments = findComments.subList(0, resultSize);
+
+        for (final Comment comment : comments) {
+            final RecipeCommentResponse recipeCommentResponse = RecipeCommentResponse.toResponse(comment);
+            recipeCommentResponses.add(recipeCommentResponse);
+        }
+        return recipeCommentResponses;
+    }
+
+    private int getResultSize(final List<Comment> findComments) {
+        if (findComments.size() < DEFAULT_CURSOR_PAGINATION_SIZE) {
+            return findComments.size();
+        }
+        return RECIPE_COMMENT_PAGE_SIZE;
+    }
+
+    private Boolean hasNextPage(final Page<Comment> findComments) {
+        return findComments.getContent().size() > RECIPE_COMMENT_PAGE_SIZE;
     }
 }

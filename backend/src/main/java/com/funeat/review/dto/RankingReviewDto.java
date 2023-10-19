@@ -1,6 +1,7 @@
 package com.funeat.review.dto;
 
 import com.funeat.review.domain.Review;
+import java.time.LocalDateTime;
 
 public class RankingReviewDto {
 
@@ -11,10 +12,11 @@ public class RankingReviewDto {
     private final String content;
     private final Long rating;
     private final Long favoriteCount;
+    private final LocalDateTime createdAt;
 
     private RankingReviewDto(final Long reviewId, final Long productId, final String categoryType,
                              final String productName, final String content,
-                             final Long rating, final Long favoriteCount) {
+                             final Long rating, final Long favoriteCount, final LocalDateTime createdAt) {
         this.reviewId = reviewId;
         this.productId = productId;
         this.categoryType = categoryType;
@@ -22,6 +24,7 @@ public class RankingReviewDto {
         this.content = content;
         this.rating = rating;
         this.favoriteCount = favoriteCount;
+        this.createdAt = createdAt;
     }
 
     public static RankingReviewDto toDto(final Review review) {
@@ -32,8 +35,8 @@ public class RankingReviewDto {
                 review.getProduct().getName(),
                 review.getContent(),
                 review.getRating(),
-                review.getFavoriteCount()
-        );
+                review.getFavoriteCount(),
+                review.getCreatedAt());
     }
 
     public Long getReviewId() {
@@ -62,5 +65,9 @@ public class RankingReviewDto {
 
     public String getCategoryType() {
         return categoryType;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

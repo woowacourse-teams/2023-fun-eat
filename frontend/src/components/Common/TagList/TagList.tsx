@@ -15,7 +15,7 @@ const TagList = ({ tags }: TagListProps) => {
         const tagColor = convertTagColor(tag.tagType);
         return (
           <li key={tag.id}>
-            <TagBadge color={tagColor} textColor="black">
+            <TagBadge element="p" color={tagColor} textColor="black">
               {tag.name}
             </TagBadge>
           </li>
@@ -29,6 +29,7 @@ export default TagList;
 
 const TagListContainer = styled.ul`
   display: flex;
+  margin: 12px 0;
   column-gap: 8px;
 `;
 

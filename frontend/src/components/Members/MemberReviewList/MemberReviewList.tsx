@@ -3,21 +3,22 @@ import { useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReviewRankingItem } from '@/components/Rank';
+import MemberReviewItem from '../MemberReviewItem/MemberReviewItem';
+
 import { PATH } from '@/constants/path';
 import { useIntersectionObserver } from '@/hooks/common';
 import { useInfiniteMemberReviewQuery } from '@/hooks/queries/members';
 import useDisplaySlice from '@/utils/displaySlice';
 
 interface MemberReviewListProps {
-  isMemberPage?: boolean;
+  isPreview?: boolean;
 }
 
-const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
+const MemberReviewList = ({ isPreview = false }: MemberReviewListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { fetchNextPage, hasNextPage, data } = useInfiniteMemberReviewQuery();
   const memberReviews = data.pages.flatMap((page) => page.reviews);
-  const reviewsToDisplay = useDisplaySlice(isMemberPage, memberReviews);
+  const reviewsToDisplay = useDisplaySlice(isPreview, memberReviews);
 
   useIntersectionObserver<HTMLDivElement>(fetchNextPage, scrollRef, hasNextPage);
 
@@ -39,21 +40,17 @@ const MemberReviewList = ({ isMemberPage = false }: MemberReviewListProps) => {
 
   return (
     <MemberReviewListContainer>
-      {!isMemberPage && (
+      {!isPreview && (
         <TotalReviewCount color={theme.colors.gray4}>
           총 <strong>{totalReviewCount}</strong>개의 리뷰를 남겼어요!
         </TotalReviewCount>
       )}
       <Spacing size={20} />
       <MemberReviewListWrapper>
-        {reviewsToDisplay.map((reviewRanking) => (
-          <li key={reviewRanking.reviewId}>
-            <Link
-              as={RouterLink}
-              to={`${PATH.PRODUCT_LIST}/${reviewRanking.categoryType}/${reviewRanking.productId}`}
-              block
-            >
-              <ReviewRankingItem reviewRanking={reviewRanking} />
+        {reviewsToDisplay.map((review) => (
+          <li key={review.reviewId}>
+            <Link as={RouterLink} to={`${PATH.REVIEW}/${review.reviewId}`} block>
+              <MemberReviewItem review={review} isPreview={isPreview} />
             </Link>
           </li>
         ))}

@@ -30,6 +30,10 @@ public class TestImageUploader implements ImageUploader {
         }
     }
 
+    @Override
+    public void delete(final String fileName) {
+    }
+
     private void deleteDirectory(Path directory) throws IOException {
         // 디렉토리 내부 파일 및 디렉토리 삭제
         try (Stream<Path> pathStream = Files.walk(directory)) {

@@ -13,9 +13,10 @@
     "test:coverage": "jest --watchAll --coverage"
   },
   "dependencies": {
-    "@fun-eat/design-system": "^0.3.12",
+    "@fun-eat/design-system": "^0.3.18",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",
+    "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

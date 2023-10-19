@@ -1,10 +1,7 @@
 package com.funeat.product.domain;
 
-import com.funeat.member.domain.bookmark.ProductBookmark;
 import com.funeat.review.domain.Review;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 public class Product {
@@ -31,6 +29,8 @@ public class Product {
 
     private Double averageRating = 0.0;
 
+    private Long reviewCount = 0L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -41,10 +41,11 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
 
-    @OneToMany(mappedBy = "product")
-    private List<ProductBookmark> productBookmarks;
+    @Value("${cloud.aws.image.food}")
+    private String basicFoodImage;
 
-    private Long reviewCount = 0L;
+    @Value("${cloud.aws.image.store}")
+    private String basicStoreImage;
 
     protected Product() {
     }
@@ -68,8 +69,42 @@ public class Product {
         this.category = category;
     }
 
-    public void updateAverageRating(final Long rating, final Long count) {
+    public Product(final String name, final Long price, final String image, final String content,
+                   final Category category, final Long reviewCount) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.content = content;
+        this.category = category;
+        this.reviewCount = reviewCount;
+    }
+
+    public Product(final String name, final Long price, final String image, final String content,
+                   final Double averageRating, final Category category, final Long reviewCount) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.content = content;
+        this.averageRating = averageRating;
+        this.category = category;
+        this.reviewCount = reviewCount;
+    }
+
+    public static Product create(final String name, final Long price, final String content, final Category category) {
+        return new Product(name, price, null, content, category);
+    }
+
+    public void updateAverageRatingForInsert(final Long count, final Long rating) {
         final double calculatedRating = ((count - 1) * averageRating + rating) / count;
+        this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
+    }
+
+    public void updateAverageRatingForDelete(final Long deletedRating) {
+        if (reviewCount == 1) {
+            this.averageRating = 0.0;
+            return;
+        }
+        final double calculatedRating = (reviewCount * averageRating - deletedRating) / (reviewCount - 1);
         this.averageRating = Math.round(calculatedRating * 10.0) / 10.0;
     }
 
@@ -79,8 +114,23 @@ public class Product {
         return averageRating - (averageRating - 3.0) * factor;
     }
 
-    public void updateImage(final String topFavoriteImage) {
+    public void updateBasicImage() {
+        if (category.isFood()) {
+            this.image = basicFoodImage;
+            return;
+        }
+        this.image = basicStoreImage;
+    }
+
+    public void updateFavoriteImage(final String topFavoriteImage) {
         this.image = topFavoriteImage;
+    }
+
+    public void update(final String name, final String content, final Long price, final Category category) {
+        this.name = name;
+        this.content = content;
+        this.price = price;
+        this.category = category;
     }
 
     public Long getId() {
@@ -117,5 +167,9 @@ public class Product {
 
     public void addReviewCount() {
         reviewCount++;
+    }
+
+    public void minusReviewCount() {
+        reviewCount--;
     }
 }

@@ -63,7 +63,13 @@ export const CATEGORY_TYPE = {
 
 export const IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
-export const ENVIRONMENT = window.location.href.includes('dev') ? 'dev' : 'prod';
+export const ENVIRONMENT = window.location.href.includes('dev')
+  ? 'dev'
+  : process.env.NODE_ENV === 'production'
+  ? 'prod'
+  : 'local';
 
 export const IMAGE_URL =
   ENVIRONMENT === 'dev' ? process.env.S3_DEV_CLOUDFRONT_PATH : process.env.S3_PROD_CLOUDFRONT_PATH;
+
+export const PREVIOUS_PATH_LOCAL_STORAGE_KEY = `funeat-previous-path-${ENVIRONMENT}`;

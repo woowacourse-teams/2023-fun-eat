@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { SvgIcon, TagList } from '@/components/Common';
 import { useTimeout } from '@/hooks/common';
+import { useToastActionContext } from '@/hooks/context';
 import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/date';
@@ -18,6 +19,8 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
     review;
   const [isFavorite, setIsFavorite] = useState(favorite);
   const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
+
+  const { toast } = useToastActionContext();
   const { mutate } = useReviewFavoriteMutation(productId, id);
 
   const theme = useTheme();
@@ -32,11 +35,11 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
         },
         onError: (error) => {
           if (error instanceof Error) {
-            alert(error.message);
+            toast.error(error.message);
             return;
           }
 
-          alert('리뷰 좋아요를 다시 시도해주세요.');
+          toast.error('리뷰 좋아요를 다시 시도해주세요.');
         },
       }
     );

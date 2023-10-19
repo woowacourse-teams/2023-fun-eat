@@ -1,7 +1,7 @@
 import { BottomSheet, Heading, Link, Spacing, useBottomSheet } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { Suspense, useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -15,10 +15,11 @@ import {
   SvgIcon,
 } from '@/components/Common';
 import { RecipeList, RecipeRegisterForm } from '@/components/Recipe';
-import { RECIPE_SORT_OPTIONS } from '@/constants';
+import { PREVIOUS_PATH_LOCAL_STORAGE_KEY, RECIPE_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import RecipeFormProvider from '@/contexts/RecipeFormContext';
 import { useGA, useSortOption } from '@/hooks/common';
+import { setLocalStorage } from '@/utils/localStorage';
 
 const RECIPE_PAGE_TITLE = '🍯 꿀조합';
 const REGISTER_RECIPE = '꿀조합 작성하기';
@@ -27,11 +28,16 @@ const REGISTER_RECIPE_AFTER_LOGIN = '로그인 후 꿀조합을 작성할 수 �
 export const RecipePage = () => {
   const [activeSheet, setActiveSheet] = useState<'registerRecipe' | 'sortOption'>('sortOption');
   const { selectedOption, selectSortOption } = useSortOption(RECIPE_SORT_OPTIONS[0]);
-  const { ref, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
+  const { isOpen, isClosing, handleOpenBottomSheet, handleCloseBottomSheet } = useBottomSheet();
   const { reset } = useQueryErrorResetBoundary();
   const { gaEvent } = useGA();
+  const { pathname } = useLocation();
 
   const recipeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLocalStorage(PREVIOUS_PATH_LOCAL_STORAGE_KEY, pathname);
+  }, []);
 
   const handleOpenRegisterRecipeSheet = () => {
     setActiveSheet('registerRecipe');
@@ -72,7 +78,7 @@ export const RecipePage = () => {
         />
       </RecipeRegisterButtonWrapper>
       <ScrollButton targetRef={recipeRef} isRecipePage />
-      <BottomSheet ref={ref} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
+      <BottomSheet isOpen={isOpen} isClosing={isClosing} maxWidth="600px" close={handleCloseBottomSheet}>
         {activeSheet === 'sortOption' ? (
           <SortOptionList
             options={RECIPE_SORT_OPTIONS}

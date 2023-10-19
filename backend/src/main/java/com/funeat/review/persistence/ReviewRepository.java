@@ -14,11 +14,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ReviewRepository extends JpaRepository<Review, Long> {
-
-    Page<Review> findReviewsByProduct(final Pageable pageable, final Product product);
-
-    List<Review> findTop3ByOrderByFavoriteCountDesc();
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewCustomRepository {
 
     Long countByProduct(final Product product);
 
@@ -34,4 +30,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             + "WHERE p.id = :id AND r.image != '' "
             + "ORDER BY r.favoriteCount DESC, r.id DESC")
     List<Review> findPopularReviewWithImage(@Param("id") final Long productId, final Pageable pageable);
+
+    Optional<Review> findTopByProductOrderByFavoriteCountDescIdDesc(final Product product);
+
+    List<Review> findReviewsByFavoriteCountGreaterThanEqual(final Long favoriteCount);
 }

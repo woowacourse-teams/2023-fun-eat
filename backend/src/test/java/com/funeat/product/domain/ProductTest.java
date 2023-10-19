@@ -1,7 +1,6 @@
 package com.funeat.product.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -14,17 +13,17 @@ import org.junit.jupiter.api.Test;
 class ProductTest {
 
     @Nested
-    class updateAverageRating_성공_테스트 {
+    class updateAverageRatingForInsert_성공_테스트 {
 
         @Test
         void 평균_평점을_업데이트_할_수_있다() {
             // given
             final var product = new Product("testName", 1000L, "testImage", "testContent", null);
-            final var reviewRating = 4L;
             final var reviewCount = 1L;
+            final var reviewRating = 4L;
 
             // when
-            product.updateAverageRating(reviewRating, reviewCount);
+            product.updateAverageRatingForInsert(reviewCount, reviewRating);
             final var actual = product.getAverageRating();
 
             // then
@@ -35,16 +34,16 @@ class ProductTest {
         void 평균_평점을_여러번_업데이트_할_수_있다() {
             // given
             final var product = new Product("testName", 1000L, "testImage", "testContent", null);
-            final var reviewRating1 = 4L;
-            final var reviewRating2 = 2L;
             final var reviewCount1 = 1L;
             final var reviewCount2 = 2L;
+            final var reviewRating1 = 4L;
+            final var reviewRating2 = 2L;
 
             // when
-            product.updateAverageRating(reviewRating1, reviewCount1);
+            product.updateAverageRatingForInsert(reviewCount1, reviewRating1);
             final var actual1 = product.getAverageRating();
 
-            product.updateAverageRating(reviewRating2, reviewCount2);
+            product.updateAverageRatingForInsert(reviewCount2, reviewRating2);
             final var actual2 = product.getAverageRating();
 
             // then
@@ -58,39 +57,34 @@ class ProductTest {
     }
 
     @Nested
-    class updateAverageRating_실패_테스트 {
+    class updateAverageRatingForDelete_성공_테스트 {
 
         @Test
-        void 리뷰_평점에_null_값이_들어오면_예외가_발생한다() {
+        void 리뷰가_하나인_상품의_리뷰를_삭제하면_평균평점은_0점이_된다() {
             // given
-            final var product = new Product("testName", 1000L, "testImage", "testContent", null);
-            final var reviewCount = 1L;
+            final var product = new Product("testName", 1000L, "testImage", "testContent", 4.0, null, 1L);
+            final var reviewRating = 4L;
 
             // when
-            assertThatThrownBy(() -> product.updateAverageRating(null, reviewCount))
-                    .isInstanceOf(NullPointerException.class);
+            product.updateAverageRatingForDelete(reviewRating);
+            final var actual = product.getAverageRating();
+
+            // then
+            assertThat(actual).isEqualTo(0.0);
         }
 
         @Test
-        void 리뷰_평점이_0점이라면_예외가_발생해야하는데_관련_로직이_없어_통과하고_있다() {
+        void 리뷰가_여러개인_상품의_리뷰를_삭제하면_평균평점이_갱신된다() {
             // given
-            final var product = new Product("testName", 1000L, "testImage", "testContent", null);
-            final var reviewRating = 0L;
-            final var reviewCount = 1L;
+            final var product = new Product("testName", 1000L, "testImage", "testContent", 4.0, null, 4L);
+            final var reviewRating = 5L;
 
             // when
-            product.updateAverageRating(reviewRating, reviewCount);
-        }
+            product.updateAverageRatingForDelete(reviewRating);
+            final var actual = product.getAverageRating();
 
-        @Test
-        void 리뷰_개수가_0개라면_예외가_발생해야하는데_calculatedRating값이_infinity가_나와_통과하고_있다() {
-            // given
-            final var product = new Product("testName", 1000L, "testImage", "testContent", null);
-            final var reviewRating = 3L;
-            final var reviewCount = 0L;
-
-            // when
-            product.updateAverageRating(reviewRating, reviewCount);
+            // then
+            assertThat(actual).isEqualTo(3.7);
         }
     }
 

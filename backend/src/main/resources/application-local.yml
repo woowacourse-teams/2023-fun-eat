@@ -12,7 +12,6 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
@@ -28,5 +27,8 @@ cloud:
       static: { S3_REGION }
     s3:
       bucket: { S3_BUCKET }
-      folder: { S3_DEV_FOLDER }
-      cloudfrontPath: { S3_DEV_CLOUDFRONT_PATH }
+      folder: { S3_LOCAL_FOLDER }
+      cloudfrontPath: { S3_LOCAL_CLOUDFRONT_PATH }
+    image:
+      food: { LOCAL_BASIC_FOOD_IMAGE }
+      store: { LOCAL_BASIC_STORE_IMAGE }

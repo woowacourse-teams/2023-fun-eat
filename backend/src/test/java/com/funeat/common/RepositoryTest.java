@@ -1,11 +1,11 @@
 package com.funeat.common;
 
+import com.funeat.banner.domain.Banner;
+import com.funeat.banner.persistence.BannerRepository;
 import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.RecipeFavorite;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.member.persistence.MemberRepository;
-import com.funeat.member.persistence.ProductBookmarkRepository;
-import com.funeat.member.persistence.RecipeBookMarkRepository;
 import com.funeat.member.persistence.RecipeFavoriteRepository;
 import com.funeat.member.persistence.ReviewFavoriteRepository;
 import com.funeat.product.domain.Category;
@@ -43,12 +43,6 @@ public abstract class RepositoryTest {
     protected MemberRepository memberRepository;
 
     @Autowired
-    protected ProductBookmarkRepository productBookmarkRepository;
-
-    @Autowired
-    protected RecipeBookMarkRepository recipeBookMarkRepository;
-
-    @Autowired
     protected RecipeFavoriteRepository recipeFavoriteRepository;
 
     @Autowired
@@ -77,6 +71,9 @@ public abstract class RepositoryTest {
 
     @Autowired
     protected TagRepository tagRepository;
+
+    @Autowired
+    protected BannerRepository bannerRepository;
 
     protected Long 단일_상품_저장(final Product product) {
         return productRepository.save(product).getId();
@@ -194,5 +191,11 @@ public abstract class RepositoryTest {
 
     protected void 레시피_좋아요_저장(final RecipeFavorite recipeFavorite) {
         recipeFavoriteRepository.save(recipeFavorite);
+    }
+
+    protected void 복수_배너_저장(final Banner... bannerToSave) {
+        final List<Banner> banners = List.of(bannerToSave);
+
+        bannerRepository.saveAll(banners);
     }
 }

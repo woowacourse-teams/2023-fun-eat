@@ -6,6 +6,19 @@ spring:
       enabled: true
       maxFileSize: 10MB
       maxRequestSize: 15MB
+  task:
+    execution:
+      pool:
+        core-size: { THREAD_CORE_SIZE }
+        max-size: { THREAD_MAX_SIZE }
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: never
+  datasource:
+    hikari:
+      connection-timeout: { CONNECTION_TIMEOUT }
+      maximum-pool-size: { MAXIMUM_POOL_SIZE }
 
 springdoc:
   swagger-ui:
@@ -23,7 +36,7 @@ server:
       max: { MAX_THREADS }
     max-connections: { MAX_CONNECTIONS }
     accept-count: { ACCEPT_COUNT }
-  servlet:
-    session:
-      cookie:
-        name: FUNEAT
+
+back-office:
+  id: { BACK_OFFICE_ID }
+  key: { BACK_OFFICE_KEY }

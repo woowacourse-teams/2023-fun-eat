@@ -1,9 +1,12 @@
 import { Text, useTheme } from '@fun-eat/design-system';
 import { memo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
+import PBPreviewImage from '@/assets/samgakgimbab.svg';
 import { Skeleton, SvgIcon } from '@/components/Common';
+import { CATEGORY_TYPE } from '@/constants';
 import type { Product } from '@/types/product';
 
 interface ProductItemProps {
@@ -12,12 +15,17 @@ interface ProductItemProps {
 
 const ProductItem = ({ product }: ProductItemProps) => {
   const theme = useTheme();
+  const { category } = useParams();
   const { name, price, image, averageRating, reviewCount } = product;
   const [isImageLoading, setIsImageLoading] = useState(true);
 
+  if (!category) {
+    return null;
+  }
+
   return (
     <ProductItemContainer>
-      {image !== null ? (
+      {image ? (
         <>
           <ProductImage
             src={image}
@@ -29,8 +37,10 @@ const ProductItem = ({ product }: ProductItemProps) => {
           />
           {isImageLoading && <Skeleton width={90} height={90} />}
         </>
-      ) : (
+      ) : category === CATEGORY_TYPE.FOOD ? (
         <PreviewImage width={90} height={90} />
+      ) : (
+        <PBPreviewImage width={90} height={90} />
       )}
       <ProductInfoWrapper>
         <Text size="lg" weight="bold">
@@ -43,7 +53,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
           <RatingIconWrapper>
             <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
             <Text as="span" size="sm" css="line-height: 24px;" aria-label={`${averageRating}점`}>
-              {averageRating}
+              {averageRating.toFixed(1)}
             </Text>
           </RatingIconWrapper>
           <ReviewIconWrapper>

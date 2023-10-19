@@ -29,7 +29,7 @@ public class LoginSteps {
 
     public static ExtractableResponse<Response> 로그아웃_요청(final String loginCookie) {
         return given()
-                .cookie("FUNEAT", loginCookie)
+                .cookie("SESSION", loginCookie)
                 .when()
                 .post("/api/logout")
                 .then()
@@ -44,6 +44,6 @@ public class LoginSteps {
                 .then()
                 .extract()
                 .response()
-                .getCookie("FUNEAT");
+                .getCookie("SESSION");
     }
 }
