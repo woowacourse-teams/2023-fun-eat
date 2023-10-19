@@ -19,10 +19,6 @@ const ProductItem = ({ product }: ProductItemProps) => {
   const { name, price, image, averageRating, reviewCount } = product;
   const [isImageLoading, setIsImageLoading] = useState(true);
 
-  if (!category) {
-    return null;
-  }
-
   return (
     <ProductItemContainer>
       {image ? (
