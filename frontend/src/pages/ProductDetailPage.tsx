@@ -17,7 +17,7 @@ import {
 } from '@/components/Common';
 import { ProductDetailItem, ProductRecipeList } from '@/components/Product';
 import { BestReviewItem, ReviewList, ReviewRegisterForm } from '@/components/Review';
-import { PRODUCT_PATH_LOCAL_STORAGE_KEY, RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
+import { PREVIOUS_PATH_LOCAL_STORAGE_KEY, RECIPE_SORT_OPTIONS, REVIEW_SORT_OPTIONS } from '@/constants';
 import { PATH } from '@/constants/path';
 import ReviewFormProvider from '@/contexts/ReviewFormContext';
 import { useGA, useSortOption, useTabMenu } from '@/hooks/common';
@@ -78,7 +78,7 @@ export const ProductDetailPage = () => {
   };
 
   const handleLoginButtonClick = () => {
-    setLocalStorage(PRODUCT_PATH_LOCAL_STORAGE_KEY, pathname);
+    setLocalStorage(PREVIOUS_PATH_LOCAL_STORAGE_KEY, pathname);
     navigate(PATH.LOGIN);
   };
 

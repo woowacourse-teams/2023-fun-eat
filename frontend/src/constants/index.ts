@@ -72,4 +72,4 @@ export const ENVIRONMENT = window.location.href.includes('dev')
 export const IMAGE_URL =
   ENVIRONMENT === 'dev' ? process.env.S3_DEV_CLOUDFRONT_PATH : process.env.S3_PROD_CLOUDFRONT_PATH;
 
-export const PRODUCT_PATH_LOCAL_STORAGE_KEY = `funeat-last-product-path-${ENVIRONMENT}`;
+export const PREVIOUS_PATH_LOCAL_STORAGE_KEY = `funeat-previous-path-${ENVIRONMENT}`;
