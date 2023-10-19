@@ -34,3 +34,9 @@ cloud:
 back-office:
   id: test
   key: test
+
+server:
+  servlet:
+    session:
+      cookie:
+        name: SESSION
