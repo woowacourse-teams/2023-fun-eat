@@ -19,7 +19,7 @@ public class ReviewSteps {
                                                          final MultiPartSpecification image,
                                                          final ReviewCreateRequest request) {
         final var requestSpec = given()
-                .cookie("JSESSIONID", loginCookie);
+                .cookie("SESSION", loginCookie);
 
         if (Objects.nonNull(image)) {
             requestSpec.multiPart(image);
@@ -36,7 +36,7 @@ public class ReviewSteps {
     public static ExtractableResponse<Response> 리뷰_좋아요_요청(final String loginCookie, final Long productId,
                                                           final Long reviewId, final ReviewFavoriteRequest request) {
         return given()
-                .cookie("JSESSIONID", loginCookie)
+                .cookie("SESSION", loginCookie)
                 .contentType("application/json")
                 .body(request)
                 .when()
@@ -58,7 +58,7 @@ public class ReviewSteps {
                                                                 final Long lastReviewId,
                                                                 final String sort, final Long page) {
         return given()
-                .cookie("JSESSIONID", loginCookie)
+                .cookie("SESSION", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
                 .queryParam("lastReviewId", lastReviewId).log().all()
