@@ -111,7 +111,7 @@ public class ReviewService {
 
         final Long countByProduct = reviewRepository.countByProduct(findProduct);
 
-        findProduct.updateAverageRating(savedReview.getRating(), countByProduct);
+        findProduct.updateAverageRatingForInsert(countByProduct, savedReview.getRating());
         findProduct.addReviewCount();
         reviewTagRepository.saveAll(reviewTags);
     }
@@ -247,11 +247,17 @@ public class ReviewService {
 
         if (review.checkAuthor(member)) {
             eventPublisher.publishEvent(new ReviewDeleteEvent(image));
+            updateProduct(product, review.getRating());
             deleteThingsRelatedToReview(review);
-            updateProductImage(product.getId());
             return;
         }
         throw new NotAuthorOfReviewException(NOT_AUTHOR_OF_REVIEW, memberId);
+    }
+
+    private void updateProduct(final Product product, final Long deletedRating) {
+        updateProductImage(product.getId());
+        product.updateAverageRatingForDelete(deletedRating);
+        product.minusReviewCount();
     }
 
     private void deleteThingsRelatedToReview(final Review review) {
