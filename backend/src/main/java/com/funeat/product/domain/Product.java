@@ -41,12 +41,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
 
-    @Value("${cloud.aws.image.food}")
-    private String basicFoodImage;
-
-    @Value("${cloud.aws.image.store}")
-    private String basicStoreImage;
-
     protected Product() {
     }
 
@@ -115,11 +109,7 @@ public class Product {
     }
 
     public void updateBasicImage() {
-        if (category.isFood()) {
-            this.image = basicFoodImage;
-            return;
-        }
-        this.image = basicStoreImage;
+        this.image = null;
     }
 
     public void updateFavoriteImage(final String topFavoriteImage) {

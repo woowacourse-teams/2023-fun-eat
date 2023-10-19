@@ -29,6 +29,3 @@ cloud:
       bucket: { S3_BUCKET }
       folder: { S3_LOCAL_FOLDER }
       cloudfrontPath: { S3_LOCAL_CLOUDFRONT_PATH }
-    image:
-      food: { LOCAL_BASIC_FOOD_IMAGE }
-      store: { LOCAL_BASIC_STORE_IMAGE }
