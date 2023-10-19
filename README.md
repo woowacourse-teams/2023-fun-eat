@@ -13,9 +13,9 @@
 
 <br>
 
-[![Application](http://img.shields.io/badge/Application-D8EAFF?style=flat&logo=github&logoColor=black&link=https://funeat.site/)](https://funeat.site/)
-[![WIKI](http://img.shields.io/badge/-GitHub%20WiKi-FFEC99?style=flat&logoColor=black&link=https://github.com/woowacourse-teams/2023-fun-eat/wiki)](https://github.com/woowacourse-teams/2023-fun-eat/wiki)
-[![Release](https://img.shields.io/github/v/release/woowacourse-teams/2023-fun-eat?color=FFCFCF)](https://github.com/woowacourse-teams/2023-fun-eat/releases/tag/v1.2.0)
+[![Application](http://img.shields.io/badge/funeat.site-D8EAFF?style=for-the-badge&logo=aHR0cHM6Ly9naXRodWIuY29tL3dvb3dhY291cnNlLXRlYW1zLzIwMjMtZnVuLWVhdC9hc3NldHMvODA0NjQ5NjEvOWI1OWY3NzktY2M5MS00MTJhLWE3NDUtZGQ3M2IzY2UxZGNk&logoColor=black&link=https://funeat.site/)](https://funeat.site/)
+[![WIKI](http://img.shields.io/badge/-GitHub%20WiKi-FFEC99?style=for-the-badge&logoColor=black&link=https://github.com/woowacourse-teams/2023-fun-eat/wiki)](https://github.com/woowacourse-teams/2023-fun-eat/wiki)
+[![Release](https://img.shields.io/github/v/release/woowacourse-teams/2023-fun-eat?style=for-the-badge&color=FFCFCF)](https://github.com/woowacourse-teams/2023-fun-eat/releases/tag/v1.2.0)
 
 </div>
 
@@ -52,7 +52,7 @@
 
 # 🛠️ 기술 스택
 
-### Backend
+### 백엔드
 
 <div align="center">
   <img src='https://github.com/woowacourse-teams/2023-fun-eat/assets/55427367/5b60393a-ffbf-4595-bb4c-166d091a7998' width="400px" alt="BE_기술스택"/>
@@ -60,7 +60,7 @@
 
 <br/>
 
-### Frontend
+### 프론트엔드
 
 <div align="center">
   <img src='https://github.com/woowacourse-teams/2023-fun-eat/assets/55427367/e3d76698-aaa4-4eea-a878-8c03f3faf395' width="400px" alt="FE_기술스택"/>
@@ -68,10 +68,27 @@
 
 <br/>
 
-### Infra
+### 인프라
 
 <div align="center">
   <img src='https://github.com/woowacourse-teams/2023-fun-eat/assets/55427367/79399085-1245-4af4-be20-2d5402d53da7' width="400px" alt="인프라_기술스택"/>
+</div>
+
+<br>
+<br>
+
+# 인프라 구조
+
+### CI/CD
+
+<div align="center">
+    <img src="https://github.com/woowacourse-teams/2023-fun-eat/assets/55427367/3fbef028-d216-4abe-ab4f-c531b099dd33" alt="cicd">
+</div>
+
+### 구조
+
+<div align="center">
+    <img src="https://github.com/woowacourse-teams/2023-fun-eat/assets/55427367/3bbb9d40-f525-43ab-8ec2-ade6e6a07139" alt="인프라 구조" />
 </div>
 
 <br>
