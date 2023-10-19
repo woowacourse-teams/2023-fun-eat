@@ -49,6 +49,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
     mutate(formData, {
       onSuccess: () => {
         resetAndCloseForm();
+        toast.success('🍯 꿀조합이 등록 됐어요');
       },
       onError: (error) => {
         resetAndCloseForm();
