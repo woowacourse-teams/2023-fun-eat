@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 public class Product {
@@ -28,6 +29,8 @@ public class Product {
 
     private Double averageRating = 0.0;
 
+    private Long reviewCount = 0L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -38,7 +41,11 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductRecipe> productRecipes;
 
-    private Long reviewCount = 0L;
+    @Value("${cloud.aws.image.food}")
+    private String basicFoodImage;
+
+    @Value("${cloud.aws.image.store}")
+    private String basicStoreImage;
 
     protected Product() {
     }
@@ -107,7 +114,15 @@ public class Product {
         return averageRating - (averageRating - 3.0) * factor;
     }
 
-    public void updateImage(final String topFavoriteImage) {
+    public void updateBasicImage() {
+        if (category.isFood()) {
+            this.image = basicFoodImage;
+            return;
+        }
+        this.image = basicStoreImage;
+    }
+
+    public void updateFavoriteImage(final String topFavoriteImage) {
         this.image = topFavoriteImage;
     }
 

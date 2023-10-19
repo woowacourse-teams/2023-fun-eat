@@ -30,6 +30,10 @@ public class Category {
         this.image = image;
     }
 
+    public boolean isFood() {
+        return type == CategoryType.FOOD;
+    }
+
     public Long getId() {
         return id;
     }
