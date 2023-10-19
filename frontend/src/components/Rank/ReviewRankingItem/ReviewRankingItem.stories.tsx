@@ -15,6 +15,7 @@ const meta: Meta<typeof ReviewRankingItem> = {
       rating: 4.0,
       favoriteCount: 1256,
       categoryType: 'food',
+      createdAt: '2021-08-01T00:00:00.000Z',
     },
   },
 };

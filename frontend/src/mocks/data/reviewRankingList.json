@@ -7,7 +7,8 @@
       "content": "할머니가 먹을 거 같은 맛입니다. 1960년 전쟁 때 맛 보고 싶었는데 그때는 너무 가난해서 먹을 수 없었는데요 이것보다 긴 리뷰도 잘려 보인답니다",
       "rating": 4.0,
       "favoriteCount": 1256,
-      "categoryType": "food"
+      "categoryType": "food",
+      "createdAt": "2023-08-09T10:10:10"
     },
     {
       "reviewId": 1,
@@ -16,7 +17,8 @@
       "content": "하얀 짜파게티라니 말이 안된다고 생각했었죠. 실제로 맛을 보니까 까만 짜파게티랑 맛이 뭔가 다를게 없네요.",
       "rating": 4.4,
       "favoriteCount": 870,
-      "categoryType": "food"
+      "categoryType": "food",
+      "createdAt": "2023-08-09T10:10:10"
     }
   ]
 }

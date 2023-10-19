@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import type { ReviewRanking } from '@/types/ranking';
+import { getRelativeDate } from '@/utils/date';
 
 interface ReviewRankingItemProps {
   reviewRanking: ReviewRanking;
@@ -12,7 +13,7 @@ interface ReviewRankingItemProps {
 const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
   const theme = useTheme();
 
-  const { productName, content, rating, favoriteCount } = reviewRanking;
+  const { productName, content, rating, favoriteCount, createdAt } = reviewRanking;
 
   return (
     <ReviewRankingItemContainer>
@@ -36,6 +37,9 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
             {rating.toFixed(1)}
           </Text>
         </RatingIconWrapper>
+        <ReviewDate size="sm" color={theme.textColors.info}>
+          {getRelativeDate(createdAt)}
+        </ReviewDate>
       </FavoriteStarWrapper>
     </ReviewRankingItemContainer>
   );
@@ -79,4 +83,8 @@ const RatingIconWrapper = styled.div`
   & > svg {
     padding-bottom: 2px;
   }
+`;
+
+const ReviewDate = styled(Text)`
+  margin-left: auto;
 `;
