@@ -53,6 +53,27 @@ const router = createBrowserRouter([
       },
     ],
   },
+  /** 로그인이 안되었다면 로그인 페이지로 리다이렉트하면서 헤더만 있는 레이아웃 */
+  {
+    path: '/',
+    element: (
+      <AuthLayout>
+        <App layout="headerOnly" />
+      </AuthLayout>
+    ),
+    errorElement: <Navigate to={PATH.LOGIN} replace />,
+    children: [
+      {
+        path: `${PATH.RECIPE}/:recipeId`,
+        async lazy() {
+          const { RecipeDetailPage } = await import(
+            /* webpackChunkName: "RecipeDetailPage" */ '@/pages/RecipeDetailPage'
+          );
+          return { Component: RecipeDetailPage };
+        },
+      },
+    ],
+  },
   {
     path: '/',
     element: (
