@@ -2,7 +2,10 @@
 
 <br>
 
-<img src="https://github.com/woowacourse-teams/2023-fun-eat/assets/80464961/aff67268-1d89-4598-9a50-2af793a7124c" width="520px" alt="logo" />
+<img src="https://github.com/woowacourse-teams/2023-fun-eat/assets/80464961/85396306-1d3e-4d8e-8763-0e28e2a8be04" width="520px" />
+
+<br>
+<br>
 
 <b>궁금해? 맛있을걸? 먹어봐! <br>
 🍙 편의점 음식 리뷰 & 꿀조합 공유 서비스 🍙</b>
