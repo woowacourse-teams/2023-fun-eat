@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { productApi } from '@/apis';
+import { useToastActionContext } from '@/hooks/context';
 import type { ReviewFavoriteRequestBody } from '@/types/review';
 
 const headers = { 'Content-Type': 'application/json' };
@@ -11,10 +12,30 @@ const patchReviewFavorite = (productId: number, reviewId: number, body: ReviewFa
 
 const useReviewFavoriteMutation = (productId: number, reviewId: number) => {
   const queryClient = useQueryClient();
+  const { toast } = useToastActionContext();
+
+  const queryKey = ['product', productId, 'review'];
 
   return useMutation({
     mutationFn: (body: ReviewFavoriteRequestBody) => patchReviewFavorite(productId, reviewId, body),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['product', productId, 'review'] }),
+    onMutate: async (newFavoriteRequest) => {
+      await queryClient.cancelQueries({ queryKey: queryKey });
+
+      const previousRequest = queryClient.getQueryData(queryKey);
+      queryClient.setQueryData(queryKey, newFavoriteRequest);
+
+      return { previousRequest };
+    },
+    onError: (error, _, context) => {
+      queryClient.setQueryData(queryKey, context?.previousRequest);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.error('리뷰 좋아요를 다시 시도해주세요.');
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKey }),
   });
 };
 
