@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { useTimeout } from '@/hooks/common';
-import { useToastActionContext } from '@/hooks/context';
 import { useRecipeFavoriteMutation } from '@/hooks/queries/recipe';
 
 interface RecipeFavoriteProps {
@@ -13,23 +12,28 @@ interface RecipeFavoriteProps {
   recipeId: number;
 }
 
-const RecipeFavorite = ({ recipeId, favorite, favoriteCount }: RecipeFavoriteProps) => {
-  const [isFavorite, setIsFavorite] = useState(favorite);
-  const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
-  const { toast } = useToastActionContext();
+const RecipeFavoriteButton = ({ recipeId, favorite, favoriteCount }: RecipeFavoriteProps) => {
+  const initialFavoriteState = {
+    isFavorite: favorite,
+    currentFavoriteCount: favoriteCount,
+  };
+
+  const [favoriteInfo, setFavoriteInfo] = useState(initialFavoriteState);
 
   const { mutate } = useRecipeFavoriteMutation(Number(recipeId));
+  const { isFavorite, currentFavoriteCount } = favoriteInfo;
 
   const handleToggleFavorite = async () => {
+    setFavoriteInfo((prev) => ({
+      isFavorite: !prev.isFavorite,
+      currentFavoriteCount: isFavorite ? prev.currentFavoriteCount - 1 : prev.currentFavoriteCount + 1,
+    }));
+
     mutate(
       { favorite: !isFavorite },
       {
-        onSuccess: () => {
-          setIsFavorite((prev) => !prev);
-          setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
-        },
         onError: () => {
-          toast.error('꿀조합 좋아요를 다시 시도해주세요.');
+          setFavoriteInfo(initialFavoriteState);
         },
       }
     );
@@ -51,7 +55,7 @@ const RecipeFavorite = ({ recipeId, favorite, favoriteCount }: RecipeFavoritePro
   );
 };
 
-export default RecipeFavorite;
+export default RecipeFavoriteButton;
 
 const FavoriteButton = styled(Button)`
   display: flex;
