@@ -18,16 +18,7 @@ const useReviewFavoriteMutation = (productId: number, reviewId: number) => {
 
   return useMutation({
     mutationFn: (body: ReviewFavoriteRequestBody) => patchReviewFavorite(productId, reviewId, body),
-    onMutate: async (newFavoriteRequest) => {
-      await queryClient.cancelQueries({ queryKey: queryKey });
-
-      const previousRequest = queryClient.getQueryData(queryKey);
-      queryClient.setQueryData(queryKey, newFavoriteRequest);
-
-      return { previousRequest };
-    },
-    onError: (error, _, context) => {
-      queryClient.setQueryData(queryKey, context?.previousRequest);
+    onError: (error) => {
       if (error instanceof Error) {
         toast.error(error.message);
         return;
@@ -35,7 +26,7 @@ const useReviewFavoriteMutation = (productId: number, reviewId: number) => {
 
       toast.error('리뷰 좋아요를 다시 시도해주세요.');
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKey }),
   });
 };
 
