@@ -22,7 +22,6 @@ const useRecipeFavoriteMutation = (recipeId: number) => {
       await queryClient.cancelQueries({ queryKey: queryKey });
 
       const previousRequest = queryClient.getQueryData<RecipeDetail>(queryKey);
-      console.log(previousRequest);
 
       if (previousRequest) {
         queryClient.setQueryData(queryKey, () => ({
