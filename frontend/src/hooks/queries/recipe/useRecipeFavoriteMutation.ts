@@ -40,7 +40,7 @@ const useRecipeFavoriteMutation = (recipeId: number) => {
         return;
       }
 
-      toast.error('꿀조합 좋아요를 다시 시도해주세요.');
+      toast.error('좋아요를 다시 시도해주세요.');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKey });

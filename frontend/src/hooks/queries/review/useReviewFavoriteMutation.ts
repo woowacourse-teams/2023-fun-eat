@@ -24,7 +24,7 @@ const useReviewFavoriteMutation = (productId: number, reviewId: number) => {
         return;
       }
 
-      toast.error('리뷰 좋아요를 다시 시도해주세요.');
+      toast.error('좋아요를 다시 시도해주세요.');
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKey }),
   });
