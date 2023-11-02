@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { recipeApi } from '@/apis';
 import { useToastActionContext } from '@/hooks/context';
-import type { RecipeFavoriteRequestBody } from '@/types/recipe';
+import type { RecipeFavoriteRequestBody, RecipeDetail } from '@/types/recipe';
 
 const headers = { 'Content-Type': 'application/json' };
 
@@ -18,7 +18,24 @@ const useRecipeFavoriteMutation = (recipeId: number) => {
 
   return useMutation({
     mutationFn: (body: RecipeFavoriteRequestBody) => patchRecipeFavorite(recipeId, body),
-    onError: (error) => {
+    onMutate: async (newFavoriteRequest) => {
+      await queryClient.cancelQueries({ queryKey: queryKey });
+
+      const previousRequest = queryClient.getQueryData<RecipeDetail>(queryKey);
+      console.log(previousRequest);
+
+      if (previousRequest) {
+        queryClient.setQueryData(queryKey, () => ({
+          ...previousRequest,
+          newFavoriteRequest,
+        }));
+      }
+
+      return { previousRequest };
+    },
+    onError: (error, _, context) => {
+      queryClient.setQueryData(queryKey, context?.previousRequest);
+
       if (error instanceof Error) {
         toast.error(error.message);
         return;
@@ -26,7 +43,9 @@ const useRecipeFavoriteMutation = (recipeId: number) => {
 
       toast.error('꿀조합 좋아요를 다시 시도해주세요.');
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKey }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey });
+    },
   });
 };
 
