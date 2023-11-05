@@ -26,7 +26,7 @@ const useRecipeFavoriteMutation = (recipeId: number) => {
       if (previousRequest) {
         queryClient.setQueryData(queryKey, () => ({
           ...previousRequest,
-          newFavoriteRequest,
+          favorite: newFavoriteRequest.favorite,
           favoriteCount: newFavoriteRequest.favorite
             ? previousRequest.favoriteCount + 1
             : previousRequest.favoriteCount - 1,
