@@ -98,7 +98,6 @@ const Form = styled.form`
 const CommentTextarea = styled(Textarea)`
   height: 50px;
   padding: 8px;
-  font-size: 1.4rem;
 `;
 
 const SubmitButton = styled(Button)`
