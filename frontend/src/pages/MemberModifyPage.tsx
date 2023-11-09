@@ -1,4 +1,4 @@
-import { Button, Spacing } from '@fun-eat/design-system';
+import { Button, Spacing, useToastActionContext } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ import { SectionTitle, SvgIcon } from '@/components/Common';
 import { MemberModifyInput } from '@/components/Members';
 import { IMAGE_MAX_SIZE } from '@/constants';
 import { useFormData, useImageUploader } from '@/hooks/common';
-import { useToastActionContext } from '@/hooks/context';
 import { useMemberModifyMutation, useMemberQuery } from '@/hooks/queries/members';
 import type { MemberRequest } from '@/types/member';
 

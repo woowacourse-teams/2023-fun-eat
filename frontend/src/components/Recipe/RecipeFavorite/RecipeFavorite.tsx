@@ -1,10 +1,9 @@
-import { theme, Button, Text } from '@fun-eat/design-system';
+import { theme, Button, Text, useToastActionContext } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { useTimeout } from '@/hooks/common';
-import { useToastActionContext } from '@/hooks/context';
 import { useRecipeFavoriteMutation } from '@/hooks/queries/recipe';
 
 interface RecipeFavoriteProps {

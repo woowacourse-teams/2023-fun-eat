@@ -1375,10 +1375,10 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.1.6.tgz#22958c042e10b67463997bd6ea7115fe28cbcaf9"
   integrity sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==
 
-"@fun-eat/design-system@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@fun-eat/design-system/-/design-system-0.4.0.tgz#77ce6d1b014e9fe02576baf1f47fad40eacf97de"
-  integrity sha512-6jW5qkod+wdwhR950QJ8f1uGYrFlAuuqHsd10K8LWcYyLiWgv8uRdJRzJ9j7cxQWgqoIPVEKiVoJ7KgjrbaZWw==
+"@fun-eat/design-system@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@fun-eat/design-system/-/design-system-0.4.1.tgz#a486b58e9cc4db2535e5ec5370b711cfc5ca78b3"
+  integrity sha512-nmAu+H0qTmR161WrOVUD5pE66W7MtZl26+fASMBLZw7al9khTUwXkiI6vMr3sGaglih0TsB0bRSiMxWKtV4DlA==
 
 "@humanwhocodes/config-array@^0.11.11":
   version "0.11.11"
