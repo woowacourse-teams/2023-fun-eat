@@ -1,8 +1,7 @@
-import { Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Heading, Input, Spacing, Text, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
-import { Input } from '@/components/Common';
 import { useRecipeFormActionContext } from '@/hooks/context';
 
 const MIN_LENGTH = 1;

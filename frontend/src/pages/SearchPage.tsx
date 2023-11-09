@@ -1,10 +1,10 @@
-import { Button, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Button, Heading, Spacing, Text, Input, useTheme } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Loading, SvgIcon } from '@/components/Common';
 import { RecommendList, ProductSearchResultList, RecipeSearchResultList } from '@/components/Search';
 import { SEARCH_PAGE_VARIANTS } from '@/constants';
 import { useDebounce, useRoutePage } from '@/hooks/common';
