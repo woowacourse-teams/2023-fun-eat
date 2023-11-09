@@ -17,7 +17,6 @@ export { default as ErrorComponent } from './ErrorComponent/ErrorComponent';
 export { default as Loading } from './Loading/Loading';
 export { default as MarkedText } from './MarkedText/MarkedText';
 export { default as NavigableSectionTitle } from './NavigableSectionTitle/NavigableSectionTitle';
-export { default as Carousel } from './Carousel/Carousel';
 export { default as RegisterButton } from './RegisterButton/RegisterButton';
 export { default as Toast } from './Toast/Toast';
 export { default as CategoryItem } from './CategoryItem/CategoryItem';
