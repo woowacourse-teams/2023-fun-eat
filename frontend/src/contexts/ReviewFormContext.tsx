@@ -36,7 +36,7 @@ const ReviewFormProvider = ({ children }: PropsWithChildren) => {
 
       if (Array.isArray(targetValue)) {
         if (targetValue.length >= MIN_DISPLAYED_TAGS_LENGTH && !isSelected) {
-          toast.success(`태그는 ${MIN_DISPLAYED_TAGS_LENGTH}까지 선택할 수 있습니다`);
+          toast.success(`태그는 ${MIN_DISPLAYED_TAGS_LENGTH}개까지 선택할 수 있습니다`);
           return prev;
         }
 
