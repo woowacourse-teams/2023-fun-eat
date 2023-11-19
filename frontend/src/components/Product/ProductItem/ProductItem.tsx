@@ -1,11 +1,11 @@
-import { Text, useTheme } from '@fun-eat/design-system';
+import { Text, Skeleton, useTheme } from '@fun-eat/design-system';
 import { memo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/characters.svg';
 import PBPreviewImage from '@/assets/samgakgimbab.svg';
-import { Skeleton, SvgIcon } from '@/components/Common';
+import { SvgIcon } from '@/components/Common';
 import { CATEGORY_TYPE } from '@/constants';
 import type { Product } from '@/types/product';
 

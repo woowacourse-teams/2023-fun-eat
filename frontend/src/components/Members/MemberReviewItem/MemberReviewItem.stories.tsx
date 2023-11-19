@@ -2,18 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import MemberReviewItem from './MemberReviewItem';
 
-import ToastProvider from '@/contexts/ToastContext';
-
 const meta: Meta<typeof MemberReviewItem> = {
   title: 'members/MemberReviewItem',
   component: MemberReviewItem,
-  decorators: [
-    (Story) => (
-      <ToastProvider>
-        <Story />
-      </ToastProvider>
-    ),
-  ],
   args: {
     review: {
       reviewId: 1,

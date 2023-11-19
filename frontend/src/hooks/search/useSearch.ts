@@ -1,9 +1,9 @@
+import { useToastActionContext } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler, MouseEventHandler } from 'react';
 import { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useGA } from '../common';
-import { useToastActionContext } from '../context';
 
 const useSearch = () => {
   const inputRef = useRef<HTMLInputElement>(null);

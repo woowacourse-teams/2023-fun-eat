@@ -1,9 +1,8 @@
-import { useTheme, Spacing, Text, Button } from '@fun-eat/design-system';
+import { useTheme, Spacing, Text, Button, useToastActionContext } from '@fun-eat/design-system';
 import type { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
-import { useToastActionContext } from '@/hooks/context';
 import { useDeleteReview } from '@/hooks/queries/members';
 import type { MemberReview } from '@/types/review';
 

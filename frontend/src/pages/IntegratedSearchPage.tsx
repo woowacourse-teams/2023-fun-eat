@@ -1,9 +1,9 @@
-import { Button, Heading, Spacing, Text } from '@fun-eat/design-system';
+import { Button, Heading, Spacing, Text, Input } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon, TabMenu } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Loading, SvgIcon, TabMenu } from '@/components/Common';
 import { RecommendList, ProductSearchResultList, RecipeSearchResultList } from '@/components/Search';
 import { SEARCH_TAB_VARIANTS } from '@/constants';
 import { useDebounce, useTabMenu } from '@/hooks/common';
