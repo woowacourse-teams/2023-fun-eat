@@ -1,10 +1,10 @@
-import { Badge, Button, Text, useTheme, useToastActionContext } from '@fun-eat/design-system';
-import { memo, useState } from 'react';
+import { Badge, Text, useTheme } from '@fun-eat/design-system';
+import { memo } from 'react';
 import styled from 'styled-components';
 
+import ReviewFavoriteButton from '../ReviewFavoriteButton/ReviewFavoriteButton';
+
 import { SvgIcon, TagList } from '@/components/Common';
-import { useTimeout } from '@/hooks/common';
-import { useReviewFavoriteMutation } from '@/hooks/queries/review';
 import type { Review } from '@/types/review';
 import { getRelativeDate } from '@/utils/date';
 
@@ -14,37 +14,10 @@ interface ReviewItemProps {
 }
 
 const ReviewItem = ({ productId, review }: ReviewItemProps) => {
-  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favoriteCount, favorite } =
-    review;
-  const [isFavorite, setIsFavorite] = useState(favorite);
-  const [currentFavoriteCount, setCurrentFavoriteCount] = useState(favoriteCount);
-
-  const { toast } = useToastActionContext();
-  const { mutate } = useReviewFavoriteMutation(productId, id);
-
   const theme = useTheme();
 
-  const handleToggleFavorite = async () => {
-    mutate(
-      { favorite: !isFavorite },
-      {
-        onSuccess: () => {
-          setIsFavorite((prev) => !prev);
-          setCurrentFavoriteCount((prev) => (isFavorite ? prev - 1 : prev + 1));
-        },
-        onError: (error) => {
-          if (error instanceof Error) {
-            toast.error(error.message);
-            return;
-          }
-
-          toast.error('리뷰 좋아요를 다시 시도해주세요.');
-        },
-      }
-    );
-  };
-
-  const [debouncedToggleFavorite] = useTimeout(handleToggleFavorite, 200);
+  const { id, userName, profileImage, image, rating, tags, content, createdAt, rebuy, favorite, favoriteCount } =
+    review;
 
   return (
     <ReviewItemContainer>
@@ -78,17 +51,7 @@ const ReviewItem = ({ productId, review }: ReviewItemProps) => {
       {image && <ReviewImage src={image} height={150} alt={`${userName}의 리뷰`} />}
       <TagList tags={tags} />
       <ReviewContent>{content}</ReviewContent>
-      <FavoriteButton
-        type="button"
-        variant="transparent"
-        onClick={debouncedToggleFavorite}
-        aria-label={`좋아요 ${favoriteCount}개`}
-      >
-        <SvgIcon variant={isFavorite ? 'favoriteFilled' : 'favorite'} color={isFavorite ? 'red' : theme.colors.gray4} />
-        <Text as="span" weight="bold">
-          {currentFavoriteCount}
-        </Text>
-      </FavoriteButton>
+      <ReviewFavoriteButton productId={productId} reviewId={id} favorite={favorite} favoriteCount={favoriteCount} />
     </ReviewItemContainer>
   );
 };
@@ -139,11 +102,4 @@ const ReviewImage = styled.img`
 
 const ReviewContent = styled(Text)`
   white-space: pre-wrap;
-`;
-
-const FavoriteButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  padding: 0;
-  column-gap: 8px;
 `;

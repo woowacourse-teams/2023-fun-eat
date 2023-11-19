@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
 import { ErrorBoundary, ErrorComponent, Loading, SectionTitle } from '@/components/Common';
-import { CommentForm, CommentList, RecipeFavorite } from '@/components/Recipe';
+import { CommentForm, CommentList, RecipeFavoriteButton } from '@/components/Recipe';
 import { useRecipeDetailQuery } from '@/hooks/queries/recipe';
 import { getFormattedDate } from '@/utils/date';
 
@@ -46,7 +46,7 @@ export const RecipeDetailPage = () => {
             <Text color={theme.textColors.info}> {getFormattedDate(createdAt)}</Text>
           </div>
         </AuthorWrapper>
-        <RecipeFavorite recipeId={id} favorite={favorite} favoriteCount={favoriteCount} />
+        <RecipeFavoriteButton recipeId={id} favorite={favorite} favoriteCount={favoriteCount} />
       </AuthorFavoriteWrapper>
       <Spacing size={24} />
       <RecipeUsedProductsWrapper>
