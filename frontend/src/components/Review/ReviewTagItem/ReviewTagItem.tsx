@@ -18,7 +18,6 @@ const ReviewTagItem = ({ id, name, variant, isSelected }: ReviewTagItemProps) =>
 
   const handleReviewTag = () => {
     handleReviewFormValue({ target: 'tagIds', value: id, isSelected });
-    console.log({ target: 'tagIds', value: id, isSelected });
   };
 
   return (
