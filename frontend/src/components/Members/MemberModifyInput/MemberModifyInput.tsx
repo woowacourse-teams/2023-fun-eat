@@ -1,8 +1,6 @@
-import { Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Heading, Spacing, Text, Input, useTheme } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
-
-import { Input } from '@/components/Common';
 
 const MIN_LENGTH = 1;
 const MAX_LENGTH = 10;

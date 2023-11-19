@@ -1,10 +1,9 @@
-import { Button } from '@fun-eat/design-system';
+import { Button, useToastActionContext } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
 import { IMAGE_MAX_SIZE } from '@/constants';
 import { useEnterKeyDown } from '@/hooks/common';
-import { useToastActionContext } from '@/hooks/context';
 
 interface ReviewImageUploaderProps {
   previewImage: string;

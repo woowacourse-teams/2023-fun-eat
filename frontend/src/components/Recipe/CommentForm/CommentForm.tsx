@@ -1,11 +1,10 @@
-import { Button, Spacing, Text, Textarea, useTheme } from '@fun-eat/design-system';
+import { Button, Spacing, Text, Textarea, useTheme, useToastActionContext } from '@fun-eat/design-system';
 import type { ChangeEventHandler, FormEventHandler, RefObject } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import { useScroll } from '@/hooks/common';
-import { useToastActionContext } from '@/hooks/context';
 import { useRecipeCommentMutation } from '@/hooks/queries/recipe';
 
 interface CommentFormProps {

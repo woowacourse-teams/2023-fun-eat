@@ -1,4 +1,4 @@
-import { Button, Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { Button, Divider, Heading, Spacing, Text, theme, useToastActionContext } from '@fun-eat/design-system';
 import type { FormEventHandler, RefObject } from 'react';
 import styled from 'styled-components';
 
@@ -11,7 +11,7 @@ import { ImageUploader, SvgIcon } from '@/components/Common';
 import { ProductOverviewItem } from '@/components/Product';
 import { MIN_DISPLAYED_TAGS_LENGTH } from '@/constants';
 import { useFormData, useImageUploader, useScroll } from '@/hooks/common';
-import { useReviewFormActionContext, useReviewFormValueContext, useToastActionContext } from '@/hooks/context';
+import { useReviewFormActionContext, useReviewFormValueContext } from '@/hooks/context';
 import { useProductDetailQuery } from '@/hooks/queries/product';
 import { useReviewRegisterFormMutation } from '@/hooks/queries/review';
 import type { ReviewRequest } from '@/types/review';

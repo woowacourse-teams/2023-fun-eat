@@ -1,9 +1,9 @@
-import { Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Spacing, Text, Skeleton, useTheme } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
-import { Skeleton, SvgIcon } from '@/components/Common';
+import { SvgIcon } from '@/components/Common';
 import type { RecipeRanking } from '@/types/ranking';
 import { getRelativeDate } from '@/utils/date';
 

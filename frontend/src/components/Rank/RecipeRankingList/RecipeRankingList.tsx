@@ -1,9 +1,8 @@
-import { Link, Text } from '@fun-eat/design-system';
+import { Carousel, Link, Text } from '@fun-eat/design-system';
 import { Link as RouterLink } from 'react-router-dom';
 
 import RecipeRankingItem from '../RecipeRankingItem/RecipeRankingItem';
 
-import { Carousel } from '@/components/Common';
 import { PATH } from '@/constants/path';
 import { useGA } from '@/hooks/common';
 import { useRecipeRankingQuery } from '@/hooks/queries/rank';

@@ -1,11 +1,11 @@
-import { Badge, Button, Heading, Text, useTheme } from '@fun-eat/design-system';
+import { Badge, Button, Heading, Text, Input, useTheme } from '@fun-eat/design-system';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
 import SearchedProductList from './SearchedProductList';
 
-import { ErrorBoundary, ErrorComponent, Input, Loading, SvgIcon } from '@/components/Common';
+import { ErrorBoundary, ErrorComponent, Loading, SvgIcon } from '@/components/Common';
 import { useDebounce } from '@/hooks/common';
 import { useRecipeFormActionContext } from '@/hooks/context';
 import { useSearch } from '@/hooks/search';
