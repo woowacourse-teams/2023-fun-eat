@@ -1,7 +1,7 @@
+import { useToastActionContext } from '@fun-eat/design-system';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { recipeApi } from '@/apis';
-import { useToastActionContext } from '@/hooks/context';
 import type { RecipeFavoriteRequestBody, RecipeDetail } from '@/types/recipe';
 
 const headers = { 'Content-Type': 'application/json' };

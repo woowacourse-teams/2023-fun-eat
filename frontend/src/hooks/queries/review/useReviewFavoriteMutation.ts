@@ -1,7 +1,7 @@
+import { useToastActionContext } from '@fun-eat/design-system';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { productApi } from '@/apis';
-import { useToastActionContext } from '@/hooks/context';
 import type { ReviewFavoriteRequestBody } from '@/types/review';
 
 const headers = { 'Content-Type': 'application/json' };
