@@ -1,6 +1,11 @@
 package com.funeat.product.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Category {
@@ -23,6 +28,10 @@ public class Category {
         this.name = name;
         this.type = type;
         this.image = image;
+    }
+
+    public boolean isFood() {
+        return type == CategoryType.FOOD;
     }
 
     public Long getId() {

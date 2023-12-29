@@ -27,5 +27,5 @@ cloud:
       static: { S3_REGION }
     s3:
       bucket: { S3_BUCKET }
-      folder: { S3_DEV_FOLDER }
-      cloudfrontPath: { S3_DEV_CLOUDFRONT_PATH }
+      folder: { S3_LOCAL_FOLDER }
+      cloudfrontPath: { S3_LOCAL_CLOUDFRONT_PATH }

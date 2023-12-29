@@ -1,10 +1,11 @@
-import { Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Spacing, Text, Skeleton, useTheme } from '@fun-eat/design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import RecipePreviewImage from '@/assets/plate.svg';
-import { Skeleton, SvgIcon } from '@/components/Common';
+import { SvgIcon } from '@/components/Common';
 import type { RecipeRanking } from '@/types/ranking';
+import { getRelativeDate } from '@/utils/date';
 
 interface RecipeRankingItemProps {
   rank: number;
@@ -18,6 +19,7 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
     title,
     author: { nickname, profileImage },
     favoriteCount,
+    createdAt,
   } = recipe;
   const [isImageLoading, setIsImageLoading] = useState(true);
 
@@ -48,6 +50,10 @@ const RecipeRankingItem = ({ rank, recipe }: RecipeRankingItemProps) => {
               <SvgIcon variant="favoriteFilled" width={16} height={16} color="red" />
               <Text as="span" size="sm" weight="bold">
                 {favoriteCount}
+              </Text>
+              <Spacing direction="horizontal" size={4} />
+              <Text size="sm" color={theme.textColors.info}>
+                {getRelativeDate(createdAt)}
               </Text>
             </FavoriteWrapper>
           </TitleFavoriteWrapper>

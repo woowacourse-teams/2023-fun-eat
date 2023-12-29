@@ -20,7 +20,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
   return (
     <ProductDetailContainer>
       <ImageWrapper>
-        {image !== null ? (
+        {image ? (
           <img src={image} width={300} alt={name} />
         ) : category === CATEGORY_TYPE.FOOD ? (
           <PreviewImage width={300} />
@@ -42,7 +42,7 @@ const ProductDetailItem = ({ category, productDetail }: ProductDetailItemProps) 
           <Text weight="bold">평균 평점</Text>
           <RatingIconWrapper>
             <SvgIcon variant="star" width={20} height={20} color={theme.colors.secondary} />
-            <Text as="span">{averageRating}</Text>
+            <Text as="span">{averageRating.toFixed(1)}</Text>
           </RatingIconWrapper>
         </DescriptionWrapper>
       </DetailInfoWrapper>

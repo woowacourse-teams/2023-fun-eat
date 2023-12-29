@@ -1,9 +1,9 @@
-import { Heading, Text, useTheme } from '@fun-eat/design-system';
+import { Heading, Text, Skeleton, useTheme } from '@fun-eat/design-system';
 import { Fragment, memo, useState } from 'react';
 import styled from 'styled-components';
 
 import PreviewImage from '@/assets/plate.svg';
-import { Skeleton, SvgIcon } from '@/components/Common';
+import { SvgIcon } from '@/components/Common';
 import type { MemberRecipe, Recipe } from '@/types/recipe';
 import { getFormattedDate } from '@/utils/date';
 

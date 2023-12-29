@@ -1,7 +1,7 @@
 import type { Product } from './product';
 import type { ProductRanking, RecipeRanking, ReviewRanking } from './ranking';
-import type { MemberRecipe, Recipe } from './recipe';
-import type { Review } from './review';
+import type { Comment, MemberRecipe, Recipe } from './recipe';
+import type { Review, ReviewDetail } from './review';
 import type { ProductSearchResult, ProductSearchAutocomplete } from './search';
 
 export interface Page {
@@ -14,11 +14,11 @@ export interface Page {
 }
 
 export interface CategoryProductResponse {
-  page: Page;
+  hasNext: boolean;
   products: Product[];
 }
 export interface ProductReviewResponse {
-  page: Page;
+  hasNext: boolean;
   reviews: Review[];
 }
 
@@ -62,4 +62,10 @@ export interface ErrorResponse {
 export interface MemberRecipeResponse {
   page: Page;
   recipes: MemberRecipe[];
+}
+
+export interface CommentResponse {
+  hasNext: boolean;
+  totalElements: number | null;
+  comments: Comment[];
 }

@@ -109,16 +109,16 @@ class ProductServiceTest extends ServiceTest {
                 final var review1_4 = 리뷰_이미지test3_평점3점_재구매O_생성(member1, product1, 0L);
                 final var review2_1 = 리뷰_이미지test4_평점4점_재구매O_생성(member1, product2, 0L);
                 final var review2_2 = 리뷰_이미지test4_평점4점_재구매O_생성(member1, product2, 0L);
-                final var review3_1 = 리뷰_이미지test5_평점5점_재구매X_생성(member1, product2, 0L);
-                final var review4_1 = 리뷰_이미지test4_평점4점_재구매X_생성(member1, product2, 0L);
-                final var review4_2 = 리뷰_이미지test3_평점3점_재구매X_생성(member1, product2, 0L);
-                final var review4_3 = 리뷰_이미지test5_평점5점_재구매X_생성(member1, product2, 0L);
+                final var review3_1 = 리뷰_이미지test5_평점5점_재구매X_생성(member1, product3, 0L);
+                final var review4_1 = 리뷰_이미지test4_평점4점_재구매X_생성(member1, product4, 0L);
+                final var review4_2 = 리뷰_이미지test3_평점3점_재구매X_생성(member1, product4, 0L);
+                final var review4_3 = 리뷰_이미지test5_평점5점_재구매X_생성(member1, product4, 0L);
                 복수_리뷰_저장(review1_1, review1_2, review1_3, review1_4, review2_1, review2_2, review3_1, review4_1,
                         review4_2, review4_3);
 
-                final var rankingProductDto1 = RankingProductDto.toDto(product2);
-                final var rankingProductDto2 = RankingProductDto.toDto(product3);
-                final var rankingProductDto3 = RankingProductDto.toDto(product4);
+                final var rankingProductDto1 = RankingProductDto.toDto(product3);
+                final var rankingProductDto2 = RankingProductDto.toDto(product4);
+                final var rankingProductDto3 = RankingProductDto.toDto(product2);
                 final var rankingProductDtos = List.of(rankingProductDto1, rankingProductDto2, rankingProductDto3);
                 final var expected = RankingProductsResponse.toResponse(rankingProductDtos);
 

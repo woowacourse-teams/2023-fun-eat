@@ -1,16 +1,19 @@
-import { Spacing, Text, theme } from '@fun-eat/design-system';
+import { Spacing, Text, useTheme } from '@fun-eat/design-system';
 import { memo } from 'react';
 import styled from 'styled-components';
 
 import { SvgIcon } from '@/components/Common';
 import type { ReviewRanking } from '@/types/ranking';
+import { getRelativeDate } from '@/utils/date';
 
 interface ReviewRankingItemProps {
   reviewRanking: ReviewRanking;
 }
 
 const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
-  const { productName, content, rating, favoriteCount } = reviewRanking;
+  const theme = useTheme();
+
+  const { productName, content, rating, favoriteCount, createdAt } = reviewRanking;
 
   return (
     <ReviewRankingItemContainer>
@@ -34,6 +37,9 @@ const ReviewRankingItem = ({ reviewRanking }: ReviewRankingItemProps) => {
             {rating.toFixed(1)}
           </Text>
         </RatingIconWrapper>
+        <ReviewDate size="sm" color={theme.textColors.info}>
+          {getRelativeDate(createdAt)}
+        </ReviewDate>
       </FavoriteStarWrapper>
     </ReviewRankingItemContainer>
   );
@@ -46,7 +52,7 @@ const ReviewRankingItemContainer = styled.div`
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  border: 1px solid ${({ theme }) => theme.borderColors.disabled};
+  border: ${({ theme }) => `1px solid ${theme.borderColors.disabled}`};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
 `;
 
@@ -77,4 +83,8 @@ const RatingIconWrapper = styled.div`
   & > svg {
     padding-bottom: 2px;
   }
+`;
+
+const ReviewDate = styled(Text)`
+  margin-left: auto;
 `;

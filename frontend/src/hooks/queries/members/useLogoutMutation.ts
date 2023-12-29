@@ -1,3 +1,4 @@
+import { useToastActionContext } from '@fun-eat/design-system';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +9,8 @@ const useLogoutMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const { toast } = useToastActionContext();
+
   return useMutation({
     mutationFn: () => logoutApi.post({ credentials: true }),
     onSuccess: () => {
@@ -16,10 +19,10 @@ const useLogoutMutation = () => {
     },
     onError: (error) => {
       if (error instanceof Error) {
-        alert(error.message);
+        toast.error(error.message);
         return;
       }
-      alert('로그아웃을 다시 시도해주세요.');
+      toast.error('로그아웃을 다시 시도해주세요.');
     },
   });
 };

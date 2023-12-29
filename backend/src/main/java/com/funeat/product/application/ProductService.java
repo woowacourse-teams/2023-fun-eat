@@ -9,6 +9,7 @@ import com.funeat.product.domain.Product;
 import com.funeat.product.dto.ProductInCategoryDto;
 import com.funeat.product.dto.ProductResponse;
 import com.funeat.product.dto.ProductReviewCountDto;
+import com.funeat.product.dto.ProductSortCondition;
 import com.funeat.product.dto.ProductsInCategoryResponse;
 import com.funeat.product.dto.RankingProductDto;
 import com.funeat.product.dto.RankingProductsResponse;
@@ -21,6 +22,7 @@ import com.funeat.product.exception.ProductException.ProductNotFoundException;
 import com.funeat.product.persistence.CategoryRepository;
 import com.funeat.product.persistence.ProductRecipeRepository;
 import com.funeat.product.persistence.ProductRepository;
+import com.funeat.product.persistence.ProductSpecification;
 import com.funeat.recipe.domain.Recipe;
 import com.funeat.recipe.domain.RecipeImage;
 import com.funeat.recipe.dto.RecipeDto;
@@ -30,13 +32,14 @@ import com.funeat.recipe.persistence.RecipeRepository;
 import com.funeat.review.persistence.ReviewRepository;
 import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.tag.domain.Tag;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,9 +49,10 @@ public class ProductService {
 
     private static final int THREE = 3;
     private static final int TOP = 0;
-    public static final String REVIEW_COUNT = "reviewCount";
     private static final int RANKING_SIZE = 3;
     private static final int PAGE_SIZE = 10;
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int DEFAULT_CURSOR_PAGINATION_SIZE = 11;
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -61,7 +65,8 @@ public class ProductService {
     public ProductService(final CategoryRepository categoryRepository, final ProductRepository productRepository,
                           final ReviewTagRepository reviewTagRepository, final ReviewRepository reviewRepository,
                           final ProductRecipeRepository productRecipeRepository,
-                          final RecipeImageRepository recipeImageRepository, final RecipeRepository recipeRepository) {
+                          final RecipeImageRepository recipeImageRepository,
+                          final RecipeRepository recipeRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.reviewTagRepository = reviewTagRepository;
@@ -71,38 +76,53 @@ public class ProductService {
         this.recipeRepository = recipeRepository;
     }
 
-    public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId,
-                                                               final Pageable pageable) {
+    public ProductsInCategoryResponse getAllProductsInCategory(final Long categoryId, final Long lastProductId,
+                                                               final ProductSortCondition sortCondition) {
         final Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND, categoryId));
+        final Product lastProduct = productRepository.findById(lastProductId).orElse(null);
 
-        final Page<ProductInCategoryDto> pages = getAllProductsInCategory(pageable, category);
+        final Specification<Product> specification = ProductSpecification.searchBy(category, lastProduct, sortCondition);
+        final List<Product> findResults = productRepository.findAllWithSpecification(specification, DEFAULT_CURSOR_PAGINATION_SIZE);
 
-        final PageDto pageDto = PageDto.toDto(pages);
-        final List<ProductInCategoryDto> productDtos = pages.getContent();
+        final List<ProductInCategoryDto> productDtos = getProductInCategoryDtos(findResults);
+        final boolean hasNext = hasNextPage(findResults);
 
-        return ProductsInCategoryResponse.toResponse(pageDto, productDtos);
+        return ProductsInCategoryResponse.toResponse(hasNext, productDtos);
     }
 
-    private Page<ProductInCategoryDto> getAllProductsInCategory(final Pageable pageable, final Category category) {
-        if (Objects.nonNull(pageable.getSort().getOrderFor(REVIEW_COUNT))) {
-            final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-            return productRepository.findAllByCategoryOrderByReviewCountDesc(category, pageRequest);
+    private List<ProductInCategoryDto> getProductInCategoryDtos(final List<Product> findProducts) {
+        final int resultSize = getResultSize(findProducts);
+        final List<Product> products = findProducts.subList(0, resultSize);
+
+        return products.stream()
+                .map(ProductInCategoryDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private int getResultSize(final List<Product> findProducts) {
+        if (findProducts.size() < DEFAULT_CURSOR_PAGINATION_SIZE) {
+            return findProducts.size();
         }
-        return productRepository.findAllByCategory(category, pageable);
+        return DEFAULT_PAGE_SIZE;
+    }
+
+    private boolean hasNextPage(final List<Product> findProducts) {
+        return findProducts.size() > DEFAULT_PAGE_SIZE;
     }
 
     public ProductResponse findProductDetail(final Long productId) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND, productId));
-        final Long reviewCount = reviewRepository.countByProduct(product);
         final List<Tag> tags = reviewTagRepository.findTop3TagsByReviewIn(productId, PageRequest.of(TOP, THREE));
 
-        return ProductResponse.toResponse(product, reviewCount, tags);
+        return ProductResponse.toResponse(product, tags);
     }
 
     public RankingProductsResponse getTop3Products() {
-        final List<ProductReviewCountDto> productsAndReviewCounts = productRepository.findAllByAverageRatingGreaterThan3();
+        final LocalDateTime endDateTime = LocalDateTime.now();
+        final LocalDateTime startDateTime = endDateTime.minusWeeks(2L);
+        final List<ProductReviewCountDto> productsAndReviewCounts = productRepository.findAllByAverageRatingGreaterThan3(startDateTime, endDateTime);
         final Comparator<ProductReviewCountDto> rankingScoreComparator = Comparator.comparing(
                 (ProductReviewCountDto it) -> it.getProduct().calculateRankingScore(it.getReviewCount())
         ).reversed();

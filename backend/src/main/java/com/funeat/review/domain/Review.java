@@ -4,6 +4,7 @@ import com.funeat.member.domain.Member;
 import com.funeat.member.domain.favorite.ReviewFavorite;
 import com.funeat.product.domain.Product;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +20,8 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Review {
+
+    private static final double RANKING_GRAVITY = 0.5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,12 +83,34 @@ public class Review {
         this.favoriteCount = favoriteCount;
     }
 
+    public Review(final Member member, final Product findProduct, final String image, final Long rating,
+                  final String content, final Boolean reBuy, final Long favoriteCount, final LocalDateTime createdAt) {
+        this.member = member;
+        this.product = findProduct;
+        this.image = image;
+        this.rating = rating;
+        this.content = content;
+        this.reBuy = reBuy;
+        this.favoriteCount = favoriteCount;
+        this.createdAt = createdAt;
+    }
+
     public void addFavoriteCount() {
         this.favoriteCount++;
     }
 
     public void minusFavoriteCount() {
         this.favoriteCount--;
+    }
+
+    public Double calculateRankingScore() {
+        final long age = ChronoUnit.DAYS.between(createdAt, LocalDateTime.now());
+        final double denominator = Math.pow(age + 1.0, RANKING_GRAVITY);
+        return favoriteCount / denominator;
+    }
+
+    public boolean checkAuthor(final Member member) {
+        return Objects.equals(this.member, member);
     }
 
     public Long getId() {

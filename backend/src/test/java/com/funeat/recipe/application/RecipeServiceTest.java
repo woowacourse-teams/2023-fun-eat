@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.funeat.comment.domain.Comment;
 import com.funeat.common.ServiceTest;
 import com.funeat.common.dto.PageDto;
 import com.funeat.member.domain.Member;
@@ -35,17 +36,24 @@ import com.funeat.product.domain.Category;
 import com.funeat.product.domain.CategoryType;
 import com.funeat.product.domain.Product;
 import com.funeat.product.exception.ProductException.ProductNotFoundException;
+import com.funeat.recipe.dto.RankingRecipeDto;
+import com.funeat.recipe.dto.RankingRecipesResponse;
+import com.funeat.recipe.dto.RecipeAuthorDto;
+import com.funeat.recipe.dto.RecipeCommentCondition;
+import com.funeat.recipe.dto.RecipeCommentCreateRequest;
+import com.funeat.recipe.dto.RecipeCommentResponse;
 import com.funeat.recipe.dto.RecipeCreateRequest;
 import com.funeat.recipe.dto.RecipeDetailResponse;
 import com.funeat.recipe.dto.RecipeDto;
 import com.funeat.recipe.exception.RecipeException.RecipeNotFoundException;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 class RecipeServiceTest extends ServiceTest {
@@ -317,7 +325,7 @@ class RecipeServiceTest extends ServiceTest {
         }
 
         @Test
-        void 꿀조합을_최신순으로_정렬할_수_있다() {
+        void 꿀조합을_최신순으로_정렬할_수_있다() throws InterruptedException {
             // given
             final var member1 = 멤버_멤버1_생성();
             final var member2 = 멤버_멤버2_생성();
@@ -333,7 +341,9 @@ class RecipeServiceTest extends ServiceTest {
             복수_상품_저장(product1, product2, product3);
 
             final var recipe1_1 = 레시피_생성(member1, 1L);
+            Thread.sleep(100);
             final var recipe1_2 = 레시피_생성(member1, 3L);
+            Thread.sleep(100);
             final var recipe1_3 = 레시피_생성(member1, 2L);
             복수_꿀조합_저장(recipe1_1, recipe1_2, recipe1_3);
 
@@ -542,6 +552,342 @@ class RecipeServiceTest extends ServiceTest {
             final var favoriteRequest = 레시피좋아요요청_생성(true);
             assertThatThrownBy(() -> recipeService.likeRecipe(memberId, wrongRecipeId, favoriteRequest))
                     .isInstanceOf(RecipeNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class getTop3Recipes_성공_테스트 {
+
+        @Nested
+        class 꿀조합_개수에_대한_테스트 {
+
+            @Test
+            void 전체_꿀조합이_하나도_없어도_반환값은_있어야한다() {
+                // given
+                final var expected = RankingRecipesResponse.toResponse(Collections.emptyList());
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 랭킹_조건에_부합하는_꿀조합이_1개면_꿀조합이_1개_반환된다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe = 레시피_생성(member, 2L, now);
+                단일_꿀조합_저장(recipe);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto = RankingRecipeDto.toDto(recipe, Collections.emptyList(), author);
+                final var rankingRecipesDtos = Collections.singletonList(rankingRecipeDto);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 랭킹_조건에_부합하는_꿀조합이_2개면_꿀조합이_2개_반환된다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 2L, now.minusDays(1L));
+                final var recipe2 = 레시피_생성(member, 2L, now);
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 전체_꿀조합_중_랭킹이_높은_상위_3개_꿀조합을_구할_수_있다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 4L, now.minusDays(10L));
+                final var recipe2 = 레시피_생성(member, 6L, now.minusDays(10L));
+                final var recipe3 = 레시피_생성(member, 5L, now);
+                final var recipe4 = 레시피_생성(member, 6L, now);
+                복수_꿀조합_저장(recipe1, recipe2, recipe3, recipe4);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipeDto3 = RankingRecipeDto.toDto(recipe3, Collections.emptyList(), author);
+                final var rankingRecipeDto4 = RankingRecipeDto.toDto(recipe4, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto4, rankingRecipeDto3, rankingRecipeDto2);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+        }
+
+        @Nested
+        class 꿀조합_랭킹_점수에_대한_테스트 {
+
+            @Test
+            void 꿀조합_좋아요_수가_같으면_최근_생성된_꿀조합의_랭킹을_더_높게_반환한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 10L, now.minusDays(9L));
+                final var recipe2 = 레시피_생성(member, 10L, now.minusDays(4L));
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void 꿀조합_생성_일자가_같으면_좋아요_수가_많은_꿀조합의_랭킹을_더_높게_반환한다() {
+                // given
+                final var member = 멤버_멤버1_생성();
+                단일_멤버_저장(member);
+
+                final var now = LocalDateTime.now();
+                final var recipe1 = 레시피_생성(member, 2L, now.minusDays(1L));
+                final var recipe2 = 레시피_생성(member, 4L, now.minusDays(1L));
+                복수_꿀조합_저장(recipe1, recipe2);
+
+                final var author = RecipeAuthorDto.toDto(member);
+                final var rankingRecipeDto1 = RankingRecipeDto.toDto(recipe1, Collections.emptyList(), author);
+                final var rankingRecipeDto2 = RankingRecipeDto.toDto(recipe2, Collections.emptyList(), author);
+                final var rankingRecipesDtos = List.of(rankingRecipeDto2, rankingRecipeDto1);
+                final var expected = RankingRecipesResponse.toResponse(rankingRecipesDtos);
+
+                // when
+                final var actual = recipeService.getTop3Recipes();
+
+                // then
+                assertThat(actual).usingRecursiveComparison()
+                        .isEqualTo(expected);
+            }
+        }
+    }
+  
+    @Nested
+    class writeCommentOfRecipe_성공_테스트 {
+
+        @Test
+        void 꿀조합에_댓글을_작성할_수_있다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = 멤버_멤버1_생성();
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var savedMemberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+
+            // when
+            final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요");
+            final var savedCommentId = recipeService.writeCommentOfRecipe(savedMemberId, savedRecipeId, request);
+
+            // then
+            final var result = commentRepository.findById(savedCommentId).get();
+            final var savedRecipe = recipeRepository.findById(savedRecipeId).get();
+            final var savedMember = memberRepository.findById(savedMemberId).get();
+
+            assertThat(result).usingRecursiveComparison()
+                    .ignoringFields("id", "createdAt")
+                    .isEqualTo(new Comment(savedRecipe, savedMember, request.getComment()));
+        }
+    }
+
+    @Nested
+    class writeCommentOfRecipe_실패_테스트 {
+
+        @Test
+        void 존재하지_않은_멤버가_꿀조합에_댓글을_작성하면_예외가_발생한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = new Member("author", "image.png", "1");
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var notExistMemberId = 999999999L;
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+            final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요");
+
+            // when then
+            assertThatThrownBy(() -> recipeService.writeCommentOfRecipe(notExistMemberId, savedRecipeId, request))
+                    .isInstanceOf(MemberNotFoundException.class);
+        }
+
+        @Test
+        void 존재하지_않은_꿀조합에_댓글을_작성하면_예외가_발생한다() {
+            // given
+            final var memberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요");
+            final var notExistRecipeId = 999999999L;
+
+            // when then
+            assertThatThrownBy(() -> recipeService.writeCommentOfRecipe(memberId, notExistRecipeId, request))
+                    .isInstanceOf(RecipeNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class getCommentsOfRecipe_성공_테스트 {
+
+        @Test
+        void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_첫페이지_댓글_10개조회() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = 멤버_멤버1_생성();
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var savedMemberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+
+            for (int i = 1; i <= 15; i++) {
+                final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요" + i);
+                recipeService.writeCommentOfRecipe(savedMemberId, savedRecipeId, request);
+            }
+
+            // when
+            final var result = recipeService.getCommentsOfRecipe(savedRecipeId,
+                    new RecipeCommentCondition(null, null));
+
+            //
+            final var savedRecipe = recipeRepository.findById(savedRecipeId).get();
+            final var savedMember = memberRepository.findById(savedMemberId).get();
+
+            final var expectedCommentResponses = new ArrayList<>();
+            for (int i = 0; i < result.getComments().size(); i++) {
+                expectedCommentResponses.add(RecipeCommentResponse.toResponse(
+                        new Comment(savedRecipe, savedMember, "꿀조합 댓글이에요" + (15 - i))));
+            }
+
+            assertThat(result.getHasNext()).isTrue();
+            assertThat(result.getTotalElements()).isEqualTo(15);
+            assertThat(result.getComments()).hasSize(10);
+            assertThat(result.getComments()).usingRecursiveComparison()
+                    .ignoringFields("id", "createdAt")
+                    .isEqualTo(expectedCommentResponses);
+        }
+
+        @Test
+        void 꿀조합에_달린_댓글들을_커서페이징을_통해_조회할_수_있다_총_댓글_15개_중_마지막페이지_댓글_5개조회() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+            final var product1 = 상품_삼각김밥_가격1000원_평점2점_생성(category);
+            final var product2 = 상품_삼각김밥_가격3000원_평점4점_생성(category);
+            final var product3 = 상품_삼각김밥_가격2000원_평점3점_생성(category);
+            복수_상품_저장(product1, product2, product3);
+            final var author = 멤버_멤버1_생성();
+            단일_멤버_저장(author);
+            final var authorId = author.getId();
+
+            final var images = 여러_이미지_생성(3);
+
+            final var productIds = List.of(product1.getId(), product2.getId(), product3.getId());
+            final var recipeCreateRequest = new RecipeCreateRequest("제일로 맛있는 레시피", productIds,
+                    "우선 밥을 넣어요. 그리고 밥을 또 넣어요. 그리고 밥을 또 넣으면.. 끝!!");
+
+            final var savedMemberId = 단일_멤버_저장(멤버_멤버1_생성());
+            final var savedRecipeId = recipeService.create(authorId, images, recipeCreateRequest);
+
+            for (int i = 1; i <= 15; i++) {
+                final var request = new RecipeCommentCreateRequest("꿀조합 댓글이에요" + i);
+                recipeService.writeCommentOfRecipe(savedMemberId, savedRecipeId, request);
+            }
+
+            // when
+            final var result = recipeService.getCommentsOfRecipe(savedRecipeId,
+                    new RecipeCommentCondition(6L, 15L));
+
+            //
+            final var savedRecipe = recipeRepository.findById(savedRecipeId).get();
+            final var savedMember = memberRepository.findById(savedMemberId).get();
+
+            final var expectedCommentResponses = new ArrayList<>();
+            for (int i = 0; i < result.getComments().size(); i++) {
+                expectedCommentResponses.add(RecipeCommentResponse.toResponse(
+                        new Comment(savedRecipe, savedMember, "꿀조합 댓글이에요" + (5 - i))));
+            }
+
+            assertThat(result.getHasNext()).isFalse();
+            assertThat(result.getTotalElements()).isEqualTo(15);
+            assertThat(result.getComments()).hasSize(5);
+            assertThat(result.getComments()).usingRecursiveComparison()
+                    .ignoringFields("id", "createdAt")
+                    .isEqualTo(expectedCommentResponses);
         }
     }
 

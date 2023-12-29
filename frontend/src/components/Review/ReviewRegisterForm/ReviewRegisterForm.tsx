@@ -1,4 +1,4 @@
-import { Button, Divider, Heading, Spacing, Text, theme } from '@fun-eat/design-system';
+import { Button, Divider, Heading, Spacing, Text, theme, useToastActionContext } from '@fun-eat/design-system';
 import type { FormEventHandler, RefObject } from 'react';
 import styled from 'styled-components';
 
@@ -29,10 +29,11 @@ interface ReviewRegisterFormProps {
 
 const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMenu }: ReviewRegisterFormProps) => {
   const { scrollToPosition } = useScroll();
-  const { previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
+  const { isImageUploading, previewImage, imageFile, uploadImage, deleteImage } = useImageUploader();
 
   const reviewFormValue = useReviewFormValueContext();
   const { resetReviewFormValue } = useReviewFormActionContext();
+  const { toast } = useToastActionContext();
 
   const { data: productDetail } = useProductDetailQuery(productId);
   const { mutate, isLoading } = useReviewRegisterFormMutation(productId);
@@ -41,7 +42,8 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
     reviewFormValue.rating > MIN_RATING_SCORE &&
     reviewFormValue.tagIds.length >= MIN_SELECTED_TAGS_COUNT &&
     reviewFormValue.tagIds.length <= MIN_DISPLAYED_TAGS_LENGTH &&
-    reviewFormValue.content.length > MIN_CONTENT_LENGTH;
+    reviewFormValue.content.length > MIN_CONTENT_LENGTH &&
+    !isImageUploading;
 
   const formData = useFormData<ReviewRequest>({
     imageKey: 'image',
@@ -64,15 +66,16 @@ const ReviewRegisterForm = ({ productId, targetRef, closeReviewDialog, initTabMe
         resetAndCloseForm();
         initTabMenu();
         scrollToPosition(targetRef);
+        toast.success('📝 리뷰가 등록 됐어요');
       },
       onError: (error) => {
         resetAndCloseForm();
         if (error instanceof Error) {
-          alert(error.message);
+          toast.error(error.message);
           return;
         }
 
-        alert('리뷰 등록을 다시 시도해주세요');
+        toast.error('리뷰 등록을 다시 시도해주세요');
       },
     });
   };

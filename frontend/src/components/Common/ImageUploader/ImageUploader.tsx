@@ -1,4 +1,4 @@
-import { Button } from '@fun-eat/design-system';
+import { Button, useToastActionContext } from '@fun-eat/design-system';
 import type { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
@@ -13,6 +13,7 @@ interface ReviewImageUploaderProps {
 
 const ImageUploader = ({ previewImage, uploadImage, deleteImage }: ReviewImageUploaderProps) => {
   const { inputRef, handleKeydown } = useEnterKeyDown();
+  const { toast } = useToastActionContext();
 
   const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (!event.target.files) {
@@ -22,7 +23,7 @@ const ImageUploader = ({ previewImage, uploadImage, deleteImage }: ReviewImageUp
     const imageFile = event.target.files[0];
 
     if (imageFile.size > IMAGE_MAX_SIZE) {
-      alert('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
+      toast.error('이미지 크기가 너무 커요. 5MB 이하의 이미지를 골라주세요.');
       event.target.value = '';
       return;
     }

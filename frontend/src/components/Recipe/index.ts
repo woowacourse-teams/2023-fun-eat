@@ -4,4 +4,7 @@ export { default as RecipeUsedProducts } from './RecipeUsedProducts/RecipeUsedPr
 export { default as RecipeItem } from './RecipeItem/RecipeItem';
 export { default as RecipeList } from './RecipeList/RecipeList';
 export { default as RecipeRegisterForm } from './RecipeRegisterForm/RecipeRegisterForm';
-export { default as RecipeFavorite } from './RecipeFavorite/RecipeFavorite';
+export { default as RecipeFavoriteButton } from './RecipeFavoriteButton/RecipeFavoriteButton';
+export { default as CommentItem } from './CommentItem/CommentItem';
+export { default as CommentForm } from './CommentForm/CommentForm';
+export { default as CommentList } from './CommentList/CommentList';

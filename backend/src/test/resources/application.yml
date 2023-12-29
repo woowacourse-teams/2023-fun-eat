@@ -30,7 +30,16 @@ cloud:
       bucket: testBucket
       folder: testFolder
       cloudfrontPath: testCloudfrontPath
+    image:
+      food: foodimage
+      store: storeimage
 
 back-office:
   id: test
   key: test
+
+server:
+  servlet:
+    session:
+      cookie:
+        name: SESSION

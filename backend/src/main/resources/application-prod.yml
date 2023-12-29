@@ -34,8 +34,6 @@ management:
       enabled: true
     prometheus:
       enabled: true
-  server:
-    port: { SERVER_PORT }
 
 cloud:
   aws:

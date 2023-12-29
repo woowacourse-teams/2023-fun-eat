@@ -25,7 +25,6 @@ export const productHandlers = [
   rest.get('/api/categories/:categoryId/products', (req, res, ctx) => {
     const sortOptions = req.url.searchParams.get('sort');
     const categoryId = req.params.categoryId;
-    const page = Number(req.url.searchParams.get('page'));
 
     if (sortOptions === null) {
       return res(ctx.status(400));
@@ -37,7 +36,7 @@ export const productHandlers = [
 
     let products = commonProducts;
 
-    if (Number(categoryId) >= 7 && Number(categoryId) <= 9) {
+    if (Number(categoryId) >= 6 && Number(categoryId) <= 9) {
       products = pbProducts;
     }
 
@@ -53,11 +52,7 @@ export const productHandlers = [
         sortOrder === 'asc' ? cur[key] - next[key] : next[key] - cur[key]
       ),
     };
-    return res(
-      ctx.status(200),
-      ctx.json({ page: sortedProducts.page, products: products.products.slice(page * 10, (page + 1) * 10) }),
-      ctx.delay(500)
-    );
+    return res(ctx.status(200), ctx.json(sortedProducts), ctx.delay(500));
   }),
 
   rest.get('/api/products/:productId', (req, res, ctx) => {

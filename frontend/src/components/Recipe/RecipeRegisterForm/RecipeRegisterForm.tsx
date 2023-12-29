@@ -1,4 +1,4 @@
-import { Button, Divider, Heading, Spacing, Text, useTheme } from '@fun-eat/design-system';
+import { Button, Divider, Heading, Spacing, Text, useTheme, useToastActionContext } from '@fun-eat/design-system';
 import type { FormEventHandler } from 'react';
 import styled from 'styled-components';
 
@@ -23,6 +23,7 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
 
   const recipeFormValue = useRecipeFormValueContext();
   const { resetRecipeFormValue } = useRecipeFormActionContext();
+  const { toast } = useToastActionContext();
 
   const formData = useFormData<RecipeRequest>({
     imageKey: 'images',
@@ -48,15 +49,16 @@ const RecipeRegisterForm = ({ closeRecipeDialog }: RecipeRegisterFormProps) => {
     mutate(formData, {
       onSuccess: () => {
         resetAndCloseForm();
+        toast.success('🍯 꿀조합이 등록 됐어요');
       },
       onError: (error) => {
         resetAndCloseForm();
         if (error instanceof Error) {
-          alert(error.message);
+          toast.error(error.message);
           return;
         }
 
-        alert('꿀조합 등록을 다시 시도해주세요');
+        toast.error('꿀조합 등록을 다시 시도해주세요');
       },
     });
   };
