@@ -50,6 +50,7 @@ public class ProductService {
     private static final int THREE = 3;
     private static final int TOP = 0;
     private static final int RANKING_SIZE = 3;
+    private static final int PAGE_SIZE = 10;
     private static final int DEFAULT_PAGE_SIZE = 10;
     private static final int DEFAULT_CURSOR_PAGINATION_SIZE = 11;
 
@@ -135,15 +136,23 @@ public class ProductService {
         return RankingProductsResponse.toResponse(rankingProductDtos);
     }
 
-    public SearchProductsResponse searchProducts(final String query, final Pageable pageable) {
-        final Page<Product> products = productRepository.findAllByNameContaining(query, pageable);
+    public SearchProductsResponse searchProducts(final String query, final Long lastId) {
+        final List<Product> products = findAllByNameContaining(query, lastId);
 
-        final PageDto pageDto = PageDto.toDto(products);
+        final boolean hasNext = products.size() > PAGE_SIZE;
         final List<SearchProductDto> productDtos = products.stream()
                 .map(SearchProductDto::toDto)
                 .collect(Collectors.toList());
 
-        return SearchProductsResponse.toResponse(pageDto, productDtos);
+        return SearchProductsResponse.toResponse(hasNext, productDtos);
+    }
+
+    private List<Product> findAllByNameContaining(final String query, final Long lastId) {
+        final PageRequest size = PageRequest.ofSize(PAGE_SIZE);
+        if (lastId == 0) {
+            return productRepository.findAllByNameContainingFirst(query, size);
+        }
+        return productRepository.findAllByNameContaining(query, lastId, size);
     }
 
     public SearchProductResultsResponse getSearchResults(final String query, final Pageable pageable) {

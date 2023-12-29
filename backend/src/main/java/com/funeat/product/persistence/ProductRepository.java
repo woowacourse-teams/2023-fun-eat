@@ -26,7 +26,16 @@ public interface ProductRepository extends BaseRepository<Product, Long> {
             + "ORDER BY "
             + "(CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 ELSE 2 END), "
             + "p.id DESC")
-    Page<Product> findAllByNameContaining(@Param("name") final String name, final Pageable pageable);
+    List<Product> findAllByNameContainingFirst(@Param("name") final String name, final Pageable pageable);
+
+    @Query("SELECT p FROM Product p "
+            + "JOIN Product last ON last.id = :lastId "
+            + "WHERE p.name LIKE CONCAT('%', :name, '%') "
+            + "AND (last.name LIKE CONCAT(:name, '%') "
+            + "AND ((p.name LIKE CONCAT(:name, '%') AND p.id < :lastId) OR (p.name NOT LIKE CONCAT(:name, '%'))) "
+            + "OR (p.name NOT LIKE CONCAT(:name, '%') AND p.id < :lastId)) "
+            + "ORDER BY (CASE WHEN p.name LIKE CONCAT(:name, '%') THEN 1 ELSE 2 END), p.id DESC")
+    List<Product> findAllByNameContaining(@Param("name") final String name, final Long lastId, final Pageable pageable);
 
     @Query("SELECT new com.funeat.product.dto.ProductReviewCountDto(p, COUNT(r.id)) FROM Product p "
             + "LEFT JOIN Review r ON r.product.id = p.id "

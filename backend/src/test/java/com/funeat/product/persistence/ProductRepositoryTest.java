@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ProductRepositoryTest extends RepositoryTest {
@@ -102,7 +103,7 @@ class ProductRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class findAllByNameContaining_성공_테스트 {
+    class findAllByNameContainingFirst_성공_테스트 {
 
         @Test
         void 상품명에_검색어가_포함된_상품들을_조회한다() {
@@ -114,12 +115,36 @@ class ProductRepositoryTest extends RepositoryTest {
             final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
             복수_상품_저장(product1, product2);
 
-            final var page = 페이지요청_기본_생성(0, 10);
+            final var expected = List.of(product2, product1);
+
+            // when
+            final var actual = productRepository.findAllByNameContainingFirst("망고", PageRequest.of(0, 2));
+
+            // then
+            assertThat(actual).usingRecursiveComparison()
+                    .isEqualTo(expected);
+        }
+    }
+
+    @Nested
+    class findAllByNameContaining_성공_테스트 {
+
+        @Test
+        void 상품명에_검색어가_포함된_상품들을_조회한다() {
+            // given
+            final var category = 카테고리_간편식사_생성();
+            단일_카테고리_저장(category);
+
+            final var product1 = 상품_애플망고_가격3000원_평점5점_생성(category);
+            final var product2 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product3 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            final var product4 = 상품_망고빙수_가격5000원_평점4점_생성(category);
+            복수_상품_저장(product1, product2, product3, product4);
 
             final var expected = List.of(product2, product1);
 
             // when
-            final var actual = productRepository.findAllByNameContaining("망고", page).getContent();
+            final var actual = productRepository.findAllByNameContaining("망고", 3L, PageRequest.of(0, 4));
 
             // then
             assertThat(actual).usingRecursiveComparison()
