@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ReviewTagRepository extends JpaRepository<ReviewTag, Long> {
 
@@ -21,4 +22,11 @@ public interface ReviewTagRepository extends JpaRepository<ReviewTag, Long> {
     void deleteByReview(final Review review);
 
     List<ReviewTag> findByReview(final Review review);
+
+    @Query("SELECT rt "
+            + "FROM ReviewTag rt "
+            + "JOIN FETCH rt.review "
+            + "JOIN FETCH rt.tag "
+            + "WHERE rt.review.id IN :reviewIds")
+    List<ReviewTag> findReviewTagByReviewIds(@Param("reviewIds") final List<Long> reviewIds);
 }

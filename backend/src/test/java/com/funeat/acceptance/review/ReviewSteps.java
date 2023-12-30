@@ -61,10 +61,10 @@ public class ReviewSteps {
                 .cookie("SESSION", loginCookie)
                 .queryParam("sort", sort)
                 .queryParam("page", page)
-                .queryParam("lastReviewId", lastReviewId).log().all()
+                .queryParam("lastReviewId", lastReviewId)
                 .when()
                 .get("/api/products/{product_id}/reviews", productId)
-                .then().log().all()
+                .then()
                 .extract();
     }
 
@@ -80,7 +80,7 @@ public class ReviewSteps {
         return given()
                 .when()
                 .get("/api/ranks/products/{product_id}/reviews", productId)
-                .then().log().all()
+                .then()
                 .extract();
     }
 

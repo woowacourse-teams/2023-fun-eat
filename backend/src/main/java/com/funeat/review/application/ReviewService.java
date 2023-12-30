@@ -38,8 +38,10 @@ import com.funeat.review.persistence.ReviewTagRepository;
 import com.funeat.review.specification.SortingReviewSpecification;
 import com.funeat.tag.domain.Tag;
 import com.funeat.tag.persistence.TagRepository;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.context.ApplicationEventPublisher;
@@ -184,10 +186,21 @@ public class ReviewService {
 
     private List<SortingReviewDto> addTagsToSortingReviews(
             final List<SortingReviewDtoWithoutTag> sortingReviewDtoWithoutTags) {
-        return sortingReviewDtoWithoutTags.stream()
-                .map(reviewDto -> SortingReviewDto.toDto(reviewDto,
-                        tagRepository.findTagsByReviewId(reviewDto.getId())))
+        final List<Long> reviewIds = sortingReviewDtoWithoutTags.stream()
+                .map(SortingReviewDtoWithoutTag::getId)
                 .collect(Collectors.toList());
+        final List<ReviewTag> reviewTags = reviewTagRepository.findReviewTagByReviewIds(reviewIds);
+
+        final List<SortingReviewDto> sortingReviewDtos = new ArrayList<>();
+        for (final SortingReviewDtoWithoutTag sortingReviewDtoWithoutTag : sortingReviewDtoWithoutTags) {
+            final List<Tag> tags = reviewTags.stream()
+                    .filter(reviewTag -> Objects.equals(sortingReviewDtoWithoutTag.getId(), reviewTag.getReview().getId()))
+                    .map(ReviewTag::getTag)
+                    .collect(Collectors.toList());
+            final SortingReviewDto sortingReviewDto = SortingReviewDto.toDto(sortingReviewDtoWithoutTag, tags);
+            sortingReviewDtos.add(sortingReviewDto);
+        }
+        return sortingReviewDtos;
     }
 
     private Specification<Review> getSortingSpecification(final Product product, final String sortOption,
